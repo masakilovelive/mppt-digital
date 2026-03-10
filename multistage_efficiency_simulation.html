@@ -1,0 +1,1614 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Multi-Stage Efficiency Simulator</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --text: #0f2942;
+      --muted: #43617e;
+      --line: #d6e0ea;
+      --accent: #0f766e;
+      --accent-2: #1d4ed8;
+      --warn: #b42318;
+      --soft: #eef4fb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background:
+        radial-gradient(circle at 12% 0%, #def2ee 0%, transparent 36%),
+        radial-gradient(circle at 86% 18%, #e2ecff 0%, transparent 40%),
+        var(--bg);
+    }
+
+    .app {
+      max-width: 1280px;
+      margin: 22px auto 28px;
+      padding: 0 14px;
+    }
+
+    .hero {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      box-shadow: 0 8px 26px rgba(15, 23, 42, 0.07);
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 1.26rem;
+      letter-spacing: 0.2px;
+    }
+
+    .hero p {
+      margin: 6px 0 0;
+      color: var(--muted);
+      line-height: 1.45;
+    }
+
+    .layout {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: 430px 1fr;
+      gap: 14px;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.05);
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 1.02rem;
+    }
+
+    h3 {
+      margin: 10px 0 6px;
+      font-size: 0.94rem;
+    }
+
+    .hint {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.35;
+    }
+
+    .pair {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .triple {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    label {
+      font-size: 0.86rem;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    input[type="number"], input[type="text"], select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 7px 8px;
+      font-size: 0.94rem;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .small {
+      font-size: 0.82rem;
+      color: var(--muted);
+    }
+
+    .button-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .button-row.three {
+      grid-template-columns: repeat(3, 1fr);
+    }
+
+    button {
+      border: none;
+      border-radius: 9px;
+      padding: 9px 10px;
+      color: #fff;
+      font-weight: 700;
+      background: var(--accent);
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #334e68;
+    }
+
+    button.primary {
+      background: var(--accent-2);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 6px;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 5px 6px;
+      text-align: right;
+      vertical-align: top;
+    }
+
+    th {
+      background: #eff5fb;
+      color: #223b53;
+    }
+
+    td:first-child, th:first-child {
+      text-align: left;
+    }
+
+    .stage-editor td {
+      background: #fff;
+    }
+
+    .stage-editor input,
+    .stage-editor select {
+      font-size: 0.83rem;
+      padding: 5px 6px;
+      min-width: 80px;
+    }
+
+    .inline-btn {
+      padding: 5px 7px;
+      font-size: 0.78rem;
+      border-radius: 7px;
+      background: #4b5563;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .metric {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 8px;
+      background: var(--soft);
+      min-height: 64px;
+    }
+
+    .metric .k {
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-bottom: 4px;
+    }
+
+    .metric .v {
+      font-size: 1.04rem;
+      font-weight: 700;
+      letter-spacing: 0.15px;
+    }
+
+    .output {
+      margin-top: 8px;
+      min-height: 120px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      background: #f8fbff;
+      font-family: Consolas, "Cascadia Mono", monospace;
+      white-space: pre-wrap;
+      padding: 9px;
+      font-size: 0.89rem;
+      line-height: 1.34;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 8px;
+    }
+
+    .chart-card {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: #f8fbff;
+      padding: 8px;
+    }
+
+    .chart-title {
+      margin: 0 0 6px;
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+
+    .chart-wrap {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .chart-wrap canvas {
+      width: 100%;
+      height: 220px;
+      display: block;
+    }
+
+    .warn {
+      color: var(--warn);
+      font-weight: 700;
+    }
+
+    .formula-card {
+      margin-top: 12px;
+    }
+
+    .formula-table td {
+      text-align: left;
+      font-family: Consolas, "Cascadia Mono", monospace;
+      font-size: 0.82rem;
+      line-height: 1.33;
+    }
+
+    .formula-table td.col-rendered {
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      font-size: 0.9rem;
+      line-height: 1.4;
+    }
+
+    .formula-math {
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .footer-note {
+      margin-top: 8px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      line-height: 1.35;
+    }
+
+    .codebox {
+      width: 100%;
+      margin-top: 6px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      padding: 8px;
+      font-family: Consolas, "Cascadia Mono", monospace;
+      font-size: 0.84rem;
+      line-height: 1.3;
+      color: var(--text);
+      background: #f8fbff;
+      resize: vertical;
+    }
+
+    #ioStatus {
+      margin-top: 6px;
+      min-height: 1.2em;
+    }
+
+    #importJsonFile {
+      margin-top: 2px;
+      font-size: 0.84rem;
+    }
+
+    @media (max-width: 1050px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .chart-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="hero">
+      <h1>Multi-Stage Power Module Efficiency Simulator</h1>
+      <p>Simulate efficiency for cascaded modules (boost + isolated + buck, etc.), compare against a single-stage path, and inspect decompiled TeX formulas in readable form.</p>
+    </header>
+
+    <section class="layout">
+      <section class="card">
+        <h2>Input Conditions</h2>
+        <p class="hint">Model equations are based on the shared notes: power back-propagation from load, stage efficiency multiplication, and boost duty approximation.</p>
+
+        <h3>Load and Source</h3>
+        <div class="pair">
+          <div>
+            <label for="loadV">Load voltage Vout [V]</label>
+            <input id="loadV" type="number" step="any" value="24" />
+          </div>
+          <div>
+            <label for="loadI">Load current Iout [A]</label>
+            <input id="loadI" type="number" step="any" value="1" />
+          </div>
+        </div>
+
+        <div class="pair">
+          <div>
+            <label for="sourceVin">Source voltage Vin [V]</label>
+            <input id="sourceVin" type="number" step="any" value="0.7" />
+          </div>
+          <div>
+            <label for="etaSingle">Single-stage efficiency [%]</label>
+            <input id="etaSingle" type="number" step="any" value="72" />
+          </div>
+        </div>
+
+        <h3>Multi-Stage Modules</h3>
+        <p class="small">Stage i input voltage is auto-linked to stage (i-1) output voltage, with stage 1 input fixed to source Vin.</p>
+        <table class="stage-editor">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Topology</th>
+              <th>Vout [V]</th>
+              <th>eta [%]</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="stageRows"></tbody>
+        </table>
+
+        <div class="button-row">
+          <button id="addStage" class="secondary">Add stage</button>
+          <button id="runSim" class="primary">Run simulation</button>
+        </div>
+
+        <h3>Quick Presets</h3>
+        <div class="button-row three">
+          <button id="preset07" class="secondary">Vin 0.7 V</button>
+          <button id="preset10" class="secondary">Vin 1.0 V</button>
+          <button id="preset33" class="secondary">Vin 3.3 V</button>
+        </div>
+
+        <h3>Boost Vbus Sweep</h3>
+        <div>
+          <label for="vbusList">Candidate Vbus values [V] (comma separated)</label>
+          <input id="vbusList" type="text" value="5, 8, 12" />
+        </div>
+
+        <h3>Simulation State I/O</h3>
+        <p class="small">Export/import current input conditions and latest computed results as JSON.</p>
+        <div class="button-row three">
+          <button id="exportJson" class="secondary">Export JSON</button>
+          <button id="importJson" class="secondary">Import JSON</button>
+          <button id="downloadJson" class="secondary">Download JSON</button>
+        </div>
+        <div style="margin-top: 6px;">
+          <label for="importJsonFile">Load from .json file</label>
+          <input id="importJsonFile" type="file" accept=".json,application/json" />
+        </div>
+        <textarea id="jsonPayload" class="codebox" rows="10" placeholder="Exported JSON appears here. You can also paste JSON and click Import JSON."></textarea>
+        <div id="ioStatus" class="small"></div>
+      </section>
+
+      <section class="card">
+        <h2>Simulation Results</h2>
+        <div id="summaryGrid" class="summary-grid"></div>
+
+        <h3>Per-Stage Breakdown</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Topology</th>
+              <th>Vin [V]</th>
+              <th>Vout [V]</th>
+              <th>eta [%]</th>
+              <th>Duty (boost)</th>
+              <th>Pout [W]</th>
+              <th>Pin [W]</th>
+              <th>Iin [A]</th>
+              <th>Iout [A]</th>
+              <th>Ploss [W]</th>
+            </tr>
+          </thead>
+          <tbody id="stageResultRows"></tbody>
+        </table>
+
+        <h3>Boost Vbus Sweep (from shared derivation)</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Vbus [V]</th>
+              <th>Duty D</th>
+              <th>I_iso,in [A]</th>
+              <th>Comment</th>
+            </tr>
+          </thead>
+          <tbody id="vbusSweepRows"></tbody>
+        </table>
+
+        <div id="textResult" class="output"></div>
+
+        <h3>Charts</h3>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <p class="chart-title">Power Comparison [W]</p>
+            <div class="chart-wrap">
+              <canvas id="chartPowerCompare" width="540" height="260"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <p class="chart-title">Source Current Comparison [A]</p>
+            <div class="chart-wrap">
+              <canvas id="chartCurrentCompare" width="540" height="260"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <p class="chart-title">Overall Efficiency Comparison [%]</p>
+            <div class="chart-wrap">
+              <canvas id="chartEfficiencyCompare" width="540" height="260"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <p class="chart-title">Stage Efficiency / Cumulative Efficiency [%]</p>
+            <div class="chart-wrap">
+              <canvas id="chartStageEfficiency" width="540" height="260"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <p class="chart-title">Per-Stage Loss [W]</p>
+            <div class="chart-wrap">
+              <canvas id="chartStageLoss" width="540" height="260"></canvas>
+            </div>
+          </div>
+          <div class="chart-card">
+            <p class="chart-title">Vbus Sweep (Duty % / Iiso,in A)</p>
+            <div class="chart-wrap">
+              <canvas id="chartVbusSweep" width="540" height="260"></canvas>
+            </div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="card formula-card">
+      <h2>TeX Decompile View</h2>
+      <p class="hint">Original TeX, rendered formula (compiled view), and decompiled expression are shown together.</p>
+      <table class="formula-table">
+        <thead>
+          <tr>
+            <th>TeX</th>
+            <th>Compiled View</th>
+            <th>Decompiled</th>
+            <th>Meaning</th>
+          </tr>
+        </thead>
+        <tbody id="formulaRows"></tbody>
+      </table>
+      <p class="footer-note">Compiled math view uses KaTeX (CDN). If unavailable, TeX text is shown as fallback.</p>
+    </section>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const MAX_STAGES = 6;
+    const EPS = 1e-10;
+
+    function fmt(x, digits = 6) {
+      if (!Number.isFinite(x)) return "NaN";
+      const s = x.toFixed(digits);
+      return s.replace(/\.?0+$/, "");
+    }
+
+    function pctToFrac(v) {
+      return v / 100;
+    }
+
+    function clamp(x, lo, hi) {
+      return Math.min(hi, Math.max(lo, x));
+    }
+
+    function readNum(id, fallback = 0) {
+      const v = Number($(id).value);
+      return Number.isFinite(v) ? v : fallback;
+    }
+
+    function safeEtaPct(x) {
+      const v = Number(x);
+      if (!Number.isFinite(v)) return 90;
+      return clamp(v, 0.01, 99.99);
+    }
+
+    function parseCSVNumbers(text) {
+      return String(text)
+        .split(",")
+        .map((s) => Number(s.trim()))
+        .filter((v) => Number.isFinite(v) && v > 0);
+    }
+
+    function buildStage(name, topology, vout, eta) {
+      return { name, topology, vout, eta };
+    }
+
+    const state = {
+      stages: [
+        buildStage("Stage 1", "boost", 12, 92),
+        buildStage("Stage 2", "isolated", 24, 92)
+      ],
+      lastSnapshot: null
+    };
+
+    function renderStageEditor() {
+      const tbody = $("stageRows");
+      tbody.innerHTML = "";
+
+      state.stages.forEach((s, idx) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><input data-key="name" data-idx="${idx}" type="text" value="${s.name}" /></td>
+          <td>
+            <select data-key="topology" data-idx="${idx}">
+              <option value="boost" ${s.topology === "boost" ? "selected" : ""}>boost</option>
+              <option value="isolated" ${s.topology === "isolated" ? "selected" : ""}>isolated</option>
+              <option value="buck" ${s.topology === "buck" ? "selected" : ""}>buck</option>
+              <option value="generic" ${s.topology === "generic" ? "selected" : ""}>generic</option>
+            </select>
+          </td>
+          <td><input data-key="vout" data-idx="${idx}" type="number" step="any" value="${s.vout}" /></td>
+          <td><input data-key="eta" data-idx="${idx}" type="number" step="any" value="${s.eta}" /></td>
+          <td><button class="inline-btn" data-remove="${idx}">Remove</button></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function collectStagesFromUI() {
+      const rows = Array.from($("stageRows").querySelectorAll("tr"));
+      const stages = [];
+
+      rows.forEach((row) => {
+        const name = row.querySelector('input[data-key="name"]').value.trim() || `Stage ${stages.length + 1}`;
+        const topology = row.querySelector('select[data-key="topology"]').value;
+        const vout = Number(row.querySelector('input[data-key="vout"]').value);
+        const eta = safeEtaPct(row.querySelector('input[data-key="eta"]').value);
+
+        stages.push({
+          name,
+          topology,
+          vout: Number.isFinite(vout) && vout > EPS ? vout : 1,
+          eta
+        });
+      });
+
+      if (stages.length === 0) {
+        stages.push(buildStage("Stage 1", "boost", 12, 92));
+      }
+      return stages;
+    }
+
+    function computeChain(params) {
+      const { loadV, loadI, sourceVin, etaSinglePct, stages } = params;
+      const pLoad = loadV * loadI;
+      const etaSingle = pctToFrac(safeEtaPct(etaSinglePct));
+
+      let pNeedAtStageOutput = pLoad;
+      const stageOut = new Array(stages.length);
+
+      for (let j = stages.length - 1; j >= 0; j -= 1) {
+        const stage = stages[j];
+        const eta = pctToFrac(stage.eta);
+        const vin = j === 0 ? sourceVin : stages[j - 1].vout;
+        const vout = stage.vout;
+
+        const pOut = pNeedAtStageOutput;
+        const pIn = pOut / eta;
+        const iIn = pIn / vin;
+        const iOut = pOut / vout;
+        const pLoss = pIn - pOut;
+
+        let duty = null;
+        if (stage.topology === "boost") {
+          duty = 1 - (eta * vin) / vout;
+        }
+
+        stageOut[j] = {
+          idx: j + 1,
+          name: stage.name,
+          topology: stage.topology,
+          vin,
+          vout,
+          etaPct: stage.eta,
+          duty,
+          pOut,
+          pIn,
+          iIn,
+          iOut,
+          pLoss
+        };
+
+        pNeedAtStageOutput = pIn;
+      }
+
+      const pInMulti = pNeedAtStageOutput;
+      const iInMulti = pInMulti / sourceVin;
+      const etaTotalMulti = pLoad / pInMulti;
+      const pLossMulti = pInMulti - pLoad;
+
+      const pInSingle = pLoad / etaSingle;
+      const iInSingle = pInSingle / sourceVin;
+      const pLossSingle = pInSingle - pLoad;
+
+      const ratioCu = (iInSingle > EPS) ? Math.pow(iInMulti / iInSingle, 2) : NaN;
+
+      let consistencyMessage = "OK";
+      const finalVout = stages[stages.length - 1].vout;
+      if (Math.abs(finalVout - loadV) > 1e-6) {
+        consistencyMessage = `Warning: final stage Vout (${fmt(finalVout)} V) differs from load Vout (${fmt(loadV)} V).`;
+      }
+
+      return {
+        pLoad,
+        etaTotalMulti,
+        pInMulti,
+        iInMulti,
+        pLossMulti,
+        pInSingle,
+        iInSingle,
+        pLossSingle,
+        ratioCu,
+        consistencyMessage,
+        stageOut
+      };
+    }
+
+    function calcVbusSweep(params, chain) {
+      const { sourceVin, stages, vbusCandidates } = params;
+      const first = stages[0];
+      const rows = [];
+
+      if (!first || first.topology !== "boost" || stages.length < 2) {
+        return rows;
+      }
+
+      const eta1 = pctToFrac(first.eta);
+      let etaDownstream = 1;
+      for (let i = 1; i < stages.length; i += 1) {
+        etaDownstream *= pctToFrac(stages[i].eta);
+      }
+
+      vbusCandidates.forEach((vbus) => {
+        const duty = 1 - (eta1 * sourceVin) / vbus;
+        const iIsoIn = chain.pLoad / (etaDownstream * vbus);
+        let comment = "";
+
+        if (duty > 0.95) {
+          comment = "very high duty (harder switching conditions)";
+        } else if (duty > 0.9) {
+          comment = "high duty";
+        } else if (duty > 0 && duty < 0.85) {
+          comment = "moderate duty";
+        } else {
+          comment = "check model assumptions";
+        }
+
+        rows.push({
+          vbus,
+          duty,
+          iIsoIn,
+          comment
+        });
+      });
+
+      return rows;
+    }
+
+    function metricCard(key, value, digits = 4, unit = "") {
+      return `
+        <div class="metric">
+          <div class="k">${key}</div>
+          <div class="v">${fmt(value, digits)}${unit}</div>
+        </div>
+      `;
+    }
+
+    function renderSummary(chain) {
+      const etaDeltaPts = 100 * (chain.etaTotalMulti - chain.pLoad / chain.pInSingle);
+      const pinDelta = chain.pInSingle - chain.pInMulti;
+      const iinDelta = chain.iInSingle - chain.iInMulti;
+
+      $("summaryGrid").innerHTML = [
+        metricCard("Load power Pout", chain.pLoad, 3, " W"),
+        metricCard("eta_total (multi)", 100 * chain.etaTotalMulti, 3, " %"),
+        metricCard("Pin (multi)", chain.pInMulti, 3, " W"),
+        metricCard("Iin (multi)", chain.iInMulti, 3, " A"),
+        metricCard("Pin (single)", chain.pInSingle, 3, " W"),
+        metricCard("Iin (single)", chain.iInSingle, 3, " A"),
+        metricCard("Pin saved", pinDelta, 3, " W"),
+        metricCard("Iin reduction", iinDelta, 3, " A"),
+        metricCard("eta gain", etaDeltaPts, 3, " points"),
+        metricCard("I^2R ratio (multi/single)", chain.ratioCu, 4, "")
+      ].join("");
+    }
+
+    function renderStageRows(chain) {
+      const tbody = $("stageResultRows");
+      tbody.innerHTML = "";
+
+      chain.stageOut.forEach((s) => {
+        const tr = document.createElement("tr");
+        const dutyText = s.duty === null ? "-" : `${fmt(100 * s.duty, 3)} %`;
+        tr.innerHTML = `
+          <td>${s.idx}. ${s.name}</td>
+          <td>${s.topology}</td>
+          <td>${fmt(s.vin, 4)}</td>
+          <td>${fmt(s.vout, 4)}</td>
+          <td>${fmt(s.etaPct, 3)}</td>
+          <td>${dutyText}</td>
+          <td>${fmt(s.pOut, 4)}</td>
+          <td>${fmt(s.pIn, 4)}</td>
+          <td>${fmt(s.iIn, 4)}</td>
+          <td>${fmt(s.iOut, 4)}</td>
+          <td>${fmt(s.pLoss, 4)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderVbusRows(rows) {
+      const tbody = $("vbusSweepRows");
+      tbody.innerHTML = "";
+
+      if (!rows.length) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `<td colspan="4">Enable at least 2 stages and set Stage 1 topology to boost to use this table.</td>`;
+        tbody.appendChild(tr);
+        return;
+      }
+
+      rows.forEach((r) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${fmt(r.vbus, 4)}</td>
+          <td>${fmt(100 * r.duty, 3)} %</td>
+          <td>${fmt(r.iIsoIn, 4)}</td>
+          <td>${r.comment}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderTextSummary(params, chain, vbusRows) {
+      const lines = [];
+      lines.push(`Pout = Vout * Iout = ${fmt(params.loadV)} * ${fmt(params.loadI)} = ${fmt(chain.pLoad)} W`);
+      lines.push(`eta_total_multi = ${fmt(100 * chain.etaTotalMulti, 4)} %`);
+      lines.push(`Pin_multi = ${fmt(chain.pInMulti, 4)} W`);
+      lines.push(`Iin_multi = ${fmt(chain.iInMulti, 4)} A`);
+      lines.push(`Pin_single = ${fmt(chain.pInSingle, 4)} W`);
+      lines.push(`Iin_single = ${fmt(chain.iInSingle, 4)} A`);
+      lines.push(`I^2R ratio (multi/single) = ${fmt(chain.ratioCu, 5)} (assuming same equivalent R)`);
+
+      if (chain.consistencyMessage !== "OK") {
+        lines.push(``);
+        lines.push(`[warning] ${chain.consistencyMessage}`);
+      }
+
+      if (vbusRows.length > 0) {
+        lines.push("");
+        lines.push("Vbus sweep quick check:");
+        vbusRows.forEach((r) => {
+          lines.push(`  Vbus=${fmt(r.vbus)} V -> D=${fmt(100 * r.duty, 3)} %, I_iso,in=${fmt(r.iIsoIn, 4)} A`);
+        });
+      }
+
+      $("textResult").textContent = lines.join("\n");
+    }
+
+    function clearCanvas(canvasId) {
+      const canvas = $(canvasId);
+      if (!canvas) return null;
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      return { canvas, ctx };
+    }
+
+    function niceMax(value) {
+      const v = Math.max(1e-9, value);
+      const exp = Math.floor(Math.log10(v));
+      const base = Math.pow(10, exp);
+      const f = v / base;
+      let n = 10;
+      if (f <= 1) n = 1;
+      else if (f <= 2) n = 2;
+      else if (f <= 5) n = 5;
+      return n * base;
+    }
+
+    function drawEmptyChart(canvasId, message) {
+      const ref = clearCanvas(canvasId);
+      if (!ref) return;
+      const { canvas, ctx } = ref;
+      ctx.fillStyle = "#6b7f95";
+      ctx.font = "14px Segoe UI";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(message, canvas.width / 2, canvas.height / 2);
+    }
+
+    function drawBarChart(canvasId, labels, values, colors, yUnit = "") {
+      if (!labels.length || !values.length) {
+        drawEmptyChart(canvasId, "No data");
+        return;
+      }
+
+      const ref = clearCanvas(canvasId);
+      if (!ref) return;
+      const { canvas, ctx } = ref;
+      const w = canvas.width;
+      const h = canvas.height;
+      const m = { l: 54, r: 14, t: 14, b: 54 };
+      const pw = w - m.l - m.r;
+      const ph = h - m.t - m.b;
+
+      const dataMax = Math.max(...values, EPS);
+      const yMax = niceMax(dataMax * 1.12);
+      const ticks = 5;
+
+      ctx.strokeStyle = "#d6e0ea";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= ticks; i += 1) {
+        const y = m.t + (ph * i) / ticks;
+        ctx.beginPath();
+        ctx.moveTo(m.l, y);
+        ctx.lineTo(w - m.r, y);
+        ctx.stroke();
+
+        const v = yMax * (1 - i / ticks);
+        ctx.fillStyle = "#597289";
+        ctx.font = "11px Segoe UI";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+        ctx.fillText(`${fmt(v, 2)}${yUnit}`, m.l - 7, y);
+      }
+
+      ctx.strokeStyle = "#7f92a5";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(m.l, m.t);
+      ctx.lineTo(m.l, h - m.b);
+      ctx.lineTo(w - m.r, h - m.b);
+      ctx.stroke();
+
+      const n = labels.length;
+      const slot = pw / n;
+      const barW = Math.min(42, slot * 0.58);
+
+      for (let i = 0; i < n; i += 1) {
+        const xCenter = m.l + slot * (i + 0.5);
+        const val = values[i];
+        const barH = (val / yMax) * ph;
+        const x = xCenter - barW / 2;
+        const y = h - m.b - barH;
+
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fillRect(x, y, barW, barH);
+
+        ctx.fillStyle = "#0f2942";
+        ctx.font = "11px Segoe UI";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "bottom";
+        ctx.fillText(fmt(val, 3), xCenter, y - 3);
+
+        ctx.fillStyle = "#334e68";
+        ctx.font = "11px Segoe UI";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillText(labels[i], xCenter, h - m.b + 8);
+      }
+    }
+
+    function drawVbusSweepChart(canvasId, rows) {
+      if (!rows.length) {
+        drawEmptyChart(canvasId, "Enable boost stage to view sweep");
+        return;
+      }
+
+      const ref = clearCanvas(canvasId);
+      if (!ref) return;
+      const { canvas, ctx } = ref;
+      const w = canvas.width;
+      const h = canvas.height;
+      const m = { l: 52, r: 52, t: 18, b: 44 };
+      const pw = w - m.l - m.r;
+      const ph = h - m.t - m.b;
+
+      const sorted = rows.slice().sort((a, b) => a.vbus - b.vbus);
+      const dutyVals = sorted.map((r) => 100 * r.duty);
+      const currentVals = sorted.map((r) => r.iIsoIn);
+
+      const leftMax = niceMax(Math.max(...dutyVals, 1) * 1.08);
+      const rightMax = niceMax(Math.max(...currentVals, 1) * 1.08);
+      const ticks = 5;
+
+      for (let i = 0; i <= ticks; i += 1) {
+        const y = m.t + (ph * i) / ticks;
+        const leftV = leftMax * (1 - i / ticks);
+        const rightV = rightMax * (1 - i / ticks);
+
+        ctx.strokeStyle = "#d6e0ea";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(m.l, y);
+        ctx.lineTo(w - m.r, y);
+        ctx.stroke();
+
+        ctx.fillStyle = "#2563eb";
+        ctx.font = "11px Segoe UI";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+        ctx.fillText(`${fmt(leftV, 1)}%`, m.l - 6, y);
+
+        ctx.fillStyle = "#be123c";
+        ctx.textAlign = "left";
+        ctx.fillText(`${fmt(rightV, 2)}A`, w - m.r + 6, y);
+      }
+
+      ctx.strokeStyle = "#7f92a5";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(m.l, m.t);
+      ctx.lineTo(m.l, h - m.b);
+      ctx.lineTo(w - m.r, h - m.b);
+      ctx.lineTo(w - m.r, m.t);
+      ctx.stroke();
+
+      const n = sorted.length;
+      const xAt = (i) => (n === 1 ? m.l + pw / 2 : m.l + (pw * i) / (n - 1));
+      const yLeft = (v) => h - m.b - (v / leftMax) * ph;
+      const yRight = (v) => h - m.b - (v / rightMax) * ph;
+
+      ctx.strokeStyle = "#2563eb";
+      ctx.lineWidth = 2.1;
+      ctx.beginPath();
+      for (let i = 0; i < n; i += 1) {
+        const x = xAt(i);
+        const y = yLeft(dutyVals[i]);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      ctx.strokeStyle = "#be123c";
+      ctx.lineWidth = 2.1;
+      ctx.beginPath();
+      for (let i = 0; i < n; i += 1) {
+        const x = xAt(i);
+        const y = yRight(currentVals[i]);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      for (let i = 0; i < n; i += 1) {
+        const x = xAt(i);
+        const yD = yLeft(dutyVals[i]);
+        const yI = yRight(currentVals[i]);
+
+        ctx.fillStyle = "#2563eb";
+        ctx.beginPath();
+        ctx.arc(x, yD, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#be123c";
+        ctx.beginPath();
+        ctx.arc(x, yI, 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.fillStyle = "#334e68";
+        ctx.font = "11px Segoe UI";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillText(fmt(sorted[i].vbus, 2), x, h - m.b + 7);
+      }
+
+      ctx.fillStyle = "#334e68";
+      ctx.font = "11px Segoe UI";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      ctx.fillText("Vbus [V]", m.l + pw / 2, h - 2);
+
+      const lx = m.l + 8;
+      const ly = m.t + 8;
+      ctx.fillStyle = "#2563eb";
+      ctx.fillRect(lx, ly, 10, 10);
+      ctx.fillStyle = "#334e68";
+      ctx.font = "11px Segoe UI";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.fillText("Duty [%]", lx + 14, ly - 1);
+
+      ctx.fillStyle = "#be123c";
+      ctx.fillRect(lx + 84, ly, 10, 10);
+      ctx.fillStyle = "#334e68";
+      ctx.fillText("Iiso,in [A]", lx + 98, ly - 1);
+    }
+
+    function drawEfficiencyCompareChart(chain) {
+      const etaSinglePct = 100 * (chain.pLoad / chain.pInSingle);
+      const etaMultiPct = 100 * chain.etaTotalMulti;
+      drawBarChart(
+        "chartEfficiencyCompare",
+        ["eta single", "eta multi"],
+        [etaSinglePct, etaMultiPct],
+        ["#475569", "#0f766e"],
+        "%"
+      );
+    }
+
+    function drawStageEfficiencyChart(canvasId, stageOut) {
+      if (!stageOut.length) {
+        drawEmptyChart(canvasId, "No stage data");
+        return;
+      }
+
+      const ref = clearCanvas(canvasId);
+      if (!ref) return;
+      const { canvas, ctx } = ref;
+      const w = canvas.width;
+      const h = canvas.height;
+      const m = { l: 52, r: 14, t: 16, b: 48 };
+      const pw = w - m.l - m.r;
+      const ph = h - m.t - m.b;
+
+      const stageEta = stageOut.map((s) => s.etaPct);
+      const cumEta = [];
+      let acc = 1;
+      stageOut.forEach((s) => {
+        acc *= s.etaPct / 100;
+        cumEta.push(100 * acc);
+      });
+
+      const yMax = 100;
+      const ticks = 5;
+
+      ctx.strokeStyle = "#d6e0ea";
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= ticks; i += 1) {
+        const y = m.t + (ph * i) / ticks;
+        const v = yMax * (1 - i / ticks);
+        ctx.beginPath();
+        ctx.moveTo(m.l, y);
+        ctx.lineTo(w - m.r, y);
+        ctx.stroke();
+
+        ctx.fillStyle = "#597289";
+        ctx.font = "11px Segoe UI";
+        ctx.textAlign = "right";
+        ctx.textBaseline = "middle";
+        ctx.fillText(`${fmt(v, 1)}%`, m.l - 6, y);
+      }
+
+      ctx.strokeStyle = "#7f92a5";
+      ctx.lineWidth = 1.2;
+      ctx.beginPath();
+      ctx.moveTo(m.l, m.t);
+      ctx.lineTo(m.l, h - m.b);
+      ctx.lineTo(w - m.r, h - m.b);
+      ctx.stroke();
+
+      const n = stageOut.length;
+      const slot = pw / n;
+      const barW = Math.min(36, slot * 0.5);
+      const xCenter = (i) => m.l + slot * (i + 0.5);
+      const yMap = (v) => h - m.b - (v / yMax) * ph;
+
+      for (let i = 0; i < n; i += 1) {
+        const x = xCenter(i) - barW / 2;
+        const y = yMap(stageEta[i]);
+        const barH = h - m.b - y;
+        ctx.fillStyle = "#0891b2";
+        ctx.fillRect(x, y, barW, barH);
+
+        ctx.fillStyle = "#0f2942";
+        ctx.font = "11px Segoe UI";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "bottom";
+        ctx.fillText(fmt(stageEta[i], 2), xCenter(i), y - 3);
+
+        ctx.fillStyle = "#334e68";
+        ctx.textBaseline = "top";
+        ctx.fillText(`S${stageOut[i].idx}`, xCenter(i), h - m.b + 7);
+      }
+
+      ctx.strokeStyle = "#be123c";
+      ctx.lineWidth = 2.2;
+      ctx.beginPath();
+      for (let i = 0; i < n; i += 1) {
+        const x = xCenter(i);
+        const y = yMap(cumEta[i]);
+        if (i === 0) ctx.moveTo(x, y);
+        else ctx.lineTo(x, y);
+      }
+      ctx.stroke();
+
+      for (let i = 0; i < n; i += 1) {
+        const x = xCenter(i);
+        const y = yMap(cumEta[i]);
+        ctx.fillStyle = "#be123c";
+        ctx.beginPath();
+        ctx.arc(x, y, 3.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      const lx = m.l + 8;
+      const ly = m.t + 7;
+      ctx.fillStyle = "#0891b2";
+      ctx.fillRect(lx, ly, 10, 10);
+      ctx.fillStyle = "#334e68";
+      ctx.font = "11px Segoe UI";
+      ctx.textAlign = "left";
+      ctx.textBaseline = "top";
+      ctx.fillText("stage eta", lx + 14, ly - 1);
+
+      ctx.fillStyle = "#be123c";
+      ctx.fillRect(lx + 76, ly, 10, 10);
+      ctx.fillStyle = "#334e68";
+      ctx.fillText("cumulative eta", lx + 90, ly - 1);
+    }
+
+    function renderCharts(chain, vbusRows) {
+      drawBarChart(
+        "chartPowerCompare",
+        ["Pin single", "Pin multi", "Ploss single", "Ploss multi"],
+        [chain.pInSingle, chain.pInMulti, chain.pLossSingle, chain.pLossMulti],
+        ["#64748b", "#0f766e", "#9f1239", "#b45309"],
+        "W"
+      );
+
+      drawBarChart(
+        "chartCurrentCompare",
+        ["Iin single", "Iin multi"],
+        [chain.iInSingle, chain.iInMulti],
+        ["#334e68", "#0ea5e9"],
+        "A"
+      );
+
+      drawEfficiencyCompareChart(chain);
+      drawStageEfficiencyChart("chartStageEfficiency", chain.stageOut);
+
+      const lossLabels = chain.stageOut.map((s) => `S${s.idx}`);
+      const lossValues = chain.stageOut.map((s) => s.pLoss);
+      drawBarChart(
+        "chartStageLoss",
+        lossLabels,
+        lossValues,
+        ["#7c3aed", "#2563eb", "#0891b2", "#059669", "#ca8a04", "#be123c"],
+        "W"
+      );
+
+      drawVbusSweepChart("chartVbusSweep", vbusRows);
+    }
+
+    function readModelFromUI() {
+      const stages = collectStagesFromUI();
+      const params = {
+        loadV: Math.max(readNum("loadV", 24), EPS),
+        loadI: Math.max(readNum("loadI", 1), EPS),
+        sourceVin: Math.max(readNum("sourceVin", 0.7), EPS),
+        etaSinglePct: safeEtaPct(readNum("etaSingle", 72)),
+        stages,
+        vbusCandidates: parseCSVNumbers($("vbusList").value)
+      };
+      return params;
+    }
+
+    function serializeModel(params) {
+      return {
+        loadV: params.loadV,
+        loadI: params.loadI,
+        sourceVin: params.sourceVin,
+        etaSinglePct: params.etaSinglePct,
+        vbusCandidates: params.vbusCandidates.slice(),
+        stages: params.stages.map((s) => ({
+          name: s.name,
+          topology: s.topology,
+          vout: s.vout,
+          eta: s.eta
+        }))
+      };
+    }
+
+    function serializeResults(chain, vbusRows) {
+      return {
+        pLoad: chain.pLoad,
+        etaTotalMulti: chain.etaTotalMulti,
+        pInMulti: chain.pInMulti,
+        iInMulti: chain.iInMulti,
+        pLossMulti: chain.pLossMulti,
+        pInSingle: chain.pInSingle,
+        iInSingle: chain.iInSingle,
+        pLossSingle: chain.pLossSingle,
+        ratioCu: chain.ratioCu,
+        consistencyMessage: chain.consistencyMessage,
+        stageOut: chain.stageOut.map((s) => ({ ...s })),
+        vbusSweep: vbusRows.map((r) => ({ ...r })),
+        textSummary: $("textResult").textContent
+      };
+    }
+
+    function buildSnapshot(params, chain, vbusRows) {
+      return {
+        schema: "mathsim.multistage.v1",
+        exportedAt: new Date().toISOString(),
+        model: serializeModel(params),
+        results: serializeResults(chain, vbusRows)
+      };
+    }
+
+    function normalizeTopology(value) {
+      const v = String(value || "").toLowerCase();
+      if (["boost", "isolated", "buck", "generic"].includes(v)) return v;
+      return "generic";
+    }
+
+    function normalizeStageList(list) {
+      if (!Array.isArray(list) || list.length === 0) {
+        return [buildStage("Stage 1", "boost", 12, 92)];
+      }
+      return list.slice(0, MAX_STAGES).map((s, idx) => ({
+        name: String(s?.name || `Stage ${idx + 1}`),
+        topology: normalizeTopology(s?.topology),
+        vout: Math.max(Number(s?.vout) || 1, EPS),
+        eta: safeEtaPct(s?.eta)
+      }));
+    }
+
+    function setIOStatus(message, isError = false) {
+      const el = $("ioStatus");
+      el.textContent = message;
+      el.style.color = isError ? "#b42318" : "#43617e";
+    }
+
+    function applyImportedModel(model) {
+      if (!model || typeof model !== "object") {
+        throw new Error("Invalid JSON: model object is missing.");
+      }
+
+      const loadV = Math.max(Number(model.loadV), EPS);
+      const loadI = Math.max(Number(model.loadI), EPS);
+      const sourceVin = Math.max(Number(model.sourceVin), EPS);
+      const etaSinglePct = safeEtaPct(model.etaSinglePct);
+      const vbusCandidates = Array.isArray(model.vbusCandidates) ? model.vbusCandidates : parseCSVNumbers(model.vbusList || "");
+      const stages = normalizeStageList(model.stages);
+
+      $("loadV").value = String(Number.isFinite(loadV) ? loadV : 24);
+      $("loadI").value = String(Number.isFinite(loadI) ? loadI : 1);
+      $("sourceVin").value = String(Number.isFinite(sourceVin) ? sourceVin : 0.7);
+      $("etaSingle").value = String(etaSinglePct);
+      $("vbusList").value = (vbusCandidates.length ? vbusCandidates : [5, 8, 12]).join(", ");
+
+      state.stages = stages;
+      renderStageEditor();
+      runSimulation();
+    }
+
+    function exportSnapshotToTextarea() {
+      runSimulation();
+      const snapshot = state.lastSnapshot || {};
+      $("jsonPayload").value = JSON.stringify(snapshot, null, 2);
+      setIOStatus("Exported current model and results to JSON.");
+    }
+
+    function importSnapshotFromTextarea() {
+      try {
+        const raw = $("jsonPayload").value.trim();
+        if (!raw) {
+          throw new Error("JSON payload is empty.");
+        }
+        const parsed = JSON.parse(raw);
+        const model = parsed.model || parsed;
+        applyImportedModel(model);
+        setIOStatus("Imported JSON and recalculated.");
+      } catch (err) {
+        setIOStatus(err.message || String(err), true);
+      }
+    }
+
+    function downloadSnapshotJSON() {
+      runSimulation();
+      const snapshot = state.lastSnapshot || {};
+      const text = JSON.stringify(snapshot, null, 2);
+      $("jsonPayload").value = text;
+
+      const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+      const filename = `multistage_sim_${stamp}.json`;
+      const blob = new Blob([text], { type: "application/json;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+      setIOStatus(`Downloaded ${filename}`);
+    }
+
+    function importSnapshotFromFile(file) {
+      if (!file) return;
+      file.text()
+        .then((raw) => {
+          $("jsonPayload").value = raw;
+          const parsed = JSON.parse(raw);
+          const model = parsed.model || parsed;
+          applyImportedModel(model);
+          setIOStatus(`Loaded ${file.name} and recalculated.`);
+        })
+        .catch((err) => {
+          setIOStatus(err.message || String(err), true);
+        });
+    }
+
+    function runSimulation() {
+      const params = readModelFromUI();
+      state.stages = params.stages.map((s) => ({ ...s }));
+      const chain = computeChain(params);
+      const vbusRows = calcVbusSweep(params, chain);
+
+      renderSummary(chain);
+      renderStageRows(chain);
+      renderVbusRows(vbusRows);
+      renderTextSummary(params, chain, vbusRows);
+      renderCharts(chain, vbusRows);
+      state.lastSnapshot = buildSnapshot(params, chain, vbusRows);
+    }
+
+    function loadPreset(vin, etaSingle, etaBoost) {
+      $("sourceVin").value = String(vin);
+      $("etaSingle").value = String(etaSingle);
+      $("loadV").value = "24";
+      $("loadI").value = "1";
+      $("vbusList").value = "5, 8, 12";
+
+      state.stages = [
+        buildStage("Boost front", "boost", 12, etaBoost),
+        buildStage("Isolated DC/DC", "isolated", 24, 92)
+      ];
+      renderStageEditor();
+      runSimulation();
+    }
+
+    function findMatchingBrace(text, startIndex) {
+      let depth = 0;
+      for (let i = startIndex; i < text.length; i += 1) {
+        if (text[i] === "{") depth += 1;
+        if (text[i] === "}") {
+          depth -= 1;
+          if (depth === 0) return i;
+        }
+      }
+      return -1;
+    }
+
+    function replaceFrac(tex) {
+      let out = tex;
+      let idx = out.indexOf("\\frac");
+
+      while (idx !== -1) {
+        const numStart = idx + 5;
+        if (out[numStart] !== "{") break;
+
+        const numEnd = findMatchingBrace(out, numStart);
+        if (numEnd === -1) break;
+        const denStart = numEnd + 1;
+        if (out[denStart] !== "{") break;
+
+        const denEnd = findMatchingBrace(out, denStart);
+        if (denEnd === -1) break;
+
+        const num = out.slice(numStart + 1, numEnd);
+        const den = out.slice(denStart + 1, denEnd);
+        const rep = `(${replaceFrac(num)})/(${replaceFrac(den)})`;
+
+        out = out.slice(0, idx) + rep + out.slice(denEnd + 1);
+        idx = out.indexOf("\\frac");
+      }
+
+      return out;
+    }
+
+    function decompileTex(tex) {
+      let t = tex;
+      t = replaceFrac(t);
+
+      t = t
+        .replace(/\\prod_\{k=1\}\^\{N\}\\eta_k/g, "eta_1 * eta_2 * ... * eta_N")
+        .replace(/\\eta/g, "eta")
+        .replace(/\\mathrm\{([^}]*)\}/g, "$1")
+        .replace(/\\cdot/g, "*")
+        .replace(/\\times/g, "*")
+        .replace(/\\approx/g, "~")
+        .replace(/\\left/g, "")
+        .replace(/\\right/g, "")
+        .replace(/_\{([^}]*)\}/g, "_$1")
+        .replace(/\^\{([^}]*)\}/g, "^$1")
+        .replace(/\\/g, "")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      return t;
+    }
+
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function renderCompiledFormulas() {
+      const scope = $("formulaRows");
+      if (!scope) return;
+      if (typeof renderMathInElement !== "function") return;
+
+      renderMathInElement(scope, {
+        delimiters: [
+          { left: "\\(", right: "\\)", display: false },
+          { left: "\\[", right: "\\]", display: true }
+        ],
+        throwOnError: false,
+        strict: "ignore"
+      });
+    }
+
+    const FORMULAS = [
+      {
+        tex: "P_{out}=V_{out}I_{out}",
+        meaning: "Load output power"
+      },
+      {
+        tex: "\\eta_{total}=\\prod_{k=1}^{N}\\eta_k",
+        meaning: "Total multi-stage efficiency"
+      },
+      {
+        tex: "P_{in,single}=\\frac{P_{out}}{\\eta_{single}}",
+        meaning: "Single-stage input power"
+      },
+      {
+        tex: "I_{in,single}=\\frac{P_{out}}{\\eta_{single}V_{in}}",
+        meaning: "Single-stage source current"
+      },
+      {
+        tex: "P_{in,2stage}=\\frac{P_{out}}{\\eta_{boost}\\eta_{iso}}",
+        meaning: "Two-stage total input power"
+      },
+      {
+        tex: "I_{in,2stage}=\\frac{P_{out}}{\\eta_{boost}\\eta_{iso}V_{in}}",
+        meaning: "Two-stage source current"
+      },
+      {
+        tex: "I_{iso,in}=\\frac{P_{out}}{\\eta_{iso}V_{bus}}",
+        meaning: "Isolated stage input current"
+      },
+      {
+        tex: "D\\approx 1-\\frac{\\eta_{boost}V_{in}}{V_{bus}}",
+        meaning: "Boost duty approximation"
+      },
+      {
+        tex: "P_{cu}=I_{rms}^{2}R",
+        meaning: "Copper conduction loss"
+      },
+      {
+        tex: "P_{FET,cond}=I_{SW,rms}^{2}R_{DS(on)}",
+        meaning: "Switch conduction loss"
+      }
+    ];
+
+    function renderFormulaTable() {
+      const tbody = $("formulaRows");
+      tbody.innerHTML = "";
+
+      FORMULAS.forEach((f) => {
+        const texEsc = escapeHtml(f.tex);
+        const decompiledEsc = escapeHtml(decompileTex(f.tex));
+        const meaningEsc = escapeHtml(f.meaning);
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="col-tex">${texEsc}</td>
+          <td class="col-rendered"><span class="formula-math">\\(${texEsc}\\)</span></td>
+          <td class="col-decompiled">${decompiledEsc}</td>
+          <td>${meaningEsc}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      renderCompiledFormulas();
+    }
+
+    $("stageRows").addEventListener("click", (ev) => {
+      const btn = ev.target.closest("button[data-remove]");
+      if (!btn) return;
+      const idx = Number(btn.dataset.remove);
+      if (!Number.isInteger(idx)) return;
+      state.stages = collectStagesFromUI();
+      state.stages.splice(idx, 1);
+      if (state.stages.length === 0) {
+        state.stages.push(buildStage("Stage 1", "boost", 12, 92));
+      }
+      renderStageEditor();
+      runSimulation();
+    });
+
+    $("addStage").addEventListener("click", () => {
+      state.stages = collectStagesFromUI();
+      if (state.stages.length >= MAX_STAGES) return;
+      const id = state.stages.length + 1;
+      const prevVout = state.stages[state.stages.length - 1]?.vout || 12;
+      state.stages.push(buildStage(`Stage ${id}`, "generic", prevVout, 95));
+      renderStageEditor();
+      runSimulation();
+    });
+
+    $("runSim").addEventListener("click", runSimulation);
+    $("preset07").addEventListener("click", () => loadPreset(0.7, 72, 92));
+    $("preset10").addEventListener("click", () => loadPreset(1.0, 78, 94));
+    $("preset33").addEventListener("click", () => loadPreset(3.3, 88, 96));
+    $("exportJson").addEventListener("click", exportSnapshotToTextarea);
+    $("importJson").addEventListener("click", importSnapshotFromTextarea);
+    $("downloadJson").addEventListener("click", downloadSnapshotJSON);
+    $("importJsonFile").addEventListener("change", (ev) => {
+      const file = ev.target.files && ev.target.files[0];
+      importSnapshotFromFile(file);
+    });
+
+    window.addEventListener("load", renderCompiledFormulas);
+
+    renderStageEditor();
+    renderFormulaTable();
+    runSimulation();
+    setIOStatus("Ready.");
+  </script>
+</body>
+</html>
