@@ -16,14 +16,17 @@ This project provides browser-based simulators:
 
 ## Run Eigen Simulator
 
-1. Open `c:\mathsim\eigen_simulation.html` in a browser.
+1. Open `eigen_simulation.html` from this repository in a browser.
+   If you enter the path manually in the address bar, use a `file:///C:/...` URL instead of a raw `C:\...` path.
 2. Choose `2D Simulation`, `3D Simulation`, or `Linear Map Notes` tab.
 3. Edit matrix `A`, initial vector `x0`, and step count.
 4. Set vector `b` and click `Run 2D` or `Run 3D`.
 
 ## Run Multi-Stage Efficiency Simulator
 
-1. Open `c:\mathsim\multistage_efficiency_simulation.html` in a browser.
+1. Open `multistage_efficiency_simulation.html` from this repository in a browser.
+   If you enter the path manually in the address bar, use `file:///C:/Users/n5483/Documents/GitHub/mppt-digital/multistage_efficiency_simulation.html` instead of a raw `C:\Users\...\multistage_efficiency_simulation.html` path.
+   You can also run `.\open_multistage_efficiency_simulation.ps1` from PowerShell in this folder.
 2. Set load (`Vout`, `Iout`), source voltage (`Vin`), and single-stage efficiency.
 3. Configure cascaded stage modules (topology, `Vout`, stage efficiency).
 4. Click `Run simulation` to compute:
