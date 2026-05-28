@@ -91,3 +91,13 @@
 - [ ] Phase 7: 排水 `D1/D2` を実施する。
 - [ ] Phase 8: MPPTモードとPVモードの結果を比較する。
 - [ ] Phase 9: 合格判定、未解決リスク、次期改修をレビューする。
+
+## I. Pixhawk / MAVLink / INA780 連携
+
+- [x] Pixhawk 6C + XIAO ESP32-S3 UART MAVLink 疎通確認資料とスケッチを整理する。
+- [x] INA780BIDEKR単体MAVLink出力の資料とスケッチを整理する。
+- [x] INA780 + VESC CAN + ESP-NOW + USB Serial MAVLinkブリッジの資料とスケッチを整理する。
+- [ ] Pixhawk TELEMポート、baud、flow control設定を実機構成で確定する。
+- [ ] INA780 5系統の最終配線後、`REQUIRED_INA780_MASK` を `0x1F` に変更して欠落検出を有効化する。
+- [ ] Mission Planner tlog、管理XIAOローカルCSV、Pixhawk SD/BINログの保存範囲を確定する。
+- [ ] ESP-NOW監視経路の `RSSI`、`RX_DT`、`LOSS` を屋外でログし、通信状態の合格値を決める。

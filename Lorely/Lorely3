@@ -274,7 +274,21 @@ Vout = 3.3 V * DAC_code / 4095
 | MCP4728単体動作確認 | `esp32s3_mcp4728_pin_test.ino` |
 | INA780高速計測 | `INA780BIDEKR_one_by_one_check.ino` |
 
-### 10.2 瞬時切替の配置
+### 10.2 Pixhawk / MAVLink / INA780 連携資産
+
+Pixhawk、MAVLink、INA780まわりの実機確認資料とスケッチは、次のディレクトリへ整理する。
+
+| 機能 | ファイル |
+|---|---|
+| 統合構成メモ | `pixhawk_mavlink_ina780/PIXHAWK_XIAO_HYBRID_UI.md` |
+| Pixhawk 6C TELEM UART / MAVLink 疎通確認 | `pixhawk_mavlink_ina780/pixhawk6c_xiao_esp32s3_uart_mavlink_test/` |
+| INA780 + VESC CAN + ESP-NOW + MAVLinkブリッジ | `pixhawk_mavlink_ina780/espnow_ina780_vesc_mavlink_bridge/` |
+| INA780BIDEKR単体MAVLink出力 | `pixhawk_mavlink_ina780/ina780bidekr_standalone_mavlink_test/` |
+
+初期段階では `NAMED_VALUE_FLOAT` により `BATT_*`、`AUX_*`、`ESC_*`、`PV1_*`、`PV2_*`、`VESC_*`、`RSSI`、`RX_DT`、`LOSS` を送信し、Mission Planner / QGroundControl / Lorely3 UIで表示確認する。
+ESP-NOW経路は監視専用とし、推進、操舵、停止、Pixhawk/RCの制御には使わない。
+
+### 10.3 瞬時切替の配置
 
 補助電源の瞬時切替判断をPCのSerial指令に依存させてはならない。
 
