@@ -1,0 +1,48 @@
+paths:
+  input_dir: logs/raw_csv
+  output_dir: output
+  graph_dir: output/graphs
+
+columns:
+  time: time_ms
+  mode: mode
+  power_target: P_need
+  power_pv: P_pv_sim
+  power_load: P_load
+  voltage_load: V_load
+  aux_energy: E_aux
+  aux_current: I_aux
+  command: u_cmd
+  throttle: theta_thr
+  temperatures:
+    - temp_power
+    - temp_load
+    - temp_vesc
+  fault: fault_code
+  comm_state: comm_state
+
+thresholds:
+  P_need_default: 120.0
+  P_max_peak: 180.0
+  P_max_cont: 150.0
+  I_aux_max: 8.0
+  Temp_limit: 75.0
+  V_load_min: 18.0
+  comm_loss_values:
+    - LOST
+    - DISCONNECTED
+    - TIMEOUT
+  stable_power_error_ratio: 0.08
+  overshoot_warn_ratio: 0.15
+
+final_parameters:
+  P_need: 120.0
+  P_max_peak: 180.0
+  P_max_cont: 150.0
+  u_cmd_rate_up: 0.20
+  u_cmd_rate_down: 0.30
+  Kp: 0.05
+  E_aux_min: 20.0
+  I_aux_max: 8.0
+  Temp_limit: 75.0
+  communication_period: UART 20ms / CAN 10ms / MAVLink 100ms / LTE 1000ms

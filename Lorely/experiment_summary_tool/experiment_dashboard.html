@@ -1,0 +1,910 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Experiment CSV Dashboard</title>
+  <style>
+    :root {
+      --bg: #f6f7f9;
+      --panel: #ffffff;
+      --ink: #17202a;
+      --muted: #667085;
+      --line: #d8dee7;
+      --blue: #2563eb;
+      --green: #14804a;
+      --yellow: #a15c00;
+      --red: #b42318;
+      --soft-blue: #eaf1ff;
+      --soft-green: #e9f7ef;
+      --soft-yellow: #fff4df;
+      --soft-red: #fdeceb;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.5;
+    }
+
+    header {
+      padding: 20px 24px 14px;
+      background: var(--panel);
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    main {
+      width: min(1320px, calc(100vw - 32px));
+      margin: 16px auto 28px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(260px, 1.4fr) minmax(260px, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .dropzone,
+    .settings,
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .dropzone {
+      min-height: 132px;
+      padding: 18px;
+      display: grid;
+      align-content: center;
+      gap: 10px;
+      cursor: pointer;
+      outline: 2px solid transparent;
+      transition: outline-color 120ms ease, background 120ms ease;
+    }
+
+    .dropzone.drag {
+      outline-color: var(--blue);
+      background: var(--soft-blue);
+    }
+
+    .drop-title {
+      font-weight: 700;
+      font-size: 18px;
+    }
+
+    .drop-hint {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    input[type="file"] {
+      display: none;
+    }
+
+    .settings {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    label {
+      display: grid;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    input[type="number"],
+    input[type="text"] {
+      width: 100%;
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 6px 8px;
+      color: var(--ink);
+      background: #fff;
+      font: inherit;
+      font-size: 14px;
+    }
+
+    button {
+      min-height: 36px;
+      border: 1px solid var(--blue);
+      border-radius: 6px;
+      padding: 7px 12px;
+      background: var(--blue);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #fff;
+      color: var(--blue);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .metric {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      min-width: 0;
+    }
+
+    .metric-name {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric-value {
+      margin-top: 4px;
+      font-size: 24px;
+      font-weight: 750;
+      overflow-wrap: anywhere;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.65fr);
+      gap: 16px;
+    }
+
+    .panel {
+      padding: 14px;
+      min-width: 0;
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .charts {
+      display: grid;
+      gap: 12px;
+    }
+
+    .chart-wrap {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      background: #fff;
+    }
+
+    canvas {
+      width: 100%;
+      height: 260px;
+      display: block;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 13px;
+    }
+
+    .pass {
+      color: var(--green);
+      background: var(--soft-green);
+    }
+
+    .warn {
+      color: var(--yellow);
+      background: var(--soft-yellow);
+    }
+
+    .fail {
+      color: var(--red);
+      background: var(--soft-red);
+    }
+
+    .empty {
+      padding: 32px 18px;
+      color: var(--muted);
+      text-align: center;
+      border: 1px dashed var(--line);
+      border-radius: 8px;
+      background: #fff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    th,
+    td {
+      padding: 8px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+      overflow-wrap: anywhere;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      background: #fbfcfe;
+    }
+
+    .reasons {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--muted);
+    }
+
+    .file-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .file-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-height: auto;
+      padding: 8px 10px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--ink);
+      font: inherit;
+      font-weight: 400;
+      cursor: pointer;
+    }
+
+    .file-item.active {
+      border-color: var(--blue);
+      background: var(--soft-blue);
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 940px) {
+      .toolbar,
+      .layout,
+      .summary {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Experiment CSV Dashboard</h1>
+    <p class="subtitle">CSVログを読み込み、電力・温度・指令値・合否判定をブラウザ上で確認します。</p>
+  </header>
+
+  <main>
+    <section class="toolbar">
+      <div id="dropzone" class="dropzone" tabindex="0">
+        <input id="fileInput" type="file" accept=".csv,text/csv" multiple>
+        <div class="drop-title">CSVをここにドロップ</div>
+        <div class="drop-hint">またはクリックして `logs/raw_csv` のCSVを選択。複数ファイル対応です。</div>
+      </div>
+
+      <div class="settings">
+        <div class="settings-grid">
+          <label>P_need [W]
+            <input id="pNeed" type="number" value="120" step="1">
+          </label>
+          <label>P_max_peak [W]
+            <input id="pPeak" type="number" value="180" step="1">
+          </label>
+          <label>P_max_cont [W]
+            <input id="pCont" type="number" value="150" step="1">
+          </label>
+          <label>Temp_limit [degC]
+            <input id="tempLimit" type="number" value="75" step="1">
+          </label>
+          <label>I_aux_max [A]
+            <input id="iAuxMax" type="number" value="8" step="0.1">
+          </label>
+          <label>V_load_min [V]
+            <input id="vLoadMin" type="number" value="18" step="0.1">
+          </label>
+        </div>
+        <button id="exportCsv" class="secondary" disabled>サマリCSVを保存</button>
+      </div>
+    </section>
+
+    <section id="summary" class="summary">
+      <div class="metric">
+        <div class="metric-name">判定</div>
+        <div id="judgeMetric" class="metric-value">未読込</div>
+      </div>
+      <div class="metric">
+        <div class="metric-name">最大電力</div>
+        <div id="powerMetric" class="metric-value">-</div>
+      </div>
+      <div class="metric">
+        <div class="metric-name">最大温度</div>
+        <div id="tempMetric" class="metric-value">-</div>
+      </div>
+      <div class="metric">
+        <div class="metric-name">通信断 / Fault</div>
+        <div id="faultMetric" class="metric-value">-</div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>グラフ</h2>
+          <span id="activeFile" class="small">CSV未選択</span>
+        </div>
+        <div id="chartEmpty" class="empty">CSVを読み込むとグラフが表示されます。</div>
+        <div id="charts" class="charts" hidden>
+          <div class="chart-wrap"><canvas id="powerChart" height="260"></canvas></div>
+          <div class="chart-wrap"><canvas id="tempChart" height="260"></canvas></div>
+          <div class="chart-wrap"><canvas id="cmdChart" height="260"></canvas></div>
+        </div>
+      </div>
+
+      <aside class="panel">
+        <div class="panel-head">
+          <h2>読み込みファイル</h2>
+          <span id="fileCount" class="small">0 files</span>
+        </div>
+        <div id="fileList" class="file-list"></div>
+      </aside>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>結果サマリ</h2>
+      </div>
+      <div style="overflow-x:auto">
+        <table id="resultTable">
+          <thead>
+            <tr>
+              <th>file</th>
+              <th>judgement</th>
+              <th>P_need</th>
+              <th>P_max</th>
+              <th>P_avg</th>
+              <th>I_aux_max</th>
+              <th>Temp_max</th>
+              <th>reach_time_s</th>
+              <th>comm_loss</th>
+              <th>fault</th>
+              <th>reasons</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const state = {
+      results: [],
+      activeIndex: -1
+    };
+
+    const columns = {
+      time: "time_ms",
+      mode: "mode",
+      pNeed: "P_need",
+      pPv: "P_pv_sim",
+      pLoad: "P_load",
+      vLoad: "V_load",
+      iAux: "I_aux",
+      eAux: "E_aux",
+      uCmd: "u_cmd",
+      throttle: "theta_thr",
+      temperatures: ["temp_power", "temp_load", "temp_vesc"],
+      fault: "fault_code",
+      comm: "comm_state"
+    };
+
+    const els = {
+      dropzone: document.getElementById("dropzone"),
+      fileInput: document.getElementById("fileInput"),
+      exportCsv: document.getElementById("exportCsv"),
+      fileList: document.getElementById("fileList"),
+      fileCount: document.getElementById("fileCount"),
+      activeFile: document.getElementById("activeFile"),
+      chartEmpty: document.getElementById("chartEmpty"),
+      charts: document.getElementById("charts"),
+      powerChart: document.getElementById("powerChart"),
+      tempChart: document.getElementById("tempChart"),
+      cmdChart: document.getElementById("cmdChart"),
+      resultTableBody: document.querySelector("#resultTable tbody"),
+      judgeMetric: document.getElementById("judgeMetric"),
+      powerMetric: document.getElementById("powerMetric"),
+      tempMetric: document.getElementById("tempMetric"),
+      faultMetric: document.getElementById("faultMetric")
+    };
+
+    const settingIds = ["pNeed", "pPeak", "pCont", "tempLimit", "iAuxMax", "vLoadMin"];
+    for (const id of settingIds) {
+      document.getElementById(id).addEventListener("input", rejudgeAll);
+    }
+
+    els.dropzone.addEventListener("click", () => els.fileInput.click());
+    els.dropzone.addEventListener("keydown", event => {
+      if (event.key === "Enter" || event.key === " ") els.fileInput.click();
+    });
+    els.fileInput.addEventListener("change", event => readFiles([...event.target.files]));
+    els.exportCsv.addEventListener("click", exportSummaryCsv);
+
+    for (const eventName of ["dragenter", "dragover"]) {
+      els.dropzone.addEventListener(eventName, event => {
+        event.preventDefault();
+        els.dropzone.classList.add("drag");
+      });
+    }
+
+    for (const eventName of ["dragleave", "drop"]) {
+      els.dropzone.addEventListener(eventName, event => {
+        event.preventDefault();
+        els.dropzone.classList.remove("drag");
+      });
+    }
+
+    els.dropzone.addEventListener("drop", event => {
+      readFiles([...event.dataTransfer.files].filter(file => file.name.toLowerCase().endsWith(".csv")));
+    });
+
+    async function readFiles(files) {
+      if (!files.length) return;
+      const loaded = [];
+      for (const file of files) {
+        const text = await file.text();
+        const rows = parseCsv(text);
+        loaded.push(analyzeRows(file.name, rows));
+      }
+      state.results = loaded;
+      state.activeIndex = 0;
+      render();
+    }
+
+    function parseCsv(text) {
+      const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/).filter(line => line.trim() !== "");
+      if (!lines.length) return [];
+      const headers = splitCsvLine(lines[0]).map(h => h.trim());
+      return lines.slice(1).map(line => {
+        const values = splitCsvLine(line);
+        const row = {};
+        headers.forEach((header, index) => {
+          row[header] = values[index] ?? "";
+        });
+        return row;
+      });
+    }
+
+    function splitCsvLine(line) {
+      const values = [];
+      let current = "";
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        const next = line[i + 1];
+        if (char === '"' && inQuotes && next === '"') {
+          current += '"';
+          i++;
+        } else if (char === '"') {
+          inQuotes = !inQuotes;
+        } else if (char === "," && !inQuotes) {
+          values.push(current);
+          current = "";
+        } else {
+          current += char;
+        }
+      }
+      values.push(current);
+      return values;
+    }
+
+    function analyzeRows(fileName, rows) {
+      const thresholds = getThresholds();
+      const pNeedCsv = avg(series(rows, columns.pNeed));
+      const pNeed = numberOr(pNeedCsv, thresholds.pNeed);
+      const pPv = series(rows, columns.pPv);
+      const pLoad = series(rows, columns.pLoad);
+      const power = pLoad.some(isFiniteNumber) ? pLoad : pPv;
+      const timeS = series(rows, columns.time).map(value => isFiniteNumber(value) ? value / 1000 : NaN);
+      const tempSeries = columns.temperatures.map(col => series(rows, col));
+      const flatTemps = tempSeries.flat().filter(isFiniteNumber);
+      const faultCount = rows.filter(row => isFault(row[columns.fault])).length;
+      const commLoss = rows.filter(row => ["LOST", "DISCONNECTED", "TIMEOUT"].includes(String(row[columns.comm] ?? "").toUpperCase())).length;
+      const pMax = max(power);
+      const pAvg = avg(power);
+      const iAuxMax = max(series(rows, columns.iAux));
+      const tempMax = flatTemps.length ? Math.max(...flatTemps) : NaN;
+      const reachTime = reachTimeSeconds(timeS, power, pNeed, 0.08);
+      const overshoot = isFiniteNumber(pMax) ? Math.max(0, pMax - pNeed) : NaN;
+      const vLoadMin = min(series(rows, columns.vLoad));
+
+      const metrics = {
+        pNeed,
+        pMax,
+        pAvg,
+        iAuxMax,
+        tempMax,
+        reachTime,
+        overshoot,
+        vLoadMin,
+        commLoss,
+        faultCount
+      };
+      const judged = judge(metrics, thresholds);
+      return { fileName, rows, metrics, ...judged };
+    }
+
+    function getThresholds() {
+      return {
+        pNeed: readNumber("pNeed"),
+        pPeak: readNumber("pPeak"),
+        pCont: readNumber("pCont"),
+        tempLimit: readNumber("tempLimit"),
+        iAuxMax: readNumber("iAuxMax"),
+        vLoadMin: readNumber("vLoadMin")
+      };
+    }
+
+    function readNumber(id) {
+      return Number(document.getElementById(id).value);
+    }
+
+    function rejudgeAll() {
+      state.results = state.results.map(result => analyzeRows(result.fileName, result.rows));
+      render();
+    }
+
+    function judge(metrics, thresholds) {
+      const fail = [];
+      const warn = [];
+      if (metrics.pMax > thresholds.pPeak) fail.push("P_max exceeded P_max_peak");
+      if (metrics.iAuxMax > thresholds.iAuxMax) fail.push("I_aux_max exceeded limit");
+      if (metrics.commLoss > 0) fail.push("communication loss detected");
+      if (metrics.faultCount > 0) fail.push("failsafe/fault detected");
+      if (metrics.pAvg > thresholds.pCont) warn.push("P_avg exceeded continuous limit");
+      if (metrics.tempMax > thresholds.tempLimit) warn.push("temperature exceeded limit");
+      if (isFiniteNumber(metrics.vLoadMin) && metrics.vLoadMin < thresholds.vLoadMin) warn.push("load voltage dropped below limit");
+      if (!isFiniteNumber(metrics.reachTime)) warn.push("target power was not reached");
+      if (isFiniteNumber(metrics.overshoot) && metrics.overshoot > metrics.pNeed * 0.15) warn.push("power overshoot is large");
+      if (fail.length) return { judgement: "FAIL", reasons: fail };
+      if (warn.length) return { judgement: "WARN", reasons: warn };
+      return { judgement: "PASS", reasons: ["stable target-power response"] };
+    }
+
+    function render() {
+      els.exportCsv.disabled = state.results.length === 0;
+      els.fileCount.textContent = `${state.results.length} files`;
+      renderFiles();
+      renderTable();
+      renderActive();
+    }
+
+    function renderFiles() {
+      els.fileList.innerHTML = "";
+      state.results.forEach((result, index) => {
+        const item = document.createElement("button");
+        item.type = "button";
+        item.className = `file-item ${index === state.activeIndex ? "active" : ""}`;
+        item.innerHTML = `<span>${escapeHtml(result.fileName)}</span><span class="badge ${result.judgement.toLowerCase()}">${result.judgement}</span>`;
+        item.addEventListener("click", () => {
+          state.activeIndex = index;
+          render();
+        });
+        els.fileList.appendChild(item);
+      });
+    }
+
+    function renderTable() {
+      els.resultTableBody.innerHTML = "";
+      for (const result of state.results) {
+        const row = document.createElement("tr");
+        const m = result.metrics;
+        row.innerHTML = [
+          result.fileName,
+          result.judgement,
+          fmt(m.pNeed),
+          fmt(m.pMax),
+          fmt(m.pAvg),
+          fmt(m.iAuxMax),
+          fmt(m.tempMax),
+          fmt(m.reachTime),
+          m.commLoss,
+          m.faultCount,
+          result.reasons.join("; ")
+        ].map(value => `<td>${escapeHtml(String(value))}</td>`).join("");
+        els.resultTableBody.appendChild(row);
+      }
+    }
+
+    function renderActive() {
+      const result = state.results[state.activeIndex];
+      if (!result) {
+        els.activeFile.textContent = "CSV未選択";
+        els.chartEmpty.hidden = false;
+        els.charts.hidden = true;
+        els.judgeMetric.textContent = "未読込";
+        els.judgeMetric.className = "metric-value";
+        els.powerMetric.textContent = "-";
+        els.tempMetric.textContent = "-";
+        els.faultMetric.textContent = "-";
+        clearCanvas(els.powerChart);
+        clearCanvas(els.tempChart);
+        clearCanvas(els.cmdChart);
+        return;
+      }
+
+      const m = result.metrics;
+      els.activeFile.textContent = result.fileName;
+      els.chartEmpty.hidden = true;
+      els.charts.hidden = false;
+      els.judgeMetric.innerHTML = `<span class="badge ${result.judgement.toLowerCase()}">${result.judgement}</span>`;
+      els.powerMetric.textContent = `${fmt(m.pMax)} W`;
+      els.tempMetric.textContent = `${fmt(m.tempMax)} degC`;
+      els.faultMetric.textContent = `${m.commLoss} / ${m.faultCount}`;
+
+      const time = series(result.rows, columns.time).map((value, index) => isFiniteNumber(value) ? value / 1000 : index);
+      drawChart(els.powerChart, "Power [W]", time, [
+        { name: "P_pv_sim", values: series(result.rows, columns.pPv), color: "#2563eb" },
+        { name: "P_load", values: series(result.rows, columns.pLoad), color: "#14804a" },
+        { name: "P_need", values: series(result.rows, columns.pNeed), color: "#a15c00" }
+      ]);
+      drawChart(els.tempChart, "Temperature [degC]", time, [
+        { name: "temp_power", values: series(result.rows, "temp_power"), color: "#b42318" },
+        { name: "temp_load", values: series(result.rows, "temp_load"), color: "#a15c00" },
+        { name: "temp_vesc", values: series(result.rows, "temp_vesc"), color: "#7c3aed" }
+      ]);
+      drawChart(els.cmdChart, "Command", time, [
+        { name: "u_cmd", values: series(result.rows, columns.uCmd), color: "#2563eb" },
+        { name: "theta_thr", values: series(result.rows, columns.throttle), color: "#14804a" }
+      ]);
+    }
+
+    function drawChart(canvas, title, xValues, datasets) {
+      const ctx = canvas.getContext("2d");
+      const rect = canvas.getBoundingClientRect();
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.max(640, Math.floor(rect.width * dpr));
+      canvas.height = Math.floor(260 * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const width = canvas.width / dpr;
+      const height = canvas.height / dpr;
+      ctx.clearRect(0, 0, width, height);
+
+      const validSets = datasets
+        .map(set => ({ ...set, points: set.values.map((y, i) => ({ x: xValues[i], y })).filter(p => isFiniteNumber(p.x) && isFiniteNumber(p.y)) }))
+        .filter(set => set.points.length > 0);
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, width, height);
+      ctx.fillStyle = "#17202a";
+      ctx.font = "700 14px Segoe UI, sans-serif";
+      ctx.fillText(title, 12, 20);
+
+      if (!validSets.length) {
+        ctx.fillStyle = "#667085";
+        ctx.font = "13px Segoe UI, sans-serif";
+        ctx.fillText("表示できる列がありません", 12, 54);
+        return;
+      }
+
+      const allX = validSets.flatMap(set => set.points.map(p => p.x));
+      const allY = validSets.flatMap(set => set.points.map(p => p.y));
+      const xMin = Math.min(...allX);
+      const xMax = Math.max(...allX);
+      const yMinRaw = Math.min(...allY);
+      const yMaxRaw = Math.max(...allY);
+      const yPad = Math.max((yMaxRaw - yMinRaw) * 0.12, 1);
+      const yMin = yMinRaw - yPad;
+      const yMax = yMaxRaw + yPad;
+      const plot = { left: 54, right: width - 16, top: 36, bottom: height - 34 };
+
+      ctx.strokeStyle = "#d8dee7";
+      ctx.lineWidth = 1;
+      ctx.font = "11px Segoe UI, sans-serif";
+      ctx.fillStyle = "#667085";
+      for (let i = 0; i <= 4; i++) {
+        const y = plot.bottom - (plot.bottom - plot.top) * (i / 4);
+        ctx.beginPath();
+        ctx.moveTo(plot.left, y);
+        ctx.lineTo(plot.right, y);
+        ctx.stroke();
+        const label = yMin + (yMax - yMin) * (i / 4);
+        ctx.fillText(fmt(label), 8, y + 4);
+      }
+
+      ctx.strokeStyle = "#98a2b3";
+      ctx.beginPath();
+      ctx.moveTo(plot.left, plot.top);
+      ctx.lineTo(plot.left, plot.bottom);
+      ctx.lineTo(plot.right, plot.bottom);
+      ctx.stroke();
+
+      const sx = value => plot.left + ((value - xMin) / Math.max(xMax - xMin, 1)) * (plot.right - plot.left);
+      const sy = value => plot.bottom - ((value - yMin) / Math.max(yMax - yMin, 1)) * (plot.bottom - plot.top);
+
+      validSets.forEach((set, index) => {
+        ctx.strokeStyle = set.color;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        set.points.forEach((point, pointIndex) => {
+          const x = sx(point.x);
+          const y = sy(point.y);
+          if (pointIndex === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+        const lx = plot.left + index * 140;
+        ctx.fillStyle = set.color;
+        ctx.fillRect(lx, height - 18, 16, 3);
+        ctx.fillStyle = "#17202a";
+        ctx.font = "12px Segoe UI, sans-serif";
+        ctx.fillText(set.name, lx + 22, height - 14);
+      });
+    }
+
+    function clearCanvas(canvas) {
+      const ctx = canvas.getContext("2d");
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function series(rows, column) {
+      return rows.map(row => Number(row[column]));
+    }
+
+    function avg(values) {
+      const filtered = values.filter(isFiniteNumber);
+      if (!filtered.length) return NaN;
+      return filtered.reduce((sum, value) => sum + value, 0) / filtered.length;
+    }
+
+    function max(values) {
+      const filtered = values.filter(isFiniteNumber);
+      return filtered.length ? Math.max(...filtered) : NaN;
+    }
+
+    function min(values) {
+      const filtered = values.filter(isFiniteNumber);
+      return filtered.length ? Math.min(...filtered) : NaN;
+    }
+
+    function reachTimeSeconds(timeS, power, target, tolerance) {
+      const threshold = target * (1 - tolerance);
+      for (let i = 0; i < power.length; i++) {
+        if (isFiniteNumber(power[i]) && power[i] >= threshold && isFiniteNumber(timeS[i])) {
+          const start = timeS.find(isFiniteNumber) ?? 0;
+          return timeS[i] - start;
+        }
+      }
+      return NaN;
+    }
+
+    function isFault(value) {
+      const text = String(value ?? "").trim().toUpperCase();
+      if (!text || text === "0" || text === "OK" || text === "NONE" || text === "NAN") return false;
+      const numeric = Number(text);
+      return Number.isNaN(numeric) || numeric !== 0;
+    }
+
+    function numberOr(value, fallback) {
+      return isFiniteNumber(value) ? value : fallback;
+    }
+
+    function isFiniteNumber(value) {
+      return Number.isFinite(value);
+    }
+
+    function fmt(value) {
+      if (!isFiniteNumber(value)) return "-";
+      if (Math.abs(value) >= 100) return value.toFixed(0);
+      if (Math.abs(value) >= 10) return value.toFixed(1);
+      return value.toFixed(2);
+    }
+
+    function escapeHtml(value) {
+      return value
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function exportSummaryCsv() {
+      const header = ["file", "judgement", "P_need", "P_max", "P_avg", "I_aux_max", "Temp_max", "reach_time_s", "comm_loss", "fault", "reasons"];
+      const lines = [header.join(",")];
+      for (const result of state.results) {
+        const m = result.metrics;
+        const row = [
+          result.fileName,
+          result.judgement,
+          fmt(m.pNeed),
+          fmt(m.pMax),
+          fmt(m.pAvg),
+          fmt(m.iAuxMax),
+          fmt(m.tempMax),
+          fmt(m.reachTime),
+          m.commLoss,
+          m.faultCount,
+          result.reasons.join("; ")
+        ];
+        lines.push(row.map(csvCell).join(","));
+      }
+      const blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "experiment_dashboard_summary.csv";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function csvCell(value) {
+      const text = String(value);
+      if (/[",\n]/.test(text)) return `"${text.replaceAll('"', '""')}"`;
+      return text;
+    }
+
+    window.addEventListener("resize", () => {
+      if (state.activeIndex >= 0) renderActive();
+    });
+  </script>
+</body>
+</html>
