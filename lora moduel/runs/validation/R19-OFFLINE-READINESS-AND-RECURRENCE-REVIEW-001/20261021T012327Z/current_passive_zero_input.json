@@ -1,0 +1,12 @@
+{
+  "schema": "vc-lora-r19-startup-boundary-evidence-v1",
+  "experiment_mode": "PASSIVE",
+  "first_failure_record": null,
+  "readiness": null,
+  "first_read": null,
+  "source_order": null,
+  "coverage": {
+    "rf": null,
+    "parameters": null
+  }
+}

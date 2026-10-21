@@ -1,0 +1,325 @@
+diff --git "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\vc_lora_ground_xiao_esp32s3\\vc_lora_phase6_bridge.hpp" b/vc_lora_ground_xiao_esp32s3/vc_lora_phase6_bridge.hpp
+index 84ce34d..c90f1fd 100644
+--- "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\vc_lora_ground_xiao_esp32s3\\vc_lora_phase6_bridge.hpp"
++++ b/vc_lora_ground_xiao_esp32s3/vc_lora_phase6_bridge.hpp
+@@ -28,6 +28,20 @@
+ #error "R19 runtime diagnostics require the R19 candidate"
+ #endif
+ 
++// Experimental USB-only cause isolation, never an implicit product policy.
++// 0 preserves the existing diagnostic behaviour; 1 observes private clock
++// exchange only; 2 holds initial Ground product USB admission until explicit
++// same-boot/epoch/session HostArm. This is NOT Pixhawk flight arming.
++#ifndef VC_LORA_R19_USB_READINESS_MODE
++#define VC_LORA_R19_USB_READINESS_MODE 0
++#endif
++#if VC_LORA_R19_USB_READINESS_MODE < 0 || VC_LORA_R19_USB_READINESS_MODE > 2
++#error "VC_LORA_R19_USB_READINESS_MODE must be 0, 1 or 2"
++#endif
++#if VC_LORA_R19_USB_READINESS_MODE && !VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS
++#error "R19 USB readiness modes require runtime diagnostics"
++#endif
++
+ #include <Arduino.h>
+ #include <Preferences.h>
+ #include <esp_timer.h>
+@@ -63,8 +77,12 @@
+ #include "high_speed/r19_runtime_fail_diagnostic.hpp"
+ #include "high_speed/r19_runtime_stage_record.hpp"
+ #include "high_speed/r19_first_usb_failure_record.hpp"
++#if VC_LORA_R19_USB_READINESS_MODE != 0
++#include "diagnostics/r19_host_readiness.hpp"
++#else
+ #include "high_speed/r19_usb_clock_sync.hpp"
+ #endif
++#endif
+ 
+ #include <vc_lora/embedded_io_adapter.hpp>
+ #include <vc_lora/ground_parameter_download_proxy.hpp>
+@@ -294,6 +312,41 @@ __attribute__((used, aligned(4))) experimental::R19FirstUsbFailureRecord
+     vc_lora_r19_first_usb_failure_record{};
+ }
+ 
++#if defined(VC_LORA_PHASE6_GROUND) && VC_LORA_R19_USB_READINESS_MODE != 0
++experimental::R19HostReadinessGate r19_host_readiness_gate{};
++std::uint64_t r19_usb_readiness_boot_id{0U};
++std::uint64_t r19_usb_readiness_reader_session{0U};
++bool r19_usb_readiness_initialized{false};
++bool r19_usb_readiness_configured{false};
++std::uint64_t r19_usb_readiness_acquisition_deadline_us{0U};
++bool r19_usb_ready_publication_complete{false};
++// Independent diagnostic session acquisition budget, NOT a replacement for
++// the unchanged 106-ms product Heartbeat admission-to-publication deadline.
++constexpr std::uint64_t kR19UsbReadinessArmTimeoutUs = 120000000U;
++
++void r19_begin_usb_readiness_diagnostic() noexcept {
++#if VC_LORA_R19_USB_READINESS_MODE != 0
++  // Local session identity is taught to the PC by READY; it is not guessed
++  // from ordinary MAVLink, nor authentication of the host's Read claim.
++  r19_usb_readiness_reader_session = r19_usb_readiness_boot_id ^
++      0x5231395245414459ULL;
++  if (r19_usb_readiness_reader_session == 0U)
++    r19_usb_readiness_reader_session = 1U;
++  const auto now_us = static_cast<std::uint64_t>(esp_timer_get_time());
++  r19_usb_readiness_acquisition_deadline_us =
++      now_us > std::numeric_limits<std::uint64_t>::max() -
++                   kR19UsbReadinessArmTimeoutUs
++          ? std::numeric_limits<std::uint64_t>::max()
++          : now_us + kR19UsbReadinessArmTimeoutUs;
++  // The wrapper is closed before any product admission. Bind the concrete
++  // USB loss epoch only on the first validated diagnostic request, because
++  // host enumeration/reset can legitimately change it after setup. Until
++  // then the gate's inert default object is NEVER consulted for permission.
++  r19_usb_readiness_configured = r19_usb_readiness_boot_id != 0U;
++#endif
++}
++#endif
++
+ void r19_mark_runtime_stage(R19RuntimeStage stage) noexcept {
+   (void)vc_lora_r19_runtime_stage_record.mark_stage(
+       experimental::r19_runtime_stage_bit(stage));
+@@ -311,6 +364,11 @@ void r19_initialize_runtime_stage_record() noexcept {
+       esp_random(), esp_random(), esp_random(), esp_random()};
+   if ((instance[0] | instance[1] | instance[2] | instance[3]) == 0U)
+     instance[3] = 1U;
++#if defined(VC_LORA_PHASE6_GROUND) && VC_LORA_R19_USB_READINESS_MODE != 0
++  r19_usb_readiness_boot_id = static_cast<std::uint64_t>(instance[0]) |
++      (static_cast<std::uint64_t>(instance[1]) << 32U);
++  if (r19_usb_readiness_boot_id == 0U) r19_usb_readiness_boot_id = 1U;
++#endif
+   (void)vc_lora_r19_first_usb_failure_record.initialize(
+       kR19RuntimeStageRole, kR19RuntimeDiagnosticGenerationFingerprint, instance);
+   (void)vc_lora_r19_ground_usb_commit_record.initialize(
+@@ -399,8 +457,32 @@ std::size_t r19_usb_clock_reply_offset{0U};
+ std::uint32_t r19_usb_clock_reply_epoch{0U};
+ std::uint64_t r19_usb_clock_reply_deadline_ms{0U};
+ std::uint8_t r19_usb_clock_sequence{0U};
++#if VC_LORA_R19_USB_READINESS_MODE != 0
++enum class R19UsbPrivateReplyKind : std::uint8_t { Clock, Ready };
++R19UsbPrivateReplyKind r19_usb_private_reply_kind{R19UsbPrivateReplyKind::Clock};
++std::uint64_t r19_usb_clock_reply_nonce{0U};
++std::uint64_t r19_usb_clock_reply_device_us{0U};
++#endif
+ 
+ bool r19_intercept_usb_clock_request(const MavlinkFrame& frame) noexcept {
++#if VC_LORA_R19_USB_READINESS_MODE != 0
++  if (experimental::r19_is_host_readiness_namespace(frame)) {
++    // Consume invalid/stale/replayed diagnostic ARM and READY locally too.
++    // OUT receipt alone is not evidence of a physical USB IN completion.
++#if VC_LORA_R19_USB_READINESS_MODE == 2
++    experimental::R19HostReadinessCommand command{};
++    if (r19_usb_readiness_initialized &&
++        r19_usb_ready_publication_complete &&
++        !r19_usb_clock_reply_pending && !r19_usb_clock_reply_active &&
++        !r19_usb_clock_reply_fault &&
++        experimental::r19_decode_host_readiness_frame(frame, command)) {
++      (void)r19_host_readiness_gate.accept_arm(command, Serial.txLossEpoch(),
++          static_cast<std::uint64_t>(esp_timer_get_time()));
++    }
++#endif
++    return true;
++  }
++#endif
+   if (!experimental::r19_is_usb_clock_namespace(frame)) return false;
+   // Consume the whole diagnostic namespace locally, including invalid or busy
+   // requests. None may reach the product parameter proxy/radio path.
+@@ -409,10 +491,31 @@ bool r19_intercept_usb_clock_request(const MavlinkFrame& frame) noexcept {
+       r19_usb_clock_reply_fault ||
+       !experimental::r19_decode_usb_clock_request(frame, nonce)) return true;
+   const auto sampled_us = static_cast<std::uint64_t>(esp_timer_get_time());
++#if VC_LORA_R19_USB_READINESS_MODE != 0
++  if (!r19_usb_readiness_configured) return true;
++  if (sampled_us >= r19_usb_readiness_acquisition_deadline_us) return true;
++  if (!r19_usb_readiness_initialized) {
++    r19_usb_readiness_initialized = r19_host_readiness_gate.begin_session(
++        static_cast<experimental::R19HostReadinessMode>(
++            VC_LORA_R19_USB_READINESS_MODE),
++        experimental::R19HostReadinessRole::Ground,
++        r19_usb_readiness_boot_id, Serial.txLossEpoch(),
++        r19_usb_readiness_reader_session, sampled_us,
++        r19_usb_readiness_acquisition_deadline_us - sampled_us);
++  }
++  if (!r19_usb_readiness_initialized ||
++      !r19_host_readiness_gate.observe_clock_request(
++          nonce, Serial.txLossEpoch(), sampled_us)) return true;
++#endif
+   if (!experimental::r19_encode_usb_clock_response(
+           r19_usb_clock_sequence, nonce, sampled_us, r19_usb_clock_reply) ||
+       !vc_lora_r19_first_usb_failure_record.observe_clock_sync(nonce, sampled_us))
+     return true;
++#if VC_LORA_R19_USB_READINESS_MODE != 0
++  r19_usb_clock_reply_nonce = nonce;
++  r19_usb_clock_reply_device_us = sampled_us;
++  r19_usb_private_reply_kind = R19UsbPrivateReplyKind::Clock;
++#endif
+   r19_usb_clock_reply_pending = true;
+   return true;
+ }
+@@ -2867,7 +2970,35 @@ struct GroundUsbEpochCheckedWriter {
+ 
+ GroundUsbEpochCheckedWriter ground_usb_epoch_checked_writer{};
+ 
++bool r19_product_usb_publication_allowed() noexcept {
++#if VC_LORA_R19_USB_READINESS_MODE == 2
++  const auto now_us = static_cast<std::uint64_t>(esp_timer_get_time());
++  if (!r19_usb_readiness_initialized) {
++    if (r19_usb_readiness_configured &&
++        now_us >= r19_usb_readiness_acquisition_deadline_us)
++      latch_runtime_fail_closed();
++    return false;
++  }
++  r19_host_readiness_gate.poll(Serial.txLossEpoch(),
++      r19_usb_readiness_reader_session, now_us);
++  const auto state = r19_host_readiness_gate.snapshot().state;
++  if (state == experimental::R19HostReadinessState::TimedOut ||
++      state == experimental::R19HostReadinessState::EpochAborted ||
++      state == experimental::R19HostReadinessState::SessionAborted ||
++      state == experimental::R19HostReadinessState::ClockRegressed ||
++      state == experimental::R19HostReadinessState::InvalidConfiguration) {
++    latch_runtime_fail_closed();
++    return false;
++  }
++  return r19_host_readiness_gate.allow_ground_usb_product_admission();
++#else
++  // Disabled and SyncOnly preserve the original product path byte-for-byte.
++  return true;
++#endif
++}
++
+ void pump_ground_usb_egress(std::uint64_t now_ms) noexcept {
++  if (!r19_product_usb_publication_allowed()) return;
+   // A preceding publication fence can block for up to 100 ms.  Never feed
+   // that stale loop-entry timestamp into the 50-ms host-presence filter or a
+   // short post-fence USB dip can be misclassified as a confirmed disconnect.
+@@ -3204,6 +3335,12 @@ void update_ground_usb_connection(std::uint64_t now_ms) noexcept {
+ bool admit_ground_paced_heartbeat(
+     const GroundUsbHeartbeatLease& lease,
+     std::uint64_t now_ms) noexcept {
++  if (!r19_product_usb_publication_allowed()) {
++    // This lease is still retractable: no product byte entered LocalEgress.
++    (void)ground_usb_heartbeat_pacer.complete_emit(
++        lease.token, TxResult::Rejected, now_ms);
++    return false;
++  }
+   auto& egress = radio_application_endpoint.egress();
+   if (ground_paced_heartbeat_commit_active || egress.fail_closed()) {
+     (void)ground_usb_heartbeat_pacer.complete_emit(
+@@ -3481,6 +3618,7 @@ void observe_ground_parameter_publish_commit(
+ // a tracked PARAM_VALUE advances only after its result-bearing HWCDC fence.
+ bool replay_ground_usb_ordered_backlog(
+     std::uint64_t now_ms) noexcept {
++  if (!r19_product_usb_publication_allowed()) return true;
+   if (ground_paced_heartbeat_commit_active) {
+     return true;
+   }
+@@ -3566,6 +3704,20 @@ void recover_ground_stale_pacer_pair(
+   }
+ }
+ 
++void r19_expire_waiting_host_heartbeats(std::uint64_t now_ms) noexcept {
++#if VC_LORA_R19_USB_READINESS_MODE == 2
++  const auto held = ground_usb_heartbeat_pacer.queued();
++  const auto expired =
++      ground_usb_heartbeat_pacer.diagnostics().expired_heartbeats;
++  ground_usb_heartbeat_pacer.expire(now_ms);
++  if (held != ground_usb_heartbeat_pacer.queued() || expired !=
++          ground_usb_heartbeat_pacer.diagnostics().expired_heartbeats)
++    recover_ground_stale_pacer_pair(now_ms);
++#else
++  (void)now_ms;
++#endif
++}
++
+ // Deadline admission happens only at an empty LocalEgress frame boundary. The
+ // heartbeat marker is removed only after its byte-exact pacer lease entered
+ // that FIFO. Following frames stay in the descriptor backlog until the HB's
+@@ -3580,6 +3732,10 @@ void service_ground_usb_heartbeat_pacer(
+   const std::uint64_t observed_ms =
+       std::max(now_ms, monotonic_now_ms());
+   update_ground_usb_connection(observed_ms);
++  if (!r19_product_usb_publication_allowed()) {
++    r19_expire_waiting_host_heartbeats(observed_ms);
++    return;
++  }
+   if (!ground_usb_transport_epoch_healthy(observed_ms)) {
+     return;
+   }
+@@ -4950,7 +5106,8 @@ void handle_ground_validated_frame(const MavlinkFrame& frame,
+     return;
+   }
+ 
+-  if (!ground_usb_ordered_backlog.empty() ||
++  if (!r19_product_usb_publication_allowed() ||
++      !ground_usb_ordered_backlog.empty() ||
+       ground_usb_heartbeat_pacer.queued() != 0U ||
+       ground_paced_heartbeat_commit_active ||
+       ground_parameter_publish_commit_active) {
+@@ -5295,6 +5452,9 @@ bool r19_ground_output_is_final_parameter(
+ 
+ bool r19_route_ground_usb_output(const HighSpeedPhase6Output& output,
+                                  std::uint64_t now_ms) noexcept {
++  // Preserve the adapter's pending output token while HostArm is pending;
++  // never complete/reissue a potentially accepted product payload.
++  if (!r19_product_usb_publication_allowed()) return false;
+   if (output.type != HighSpeedPhase6OutputType::GroundUsbWrite ||
+       output.token == 0U || output.size == 0U ||
+       r19_ground_usb_commit_active ||
+@@ -5981,6 +6141,34 @@ bool r19_service_usb_clock_reply() noexcept {
+       monotonic_now_ms() <= r19_usb_clock_reply_deadline_ms) {
+     r19_usb_clock_reply_active = false;
+     ++r19_usb_clock_sequence;
++#if VC_LORA_R19_USB_READINESS_MODE != 0
++    if (r19_usb_private_reply_kind == R19UsbPrivateReplyKind::Clock) {
++      const auto completed_us =
++          static_cast<std::uint64_t>(esp_timer_get_time());
++      if (!r19_host_readiness_gate.record_clock_reply(
++              r19_usb_clock_reply_nonce, r19_usb_clock_reply_device_us,
++              r19_usb_clock_reply_epoch, completed_us)) {
++        r19_usb_clock_reply_fault = true;
++        return true;
++      }
++#if VC_LORA_R19_USB_READINESS_MODE == 2
++      experimental::R19HostReadinessCommand ready{};
++      if (
++          !r19_host_readiness_gate.ready_command(ready) ||
++          !experimental::r19_encode_host_readiness_frame(
++              r19_usb_clock_sequence, ready, r19_usb_clock_reply)) {
++        r19_usb_clock_reply_fault = true;
++        return true;
++      }
++      // Same exact-once writer and clean boundary; no diagnostic/product
++      // writer can run between this reply and its binding READY record.
++      r19_usb_private_reply_kind = R19UsbPrivateReplyKind::Ready;
++      r19_usb_clock_reply_pending = true;
++#endif
++    } else {
++      r19_usb_ready_publication_complete = true;
++    }
++#endif
+   }
+   return true;
+ }
+@@ -6008,6 +6196,9 @@ void setup_bridge() noexcept {
+ #endif
+ #if VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS
+   r19_mark_runtime_stage(R19RuntimeStage::SerialBeginReturned);
++#if defined(VC_LORA_PHASE6_GROUND) && VC_LORA_R19_USB_READINESS_MODE != 0
++  r19_begin_usb_readiness_diagnostic();
++#endif
+   const std::uint64_t diagnostic_start_ms = monotonic_now_ms();
+   if (!r19_runtime_diagnostic_cadence.start(diagnostic_start_ms)) {
+     r19_fail_diagnostic_transport(
+@@ -6117,7 +6308,12 @@ void loop_bridge() noexcept {
+   r19_mark_runtime_stage(R19RuntimeStage::LoopEntered);
+ #if defined(VC_LORA_PHASE6_GROUND)
+   r19_collect_failed_usb_clock_requests();
+-  if (r19_usb_clock_reply_active || r19_usb_clock_reply_fault) {
++  if (r19_usb_clock_reply_active || r19_usb_clock_reply_fault
++#if VC_LORA_R19_USB_READINESS_MODE == 2
++      || (r19_usb_clock_reply_pending &&
++          r19_usb_private_reply_kind == R19UsbPrivateReplyKind::Ready)
++#endif
++      ) {
+     (void)r19_service_usb_clock_reply();
+     return;
+   }

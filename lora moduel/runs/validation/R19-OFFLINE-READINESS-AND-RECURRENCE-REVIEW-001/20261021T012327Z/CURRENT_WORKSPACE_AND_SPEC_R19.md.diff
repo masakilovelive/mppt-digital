@@ -1,0 +1,62 @@
+warning: in the working copy of 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-OFFLINE-READINESS-AND-RECURRENCE-REVIEW-001\20261021T012327Z\before\CURRENT_WORKSPACE_AND_SPEC_R19.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-OFFLINE-READINESS-AND-RECURRENCE-REVIEW-001\20261021T012327Z\after\CURRENT_WORKSPACE_AND_SPEC_R19.md', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-OFFLINE-READINESS-AND-RECURRENCE-REVIEW-001\\20261021T012327Z\\before\\CURRENT_WORKSPACE_AND_SPEC_R19.md" "b/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-OFFLINE-READINESS-AND-RECURRENCE-REVIEW-001\\20261021T012327Z\\after\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
+index 0d2700f..1b1bafd 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-OFFLINE-READINESS-AND-RECURRENCE-REVIEW-001\\20261021T012327Z\\before\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
++++ "b/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-OFFLINE-READINESS-AND-RECURRENCE-REVIEW-001\\20261021T012327Z\\after\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
+@@ -6,6 +6,7 @@
+ 
+ ## 結論
+ 
++- 最新のオフライン再検証と再発履歴照合はSection 31.59である。受信0 byteの症状はR18／R19とも過去にあり、新規症状ではない。ただし今回の原因が過去と同じと判明したわけではない。受信準備272項目・境界判定54項目をPS5.1／7で再PASS、関連21/21及び通常版build2/2もPASS。機器ARM／初回enqueue固定記録とmode別実機手順は未統合で、実機操作はしていない。
+ - 最新の接続状態確認はSection 31.58である。外出中の利用者から検証依頼を受け、COM6を57600 bps・DTR/RTS falseで60秒間受信のみ観測した。COM3／COM6及び両USB-JTAG等のOS認識は正常だが、受信0 byte／送信0 byteで、現在の下り通信は確認できなかった。書込み・JTAG・reset・要求送信は行っていない。これはR19比較試験ではなく、機器上のfirmware hash・Pixhawk通電・RF・初回USB停止の原因も未確定である。
+ - 連続Readと機器側HostArmの土台はSection 31.55である。PC側の物理Read担当をCOM Openからcleanupまで単一の連続readerとし、identity確認後の担当切替えを廃止した。同節時点で全host343/343、include経路の限定修正後49/49、通常／診断Arduino4/4ビルドはPASS。最新のオフライン追加はSection 31.57を参照する。106 ms、UART／TDD／E220設定及び既存sealed候補は未変更。機器HostArmの診断source／codecは準備済みだが、能動live runnerとmode別candidate／flash bindingは未統合で、既存passive試験へは使用しない。
+ - 最新のR19診断版実機結果はSection 31.56である。同じ候補 `20261020T123447347Z-b414028b` を1回評価し、40秒で各2,646 byte／完全診断42 frame（測定内40＋startup 2）、全parser異常0を取得した。連続native Readの最大間隔はVehicle 57.4314 ms／Ground 57.4311 msで100 ms以内だが、LIVE解析処理は303.612／268.557 msで未合格。Groundの初回21-byte製品Heartbeatは今回も106 msのLoopTimeout、ring／stash 0、publish 3／pickup 2で失敗した。最初のReadの初期bufferに既に完全R19Fが63 byteあったため、この失敗が後続の解析遅延だけで起きたとは説明できない。PC Open前後の数値時刻・物理host pollingとの因果は未確定。両機accepted R18へのdigest照合付き復旧はPASS、今回の1回許可は使用済み、追加実機試験はしていない。
+@@ -4760,3 +4761,47 @@ Pixhawkの通電・送出、E220、機器applicationの初期化、USB完了の
+ 追加の書込み／CPU停止／電源操作は実施していない。新しいR19診断比較を行う前には、
+ 31.57の未統合記録・candidate／実行手順の準備と、対象・安全・復旧条件を改めてそろえる必要がある。
+ 
++### 31.59 外出中のオフライン再検証・0 byteの再発履歴照合（2026-10-21 JST）
++
++利用者の「診断統合・オフライン検証」と、今回の0 byteが新しく発生したかという問いに対する検証である。
++COM、JTAG、書込み、reset、電源操作は行っていない。今回は既存診断部品の再検証と統合状態の監査であり、
++残る実機統合の実装を完了したとは扱わない。106 ms、UART／TDD／E220設定は維持した。
++
++記録: `runs/validation/R19-OFFLINE-READINESS-AND-RECURRENCE-REVIEW-001/20261021T012327Z/summary.json`。
++
++#### 今回のオフライン検証
++
++- 受信準備workflow 272項目、境界判定54項目をWindows PowerShell 5.1／PowerShell 7でそれぞれ再PASS。
++- 関連CTest 21/21 PASS、23.95秒。全345項目を今回は再実行しておらず、前回の全件PASSと区別する。
++- 現在の0 byte観測には機器初回失敗記録・ARM記録がないため、その欠測条件を判定器へ与えた。
++  結果は原因分類UNKNOWN、USB障害記録NOT_OBSERVED、RF／全件取得NOT_EVALUATEDで、空入力を合格や既知USB原因へ昇格させなかった。
++- Vehicle→Groundの通常版compile 2/2 PASS。BIN SHAは前回と同一だが、これらは通常版のbuild確認であり、
++  新しいR19 mode 1／2の候補生成・受入又は機器書込みではない。
++
++#### 過去の受信0 byteとの比較
++
++| 日時（JST） | 保存済みの観測 | 判定範囲 |
++|---|---|---|
++| 2026-09-25 | R18の40秒受信で1,244 byte・正常42 frame。その後の別read-only preflightは0 byte | 同bootのCOM切替え・session状態をそろえない比較への注意が既に§19／20にある |
++| 2026-10-10 | R19診断版の40秒dual-COMが両方0 byte | 当該runでは内部記録にWriteAccepted→FlushFailedがある |
++| 2026-10-19 00:29頃 | accepted R18証明済みで90秒raw 0 byte、要求送信0、pump最大61.341 ms | R18でも同じ外見の症状があった証拠 |
++| 同日01:00頃 | 両XIAO＋Pixhawk cold boot及びrunner修正後、676 byte・正常18 frame・Heartbeat16件・単一PARAM応答1件 | 往復は成立。ただし複数条件が変わっており、直前の0 byteの根因証明ではない |
++| 2026-10-21 07:33頃 | R19は各COM診断2,646 byte／42 frame、製品frame 0、初回製品21 byteのUSB完了106.238 ms失敗 | 全受信0 byteとは別の観測。機器側USB記録により当該境界を確認 |
++| 同日09:46頃 | 今回の受信専用60.011493秒はCOM6 rx 0／tx 0、機器firmware hash未確認 | 過去と症状は共通だが、同一原因・新規regressionとも未証明 |
++
++各正本JSONのSHAを再照合して今回summaryへ保存した。結論は「症状は新しくないが、今回の原因まで既知とは言えない」。
++過去にrunnerの空配列・起動表示・公平性などを修正した事実と、今回の無受信を引き起こした原因の証明は別である。
++
++§19／20には、accepted R18でUSBのtxLossEpochが変わるとruntime_fail_closedを保持し、
++同bootのCOM close／reopen後の出力が止まり得る既知の注意点がある。
++今回にも関連する候補だが、今回のloss epoch／latch／RF／通電状態の証拠はなく、発生済みとは断定しない。
++従って今回の無受信を、新しいfirmware修正で発生した故障、又は以前の106 ms失敗の再発と決めつけない。
++
++#### 診断統合の監査で確認した残作業
++
++MCUのgate・READY・ARM照合とPCのoffline workflowは存在するが、PCのARM送信受付は機器受理の証拠ではない。
++機器ARM時刻・最初の製品enqueue・mode・full build／boot・USB epochを同じ版管理された固定記録で残す統合、
++そのstrict decoder・ELF symbol／manifest・JTAG取得対応、mode別候補と専用live runnerが残っている。
++既存sealed候補にはこのreadiness定義がなく、既存passive runnerもwrite 0なので流用しない。
++これは検証で判明した実際の未完了範囲であり、オフライン試験PASSだけで実機試験可能又は通信改善済みとはしない。
++

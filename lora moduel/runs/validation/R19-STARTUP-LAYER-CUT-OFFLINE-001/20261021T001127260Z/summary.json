@@ -1,0 +1,170 @@
+{
+  "schema": "vc-lora-r19-startup-layer-cut-offline-validation-v1",
+  "status": "PASS_OFFLINE_ONLY_LIVE_BINDING_AND_ROOT_CAUSE_UNRESOLVED",
+  "finalized_utc": "2026-10-21T00:35:35Z",
+  "source_inventory": "source_inventory.json",
+  "source_snapshots": "after/",
+  "source_diffs": "*.diff",
+  "user_scope": {
+    "future_specification_only": "2: adaptive congestion and long-range buffering",
+    "current_diagnostic_scope": [
+      "1: startup readiness versus operation",
+      "3: USB completion versus RF delivery versus all-parameter completion"
+    ]
+  },
+  "hardware_interaction": false,
+  "com_opened": false,
+  "jtag_connected": false,
+  "firmware_uploaded": false,
+  "power_operation": false,
+  "firmware_source_changed": false,
+  "sdk_source_changed": false,
+  "passive_runner_changed": false,
+  "sealed_candidate_changed": false,
+  "timeout_budget_ms": 106,
+  "uart_tdd_e220_settings_changed": false,
+  "buffer_capacity_changed": false,
+  "implemented": [
+    {
+      "path": "SPEC.md",
+      "section": "FUTURE-FLOW-001",
+      "state": "FUTURE_ONLY",
+      "reason": "No software ring/stash backlog at the immutable first USB failure; adaptive flow control is important but not established as its direct fix."
+    },
+    {
+      "path": "tools/r19_host_readiness_workflow.ps1",
+      "scope": "Pure offline state machine. No live COM runner. SyncOnly completes on validated ClockReply, has no READY/ARM or boot tuple binding; ExplicitHostArm requires ClockReply+READY before one ARM OUT.",
+      "device_arm_proven": false,
+      "kernel_pending_read_proven": false,
+      "live_integration_ready": false
+    },
+    {
+      "path": "tools/r19_startup_boundary_evaluation.ps1",
+      "scope": "Evidence-scoped offline classifier with independent USB/RF/parameter results and conservative timing/provenance gates.",
+      "pre_arm_failure_classification": "PRE_ARM_FAILURE_REQUIRES_GATE_OR_BINDING_REVIEW",
+      "root_cause_proven": false
+    }
+  ],
+  "independent_review": {
+    "initial_findings": 2,
+    "closed": 2,
+    "outstanding": 0,
+    "findings": [
+      "SyncOnly incorrectly waited for READY emitted only by firmware mode 2; test-first corrected against actual source contract.",
+      "Pre-ARM product failure with strict binding requires gate/provenance review, not a startup causation claim."
+    ]
+  },
+  "tests": {
+    "workflow": {
+      "checks_each_shell": 272,
+      "failures": 0,
+      "shells": [
+        "Windows PowerShell 5.1",
+        "PowerShell 7"
+      ],
+      "logs": [
+        "workflow_ps51_final.log",
+        "workflow_ps7_final.log"
+      ]
+    },
+    "evaluator": {
+      "checks_each_shell": 54,
+      "failures": 0,
+      "shells": [
+        "Windows PowerShell 5.1",
+        "PowerShell 7"
+      ],
+      "logs": [
+        "evaluation_ps51_final.log",
+        "evaluation_ps7_final.log"
+      ]
+    },
+    "related_ctest_initial": {
+      "passed": 21,
+      "failed": 0,
+      "log": "related_ctest.log",
+      "scope": "Pre-review revision; superseded by the final full suite below."
+    },
+    "full_host_suite": {
+      "status": "PASS",
+      "passed": 345,
+      "failed": 0,
+      "elapsed_seconds": 517.47,
+      "entry_point": "tools/run_host_tests.ps1",
+      "log": "full_host_tests_final.log"
+    },
+    "normal_arduino_builds": {
+      "order": [
+        "vehicle",
+        "ground"
+      ],
+      "passed": 2,
+      "failed": 0,
+      "uploaded": false,
+      "vehicle": {
+        "bytes": 390768,
+        "sha256": "09E64D5E3CD3F07A2AD67D44EBD85B24F9CE28AD37DD77ED80E8669CEECAA861",
+        "log": "arduino/vehicle/compile.json"
+      },
+      "ground": {
+        "bytes": 360992,
+        "sha256": "0A6F26371530B595770A694F7853EBE28438740ED9A66253F54A6C609CAF872A",
+        "warning": "Existing unchanged source unused variable disposition",
+        "log": "arduino/ground/compile.json"
+      }
+    },
+    "frozen_candidate_verifier": {
+      "status": "PASS",
+      "artifact_id": "20261020T123447347Z-b414028b",
+      "log": "unchanged_candidate_verification.log",
+      "new_candidate_created": false
+    }
+  },
+  "existing_live_data_re_evaluation": {
+    "source_run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261020T223348550Z-ccb3f550",
+    "input": "latest_saved_run_input.json",
+    "result": "latest_saved_run_evaluation.json",
+    "readiness_classification": "UNKNOWN",
+    "usb_failure": "IMMUTABLE_USB_COMPLETION_TIMEOUT",
+    "expected_frame_bytes": 21,
+    "accepted_frame_bytes": 21,
+    "elapsed_us": 106238,
+    "ring_pending_bytes": 0,
+    "stash_pending_bytes": 0,
+    "publish_generation": 3,
+    "pickup_generation": 2,
+    "failure_report_in_initial_pc_buffer": true,
+    "report_bytes": 63,
+    "report_crc_valid": true,
+    "immutable_record_boot_bound_to_report": false,
+    "failure_before_com_open": "UNKNOWN",
+    "rf": "NOT_EVALUATED",
+    "all_932_parameters": "NOT_EVALUATED",
+    "new_live_experiment": false
+  },
+  "unchanged_pins": {
+    "bridge_sha256": "4FDFB3FB2FBFA408E88C9C356C7D86E9692CDC98469ED5642DDC2C089B4708BE",
+    "hwcdc_sha256": "D1B890A6C37587BF7775E4F9DDB7791C91085F9C2BC4D95CB9EC3C5809B24DCA",
+    "passive_runner_sha256": "01C62A598FD9AEE52020F4FE72991FAB0502E3AD62DDA2957A6D282CC118966C",
+    "passive_outer_sha256": "F2CB12FBCD7613D7D37729D89903603C61A0DCC718C8CD4DC926E3CE2F4CD192",
+    "accepted_r18_vehicle_sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+    "accepted_r18_ground_sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5"
+  },
+  "evidence": [
+    "runs/validation/R19-HOST-READINESS-WORKFLOW-OFFLINE-001/20261021-workflow/summary.json",
+    "runs/validation/R19-HOST-READINESS-WORKFLOW-OFFLINE-001/20261021-synconly-contract-r2/summary.json",
+    "runs/validation/R19-STARTUP-BOUNDARY-EVALUATION-OFFLINE-001/20261021T001321489Z/summary.json",
+    "runs/validation/R19-STARTUP-BOUNDARY-EVALUATION-REVIEW-FIX-001/20261021T002359906Z/summary.json"
+  ],
+  "remaining_before_live": [
+    "Versioned fixed device-side ARM acceptance and first-product-enqueue record plus strict decoder and sealed packaging.",
+    "New mode-specific candidates with same-source seal/manifest/flash binding and live orchestrator integration; never reuse existing passive candidate.",
+    "Account for READY traffic emitted only by mode 2 before claiming ARM alone caused success.",
+    "Preserve MCU setup-origin acquisition deadline, continuous reader ownership, and USB epoch/boot binding.",
+    "Fresh scoped authorization and safety confirmation before any hardware action."
+  ],
+  "root_cause_proven": false,
+  "physical_30s_proven": false,
+  "acceptance_eligible": false,
+  "deployment_authorized": false
+}

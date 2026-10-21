@@ -1,0 +1,20 @@
+{
+    "schema":  "vc-lora-r19-candidate-flash-final-seal-v1",
+    "test_id":  "R19-CANDIDATE-APP-FLASH-HIL-001",
+    "finalized_utc":  "2026-10-20T22:34:53.6059613Z",
+    "result":  "PASS",
+    "status":  "PASS_R19_DIAGNOSTIC_INSTALLED_HIL_ONLY",
+    "flash_record_sha256":  "F74CC8FF59E05B4BFB01CBA8655B057A6A54899ECA3AA5B9CFE5F895D476F93F",
+    "artifact_manifest_sha256":  "E6C1A75DA3B3B7AA4B6366956A6B05A60D9915A4DC70F5CDBD40B5947793E6DA",
+    "sha256sums_sha256":  "A2CB2E43AB6196F56FBF65EFC02A14C17245DD2BFAD7446AF080277ADEA6B691",
+    "candidate_manifest_sha256":  "D0E8C5DAF27BA1131946FF3D0FA14389465E73E4F5E48C36AE672713F31920F2",
+    "final_seal_sha256":  "94B3DAF84DD17AC26D4691B9CCD9920F83EEF9EE22C77B6092CF72110A702EFC",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "hil_authorization_token":  "R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT",
+    "authorization_scope":  "one immediate R19 runtime-fail diagnostic capture only",
+    "next_required_action":  "Run one dual-COM read-only runtime-fail diagnostic capture, then mandatory accepted R18 rollback",
+    "one_run_hil_authorized":  true,
+    "deployment_authorized":  false
+}

@@ -1,0 +1,174 @@
+[CmdletBinding()]
+param([switch]$ImportOnly,[string]$InputPath,[string]$OutputPath)
+# Offline evidence classification only. ImportOnly defines functions without I/O.
+# Evidence hashes and externally verified bindings are caller-supplied provenance,
+# not new acquisition or authentication. No absent measurement is a healthy link.
+function Get-R19StartupBoundaryEvaluation {
+  [CmdletBinding()]
+  param([Parameter(Mandatory)][object]$Evidence)
+  Set-StrictMode -Version Latest
+  $ErrorActionPreference='Stop'
+  function Need([bool]$Value,[string]$Message){if(-not$Value){throw $Message}}
+  function Fields($Object,[string[]]$Allowed,[string[]]$Required){
+    Need ($null-ne$Object-and$Object-isnot[string]) 'Expected an evidence object'
+    foreach($p in $Object.PSObject.Properties.Name){Need ($p-cin$Allowed) "Unknown field: $p"}
+    foreach($p in $Required){Need ($null-ne$Object.PSObject.Properties[$p]) "Missing field: $p"}
+  }
+  function UInt($Value,[string]$Name,[uint64]$Maximum=[uint64]::MaxValue){
+    Need ($null-ne$Value-and$Value-isnot[bool]-and$Value-isnot[double]-and$Value-isnot[single]) "$Name requires an exact unsigned integer"
+    $s=[Convert]::ToString($Value,[Globalization.CultureInfo]::InvariantCulture);[uint64]$n=0
+    Need ($s-cmatch'^(0|[1-9][0-9]*)$'-and[uint64]::TryParse($s,[Globalization.NumberStyles]::None,[Globalization.CultureInfo]::InvariantCulture,[ref]$n)-and$n-le$Maximum) "Invalid unsigned integer: $Name"
+    return $n
+  }
+  function Boolean($Value,[string]$Name){Need ($Value-is[bool]) "$Name requires a boolean";return $Value}
+  function Sha($Value,[string]$Name){Need ($Value-is[string]-and$Value-cmatch'^[0-9A-Fa-f]{64}$') "$Name requires a SHA256"}
+  function Identity($Value,[string]$Name){
+    Need (@($Value).Count-eq4) "$Name requires four uint32 words"
+    $words=@();foreach($word in $Value){$words+=UInt $word $Name 4294967295};return ,$words
+  }
+  function Same($A,$B){for($i=0;$i-lt4;$i++){if($A[$i]-ne$B[$i]){return $false}};return $true}
+  function Layer($InputLayer,[string]$Name){
+    if($null-eq$InputLayer){return [pscustomobject]@{status='NOT_EVALUATED';evaluated=$false;evidence_sha256=''}}
+    Fields $InputLayer @('evaluated','status','evidence_sha256') @('evaluated','status','evidence_sha256')
+    $evaluated=Boolean $InputLayer.evaluated "$Name.evaluated"
+    Need ($InputLayer.status-cin@('PASS','FAIL','NOT_EVALUATED')) 'Unknown layer status'
+    if($evaluated){Need ($InputLayer.status-cne'NOT_EVALUATED') 'Evaluated layer needs a result';Sha $InputLayer.evidence_sha256 $Name}
+    else{Need ($InputLayer.status-ceq'NOT_EVALUATED'-and$InputLayer.evidence_sha256-ceq'') 'Uncovered layer cannot claim PASS/FAIL'}
+    return [pscustomobject]@{status=$InputLayer.status;evaluated=$evaluated;evidence_sha256=$InputLayer.evidence_sha256}
+  }
+  Fields $Evidence @('schema','experiment_mode','first_failure_record','readiness','first_read','source_order','coverage') @('schema','experiment_mode','first_failure_record','readiness','first_read','source_order','coverage')
+  Need ($Evidence.schema-ceq'vc-lora-r19-startup-boundary-evidence-v1') 'Unknown evidence schema'
+  Need ($Evidence.experiment_mode-cin@('PASSIVE','SYNC_ONLY','EXPLICIT_ARM')) 'Unknown experiment mode'
+  $usb=[ordered]@{failure='NOT_OBSERVED';record_sha256='';budget_ms=106;expected_frame_bytes=$null;accepted_frame_bytes=$null;elapsed_us=$null;ring_pending_bytes=$null;stash_pending_bytes=$null;publish_generation=$null;pickup_generation=$null;flush_blocker_mask=$null;physical_fifo_fault_proven=$false}
+  $latched=$false;$start=[uint64]0;$finish=[uint64]0;$epoch=[uint64]0;$epochStable=$true;$fingerprint=@();$boot=@()
+  $record=$Evidence.first_failure_record
+  if($null-ne$record){
+    # This is the existing strict decoder's result, not a replacement raw decoder.
+    foreach($name in @('schema','result','role','raw_sha256','failure_latched','build_fingerprint','boot_instance','first_failure')){Need ($null-ne$record.PSObject.Properties[$name]) "Missing decoded record field: $name"}
+    Need ($record.schema-ceq'vc-lora-r19-first-usb-failure-decoded-v1'-and$record.result-ceq'PASS'-and$record.role-ceq'ground') 'Requires a valid decoded Ground first-failure record'
+    Sha $record.raw_sha256 'immutable record';$usb.record_sha256=$record.raw_sha256
+    $fingerprint=Identity $record.build_fingerprint 'build_fingerprint';$boot=Identity $record.boot_instance 'boot_instance'
+    Need (@($boot|Where-Object{$_-ne0}).Count-gt0) 'Zero boot identity'
+    $latched=Boolean $record.failure_latched 'failure_latched'
+    if($latched){
+      $failure=$record.first_failure
+      foreach($name in @('api_called','raw_return','budget_ms','expected_epoch','observed_epoch','started_us','finished_us','expected_frame_bytes','accepted_frame_bytes','sdk')){Need ($null-ne$failure.PSObject.Properties[$name]) "Missing first-failure field: $name"}
+      Need ((UInt $failure.budget_ms 'budget_ms' 4294967295)-eq106) 'This classifier preserves the 106 ms product contract'
+      $epoch=UInt $failure.expected_epoch 'expected_epoch' 4294967295
+      $observedEpoch=UInt $failure.observed_epoch 'observed_epoch' 4294967295;$epochStable=($observedEpoch-eq$epoch)
+      $start=UInt $failure.started_us 'started_us';$finish=UInt $failure.finished_us 'finished_us'
+      Need ($finish-ge$start) 'Backward immutable failure interval'
+      $expected=UInt $failure.expected_frame_bytes 'expected_frame_bytes' 280;$accepted=UInt $failure.accepted_frame_bytes 'accepted_frame_bytes' 280
+      Need ($accepted-le$expected) 'Accepted bytes exceed the frame'
+      $usb.expected_frame_bytes=$expected;$usb.accepted_frame_bytes=$accepted;$usb.elapsed_us=($finish-$start).ToString([Globalization.CultureInfo]::InvariantCulture)
+      $called=Boolean $failure.api_called 'api_called'
+      $usb.failure='IMMUTABLE_USB_FAILURE'
+      if($called){
+        $rawReturn=Boolean $failure.raw_return 'raw_return'
+        if(-not$rawReturn-and$failure.sdk.terminal_name-ceq'LoopTimeout'){$usb.failure='IMMUTABLE_USB_COMPLETION_TIMEOUT'}
+        if(Boolean $failure.sdk.snapshot_observed 'snapshot_observed'){
+          foreach($name in @('ring_pending_bytes','stash_pending_bytes','publish_generation','pickup_generation','flush_blocker_mask')){$usb[$name]=UInt $failure.sdk.$name $name 4294967295}
+        }
+      }
+    }
+  }
+  $readiness=[ordered]@{status='UNKNOWN';device_clock_order='UNKNOWN';kernel_pending_read_proven=$false;acquisition_status='NOT_EVALUATED';evidence_sha256=''}
+  $classification='UNKNOWN';$classificationReason='Insufficient bound device-readiness evidence to order the immutable USB failure against startup readiness.';$ready=$Evidence.readiness
+  if($null-ne$ready){
+    $readyNames=@('schema','role','build_fingerprint','boot_instance','usb_epoch','reader_session','nonce','reply_device_us','armed_device_us','pc_reply_validated','continuous_owner','device_arm_accepted','device_arm_record_verified','mode_binding_verified','identity_binding_verified','device_clock_continuity_verified','evidence_sha256','acquisition_status')
+    Fields $ready $readyNames $readyNames
+    Need ($ready.schema-ceq'vc-lora-r19-readiness-observation-v1'-and$ready.role-ceq'ground') 'Unknown readiness schema or role'
+    Sha $ready.evidence_sha256 'readiness';$readiness.evidence_sha256=$ready.evidence_sha256
+    Need ($ready.acquisition_status-cin@('WAITING','ARMED','TIMED_OUT','NOT_EVALUATED')) 'Unknown acquisition status'
+    $readiness.acquisition_status=$ready.acquisition_status
+    $readyBuild=Identity $ready.build_fingerprint 'ready build';$readyBoot=Identity $ready.boot_instance 'ready boot'
+    $readyEpoch=UInt $ready.usb_epoch 'ready epoch' 4294967295
+    $session=UInt $ready.reader_session 'reader_session';$nonce=UInt $ready.nonce 'nonce'
+    Need ($session-gt0-and($nonce-shr48)-eq0x5219-and($nonce-band[uint64]281474976710655)-ne0) 'Invalid session or private nonce'
+    $reply=UInt $ready.reply_device_us 'reply_device_us';$arm=UInt $ready.armed_device_us 'armed_device_us'
+    $verified=$true
+    foreach($name in @('pc_reply_validated','continuous_owner','device_arm_accepted','device_arm_record_verified','mode_binding_verified','identity_binding_verified')){if(-not(Boolean $ready.$name $name)){$verified=$false}}
+    $continuity=Boolean $ready.device_clock_continuity_verified 'device_clock_continuity_verified'
+    if($null-ne$record){Need ((Same $readyBuild $fingerprint)-and(Same $readyBoot $boot)) 'Readiness build/boot mismatch';if($latched){Need ($readyEpoch-eq$epoch) 'Readiness USB epoch mismatch'}}
+    if($ready.acquisition_status-ceq'TIMED_OUT'){
+      Need (-not$ready.device_arm_accepted-and$arm-eq0) 'Expired acquisition cannot also claim ARM'
+      Need ($Evidence.experiment_mode-cne'PASSIVE') 'Passive mode has no readiness acquisition timer'
+      # The device-record provenance flag covers the saved gate state, including
+      # an acquisition timeout; an unsaved PC timer alone is not that evidence.
+      if($ready.device_arm_record_verified-and$ready.mode_binding_verified-and$ready.identity_binding_verified){$classification='STARTUP_ACQUISITION_TIMEOUT';$classificationReason='Verified device gate acquisition expired without ARM; this is separate from the 106 ms product USB completion contract.';$readiness.status='ACQUISITION_TIMEOUT'}
+    }elseif($verified){
+      Need ($Evidence.experiment_mode-ceq'EXPLICIT_ARM') 'Passive/sync-only cannot claim device ARM readiness'
+      Need ($ready.acquisition_status-ceq'ARMED'-and$reply-gt0-and$arm-ge$reply) 'Invalid bound ARM event order'
+      $readiness.status='PROTOCOL_READINESS_VERIFIED'
+      if($latched-and-not$epochStable){$readiness.status='INVALIDATED_USB_EPOCH';$classificationReason='USB epoch changed during the failure; earlier readiness does not establish readiness throughout that transaction.'}
+      elseif($latched-and$continuity){
+        if($start-ge$arm){$classification='USB_BOUNDARY_AFTER_PROTOCOL_READINESS';$classificationReason='The immutable USB failure started after bound device ARM in the same continuous device clock and USB epoch; the physical USB cause remains unproven.';$readiness.device_clock_order='FAILURE_STARTED_AT_OR_AFTER_ARM'}
+        elseif($finish-lt$arm){$classification='PRE_ARM_FAILURE_REQUIRES_GATE_OR_BINDING_REVIEW';$classificationReason='Bound EXPLICIT_ARM evidence places the product USB failure before device ARM. Review gate bypass, event binding and record provenance; this does not establish host-readiness causation.';$readiness.device_clock_order='FAILURE_FINISHED_BEFORE_ARM'}
+        else{$readiness.device_clock_order='FAILURE_OVERLAPS_ARM';$classificationReason='The immutable failure interval overlaps device ARM; the evidence does not isolate a before-readiness or after-readiness failure.'}
+      }
+    }
+  }
+  $preRead=[ordered]@{failure_report_present_before_first_application_read=$false;original_failure_before_read='UNKNOWN';immutable_failure_boot_binding_proven=$false;failure_before_com_open='UNKNOWN';timing_delta_ms=$null;report_sha256=''}
+  $first=$Evidence.first_read;$textMatch=$null
+  if($null-ne$first){
+    $names=@('schema','role','first_block_base64','initial_bytes_to_read','block_index','block_offset','evidence_sha256')
+    Fields $first $names $names
+    Need ($first.schema-ceq'vc-lora-r19-first-read-observation-v1'-and$first.role-ceq'ground') 'Unknown first-read schema or role'
+    Sha $first.evidence_sha256 'first-read'
+    [byte[]]$bytes=[Convert]::FromBase64String($first.first_block_base64)
+    Need ($bytes.Length-ge63) 'First block lacks a complete R19F'
+    $initial=UInt $first.initial_bytes_to_read 'initial_bytes_to_read' 2147483647
+    $index=UInt $first.block_index 'block_index';$offset=UInt $first.block_offset 'block_offset'
+    Need ($bytes[0]-eq253-and$bytes[1]-eq51-and$bytes[2]-eq0-and$bytes[3]-eq0-and$bytes[5]-eq254-and$bytes[6]-eq190-and$bytes[7]-eq253-and$bytes[8]-eq0-and$bytes[9]-eq0-and$bytes[10]-eq2) 'Not the exact private R19F wire header'
+    [uint16]$crc=65535
+    foreach($v in @($bytes[1..60])+@(83)){
+      [uint16]$tmp=([uint16]$v-bxor($crc-band255));$tmp=($tmp-bxor(($tmp-shl4)-band255))-band255
+      $crc=(($crc-shr8)-bxor($tmp-shl8)-bxor($tmp-shl3)-bxor($tmp-shr4))-band65535
+    }
+    Need ($bytes[61]-eq($crc-band255)-and$bytes[62]-eq($crc-shr8)) 'R19F CRC mismatch'
+    $text=[Text.Encoding]::ASCII.GetString($bytes,11,50).TrimEnd([char]0)
+    $textMatch=[regex]::Match($text,'^R19F:G:(?<line>[0-9A-F]{4}):(?<time>[0-9A-F]{16}):(?<status>[0-9A-F]{12}):(?<epoch>[0-9A-F]{8})$')
+    Need ($textMatch.Success) 'Noncanonical Ground R19F text'
+    $hash=[Security.Cryptography.SHA256]::Create();try{$preRead.report_sha256=([BitConverter]::ToString($hash.ComputeHash([byte[]]$bytes[0..62]))).Replace('-','')}finally{$hash.Dispose()}
+    $preRead.failure_report_present_before_first_application_read=($initial-ge63-and$index-eq0-and$offset-eq0)
+  }
+  $order=$Evidence.source_order
+  if($null-ne$order){
+    $names=@('schema','source_sha256','fail_report_follows_latch','runtime_source_line','runtime_time_ms','runtime_status_hex','usb_epoch','same_boot_acquisition_verified')
+    Fields $order $names $names
+    Need ($order.schema-ceq'vc-lora-r19-failure-source-order-v1') 'Unknown source order schema'
+    Sha $order.source_sha256 'source order'
+    $follows=Boolean $order.fail_report_follows_latch 'fail_report_follows_latch';$bound=Boolean $order.same_boot_acquisition_verified 'same_boot_acquisition_verified'
+    $line=UInt $order.runtime_source_line 'runtime_source_line' 65535;$time=UInt $order.runtime_time_ms 'runtime_time_ms';$orderEpoch=UInt $order.usb_epoch 'source epoch' 4294967295
+    Need ($order.runtime_status_hex-cmatch'^[0-9A-F]{12}$') 'Noncanonical status'
+    Need ($null-ne$textMatch) 'Source order requires exact report bytes'
+    Need ([Convert]::ToUInt64($textMatch.Groups['line'].Value,16)-eq$line-and[Convert]::ToUInt64($textMatch.Groups['time'].Value,16)-eq$time-and$textMatch.Groups['status'].Value-ceq$order.runtime_status_hex-and[Convert]::ToUInt64($textMatch.Groups['epoch'].Value,16)-eq$orderEpoch) 'Source/report binding mismatch'
+    if($preRead.failure_report_present_before_first_application_read-and$follows){
+      $preRead.original_failure_before_read='CONSISTENT_BOOT_BINDING_UNKNOWN'
+      if($bound-and$latched){Need ($orderEpoch-eq$epoch) 'Source/immutable epoch mismatch';$preRead.immutable_failure_boot_binding_proven=$true;$preRead.original_failure_before_read='PROVEN_BY_SOURCE_ORDER_AND_BOUND_FRAME'}
+    }
+  }
+  $rf=$null;$parameters=$null
+  if($null-ne$Evidence.coverage){Fields $Evidence.coverage @('rf','parameters') @('rf','parameters');$rf=$Evidence.coverage.rf;$parameters=$Evidence.coverage.parameters}
+  [pscustomobject][ordered]@{
+    schema='vc-lora-r19-startup-boundary-evaluation-v1';mode='OFFLINE_ONLY';hardware_interaction=$false
+    classification=$classification;classification_reason=$classificationReason;experiment_mode=$Evidence.experiment_mode
+    readiness=[pscustomobject]$readiness;usb=[pscustomobject]$usb;pre_read=[pscustomobject]$preRead
+    rf=(Layer $rf 'rf');parameters=(Layer $parameters 'parameters')
+    root_cause_proven=$false;acceptance_eligible=$false;deployment_authorized=$false
+    limitations=@('This evaluates supplied evidence; it does not acquire or authenticate artifacts or externally asserted provenance bindings.',
+      'ARM, including device acceptance, does not independently prove a kernel-pending host Read or physical host polling.',
+      'Success after ARM alone cannot distinguish startup timing from diagnostic preconditioning.',
+      'A valid failure report in the initial receive buffer establishes ordering before application Read, not before COM Open or a numerical PC/device clock difference.',
+      'The immutable failure snapshot is a terminal-boundary sample, not later FIFO state, continuous hardware state, or proof of a physical FIFO fault.',
+      'USB completion, RF delivery and full parameter acquisition are separate layers; absent downstream coverage remains NOT_EVALUATED.')
+  }
+}
+if($ImportOnly){if($InputPath-or$OutputPath){throw 'ImportOnly forbids CLI I/O arguments'};return}
+try{
+  if(-not$InputPath){throw 'InputPath is required; only offline file evaluation exists'}
+  $inputEvidence=Get-Content -LiteralPath $InputPath -Raw|ConvertFrom-Json
+  $json=Get-R19StartupBoundaryEvaluation -Evidence $inputEvidence|ConvertTo-Json -Depth 15
+  if($OutputPath){$json|Set-Content -LiteralPath $OutputPath -Encoding utf8}
+  $json
+}catch{Write-Error -ErrorAction Continue ('OFFLINE_STARTUP_BOUNDARY_REJECTED: '+$_.Exception.Message);exit 1}

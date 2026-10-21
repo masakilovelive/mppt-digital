@@ -1,0 +1,38 @@
+{
+    "schema":  "vc-lora-r18-single-param-process-gate-v1",
+    "captured_utc":  "2026-10-18T15:29:35.4265396Z",
+    "fail_closed":  true,
+    "sanitized":  true,
+    "result":  "PASS",
+    "inventory_count":  329,
+    "ancestor_ids":  [
+                         18520,
+                         25528,
+                         5296,
+                         12480,
+                         11360,
+                         2592,
+                         1248,
+                         1124,
+                         824
+                     ],
+    "trusted_ancestors":  [
+                              {
+                                  "process_id":  5296,
+                                  "parent_process_id":  12480,
+                                  "name":  "codex.exe",
+                                  "classification":  "trusted_invocation_ancestor",
+                                  "command_line_sha256":  "E311942C87A88C26C3244E8577B7E1324DF827A117B43BD94A346843DF0CEA15"
+                              },
+                              {
+                                  "process_id":  25528,
+                                  "parent_process_id":  5296,
+                                  "name":  "pwsh.exe",
+                                  "classification":  "trusted_invocation_ancestor",
+                                  "command_line_sha256":  "F11A23C3F841CF5C03BF3670B45AECA6929EFA5D634A89EA8B7EB2B1429767F3"
+                              }
+                          ],
+    "blocked_processes":  [
+
+                          ]
+}

@@ -1,0 +1,471 @@
+-- The CXX compiler identification is Clang 22.1.8
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Users/user/AppData/Local/Temp/vc_lora_host_tools/llvm-mingw-20260616-complete/unpacked/llvm-mingw-20260616-ucrt-x86_64/bin/clang++.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Configuring done
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_host_tests.dir/./
+
+  has 193 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    integration/phase6_high_speed_route_integration_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_e220_continuous_aux_credit_tests.dir/./
+
+  has 215 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/e220_continuous_aux_credit_red.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_r19_runtime_fail_diagnostic_tests.dir/./
+
+  has 216 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/r19_runtime_fail_diagnostic_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_r19_hwcdc_ll_bootstrap_model_tests.dir/./
+
+  has 217 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/r19_hwcdc_ll_bootstrap_model_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_r19_hwcdc_task_prime_model_tests.dir/./
+
+  has 215 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/r19_hwcdc_task_prime_model_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_r19_first_usb_failure_record_tests.dir/./
+
+  has 217 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/r19_first_usb_failure_record_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_r19_runtime_stage_record_tests.dir/./
+
+  has 213 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/r19_runtime_stage_record_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_r19_ground_usb_commit_record_tests.dir/./
+
+  has 217 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/r19_ground_usb_commit_record_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_r19_ground_usb_commit_source_contract_tests.dir/./
+
+  has 226 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/r19_ground_usb_commit_source_contract_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_r19_hwcdc_fifo_diagnostic_record_tests.dir/./
+
+  has 221 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/r19_hwcdc_fifo_diagnostic_record_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_r19_runtime_fail_product_source_contract_tests.dir/./
+
+  has 229 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/r19_runtime_fail_product_source_contract_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_fail_diagnostic_tests.dir/./
+
+  has 226 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_ground_runtime_fail_diagnostic_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_ground_usb_commit_latch_tests.dir/./
+
+  has 219 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_ground_usb_commit_latch_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_first_usb_failure_integration_tests.dir/./
+
+  has 225 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_first_usb_failure_integration_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_fail_diagnostic_tests.dir/./
+
+  has 227 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_vehicle_runtime_fail_diagnostic_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_alive_diagnostic_tests.dir/./
+
+  has 227 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_ground_runtime_alive_diagnostic_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_alive_starvation_tests.dir/./
+
+  has 227 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_ground_runtime_alive_starvation_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_alive_backpressure_tests.dir/./
+
+  has 229 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_ground_runtime_alive_backpressure_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_alive_diagnostic_tests.dir/./
+
+  has 228 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_vehicle_runtime_alive_diagnostic_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_alive_read_only_bootstrap_tests.dir/./
+
+  has 237 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_vehicle_runtime_alive_read_only_bootstrap_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_alive_read_only_bootstrap_tests.dir/./
+
+  has 236 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_ground_runtime_alive_read_only_bootstrap_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_fail_boundary_loss_tests.dir/./
+
+  has 229 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_ground_runtime_fail_boundary_loss_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_fail_deadline_tests.dir/./
+
+  has 224 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_ground_runtime_fail_deadline_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_fail_pending_alive_tests.dir/./
+
+  has 229 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_ground_runtime_fail_pending_alive_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_fail_staged_zero_tests.dir/./
+
+  has 228 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_vehicle_runtime_fail_staged_zero_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_fail_staged_partial_tests.dir/./
+
+  has 231 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_vehicle_runtime_fail_staged_partial_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_fail_partial_deadline_tests.dir/./
+
+  has 233 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_vehicle_runtime_fail_partial_deadline_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_fail_flush_deadline_tests.dir/./
+
+  has 231 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_vehicle_runtime_fail_flush_deadline_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_fail_recovery_guard_tests.dir/./
+
+  has 231 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_vehicle_runtime_fail_recovery_guard_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_fail_recovery_guard_tests.dir/./
+
+  has 230 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_ground_runtime_fail_recovery_guard_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_ground_host_readiness_tests.dir/./
+
+  has 217 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_ground_host_readiness_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_ground_product_loop_tests.dir/./
+
+  has 215 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_ground_product_loop_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+CMake Warning in tests/host/CMakeLists.txt:
+  The object file directory
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths/tests/host/CMakeFiles/vc_lora_phase6_vehicle_product_loop_tests.dir/./
+
+  has 216 characters.  The maximum full path to an object file is 250
+  characters (see CMAKE_OBJECT_PATH_MAX).  Object file
+
+    standalone/phase6_vehicle_product_loop_tests.cpp.obj
+
+  cannot be safely placed under this directory.  The build may not work
+  correctly.
+
+
+-- Generating done
+-- Build files have been written to: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths

@@ -1,0 +1,32 @@
+{
+  "schema": "vc-lora-connected-passive-receive-preflight-v1",
+  "observed_utc": "2026-10-21 00:46:56 UTC",
+  "user_request": "実機操作は出来るように接続状態です。検証願います",
+  "scope": "One bounded 60-second COM6 receive-only observation of currently connected firmware; not a cold-boot/R19 HostArm experiment.",
+  "serial_inventory": [
+    {
+      "port": "COM3",
+      "pnp": "USB\\VID_303A&PID_1001&MI_00\\7&7131F6A&0&0000",
+      "opened": false
+    },
+    {
+      "port": "COM6",
+      "pnp": "USB\\VID_303A&PID_1001&MI_00\\7&2159A644&0&0000",
+      "opened_by_capture_only": true
+    }
+  ],
+  "baud": 57600,
+  "dtr_enabled": false,
+  "rts_enabled": false,
+  "payload_transmit_fixture": null,
+  "known_conflicting_apps_observed": false,
+  "unknown_port_owner_possible": true,
+  "fresh_physical_safety_attestation_claimed": false,
+  "flash": false,
+  "jtag": false,
+  "reset": false,
+  "parameter_request": false,
+  "flight_arm_command": false,
+  "active_r19_comparison_ready": false,
+  "firmware_hash_on_device_verified": false
+}

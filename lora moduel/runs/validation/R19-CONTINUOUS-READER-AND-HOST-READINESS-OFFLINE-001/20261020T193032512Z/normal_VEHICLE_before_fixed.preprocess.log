@@ -1,0 +1,4 @@
+runs\validation\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\20261020T193032512Z\include_fix_before.hpp:1:9: warning: #pragma once in main file [-Wpragma-once-outside-header]
+    1 | #pragma once
+      |         ^
+1 warning generated.

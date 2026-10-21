@@ -1,0 +1,241 @@
+{
+    "schema_version":  1,
+    "test_id":  "R18-PIXHAWK-READONLY-PREFLIGHT-HIL-001",
+    "mode":  "LIVE_R18_READONLY_PREFLIGHT",
+    "acceptance_profile":  "R18",
+    "result":  "FAIL",
+    "started_utc":  "2026-09-25T12:29:33.2418749Z",
+    "finished_utc":  "2026-09-25T12:30:15.3226780Z",
+    "failure":  "Preflight timeout waiting for two fresh primary 1/1 heartbeats and an idle parser.",
+    "measurement":  {
+                        "result":  "FAIL",
+                        "failure":  "Preflight timeout waiting for two fresh primary 1/1 heartbeats and an idle parser.",
+                        "identity_before_open":  {
+                                                     "result":  "PASS",
+                                                     "checkpoint":  "before_open",
+                                                     "port":  "COM6",
+                                                     "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                                                     "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                                                     "vid":  "303A",
+                                                     "pid":  "1001",
+                                                     "name":  "USB シリアル デバイス (COM6)",
+                                                     "status":  "OK",
+                                                     "config_manager_error_code":  0
+                                                 },
+                        "identity_immediately_after_open":  {
+                                                                "result":  "PASS",
+                                                                "checkpoint":  "immediately_after_open",
+                                                                "port":  "COM6",
+                                                                "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                                                                "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                                                                "vid":  "303A",
+                                                                "pid":  "1001",
+                                                                "name":  "USB シリアル デバイス (COM6)",
+                                                                "status":  "OK",
+                                                                "config_manager_error_code":  0
+                                                            },
+                        "process_inventory":  [
+
+                                              ],
+                        "preflight":  null,
+                        "request":  {
+                                        "request_attempted":  0,
+                                        "request_write_started_us":  -1,
+                                        "request_write_call_completed":  0,
+                                        "request_writes_completed":  0,
+                                        "request_complete_write_edge_us":  -1,
+                                        "request_outcome":  "NOT_ATTEMPTED",
+                                        "request_sha256":  "FC3A47A83D35D44E96E044A216FDBF082805F9FACCDD5E4B9252E0C7026D4A75"
+                                    },
+                        "measurement_boundary":  null,
+                        "accounting":  null,
+                        "last_actual_capture_us":  -1,
+                        "cleanup":  {
+                                        "result":  "PASS",
+                                        "error_count":  0,
+                                        "errors":  [
+
+                                                   ],
+                                        "steps":  [
+                                                      {
+                                                          "name":  "frame_ledger_final_append",
+                                                          "result":  "PASS",
+                                                          "failure":  ""
+                                                      },
+                                                      {
+                                                          "name":  "serial_close",
+                                                          "result":  "PASS",
+                                                          "failure":  ""
+                                                      },
+                                                      {
+                                                          "name":  "serial_dispose",
+                                                          "result":  "PASS",
+                                                          "failure":  ""
+                                                      },
+                                                      {
+                                                          "name":  "raw_fsync",
+                                                          "result":  "PASS",
+                                                          "failure":  ""
+                                                      },
+                                                      {
+                                                          "name":  "timeline_fsync_close",
+                                                          "result":  "PASS",
+                                                          "failure":  ""
+                                                      },
+                                                      {
+                                                          "name":  "frame_fsync_close",
+                                                          "result":  "PASS",
+                                                          "failure":  ""
+                                                      },
+                                                      {
+                                                          "name":  "progress_fsync_close",
+                                                          "result":  "PASS",
+                                                          "failure":  ""
+                                                      },
+                                                      {
+                                                          "name":  "raw_dispose",
+                                                          "result":  "PASS",
+                                                          "failure":  ""
+                                                      }
+                                                  ],
+                                        "serial_is_open_after_cleanup":  false
+                                    }
+                    },
+    "request":  {
+                    "request_attempted":  0,
+                    "request_write_started_us":  -1,
+                    "request_write_call_completed":  0,
+                    "request_writes_completed":  0,
+                    "request_complete_write_edge_us":  -1,
+                    "request_outcome":  "NOT_ATTEMPTED",
+                    "request_sha256":  "FC3A47A83D35D44E96E044A216FDBF082805F9FACCDD5E4B9252E0C7026D4A75"
+                },
+    "external_actions":  {
+                             "cim_queried":  true,
+                             "pnp_queried":  true,
+                             "process_inventory_queried":  true,
+                             "com_ports_opened":  true,
+                             "serial_write_attempted":  false,
+                             "serial_write_call_completed":  false,
+                             "serial_bytes_drained":  false,
+                             "serial_bytes_written":  false,
+                             "firmware_write_attempted":  false,
+                             "e220_write_attempted":  false,
+                             "actuator_command_attempted":  false
+                         },
+    "cleanup":  {
+                    "result":  "PASS",
+                    "error_count":  0,
+                    "errors":  [
+
+                               ],
+                    "steps":  [
+                                  {
+                                      "name":  "frame_ledger_final_append",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  },
+                                  {
+                                      "name":  "serial_close",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  },
+                                  {
+                                      "name":  "serial_dispose",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  },
+                                  {
+                                      "name":  "raw_fsync",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  },
+                                  {
+                                      "name":  "timeline_fsync_close",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  },
+                                  {
+                                      "name":  "frame_fsync_close",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  },
+                                  {
+                                      "name":  "progress_fsync_close",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  },
+                                  {
+                                      "name":  "raw_dispose",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  }
+                              ],
+                    "serial_is_open_after_cleanup":  false
+                },
+    "safety":  {
+                   "firmware_write_attempted":  false,
+                   "e220_write_attempted":  false,
+                   "actuator_command_attempted":  false,
+                   "power_cycle_required":  false,
+                   "com3_opened":  false,
+                   "com3_written":  false,
+                   "read_only_preflight":  true,
+                   "only_permitted_write":  "none (read-only preflight)"
+               },
+    "r18_artifact_provenance":  {
+                                    "result":  "PASS",
+                                    "accepted_files_verified":  true,
+                                    "pins":  [
+                                                 {
+                                                     "name":  "runner.executed.ps1",
+                                                     "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tools\\run_r18_pixhawk_param_list_e2e_hil.ps1",
+                                                     "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R18-PIXHAWK-READONLY-PREFLIGHT-HIL-001\\LIVE-20260925T122932016Z\\staged\\runner.executed.ps1",
+                                                     "bytes":  92956,
+                                                     "sha256":  "31D2DA26B20E6AA00FC73B03DDB8170B0F9053C9E4A031E667D0913467BD79D5"
+                                                 },
+                                                 {
+                                                     "name":  "mavlink_frame.cpp",
+                                                     "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\core\\src\\mavlink_frame.cpp",
+                                                     "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R18-PIXHAWK-READONLY-PREFLIGHT-HIL-001\\LIVE-20260925T122932016Z\\staged\\mavlink_frame.cpp",
+                                                     "bytes":  16510,
+                                                     "sha256":  "BD2890D8973C5A694D53AB2866A6B3DBF319FAE40B3CC308AE2DAE91B634F3A8"
+                                                 },
+                                                 {
+                                                     "name":  "ground.r18.accepted.application.bin",
+                                                     "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\baselines\\R18-PRODUCTION-R4-ACCEPTED\\20260914T225054625Z\\artifacts\\ground.application.bin",
+                                                     "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R18-PIXHAWK-READONLY-PREFLIGHT-HIL-001\\LIVE-20260925T122932016Z\\staged\\ground.r18.accepted.application.bin",
+                                                     "bytes":  360208,
+                                                     "sha256":  "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5"
+                                                 },
+                                                 {
+                                                     "name":  "vehicle.r18.accepted.application.bin",
+                                                     "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\baselines\\R18-PRODUCTION-R4-ACCEPTED\\20260914T225054625Z\\artifacts\\vehicle.application.bin",
+                                                     "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R18-PIXHAWK-READONLY-PREFLIGHT-HIL-001\\LIVE-20260925T122932016Z\\staged\\vehicle.r18.accepted.application.bin",
+                                                     "bytes":  389280,
+                                                     "sha256":  "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52"
+                                                 },
+                                                 {
+                                                     "name":  "prior.r18.restore_and_inventory.summary.json",
+                                                     "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\high_speed\\R19-HS-G0-E220-INVENTORY-HIL-001\\LIVE-R3-20260915T130445974Z\\summary.json",
+                                                     "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R18-PIXHAWK-READONLY-PREFLIGHT-HIL-001\\LIVE-20260925T122932016Z\\staged\\prior.r18.restore_and_inventory.summary.json",
+                                                     "bytes":  41140,
+                                                     "sha256":  "AEFF205534567E26AFD17AB5EDF5BF05E9DD735D6A4D52E51DB318B7FE23AC66"
+                                                 }
+                                             ]
+                                },
+    "r19_artifact_provenance":  {
+                                    "result":  "NOT_APPLICABLE",
+                                    "validated":  false,
+                                    "record":  null
+                                },
+    "runtime_firmware_provenance":  {
+                                        "result":  "UNPROVEN_NO_DEVICE_READBACK",
+                                        "verified":  false
+                                    },
+    "runner_integrity":  {
+                             "result":  "PASS",
+                             "start_sha256":  "31D2DA26B20E6AA00FC73B03DDB8170B0F9053C9E4A031E667D0913467BD79D5",
+                             "end_sha256":  "31D2DA26B20E6AA00FC73B03DDB8170B0F9053C9E4A031E667D0913467BD79D5"
+                         }
+}

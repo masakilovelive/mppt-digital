@@ -1,0 +1,145 @@
+{
+  "schema": "vc-lora-no-manual-power-cycle-hardware-preflight-result-v1",
+  "result": "PASS_USB_JTAG_CONNECTION_ONLY_MAVLINK_AND_CAUSE_NOT_EVALUATED",
+  "user_request": "実機操作願います。安全条件は満たしています。こちらから電源のon/offは出来ません",
+  "safety_attested_by_user": true,
+  "manual_power_cycle_available": false,
+  "cold_boot_claimed": false,
+  "hardware_interaction": true,
+  "scope": "One transport-only active preflight per exact Vehicle/Ground adapter identity. No target configuration, target memory access, CPU halt, system reset, flash, COM open or payload writes.",
+  "pnp_gate": {
+    "result": "PASS",
+    "status": "PASS_WINUSB_DRIVER_BINDING_PNP_ONLY",
+    "process_exit_code": 1,
+    "exit_code_semantics": "Intentional fail-closed nonzero: PnP-only proof does not authorize firmware installation; active preflight uses the user's separate current hardware-verification request.",
+    "summary": "pnp_gate/summary.json",
+    "sha256": "A8B6E419B4AEB52A4470954626EE7E7FF8E719C84F67F202FC8610BA63AE11E5"
+  },
+  "offline_regressions": {
+    "pnp_gate_contract": "PASS",
+    "reader_contract": {
+      "total": 117,
+      "passed": 117,
+      "failed": 0
+    },
+    "reader_contract_hardware_interaction": false
+  },
+  "active_preflights": [
+    {
+      "role": "vehicle",
+      "path": "active_vehicle/summary.json",
+      "sha256": "2D8FAA1DF9313404A16EF85B7A5172E279B89E929DA1D3B0351CC67F921FF9AA",
+      "generated_at_utc": "2026-10-21T01:41:41.6010137Z",
+      "result": "PASS",
+      "status": "PASS_JTAG_PREFLIGHT_TAP_RESET_SCAN_POSSIBLE_NO_CPU_HALT_OR_SYSTEM_RESET_COMMAND",
+      "binding": {
+        "role": "vehicle",
+        "requested_serial": "90:70:69:11:81:a4",
+        "requested_usb_location": "1-4.2",
+        "opened_serial": "90:70:69:11:81:a4",
+        "opened_usb_location": "1-4.2"
+      },
+      "safety": {
+        "com_opened": false,
+        "flash_written": false,
+        "target_config_loaded": false,
+        "cpu_halt_command_issued": false,
+        "system_reset_command_issued": false,
+        "transport_init_requested": true,
+        "transport_init_completion_proven": true,
+        "jtag_clock_activity_possible": true,
+        "tap_reset_or_scan_possible": true,
+        "target_state_modified": null,
+        "target_state_modification_known": false,
+        "process_termination_proven": true,
+        "shutdown_proven": true
+      },
+      "log_sha256": "933F64AB1C92372C04C182722FFE8D43104D51C630171DEFF94961C14A289D0E"
+    },
+    {
+      "role": "ground",
+      "path": "active_ground/summary.json",
+      "sha256": "44D69F96DA708744764FCB71EAAB2B3A8EB347AAB03521350345A7DCD098FEE8",
+      "generated_at_utc": "2026-10-21T01:41:43.0902378Z",
+      "result": "PASS",
+      "status": "PASS_JTAG_PREFLIGHT_TAP_RESET_SCAN_POSSIBLE_NO_CPU_HALT_OR_SYSTEM_RESET_COMMAND",
+      "binding": {
+        "role": "ground",
+        "requested_serial": "1c:db:d4:5a:83:80",
+        "requested_usb_location": "1-4.4",
+        "opened_serial": "1c:db:d4:5a:83:80",
+        "opened_usb_location": "1-4.4"
+      },
+      "safety": {
+        "com_opened": false,
+        "flash_written": false,
+        "target_config_loaded": false,
+        "cpu_halt_command_issued": false,
+        "system_reset_command_issued": false,
+        "transport_init_requested": true,
+        "transport_init_completion_proven": true,
+        "jtag_clock_activity_possible": true,
+        "tap_reset_or_scan_possible": true,
+        "target_state_modified": null,
+        "target_state_modification_known": false,
+        "process_termination_proven": true,
+        "shutdown_proven": true
+      },
+      "log_sha256": "22C8DFFF79DAAA8890903136F3CA7CD8FA1F2E84353419C007C3BBD9730AFFDC"
+    }
+  ],
+  "ports_after": [
+    {
+      "DeviceID": "COM3",
+      "PNPDeviceID": "USB\\VID_303A&PID_1001&MI_00\\7&7131F6A&0&0000",
+      "Status": "OK",
+      "ConfigManagerErrorCode": 0
+    },
+    {
+      "DeviceID": "COM6",
+      "PNPDeviceID": "USB\\VID_303A&PID_1001&MI_00\\7&2159A644&0&0000",
+      "Status": "OK",
+      "ConfigManagerErrorCode": 0
+    }
+  ],
+  "com_opened": false,
+  "serial_payload_written": false,
+  "target_memory_read": false,
+  "cpu_state_read": false,
+  "cpu_halt_command_issued": false,
+  "system_reset_command_issued": false,
+  "firmware_written": false,
+  "jtag_tap_clock_init_reset_scan_possible": true,
+  "target_state_modified": null,
+  "target_state_modification_known": false,
+  "all_openocd_shutdown_proven": true,
+  "all_native_process_termination_proven": true,
+  "mavlink_receive_retested": false,
+  "mavlink_status": "NOT_EVALUATED_THIS_RUN",
+  "root_cause_status": "UNRESOLVED",
+  "current_on_device_firmware_hash_verified": false,
+  "existing_r19_candidate_changed": false,
+  "accepted_r18_artifacts_changed": false,
+  "stopped_before": [
+    "R18 parameter liveness workflow requires simultaneous full bench power OFF/ON; no false coldboot attestation supplied.",
+    "R19 internal runtime read requires halted target and matched candidate/flash evidence; current application identity and the new readiness record/live integration are not available.",
+    "No firmware flash, warm reset substitute, repeated COM reopen or automated recovery requiring onsite power was attempted."
+  ],
+  "limitations": [
+    "Successful USB-JTAG adapter open does not prove CPU application running, Pixhawk/E220 power, RF delivery, USB payload completion or MAVLink communication.",
+    "TAP initialization can clock/reset/scan the JTAG TAP even without CPU halt or system reset commands. Target state effects are not independently proven absent.",
+    "The previous 60-second zero-byte observation was not repeated or repaired by this preflight."
+  ],
+  "tools": {
+    "reader": "tools/read_r19_runtime_stage_jtag.ps1",
+    "reader_sha256": "5F8E44016C82EB08EABCEB00B641EB43D5669CAADC7272B885858AF15842B554",
+    "pnp_gate": "tools/invoke_r19_jtag_preflash_gate.ps1",
+    "pnp_gate_sha256": "853A404C816D8C9C92B609FD697763977AEDE1849E87A494AEB70FBAA38F4210",
+    "source_edited": false
+  },
+  "timeout_budget_ms": 106,
+  "uart_tdd_e220_settings_changed": false,
+  "root_cause_proven": false,
+  "acceptance_eligible": false,
+  "deployment_authorized": false
+}

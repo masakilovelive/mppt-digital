@@ -1,0 +1,17 @@
+{
+  "scope": "Host fake-Arduino preprocess, default normal mode; not an Xtensa binary comparison",
+  "results": [
+    {
+      "role": "VEHICLE",
+      "before_sha256": "1C35E310E977D71F53F392295619456CF097E595C23F74059AA26317AAAA140F",
+      "after_sha256": "1C35E310E977D71F53F392295619456CF097E595C23F74059AA26317AAAA140F",
+      "exact_equal": true
+    },
+    {
+      "role": "GROUND",
+      "before_sha256": "3396B43B1C7B9016E3CC8DE5EF8E621718FEA771406145DE39F03B021E1803D2",
+      "after_sha256": "3396B43B1C7B9016E3CC8DE5EF8E621718FEA771406145DE39F03B021E1803D2",
+      "exact_equal": true
+    }
+  ]
+}

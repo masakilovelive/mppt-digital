@@ -1,0 +1,16 @@
+warning: in the working copy of 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-STARTUP-LAYER-CUT-OFFLINE-001\20261021T001127260Z\before\CMakeLists.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-STARTUP-LAYER-CUT-OFFLINE-001\20261021T001127260Z\after\CMakeLists.txt', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-STARTUP-LAYER-CUT-OFFLINE-001\\20261021T001127260Z\\before\\CMakeLists.txt" "b/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-STARTUP-LAYER-CUT-OFFLINE-001\\20261021T001127260Z\\after\\CMakeLists.txt"
+index c1c0fd9..f7a3dce 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-STARTUP-LAYER-CUT-OFFLINE-001\\20261021T001127260Z\\before\\CMakeLists.txt"
++++ "b/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-STARTUP-LAYER-CUT-OFFLINE-001\\20261021T001127260Z\\after\\CMakeLists.txt"
+@@ -126,7 +126,8 @@ if(VC_LORA_BUILD_TESTS)
+         "${CMAKE_SOURCE_DIR}/tests/hil/check_r19_startup_reader_integration.ps1"
+         -RepoRoot "${CMAKE_SOURCE_DIR}"
+     )
+-    foreach(r19_contract continuous_reader_contract continuous_reader_integration host_readiness_wire)
++    foreach(r19_contract continuous_reader_contract continuous_reader_integration
++        host_readiness_wire host_readiness_workflow startup_boundary_evaluation)
+       add_test(NAME R19-${r19_contract}-OFFLINE-001
+         COMMAND "${VC_LORA_POWERSHELL_EXECUTABLE}"
+           -NoProfile -NonInteractive -ExecutionPolicy Bypass -File

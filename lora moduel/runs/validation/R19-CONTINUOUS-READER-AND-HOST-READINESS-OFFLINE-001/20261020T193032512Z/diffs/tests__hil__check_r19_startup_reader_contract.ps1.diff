@@ -1,0 +1,24 @@
+diff --git "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\tests\\hil\\check_r19_startup_reader_contract.ps1" b/tests/hil/check_r19_startup_reader_contract.ps1
+index dfa070a..4f8182a 100644
+--- "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\tests\\hil\\check_r19_startup_reader_contract.ps1"
++++ b/tests/hil/check_r19_startup_reader_contract.ps1
+@@ -99,8 +99,17 @@ foreach($name in @('Start-R19StartupCapture','Receive-R19StartupCapture','Stop-R
+ }
+ $capture=@($ast.FindAll({param($n)
+   $n-is[Management.Automation.Language.FunctionDefinitionAst]-and$n.Name-ceq'Invoke-R19RuntimeFailDiagnosticCapture'},$true))[0].Extent.Text
+-Assert-Condition ($capture.IndexOf('Start-R19StartupCapture')-lt$capture.IndexOf("'after_open'")-and
+-  $capture.IndexOf('Receive-R19StartupCapture')-gt$capture.IndexOf("'after_open'")) 'Identity gate must quarantine before successful verification.'
++# The lifetime owner supersedes the legacy stop/join handover; the legacy
++# functions above remain covered as compatibility APIs, not the live path.
++Assert-Condition ($capture.IndexOf('Start-R19ContinuousCapture')-ge0-and
++  $capture.IndexOf('Start-R19ContinuousCapture')-lt$capture.IndexOf("'after_open'")-and
++  $capture.IndexOf('Confirm-R19ContinuousIdentity')-gt$capture.IndexOf("'after_open'")) 'Identity gate must quarantine before successful verification.'
++$confirm=@($ast.FindAll({param($n)
++  $n-is[Management.Automation.Language.FunctionDefinitionAst]-and$n.Name-ceq'Confirm-R19ContinuousIdentity'},$true))[0].Extent.Text
++Assert-Condition ($confirm.Contains('before both post-open identities pass.')-and
++  $confirm.Contains("MarkPhase('IDENTITY_VERIFIED')")-and
++  -not($capture.Contains('Receive-R19StartupCapture')-or$confirm-match'\.Stop\(|\.Close\(|\.Join\(')) `
++    'Identity verification must not transfer physical Read ownership or release bytes early.'
+ Assert-Condition ($capture.Contains('startup_reader_evidence')-and$capture.Contains('startup_readers_valid')-and
+   $capture.Contains('measurement_window_start_us')) 'Early reader evidence/strict gate/window origin missing.'
+ Pass 'production_quarantine_identity_and_result_gate'

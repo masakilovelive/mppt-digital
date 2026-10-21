@@ -1,0 +1,148 @@
+diff --git a/tools/r19_host_readiness_wire.ps1 b/tools/r19_host_readiness_wire.ps1
+new file mode 100644
+index 0000000..e2e9910
+--- /dev/null
++++ b/tools/r19_host_readiness_wire.ps1
+@@ -0,0 +1,142 @@
++# Pure fixed-wire diagnostic codec. Dot-sourcing defines functions only: no COM,
++# process, filesystem, network, hardware, wall clock, or execution entrypoint.
++# This is an opt-in USB-local protocol, not flight arming or authentication.
++# A PC proof bit is a claim made by the runner after actually validating its
++# matching reply and keeping the same reader alive; MCU cannot prove a pending
++# kernel Read from receipt of an OUT command. Never route this namespace to RF.
++
++function ConvertTo-R19HostReadinessUInt {
++  param([object]$Value,[string]$Name,[uint64]$Maximum=[uint64]::MaxValue,[switch]$AllowZero)
++  if($null-eq$Value-or$Value-is[bool]-or$Value-is[double]-or$Value-is[single]){
++    throw "$Name must be a canonical exact unsigned integer"
++  }
++  $text=[Convert]::ToString($Value,[Globalization.CultureInfo]::InvariantCulture)
++  [uint64]$number=0
++  if($text-cnotmatch'^(0|[1-9][0-9]*)$'-or
++     -not[uint64]::TryParse($text,[Globalization.NumberStyles]::None,
++       [Globalization.CultureInfo]::InvariantCulture,[ref]$number)-or
++     ($number-eq0-and-not$AllowZero)-or$number-gt$Maximum){throw "$Name is outside the canonical integer range"}
++  $number
++}
++
++function Test-R19HostReadinessNonce {
++  param([uint64]$Nonce)
++  (($Nonce-shr48)-eq0x5219)-and(($Nonce-band[uint64]0x0000FFFFFFFFFFFF)-ne0)
++}
++
++function Get-R19HostReadinessCrc {
++  param([byte[]]$Bytes)
++  if($null-eq$Bytes-or$Bytes.Length-ne66){throw 'Host readiness frame must be exactly 66 bytes'}
++  [uint16]$crc=65535
++  foreach($value in @($Bytes[1..63])+@(83)) {
++    [uint16]$tmp=([uint16]$value-bxor($crc-band255))
++    $tmp=($tmp-bxor(($tmp-shl4)-band255))-band255
++    $crc=(($crc-shr8)-bxor($tmp-shl8)-bxor($tmp-shl3)-bxor($tmp-shr4))-band65535
++  }
++  $crc
++}
++
++function New-R19HostReadinessFrame {
++  param(
++    [Parameter(Mandatory)][ValidateSet('Ready','Arm')][string]$Opcode,
++    [Parameter(Mandatory)][ValidateSet('Ground','Vehicle')][string]$Role,
++    [Parameter(Mandatory)][object]$ReaderSession,
++    [Parameter(Mandatory)][object]$Nonce,
++    [Parameter(Mandatory)][object]$BootId,
++    [Parameter(Mandatory)][object]$UsbEpoch,
++    [Parameter(Mandatory)][object]$ReplyDeviceUs,
++    [byte]$Sequence=0,
++    [byte]$ProofFlags=0
++  )
++  [uint64]$session=ConvertTo-R19HostReadinessUInt $ReaderSession 'reader_session'
++  [uint64]$clockNonce=ConvertTo-R19HostReadinessUInt $Nonce 'nonce'
++  [uint64]$boot=ConvertTo-R19HostReadinessUInt $BootId 'boot_id'
++  # HWCDC loss_epoch starts at zero. It is a valid generation, not an absent ID.
++  [uint32]$epoch=ConvertTo-R19HostReadinessUInt $UsbEpoch 'usb_epoch' 4294967295 -AllowZero
++  [uint64]$reply=ConvertTo-R19HostReadinessUInt $ReplyDeviceUs 'reply_device_us' 9223372036854775
++  if(-not(Test-R19HostReadinessNonce $clockNonce)){throw 'Nonce is not in the private 0x5219 diagnostic domain'}
++  if(($Opcode-ieq'Arm'-and$ProofFlags-ne3)-or($Opcode-ieq'Ready'-and$ProofFlags-ne0)){
++    throw 'ARM requires exactly reply-read plus continuous-reader proof claims; READY cannot claim either'
++  }
++  [byte[]]$bytes=[byte[]]::new(66)
++  $bytes[0]=253;$bytes[1]=54;$bytes[4]=$Sequence;$bytes[5]=249
++  $bytes[6]=if($Opcode-ieq'Arm'){195}else{196};$bytes[7]=253
++  $bytes[10]=82;$bytes[11]=49;$bytes[12]=57;$bytes[13]=65;$bytes[14]=1
++  $bytes[15]=if($Opcode-ieq'Arm'){1}else{2}
++  $bytes[16]=if($Role-ieq'Ground'){1}else{2};$bytes[17]=$ProofFlags
++  # Explicit byte extraction preserves little-endian wire order on every runtime.
++  foreach($pair in @(@(18,$session,8),@(26,$clockNonce,8),@(34,$boot,8),@(42,[uint64]$epoch,4),@(46,$reply,8))) {
++    for($index=0;$index-lt[int]$pair[2];$index++) {
++      $bytes[[int]$pair[0]+$index]=[byte](([uint64]$pair[1]-shr(8*$index))-band255)
++    }
++  }
++  $bytes[62]=165;$bytes[63]=90
++  [uint16]$crc=Get-R19HostReadinessCrc $bytes
++  $bytes[64]=[byte]($crc-band255);$bytes[65]=[byte](($crc-shr8)-band255)
++  return ,$bytes
++}
++
++function ConvertFrom-R19HostReadinessFrame {
++  param([byte[]]$Bytes)
++  try {
++    if($null-eq$Bytes-or$Bytes.Length-ne66-or$Bytes[0]-ne253-or$Bytes[1]-ne54-or
++       $Bytes[2]-ne0-or$Bytes[3]-ne0-or$Bytes[5]-ne249-or
++       ($Bytes[6]-ne195-and$Bytes[6]-ne196)-or$Bytes[7]-ne253-or$Bytes[8]-ne0-or$Bytes[9]-ne0){
++      throw 'Not the canonical USB-local readiness namespace'
++    }
++    [uint16]$wireCrc=[uint16]$Bytes[64]-bor([uint16]$Bytes[65]-shl8)
++    if($wireCrc-ne(Get-R19HostReadinessCrc $Bytes)){throw 'Readiness CRC mismatch'}
++    if($Bytes[10]-ne82-or$Bytes[11]-ne49-or$Bytes[12]-ne57-or$Bytes[13]-ne65-or
++       $Bytes[14]-ne1-or$Bytes[62]-ne165-or$Bytes[63]-ne90){throw 'Readiness magic, version or trailer mismatch'}
++    foreach($index in 54..61){if($Bytes[$index]-ne0){throw 'Readiness reserved bytes must be zero'}}
++    $opcode=if($Bytes[15]-eq1-and$Bytes[6]-eq195){'Arm'}elseif($Bytes[15]-eq2-and$Bytes[6]-eq196){'Ready'}else{throw 'Opcode/component mismatch'}
++    $role=if($Bytes[16]-eq1){'Ground'}elseif($Bytes[16]-eq2){'Vehicle'}else{throw 'Unknown readiness role'}
++    $integers=@{}
++    foreach($pair in @(@('reader_session',18,8),@('nonce',26,8),@('boot_id',34,8),@('usb_epoch',42,4),@('reply_device_us',46,8))) {
++      [uint64]$value=0
++      for($index=0;$index-lt[int]$pair[2];$index++) {
++        $value=$value-bor([uint64]$Bytes[[int]$pair[1]+$index]-shl(8*$index))
++      }
++      $integers[[string]$pair[0]]=$value.ToString([Globalization.CultureInfo]::InvariantCulture)
++    }
++    # Re-encoding validates nonzero ranges, nonce domain and proof bits, and
++    # ensures exact wire parity with the firmware codec.
++    [byte[]]$canonical=New-R19HostReadinessFrame -Opcode $opcode -Role $role -Sequence $Bytes[4] -ProofFlags $Bytes[17] `
++      -ReaderSession $integers.reader_session -Nonce $integers.nonce -BootId $integers.boot_id `
++      -UsbEpoch $integers.usb_epoch -ReplyDeviceUs $integers.reply_device_us
++    for($index=0;$index-lt66;$index++){if($canonical[$index]-ne$Bytes[$index]){throw 'Noncanonical readiness bytes'}}
++    [pscustomobject][ordered]@{schema='vc-lora-r19-host-readiness-v1';valid=$true;opcode=$opcode;role=$role
++      proof_flags=[int]$Bytes[17];reader_session=$integers.reader_session;nonce=$integers.nonce
++      boot_id=$integers.boot_id;usb_epoch=$integers.usb_epoch;reply_device_us=$integers.reply_device_us
++      sequence=[int]$Bytes[4];error=''}
++  } catch {
++    [pscustomobject][ordered]@{schema='vc-lora-r19-host-readiness-v1';valid=$false;opcode='';role=''
++      proof_flags=0;reader_session='';nonce='';boot_id='';usb_epoch='';reply_device_us='';sequence=-1;error=$_.Exception.Message}
++  }
++}
++
++function New-R19HostReadinessArm {
++  param([Parameter(Mandatory)][object]$Ready,
++        [Parameter(Mandatory)][bool]$ReplyReadValidated,
++        [Parameter(Mandatory)][bool]$ContinuousReader,
++        [byte]$Sequence=0)
++  if($Ready.valid-ne$true-or$Ready.opcode-cne'Ready'-or$Ready.proof_flags-ne0-or
++     -not$ReplyReadValidated-or-not$ContinuousReader){
++    throw 'ARM requires canonical READY and explicit validated reply-read/continuous-reader claims'
++  }
++  New-R19HostReadinessFrame -Opcode Arm -Role $Ready.role -ReaderSession $Ready.reader_session `
++    -Nonce $Ready.nonce -BootId $Ready.boot_id -UsbEpoch $Ready.usb_epoch `
++    -ReplyDeviceUs $Ready.reply_device_us -ProofFlags 3 -Sequence $Sequence
++}
++
++function Test-R19HostReadinessBinding {
++  param([object]$Ready,[object]$Arm)
++  try {
++    if($null-eq$Ready-or$null-eq$Arm-or$Ready.valid-ne$true-or$Arm.valid-ne$true-or
++       $Ready.opcode-cne'Ready'-or$Arm.opcode-cne'Arm'-or$Ready.proof_flags-ne0-or$Arm.proof_flags-ne3){return $false}
++    foreach($name in @('role','reader_session','nonce','boot_id','usb_epoch','reply_device_us')) {
++      if([string]$Ready.$name-cne[string]$Arm.$name){return $false}
++    }
++    return $true
++  } catch {return $false}
++}

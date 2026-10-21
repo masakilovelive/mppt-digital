@@ -1,0 +1,12 @@
+PASS empty_open_issues_read
+PASS delayed_second_open_keeps_first_reader_running
+PASS identity_delay_quarantine_and_timeout_preserved
+PASS partial_read_exact_bytes_watermark_and_native_qpc
+PASS read_fails_closed_with_raw_retained
+PASS capacity_fails_closed_with_raw_retained
+PASS blocks_fails_closed_with_raw_retained
+PASS production_quarantine_identity_and_result_gate
+PASS native_first_read_merged_before_main_by_shared_qpc
+PASS merged_trace_overflow_explicit_not_ordering_proof
+PASS helper_compiles_verified_pinned_bytes_and_exports_provenance
+Startup reader offline contract PASS tests=11; no COM, PnP, process inventory, or hardware accessed; not a physical USB timing proof.

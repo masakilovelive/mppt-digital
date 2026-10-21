@@ -1,0 +1,13 @@
+diff --git "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\tools\\invoke_r19_runtime_stage_cause_experiment_hil.ps1" b/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1
+index 9ba284f..a002f4e 100644
+--- "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\tools\\invoke_r19_runtime_stage_cause_experiment_hil.ps1"
++++ b/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1
+@@ -71,7 +71,7 @@ $expectedJtagPreflightGateSha256 =
+ $expectedFlashToolSha256 =
+     'CF6F9407218AB8C0571D1D8ED04DE07AE1892176E4CB973BEF45743CB5A01139'
+ $expectedCaptureToolSha256 =
+-    '79E908CBA3F120F007DB81FA08B5590337581BB4CE9433054EAD7E7A46543680'
++    '01C62A598FD9AEE52020F4FE72991FAB0502E3AD62DDA2957A6D282CC118966C'
+ $expectedCandidateArtifactId = '20261020T123447347Z-b414028b'
+ $expectedCandidateLatestSha256 =
+     '7B9E24D307963177D3489627AB305023B8A31744B5008FD36210590D60F4DA41'

@@ -1,0 +1,18 @@
+FW-ARDUINO-SYNC-001 PASS candidate_packaging=enabled
+COMPILE_BEGIN standard_vehicle
+COMPILE_END standard_vehicle success=True exit=0
+COMPILE_BEGIN standard_ground
+COMPILE_END standard_ground success=True exit=0
+COMPILE_BEGIN host_arm_diagnostic_vehicle
+COMPILE_END host_arm_diagnostic_vehicle success=False exit=1
+Compile failed: host_arm_diagnostic_vehicle; see E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R1
+9-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\20261020T193032512Z\arduino\host_arm_diagnostic_vehicle
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE
+-001\20261020T193032512Z\compile_only.ps1:50 char:21
++    if(-not$success){throw ('Compile failed: '+$name+'; see '+$base)}
++                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Compile failed:...gnostic_vehicle:String) [], RuntimeException
+    + FullyQualifiedErrorId : Compile failed: host_arm_diagnostic_vehicle; see E:\VESC\TRIAL_LOG\Loreley3_System\06_vc 
+   _lora_bridge\runs\validation\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\20261020T193032512Z\arduino\host  
+  _arm_diagnostic_vehicle
+ 

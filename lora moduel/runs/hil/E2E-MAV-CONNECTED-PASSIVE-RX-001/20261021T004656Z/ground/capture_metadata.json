@@ -1,0 +1,22 @@
+{
+    "schema_version":  1,
+    "status":  "CAPTURED",
+    "test_id":  "E2E-MAV-CONNECTED-PASSIVE-RX-001",
+    "endpoint":  "ground_usb",
+    "port":  "COM6",
+    "baud":  57600,
+    "format":  "8N1",
+    "dtr_enabled":  false,
+    "started_utc":  "2026-10-21T00:46:58.1141948Z",
+    "finished_utc":  "2026-10-21T00:47:58.2527853Z",
+    "duration_us":  60011493,
+    "rx_bytes":  0,
+    "tx_bytes":  0,
+    "transmit_fixture":  null,
+    "transmit_count_requested":  1,
+    "transmit_count_completed":  0,
+    "transmit_interval_ms":  0,
+    "capture_jsonl":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\E2E-MAV-CONNECTED-PASSIVE-RX-001\\20261021T004656Z\\ground\\capture.jsonl",
+    "rx_binary":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\E2E-MAV-CONNECTED-PASSIVE-RX-001\\20261021T004656Z\\ground\\rx.bin",
+    "tx_binary":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\E2E-MAV-CONNECTED-PASSIVE-RX-001\\20261021T004656Z\\ground\\tx.bin"
+}

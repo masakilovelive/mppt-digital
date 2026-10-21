@@ -1,0 +1,53 @@
+{
+    "schema":  "r19-continuous-reader-readiness-compile-only-v1",
+    "result":  "INCOMPLETE_OR_FAIL",
+    "hardware_interaction":  false,
+    "flash_attempted":  false,
+    "sealed_candidate_created":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false,
+    "cases":  [
+                  {
+                      "name":  "standard_vehicle",
+                      "role":  "vehicle",
+                      "mode":  "standard",
+                      "fqbn":  "esp32:esp32:XIAO_ESP32S3",
+                      "flags":  "",
+                      "success":  true,
+                      "exit_code":  0,
+                      "started_utc":  "2026-10-20T19:53:55.5560799Z",
+                      "elapsed_ms":  370936.02790000004,
+                      "log_path":  "standard_vehicle/compile.json",
+                      "binary_bytes":  390768,
+                      "binary_sha256":  "DCF22933CB26C497598CA7487420F324F18490D77E534AAE1E0C1DE79697D8C1"
+                  },
+                  {
+                      "name":  "standard_ground",
+                      "role":  "ground",
+                      "mode":  "standard",
+                      "fqbn":  "esp32:esp32:XIAO_ESP32S3",
+                      "flags":  "",
+                      "success":  true,
+                      "exit_code":  0,
+                      "started_utc":  "2026-10-20T20:00:06.7261549Z",
+                      "elapsed_ms":  246134.1832,
+                      "log_path":  "standard_ground/compile.json",
+                      "binary_bytes":  360992,
+                      "binary_sha256":  "4F68C70A966C5D606630612ED1F0F58EECD1EE3EC3EE9BBDC412A9574F97019E"
+                  },
+                  {
+                      "name":  "host_arm_diagnostic_vehicle",
+                      "role":  "vehicle",
+                      "mode":  "host_arm_diagnostic",
+                      "fqbn":  "esp32:esp32:XIAO_ESP32S3",
+                      "flags":  "-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1 -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1 -DVC_LORA_R19_USB_READINESS_MODE=2",
+                      "success":  false,
+                      "exit_code":  1,
+                      "started_utc":  "2026-10-20T20:04:12.9149766Z",
+                      "elapsed_ms":  66666.4327,
+                      "log_path":  "host_arm_diagnostic_vehicle/compile.json",
+                      "binary_bytes":  0,
+                      "binary_sha256":  ""
+                  }
+              ]
+}

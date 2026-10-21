@@ -1,0 +1,51 @@
+[
+  {
+    "path": "CMakeLists.txt",
+    "bytes": 9100,
+    "sha256": "B607998884212E5F51BA0887670E3B55752F812B75EF70D1364A5F79A48B24FC",
+    "after_snapshot": "after/CMakeLists.txt",
+    "diff": "CMakeLists.txt.diff"
+  },
+  {
+    "path": "SPEC.md",
+    "bytes": 7633,
+    "sha256": "B573B134C9D4C576242AE400F826B7077D57E2A4E4CCF44BE225EE04A878FB80",
+    "after_snapshot": "after/SPEC.md",
+    "diff": "SPEC.md.diff"
+  },
+  {
+    "path": "CURRENT_WORKSPACE_AND_SPEC_R19.md",
+    "bytes": 375846,
+    "sha256": "1831A91BD46B06DADF65D8AD7FA39381764EA98B4DB81461BBDA904EBE0B4D7F",
+    "after_snapshot": "after/CURRENT_WORKSPACE_AND_SPEC_R19.md",
+    "diff": "CURRENT_WORKSPACE_AND_SPEC_R19.md.diff"
+  },
+  {
+    "path": "tools/r19_host_readiness_workflow.ps1",
+    "bytes": 12934,
+    "sha256": "1B0740C84FE8B54C8F573846E6EBCDCDA7DF330565833500F1EE557CF11BD099",
+    "after_snapshot": "after/tools__r19_host_readiness_workflow.ps1",
+    "diff": "tools__r19_host_readiness_workflow.ps1.diff"
+  },
+  {
+    "path": "tests/hil/check_r19_host_readiness_workflow.ps1",
+    "bytes": 18689,
+    "sha256": "46E556275438561A8E75E0765D0B550DF31DE1D11D494A97D53AC758629309F1",
+    "after_snapshot": "after/tests__hil__check_r19_host_readiness_workflow.ps1",
+    "diff": "tests__hil__check_r19_host_readiness_workflow.ps1.diff"
+  },
+  {
+    "path": "tools/r19_startup_boundary_evaluation.ps1",
+    "bytes": 16606,
+    "sha256": "34C23B79860987F29A40FFAFC6E168131C8935CCB5DA2977CF3F322B09DD1B1C",
+    "after_snapshot": "after/tools__r19_startup_boundary_evaluation.ps1",
+    "diff": "tools__r19_startup_boundary_evaluation.ps1.diff"
+  },
+  {
+    "path": "tests/hil/check_r19_startup_boundary_evaluation.ps1",
+    "bytes": 11081,
+    "sha256": "560B7376539CE13C0B1E5FE2CF888437C867DB687A2E26653ECE73464AD6773F",
+    "after_snapshot": "after/tests__hil__check_r19_startup_boundary_evaluation.ps1",
+    "diff": "tests__hil__check_r19_startup_boundary_evaluation.ps1.diff"
+  }
+]

@@ -1,0 +1,149 @@
+[
+  {
+    "path": "CMakeLists.txt",
+    "kind": "modified",
+    "before_sha256": "CFB7D4A8DCF28C0A5C4153D4B6A1575A9859D1B92220657F7E3C9BF548DF9363",
+    "after_sha256": "6D683AA893107F83BFD303189CF1F099823F273CAD93734E9FEBE8B18A3FE7DA",
+    "size_bytes": 9040
+  },
+  {
+    "path": "CURRENT_WORKSPACE_AND_SPEC_R19.md",
+    "kind": "modified",
+    "before_sha256": "530BD880E1FC48A6C9878668F2CEC641B4639177D6409DAA09C41D701492AD65",
+    "after_sha256": "29277BB05C387D28F7A48A61790F530B28F99D8E82438E7383CDB4BFB003EC40",
+    "size_bytes": 362064
+  },
+  {
+    "path": "firmware/diagnostics/r19_host_readiness.hpp",
+    "kind": "new",
+    "before_sha256": null,
+    "after_sha256": "AB2407134125CE8E64F8CF44B08A265DF7A1BA1D9A0BF3C89C74B740527F8D56",
+    "size_bytes": 13605
+  },
+  {
+    "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+    "kind": "modified",
+    "before_sha256": "A7759306694F93A425229A30C721121BD7B29C063860C8C58691FB049985BF34",
+    "after_sha256": "4FDFB3FB2FBFA408E88C9C356C7D86E9692CDC98469ED5642DDC2C089B4708BE",
+    "size_bytes": 249875
+  },
+  {
+    "path": "tests/hil/check_r19_continuous_reader_contract.ps1",
+    "kind": "new",
+    "before_sha256": null,
+    "after_sha256": "35F7BA97BBE7D3E3B066A77294168699EDE468CEAE413F8ABFCF7F2402C32732",
+    "size_bytes": 13884
+  },
+  {
+    "path": "tests/hil/check_r19_continuous_reader_integration.ps1",
+    "kind": "new",
+    "before_sha256": null,
+    "after_sha256": "3563790930DF7D264193DD3928D34A27C7EDA18B39A0F8C486F4F34609146DBE",
+    "size_bytes": 12524
+  },
+  {
+    "path": "tests/hil/check_r19_host_readiness_wire.ps1",
+    "kind": "new",
+    "before_sha256": null,
+    "after_sha256": "E0FD2952C60C83B381F7B93742ACC8A706526A9D06BC0E833E8E70495D52F0C7",
+    "size_bytes": 4929
+  },
+  {
+    "path": "tests/hil/check_r19_startup_reader_contract.ps1",
+    "kind": "modified",
+    "before_sha256": "5C8A3B9ED6C0AA87546B4F46E26AB697003A8865CFE4CD5073CA4DB010660E8E",
+    "after_sha256": "06BA77B847162E8428D5E58D6E5251F667C0A7C685EDF01C7F5CC36AC4E46A9E",
+    "size_bytes": 10282
+  },
+  {
+    "path": "tests/host/CMakeLists.txt",
+    "kind": "modified",
+    "before_sha256": "4C17A5E5FF3A3EF6C0C3C1737617DA38956732F9E80D3264120F3C5003C84605",
+    "after_sha256": "E434DDDD8ACC3686ADE2D35A45135AA6AF7B7184620853677F066879278464F7",
+    "size_bytes": 36318
+  },
+  {
+    "path": "tests/host/standalone/check_r19_host_readiness_integration.ps1",
+    "kind": "new",
+    "before_sha256": null,
+    "after_sha256": "9719EC9AC2A15DF3EFF9F1AA1B4B233040802C6A7ABF4730797061D58110F155",
+    "size_bytes": 7512
+  },
+  {
+    "path": "tests/host/standalone/phase6_ground_host_readiness_tests.cpp",
+    "kind": "new",
+    "before_sha256": null,
+    "after_sha256": "1C219270EFBE3437A25AF3B637B899A852C12877A6050A57781461BA7852989F",
+    "size_bytes": 5965
+  },
+  {
+    "path": "tests/host/standalone/r19_host_readiness_tests.cpp",
+    "kind": "new",
+    "before_sha256": null,
+    "after_sha256": "A727493461AA0E13D65C4D7A41540D83ED15369C15B3DAA2FD4E7E051DA9B892",
+    "size_bytes": 12256
+  },
+  {
+    "path": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+    "kind": "modified",
+    "before_sha256": "93A6CA04130B3E575B6AE9A3582F7E1A43A5BD63E228CB06D31502C3D189E255",
+    "after_sha256": "F2CB12FBCD7613D7D37729D89903603C61A0DCC718C8CD4DC926E3CE2F4CD192",
+    "size_bytes": 175418
+  },
+  {
+    "path": "tools/r19_continuous_reader.cs",
+    "kind": "new",
+    "before_sha256": null,
+    "after_sha256": "8DF5929114802926708BD42430CDCD7AF499B15B92EB7B7503BEF11C635B44F9",
+    "size_bytes": 17494
+  },
+  {
+    "path": "tools/r19_host_readiness_wire.ps1",
+    "kind": "new",
+    "before_sha256": null,
+    "after_sha256": "91CEEF26F4CFF3E8DED4C6132CD274BDC325051592715D70CBAF08CDF71BCBE4",
+    "size_bytes": 7713
+  },
+  {
+    "path": "tools/run_r19_runtime_fail_diagnostic_hil.ps1",
+    "kind": "modified",
+    "before_sha256": "79E908CBA3F120F007DB81FA08B5590337581BB4CE9433054EAD7E7A46543680",
+    "after_sha256": "01C62A598FD9AEE52020F4FE72991FAB0502E3AD62DDA2957A6D282CC118966C",
+    "size_bytes": 185622
+  },
+  {
+    "path": "tools/sync_arduino_sketch_core.ps1",
+    "kind": "modified",
+    "before_sha256": "3FE7FFF88F37FEB821B6D688EA08B9DCA6B649970DA62794C8D0A1EE3A170E37",
+    "after_sha256": "00FC27F805C00BA4CA5618EBEE219FB08537423A9CAA80772D711AE89760C517",
+    "size_bytes": 4470
+  },
+  {
+    "path": "vc_lora_ground_xiao_esp32s3/diagnostics/r19_host_readiness.hpp",
+    "kind": "new",
+    "before_sha256": null,
+    "after_sha256": "AB2407134125CE8E64F8CF44B08A265DF7A1BA1D9A0BF3C89C74B740527F8D56",
+    "size_bytes": 13605
+  },
+  {
+    "path": "vc_lora_ground_xiao_esp32s3/vc_lora_phase6_bridge.hpp",
+    "kind": "modified",
+    "before_sha256": "A7759306694F93A425229A30C721121BD7B29C063860C8C58691FB049985BF34",
+    "after_sha256": "4FDFB3FB2FBFA408E88C9C356C7D86E9692CDC98469ED5642DDC2C089B4708BE",
+    "size_bytes": 249875
+  },
+  {
+    "path": "vc_lora_vehicle_xiao_esp32s3/diagnostics/r19_host_readiness.hpp",
+    "kind": "new",
+    "before_sha256": null,
+    "after_sha256": "AB2407134125CE8E64F8CF44B08A265DF7A1BA1D9A0BF3C89C74B740527F8D56",
+    "size_bytes": 13605
+  },
+  {
+    "path": "vc_lora_vehicle_xiao_esp32s3/vc_lora_phase6_bridge.hpp",
+    "kind": "modified",
+    "before_sha256": "A7759306694F93A425229A30C721121BD7B29C063860C8C58691FB049985BF34",
+    "after_sha256": "4FDFB3FB2FBFA408E88C9C356C7D86E9692CDC98469ED5642DDC2C089B4708BE",
+    "size_bytes": 249875
+  }
+]

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PnpUtil Version="10.0.26300" Command="/enum-interfaces /enabled /instanceid USB\VID_303A&amp;PID_1001&amp;MI_02\7&amp;7131F6A&amp;0&amp;0002 /format xml">
+    <Interface Path="\\?\USB#VID_303A&amp;PID_1001&amp;MI_02#7&amp;7131f6a&amp;0&amp;0002#{dee824ef-729b-4a0e-9c14-b7117d33a817}">
+        <Description>Unknown</Description>
+        <ClassGuid>{dee824ef-729b-4a0e-9c14-b7117d33a817}</ClassGuid>
+        <DeviceInstanceId>USB\VID_303A&amp;PID_1001&amp;MI_02\7&amp;7131f6a&amp;0&amp;0002</DeviceInstanceId>
+        <Status>Enabled</Status>
+    </Interface>
+    <Interface Path="\\?\USB#VID_303A&amp;PID_1001&amp;MI_02#7&amp;7131f6a&amp;0&amp;0002#{80869ad8-c37f-476a-a6b4-ae241c30a473}">
+        <Description>Unknown</Description>
+        <ClassGuid>{80869ad8-c37f-476a-a6b4-ae241c30a473}</ClassGuid>
+        <DeviceInstanceId>USB\VID_303A&amp;PID_1001&amp;MI_02\7&amp;7131f6a&amp;0&amp;0002</DeviceInstanceId>
+        <Status>Enabled</Status>
+    </Interface>
+</PnpUtil>

@@ -1,0 +1,183 @@
+{
+  "schema": "vc-lora-r19-continuous-reader-readiness-offline-v1",
+  "result": "PASS_OFFLINE_PHASE_1_HIL_PENDING",
+  "client_date_jst": "2026-10-21",
+  "finished_utc": "2026-10-20T20:17:45.0976231Z",
+  "proposal_all_stages_completed": false,
+  "hardware_resolution": "NOT_MEASURED_AFTER_THIS_CHANGE",
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "actions": {
+    "pnp_query": false,
+    "sdk_source_change": false,
+    "com_opened": false,
+    "firmware_write": false,
+    "processes_terminated": 0,
+    "e220_register_change": false,
+    "root_readonly_process_inventory": true,
+    "jtag": false,
+    "serial_payload_write": false
+  },
+  "fixed": [
+    "One native read owner from Open through cleanup; identity transition is a marker, not Stop/Join/handover.",
+    "Bounded parser delivery; immutable native raw retained on identity, read and join failures.",
+    "Separate native-reader and LIVE-parser 100 ms checks with interval endpoints and final LIVE interval.",
+    "Exact existing-frame tail only; prefetched next frames retained and not silently accepted.",
+    "Diagnostic-only SyncOnly vs HostArm firmware gates and pure PC wire codecs; no active PC workflow yet.",
+    "Windows Xtensa duplicate clock definitions fixed with exclusive include routes."
+  ],
+  "invariants": {
+    "frozen_candidate_header_count": 15,
+    "default_readiness_mode": 0,
+    "passive_capture_payload_writes": 0,
+    "tdd_settings_changed": false,
+    "pixhawk_gcs_bps": 57600,
+    "e220_uart_bps": 115200,
+    "product_heartbeat_deadline_ms": 106,
+    "e220_profile_changed": false
+  },
+  "tests": {
+    "host_readiness_cpp_checks": 1171,
+    "full_suite": {
+      "log": "full_host_tests_frozen.log",
+      "elapsed_seconds": 497.95,
+      "failed": 0,
+      "note": "Before final nonzero-mode-only include-route fix. See related retest and normal preprocessor equivalence.",
+      "passed": 343,
+      "bridge_sha256": "9373B24B81A534DA33BBC902444463380AF2500B709F039D0EFAB17C1A214BA1"
+    },
+    "ground_readiness_real_bridge_fake_checks": 16,
+    "host_readiness_source_contract_checks": 14,
+    "hardware_timing_proven": false,
+    "injected_parser_delay_ms": 160,
+    "injected_delay_expected_result": "FAIL_100_MS_FAIRNESS",
+    "per_interpreter": {
+      "continuous_integration": 9,
+      "shells": [
+        "Windows PowerShell 5.1",
+        "PowerShell 7"
+      ],
+      "continuous_helper": 20,
+      "host_readiness_wire": 98,
+      "failures": 0
+    },
+    "post_include_fix": {
+      "elapsed_seconds": 7.96,
+      "failed": 0,
+      "passed": 49,
+      "log": "post_include_fix_related_tests.log"
+    },
+    "synthetic_stream": {
+      "duplicated": 0,
+      "bytes": 10000,
+      "delivery_budget_bytes": 63,
+      "missing": 0,
+      "native_read_bytes": 37,
+      "scope": "memory-only, not RF/USB throughput"
+    }
+  },
+  "compilation": {
+    "note": "Two initial diagnostic compile attempts exposed the same duplicate include problem. Both failed before any firmware write. Later six-job builds used new folders. No taskkill took place: identity guard rejected termination because the process had already exited.",
+    "fqbn": "esp32:esp32:XIAO_ESP32S3",
+    "diagnostic_builds": [
+      {
+        "name": "host_arm_include_fixed_vehicle",
+        "role": "vehicle",
+        "mode": "host_arm_diagnostic",
+        "jobs": 6,
+        "flags": "-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1 -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1 -DVC_LORA_R19_USB_READINESS_MODE=2",
+        "success": true,
+        "exit_code": 0,
+        "elapsed_ms": 225596.21120000002,
+        "log_path": "arduino/host_arm_include_fixed_vehicle/compile.json",
+        "binary_bytes": 441280,
+        "binary_sha256": "001F2664F53CF00B1076B07BFA8A4811338F5759375658B7C054877B44139AF9"
+      },
+      {
+        "name": "host_arm_include_fixed_ground",
+        "role": "ground",
+        "mode": "host_arm_diagnostic",
+        "jobs": 6,
+        "flags": "-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1 -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1 -DVC_LORA_R19_USB_READINESS_MODE=2",
+        "success": true,
+        "exit_code": 0,
+        "elapsed_ms": 252265.0755,
+        "log_path": "arduino/host_arm_include_fixed_ground/compile.json",
+        "binary_bytes": 422240,
+        "binary_sha256": "E4F499D1E22C18DD3C4EA98FF21FB9CCA95275C74D0D70F22233177D8F50E617"
+      }
+    ],
+    "diagnostic_source": "after/firmware/phase6/vc_lora_phase6_bridge.hpp",
+    "successful_builds": 4,
+    "sealed_candidates_created": 0,
+    "equivalence_scope": "host fake-Arduino preprocessing only, not identical Xtensa binaries",
+    "normal_builds": [
+      {
+        "name": "standard_vehicle",
+        "role": "vehicle",
+        "mode": "standard",
+        "fqbn": "esp32:esp32:XIAO_ESP32S3",
+        "flags": "",
+        "success": true,
+        "exit_code": 0,
+        "started_utc": "2026-10-20T19:53:55.5560799Z",
+        "elapsed_ms": 370936.02790000004,
+        "log_path": "standard_vehicle/compile.json",
+        "binary_bytes": 390768,
+        "binary_sha256": "DCF22933CB26C497598CA7487420F324F18490D77E534AAE1E0C1DE79697D8C1"
+      },
+      {
+        "name": "standard_ground",
+        "role": "ground",
+        "mode": "standard",
+        "fqbn": "esp32:esp32:XIAO_ESP32S3",
+        "flags": "",
+        "success": true,
+        "exit_code": 0,
+        "started_utc": "2026-10-20T20:00:06.7261549Z",
+        "elapsed_ms": 246134.1832,
+        "log_path": "standard_ground/compile.json",
+        "binary_bytes": 360992,
+        "binary_sha256": "4F68C70A966C5D606630612ED1F0F58EECD1EE3EC3EE9BBDC412A9574F97019E"
+      }
+    ],
+    "normal_source": "include_fix_before.hpp",
+    "normal_include_fix_equivalence": "normal_preprocessed_equivalence.json",
+    "failed_compile_logs_retained": [
+      "arduino/host_arm_diagnostic_vehicle/compile.json",
+      "arduino/host_arm_parallel_vehicle/compile.json"
+    ]
+  },
+  "preservation": {
+    "existing_candidate_verifier": "existing_candidate_verification_explicit_root.log",
+    "common_sha256": "582B50BB6C4A981862D4CE716A90D8B88601476724E9B75889A414EBE8A25B39",
+    "flash_tool_sha256": "CF6F9407218AB8C0571D1D8ED04DE07AE1892176E4CB973BEF45743CB5A01139",
+    "accepted_r18_files": 8,
+    "sdk_canonical_sha256": "D1B890A6C37587BF7775E4F9DDB7791C91085F9C2BC4D95CB9EC3C5809B24DCA",
+    "sealed_candidate_files": 147,
+    "mismatches": 0,
+    "sdk_installed_sha256": "D1B890A6C37587BF7775E4F9DDB7791C91085F9C2BC4D95CB9EC3C5809B24DCA"
+  },
+  "source_snapshot_files": 21,
+  "source_changes": "source_changes.json",
+  "remaining": [
+    "Fresh permission and six-condition safety/power confirmation before any hardware experiment.",
+    "Run same sealed candidate with continuous reader, 40 s dual-COM and runtime records, mandatory accepted R18 rollback.",
+    "If initial 106 ms failure persists, complete active SyncOnly/HostArm PC workflow and sealed per-mode candidate/manifest/flash bindings before A/B comparison.",
+    "HostArm success supports but does not prove startup/preconditioning cause; kernel Read and physical USB polling remain distinct.",
+    "932 parameters within30 s and heartbeat max2500 ms remain unverified."
+  ],
+  "causal_caution": "The new diagnostic compile error is not asserted to be the cause of past already-flashed R19 USB timeouts.",
+  "red_history": {
+    "include_route_red": "windows_xtensa_include_red.log",
+    "no_tests_deleted_or_safety_thresholds_relaxed": true,
+    "second_reason": "Ran during packaging isolation; the restored common pin was separately verified and the final full suite passed.",
+    "new_root_integration_red": "continuous_integration_red.log",
+    "second_full_suite_failed": 1,
+    "first_full_suite_failed": 2,
+    "first_reasons": [
+      "Legacy test named the removed live handover implementation, while preserving its compatibility tests.",
+      "Temporary diagnostic header packaging changed the exact pinned common dependency."
+    ]
+  }
+}

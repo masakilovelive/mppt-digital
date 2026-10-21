@@ -1,0 +1,66 @@
+{
+    "schema":  "vc-lora-r19-host-readiness-integration-offline-v1",
+    "result":  "PASS",
+    "hardware_interaction":  false,
+    "product_deadline_ms":  106,
+    "checks":  [
+                   {
+                       "name":  "readiness-default-off-and-diagnostic-only",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "original-product-deadline-unchanged",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "gate-before-irreversible-heartbeat-admission",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "gate-before-irreversible-ordered-backlog-admission",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "gate-before-irreversible-normal-rf-admission",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "gate-before-irreversible-r19-bulk-admission",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "defensive-physical-pump-gate",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "waiting-gate-does-not-pause-heartbeat-expiry",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "header-dependency-closure",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "arm-namespace-is-local-and-after-ready-publication",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "clock-completion-stages-ready-with-same-writer",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "initialization-precedes-product-setup-and-preserves-default",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "no-arm-acquisition-is-bounded-before-first-nonce",
+                       "passed":  true
+                   },
+                   {
+                       "name":  "clock-header-is-owned-by-one-include-route-per-mode",
+                       "passed":  true
+                   }
+               ],
+    "check_count":  14,
+    "failed_count":  0
+}

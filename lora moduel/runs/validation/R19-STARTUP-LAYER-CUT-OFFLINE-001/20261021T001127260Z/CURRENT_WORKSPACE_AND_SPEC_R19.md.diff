@@ -1,0 +1,120 @@
+warning: in the working copy of 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-STARTUP-LAYER-CUT-OFFLINE-001\20261021T001127260Z\before\CURRENT_WORKSPACE_AND_SPEC_R19.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-STARTUP-LAYER-CUT-OFFLINE-001\20261021T001127260Z\after\CURRENT_WORKSPACE_AND_SPEC_R19.md', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-STARTUP-LAYER-CUT-OFFLINE-001\\20261021T001127260Z\\before\\CURRENT_WORKSPACE_AND_SPEC_R19.md" "b/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-STARTUP-LAYER-CUT-OFFLINE-001\\20261021T001127260Z\\after\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
+index 99af414..34acae4 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-STARTUP-LAYER-CUT-OFFLINE-001\\20261021T001127260Z\\before\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
++++ "b/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-STARTUP-LAYER-CUT-OFFLINE-001\\20261021T001127260Z\\after\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
+@@ -6,8 +6,9 @@
+ 
+ ## 結論
+ 
+-- 最新のオフライン統合はSection 31.55である。PC側の物理Read担当をCOM Openからcleanupまで単一の連続readerとし、identity確認後の担当切替えを廃止した。全host343/343、include経路の限定修正後49/49、通常／診断Arduino4/4ビルドはPASS。106 ms、UART／TDD／E220設定及び既存sealed候補は未変更。HostArmの診断source／codecは準備済みだが、能動PC workflowとA/B別candidate／flash bindingは未統合で、今回のpassive試験へは使用しない。
++- 連続Readと機器側HostArmの土台はSection 31.55である。PC側の物理Read担当をCOM Openからcleanupまで単一の連続readerとし、identity確認後の担当切替えを廃止した。同節時点で全host343/343、include経路の限定修正後49/49、通常／診断Arduino4/4ビルドはPASS。最新のオフライン追加はSection 31.57を参照する。106 ms、UART／TDD／E220設定及び既存sealed候補は未変更。機器HostArmの診断source／codecは準備済みだが、能動live runnerとmode別candidate／flash bindingは未統合で、既存passive試験へは使用しない。
+ - 最新の実機結果はSection 31.56である。同じ候補 `20261020T123447347Z-b414028b` を1回評価し、40秒で各2,646 byte／完全診断42 frame（測定内40＋startup 2）、全parser異常0を取得した。連続native Readの最大間隔はVehicle 57.4314 ms／Ground 57.4311 msで100 ms以内だが、LIVE解析処理は303.612／268.557 msで未合格。Groundの初回21-byte製品Heartbeatは今回も106 msのLoopTimeout、ring／stash 0、publish 3／pickup 2で失敗した。最初のReadの初期bufferに既に完全R19Fが63 byteあったため、この失敗が後続の解析遅延だけで起きたとは説明できない。PC Open前後の数値時刻・物理host pollingとの因果は未確定。両機accepted R18へのdigest照合付き復旧はPASS、今回の1回許可は使用済み、追加実機試験はしていない。
++- Section 31.57では②の適応的混雑制御を`SPEC.md`の将来仕様`FUTURE-FLOW-001`へ分離し、①受信準備・③完了境界の切分け用offline workflow／判定器を追加した。実機runner／新しいmode別candidate／機器ARM記録は未統合で、現候補の書込みやCOM／JTAG操作は行っていない。既存実機データはUSB完了失敗を確認できる一方、受信準備との原因分類はUNKNOWN、RF／全パラメータはNOT_EVALUATEDのままとする。
+ - Section 31.48までのoffline準備は全host321/321・通常版／診断版ビルド・4記録の独立照合に合格済みである。Section 31.49では全16 rawの取得も成功したが、PC service gap及びUSB完了評価は未合格。932件30秒、Heartbeat最大2,500 ms及び製品Deploymentは未証明である。今回の実機一回限定許可は使用済みであり、追加試験はしていない。
+ - 最新のSection 31.43では、試験runnerの起動表示判定・timeout診断・初回処理負荷を修正し、cold boot後のR18単一PARAM実機試験に合格した。`SERIAL1_BAUD=57`の応答1件、要求→応答`5,297.170 ms`、Heartbeat最大`2,113.785 ms`、PC側pump最大`82.282 ms`、全parser／CRC／noise／partial／control leak 0である。前回の0 byteは再現しなかったが根本原因は未確定であり、今回の結果を全932件再取得又はR19高速受入へ拡張しない。
+ - R18低速製品経路は、Mission Planner実機試験で`PARAM_VALUE`を正確に932/932件取得し、同じ受入区間のHeartbeat最大間隔`2,206.203 ms`も基準`2,500 ms`以下で合格している。
+@@ -4631,3 +4632,102 @@ Vehicleのfirst-product-failure未latchも製品通信健全性の証明では
+ HostArmの能動PC workflow及びA/B別sealed candidate／flash bindingの完成である。
+ 今回の一回限定許可は消費済みで、自動再試験や新候補の書込みは行っていない。
+ 
++### 31.57 ②を将来仕様へ分離、①受信準備・③完了境界のオフライン切分け（2026-10-21 JST）
++
++利用者の依頼は、②混雑・流量制御を今回のUSB原因調査から分離して将来仕様に記載し、
++①接続準備と運転の分離、③USB／RF／取得完了の独立判定で原因を切り分けることである。
++今回は機器操作のないoffline診断処理・仕様追記で、実機再試験や製品機能の修復完了ではない。
++
++記録: `runs/validation/R19-STARTUP-LAYER-CUT-OFFLINE-001/20261021T001127260Z/summary.json`。
++
++#### ②の将来仕様と今回の非対象範囲
++
++`SPEC.md`の`FUTURE-FLOW-001`に固定容量と滞留時間の監視、高低水位の送出抑制／再開、
++Heartbeat／コマンド応答の優先枠、パラメータ欠落回復、完全frame・partial suffixの保持を記載した。
++既存16 KiB上り／4 KiB下り等のbufferや、AUXによる400-byte局所creditを未実装とは扱わない。
++今回の固定初回USB失敗ではring／stashが0で、buffer増量が直接原因を解消する根拠はない。
++有限bufferだけで持続的な入力超過は吸収できないため、将来は送信元の流量抑制と一体評価する。
++今回は容量・流量・UART・TDD・E220設定を変更しない。
++
++#### ①のPC側手順をオフライン状態機械にした
++
++`tools/r19_host_readiness_workflow.ps1`は、既存wire／clock codecを明示的に利用する純粋な状態機械である。
++COMを開かず、書込み・実時計採取・process・networkアクセスをしない。
++
++- 同じreader identityを維持したclock要求生成→実OUT受理記録→CRC正常な返信の実バイト確認の順を要求する。
++  ExplicitHostArmでは続いてnonce／role／device boot／device session／epoch／返信時刻に合うREADYを確認する。
++- SyncOnly（mode 1）はclock返信検証で完了し、実ファームが生成しないREADYを待たない。
++  READY／ARMを要求せず、SyncOnlyへREADYが届いた場合はmode不一致として拒否する。
++  ExplicitHostArm（mode 2）だけがREADY検証後に一度のARMを生成する。
++- partial frame、partial OUT受理、古いnonce／epoch／session、順序違反、reader停止・差替え、
++  PC clock domainの変更・逆行・期限超過を拒否する。初回製品Heartbeatの受理済み21 byteを全量再送しない。
++- OUT受理後も`ArmWriteAcceptedAwaitingDeviceEvidence`であり、機器のARM受理やkernel-pending Readを証明しない。
++- PC側取得期限はMCU setup起点120秒期限の代用ではなく、更新しない。
++  mode 2は初回HeartbeatだけでなくGround製品USB出力のadmission全体を待機させるため、
++  無線受信の滞留や古いHeartbeatの期限切れも別途測定する。
++
++この追加は能動live runnerの完成ではない。既存passive runnerのpayload write 0を維持し、
++現sealed候補をHostArm対応と偽らない。診断用ARMをMission Planner製品手順や飛行ARMと混同しない。
++
++#### ③の判定器と既存実機データの再評価
++
++`tools/r19_startup_boundary_evaluation.ps1`を追加した。ImportOnlyは純粋関数定義、
++CLIは既存JSONのoffline入出力だけで、取得操作を含まない。新しい原因分類は次を分離する。
++
++- 固定384-byte初回失敗と、後刻JTAGで読んだEndpoint FIFO状態。
++- 初期受信領域の完全R19Fと、COM Open前の欠落・MCU対PCの数値時刻に関する推測。
++- PC側のARM生成／OUT受理と、モード・機器boot・USB epochに結合した機器側ARM受理証拠。
++- setup取得期限切れと、製品USB完了106 ms期限切れ。
++- USB、RF、全パラメータの各層。未測定の下流をUSB失敗から自動的にFAIL又はPASSにしない。
++- 同boot／modeの機器ARMを証明済みなのに製品失敗がARM前なら、準備不足の証明とはせず、
++  gate迂回又は記録の誤結合を要確認とする。
++
++31.56の既存raw 2回を元decoderで再検証し、outer参照のstage／capture summary、native raw、
++sealed sourceのSHAを再照合して`latest_saved_run_input.json`を生成した。
++再評価結果`latest_saved_run_evaluation.json`は次のとおり。
++
++| 境界 | 再評価 |
++|---|---|
++| USB初回失敗 | IMMUTABLE_USB_COMPLETION_TIMEOUT、21/21 byte、106.238 ms |
++| 初回失敗時software待ち／世代 | ring 0／stash 0、publish 3／pickup 2 |
++| 最初のPC Read前の失敗通知 | CRC正常な全63 byteが存在 |
++| 受信準備との原因分類 | UNKNOWN、機器ARM証拠なし |
++| 同通知と内部記録の厳密なboot結合 | 通知にはboot nonceがなく単独では未証明 |
++| 無線到達／全932件取得 | NOT_EVALUATED／NOT_EVALUATED |
++
++R19Fを生成した停止がReadに先行するというsource上の順序は維持する。
++ただし、その通知だけで固定初回記録とのboot結合やPC Open前の時刻まで昇格させない。
++今回追加したoffline判定器自体も、入力の外部provenanceを認証したり原因を確定したりするものではない。
++
++#### 実機で必要な比較条件（未統合・未実施）
++
++| mode | USB準備交換 | 製品USB出力開始 |
++|---|---|---|
++| A Passive | なし | 現行どおり |
++| B SyncOnly | clock／返信のみ | 現行どおり、ARM待ちなし |
++| C ExplicitHostArm | clock／返信／READY／ARM | 同bootの機器ARM受理後 |
++
++単にCだけ成功しても、起動順序と診断交換による予備作動を分離できないため原因確定としない。
++現sourceではREADYもmode 2限定で、BとCは同一トラフィックではない。
++ARM待機単独の因果まで主張する場合は、READYの追加送信による予備作動を揃える対照条件か、
++その影響を分けられる機器内時系列の証拠が必要である。
++機器ARM後も初回製品USB失敗があれば「準備往復確認後にもUSB境界で発生」と分類するが、
++USB物理故障やPC host pollingの原因を自動確定しない。
++
++実機前には、同一source基準のmode別新規candidateのseal／manifest／flash bindingと、
++機器ARM受理・最初の製品enqueueを読める版番号付き固定記録及びdecoderの統合が必要である。
++機器setup起点120秒の残時間も確認し、取得期限切れはUSB障害とは別の試験準備失敗にする。
++既存候補・passive outerの固定pinを緩和して代用しない。新たな範囲明確な許可と安全確認後に限り実機へ進む。
++
++#### オフライン検証と独立確認
++
++追加した受信準備workflowはWindows PowerShell 5.1／PowerShell 7の各272項目、
++境界判定器は各54項目でPASS。いずれも失敗を先に再現してから修正した。
++最終sourceで`tools/run_host_tests.ps1`を実行し、全host 345/345 PASS（517.47秒）を確認した。
++独立レビューで見つかったSyncOnlyの存在しないREADY待ちと、ARM前失敗を準備不足と読める判定名を訂正し、
++同レビューで両指摘の解消を確認した。改訂前の264／52項目の記録は最終結果ではない。
++
++通常版のVehicle→Ground Arduino compileも2/2 PASS。Groundには既存sourceの未使用変数warningが1件あり、
++warning-freeとはしない。これらの新しいbuild出力はaccepted R18保存物やsealed R19候補へ置き換えていない。
++既存sealed R19候補の読取り専用verifierはPASS、canonical bridge／HWCDC／passive runnerのSHAは未変更。
++

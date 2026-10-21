@@ -1,0 +1,3 @@
+# Preserve sealed evidence and hash-pinned sources byte for byte.
+* -text
+*.bin binary

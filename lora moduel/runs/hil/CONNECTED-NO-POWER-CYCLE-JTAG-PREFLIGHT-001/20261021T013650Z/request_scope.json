@@ -1,0 +1,19 @@
+{
+  "schema": "vc-lora-no-manual-power-cycle-scope-v1",
+  "created_utc": "2026-10-21 01:36:50 UTC",
+  "request": "実機操作願います。安全条件は満たしています。こちらから電源のon/offは出来ません",
+  "user_authorized_hardware_verification": true,
+  "user_attests_safety_conditions": true,
+  "manual_power_cycle_available": false,
+  "cold_boot_claimed": false,
+  "authorized_execution_scope": "PnP binding verification and at most one bounded USB-JTAG transport-only preflight for each exact Vehicle/Ground identity; no target configuration/memory reads or CPU halt/system reset commands. Stop on any failed prerequisite, do not improvise a recovery requiring onsite power.",
+  "com_open": false,
+  "payload_write": false,
+  "firmware_flash": false,
+  "cpu_halt_command": false,
+  "system_reset_command": false,
+  "tap_clock_init_scan_reset_possible": true,
+  "target_state_effects_proven": false,
+  "new_r19_comparison_ready": false,
+  "current_on_device_firmware_identity_verified": false
+}

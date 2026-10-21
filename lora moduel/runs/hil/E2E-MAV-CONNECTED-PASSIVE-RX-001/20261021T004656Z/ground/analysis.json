@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "status": "ANALYZED_NOT_YET_JUDGED",
+  "measurement_only": true,
+  "test_id": "E2E-MAV-CONNECTED-PASSIVE-RX-001",
+  "endpoint": "ground_usb",
+  "capture": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\E2E-MAV-CONNECTED-PASSIVE-RX-001\\20261021T004656Z\\ground\\capture.jsonl",
+  "capture_sha256": "B31F943503123C0DE7CDBE6248D51165600AB0C0E95777A27EBC786476A701AD",
+  "definitions": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\core\\src\\mavlink_frame.cpp",
+  "definitions_sha256": "BD2890D8973C5A694D53AB2866A6B3DBF319FAE40B3CC308AE2DAE91B634F3A8",
+  "capture_header": {
+    "kind": "header",
+    "schema_version": 1,
+    "tool": "hil_capture_serial.ps1",
+    "test_id": "E2E-MAV-CONNECTED-PASSIVE-RX-001",
+    "endpoint": "ground_usb",
+    "port": "COM6",
+    "baud": 57600,
+    "format": "8N1",
+    "dtr_enabled": false,
+    "started_utc": "2026-10-21T00:46:58.1141948Z"
+  },
+  "capture_footer": {
+    "kind": "footer",
+    "completed": true,
+    "duration_us": 60011493,
+    "rx_bytes": 0,
+    "tx_bytes": 0,
+    "finished_utc": "2026-10-21T00:47:58.2342860Z"
+  },
+  "directions": {
+    "rx": {
+      "mavlink": {
+        "stream_bytes": 0,
+        "stream_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "valid_frame_bytes": 0,
+        "valid_frame_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "valid_frames": 0,
+        "bad_crc": 0,
+        "unsupported_frames": 0,
+        "bad_payload_length": 0,
+        "noise_bytes": 0,
+        "partial_bytes": 0,
+        "signed_frames": 0,
+        "message_counts": {},
+        "source_counts": {},
+        "heartbeat": {
+          "count": 0,
+          "first_t_us": null,
+          "last_t_us": null,
+          "max_gap_ms": 0.0
+        },
+        "frames": []
+      },
+      "tdd_control": {
+        "valid": 0,
+        "bad_crc": 0,
+        "malformed": 0,
+        "nonzero_reserved_padding": 0,
+        "unknown_version": 0,
+        "unknown_type": 0,
+        "type_counts": {},
+        "session_sequence": [],
+        "all_sessions_nonzero": true,
+        "messages": []
+      }
+    },
+    "tx": {
+      "mavlink": {
+        "stream_bytes": 0,
+        "stream_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "valid_frame_bytes": 0,
+        "valid_frame_sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+        "valid_frames": 0,
+        "bad_crc": 0,
+        "unsupported_frames": 0,
+        "bad_payload_length": 0,
+        "noise_bytes": 0,
+        "partial_bytes": 0,
+        "signed_frames": 0,
+        "message_counts": {},
+        "source_counts": {},
+        "heartbeat": {
+          "count": 0,
+          "first_t_us": null,
+          "last_t_us": null,
+          "max_gap_ms": 0.0
+        },
+        "frames": []
+      },
+      "tdd_control": {
+        "valid": 0,
+        "bad_crc": 0,
+        "malformed": 0,
+        "nonzero_reserved_padding": 0,
+        "unknown_version": 0,
+        "unknown_type": 0,
+        "type_counts": {},
+        "session_sequence": [],
+        "all_sessions_nonzero": true,
+        "messages": []
+      }
+    }
+  }
+}

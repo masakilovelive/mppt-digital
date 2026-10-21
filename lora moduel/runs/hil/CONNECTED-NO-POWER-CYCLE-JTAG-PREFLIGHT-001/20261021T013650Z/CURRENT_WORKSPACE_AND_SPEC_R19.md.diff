@@ -1,0 +1,47 @@
+warning: in the working copy of 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\hil\CONNECTED-NO-POWER-CYCLE-JTAG-PREFLIGHT-001\20261021T013650Z\before\CURRENT_WORKSPACE_AND_SPEC_R19.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\hil\CONNECTED-NO-POWER-CYCLE-JTAG-PREFLIGHT-001\20261021T013650Z\after\CURRENT_WORKSPACE_AND_SPEC_R19.md', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\CONNECTED-NO-POWER-CYCLE-JTAG-PREFLIGHT-001\\20261021T013650Z\\before\\CURRENT_WORKSPACE_AND_SPEC_R19.md" "b/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\CONNECTED-NO-POWER-CYCLE-JTAG-PREFLIGHT-001\\20261021T013650Z\\after\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
+index 1b1bafd..a45fb11 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\CONNECTED-NO-POWER-CYCLE-JTAG-PREFLIGHT-001\\20261021T013650Z\\before\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
++++ "b/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\CONNECTED-NO-POWER-CYCLE-JTAG-PREFLIGHT-001\\20261021T013650Z\\after\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
+@@ -6,6 +6,7 @@
+ 
+ ## 結論
+ 
++- 最新の電源操作なし実機確認はSection 31.60である。安全条件確認済み・現地電源ON/OFF不可という依頼の下、両機のUSB-JTAG transport-only接続を各1回実施してPASSし、shutdown／process終了も証明した。CPU停止・system reset・メモリ読取り・COM再オープン・書込みは行っていない。TAP初期化／reset／scanは起こり得るため状態無変更とは断定しない。MAVLink通信と前回0 byteの原因は今回未評価のままである。
+ - 最新のオフライン再検証と再発履歴照合はSection 31.59である。受信0 byteの症状はR18／R19とも過去にあり、新規症状ではない。ただし今回の原因が過去と同じと判明したわけではない。受信準備272項目・境界判定54項目をPS5.1／7で再PASS、関連21/21及び通常版build2/2もPASS。機器ARM／初回enqueue固定記録とmode別実機手順は未統合で、実機操作はしていない。
+ - 最新の接続状態確認はSection 31.58である。外出中の利用者から検証依頼を受け、COM6を57600 bps・DTR/RTS falseで60秒間受信のみ観測した。COM3／COM6及び両USB-JTAG等のOS認識は正常だが、受信0 byte／送信0 byteで、現在の下り通信は確認できなかった。書込み・JTAG・reset・要求送信は行っていない。これはR19比較試験ではなく、機器上のfirmware hash・Pixhawk通電・RF・初回USB停止の原因も未確定である。
+ - 連続Readと機器側HostArmの土台はSection 31.55である。PC側の物理Read担当をCOM Openからcleanupまで単一の連続readerとし、identity確認後の担当切替えを廃止した。同節時点で全host343/343、include経路の限定修正後49/49、通常／診断Arduino4/4ビルドはPASS。最新のオフライン追加はSection 31.57を参照する。106 ms、UART／TDD／E220設定及び既存sealed候補は未変更。機器HostArmの診断source／codecは準備済みだが、能動live runnerとmode別candidate／flash bindingは未統合で、既存passive試験へは使用しない。
+@@ -4805,3 +4806,32 @@ MCUのgate・READY・ARM照合とPCのoffline workflowは存在するが、PCの
+ 既存sealed候補にはこのreadiness定義がなく、既存passive runnerもwrite 0なので流用しない。
+ これは検証で判明した実際の未完了範囲であり、オフライン試験PASSだけで実機試験可能又は通信改善済みとはしない。
+ 
++### 31.60 手動電源ON/OFF不可でのUSB-JTAG接続確認（2026-10-21 JST）
++
++利用者は実機操作を依頼し、安全条件を満たしていると確認した一方、現地から電源ON/OFFはできないと明示した。
++今回はその制約内で、PnP／driver結合確認後、既存のtransport-only active JTAG preflightを各roleで1回実施した。
++全bench cold boot済みとは申告・記録していない。
++
++記録: `runs/hil/CONNECTED-NO-POWER-CYCLE-JTAG-PREFLIGHT-001/20261021T013650Z/summary.json`。
++
++- PnP gate契約はPASS、reader契約は117/117 PASS。その後、実PnP・WinUSB driver／interface登録の結合がPASS。
++  PnP gateのexit 1は仕様上の意図的fail-closedであり、driver証明のみで書込みを許可しないための値。
++  今回のactive確認は利用者の新しい実機操作依頼を根拠とし、PnP PASSから書込み許可を推定していない。
++- fresh PnP chainと、直近に検証済みの同じserial／USB locationを照合した。
++  Vehicleは`90:70:69:11:81:A4 / 1-4.2`、Groundは`1C:DB:D4:5A:83:80 / 1-4.4`。
++- 2026-10-21 10:41:41～10:41:43 JST、両roleのactive preflightがPASS。
++  要求したserial／locationと実際に開いた対象が一致し、各OpenOCDの明示shutdownとprocess終了を証明した。
++- 対象CPU設定は読み込まず、CPU halt／system resetコマンド、RAM読取り、flash、COM open、payload送信は行っていない。
++  ただし`transport init`はJTAG TAPのclock／初期化／reset／scanを伴い得るため、
++  `target_state_modified=null / target_state_modification_known=false`を維持する。
++- 終了後もCOM3／COM6のOS認識はStatus OK／問題コード0。CPU実行状態を取得した証拠にはしない。
++
++判定は`PASS_USB_JTAG_CONNECTION_ONLY_MAVLINK_AND_CAUSE_NOT_EVALUATED`。
++以前のOpenOCD USB-open不能が現在再発していないことは確認したが、CPU／application／FIFO／無線／Pixhawkの健全性、
++MAVLink受信、前回60秒0 byteの原因又は改善を証明したものではない。COM受信の再測定も行っていない。
++
++R18単一PARAMの正式手順は両XIAO＋Pixhawk等を同時に全OFFしてからのcold boot申告を必須としており、
++今回はその条件を満たせない。MCUだけのソフトresetを、E220・Pixhawkも含む電源断の代用とはしなかった。
++またR19内部記録読取りは候補／flash証拠への結合とCPU停止を必要とし、今回の機器application hashと新readiness記録の
++実機統合が未確認・未完了なので進めていない。手動復旧のない状態で書込みやその場の回復手順を追加していない。
++

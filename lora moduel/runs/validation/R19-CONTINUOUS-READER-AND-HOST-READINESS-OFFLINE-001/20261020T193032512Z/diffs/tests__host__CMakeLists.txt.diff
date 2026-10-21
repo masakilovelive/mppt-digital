@@ -1,0 +1,39 @@
+diff --git "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\tests\\host\\CMakeLists.txt" b/tests/host/CMakeLists.txt
+index 6c16753..8b88282 100644
+--- "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\tests\\host\\CMakeLists.txt"
++++ b/tests/host/CMakeLists.txt
+@@ -108,6 +108,18 @@ add_executable(vc_lora_r19_hwcdc_task_prime_model_tests
+ add_executable(vc_lora_r19_usb_clock_sync_tests
+   standalone/r19_usb_clock_sync_tests.cpp
+ )
++add_executable(vc_lora_r19_host_readiness_tests
++  standalone/r19_host_readiness_tests.cpp)
++target_link_libraries(vc_lora_r19_host_readiness_tests PRIVATE vc_lora_core)
++target_include_directories(vc_lora_r19_host_readiness_tests PRIVATE
++  ${CMAKE_SOURCE_DIR}/firmware)
++target_compile_features(vc_lora_r19_host_readiness_tests PRIVATE cxx_std_17)
++if(WIN32 AND NOT MSVC)
++  target_link_options(vc_lora_r19_host_readiness_tests PRIVATE -static)
++endif()
++add_test(NAME UT-R19-HOST-READINESS-001 COMMAND vc_lora_r19_host_readiness_tests)
++set_tests_properties(UT-R19-HOST-READINESS-001 PROPERTIES
++  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} LABELS "r19;diagnostic;offline" TIMEOUT 30)
+ target_link_libraries(vc_lora_r19_usb_clock_sync_tests PRIVATE vc_lora_core)
+ target_include_directories(vc_lora_r19_usb_clock_sync_tests PRIVATE
+   ${CMAKE_SOURCE_DIR}/firmware
+@@ -325,7 +337,15 @@ add_executable(vc_lora_phase6_vehicle_runtime_fail_recovery_guard_tests
+ add_executable(vc_lora_phase6_ground_runtime_fail_recovery_guard_tests
+   standalone/phase6_ground_runtime_fail_recovery_guard_tests.cpp
+ )
++add_executable(vc_lora_phase6_ground_host_readiness_tests
++  standalone/phase6_ground_host_readiness_tests.cpp)
++add_test(NAME IT-R19-GROUND-HOST-READINESS-001
++  COMMAND vc_lora_phase6_ground_host_readiness_tests)
++set_tests_properties(IT-R19-GROUND-HOST-READINESS-001 PROPERTIES
++  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} LABELS "r19;diagnostic;offline" TIMEOUT 30)
++
+ foreach(runtime_fail_bridge_target IN ITEMS
++    vc_lora_phase6_ground_host_readiness_tests
+     vc_lora_phase6_first_usb_failure_integration_tests
+     vc_lora_phase6_ground_usb_commit_latch_tests
+     vc_lora_phase6_ground_runtime_fail_diagnostic_tests

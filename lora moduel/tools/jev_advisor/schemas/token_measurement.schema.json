@@ -1,0 +1,375 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:vc-lora:jev:token-measurement:2",
+  "title": "Jev and Codex token measurement record v2",
+  "description": "One complete, provenance-bound run measurement. input_tokens is non-cached input; cached input is stored separately.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "measurement_schema",
+    "run_id",
+    "issue_id",
+    "mode",
+    "source_hash",
+    "codex_model",
+    "reasoning_effort",
+    "codex_called",
+    "jev_called",
+    "input_tokens",
+    "cached_input_tokens",
+    "output_tokens",
+    "total_tokens",
+    "jev_input_tokens",
+    "jev_output_tokens",
+    "action_id",
+    "confidence",
+    "route_correct",
+    "accepted_fix",
+    "human_adjudication_id",
+    "adjudicated_at",
+    "retry_count",
+    "safety_violation",
+    "elapsed_seconds",
+    "codex_credits",
+    "jev_cost_usd",
+    "usage_source",
+    "jev_generation_id",
+    "rate_card_version",
+    "rate_card_hash",
+    "rate_card_source",
+    "rate_card_retrieved_at",
+    "measured_at"
+  ],
+  "properties": {
+    "measurement_schema": {
+      "const": "jev-token-eval-2"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "issue_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "mode": {
+      "type": "string",
+      "enum": [
+        "baseline_codex",
+        "jev_hybrid"
+      ]
+    },
+    "source_hash": {
+      "type": "string",
+      "pattern": "^[A-Fa-f0-9]{64}$"
+    },
+    "codex_model": {
+      "description": "Configured comparison model, including runs where codex_called is false.",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "reasoning_effort": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 32
+    },
+    "codex_called": {
+      "type": "boolean"
+    },
+    "jev_called": {
+      "type": "boolean"
+    },
+    "input_tokens": {
+      "description": "Non-cached Codex input after provider-usage normalization.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "cached_input_tokens": {
+      "description": "Cached Codex input, disjoint from input_tokens.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "output_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "total_tokens": {
+      "description": "Runtime-enforced invariant: input_tokens + cached_input_tokens + output_tokens.",
+      "type": "integer",
+      "minimum": 0
+    },
+    "jev_input_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "jev_output_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "action_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "RUN_FOCUSED_GRANT_TEST",
+        "RUN_DIRECTION_GUARD_TEST",
+        "INSPECT_FINAL_VCB1_TAIL",
+        "INSPECT_VCTA_PHYSICAL_DRAIN",
+        "COLLECT_MORE_EVIDENCE",
+        "CODE_REVIEW_REQUIRED",
+        "HUMAN_REVIEW_REQUIRED",
+        "STOP_SAFETY_CONDITION",
+        null
+      ]
+    },
+    "confidence": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "route_correct": {
+      "description": "Null until human adjudication is recorded.",
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "accepted_fix": {
+      "description": "Null until the acceptance decision is adjudicated.",
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "human_adjudication_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "adjudicated_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "retry_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "safety_violation": {
+      "type": "boolean"
+    },
+    "elapsed_seconds": {
+      "type": "number",
+      "minimum": 0
+    },
+    "codex_credits": {
+      "description": "Calculated with the exact rate-card provenance saved in this record.",
+      "type": "number",
+      "minimum": 0
+    },
+    "jev_cost_usd": {
+      "type": "number",
+      "minimum": 0
+    },
+    "usage_source": {
+      "type": "string",
+      "enum": [
+        "api_exact",
+        "dashboard_batch",
+        "estimated"
+      ]
+    },
+    "jev_generation_id": {
+      "description": "Provider receipt/id; required by runtime for exact Jev API usage.",
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1,
+      "maxLength": 256
+    },
+    "rate_card_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "rate_card_hash": {
+      "type": "string",
+      "pattern": "^[A-Fa-f0-9]{64}$"
+    },
+    "rate_card_source": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^https://"
+    },
+    "rate_card_retrieved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "measured_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "codex_called": {
+            "const": false
+          }
+        },
+        "required": [
+          "codex_called"
+        ]
+      },
+      "then": {
+        "properties": {
+          "input_tokens": {
+            "const": 0
+          },
+          "cached_input_tokens": {
+            "const": 0
+          },
+          "output_tokens": {
+            "const": 0
+          },
+          "total_tokens": {
+            "const": 0
+          },
+          "codex_credits": {
+            "const": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "jev_called": {
+            "const": false
+          }
+        },
+        "required": [
+          "jev_called"
+        ]
+      },
+      "then": {
+        "properties": {
+          "jev_input_tokens": {
+            "const": 0
+          },
+          "jev_output_tokens": {
+            "const": 0
+          },
+          "action_id": {
+            "const": null
+          },
+          "confidence": {
+            "const": null
+          },
+          "jev_generation_id": {
+            "const": null
+          },
+          "jev_cost_usd": {
+            "const": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "jev_called": {
+            "const": true
+          },
+          "usage_source": {
+            "const": "api_exact"
+          }
+        },
+        "required": [
+          "jev_called",
+          "usage_source"
+        ]
+      },
+      "then": {
+        "properties": {
+          "action_id": {
+            "type": "string",
+            "enum": [
+              "RUN_FOCUSED_GRANT_TEST",
+              "RUN_DIRECTION_GUARD_TEST",
+              "INSPECT_FINAL_VCB1_TAIL",
+              "INSPECT_VCTA_PHYSICAL_DRAIN",
+              "COLLECT_MORE_EVIDENCE",
+              "CODE_REVIEW_REQUIRED",
+              "HUMAN_REVIEW_REQUIRED",
+              "STOP_SAFETY_CONDITION"
+            ]
+          },
+          "confidence": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "jev_generation_id": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "anyOf": [
+          {
+            "properties": {
+              "route_correct": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "route_correct"
+            ]
+          },
+          {
+            "properties": {
+              "accepted_fix": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "accepted_fix"
+            ]
+          }
+        ]
+      },
+      "then": {
+        "properties": {
+          "human_adjudication_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "adjudicated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  ]
+}

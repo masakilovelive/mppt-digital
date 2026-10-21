@@ -1,0 +1,224 @@
+{
+  "policy_version": "r19-actions-2",
+  "input_schema_version": "r19-jev-input-2",
+  "measurement_schema_version": "jev-token-eval-2",
+  "description": "Closed action catalog for R19 Jev shadow evaluation. Jev may select one action but cannot execute it, change acceptance criteria, or mutate live authorization.",
+  "phase_a": {
+    "mode": "shadow_evaluation",
+    "execute_actions": false,
+    "hardware_access_allowed": false,
+    "com_access_allowed": false,
+    "firmware_write_allowed": false,
+    "human_decision_comparison_required": true,
+    "token_savings_are_simulated": true
+  },
+  "fixed_acceptance": {
+    "expected_params": 932,
+    "parameter_count_mode": "exact",
+    "max_elapsed_ms": 30000,
+    "max_heartbeat_gap_ms": 2500,
+    "heartbeat_gap_kinds": [
+      "first",
+      "max",
+      "post"
+    ],
+    "strict_parameter_order": true,
+    "minimum_heartbeat_samples": 1,
+    "max_error_count": 0,
+    "zero_error_fields": [
+      "missing",
+      "duplicate",
+      "sequence",
+      "crc",
+      "parser",
+      "partial",
+      "control_leakage"
+    ],
+    "rejected_write_preserves_bytes_and_accounting": true,
+    "live_flash_requires_explicit_authorization": true,
+    "full_acceptance_evidence_scope": "hil_physical",
+    "host_model_success_verdict": "PASS_HOST_MODEL",
+    "hil_physical_success_verdict": "PASS_FIXED"
+  },
+  "confidence_routing": {
+    "high": {
+      "minimum": 0.9,
+      "maximum": 1.0,
+      "future_disposition": "safe_read_only_or_focused_host_candidate"
+    },
+    "review": {
+      "minimum": 0.7,
+      "maximum_exclusive": 0.9,
+      "future_disposition": "codex_or_human_confirmation_required"
+    },
+    "low": {
+      "minimum": 0.0,
+      "maximum_exclusive": 0.7,
+      "forced_action_id": "COLLECT_MORE_EVIDENCE"
+    },
+    "api_failure": {
+      "disposition": "local_deterministic_fallback",
+      "execute_action": false
+    },
+    "safety_condition": {
+      "forced_action_id": "STOP_SAFETY_CONDITION",
+      "overrides_confidence": true
+    }
+  },
+  "forbidden_operations": [
+    "vehicle_ground_auto_flash",
+    "automatic_com_operation",
+    "e220_persistent_setting_change",
+    "uart_air_rate_sub_packet_tdd_change",
+    "live_flash_authorized_mutation",
+    "acceptance_threshold_relaxation",
+    "fixed_fail_override"
+  ],
+  "context_limits": {
+    "max_optional_files": 12,
+    "project_wide_source_upload_allowed": false,
+    "raw_log_upload_allowed": false,
+    "source_manifest_required": true
+  },
+  "actions": [
+    {
+      "action_id": "RUN_FOCUSED_GRANT_TEST",
+      "cause_id": "GRANT_HANDOFF_SUSPECTED",
+      "category": "focused_host_test",
+      "description": "Reproduce the fresh-GRANT handoff boundary with the existing focused host test.",
+      "phase_a_effect": "record_only",
+      "future_high_confidence_candidate": true,
+      "requires_codex": false,
+      "requires_human": false,
+      "context_allowlist": [
+        "runs/decision/<run_id>/input.json",
+        "runs/decision/<run_id>/deterministic_result.json",
+        "tests/host/unit/high_speed_tdd_coordinator_tests.cpp"
+      ]
+    },
+    {
+      "action_id": "RUN_DIRECTION_GUARD_TEST",
+      "cause_id": "DIRECTION_GUARD_BOUNDARY_SUSPECTED",
+      "category": "focused_host_test",
+      "description": "Exercise the 100 ms direction-guard boundary in the focused host tests.",
+      "phase_a_effect": "record_only",
+      "future_high_confidence_candidate": true,
+      "requires_codex": false,
+      "requires_human": false,
+      "context_allowlist": [
+        "runs/decision/<run_id>/input.json",
+        "runs/decision/<run_id>/deterministic_result.json",
+        "tests/host/unit/high_speed_tdd_coordinator_tests.cpp",
+        "tests/host/unit/high_speed_phase6_adapter_tests.cpp"
+      ]
+    },
+    {
+      "action_id": "INSPECT_FINAL_VCB1_TAIL",
+      "cause_id": "FINAL_VCB1_TAIL_UNPROVEN",
+      "category": "read_only_inspection",
+      "description": "Inspect correlation between the final VCB1 ordinal and the physical RF tail evidence.",
+      "phase_a_effect": "record_only",
+      "future_high_confidence_candidate": true,
+      "requires_codex": false,
+      "requires_human": false,
+      "context_allowlist": [
+        "runs/decision/<run_id>/input.json",
+        "runs/decision/<run_id>/deterministic_result.json",
+        "core/include/vc_lora/high_speed_tdd_coordinator.hpp",
+        "core/src/high_speed_tdd_coordinator.cpp",
+        "firmware/high_speed/high_speed_phase6_adapter.hpp",
+        "tests/host/unit/high_speed_tdd_coordinator_tests.cpp",
+        "tests/host/unit/high_speed_phase6_adapter_tests.cpp"
+      ]
+    },
+    {
+      "action_id": "INSPECT_VCTA_PHYSICAL_DRAIN",
+      "cause_id": "VCTA_PHYSICAL_DRAIN_UNPROVEN",
+      "category": "read_only_inspection",
+      "description": "Inspect whether the final VCTA fragment has accepted physical drain evidence.",
+      "phase_a_effect": "record_only",
+      "future_high_confidence_candidate": true,
+      "requires_codex": false,
+      "requires_human": false,
+      "context_allowlist": [
+        "runs/decision/<run_id>/input.json",
+        "runs/decision/<run_id>/deterministic_result.json",
+        "firmware/high_speed/terminal_ack_producer.hpp",
+        "firmware/high_speed/terminal_ack_bridge.hpp",
+        "tests/host/standalone/terminal_ack_producer_tests.cpp",
+        "tests/host/standalone/terminal_ack_bridge_tests.cpp"
+      ]
+    },
+    {
+      "action_id": "COLLECT_MORE_EVIDENCE",
+      "cause_id": "EVIDENCE_INSUFFICIENT_OR_LOW_CONFIDENCE",
+      "category": "evidence_request",
+      "description": "Record that bounded additional evidence is required; do not modify source or hardware.",
+      "phase_a_effect": "record_only",
+      "future_high_confidence_candidate": false,
+      "requires_codex": false,
+      "requires_human": true,
+      "context_allowlist": [
+        "runs/decision/<run_id>/input.json",
+        "runs/decision/<run_id>/deterministic_result.json",
+        "runs/decision/<run_id>/jev_result.json"
+      ]
+    },
+    {
+      "action_id": "CODE_REVIEW_REQUIRED",
+      "cause_id": "UNKNOWN_OR_SOURCE_LEVEL_DEFECT",
+      "category": "codex_escalation",
+      "description": "Build a bounded review package; Codex invocation is outside this Phase A policy execution.",
+      "phase_a_effect": "record_only",
+      "future_high_confidence_candidate": false,
+      "requires_codex": true,
+      "requires_human": true,
+      "context_allowlist": [
+        "CURRENT_WORKSPACE_AND_SPEC_R19.md",
+        "Jev_Integration_and_Token_Measurement_Spec_R19.md",
+        "runs/decision/<run_id>/input.json",
+        "runs/decision/<run_id>/deterministic_result.json",
+        "runs/decision/<run_id>/jev_result.json",
+        "runs/decision/<run_id>/changes.diff",
+        "core/include/vc_lora/high_speed_tdd_coordinator.hpp",
+        "core/src/high_speed_tdd_coordinator.cpp",
+        "firmware/high_speed/high_speed_phase6_adapter.hpp",
+        "firmware/high_speed/terminal_ack_producer.hpp",
+        "tests/host/unit/high_speed_tdd_coordinator_tests.cpp",
+        "tests/host/unit/high_speed_phase6_adapter_tests.cpp"
+      ]
+    },
+    {
+      "action_id": "HUMAN_REVIEW_REQUIRED",
+      "cause_id": "AUTHORIZATION_OR_AMBIGUOUS_OPERATION_REQUIRED",
+      "category": "human_escalation",
+      "description": "Require an explicit human decision before any operation outside safe read-only analysis.",
+      "phase_a_effect": "record_only",
+      "future_high_confidence_candidate": false,
+      "requires_codex": false,
+      "requires_human": true,
+      "context_allowlist": [
+        "runs/decision/<run_id>/input.json",
+        "runs/decision/<run_id>/deterministic_result.json",
+        "runs/decision/<run_id>/jev_result.json",
+        "runs/decision/<run_id>/final_action.json"
+      ]
+    },
+    {
+      "action_id": "STOP_SAFETY_CONDITION",
+      "cause_id": "SAFETY_RULE_OR_FIXED_ACCEPTANCE_VIOLATION",
+      "category": "safety_stop",
+      "description": "Stop action processing regardless of confidence; a FAIL cannot be converted to PASS.",
+      "phase_a_effect": "record_only",
+      "future_high_confidence_candidate": false,
+      "requires_codex": false,
+      "requires_human": true,
+      "context_allowlist": [
+        "runs/decision/<run_id>/input.json",
+        "runs/decision/<run_id>/deterministic_result.json",
+        "runs/decision/<run_id>/jev_result.json",
+        "runs/decision/<run_id>/final_action.json"
+      ]
+    }
+  ]
+}

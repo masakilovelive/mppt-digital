@@ -1,0 +1,12 @@
+[1/12] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_flush_deadline_tests.exe
+[2/12] Linking CXX executable tests\host\vc_lora_phase6_ground_usb_commit_latch_tests.exe
+[3/12] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_fail_diagnostic_tests.exe
+[4/12] Linking CXX executable tests\host\vc_lora_phase6_first_usb_failure_integration_tests.exe
+[5/12] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_alive_read_only_bootstrap_tests.exe
+[6/12] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_recovery_guard_tests.exe
+[7/12] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_alive_read_only_bootstrap_tests.exe
+[8/12] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_fail_deadline_tests.exe
+[9/12] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_staged_partial_tests.exe
+[10/12] Linking CXX executable tests\host\vc_lora_phase6_ground_host_readiness_tests.exe
+[11/12] Linking CXX executable tests\host\vc_lora_phase6_ground_product_loop_tests.exe
+[12/12] Linking CXX executable tests\host\vc_lora_phase6_vehicle_product_loop_tests.exe

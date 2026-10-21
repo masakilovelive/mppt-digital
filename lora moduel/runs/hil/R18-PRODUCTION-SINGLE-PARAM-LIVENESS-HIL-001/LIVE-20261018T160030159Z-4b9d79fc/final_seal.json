@@ -1,0 +1,17 @@
+{
+    "schema":  "vc-lora-r18-single-param-liveness-final-seal-v1",
+    "sealed_utc":  "2026-10-18T16:01:03.4654541Z",
+    "result":  "PASS",
+    "summary_sha256":  "5C20D81F29C2B29DC2AD61562AD625F34F8F0FE0551B5BD8983FCA51D1CC2AD4",
+    "artifact_manifest_sha256":  "4D9187DFB07FDA5682EAFB2097FF2CEB6B0B6701162D2D18129C89458A4DC483",
+    "sha256sums_sha256":  "17D92101CFA9349D6222E659C56CA95B3FCE97DA4FEC9057451B5485ED26C108",
+    "artifact_path_set_sha256":  "6A6A0A1F9469913D327F3517AEF68AF84297F16818D1371EF433CB828E0D9984",
+    "runner_start_sha256":  "94995BBAA27799597EE4ACC100716380B10A7FBDF97D677ADEB347F38C4AA1A0",
+    "runner_end_sha256":  "94995BBAA27799597EE4ACC100716380B10A7FBDF97D677ADEB347F38C4AA1A0",
+    "runner_integrity":  "PASS",
+    "immutable_after_seal":  true,
+    "authorization_id":  "4b9d79fc-52b8-446e-a6ed-39e804a96848",
+    "authorization_claim_sha256":  "13702F492E93F44CE70902305F6BD5CB41283C8779EF74382154951E8DBBA031",
+    "authorization_consumed":  true,
+    "authorization_reusable":  false
+}

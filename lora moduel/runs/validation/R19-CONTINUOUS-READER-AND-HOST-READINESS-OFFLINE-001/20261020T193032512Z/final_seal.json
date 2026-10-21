@@ -1,0 +1,14 @@
+{
+  "schema": "r19-offline-implementation-final-seal-v1",
+  "result": "PASS_OFFLINE_PHASE_1_HIL_PENDING",
+  "sealed_utc": "2026-10-20T20:19:26.9060599Z",
+  "file_count": 137,
+  "tree_sha256": "71DDF1E11DF3A10FCF48B1112513E230FB3B94A3E71B0D29D6AE49F47AB25A4C",
+  "summary_sha256": "B276F40382EDB1DBA9D0FF2415AE42865E2F8A3D2C6A492624A6CF3E1C43EA3C",
+  "artifact_manifest_sha256": "AAA27A545104BFFF80B50E8D75C2CE7F8B6EEF73A3BD0C776AB210471B1AE524",
+  "sums_sha256": "5042B19F5E2BDC1E6E87978FFB7E8DFD245DD1DEB2156B861FF97B63A88665B2",
+  "verified_files": 137,
+  "mismatch_count": 0,
+  "hardware_interaction": false,
+  "candidate_or_deployment_authorization": false
+}

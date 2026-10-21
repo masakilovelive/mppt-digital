@@ -1,0 +1,4 @@
+Recorded R19A replay PASS: unchanged 809/2709 bytes; 32-byte prefix remains incomplete; 8 mutations rejected.
+Recorded R19F boundary replay PASS: unchanged 441/2646 bytes; leading31 uniquely seq2 CRC-derived; terminal32 remains incomplete; 14 unsafe mutations rejected.
+R19 runtime-fail diagnostic PASS evidence=E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-RUNTIME-FAIL-DIAGNOSTIC-RUNNER-CONTRACT-001\20261020T193523716Z-7c995398
+R19-RUNTIME-FAIL-DIAGNOSTIC-RUNNER-CONTRACT-001 PASS evidence=E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-RUNTIME-FAIL-DIAGNOSTIC-RUNNER-CONTRACT-001\20261020T193523716Z-7c995398

@@ -1,0 +1,38 @@
+{
+  "schema": "vc-lora-publication-offline-validation-v1",
+  "completed_utc": "2026-10-21T02:48:32Z",
+  "result": "PASS_SELECTED_OFFLINE_VALIDATION",
+  "source_root": "../mppt-digital/lora moduel",
+  "scope": "Publication-copy validation only; no hardware, serial ports, JTAG, flashing, reset, network API or Jev execution.",
+  "source_modified": false,
+  "space_in_source_path_verified": true,
+  "engines": {
+    "windows_powershell": "5.1.26100.9711",
+    "powershell": "7.6.5",
+    "cmake": "3.22.1-g37088a8-dirty",
+    "ninja": "1.10.2",
+    "compiler": "clang 22.1.8; x86_64-w64-windows-gnu; llvm-mingw-20260616-complete"
+  },
+  "powershell_tests": [
+    {"engine": "Windows PowerShell 5.1", "test": "check_r19_host_readiness_workflow.ps1", "checks": 272, "failures": 0, "exit_code": 0, "log": "ps51_host_readiness_workflow.log"},
+    {"engine": "Windows PowerShell 5.1", "test": "check_r19_startup_boundary_evaluation.ps1", "checks": 54, "failures": 0, "exit_code": 0, "log": "ps51_startup_boundary_evaluation.log"},
+    {"engine": "PowerShell 7", "test": "check_r19_host_readiness_workflow.ps1", "checks": 272, "failures": 0, "exit_code": 0, "log": "ps7_host_readiness_workflow.log"},
+    {"engine": "PowerShell 7", "test": "check_r19_startup_boundary_evaluation.ps1", "checks": 54, "failures": 0, "exit_code": 0, "log": "ps7_startup_boundary_evaluation.log"}
+  ],
+  "cpp_build": {
+    "configure": "PASS",
+    "build": "PASS",
+    "targets": ["vc_lora_core", "vc_lora_host_tests", "vc_lora_r19_host_readiness_tests", "vc_lora_r19_usb_clock_sync_tests", "vc_lora_r19_first_usb_failure_record_tests"],
+    "generator": "Ninja",
+    "build_type": "Debug",
+    "steps": 75,
+    "configure_log": "cmake_configure_portable_paths.log",
+    "build_log": "cmake_build.log",
+    "cautions": ["Initial configure with a backslash CMAKE_CXX_COMPILER path failed on CMake's invalid \\U escape. Reconfiguring into a fresh build directory with forward-slash paths succeeded without modifying source.", "CMake emitted long object-path warnings; the selected targets nevertheless built successfully."]
+  },
+  "cpp_tests": {
+    "standalone_ctest": {"passed": 3, "failed": 0, "elapsed_seconds": 0.29, "log": "ctest_standalone_subset.log", "checks": {"UT-R19-HOST-READINESS-001": 1171, "UT-R19-USB-CLOCK-SYNC-001": 521, "UT-R19-FIRST-USB-FAILURE-RECORD-001": 30}},
+    "core_cases": {"passed": 44, "failed": 0, "families": ["UT-CONTROL-V2-*", "UT-BUF-*", "UT-LINK-*", "UT-LINK-ACCOUNT-*", "UT-MAV-BOUNDARY-*", "UT-MAV-001..013"], "output_directory": "cpp-cases", "reproduction": "host-build-portable-paths/tests/host/vc_lora_host_tests.exe --test-case=<ID> --seed=20260817 --output-dir=<validation>/cpp-cases/<ID>"}
+  },
+  "limitations": ["Only selected self-contained tests were rerun from this publication copy; the complete historical 345-test suite was not rerun.", "CTest registers 345 tests but 3 were executed in this validation; the 44 core cases were run directly with output directories outside the publication copy.", "No hardware acceptance, USB/LoRa liveness, 932-parameter speed or Heartbeat SLA result is established by these offline checks."]
+}

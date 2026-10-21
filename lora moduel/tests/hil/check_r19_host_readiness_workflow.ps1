@@ -1,0 +1,178 @@
+param()
+$ErrorActionPreference='Stop'
+$repo=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+. (Join-Path $repo 'tools/r19_host_readiness_wire.ps1')
+. (Join-Path $repo 'tools/r19_usb_clock_correlation.ps1')
+$module=Join-Path $repo 'tools/r19_host_readiness_workflow.ps1'
+if(-not(Test-Path -LiteralPath $module)){throw 'RED: host readiness workflow is not implemented'}
+. $module
+$script:checks=0;$script:failures=0
+function Assert-Workflow([bool]$Value,[string]$Label){
+  $script:checks++;if(-not$Value){$script:failures++;Write-Output "FAIL $Label"}
+}
+function Assert-WorkflowThrows([scriptblock]$Action,[string]$Label){
+  $threw=$false;try{&$Action|Out-Null}catch{$threw=$true};Assert-Workflow $threw $Label
+}
+$script:nonce='5915779601526205389'
+$script:binding=@{role='Ground';boot_id='123';reader_session='456';usb_epoch='7'}
+$script:context=@{ReaderIdentity='physical-reader-1';ReaderAlive=$true;ClockDomainId='qpc-run-1'}
+function New-Fixture([string]$Mode='ExplicitHostArm',[switch]$Learn){
+  $arguments=@{Mode=$Mode;Role='Ground';Nonce=$script:nonce;ReaderIdentity='physical-reader-1';ClockDomainId='qpc-run-1';TickFrequency='10000000';StartTicks='100';ReadStartedTicks='90';TimeoutTicks='1000'}
+  if(-not$Learn){$arguments.ExpectedBinding=$script:binding}
+  New-R19HostReadinessWorkflow @arguments
+}
+function New-Reply([string]$Nonce=$script:nonce,[long]$DeviceUs=1101){
+  [byte[]]$bytes=New-R19TimesyncRequest -Nonce ([long]$Nonce)
+  $bytes[6]=194;[BitConverter]::GetBytes([long]($DeviceUs*1000)).CopyTo($bytes,10)
+  [BitConverter]::GetBytes([uint16](Get-R19TimesyncCrc $bytes)).CopyTo($bytes,26)
+  return ,$bytes
+}
+function New-Ready([hashtable]$Overrides=@{}){
+  $args=@{Opcode='Ready';Role='Ground';ReaderSession='456';Nonce=$script:nonce;BootId='123';UsbEpoch='7';ReplyDeviceUs='1101'}
+  foreach($key in $Overrides.Keys){$args[$key]=$Overrides[$key]}
+  New-R19HostReadinessFrame @args
+}
+function Start-Fixture($State){
+  New-R19HostReadinessClockRequest -State $State @script:context -NowTicks '110'|Out-Null
+  Set-R19HostReadinessWriteCommit -State $State @script:context -Kind ClockRequest -AcceptedBytes 28 -WriteStartedTicks '115' -NowTicks '120'|Out-Null
+}
+function Reply-Fixture($State){
+  Add-R19HostReadinessObservation -State $State @script:context -Kind ClockReply -Bytes (New-Reply) -NowTicks '140' -ReadCompletedTicks '130'|Out-Null
+}
+function Ready-Fixture($State){
+  Add-R19HostReadinessObservation -State $State @script:context -Kind Ready -Bytes (New-Ready) -NowTicks '160' -ReadCompletedTicks '150'|Out-Null
+}
+$state=New-Fixture
+Assert-Workflow ($state.status-ceq'WaitingClockRequest'-and$state.hardware_interaction-eq$false) 'starts offline and unarmed'
+[byte[]]$request=New-R19HostReadinessClockRequest -State $state @script:context -NowTicks '110'
+Assert-Workflow ($request.Length-eq28-and$request[6]-eq193-and[BitConverter]::ToInt64($request,18)-eq[long]$script:nonce) 'exact same private 28-byte clock request'
+Assert-Workflow ($state.status-ceq'ClockRequestBuilt'-and-not$state.clock_request_write_accepted) 'generation is not successful OUT'
+Set-R19HostReadinessWriteCommit -State $state @script:context -Kind ClockRequest -AcceptedBytes 28 -WriteStartedTicks '115' -NowTicks '120'|Out-Null
+Reply-Fixture $state;Ready-Fixture $state
+Assert-Workflow ($state.reply_read_validated-and$state.ready.valid-and$state.ready.boot_id-ceq'123') 'actual canonical reply and same-tuple READY validated'
+[byte[]]$arm=New-R19HostReadinessWorkflowArm -State $state @script:context -NowTicks '170' -Sequence 20
+$armDecoded=ConvertFrom-R19HostReadinessFrame $arm
+Assert-Workflow ($arm.Length-eq66-and(Test-R19HostReadinessBinding $state.ready $armDecoded)) 'one ARM exact tuple echoes READY'
+Assert-Workflow ($state.status-ceq'ArmBuilt'-and-not$state.arm_write_accepted-and-not$state.device_armed_proven) 'building ARM does not prove device state'
+Set-R19HostReadinessWriteCommit -State $state @script:context -Kind Arm -AcceptedBytes 66 -WriteStartedTicks '175' -NowTicks '180'|Out-Null
+Assert-Workflow ($state.status-ceq'ArmWriteAcceptedAwaitingDeviceEvidence'-and-not$state.device_armed_proven) 'full OUT acceptance remains not MCU acknowledgement'
+Assert-Workflow ($state.events.Count-eq7-and$state.events[0].kind-ceq'Begin'-and$state.events[6].kind-ceq'ArmWriteAccepted') 'ordered explicit PC event records'
+Assert-Workflow ($state.clock_relation-ceq'UNKNOWN_NO_OFFSET_BOUNDS'-and-not$state.kernel_pending_read_proven) 'no invented MCU offset or kernel pending Read proof'
+Assert-Workflow ($state.reply.device_microseconds-ceq'1101'-and$state.reply_read_completed_ticks-ceq'130'-and$state.ready_read_completed_ticks-ceq'150') 'separate MCU value and PC-domain returned-read samples retained'
+
+$bridgeSource=[IO.File]::ReadAllText((Join-Path $repo 'firmware/phase6/vc_lora_phase6_bridge.hpp'))
+Assert-Workflow ($bridgeSource-match'(?s)#if VC_LORA_R19_USB_READINESS_MODE == 2\s+experimental::R19HostReadinessCommand ready\{\};.*?r19_encode_host_readiness_frame\(.*?r19_usb_clock_reply_pending = true;\s+#endif') 'real firmware generates READY only inside mode 2, not SyncOnly'
+$sync=New-Fixture SyncOnly;Start-Fixture $sync;Reply-Fixture $sync
+Assert-Workflow ($sync.status-ceq'SyncOnlyClockReplyValidated'-and-not$sync.arm_built-and$null-eq$sync.ready) 'SyncOnly completes after actual clock reply without requiring absent mode 1 READY'
+Assert-Workflow ($sync.events.Count-eq4-and$sync.reply_read_validated) 'SyncOnly terminal evidence contains clock read only, no invented READY binding'
+Assert-Workflow (-not$sync.ready_required-and-not$sync.ready_binding_validated-and$sync.binding_authority-ceq'unavailable_in_SyncOnly_clock_reply') 'SyncOnly cannot independently bind MCU boot/session/epoch from a clock reply'
+Update-R19HostReadinessWorkflow -State $sync @script:context -NowTicks '1101'|Out-Null
+Assert-Workflow ($sync.status-ceq'SyncOnlyClockReplyValidated') 'SyncOnly clock completion ends PC acquisition timer'
+Assert-WorkflowThrows {New-R19HostReadinessWorkflowArm -State $sync @script:context -NowTicks '1110'} 'sync-only cannot arm'
+Assert-Workflow ($sync.failure_reason-ceq'ArmNotPermittedInThisControlMode') 'SyncOnly ARM rejected by mode, not incidental timestamp order'
+$syncReady=New-Fixture SyncOnly;Start-Fixture $syncReady;Reply-Fixture $syncReady
+Assert-WorkflowThrows {Ready-Fixture $syncReady} 'unexpected mode 2 READY in SyncOnly rejected'
+Assert-Workflow ($syncReady.status-ceq'Rejected'-and$null-eq$syncReady.ready-and-not$syncReady.arm_built) 'SyncOnly never adopts a READY/device-session assertion'
+Assert-Workflow ($syncReady.failure_reason-ceq'ReadyNotEmittedBySyncOnly') 'SyncOnly unexpected READY explicit mode mismatch diagnostic'
+$learn=New-Fixture -Learn;Start-Fixture $learn;Reply-Fixture $learn;Ready-Fixture $learn
+Assert-Workflow ($learn.binding_authority-ceq'first_nonce_matched_READY_assertion'-and$learn.ready.reader_session-ceq'456') 'first matching READY may teach device tuple without pretending independent boot proof'
+New-R19HostReadinessWorkflowArm -State $learn @script:context -NowTicks '170'|Out-Null
+Assert-Workflow $learn.arm_built 'learned tuple still strictly binds ARM'
+
+foreach($case in @('requestReplay','replyBeforeRequest','replyBeforeWrite','readyBeforeReply','armBeforeReply','armBeforeReady','replyReplay','readyReplay','armReplay','commitReplay','wrongRole','wrongNonce','wrongBoot','wrongSession','wrongEpoch','wrongReplyUs','readerStopped','readerReplaced','wrongClockDomain','timeRegressed','readBeforeRequest','readInFuture','partialWrite','armPartialWrite','deadline','zeroTimeout','readNotStarted','invalidClockReply')){
+  $candidate=New-Fixture
+  Assert-WorkflowThrows {
+    switch($case){
+      'requestReplay' {Start-Fixture $candidate;New-R19HostReadinessClockRequest -State $candidate @script:context -NowTicks '130'}
+      'replyBeforeRequest' {Reply-Fixture $candidate}
+      'replyBeforeWrite' {New-R19HostReadinessClockRequest -State $candidate @script:context -NowTicks '110'|Out-Null;Reply-Fixture $candidate}
+      'readyBeforeReply' {Start-Fixture $candidate;Ready-Fixture $candidate}
+      'armBeforeReply' {Start-Fixture $candidate;New-R19HostReadinessWorkflowArm -State $candidate @script:context -NowTicks '130'}
+      'armBeforeReady' {Start-Fixture $candidate;Reply-Fixture $candidate;New-R19HostReadinessWorkflowArm -State $candidate @script:context -NowTicks '150'}
+      'replyReplay' {Start-Fixture $candidate;Reply-Fixture $candidate;Reply-Fixture $candidate}
+      'readyReplay' {Start-Fixture $candidate;Reply-Fixture $candidate;Ready-Fixture $candidate;Ready-Fixture $candidate}
+      'armReplay' {Start-Fixture $candidate;Reply-Fixture $candidate;Ready-Fixture $candidate;New-R19HostReadinessWorkflowArm -State $candidate @script:context -NowTicks '170'|Out-Null;New-R19HostReadinessWorkflowArm -State $candidate @script:context -NowTicks '180'}
+      'commitReplay' {Start-Fixture $candidate;Set-R19HostReadinessWriteCommit -State $candidate @script:context -Kind ClockRequest -AcceptedBytes 28 -WriteStartedTicks '125' -NowTicks '130'}
+      'readerStopped' {Update-R19HostReadinessWorkflow -State $candidate -ReaderIdentity physical-reader-1 -ReaderAlive $false -ClockDomainId qpc-run-1 -NowTicks '110'}
+      'readerReplaced' {Update-R19HostReadinessWorkflow -State $candidate -ReaderIdentity physical-reader-2 -ReaderAlive $true -ClockDomainId qpc-run-1 -NowTicks '110'}
+      'wrongClockDomain' {Update-R19HostReadinessWorkflow -State $candidate -ReaderIdentity physical-reader-1 -ReaderAlive $true -ClockDomainId qpc-run-2 -NowTicks '110'}
+      'timeRegressed' {Update-R19HostReadinessWorkflow -State $candidate @script:context -NowTicks '99'}
+      'readBeforeRequest' {Start-Fixture $candidate;Add-R19HostReadinessObservation -State $candidate @script:context -Kind ClockReply -Bytes (New-Reply) -NowTicks '140' -ReadCompletedTicks '114'}
+      'readInFuture' {Start-Fixture $candidate;Add-R19HostReadinessObservation -State $candidate @script:context -Kind ClockReply -Bytes (New-Reply) -NowTicks '140' -ReadCompletedTicks '141'}
+      'partialWrite' {New-R19HostReadinessClockRequest -State $candidate @script:context -NowTicks '110'|Out-Null;Set-R19HostReadinessWriteCommit -State $candidate @script:context -Kind ClockRequest -AcceptedBytes 27 -WriteStartedTicks '115' -NowTicks '120'}
+      'armPartialWrite' {Start-Fixture $candidate;Reply-Fixture $candidate;Ready-Fixture $candidate;New-R19HostReadinessWorkflowArm -State $candidate @script:context -NowTicks '170'|Out-Null;Set-R19HostReadinessWriteCommit -State $candidate @script:context -Kind Arm -AcceptedBytes 65 -WriteStartedTicks '175' -NowTicks '180'}
+      'deadline' {Update-R19HostReadinessWorkflow -State $candidate @script:context -NowTicks '1101'}
+      'zeroTimeout' {New-R19HostReadinessWorkflow -Mode ExplicitHostArm -Role Ground -Nonce $script:nonce -ReaderIdentity reader -ClockDomainId domain -TickFrequency 1 -StartTicks 1 -ReadStartedTicks 1 -TimeoutTicks 0}
+      'readNotStarted' {New-R19HostReadinessWorkflow -Mode ExplicitHostArm -Role Ground -Nonce $script:nonce -ReaderIdentity reader -ClockDomainId domain -TickFrequency 1 -StartTicks 1 -ReadStartedTicks 2 -TimeoutTicks 1}
+      'invalidClockReply' {Start-Fixture $candidate;Add-R19HostReadinessObservation -State $candidate @script:context -Kind ClockReply -Bytes (New-Reply -Nonce '5915779601526205390') -NowTicks '140' -ReadCompletedTicks '130'}
+      default {
+        Start-Fixture $candidate;Reply-Fixture $candidate
+        $overrides=switch($case){'wrongRole'{@{Role='Vehicle'}}'wrongNonce'{@{Nonce='5915779601526205390'}}'wrongBoot'{@{BootId='124'}}'wrongSession'{@{ReaderSession='457'}}'wrongEpoch'{@{UsbEpoch='8'}}'wrongReplyUs'{@{ReplyDeviceUs='1102'}}}
+        Add-R19HostReadinessObservation -State $candidate @script:context -Kind Ready -Bytes (New-Ready $overrides) -NowTicks '160' -ReadCompletedTicks '150'
+      }
+    }
+  } "$case rejected"
+}
+for($cut=0;$cut-lt66;$cut++){
+  $candidate=New-Fixture;Start-Fixture $candidate;Reply-Fixture $candidate
+  [byte[]]$whole=New-Ready;[byte[]]$part=if($cut-eq0){[byte[]]::new(0)}else{$whole[0..($cut-1)]}
+  Assert-WorkflowThrows {Add-R19HostReadinessObservation -State $candidate @script:context -Kind Ready -Bytes $part -NowTicks '160' -ReadCompletedTicks '150'} "partial READY length $cut rejected, no stream-framing claim"
+}
+foreach($kind in @('ClockReply','Ready')){
+  $count=if($kind-ceq'ClockReply'){28}else{66}
+  for($index=0;$index-lt$count;$index++){
+    $candidate=New-Fixture;Start-Fixture $candidate;if($kind-ceq'Ready'){Reply-Fixture $candidate}
+    [byte[]]$bad=if($kind-ceq'ClockReply'){New-Reply}else{New-Ready};$bad[$index]=$bad[$index]-bxor1
+    Assert-WorkflowThrows {Add-R19HostReadinessObservation -State $candidate @script:context -Kind $kind -Bytes $bad -NowTicks '160' -ReadCompletedTicks '150'} "$kind corruption byte $index rejected"
+  }
+}
+$boundary=New-Fixture;Update-R19HostReadinessWorkflow -State $boundary @script:context -NowTicks '1100'|Out-Null
+Assert-Workflow ($boundary.status-ceq'WaitingClockRequest') 'deadline equality is admissible, greater is rejected'
+$concurrent=New-Fixture;Start-Fixture $concurrent
+Add-R19HostReadinessObservation -State $concurrent @script:context -Kind ClockReply -Bytes (New-Reply) -NowTicks '140' -ReadCompletedTicks '119'|Out-Null
+Assert-Workflow $concurrent.reply_read_validated 'native reply Read may complete during OUT call before write return'
+foreach($cut in 0..27){
+  $candidate=New-Fixture;Start-Fixture $candidate
+  [byte[]]$whole=New-Reply;[byte[]]$part=if($cut-eq0){[byte[]]::new(0)}else{$whole[0..($cut-1)]}
+  Assert-WorkflowThrows {Add-R19HostReadinessObservation -State $candidate @script:context -Kind ClockReply -Bytes $part -NowTicks '140' -ReadCompletedTicks '130'} "partial ClockReply length $cut rejected"
+}
+foreach($kind in @('ClockRequest','Arm')){
+  foreach($start in @('1','200')){
+    $candidate=New-Fixture
+    if($kind-ceq'Arm'){Start-Fixture $candidate;Reply-Fixture $candidate;Ready-Fixture $candidate;New-R19HostReadinessWorkflowArm -State $candidate @script:context -NowTicks '170'|Out-Null}
+    else{New-R19HostReadinessClockRequest -State $candidate @script:context -NowTicks '110'|Out-Null}
+    $size=if($kind-ceq'Arm'){66}else{28}
+    Assert-WorkflowThrows {Set-R19HostReadinessWriteCommit -State $candidate @script:context -Kind $kind -AcceptedBytes $size -WriteStartedTicks $start -NowTicks '180'} "$kind begin/return order invalid $start"
+    Assert-Workflow ($candidate.status-ceq'Rejected'-and-not$candidate.device_armed_proven) 'invalid write sample fails closed'
+  }
+}
+$readyOrder=New-Fixture;Start-Fixture $readyOrder;Reply-Fixture $readyOrder
+Assert-WorkflowThrows {Add-R19HostReadinessObservation -State $readyOrder @script:context -Kind Ready -Bytes (New-Ready) -NowTicks '160' -ReadCompletedTicks '129'} 'READY return cannot precede matching reply return'
+$stopped=New-Fixture;Start-Fixture $stopped;Reply-Fixture $stopped;Ready-Fixture $stopped
+Assert-WorkflowThrows {Update-R19HostReadinessWorkflow -State $stopped -ReaderIdentity physical-reader-1 -ReaderAlive $false -ClockDomainId qpc-run-1 -NowTicks '170'} 'stop after READY invalidates all proof claims'
+Assert-WorkflowThrows {New-R19HostReadinessWorkflowArm -State $stopped @script:context -NowTicks '180'} 'restarting same reader name cannot revive rejected workflow'
+Assert-Workflow ($stopped.events.Count-eq6-and$stopped.failure_reason-ceq'ContinuousReaderStopped') 'first rejection remains latched, no unbounded replay events'
+$epochZeroBinding=$script:binding.Clone();$epochZeroBinding.usb_epoch='0'
+$epochZero=New-R19HostReadinessWorkflow -Mode ExplicitHostArm -Role Ground -Nonce $script:nonce -ReaderIdentity physical-reader-1 -ClockDomainId qpc-run-1 -TickFrequency '10000000' -StartTicks '100' -ReadStartedTicks '90' -TimeoutTicks '1000' -ExpectedBinding $epochZeroBinding
+Start-Fixture $epochZero;Reply-Fixture $epochZero
+Add-R19HostReadinessObservation -State $epochZero @script:context -Kind Ready -Bytes (New-Ready @{UsbEpoch='0'}) -NowTicks '160' -ReadCompletedTicks '150'|Out-Null
+Assert-Workflow ($epochZero.ready.usb_epoch-ceq'0') 'initial USB epoch zero is a valid bound generation'
+Assert-WorkflowThrows {New-R19HostReadinessWorkflow -Mode ExplicitHostArm -Role Vehicle -Nonce $script:nonce -ReaderIdentity reader -ClockDomainId domain -TickFrequency 1 -StartTicks 1 -ReadStartedTicks 1 -TimeoutTicks 1} 'Vehicle cannot use Ground explicit admission ARM mode'
+$terminal=New-Fixture
+Assert-WorkflowThrows {Update-R19HostReadinessWorkflow -State $terminal @script:context -NowTicks '1101'} 'deadline first expiry is rejected'
+Assert-WorkflowThrows {Update-R19HostReadinessWorkflow -State $terminal @script:context -NowTicks '1102'} 'deadline cannot be renewed by later poll'
+Assert-Workflow ($terminal.deadline_ticks-ceq'1100'-and$terminal.events.Count-eq2) 'PC deadline immutable; setup deadline explicitly unknown'
+Assert-Workflow ($terminal.deadline_origin-ceq'PC_workflow_start_NOT_device_setup'-and-not$terminal.device_setup_deadline_known-and-not$terminal.live_integration_ready) 'no fake MCU setup deadline or live-readiness claim'
+$large=New-R19HostReadinessWorkflow -Mode SyncOnly -Role Ground -Nonce $script:nonce -ReaderIdentity reader -ClockDomainId domain -TickFrequency '10000000' -StartTicks '9007199254740993' -ReadStartedTicks '9007199254740992' -TimeoutTicks '100'
+Assert-Workflow ($large.deadline_ticks-ceq'9007199254741093') 'integer timestamps above double exact range stay exact'
+Assert-WorkflowThrows {New-R19HostReadinessWorkflow -Mode SyncOnly -Role Ground -Nonce $script:nonce -ReaderIdentity reader -ClockDomainId domain -TickFrequency '1' -StartTicks '18446744073709551615' -ReadStartedTicks '1' -TimeoutTicks '1'} 'deadline overflow rejected'
+$tokens=$null;$parseErrors=$null
+$syntax=[Management.Automation.Language.Parser]::ParseFile($module,[ref]$tokens,[ref]$parseErrors)
+$commands=@($syntax.FindAll({param($ast)$ast-is[Management.Automation.Language.CommandAst]},$true)|ForEach-Object{$_.GetCommandName()})
+Assert-Workflow ($parseErrors.Count-eq0) 'workflow source parses'
+foreach($forbidden in @('Get-Date','Get-Content','Set-Content','Add-Content','New-Item','Start-Process','Invoke-RestMethod','Invoke-WebRequest','Start-Sleep','New-R19TimesyncNonce')){
+  Assert-Workflow ($commands-cnotcontains$forbidden) "pure actions do not call $forbidden"
+}
+Assert-Workflow (-not([IO.File]::ReadAllText($module)-match'(?m)^\s*[^#\r\n].*\[IO\.Ports\.SerialPort\]')) 'no COM transport implementation'
+Write-Output ("UT-R19-HOST-READINESS-WORKFLOW-001 checks={0} failures={1}"-f$script:checks,$script:failures)
+if($script:failures-ne0){exit 1}

@@ -1,0 +1,112 @@
+Internal ctest changing into directory: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+Test project E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+      Start 14: UT-R19-HWCDC-FLUSH-CALL-EVIDENCE-001
+      Start 10: R19-host_readiness_wire-OFFLINE-001
+      Start 11: R19-HOST-READINESS-INTEGRATION-OFFLINE-001
+      Start 65: IT-R19-GROUND-PRODUCT-LOOP-COLD-BOOT-001
+ 1/49 Test #65: IT-R19-GROUND-PRODUCT-LOOP-COLD-BOOT-001 ...............   Passed    0.66 sec
+      Start 48: IT-R19-GROUND-RUNTIME-ALIVE-STARVATION-001
+ 2/49 Test #48: IT-R19-GROUND-RUNTIME-ALIVE-STARVATION-001 .............   Passed    0.42 sec
+      Start 39: IT-R19-GROUND-USB-COMMIT-LATCH-endpoint-001
+ 3/49 Test #39: IT-R19-GROUND-USB-COMMIT-LATCH-endpoint-001 ............   Passed    0.36 sec
+      Start 60: IT-R19-VEHICLE-RUNTIME-FAIL-RECOVERY-EPOCH-001
+ 4/49 Test #60: IT-R19-VEHICLE-RUNTIME-FAIL-RECOVERY-EPOCH-001 .........   Passed    0.38 sec
+      Start 63: IT-R19-GROUND-RUNTIME-FAIL-RECOVERY-TARGET-001
+ 5/49 Test #63: IT-R19-GROUND-RUNTIME-FAIL-RECOVERY-TARGET-001 .........   Passed    0.37 sec
+      Start 66: IT-R19-VEHICLE-PRODUCT-LOOP-COLD-BOOT-001
+ 6/49 Test #11: R19-HOST-READINESS-INTEGRATION-OFFLINE-001 .............   Passed    2.73 sec
+      Start 56: IT-R19-VEHICLE-RUNTIME-FAIL-STAGED-ZERO-001
+ 7/49 Test #66: IT-R19-VEHICLE-PRODUCT-LOOP-COLD-BOOT-001 ..............   Passed    0.66 sec
+      Start 32: IT-R19-GROUND-HOST-READINESS-001
+ 8/49 Test #10: R19-host_readiness_wire-OFFLINE-001 ....................   Passed    3.41 sec
+      Start 57: IT-R19-VEHICLE-RUNTIME-FAIL-STAGED-PARTIAL-001
+ 9/49 Test #56: IT-R19-VEHICLE-RUNTIME-FAIL-STAGED-ZERO-001 ............   Passed    0.98 sec
+      Start 33: IT-R19-FIRST-USB-FAILURE-transport-001
+10/49 Test #32: IT-R19-GROUND-HOST-READINESS-001 .......................   Passed    0.98 sec
+      Start 47: IT-R19-GROUND-RUNTIME-ALIVE-DIAGNOSTIC-001
+11/49 Test #57: IT-R19-VEHICLE-RUNTIME-FAIL-STAGED-PARTIAL-001 .........   Passed    0.95 sec
+      Start 55: IT-R19-GROUND-RUNTIME-FAIL-PENDING-ALIVE-001
+12/49 Test #33: IT-R19-FIRST-USB-FAILURE-transport-001 .................   Passed    0.93 sec
+      Start 50: IT-R19-VEHICLE-RUNTIME-ALIVE-DIAGNOSTIC-001
+13/49 Test #47: IT-R19-GROUND-RUNTIME-ALIVE-DIAGNOSTIC-001 .............   Passed    0.69 sec
+      Start 21: UT-R19-HOST-READINESS-001
+14/49 Test #55: IT-R19-GROUND-RUNTIME-FAIL-PENDING-ALIVE-001 ...........   Passed    0.57 sec
+      Start 46: IT-R19-VEHICLE-RUNTIME-FAIL-DIAGNOSTIC-001
+15/49 Test #50: IT-R19-VEHICLE-RUNTIME-ALIVE-DIAGNOSTIC-001 ............   Passed    0.33 sec
+      Start 53: IT-R19-GROUND-RUNTIME-FAIL-BOUNDARY-LOSS-001
+16/49 Test #21: UT-R19-HOST-READINESS-001 ..............................   Passed    0.56 sec
+      Start 30: UT-R19-GROUND-USB-COMMIT-SOURCE-001
+17/49 Test #46: IT-R19-VEHICLE-RUNTIME-FAIL-DIAGNOSTIC-001 .............   Passed    0.41 sec
+      Start 28: UT-R19-RUNTIME-STAGE-RECORD-001
+18/49 Test #53: IT-R19-GROUND-RUNTIME-FAIL-BOUNDARY-LOSS-001 ...........   Passed    0.38 sec
+      Start 51: IT-R19-VEHICLE-RUNTIME-ALIVE-READ-ONLY-BOOTSTRAP-001
+19/49 Test #14: UT-R19-HWCDC-FLUSH-CALL-EVIDENCE-001 ...................   Passed    5.56 sec
+      Start 24: UT-R19-RUNTIME-FAIL-DIAGNOSTIC-001
+20/49 Test #28: UT-R19-RUNTIME-STAGE-RECORD-001 ........................   Passed    0.15 sec
+      Start 45: IT-R19-GROUND-RUNTIME-FAIL-DIAGNOSTIC-001
+21/49 Test #30: UT-R19-GROUND-USB-COMMIT-SOURCE-001 ....................   Passed    0.50 sec
+      Start 23: UT-R19-FIRST-USB-FAILURE-RECORD-001
+22/49 Test #51: IT-R19-VEHICLE-RUNTIME-ALIVE-READ-ONLY-BOOTSTRAP-001 ...   Passed    0.46 sec
+      Start 36: IT-R19-FIRST-USB-FAILURE-wrapper_late-001
+23/49 Test #24: UT-R19-RUNTIME-FAIL-DIAGNOSTIC-001 .....................   Passed    0.39 sec
+      Start 29: UT-R19-GROUND-USB-COMMIT-RECORD-001
+24/49 Test #45: IT-R19-GROUND-RUNTIME-FAIL-DIAGNOSTIC-001 ..............   Passed    0.39 sec
+      Start 54: IT-R19-GROUND-RUNTIME-FAIL-DEADLINE-001
+25/49 Test #23: UT-R19-FIRST-USB-FAILURE-RECORD-001 ....................   Passed    0.38 sec
+      Start 61: IT-R19-VEHICLE-RUNTIME-FAIL-RECOVERY-EXPIRY-001
+26/49 Test #36: IT-R19-FIRST-USB-FAILURE-wrapper_late-001 ..............   Passed    0.39 sec
+      Start 22: UT-R19-USB-CLOCK-SYNC-001
+27/49 Test #29: UT-R19-GROUND-USB-COMMIT-RECORD-001 ....................   Passed    0.38 sec
+      Start 27: UT-R19-HWCDC-TASK-PRIME-001
+28/49 Test #54: IT-R19-GROUND-RUNTIME-FAIL-DEADLINE-001 ................   Passed    0.39 sec
+      Start 58: IT-R19-VEHICLE-RUNTIME-FAIL-PARTIAL-DEADLINE-001
+29/49 Test #61: IT-R19-VEHICLE-RUNTIME-FAIL-RECOVERY-EXPIRY-001 ........   Passed    0.33 sec
+      Start 62: IT-R19-GROUND-RUNTIME-FAIL-RECOVERY-EPOCH-001
+30/49 Test #22: UT-R19-USB-CLOCK-SYNC-001 ..............................   Passed    0.33 sec
+      Start 59: IT-R19-VEHICLE-RUNTIME-FAIL-FLUSH-DEADLINE-001
+31/49 Test #27: UT-R19-HWCDC-TASK-PRIME-001 ............................   Passed    0.54 sec
+      Start 38: IT-R19-GROUND-USB-COMMIT-LATCH-transport-001
+32/49 Test #58: IT-R19-VEHICLE-RUNTIME-FAIL-PARTIAL-DEADLINE-001 .......   Passed    0.54 sec
+      Start 43: IT-R19-GROUND-USB-COMMIT-LATCH-postflush_retired-001
+33/49 Test #62: IT-R19-GROUND-RUNTIME-FAIL-RECOVERY-EPOCH-001 ..........   Passed    0.31 sec
+      Start 35: IT-R19-FIRST-USB-FAILURE-endpoint-001
+34/49 Test #59: IT-R19-VEHICLE-RUNTIME-FAIL-FLUSH-DEADLINE-001 .........   Passed    0.31 sec
+      Start 37: IT-R19-FIRST-USB-FAILURE-sync_partial-001
+35/49 Test #38: IT-R19-GROUND-USB-COMMIT-LATCH-transport-001 ...........   Passed    0.09 sec
+      Start 44: IT-R19-GROUND-USB-COMMIT-LATCH-success-001
+36/49 Test #43: IT-R19-GROUND-USB-COMMIT-LATCH-postflush_retired-001 ...   Passed    0.09 sec
+      Start 42: IT-R19-GROUND-USB-COMMIT-LATCH-retired-001
+37/49 Test #35: IT-R19-FIRST-USB-FAILURE-endpoint-001 ..................   Passed    0.09 sec
+      Start 34: IT-R19-FIRST-USB-FAILURE-before_deadline-001
+38/49 Test #37: IT-R19-FIRST-USB-FAILURE-sync_partial-001 ..............   Passed    0.09 sec
+      Start 52: IT-R19-GROUND-RUNTIME-ALIVE-READ-ONLY-BOOTSTRAP-001
+39/49 Test #44: IT-R19-GROUND-USB-COMMIT-LATCH-success-001 .............   Passed    0.33 sec
+      Start 31: UT-R19-HWCDC-FIFO-DIAGNOSTIC-RECORD-001
+40/49 Test #42: IT-R19-GROUND-USB-COMMIT-LATCH-retired-001 .............   Passed    0.33 sec
+      Start 25: UT-R19-RUNTIME-FAIL-PRODUCT-SOURCE-001
+41/49 Test #34: IT-R19-FIRST-USB-FAILURE-before_deadline-001 ...........   Passed    0.33 sec
+      Start 64: IT-R19-GROUND-RUNTIME-FAIL-RECOVERY-EXPIRY-001
+42/49 Test #52: IT-R19-GROUND-RUNTIME-ALIVE-READ-ONLY-BOOTSTRAP-001 ....   Passed    0.34 sec
+      Start 49: IT-R19-GROUND-RUNTIME-ALIVE-BACKPRESSURE-001
+43/49 Test #31: UT-R19-HWCDC-FIFO-DIAGNOSTIC-RECORD-001 ................   Passed    0.35 sec
+      Start 26: UT-R19-HWCDC-LL-BOOTSTRAP-001
+44/49 Test #64: IT-R19-GROUND-RUNTIME-FAIL-RECOVERY-EXPIRY-001 .........   Passed    0.33 sec
+      Start 41: IT-R19-GROUND-USB-COMMIT-LATCH-deadline-001
+45/49 Test #25: UT-R19-RUNTIME-FAIL-PRODUCT-SOURCE-001 .................   Passed    0.39 sec
+      Start 40: IT-R19-GROUND-USB-COMMIT-LATCH-late-001
+46/49 Test #49: IT-R19-GROUND-RUNTIME-ALIVE-BACKPRESSURE-001 ...........   Passed    0.36 sec
+47/49 Test #41: IT-R19-GROUND-USB-COMMIT-LATCH-deadline-001 ............   Passed    0.06 sec
+48/49 Test #26: UT-R19-HWCDC-LL-BOOTSTRAP-001 ..........................   Passed    0.11 sec
+49/49 Test #40: IT-R19-GROUND-USB-COMMIT-LATCH-late-001 ................   Passed    0.06 sec
+
+100% tests passed, 0 tests failed out of 49
+
+Label Time Summary:
+contract        =   5.56 sec*proc (1 test)
+diagnostic      =  17.41 sec*proc (44 tests)
+offline         =  24.28 sec*proc (47 tests)
+phase6          =   1.32 sec*proc (2 tests)
+product-loop    =  11.84 sec*proc (29 tests)
+r19             =  24.28 sec*proc (47 tests)
+
+Total Test time (real) =   7.96 sec

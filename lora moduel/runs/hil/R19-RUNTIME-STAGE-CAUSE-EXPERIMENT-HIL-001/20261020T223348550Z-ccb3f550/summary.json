@@ -1,0 +1,1182 @@
+{
+    "schema":  "vc-lora-r19-runtime-stage-cause-experiment-v1",
+    "test_id":  "R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001",
+    "started_utc":  "2026-10-20T22:33:48.4797649Z",
+    "finished_utc":  "2026-10-20T22:36:30.2010519Z",
+    "result":  "FAIL",
+    "status":  "FAIL_USB_TX_BOUNDARY_CAUSE_EVIDENCE_CAPTURED_R18_RESTORED",
+    "mode":  "LIVE_HIL",
+    "hardware_interaction":  true,
+    "diagnostic_only":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false,
+    "capture_seconds":  40,
+    "offline_scenario":  "",
+    "failure":  "",
+    "authorization":  {
+                          "hil_token":  "R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT",
+                          "safety_attestation":  "PIXHAWK_DISARMED_PROPULSION_ISOLATED_ANTENNAS_CONNECTED_GND_3V3_CHECKED_PARAM_BACKUP_SAVED",
+                          "rollback_token":  "RESTORE_ACCEPTED_R18_AFTER_R19_HIL"
+                      },
+    "candidate":  {
+                      "artifact_id":  "20261020T123447347Z-b414028b",
+                      "artifact_root":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261020T123447347Z-b414028b",
+                      "latest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\latest.json",
+                      "latest_sha256":  "7B9E24D307963177D3489627AB305023B8A31744B5008FD36210590D60F4DA41",
+                      "handoff_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261020T123447347Z-b414028b\\handoff.json",
+                      "handoff_sha256":  "FEFE227F9449D75352657107CD46E71C1434F1FC4DDCDC91E0F14A6DD1873A5E",
+                      "candidate_manifest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261020T123447347Z-b414028b\\candidate_manifest.json",
+                      "candidate_manifest_sha256":  "D0E8C5DAF27BA1131946FF3D0FA14389465E73E4F5E48C36AE672713F31920F2",
+                      "endpoint_fifo_schema":  2,
+                      "endpoint_fifo_size_bytes":  112,
+                      "runtime_stage_size_bytes":  68,
+                      "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v5",
+                      "latest_lock_retained_until_outer_exit":  true
+                  },
+    "steps":  [
+                  {
+                      "name":  "jtag_preflight",
+                      "result":  "FAIL",
+                      "exit_code":  1,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  180000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\jtag_preflight.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\jtag_preflight.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "853A404C816D8C9C92B609FD697763977AEDE1849E87A494AEB70FBAA38F4210",
+                      "script_lock_retained_until_outer_exit":  false,
+                      "semantic_result":  "PASS_PNP_DRIVER_BINDING_ONLY_EXPECTED_EXIT_1"
+                  },
+                  {
+                      "name":  "active_jtag_vehicle",
+                      "result":  "PASS",
+                      "exit_code":  0,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  90000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\active_jtag_vehicle.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\active_jtag_vehicle.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "5F8E44016C82EB08EABCEB00B641EB43D5669CAADC7272B885858AF15842B554",
+                      "script_lock_retained_until_outer_exit":  false
+                  },
+                  {
+                      "name":  "active_jtag_ground",
+                      "result":  "PASS",
+                      "exit_code":  0,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  90000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\active_jtag_ground.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\active_jtag_ground.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "5F8E44016C82EB08EABCEB00B641EB43D5669CAADC7272B885858AF15842B554",
+                      "script_lock_retained_until_outer_exit":  false
+                  },
+                  {
+                      "name":  "install",
+                      "result":  "PASS",
+                      "exit_code":  0,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  240000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\install.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\install.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "CF6F9407218AB8C0571D1D8ED04DE07AE1892176E4CB973BEF45743CB5A01139",
+                      "script_lock_retained_until_outer_exit":  false
+                  },
+                  {
+                      "name":  "capture",
+                      "result":  "FAIL",
+                      "exit_code":  1,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  90000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\capture.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\capture.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "01C62A598FD9AEE52020F4FE72991FAB0502E3AD62DDA2957A6D282CC118966C",
+                      "script_lock_retained_until_outer_exit":  false
+                  },
+                  {
+                      "name":  "stage_vehicle",
+                      "result":  "PASS",
+                      "exit_code":  0,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  90000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\stage_vehicle.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\stage_vehicle.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "5F8E44016C82EB08EABCEB00B641EB43D5669CAADC7272B885858AF15842B554",
+                      "script_lock_retained_until_outer_exit":  false
+                  },
+                  {
+                      "name":  "stage_ground",
+                      "result":  "PASS",
+                      "exit_code":  0,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  90000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\stage_ground.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\stage_ground.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "5F8E44016C82EB08EABCEB00B641EB43D5669CAADC7272B885858AF15842B554",
+                      "script_lock_retained_until_outer_exit":  false
+                  },
+                  {
+                      "name":  "rollback",
+                      "result":  "PASS",
+                      "exit_code":  0,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  300000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\rollback.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\rollback.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "CF6F9407218AB8C0571D1D8ED04DE07AE1892176E4CB973BEF45743CB5A01139",
+                      "script_lock_retained_until_outer_exit":  false
+                  }
+              ],
+    "jtag_preflight":  {
+                           "proven":  false,
+                           "driver_binding_proven":  true,
+                           "firmware_install_allowed":  false,
+                           "status":  "PASS_WINUSB_DRIVER_BINDING_PNP_ONLY",
+                           "roles":  [
+                                         {
+                                             "role":  "vehicle",
+                                             "com":  "COM3",
+                                             "serial":  "90:70:69:11:81:A4",
+                                             "parent":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                                             "mi00_instance_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                                             "mi02_instance_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02\\7\u00267131F6A\u00260\u00260002",
+                                             "mi02_status":  "OK",
+                                             "service":  "WinUSB",
+                                             "problem_code":  0,
+                                             "driver_inf":  "oem227.inf",
+                                             "driver_inf_sha256":  "0652254D989022A381EB91084C74A08BAF400E510CE6A2FE4C6EC834AE99EADA",
+                                             "driver_provider":  "libwdi",
+                                             "driver_version":  "6.1.7600.16386",
+                                             "matching_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02",
+                                             "device_class_guid":  "{88BAE032-5A81-49F0-BC3D-A4FF138216D6}",
+                                             "location_paths":  [
+                                                                    "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USBMI(2)",
+                                                                    "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USBMI(2)"
+                                                                ],
+                                             "pnp_port_chain":  "4.2",
+                                             "registry_interface_guids":  [
+                                                                              "{80869ad8-c37f-476a-a6b4-ae241c30a473}"
+                                                                          ],
+                                             "pnputil_interfaces":  [
+                                                                        "\\\\?\\USB#VID_303A\u0026PID_1001\u0026MI_02#7\u00267131f6a\u00260\u00260002#{dee824ef-729b-4a0e-9c14-b7117d33a817}",
+                                                                        "\\\\?\\USB#VID_303A\u0026PID_1001\u0026MI_02#7\u00267131f6a\u00260\u00260002#{80869ad8-c37f-476a-a6b4-ae241c30a473}"
+                                                                    ],
+                                             "driver_binding_proven":  true,
+                                             "interface_registration_proven":  true,
+                                             "openocd_usb_location":  "",
+                                             "reader_preflight_proven":  false,
+                                             "reader_summary_path":  "",
+                                             "reader_summary_sha256":  ""
+                                         },
+                                         {
+                                             "role":  "ground",
+                                             "com":  "COM6",
+                                             "serial":  "1C:DB:D4:5A:83:80",
+                                             "parent":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                                             "mi00_instance_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                                             "mi02_instance_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02\\7\u00262159A644\u00260\u00260002",
+                                             "mi02_status":  "OK",
+                                             "service":  "WinUSB",
+                                             "problem_code":  0,
+                                             "driver_inf":  "oem227.inf",
+                                             "driver_inf_sha256":  "0652254D989022A381EB91084C74A08BAF400E510CE6A2FE4C6EC834AE99EADA",
+                                             "driver_provider":  "libwdi",
+                                             "driver_version":  "6.1.7600.16386",
+                                             "matching_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02",
+                                             "device_class_guid":  "{88BAE032-5A81-49F0-BC3D-A4FF138216D6}",
+                                             "location_paths":  [
+                                                                    "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(4)#USBMI(2)",
+                                                                    "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(4)#USBMI(2)"
+                                                                ],
+                                             "pnp_port_chain":  "4.4",
+                                             "registry_interface_guids":  [
+                                                                              "{80869ad8-c37f-476a-a6b4-ae241c30a473}"
+                                                                          ],
+                                             "pnputil_interfaces":  [
+                                                                        "\\\\?\\USB#VID_303A\u0026PID_1001\u0026MI_02#7\u00262159a644\u00260\u00260002#{dee824ef-729b-4a0e-9c14-b7117d33a817}",
+                                                                        "\\\\?\\USB#VID_303A\u0026PID_1001\u0026MI_02#7\u00262159a644\u00260\u00260002#{80869ad8-c37f-476a-a6b4-ae241c30a473}"
+                                                                    ],
+                                             "driver_binding_proven":  true,
+                                             "interface_registration_proven":  true,
+                                             "openocd_usb_location":  "",
+                                             "reader_preflight_proven":  false,
+                                             "reader_summary_path":  "",
+                                             "reader_summary_sha256":  ""
+                                         }
+                                     ],
+                           "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\jtag_preflight",
+                           "summary_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\jtag_preflight\\summary.json",
+                           "summary_sha256":  "C5227754A600C40ECB4165A1CF591D31CD2E6DF29D6F340AB1ABCCF23F595C5C"
+                       },
+    "active_jtag_preflight":  {
+                                  "proven":  true,
+                                  "firmware_install_allowed":  true,
+                                  "status":  "PASS_FRESH_DUAL_ACTIVE_JTAG_PREFLIGHT",
+                                  "roles":  [
+                                                {
+                                                    "proven":  true,
+                                                    "role":  "vehicle",
+                                                    "status":  "PASS_JTAG_PREFLIGHT_TAP_RESET_SCAN_POSSIBLE_NO_CPU_HALT_OR_SYSTEM_RESET_COMMAND",
+                                                    "hardware_interaction":  true,
+                                                    "requested_serial":  "90:70:69:11:81:a4",
+                                                    "opened_serial":  "90:70:69:11:81:a4",
+                                                    "requested_usb_location":  "1-4.2",
+                                                    "opened_usb_location":  "1-4.2",
+                                                    "pnp_port_chain":  "4.2",
+                                                    "pnp_location_suffix_matched":  true,
+                                                    "safety":  {
+                                                                   "com_opened":  false,
+                                                                   "flash_written":  false,
+                                                                   "target_config_loaded":  false,
+                                                                   "cpu_halt_command_issued":  false,
+                                                                   "system_reset_command_issued":  false,
+                                                                   "transport_init_requested":  true,
+                                                                   "transport_init_completion_proven":  true,
+                                                                   "jtag_clock_activity_possible":  true,
+                                                                   "tap_reset_or_scan_possible":  true,
+                                                                   "target_state_modified":  null,
+                                                                   "target_state_modification_known":  false,
+                                                                   "process_termination_proven":  true,
+                                                                   "shutdown_proven":  true
+                                                               },
+                                                    "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\active_jtag_preflight\\vehicle",
+                                                    "summary_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\active_jtag_preflight\\vehicle\\summary.json",
+                                                    "summary_sha256":  "19DC9A932D24E47D25A745FEEC186129B5514E21CBE3EE156909535CBCBBB4F5"
+                                                },
+                                                {
+                                                    "proven":  true,
+                                                    "role":  "ground",
+                                                    "status":  "PASS_JTAG_PREFLIGHT_TAP_RESET_SCAN_POSSIBLE_NO_CPU_HALT_OR_SYSTEM_RESET_COMMAND",
+                                                    "hardware_interaction":  true,
+                                                    "requested_serial":  "1c:db:d4:5a:83:80",
+                                                    "opened_serial":  "1c:db:d4:5a:83:80",
+                                                    "requested_usb_location":  "1-4.4",
+                                                    "opened_usb_location":  "1-4.4",
+                                                    "pnp_port_chain":  "4.4",
+                                                    "pnp_location_suffix_matched":  true,
+                                                    "safety":  {
+                                                                   "com_opened":  false,
+                                                                   "flash_written":  false,
+                                                                   "target_config_loaded":  false,
+                                                                   "cpu_halt_command_issued":  false,
+                                                                   "system_reset_command_issued":  false,
+                                                                   "transport_init_requested":  true,
+                                                                   "transport_init_completion_proven":  true,
+                                                                   "jtag_clock_activity_possible":  true,
+                                                                   "tap_reset_or_scan_possible":  true,
+                                                                   "target_state_modified":  null,
+                                                                   "target_state_modification_known":  false,
+                                                                   "process_termination_proven":  true,
+                                                                   "shutdown_proven":  true
+                                                               },
+                                                    "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\active_jtag_preflight\\ground",
+                                                    "summary_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\active_jtag_preflight\\ground\\summary.json",
+                                                    "summary_sha256":  "BD21D328693C930253E497628180EB040A53617B4D9B1618290A1872C13746AD"
+                                                }
+                                            ],
+                                  "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\active_jtag_preflight"
+                              },
+    "capture":  {
+                    "acceptable":  true,
+                    "evidence_contract_proven":  true,
+                    "classification":  "R19F",
+                    "status":  "PASS_DIAGNOSTIC_CAPTURED",
+                    "timing_sla_result":  "FAIL",
+                    "timing_sla_failure_admitted_for_stage_read":  true,
+                    "tail_stall_failure_admitted_for_stage_read":  false,
+                    "alive_tail_stall_failure_admitted_for_stage_read":  false,
+                    "alive_tail_raw_replay":  null,
+                    "boundary_partial_failure_admitted_for_stage_read":  false,
+                    "boundary_partial_raw_replay":  null,
+                    "summary_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\capture\\summary.json",
+                    "summary_sha256":  "9C56340B4672C6339DD0256F35CD2B7FAB8EA41B604CB22A0D424B4369DE7A5A",
+                    "rejection_reasons":  [
+
+                                          ],
+                    "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\capture"
+                },
+    "stage_evidence":  {
+                           "vehicle":  {
+                                           "proven":  true,
+                                           "role":  "vehicle",
+                                           "address":  "0x3fcab680",
+                                           "probe_usb_location":  "1-4.2",
+                                           "cleanup_proven":  true,
+                                           "target_may_be_halted":  false,
+                                           "native_processes_termination_proven":  true,
+                                           "boundary_classification":  "flush-completed",
+                                           "usb_tx_boundary_classification":  "flush-blocked",
+                                           "usb_tx_boundary_completion_proven":  false,
+                                           "extended_raw_replay":  {
+                                                                       "proven":  true,
+                                                                       "raw_read_count":  10,
+                                                                       "usb_boundary_classification":  "flush-blocked",
+                                                                       "usb_boundary_completion_proven":  false,
+                                                                       "interpretation":  "latched-events-not-continuous-live-hardware-state",
+                                                                       "first_heartbeat_failure_latched":  false,
+                                                                       "first_heartbeat_reason":  "None",
+                                                                       "first_heartbeat_failed_predicates":  [
+
+                                                                                                             ],
+                                                                       "first_heartbeat_predicates":  {
+                                                                                                          "transport_published":  {
+                                                                                                                                      "observed":  false,
+                                                                                                                                      "value":  false
+                                                                                                                                  },
+                                                                                                          "endpoint_ready":  {
+                                                                                                                                 "observed":  false,
+                                                                                                                                 "value":  false
+                                                                                                                             },
+                                                                                                          "completed_within_deadline":  {
+                                                                                                                                            "observed":  false,
+                                                                                                                                            "value":  false
+                                                                                                                                        }
+                                                                                                      },
+                                                                       "restart_classification":  "restart-payload-published-host-pickup-not-proven",
+                                                                       "hwcdc_restart":  {
+                                                                                             "schema":  1,
+                                                                                             "size_bytes":  128,
+                                                                                             "sequence":  176,
+                                                                                             "flags":  "0x00000005",
+                                                                                             "state_semantics":  "latched-diagnostic-events-not-live-hardware-state",
+                                                                                             "initialized":  true,
+                                                                                             "first_blocked_latched":  false,
+                                                                                             "latest_restart_valid":  true,
+                                                                                             "event_count":  86,
+                                                                                             "blocked_count":  0,
+                                                                                             "restart_count":  86,
+                                                                                             "first":  {
+                                                                                                           "phase":  0,
+                                                                                                           "ordinal":  0,
+                                                                                                           "state":  {
+                                                                                                                         "flags":  "0x00000000",
+                                                                                                                         "epoch":  0,
+                                                                                                                         "ring_pending_bytes":  0,
+                                                                                                                         "stash_pending_bytes":  0,
+                                                                                                                         "publish_generation":  0,
+                                                                                                                         "pickup_generation":  0,
+                                                                                                                         "raw_interrupt_status":  "0x00000000",
+                                                                                                                         "interrupt_enabled_mask":  "0x00000000"
+                                                                                                                     }
+                                                                                                       },
+                                                                                             "latest":  {
+                                                                                                            "origin":  1,
+                                                                                                            "outcome":  1,
+                                                                                                            "requested_bytes":  32,
+                                                                                                            "written_bytes":  32,
+                                                                                                            "ordinal":  86,
+                                                                                                            "state":  {
+                                                                                                                          "flags":  "0x00000016",
+                                                                                                                          "epoch":  1,
+                                                                                                                          "ring_pending_bytes":  0,
+                                                                                                                          "stash_pending_bytes":  0,
+                                                                                                                          "publish_generation":  105,
+                                                                                                                          "pickup_generation":  104,
+                                                                                                                          "raw_interrupt_status":  "0x00000102",
+                                                                                                                          "interrupt_enabled_mask":  "0x0000020c"
+                                                                                                                      }
+                                                                                                        }
+                                                                                         },
+                                                                       "ground_usb_commit":  {
+                                                                                                 "schema":  1,
+                                                                                                 "size_bytes":  128,
+                                                                                                 "sequence":  2,
+                                                                                                 "role":  "vehicle",
+                                                                                                 "state_semantics":  "first-ground-usb-commit-failure-only-not-live-state",
+                                                                                                 "failure_latched":  false,
+                                                                                                 "reason":  0,
+                                                                                                 "reason_name":  "None",
+                                                                                                 "observed_mask":  0,
+                                                                                                 "true_mask":  0,
+                                                                                                 "source_line":  0,
+                                                                                                 "token":  0,
+                                                                                                 "expected_epoch":  0,
+                                                                                                 "observed_epoch":  0,
+                                                                                                 "values":  {
+                                                                                                                "commit_started_ms":  0,
+                                                                                                                "flush_started_ms":  0,
+                                                                                                                "completed_ms":  0,
+                                                                                                                "deadline_ms":  0,
+                                                                                                                "committed_base":  0,
+                                                                                                                "commit_goal":  0,
+                                                                                                                "bytes_committed":  0
+                                                                                                            },
+                                                                                                 "expected_frame_bytes":  0,
+                                                                                                 "accepted_frame_bytes":  0,
+                                                                                                 "predicates":  {
+                                                                                                                    "transport_published":  {
+                                                                                                                                                "observed":  false,
+                                                                                                                                                "value":  false
+                                                                                                                                            },
+                                                                                                                    "endpoint_ready":  {
+                                                                                                                                           "observed":  false,
+                                                                                                                                           "value":  false
+                                                                                                                                       },
+                                                                                                                    "completed_within_deadline":  {
+                                                                                                                                                      "observed":  false,
+                                                                                                                                                      "value":  false
+                                                                                                                                                  }
+                                                                                                                }
+                                                                                             },
+                                                                       "first_usb_failure":  {
+                                                                                                 "schema":  "vc-lora-r19-first-usb-failure-decoded-v1",
+                                                                                                 "result":  "PASS",
+                                                                                                 "mode":  "offline-only",
+                                                                                                 "hardware_interaction":  false,
+                                                                                                 "raw_size_bytes":  384,
+                                                                                                 "raw_sha256":  "E822F186D046C7EB4ACA2BB18096C275BB4008DA5F9CB86C097356FF31AFC235",
+                                                                                                 "sequence":  2,
+                                                                                                 "record_schema":  1,
+                                                                                                 "role":  "vehicle",
+                                                                                                 "build_fingerprint":  [
+                                                                                                                           1378957636,
+                                                                                                                           1398032177,
+                                                                                                                           842019382,
+                                                                                                                           825241651
+                                                                                                                       ],
+                                                                                                 "boot_instance":  [
+                                                                                                                       1629685871,
+                                                                                                                       2720444753,
+                                                                                                                       3270522514,
+                                                                                                                       661597833
+                                                                                                                   ],
+                                                                                                 "failure_latched":  false,
+                                                                                                 "clock_sync":  {
+                                                                                                                    "observed":  false,
+                                                                                                                    "sync_count":  0,
+                                                                                                                    "nonce":  "0",
+                                                                                                                    "device_us":  "0"
+                                                                                                                },
+                                                                                                 "first_failure":  {
+                                                                                                                       "reason":  0,
+                                                                                                                       "source_line":  0,
+                                                                                                                       "token":  0,
+                                                                                                                       "attempt_id":  0,
+                                                                                                                       "wrapper_flags":  0,
+                                                                                                                       "api_called":  false,
+                                                                                                                       "raw_return":  null,
+                                                                                                                       "budget_ms":  0,
+                                                                                                                       "expected_epoch":  0,
+                                                                                                                       "observed_epoch":  0,
+                                                                                                                       "started_us":  "0",
+                                                                                                                       "finished_us":  "0",
+                                                                                                                       "deadline_us":  "0",
+                                                                                                                       "failure_observed_us":  "0",
+                                                                                                                       "elapsed_us":  "0",
+                                                                                                                       "expected_frame_bytes":  0,
+                                                                                                                       "accepted_frame_bytes":  0,
+                                                                                                                       "sdk":  {
+                                                                                                                                   "schema":  0,
+                                                                                                                                   "validity_flags":  0,
+                                                                                                                                   "transaction_token":  0,
+                                                                                                                                   "attempt_id":  0,
+                                                                                                                                   "terminal_reason":  0,
+                                                                                                                                   "timeout_ms":  0,
+                                                                                                                                   "expected_loss_epoch":  0,
+                                                                                                                                   "started_ms":  0,
+                                                                                                                                   "finished_ms":  0,
+                                                                                                                                   "lock_wait_ms":  0,
+                                                                                                                                   "elapsed_ms":  0,
+                                                                                                                                   "raw_return":  0,
+                                                                                                                                   "state_flags":  0,
+                                                                                                                                   "observed_loss_epoch":  0,
+                                                                                                                                   "ring_pending_bytes":  0,
+                                                                                                                                   "stash_pending_bytes":  0,
+                                                                                                                                   "publish_generation":  0,
+                                                                                                                                   "pickup_generation":  0,
+                                                                                                                                   "raw_interrupt_status":  0,
+                                                                                                                                   "interrupt_enable_mask":  0,
+                                                                                                                                   "flush_blocker_mask":  0,
+                                                                                                                                   "snapshot_started_ms":  0,
+                                                                                                                                   "snapshot_finished_ms":  0,
+                                                                                                                                   "snapshot_duration_us":  0,
+                                                                                                                                   "snapshot_observed":  false,
+                                                                                                                                   "lock_acquired":  false,
+                                                                                                                                   "terminal_name":  "NotObserved"
+                                                                                                                               }
+                                                                                                                   },
+                                                                                                 "acceptance":  "NOT_EVALUATED"
+                                                                                             },
+                                                                       "first_usb_failure_pc_time_relation":  {
+                                                                                                                  "classification":  "UNKNOWN",
+                                                                                                                  "reason":  "No matched same-boot nonce exchange, uninterrupted clock continuity and guaranteed error bound supplied.",
+                                                                                                                  "inferred_from_utc_or_elapsed_time":  false,
+                                                                                                                  "semantics":  "failure-decision-sample-not-physical-fault-onset"
+                                                                                                              },
+                                                                       "record_acquisition_proves_usb_success":  false
+                                                                   },
+                                           "validation_error":  "",
+                                           "endpoint_fifo":  {
+                                                                 "active_writer":  0,
+                                                                 "sequence":  44748,
+                                                                 "magic":  "0x48313946",
+                                                                 "schema":  2,
+                                                                 "state_semantics":  "last-committed-diagnostic-event-not-live-hardware-state",
+                                                                 "flags":  {
+                                                                               "mask":  "0x00002417",
+                                                                               "names":  [
+                                                                                             "Initialized",
+                                                                                             "ObservationActive",
+                                                                                             "Connected",
+                                                                                             "PayloadInFlight",
+                                                                                             "FlushActive",
+                                                                                             "PayloadFlushPending"
+                                                                                         ],
+                                                                               "initialized":  true,
+                                                                               "observation_active":  true,
+                                                                               "diagnostic_observation_window_started":  true,
+                                                                               "fifo_write_attempt_observed":  true,
+                                                                               "positive_fifo_write_observed":  true,
+                                                                               "wr_done_observed":  true,
+                                                                               "payload_pickup_observed":  true,
+                                                                               "connected":  true,
+                                                                               "fifo_writable":  false,
+                                                                               "payload_in_flight":  true,
+                                                                               "fifo_quarantined":  false,
+                                                                               "reset_pending":  false,
+                                                                               "bootstrap_fence":  false,
+                                                                               "bootstrap_aborted":  false,
+                                                                               "debug_writer_active":  false,
+                                                                               "last_event_bus_reset":  false,
+                                                                               "flush_active":  true,
+                                                                               "payload_publish_pending":  false,
+                                                                               "payload_publish_aborted":  false,
+                                                                               "payload_flush_pending":  true
+                                                                           },
+                                                                 "tx_loss_epoch":  1,
+                                                                 "counters":  {
+                                                                                  "fifo_write_attempt":  105,
+                                                                                  "fifo_write_bytes":  2993,
+                                                                                  "fifo_zero_write":  0,
+                                                                                  "wr_done":  105,
+                                                                                  "in_empty_irq":  105,
+                                                                                  "payload_in_empty":  104,
+                                                                                  "bus_reset":  0,
+                                                                                  "flush_attempt":  260,
+                                                                                  "flush_success":  47,
+                                                                                  "flush_timeout":  212,
+                                                                                  "flush_abort_inferred":  0,
+                                                                                  "zlp_flush":  0
+                                                                              },
+                                                                 "last_fifo_write_size":  32,
+                                                                 "generations":  {
+                                                                                     "publish":  105,
+                                                                                     "pickup":  104,
+                                                                                     "relationship":  "publish-is-one-ahead-modulo-uint32"
+                                                                                 },
+                                                                 "pending_bytes":  {
+                                                                                       "ring":  31,
+                                                                                       "stash":  0
+                                                                                   },
+                                                                 "last_interrupt_status":  "0x00000000",
+                                                                 "flush_blockers":  {
+                                                                                        "mask":  "0x0000001c",
+                                                                                        "names":  [
+                                                                                                      "SoftwarePending",
+                                                                                                      "FifoNotWritable",
+                                                                                                      "PayloadPickupPending"
+                                                                                                  ]
+                                                                                    },
+                                                                 "last_flush_outcome":  "Active",
+                                                                 "last_flush_outcome_code":  1,
+                                                                 "last_flush_task_zlp_count":  0,
+                                                                 "last_flush_isr_zlp_count":  0,
+                                                                 "last_flush_terminal_blocker_mask":  "0x00000000",
+                                                                 "last_flush_terminal_blocker_mask_code":  0,
+                                                                 "last_flush_terminal_blocker_names":  [
+
+                                                                                                       ],
+                                                                 "last_flush_classification":  "flush-attempt-active",
+                                                                 "boundary_classification":  "flush-blocked",
+                                                                 "usb_tx_boundary_completion_proven":  false
+                                                             },
+                                           "first_failure":  {
+                                                                 "code":  "0x54520010",
+                                                                 "name":  "FlushFailed",
+                                                                 "stage_mask":  "0x00007fff",
+                                                                 "detail":  2605
+                                                             },
+                                           "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\stage_vehicle",
+                                           "summary_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\stage_vehicle\\summary.json",
+                                           "summary_sha256":  "04A6B97160ACDFD4A17840B85C81F261ED91F55E00495D014D1E4B7B9DBC1ABA"
+                                       },
+                           "ground":  {
+                                          "proven":  true,
+                                          "role":  "ground",
+                                          "address":  "0x3fca2bf8",
+                                          "probe_usb_location":  "1-4.4",
+                                          "cleanup_proven":  true,
+                                          "target_may_be_halted":  false,
+                                          "native_processes_termination_proven":  true,
+                                          "boundary_classification":  "flush-completed",
+                                          "usb_tx_boundary_classification":  "flush-blocked",
+                                          "usb_tx_boundary_completion_proven":  false,
+                                          "extended_raw_replay":  {
+                                                                      "proven":  true,
+                                                                      "raw_read_count":  10,
+                                                                      "usb_boundary_classification":  "flush-blocked",
+                                                                      "usb_boundary_completion_proven":  false,
+                                                                      "interpretation":  "latched-events-not-continuous-live-hardware-state",
+                                                                      "first_heartbeat_failure_latched":  true,
+                                                                      "first_heartbeat_reason":  "PublicationRejected",
+                                                                      "first_heartbeat_failed_predicates":  [
+                                                                                                                "transport_published"
+                                                                                                            ],
+                                                                      "first_heartbeat_predicates":  {
+                                                                                                         "transport_published":  {
+                                                                                                                                     "observed":  true,
+                                                                                                                                     "value":  false
+                                                                                                                                 },
+                                                                                                         "endpoint_ready":  {
+                                                                                                                                "observed":  true,
+                                                                                                                                "value":  true
+                                                                                                                            },
+                                                                                                         "completed_within_deadline":  {
+                                                                                                                                           "observed":  true,
+                                                                                                                                           "value":  true
+                                                                                                                                       }
+                                                                                                     },
+                                                                      "restart_classification":  "restart-payload-published-host-pickup-not-proven",
+                                                                      "hwcdc_restart":  {
+                                                                                            "schema":  1,
+                                                                                            "size_bytes":  128,
+                                                                                            "sequence":  142,
+                                                                                            "flags":  "0x00000007",
+                                                                                            "state_semantics":  "latched-diagnostic-events-not-live-hardware-state",
+                                                                                            "initialized":  true,
+                                                                                            "first_blocked_latched":  true,
+                                                                                            "latest_restart_valid":  true,
+                                                                                            "event_count":  69,
+                                                                                            "blocked_count":  2,
+                                                                                            "restart_count":  67,
+                                                                                            "first":  {
+                                                                                                          "phase":  1,
+                                                                                                          "ordinal":  20,
+                                                                                                          "state":  {
+                                                                                                                        "flags":  "0x0000000e",
+                                                                                                                        "epoch":  1,
+                                                                                                                        "ring_pending_bytes":  31,
+                                                                                                                        "stash_pending_bytes":  0,
+                                                                                                                        "publish_generation":  26,
+                                                                                                                        "pickup_generation":  26,
+                                                                                                                        "raw_interrupt_status":  "0x00000102",
+                                                                                                                        "interrupt_enabled_mask":  "0x00000204"
+                                                                                                                    }
+                                                                                                      },
+                                                                                            "latest":  {
+                                                                                                           "origin":  1,
+                                                                                                           "outcome":  1,
+                                                                                                           "requested_bytes":  32,
+                                                                                                           "written_bytes":  32,
+                                                                                                           "ordinal":  69,
+                                                                                                           "state":  {
+                                                                                                                         "flags":  "0x00000016",
+                                                                                                                         "epoch":  1,
+                                                                                                                         "ring_pending_bytes":  0,
+                                                                                                                         "stash_pending_bytes":  0,
+                                                                                                                         "publish_generation":  98,
+                                                                                                                         "pickup_generation":  97,
+                                                                                                                         "raw_interrupt_status":  "0x00000102",
+                                                                                                                         "interrupt_enabled_mask":  "0x0000020c"
+                                                                                                                     }
+                                                                                                       }
+                                                                                        },
+                                                                      "ground_usb_commit":  {
+                                                                                                "schema":  1,
+                                                                                                "size_bytes":  128,
+                                                                                                "sequence":  4,
+                                                                                                "role":  "ground",
+                                                                                                "state_semantics":  "first-ground-usb-commit-failure-only-not-live-state",
+                                                                                                "failure_latched":  true,
+                                                                                                "reason":  1,
+                                                                                                "reason_name":  "PublicationRejected",
+                                                                                                "observed_mask":  7,
+                                                                                                "true_mask":  6,
+                                                                                                "source_line":  3373,
+                                                                                                "token":  1,
+                                                                                                "expected_epoch":  1,
+                                                                                                "observed_epoch":  1,
+                                                                                                "values":  {
+                                                                                                               "commit_started_ms":  5559,
+                                                                                                               "flush_started_ms":  5559,
+                                                                                                               "completed_ms":  5665,
+                                                                                                               "deadline_ms":  5665,
+                                                                                                               "committed_base":  0,
+                                                                                                               "commit_goal":  21,
+                                                                                                               "bytes_committed":  21
+                                                                                                           },
+                                                                                                "expected_frame_bytes":  21,
+                                                                                                "accepted_frame_bytes":  21,
+                                                                                                "predicates":  {
+                                                                                                                   "transport_published":  {
+                                                                                                                                               "observed":  true,
+                                                                                                                                               "value":  false
+                                                                                                                                           },
+                                                                                                                   "endpoint_ready":  {
+                                                                                                                                          "observed":  true,
+                                                                                                                                          "value":  true
+                                                                                                                                      },
+                                                                                                                   "completed_within_deadline":  {
+                                                                                                                                                     "observed":  true,
+                                                                                                                                                     "value":  true
+                                                                                                                                                 }
+                                                                                                               }
+                                                                                            },
+                                                                      "first_usb_failure":  {
+                                                                                                "schema":  "vc-lora-r19-first-usb-failure-decoded-v1",
+                                                                                                "result":  "PASS",
+                                                                                                "mode":  "offline-only",
+                                                                                                "hardware_interaction":  false,
+                                                                                                "raw_size_bytes":  384,
+                                                                                                "raw_sha256":  "BD535C4B1C8942810431D47D1617EAC69AAFA9FED96D7B452811ACB9AC0EF0C5",
+                                                                                                "sequence":  4,
+                                                                                                "record_schema":  1,
+                                                                                                "role":  "ground",
+                                                                                                "build_fingerprint":  [
+                                                                                                                          1378957636,
+                                                                                                                          1398032177,
+                                                                                                                          842019382,
+                                                                                                                          825241651
+                                                                                                                      ],
+                                                                                                "boot_instance":  [
+                                                                                                                      4057810195,
+                                                                                                                      2537125389,
+                                                                                                                      3464760968,
+                                                                                                                      3180632634
+                                                                                                                  ],
+                                                                                                "failure_latched":  true,
+                                                                                                "clock_sync":  {
+                                                                                                                   "observed":  false,
+                                                                                                                   "sync_count":  0,
+                                                                                                                   "nonce":  "0",
+                                                                                                                   "device_us":  "0"
+                                                                                                               },
+                                                                                                "first_failure":  {
+                                                                                                                      "reason":  1,
+                                                                                                                      "source_line":  3377,
+                                                                                                                      "token":  1,
+                                                                                                                      "attempt_id":  1,
+                                                                                                                      "wrapper_flags":  13,
+                                                                                                                      "api_called":  true,
+                                                                                                                      "raw_return":  false,
+                                                                                                                      "budget_ms":  106,
+                                                                                                                      "expected_epoch":  1,
+                                                                                                                      "observed_epoch":  1,
+                                                                                                                      "started_us":  "5559642",
+                                                                                                                      "finished_us":  "5665880",
+                                                                                                                      "deadline_us":  "5665000",
+                                                                                                                      "failure_observed_us":  "5665917",
+                                                                                                                      "elapsed_us":  "106238",
+                                                                                                                      "expected_frame_bytes":  21,
+                                                                                                                      "accepted_frame_bytes":  21,
+                                                                                                                      "sdk":  {
+                                                                                                                                  "schema":  1,
+                                                                                                                                  "validity_flags":  127,
+                                                                                                                                  "transaction_token":  1,
+                                                                                                                                  "attempt_id":  1,
+                                                                                                                                  "terminal_reason":  5,
+                                                                                                                                  "timeout_ms":  106,
+                                                                                                                                  "expected_loss_epoch":  1,
+                                                                                                                                  "started_ms":  5559,
+                                                                                                                                  "finished_ms":  5665,
+                                                                                                                                  "lock_wait_ms":  0,
+                                                                                                                                  "elapsed_ms":  106,
+                                                                                                                                  "raw_return":  0,
+                                                                                                                                  "state_flags":  22,
+                                                                                                                                  "observed_loss_epoch":  1,
+                                                                                                                                  "ring_pending_bytes":  0,
+                                                                                                                                  "stash_pending_bytes":  0,
+                                                                                                                                  "publish_generation":  3,
+                                                                                                                                  "pickup_generation":  2,
+                                                                                                                                  "raw_interrupt_status":  258,
+                                                                                                                                  "interrupt_enable_mask":  524,
+                                                                                                                                  "flush_blocker_mask":  24,
+                                                                                                                                  "snapshot_started_ms":  5665,
+                                                                                                                                  "snapshot_finished_ms":  5665,
+                                                                                                                                  "snapshot_duration_us":  8,
+                                                                                                                                  "snapshot_observed":  true,
+                                                                                                                                  "lock_acquired":  true,
+                                                                                                                                  "terminal_name":  "LoopTimeout"
+                                                                                                                              }
+                                                                                                                  },
+                                                                                                "acceptance":  "NOT_EVALUATED"
+                                                                                            },
+                                                                      "first_usb_failure_pc_time_relation":  {
+                                                                                                                 "classification":  "UNKNOWN",
+                                                                                                                 "reason":  "No matched same-boot nonce exchange, uninterrupted clock continuity and guaranteed error bound supplied.",
+                                                                                                                 "inferred_from_utc_or_elapsed_time":  false,
+                                                                                                                 "semantics":  "failure-decision-sample-not-physical-fault-onset"
+                                                                                                             },
+                                                                      "record_acquisition_proves_usb_success":  false
+                                                                  },
+                                          "validation_error":  "",
+                                          "endpoint_fifo":  {
+                                                                "active_writer":  0,
+                                                                "sequence":  30358,
+                                                                "magic":  "0x48313946",
+                                                                "schema":  2,
+                                                                "state_semantics":  "last-committed-diagnostic-event-not-live-hardware-state",
+                                                                "flags":  {
+                                                                              "mask":  "0x00002417",
+                                                                              "names":  [
+                                                                                            "Initialized",
+                                                                                            "ObservationActive",
+                                                                                            "Connected",
+                                                                                            "PayloadInFlight",
+                                                                                            "FlushActive",
+                                                                                            "PayloadFlushPending"
+                                                                                        ],
+                                                                              "initialized":  true,
+                                                                              "observation_active":  true,
+                                                                              "diagnostic_observation_window_started":  true,
+                                                                              "fifo_write_attempt_observed":  true,
+                                                                              "positive_fifo_write_observed":  true,
+                                                                              "wr_done_observed":  true,
+                                                                              "payload_pickup_observed":  true,
+                                                                              "connected":  true,
+                                                                              "fifo_writable":  false,
+                                                                              "payload_in_flight":  true,
+                                                                              "fifo_quarantined":  false,
+                                                                              "reset_pending":  false,
+                                                                              "bootstrap_fence":  false,
+                                                                              "bootstrap_aborted":  false,
+                                                                              "debug_writer_active":  false,
+                                                                              "last_event_bus_reset":  false,
+                                                                              "flush_active":  true,
+                                                                              "payload_publish_pending":  false,
+                                                                              "payload_publish_aborted":  false,
+                                                                              "payload_flush_pending":  true
+                                                                          },
+                                                                "tx_loss_epoch":  1,
+                                                                "counters":  {
+                                                                                 "fifo_write_attempt":  98,
+                                                                                 "fifo_write_bytes":  2762,
+                                                                                 "fifo_zero_write":  0,
+                                                                                 "wr_done":  98,
+                                                                                 "in_empty_irq":  98,
+                                                                                 "payload_in_empty":  97,
+                                                                                 "bus_reset":  0,
+                                                                                 "flush_attempt":  188,
+                                                                                 "flush_success":  44,
+                                                                                 "flush_timeout":  143,
+                                                                                 "flush_abort_inferred":  0,
+                                                                                 "zlp_flush":  0
+                                                                             },
+                                                                "last_fifo_write_size":  32,
+                                                                "generations":  {
+                                                                                    "publish":  98,
+                                                                                    "pickup":  97,
+                                                                                    "relationship":  "publish-is-one-ahead-modulo-uint32"
+                                                                                },
+                                                                "pending_bytes":  {
+                                                                                      "ring":  31,
+                                                                                      "stash":  0
+                                                                                  },
+                                                                "last_interrupt_status":  "0x00000000",
+                                                                "flush_blockers":  {
+                                                                                       "mask":  "0x0000001c",
+                                                                                       "names":  [
+                                                                                                     "SoftwarePending",
+                                                                                                     "FifoNotWritable",
+                                                                                                     "PayloadPickupPending"
+                                                                                                 ]
+                                                                                   },
+                                                                "last_flush_outcome":  "Active",
+                                                                "last_flush_outcome_code":  1,
+                                                                "last_flush_task_zlp_count":  0,
+                                                                "last_flush_isr_zlp_count":  0,
+                                                                "last_flush_terminal_blocker_mask":  "0x00000000",
+                                                                "last_flush_terminal_blocker_mask_code":  0,
+                                                                "last_flush_terminal_blocker_names":  [
+
+                                                                                                      ],
+                                                                "last_flush_classification":  "flush-attempt-active",
+                                                                "boundary_classification":  "flush-blocked",
+                                                                "usb_tx_boundary_completion_proven":  false
+                                                            },
+                                          "first_failure":  {
+                                                                "code":  "0x5452001c",
+                                                                "name":  "GroundBoundaryFlushFailed",
+                                                                "stage_mask":  "0x00007fff",
+                                                                "detail":  6166
+                                                            },
+                                          "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\stage_ground",
+                                          "summary_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261020T223348550Z-ccb3f550\\stage_ground\\summary.json",
+                                          "summary_sha256":  "B7358617F81A576263ACB4BDED2EB580B941EBA929577A92C85B24B28C385C8E"
+                                      }
+                       },
+    "stage_read_policy":  {
+                              "order":  [
+                                            "vehicle",
+                                            "ground"
+                                        ],
+                              "simultaneous":  false,
+                              "stage_mask_monotonic":  true,
+                              "first_failure_latched":  true,
+                              "authoritative_cause_fields":  [
+                                                                 "first_failure.code",
+                                                                 "first_failure.name",
+                                                                 "first_failure.stage_mask",
+                                                                 "first_failure.detail",
+                                                                 "extended_raw_replay.first_usb_failure.first_failure",
+                                                                 "extended_raw_replay.first_usb_failure.clock_sync"
+                                                             ],
+                              "limitation":  "The two roles are halted and read sequentially. Ground may advance after the Vehicle snapshot; stage masks are causal lower bounds, and the latched first_failure fields are authoritative."
+                          },
+    "diagnostic_outcomes":  {
+                                "record_acquisition_result":  "PASS",
+                                "usb_boundary_observation_result":  "INCOMPLETE_AT_RECORDED_BOUNDARY",
+                                "usb_observation_is_continuous_live_hardware_state":  false,
+                                "usb_observation_proves_windows_cdc_consumption":  false,
+                                "first_usb_failure":  {
+                                                          "vehicle":  {
+                                                                          "record_acquisition":  "PROVEN",
+                                                                          "first_failure_observation":  "NOT_LATCHED",
+                                                                          "wait_reason":  "NOT_OBSERVED",
+                                                                          "record":  {
+                                                                                         "schema":  "vc-lora-r19-first-usb-failure-decoded-v1",
+                                                                                         "result":  "PASS",
+                                                                                         "mode":  "offline-only",
+                                                                                         "hardware_interaction":  false,
+                                                                                         "raw_size_bytes":  384,
+                                                                                         "raw_sha256":  "E822F186D046C7EB4ACA2BB18096C275BB4008DA5F9CB86C097356FF31AFC235",
+                                                                                         "sequence":  2,
+                                                                                         "record_schema":  1,
+                                                                                         "role":  "vehicle",
+                                                                                         "build_fingerprint":  [
+                                                                                                                   1378957636,
+                                                                                                                   1398032177,
+                                                                                                                   842019382,
+                                                                                                                   825241651
+                                                                                                               ],
+                                                                                         "boot_instance":  [
+                                                                                                               1629685871,
+                                                                                                               2720444753,
+                                                                                                               3270522514,
+                                                                                                               661597833
+                                                                                                           ],
+                                                                                         "failure_latched":  false,
+                                                                                         "clock_sync":  {
+                                                                                                            "observed":  false,
+                                                                                                            "sync_count":  0,
+                                                                                                            "nonce":  "0",
+                                                                                                            "device_us":  "0"
+                                                                                                        },
+                                                                                         "first_failure":  {
+                                                                                                               "reason":  0,
+                                                                                                               "source_line":  0,
+                                                                                                               "token":  0,
+                                                                                                               "attempt_id":  0,
+                                                                                                               "wrapper_flags":  0,
+                                                                                                               "api_called":  false,
+                                                                                                               "raw_return":  null,
+                                                                                                               "budget_ms":  0,
+                                                                                                               "expected_epoch":  0,
+                                                                                                               "observed_epoch":  0,
+                                                                                                               "started_us":  "0",
+                                                                                                               "finished_us":  "0",
+                                                                                                               "deadline_us":  "0",
+                                                                                                               "failure_observed_us":  "0",
+                                                                                                               "elapsed_us":  "0",
+                                                                                                               "expected_frame_bytes":  0,
+                                                                                                               "accepted_frame_bytes":  0,
+                                                                                                               "sdk":  {
+                                                                                                                           "schema":  0,
+                                                                                                                           "validity_flags":  0,
+                                                                                                                           "transaction_token":  0,
+                                                                                                                           "attempt_id":  0,
+                                                                                                                           "terminal_reason":  0,
+                                                                                                                           "timeout_ms":  0,
+                                                                                                                           "expected_loss_epoch":  0,
+                                                                                                                           "started_ms":  0,
+                                                                                                                           "finished_ms":  0,
+                                                                                                                           "lock_wait_ms":  0,
+                                                                                                                           "elapsed_ms":  0,
+                                                                                                                           "raw_return":  0,
+                                                                                                                           "state_flags":  0,
+                                                                                                                           "observed_loss_epoch":  0,
+                                                                                                                           "ring_pending_bytes":  0,
+                                                                                                                           "stash_pending_bytes":  0,
+                                                                                                                           "publish_generation":  0,
+                                                                                                                           "pickup_generation":  0,
+                                                                                                                           "raw_interrupt_status":  0,
+                                                                                                                           "interrupt_enable_mask":  0,
+                                                                                                                           "flush_blocker_mask":  0,
+                                                                                                                           "snapshot_started_ms":  0,
+                                                                                                                           "snapshot_finished_ms":  0,
+                                                                                                                           "snapshot_duration_us":  0,
+                                                                                                                           "snapshot_observed":  false,
+                                                                                                                           "lock_acquired":  false,
+                                                                                                                           "terminal_name":  "NotObserved"
+                                                                                                                       }
+                                                                                                           },
+                                                                                         "acceptance":  "NOT_EVALUATED"
+                                                                                     },
+                                                                          "pc_time_relation":  "UNKNOWN",
+                                                                          "pc_time_reason":  "No matched same-boot nonce exchange, uninterrupted clock continuity and guaranteed error bound supplied.",
+                                                                          "acquisition_proves_usb_success":  false,
+                                                                          "acquisition_proves_pc_consumption":  false,
+                                                                          "observation_is_continuous_state":  false,
+                                                                          "semantics":  "Immutable first-failure decision and terminal-boundary SDK snapshot; not physical fault onset or live host consumption."
+                                                                      },
+                                                          "ground":  {
+                                                                         "record_acquisition":  "PROVEN",
+                                                                         "first_failure_observation":  "LATCHED",
+                                                                         "wait_reason":  "LoopTimeout",
+                                                                         "record":  {
+                                                                                        "schema":  "vc-lora-r19-first-usb-failure-decoded-v1",
+                                                                                        "result":  "PASS",
+                                                                                        "mode":  "offline-only",
+                                                                                        "hardware_interaction":  false,
+                                                                                        "raw_size_bytes":  384,
+                                                                                        "raw_sha256":  "BD535C4B1C8942810431D47D1617EAC69AAFA9FED96D7B452811ACB9AC0EF0C5",
+                                                                                        "sequence":  4,
+                                                                                        "record_schema":  1,
+                                                                                        "role":  "ground",
+                                                                                        "build_fingerprint":  [
+                                                                                                                  1378957636,
+                                                                                                                  1398032177,
+                                                                                                                  842019382,
+                                                                                                                  825241651
+                                                                                                              ],
+                                                                                        "boot_instance":  [
+                                                                                                              4057810195,
+                                                                                                              2537125389,
+                                                                                                              3464760968,
+                                                                                                              3180632634
+                                                                                                          ],
+                                                                                        "failure_latched":  true,
+                                                                                        "clock_sync":  {
+                                                                                                           "observed":  false,
+                                                                                                           "sync_count":  0,
+                                                                                                           "nonce":  "0",
+                                                                                                           "device_us":  "0"
+                                                                                                       },
+                                                                                        "first_failure":  {
+                                                                                                              "reason":  1,
+                                                                                                              "source_line":  3377,
+                                                                                                              "token":  1,
+                                                                                                              "attempt_id":  1,
+                                                                                                              "wrapper_flags":  13,
+                                                                                                              "api_called":  true,
+                                                                                                              "raw_return":  false,
+                                                                                                              "budget_ms":  106,
+                                                                                                              "expected_epoch":  1,
+                                                                                                              "observed_epoch":  1,
+                                                                                                              "started_us":  "5559642",
+                                                                                                              "finished_us":  "5665880",
+                                                                                                              "deadline_us":  "5665000",
+                                                                                                              "failure_observed_us":  "5665917",
+                                                                                                              "elapsed_us":  "106238",
+                                                                                                              "expected_frame_bytes":  21,
+                                                                                                              "accepted_frame_bytes":  21,
+                                                                                                              "sdk":  {
+                                                                                                                          "schema":  1,
+                                                                                                                          "validity_flags":  127,
+                                                                                                                          "transaction_token":  1,
+                                                                                                                          "attempt_id":  1,
+                                                                                                                          "terminal_reason":  5,
+                                                                                                                          "timeout_ms":  106,
+                                                                                                                          "expected_loss_epoch":  1,
+                                                                                                                          "started_ms":  5559,
+                                                                                                                          "finished_ms":  5665,
+                                                                                                                          "lock_wait_ms":  0,
+                                                                                                                          "elapsed_ms":  106,
+                                                                                                                          "raw_return":  0,
+                                                                                                                          "state_flags":  22,
+                                                                                                                          "observed_loss_epoch":  1,
+                                                                                                                          "ring_pending_bytes":  0,
+                                                                                                                          "stash_pending_bytes":  0,
+                                                                                                                          "publish_generation":  3,
+                                                                                                                          "pickup_generation":  2,
+                                                                                                                          "raw_interrupt_status":  258,
+                                                                                                                          "interrupt_enable_mask":  524,
+                                                                                                                          "flush_blocker_mask":  24,
+                                                                                                                          "snapshot_started_ms":  5665,
+                                                                                                                          "snapshot_finished_ms":  5665,
+                                                                                                                          "snapshot_duration_us":  8,
+                                                                                                                          "snapshot_observed":  true,
+                                                                                                                          "lock_acquired":  true,
+                                                                                                                          "terminal_name":  "LoopTimeout"
+                                                                                                                      }
+                                                                                                          },
+                                                                                        "acceptance":  "NOT_EVALUATED"
+                                                                                    },
+                                                                         "pc_time_relation":  "UNKNOWN",
+                                                                         "pc_time_reason":  "No matched same-boot nonce exchange, uninterrupted clock continuity and guaranteed error bound supplied.",
+                                                                         "acquisition_proves_usb_success":  false,
+                                                                         "acquisition_proves_pc_consumption":  false,
+                                                                         "observation_is_continuous_state":  false,
+                                                                         "semantics":  "Immutable first-failure decision and terminal-boundary SDK snapshot; not physical fault onset or live host consumption."
+                                                                     }
+                                                      },
+                                "serial_ports_closed_before_jtag_read":  true
+                            },
+    "rollback":  {
+                     "attempted":  true,
+                     "proven":  true,
+                     "required_token":  "RESTORE_ACCEPTED_R18_AFTER_R19_HIL",
+                     "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261020T223348914Z-7bc5af10-rollback"
+                 },
+    "hardware_quiescence":  {
+                                "child_termination_proven":  true,
+                                "active_jtag_cleanup_proven":  true,
+                                "further_child_launch_blocked":  false,
+                                "rollback_skipped_due_unproven_child_termination":  false
+                            },
+    "power_off_required":  false
+}

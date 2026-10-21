@@ -1,0 +1,49 @@
+warning: in the working copy of 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\hil\E2E-MAV-CONNECTED-PASSIVE-RX-001\20261021T004656Z\before\CURRENT_WORKSPACE_AND_SPEC_R19.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\hil\E2E-MAV-CONNECTED-PASSIVE-RX-001\20261021T004656Z\after\CURRENT_WORKSPACE_AND_SPEC_R19.md', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\E2E-MAV-CONNECTED-PASSIVE-RX-001\\20261021T004656Z\\before\\CURRENT_WORKSPACE_AND_SPEC_R19.md" "b/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\E2E-MAV-CONNECTED-PASSIVE-RX-001\\20261021T004656Z\\after\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
+index 34acae4..0d2700f 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\E2E-MAV-CONNECTED-PASSIVE-RX-001\\20261021T004656Z\\before\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
++++ "b/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\E2E-MAV-CONNECTED-PASSIVE-RX-001\\20261021T004656Z\\after\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
+@@ -6,8 +6,9 @@
+ 
+ ## 結論
+ 
++- 最新の接続状態確認はSection 31.58である。外出中の利用者から検証依頼を受け、COM6を57600 bps・DTR/RTS falseで60秒間受信のみ観測した。COM3／COM6及び両USB-JTAG等のOS認識は正常だが、受信0 byte／送信0 byteで、現在の下り通信は確認できなかった。書込み・JTAG・reset・要求送信は行っていない。これはR19比較試験ではなく、機器上のfirmware hash・Pixhawk通電・RF・初回USB停止の原因も未確定である。
+ - 連続Readと機器側HostArmの土台はSection 31.55である。PC側の物理Read担当をCOM Openからcleanupまで単一の連続readerとし、identity確認後の担当切替えを廃止した。同節時点で全host343/343、include経路の限定修正後49/49、通常／診断Arduino4/4ビルドはPASS。最新のオフライン追加はSection 31.57を参照する。106 ms、UART／TDD／E220設定及び既存sealed候補は未変更。機器HostArmの診断source／codecは準備済みだが、能動live runnerとmode別candidate／flash bindingは未統合で、既存passive試験へは使用しない。
+-- 最新の実機結果はSection 31.56である。同じ候補 `20261020T123447347Z-b414028b` を1回評価し、40秒で各2,646 byte／完全診断42 frame（測定内40＋startup 2）、全parser異常0を取得した。連続native Readの最大間隔はVehicle 57.4314 ms／Ground 57.4311 msで100 ms以内だが、LIVE解析処理は303.612／268.557 msで未合格。Groundの初回21-byte製品Heartbeatは今回も106 msのLoopTimeout、ring／stash 0、publish 3／pickup 2で失敗した。最初のReadの初期bufferに既に完全R19Fが63 byteあったため、この失敗が後続の解析遅延だけで起きたとは説明できない。PC Open前後の数値時刻・物理host pollingとの因果は未確定。両機accepted R18へのdigest照合付き復旧はPASS、今回の1回許可は使用済み、追加実機試験はしていない。
++- 最新のR19診断版実機結果はSection 31.56である。同じ候補 `20261020T123447347Z-b414028b` を1回評価し、40秒で各2,646 byte／完全診断42 frame（測定内40＋startup 2）、全parser異常0を取得した。連続native Readの最大間隔はVehicle 57.4314 ms／Ground 57.4311 msで100 ms以内だが、LIVE解析処理は303.612／268.557 msで未合格。Groundの初回21-byte製品Heartbeatは今回も106 msのLoopTimeout、ring／stash 0、publish 3／pickup 2で失敗した。最初のReadの初期bufferに既に完全R19Fが63 byteあったため、この失敗が後続の解析遅延だけで起きたとは説明できない。PC Open前後の数値時刻・物理host pollingとの因果は未確定。両機accepted R18へのdigest照合付き復旧はPASS、今回の1回許可は使用済み、追加実機試験はしていない。
+ - Section 31.57では②の適応的混雑制御を`SPEC.md`の将来仕様`FUTURE-FLOW-001`へ分離し、①受信準備・③完了境界の切分け用offline workflow／判定器を追加した。実機runner／新しいmode別candidate／機器ARM記録は未統合で、現候補の書込みやCOM／JTAG操作は行っていない。既存実機データはUSB完了失敗を確認できる一方、受信準備との原因分類はUNKNOWN、RF／全パラメータはNOT_EVALUATEDのままとする。
+ - Section 31.48までのoffline準備は全host321/321・通常版／診断版ビルド・4記録の独立照合に合格済みである。Section 31.49では全16 rawの取得も成功したが、PC service gap及びUSB完了評価は未合格。932件30秒、Heartbeat最大2,500 ms及び製品Deploymentは未証明である。今回の実機一回限定許可は使用済みであり、追加試験はしていない。
+ - 最新のSection 31.43では、試験runnerの起動表示判定・timeout診断・初回処理負荷を修正し、cold boot後のR18単一PARAM実機試験に合格した。`SERIAL1_BAUD=57`の応答1件、要求→応答`5,297.170 ms`、Heartbeat最大`2,113.785 ms`、PC側pump最大`82.282 ms`、全parser／CRC／noise／partial／control leak 0である。前回の0 byteは再現しなかったが根本原因は未確定であり、今回の結果を全932件再取得又はR19高速受入へ拡張しない。
+@@ -4731,3 +4732,31 @@ USB物理故障やPC host pollingの原因を自動確定しない。
+ warning-freeとはしない。これらの新しいbuild出力はaccepted R18保存物やsealed R19候補へ置き換えていない。
+ 既存sealed R19候補の読取り専用verifierはPASS、canonical bridge／HWCDC／passive runnerのSHAは未変更。
+ 
++### 31.58 接続状態の無送信・受信専用確認（2026-10-21 JST）
++
++利用者は外出中で現地操作ができないが、機器を接続済みとして検証を依頼した。
++今回は新しい安全条件の現物確認を済ませたとは扱わず、既存の受信専用手順だけを1回実施した。
++前節の新しいR19 mode比較手順・機器記録が未統合であることは変わらない。
++
++記録: `runs/hil/E2E-MAV-CONNECTED-PASSIVE-RX-001/20261021T004656Z/summary.json`。
++
++- 実行前後でCOM3 Vehicle／COM6 Groundの既知PNP IDを確認した。
++  両機のUSB CDC、USB-JTAG、USB compositeの計6機能はOS上Status OK／ConfigManagerErrorCode 0。
++  これは機器applicationの実行やPixhawk・RF・実JTAG接続の健全性を証明しない。
++- `tools/hil_capture_serial.ps1`をCOM6、57600 bps、8N1、DTR/RTS falseで実行。
++  `TransmitFile`なし、COM3は開かず、payload送信・buffer破棄・reset要求・書込み・JTAG操作は行っていない。
++- 2026-10-21 09:46:58～09:47:58 JST、計60.011493秒の受信0 byte／送信0 byte。
++  完全MAVLink／Heartbeatも0件。終了処理のClose／Disposeを経てprocessはexit 0。
++- 元analyzerのself-testはPASS。rawとcapture footer／metadataのbyte数を照合した。
++  0 frameでCRC/noise 0やHeartbeat最大間隔0と表示されても、通信品質PASSとはしない。
++  Heartbeat SLA／CRC品質／上り／RF到達／932件取得は今回未評価である。
++
++判定は`NO_DOWNLINK_OBSERVED_IN_CURRENT_CONNECTED_STATE`。
++COM6を開いて受信処理が完了したことまでは確認できたが、現在の下り通信の成立は確認できない。
++実機firmwareのhash読取りは行っておらず、最後にaccepted R18へ復旧した履歴だけから
++今回の0 byteをR19の再発又はR18の故障と断定しない。
++Pixhawkの通電・送出、E220、機器applicationの初期化、USB完了のどこで停止したかも未確定である。
++
++追加の書込み／CPU停止／電源操作は実施していない。新しいR19診断比較を行う前には、
++31.57の未統合記録・candidate／実行手順の準備と、対象・安全・復旧条件を改めてそろえる必要がある。
++

@@ -1,0 +1,17 @@
+Internal ctest changing into directory: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths
+Test project E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build-portable-paths
+    Start 23: UT-R19-HOST-READINESS-001
+1/3 Test #23: UT-R19-HOST-READINESS-001 .............   Passed    0.12 sec
+    Start 24: UT-R19-USB-CLOCK-SYNC-001
+2/3 Test #24: UT-R19-USB-CLOCK-SYNC-001 .............   Passed    0.05 sec
+    Start 25: UT-R19-FIRST-USB-FAILURE-RECORD-001
+3/3 Test #25: UT-R19-FIRST-USB-FAILURE-RECORD-001 ...   Passed    0.04 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Label Time Summary:
+diagnostic    =   0.21 sec*proc (3 tests)
+offline       =   0.21 sec*proc (3 tests)
+r19           =   0.21 sec*proc (3 tests)
+
+Total Test time (real) =   0.29 sec

@@ -1,0 +1,22 @@
+Open On-Chip Debugger v0.12.0-esp32-20260424 (2026-04-24-15:13)
+Licensed under GNU GPL v2
+For bug reports, read
+	http://openocd.org/doc/doxygen/bugs.html
+Info : esp_usb_jtag: VID set to 0x303a and PID to 0x1001
+Info : esp_usb_jtag: capabilities descriptor set to 0x2000
+adapter usb location: 1-4.4
+VC_LORA_JTAG_PREFLIGHT_POLICY=TAP_INIT_POSSIBLE_NO_TARGET_CONFIG_NO_CPU_HALT_NO_SYSTEM_RESET_COMMAND
+VC_LORA_JTAG_TRANSPORT_INIT_REQUESTED
+Info : esp_usb_jtag: serial (1C:DB:D4:5A:83:80)
+Info : esp_usb_jtag: Device found. Base speed 40000KHz, div range 1 to 255
+Info : clock speed 40000 kHz
+Warn : There are no enabled taps.  AUTO PROBING MIGHT NOT WORK!!
+Info : JTAG tap: auto0.tap tap/device found: 0x120034e5 (mfg: 0x272 (Tensilica), part: 0x2003, ver: 0x1)
+Info : JTAG tap: auto1.tap tap/device found: 0x120034e5 (mfg: 0x272 (Tensilica), part: 0x2003, ver: 0x1)
+Warn : AUTO auto0.tap - use "jtag newtap auto0 tap -irlen 5 -expected-id 0x120034e5"
+Warn : AUTO auto1.tap - use "jtag newtap auto1 tap -irlen 5 -expected-id 0x120034e5"
+VC_LORA_JTAG_TRANSPORT_INIT_COMPLETED
+VC_LORA_JTAG_OPEN_SERIAL=1C:DB:D4:5A:83:80
+VC_LORA_JTAG_OPEN_LOCATION=1-4.4
+VC_LORA_JTAG_PREFLIGHT_OPEN
+shutdown command invoked

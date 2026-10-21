@@ -1,0 +1,21 @@
+{
+  "schema": "vc-lora-offline-readiness-and-history-scope-v1",
+  "created_utc": "2026-10-21 01:23:27 UTC",
+  "request": "外出中は診断統合・オフライン検証を進める提案の検証依頼。今回の0 byteが新規症状か過去にもあったかを確認。",
+  "mode": "OFFLINE_VALIDATION_AND_EVIDENCE_AUDIT_ONLY",
+  "hardware_interaction": false,
+  "firmware_edited": false,
+  "authorized_work": [
+    "Re-run existing offline workflow and classifier regressions",
+    "Audit integration gaps against source and sealed package",
+    "Compare current passive0-byte evidence to prior recorded failures and recoveries"
+  ],
+  "not_authorized_or_not_needed": [
+    "New live experiments",
+    "COM open or payload writes",
+    "JTAG/CPU halt",
+    "Firmware flash/reset/power operations",
+    "Treat an old one-cycle authorization as current",
+    "Treat identical symptoms as proven identical causes"
+  ]
+}

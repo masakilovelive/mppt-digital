@@ -1,0 +1,38 @@
+warning: in the working copy of 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-STARTUP-LAYER-CUT-OFFLINE-001\20261021T001127260Z\before\SPEC.md', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-STARTUP-LAYER-CUT-OFFLINE-001\20261021T001127260Z\after\SPEC.md', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-STARTUP-LAYER-CUT-OFFLINE-001\\20261021T001127260Z\\before\\SPEC.md" "b/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-STARTUP-LAYER-CUT-OFFLINE-001\\20261021T001127260Z\\after\\SPEC.md"
+index f345ef0..3b1c4d4 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-STARTUP-LAYER-CUT-OFFLINE-001\\20261021T001127260Z\\before\\SPEC.md"
++++ "b/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-STARTUP-LAYER-CUT-OFFLINE-001\\20261021T001127260Z\\after\\SPEC.md"
+@@ -109,6 +109,31 @@ E220からローカルUARTへの受信転送は両側とも全区間で継続す
+ - `msgid=194`を含むその他の低優先度フレームはフレーム全体を破棄し、
+   途中バイトを無線へ混入させない。
+ 
++## 将来仕様 FUTURE-FLOW-001：混雑追従・長距離リンク変動への対応
++
++状態: 将来対応。今回の初回USB送信完了失敗の修正・実機受入対象には含めない。
++既存の固定バッファ、優先度、AUXによる局所credit管理を廃止・未実装扱いするものではない。
++
++目的は、距離そのものではなく、実効帯域の低下・変動、再送、一時的な送信停止、
++入力burstによる滞留を有界に処理することである。有限バッファの増量だけで、
++持続的な入力速度超過を解決したとはみなさない。
++
++将来の統合要件:
++
++- 固定容量・完全フレーム単位の受理を維持し、容量、最大使用量、drop、最古frame ageを記録する。
++- 高水位で通常テレメトリ／bulk投入を抑制し、低水位で再開する。判定の往復による振動を避ける。
++  閾値、制御対象、許容滞留時間は実測帯域と最大burstから算定し、未測定の数値を固定しない。
++- Heartbeatとコマンド応答には独立した優先枠・deadlineを維持し、大量パラメータで飢餓させない。
++- パラメータ／コマンドの欠落は成功扱いせず、相関ID・index・件数を使って明示的に検出・回復する。
++- 抑制・再開・再送は受理済みpartial suffixを保持する。USBへ受理した全フレームを無条件に再送しない。
++- AUXによる局所buffer空きと、相手へのRF到達・最終tail・GCS取得完了は別の証拠として扱う。
++- 容量は入力burstと許容停止時間に加え、frame descriptorとdeadline制約を含めて評価する。
++- 受入は帯域低下・送信停止・入力burst・混雑回復を注入し、優先通信の期限、欠落会計、
++  永久待ちなし、回復後の順序・完全性を同時に評価する。机上容量計算だけでは合格しない。
++
++今回の初回USB失敗記録はring／stashとも0のため、buffer増量が直接の原因修正である根拠はない。
++106 ms、UART／TDD／E220設定、現行固定容量は本項の追記によって変更しない。
++
+ ## ピン仕様
+ 
+ ### XIAO ESP32-S3 と E220

@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "test_id": "REPLACE_WITH_TEST_ID",
+  "result": "BLOCKED",
+  "coverage": "PARTIAL",
+  "operator": null,
+  "started_utc": null,
+  "finished_utc": null,
+  "hardware": {
+    "vehicle_board_id": null,
+    "ground_board_id": null,
+    "fqbn": "esp32:esp32:XIAO_ESP32S3",
+    "arduino_core_version": null,
+    "pixhawk_model": null,
+    "ardupilot_version": null,
+    "telem_port": null,
+    "antenna": "915-928 MHz",
+    "distance_m": null,
+    "vehicle_supply_v": null,
+    "ground_supply_v": null
+  },
+  "firmware": {
+    "vehicle_sha256": null,
+    "ground_sha256": null,
+    "source_manifest_sha256": null,
+    "diagnostic_build": false
+  },
+  "e220_profile": {
+    "expected_hex": "0000E5C346000000",
+    "vehicle_readback_hex": null,
+    "ground_readback_hex": null
+  },
+  "safety": {
+    "power_off_wiring_checked": false,
+    "antennas_connected_before_power": false,
+    "logic_is_3v3": false,
+    "grounds_checked": false,
+    "pixhawk_disarmed": false,
+    "actuators_isolated": false,
+    "parameter_backup_path": null
+  },
+  "evidence": {
+    "captures": [],
+    "logic_analyzer_files": [],
+    "mission_planner_tlogs": [],
+    "wiring_photos": [],
+    "sha256_manifest": null
+  },
+  "host_reference": {
+    "summary_path": null,
+    "result": null,
+    "key_metrics": {}
+  },
+  "measured": {},
+  "criteria": [],
+  "first_mismatch": null,
+  "reproduction": null,
+  "notes": "Do not set result=PASS until every required endpoint and waveform is present."
+}

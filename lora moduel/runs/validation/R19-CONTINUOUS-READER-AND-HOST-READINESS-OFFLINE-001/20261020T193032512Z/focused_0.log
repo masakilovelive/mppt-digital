@@ -1,0 +1,15 @@
+PASS real_wrappers_quarantine_until_both_identities_pass
+PASS identity_mismatch_cleanup_preserves_raw_without_parsing
+PASS physical_initial_watermark_splits_one_native_batch_without_fabricated_reads
+PASS unarmed_stop_and_cleanup_terminate_without_read_or_close_fallback
+PASS handover_gap_over_100ms_remains_a_fairness_failure
+PASS fallback_close_join_success_never_allows_normal_replay_even_on_retry
+PASS failed_join_forbids_handover_and_cleanup_reports_failure
+PASS primary_failure_survives_multiple_cleanup_failures
+PASS startup_only_diagnostics_cannot_satisfy_measurement_window
+PASS measurement_gate_is_per_role_and_includes_exact_window_boundary
+MEASUREMENT {"case":"quarantine","role":"vehicle","open_to_first_read_us":2070.3,"scope":"offline fake source only"}
+MEASUREMENT {"case":"quarantine","role":"ground","open_to_first_read_us":66.2,"scope":"offline fake source only"}
+MEASUREMENT {"case":"injected_handover_gap","maximum_service_gap_us":162867,"limit_us":100000,"expected_fairness":"FAIL","scope":"offline injected delay only"}
+Startup integration offline tests: PASS=10 FAIL=0; no COM, PnP, process inventory, network or hardware accessed.
+Measurements use fake in-memory serial sources; they do not establish physical USB latency, MCU deadline compliance, or product acceptance.

@@ -1,0 +1,11 @@
+{
+  "result": "PASS",
+  "hardware_interaction": false,
+  "accepted_reference": "runs/validation/R19-FIRST-FAIL-LIVE-ACQUISITION-INTEGRATION-OFFLINE-001/20261020T121141002Z/accepted_r18_before.json",
+  "accepted_files": 8,
+  "sealed_candidate": "runs/candidates/R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001/20261020T123447347Z-b414028b",
+  "candidate_files": 147,
+  "candidate_manifest_sha256": "D0E8C5DAF27BA1131946FF3D0FA14389465E73E4F5E48C36AE672713F31920F2",
+  "sdk_canonical_sha256": "D1B890A6C37587BF7775E4F9DDB7791C91085F9C2BC4D95CB9EC3C5809B24DCA",
+  "errors": []
+}

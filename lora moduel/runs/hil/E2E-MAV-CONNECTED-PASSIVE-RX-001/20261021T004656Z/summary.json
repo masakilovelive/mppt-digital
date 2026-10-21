@@ -1,0 +1,105 @@
+{
+  "schema": "vc-lora-connected-passive-receive-result-v1",
+  "test_id": "E2E-MAV-CONNECTED-PASSIVE-RX-001",
+  "result": "NO_DOWNLINK_OBSERVED_IN_CURRENT_CONNECTED_STATE",
+  "scope": "One receive-only observation, no firmware identification/readback, no R19 mode comparison, no cold-boot test.",
+  "user_authorized_verification": true,
+  "hardware_interaction": true,
+  "port_opened": "COM6",
+  "com3_opened": false,
+  "baud": 57600,
+  "dtr_enabled": false,
+  "rts_enabled": false,
+  "duration_us": 60011493,
+  "started_utc": "2026-10-21T00:46:58.1141948Z",
+  "finished_utc": "2026-10-21T00:47:58.2527853Z",
+  "capture_process_exit_code": 0,
+  "capture_completed": true,
+  "serial_cleanup": "Close and Dispose completed through finally; capture process exited normally.",
+  "rx_bytes": 0,
+  "tx_bytes": 0,
+  "valid_mavlink_frames": 0,
+  "heartbeat_count": 0,
+  "heartbeat_max_gap_ms": null,
+  "heartbeat_sla": "NOT_EVALUATED_NO_FRAMES",
+  "crc_integrity": "NOT_EVALUATED_NO_FRAMES",
+  "uplink": "NOT_EVALUATED_NO_PAYLOAD_SENT",
+  "rf_delivery": "NOT_EVALUATED_NO_LOCAL_RF_OBSERVABILITY",
+  "all_932_parameters": "NOT_EVALUATED",
+  "usb_enumeration": {
+    "before_ports": [
+      "COM3",
+      "COM6"
+    ],
+    "after_ports": [
+      "COM3",
+      "COM6"
+    ],
+    "all_six_xiao_usb_functions_os_status": "OK",
+    "all_six_config_manager_error_codes": 0,
+    "meaning": "OS enumeration only; not proof of MCU application, RF, Pixhawk power or physical JTAG accessibility."
+  },
+  "actions_not_performed": [
+    "Firmware flash",
+    "JTAG connection or CPU halt",
+    "Reset or power cycling",
+    "Flight arming commands",
+    "Parameter read requests",
+    "Parameter writes",
+    "COM3 opening"
+  ],
+  "fresh_physical_safety_attestation_claimed": false,
+  "current_on_device_firmware_hash_verified": false,
+  "last_known_firmware": "accepted R18 restored in previous R19 experiment, not re-verified by this observation",
+  "unchanged": [
+    "Product 106 ms contract",
+    "Firmware source",
+    "Existing sealed candidate",
+    "Accepted R18 artifacts",
+    "UART/TDD/E220 settings"
+  ],
+  "interpretation": [
+    "COM6 opened successfully and the receive-only capture completed, but no bytes were observed in 60.011493 seconds.",
+    "No-frame CRC/noise counters of zero and analyzer max_gap_ms=0 are empty-set defaults, not PASS.",
+    "This observation does not establish a R19 regression or isolate USB versus RF, Pixhawk power, application state or initialization.",
+    "Physical conditions cannot be inspected while the user is away. Active R19 A/B/C comparisons also require the previously documented mode-specific seals, device ARM/first-enqueue record and live integration."
+  ],
+  "root_cause_proven": false,
+  "acceptance_eligible": false,
+  "deployment_authorized": false,
+  "tools": {
+    "capture": "tools/hil_capture_serial.ps1",
+    "analyzer": "tools/hil_analyze_capture.py",
+    "analyzer_self_test": "PASS",
+    "capture_sha256": "3E7633E305FB253C15735A9B11479ED0A7BF2B8E0397D2E2EE81828D8BF7BC59",
+    "analyzer_sha256": "5D62CC0F7982F45DEDA75E24E94BC2E7D8E53446C60F27183BD9FD2D75952839",
+    "tool_sources_edited": false
+  },
+  "evidence_files": [
+    {
+      "path": "ground/analysis.json",
+      "bytes": 3320,
+      "sha256": "B525461C535C40D554E1FFF02174C8AB6E13445D6BACE2CD5D03BECEA9F32289"
+    },
+    {
+      "path": "ground/capture_metadata.json",
+      "bytes": 1040,
+      "sha256": "B7D242A0C56D3814A794E54935E9CE1C50D12B5D63466A2D89A051FDEF06E409"
+    },
+    {
+      "path": "ground/capture.jsonl",
+      "bytes": 377,
+      "sha256": "B31F943503123C0DE7CDBE6248D51165600AB0C0E95777A27EBC786476A701AD"
+    },
+    {
+      "path": "ground/rx.bin",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "ground/tx.bin",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+diff --git "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\CURRENT_WORKSPACE_AND_SPEC_R19.md" b/CURRENT_WORKSPACE_AND_SPEC_R19.md
+index 7241130..0752bc2 100644
+--- "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\CURRENT_WORKSPACE_AND_SPEC_R19.md"
++++ b/CURRENT_WORKSPACE_AND_SPEC_R19.md
+@@ -4488,3 +4488,69 @@ nonce往復そのものの影響を分離する。今回これらの修正・追
+ 106 ms延長、RF高速化、932件30秒、Heartbeat最大2,500 ms、受入／Deploymentへの昇格は行わない。
+ 今回の1回許可は使用済みで、両機はR18へ復旧済みである。
+ 
++### 31.55 連続readerと診断用HostArmのオフライン実装（2026-10-21 JST）
++
++ユーザー提供の追加提案を受け、まず106 msを維持したままPC側の読取り所有権の切替えを除去した。
++記録・差分・最終検証結果の入口は
++`runs/validation/R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001/20261020T193032512Z/summary.json`。
++本節はオフライン実装の記録であり、31.54以降の新たな実機試験結果ではない。
++
++#### 今回実装した内容
++
++- `tools/r19_continuous_reader.cs`の単一native workerが、Open直後から終了処理まで物理Readを所有する。
++  identity確認はphase記録だけとし、Stop／Join／主処理へのRead移譲を行わない。
++- 主処理は固定上限のbyte予算で受信済み部分を取り出す。元のnative batch・QPC・初期BytesToRead境界を保持し、
++  全native rawは解析カーソルと独立して保存する。identity不一致・例外・終了失敗時にも受信済みprefixを保存する。
++- native Read間隔と主処理の解析公平性を別々に100 ms基準で評価する。
++  最大間隔の前後時刻と最初の解析service時刻を保存し、最後のLIVE区間も検査する。
++  既存の上限500 msの同一frame末尾drainはLIVE解析公平性と区別し、後続frameを消費しない。
++  未解析suffixは全rawへ保存するが、成功扱いしない。
++- 診断専用`VC_LORA_R19_USB_READINESS_MODE`を追加した。既定0は従来動作。
++  1はSyncOnlyで製品USB admissionを変更しない。2はGroundの初期製品USB enqueueを抑止し、
++  nonce時計応答→READY受信→明示ARMで解除する。通常製品版で非ゼロを指定するとコンパイル拒否する。
++- ARMはrole／boot／reader session／nonce／実USB loss epoch／返信時刻を照合する。
++  READYは排他的writerで完了確認する。受理済み21 byteをRejected後に全量再送することはない。
++  ARM未到着の取得期限はsetup起点120秒で、nonce到着によって延長しない。
++  待機中の古いHeartbeatの期限切れとbacklog回復は維持する。
++- PC側の純粋なwire codecとC++側で、同じ54-byte payload／66-byte frameの黄金ベクターを照合する。
++  この予約namespaceは診断専用で、Pixhawk／RF／GCSへ転送しない。
++
++#### 証明範囲と残作業
++
++メモリ内の試験では、10,000 byteを37-byteのnative Readと63-byteの配信予算で欠落・重複なく扱えた。
++これは実USBの速度・106 ms完了・932件30秒・Heartbeat最大2,500 msの証明ではない。
++主処理に160 msの遅延を注入した試験は、native Readが継続していても解析公平性を不合格とする。
++
++HostArmのsource／codecは診断実装済みだが、能動PC runnerとA/B別candidate manifest・flash bindingは未統合。
++封印済み候補`20261020T123447347Z-b414028b`をA/B対応候補とは扱わない。
++既存のpassive outerはCOM payload write 0のままとし、この制約を緩めてARMを混入させない。
++CLOCK／READYの診断writer所有中は既存同様Ground loopが一時的に早期returnし得るため、
++RF／TDDが常時無停止とは説明しない。
++
++「ARM後に成功した」は起動順序／preconditioning仮説の支持にはなるが、原因確定ではない。
++PCが返信を読んだというclaimと、kernel-pending Read／物理USB host pollingも区別する。
++現行TIMESYNC-shaped nonceは私的診断規約であり、標準の時刻同期を証明するものではない。
++500 msで完了しないことだけから永久停止とも判定しない。
++
++次は連続readerによる同一既存候補の再測定で、Read担当切替え由来の空白と106 ms失敗を別々に確認する。
++それでも失敗する場合にA/B能動workflowと封印済み候補の束縛を完成させ、同じ観測条件で比較する。
++SDKイベント履歴・非同期commit・106 ms延長・UART／TDD／E220の高速設定変更は今回行わない。
++今回の作業ではCOMを開かず、書込み・JTAG・追加実機試験を行っていない。機器上のR18には未変更。
++
++#### 配布構成・実コンパイラで検出した問題の処置
++
++readinessヘッダーは`firmware/diagnostics/`へ隔離した。既存候補の15ヘッダーallowlistと
++common／verifier／flash toolの固定SHAは維持する。手動の診断ビルドに限り同期時に
++`-IncludeR19HighSpeedCandidate -IncludeR19UsbReadinessDiagnostics`を明示する。
++同一の封印済み候補は、既存verifierで再照合できた。A/B候補としての昇格ではない。
++
++実Arduino診断コンパイルでは、Windowsのパス表現差によりclockヘッダーの`pragma once`だけでは
++二重定義を防げないことを検出した。失敗ログと先行する失敗試験を保存し、mode 0では従来clock、
++非ゼロmodeではreadiness経由のclockと、include経路を排他的にした。正常通信の再送処理変更ではない。
++Hostのfake-Arduino環境で、修正前後の通常Vehicle／Groundの前処理結果SHAが各々一致した。
++これはXtensa実バイナリの同一性証明とは区別する。
++
++全体回帰343/343 PASSの後、このinclude限定修正について関連49/49 PASSを追加確認した。
++最終コンパイル結果・各ソース版・RED履歴・通常版との対応は上記`summary.json`を正とする。
++実機での106 ms停止解消、932件30秒、Heartbeat 2,500 msは引き続き未確認である。
++

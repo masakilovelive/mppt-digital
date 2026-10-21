@@ -1,0 +1,58 @@
+﻿{
+    "schema":  "vc-lora-r19-startup-boundary-evaluation-v1",
+    "mode":  "OFFLINE_ONLY",
+    "hardware_interaction":  false,
+    "classification":  "UNKNOWN",
+    "classification_reason":  "Insufficient bound device-readiness evidence to order the immutable USB failure against startup readiness.",
+    "experiment_mode":  "PASSIVE",
+    "readiness":  {
+                      "status":  "UNKNOWN",
+                      "device_clock_order":  "UNKNOWN",
+                      "kernel_pending_read_proven":  false,
+                      "acquisition_status":  "NOT_EVALUATED",
+                      "evidence_sha256":  ""
+                  },
+    "usb":  {
+                "failure":  "IMMUTABLE_USB_COMPLETION_TIMEOUT",
+                "record_sha256":  "BD535C4B1C8942810431D47D1617EAC69AAFA9FED96D7B452811ACB9AC0EF0C5",
+                "budget_ms":  106,
+                "expected_frame_bytes":  21,
+                "accepted_frame_bytes":  21,
+                "elapsed_us":  "106238",
+                "ring_pending_bytes":  0,
+                "stash_pending_bytes":  0,
+                "publish_generation":  3,
+                "pickup_generation":  2,
+                "flush_blocker_mask":  24,
+                "physical_fifo_fault_proven":  false
+            },
+    "pre_read":  {
+                     "failure_report_present_before_first_application_read":  true,
+                     "original_failure_before_read":  "CONSISTENT_BOOT_BINDING_UNKNOWN",
+                     "immutable_failure_boot_binding_proven":  false,
+                     "failure_before_com_open":  "UNKNOWN",
+                     "timing_delta_ms":  null,
+                     "report_sha256":  "C3F54CD7F9E9951CCEB7EE45691F4DC367441BBAEE56FFF97D34C3325C18B269"
+                 },
+    "rf":  {
+               "status":  "NOT_EVALUATED",
+               "evaluated":  false,
+               "evidence_sha256":  ""
+           },
+    "parameters":  {
+                       "status":  "NOT_EVALUATED",
+                       "evaluated":  false,
+                       "evidence_sha256":  ""
+                   },
+    "root_cause_proven":  false,
+    "acceptance_eligible":  false,
+    "deployment_authorized":  false,
+    "limitations":  [
+                        "This evaluates supplied evidence; it does not acquire or authenticate artifacts or externally asserted provenance bindings.",
+                        "ARM, including device acceptance, does not independently prove a kernel-pending host Read or physical host polling.",
+                        "Success after ARM alone cannot distinguish startup timing from diagnostic preconditioning.",
+                        "A valid failure report in the initial receive buffer establishes ordering before application Read, not before COM Open or a numerical PC/device clock difference.",
+                        "The immutable failure snapshot is a terminal-boundary sample, not later FIFO state, continuous hardware state, or proof of a physical FIFO fault.",
+                        "USB completion, RF delivery and full parameter acquisition are separate layers; absent downstream coverage remains NOT_EVALUATED."
+                    ]
+}

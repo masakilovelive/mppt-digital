@@ -1,0 +1,7 @@
+Missing production function Start-R19ContinuousCapture
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_continuous_reader_integration.ps1:20 char:23
++  if($found.Count-ne1){throw "Missing production function $name"}
++                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Missing product...ntinuousCapture:String) [], RuntimeException
+    + FullyQualifiedErrorId : Missing production function Start-R19ContinuousCapture
+ 

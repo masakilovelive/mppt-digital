@@ -1,0 +1,128 @@
+diff --git a/tests/host/standalone/phase6_ground_host_readiness_tests.cpp b/tests/host/standalone/phase6_ground_host_readiness_tests.cpp
+new file mode 100644
+index 0000000..24a25c9
+--- /dev/null
++++ b/tests/host/standalone/phase6_ground_host_readiness_tests.cpp
+@@ -0,0 +1,122 @@
++#include "fake_arduino_test_api.hpp"
++
++#define VC_LORA_PHASE6_GROUND 1
++#define VC_LORA_R19_HIGH_SPEED_CANDIDATE 1
++#define VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS 1
++#ifndef VC_LORA_R19_USB_READINESS_MODE
++#define VC_LORA_R19_USB_READINESS_MODE 2
++#endif
++#include "phase6/vc_lora_phase6_bridge.hpp"
++
++#include <array>
++#include <cstdint>
++#include <iostream>
++
++int main() {
++  using namespace vc_lora_phase6_firmware;
++  using namespace vc_lora::experimental;
++  unsigned checks=0U, failures=0U;
++  const auto check=[&](bool value,const char* message) {
++    ++checks;
++    if(!value){++failures;std::cerr<<message<<'\n';}
++  };
++  fake_arduino::reset_platform();
++  fake_arduino::set_pin_input_level(D8,HIGH);
++  Serial.set_plugged(true);
++  Serial.set_endpoint_ready(true);
++  setup_bridge();
++  check(bridge_ready && !runtime_fail_closed,"setup failed");
++  check(kGroundUsbHeartbeatCommitDeadlineMs==106U,"product budget changed");
++  check(!r19_product_usb_publication_allowed() &&
++        r19_usb_readiness_configured && !r19_usb_readiness_initialized,
++        "default gate leaked before first diagnostic request");
++
++  // Enumeration can advance the epoch before the host's first request. The
++  // wrapper remains closed and the request binds the actual current epoch.
++  for(unsigned i=0U;i<7U;++i) Serial.simulate_tx_loss();
++  ground_usb_observed_loss_epoch=7U;
++  std::array<std::uint8_t,9U> heartbeat_payload{
++      0U,0U,0U,0U,2U,3U,0U,4U,3U};
++  vc_lora::MavlinkFrame heartbeat{}, status{};
++  (void)vc_lora::encode_mavlink_v2(41U,1U,1U,0U,
++      heartbeat_payload.data(),heartbeat_payload.size(),heartbeat);
++  std::array<std::uint8_t,31U> status_payload{};
++  (void)vc_lora::encode_mavlink_v2(42U,1U,1U,1U,
++      status_payload.data(),status_payload.size(),status);
++  handle_ground_validated_frame(heartbeat,monotonic_now_ms());
++  handle_ground_validated_frame(status,monotonic_now_ms());
++  service_ground_usb_heartbeat_pacer(monotonic_now_ms());
++  pump_ground_usb_egress(monotonic_now_ms());
++  check(radio_application_endpoint.egress().empty() && Serial.tx_bytes().empty(),
++        "product bytes entered egress before HostArm");
++  check(ground_usb_heartbeat_pacer.queued()==1U &&
++        !ground_usb_ordered_backlog.empty(),"complete RF backlog not retained");
++
++  constexpr std::uint64_t nonce=0x5219000000000021ULL;
++  std::array<std::uint8_t,16U> request_payload{};
++  for(unsigned i=0;i<8U;++i)
++    request_payload[8U+i]=static_cast<std::uint8_t>(nonce>>(8U*i));
++  vc_lora::MavlinkFrame request{};
++  (void)vc_lora::encode_mavlink_v2(2U,249U,193U,111U,
++      request_payload.data(),request_payload.size(),request);
++  check(r19_intercept_usb_clock_request(request),"clock request escaped local demux");
++  check(r19_usb_readiness_initialized &&
++        r19_host_readiness_gate.snapshot().usb_epoch==7U,
++        "request did not bind current post-enumeration epoch");
++  check(r19_service_usb_clock_reply() && Serial.tx_bytes().size()==28U &&
++        r19_usb_clock_reply_pending && !r19_usb_ready_publication_complete,
++        "clock publication did not retain exclusive READY continuation");
++  check(r19_service_usb_clock_reply() && Serial.tx_bytes().size()==94U &&
++        r19_usb_ready_publication_complete &&
++        !r19_product_usb_publication_allowed(),
++        "READY publication incorrectly armed product output");
++  R19HostReadinessCommand command{};
++  check(r19_host_readiness_gate.ready_command(command),"READY binding unavailable");
++  command.opcode=R19HostReadinessOpcode::Arm;
++  command.proof_flags=r19_host_arm_required_proof;
++  vc_lora::MavlinkFrame arm{};
++  (void)r19_encode_host_readiness_frame(4U,command,arm);
++  auto stale=arm;
++  stale.bytes[20U]^=1U;
++  check(r19_intercept_usb_clock_request(stale) &&
++        !r19_product_usb_publication_allowed(),"invalid ARM escaped or armed gate");
++  check(r19_intercept_usb_clock_request(arm) &&
++        r19_product_usb_publication_allowed(),"matching explicit ARM was not accepted");
++
++  service_ground_usb_heartbeat_pacer(monotonic_now_ms());
++  check(ground_paced_heartbeat_commit_active &&
++        radio_application_endpoint.egress().queued_bytes()==21U,
++        "first real heartbeat was not admitted only after ARM");
++  pump_ground_usb_egress(monotonic_now_ms());
++  const auto accepted_bytes=Serial.tx_bytes().size();
++  Serial.set_flush_failures(1U);
++  observe_ground_paced_heartbeat_commit(monotonic_now_ms());
++  observe_ground_paced_heartbeat_commit(monotonic_now_ms());
++  check(accepted_bytes==115U && Serial.tx_bytes().size()==accepted_bytes &&
++        runtime_fail_closed && !ground_paced_heartbeat_commit_active,
++        "fully accepted 21 bytes were replayed after Rejected publication");
++
++  // Expiry is serviced while the experiment waits. Expired wire images must
++  // not be made fresh by a late ARM or left with stale paired FIFO markers.
++  runtime_fail_closed=false; bridge_ready=true;
++  r19_host_readiness_gate={}; r19_usb_readiness_initialized=false;
++  ground_usb_ordered_backlog.reset();
++  ground_usb_heartbeat_pacer=vc_lora::GroundUsbHeartbeatPacer{
++      product_ground_usb_heartbeat_pacer_config()};
++  ground_usb_heartbeat_pacer.set_usb_connected(true,monotonic_now_ms());
++  handle_ground_validated_frame(heartbeat,monotonic_now_ms());
++  fake_arduino::advance_time_ms(2500U);
++  service_ground_usb_heartbeat_pacer(monotonic_now_ms());
++  check(ground_usb_heartbeat_pacer.queued()==0U &&
++        ground_usb_ordered_backlog.empty() &&
++        ground_usb_heartbeat_pacer.diagnostics().expired_heartbeats==1U &&
++        Serial.tx_bytes().size()==accepted_bytes,
++        "waiting gate retained/replayed expired heartbeat or stale marker");
++  runtime_fail_closed=false; bridge_ready=true;
++  fake_arduino::advance_time_ms(120001U);
++  check(!r19_product_usb_publication_allowed() && runtime_fail_closed,
++        "absence of any first nonce left the acquisition wait unbounded");
++  std::cout<<"R19-GROUND-HOST-READINESS-001 checks="<<checks
++           <<" failures="<<failures<<'\n';
++  return failures==0U?0:1;
++}

@@ -1,0 +1,1374 @@
+{
+    "schema":  "vc-lora-r19-candidate-artifact-manifest-v1",
+    "test_id":  "FW-R19-CANDIDATE-ARTIFACT-BUILD-001",
+    "artifact_id":  "20261003T110913332Z-04fb913b",
+    "generated_at_utc":  "2026-10-03T11:11:52.4060293Z",
+    "result":  "PASS",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false,
+    "artifact_root":  "runs/candidates/R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001/20261003T110913332Z-04fb913b",
+    "hardware_interaction":  {
+                                 "performed":  false,
+                                 "com_ports_opened":  [
+
+                                                      ],
+                                 "upload_performed":  false,
+                                 "flash_performed":  false
+                             },
+    "deployment":  {
+                       "authorized":  false,
+                       "physical_30s_proven":  false
+                   },
+    "toolchain":  {
+                      "fqbn":  "esp32:esp32:XIAO_ESP32S3",
+                      "arduino_cli":  {
+                                          "version":  "1.5.2-rc.1",
+                                          "path":  "C:\\Users\\user\\AppData\\Local\\Temp\\arduino-cli-vc-lora-check\\arduino-cli.exe",
+                                          "sha256":  "BA1890AFCFC08524F76191B5CC801B0779CB25E81A5E6693EB0E26B50A3F3538"
+                                      },
+                      "esp32_core":  {
+                                         "version":  "3.3.11",
+                                         "installed_root":  "C:\\Users\\user\\AppData\\Local\\Arduino15\\packages\\esp32\\hardware\\esp32\\3.3.11"
+                                     },
+                      "ide_config":  {
+                                         "path":  "C:\\Users\\user\\.arduinoIDE\\arduino-cli.yaml",
+                                         "sha256":  "5E827B280540A52619029484EC288681A2722B08467794186B4104CDB85598B9"
+                                     },
+                      "hwcdc":  {
+                                    "installed_cpp_sha256":  "9524B055A6000278399EDAC8B28854BEDCCEF3D9795C2095BFC0B00704F0BE6C",
+                                    "installed_h_sha256":  "1901C4C1CF17884AAB2B6F8ECE909E2117E9893C0FF6F579F7562E4015415BCC",
+                                    "canonical_cpp_sha256":  "9524B055A6000278399EDAC8B28854BEDCCEF3D9795C2095BFC0B00704F0BE6C",
+                                    "canonical_h_sha256":  "1901C4C1CF17884AAB2B6F8ECE909E2117E9893C0FF6F579F7562E4015415BCC",
+                                    "exact_match":  true
+                                }
+                  },
+    "hwcdc_semantic_contract":  {
+                                    "required":  true,
+                                    "result":  "PASS",
+                                    "summary":  {
+                                                    "path":  "evidence/hwcdc_semantic_contract/summary.json",
+                                                    "size_bytes":  8949,
+                                                    "sha256":  "380DE71C4A8F9F876511C80C9D0044156B482DDD83628452ADCECA88D9362DF7"
+                                                },
+                                    "required_checks":  [
+                                                            "diagnostic_bootstrap_api_macro_scoped",
+                                                            "diagnostic_bootstrap_exact_63_byte_cold_start_only",
+                                                            "diagnostic_bootstrap_requires_clean_empty_boundary",
+                                                            "diagnostic_bootstrap_all_or_zero_publication_fence",
+                                                            "diagnostic_bootstrap_rechecks_epoch_reset_and_presence",
+                                                            "diagnostic_bootstrap_isr_fence_before_ring_and_fifo",
+                                                            "diagnostic_bootstrap_serializes_debug_writer",
+                                                            "diagnostic_connected_requires_payload_pickup_witness"
+                                                        ],
+                                    "check_count":  34
+                                },
+    "candidate_enable":  {
+                             "macro":  "VC_LORA_R19_HIGH_SPEED_CANDIDATE",
+                             "value":  1,
+                             "compile_flag":  "-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1",
+                             "property":  "compiler.cpp.extra_flags=-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1 -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1",
+                             "bridge_default":  0,
+                             "mechanism":  "arduino-cli-build-property"
+                         },
+    "compile_order":  [
+                          "vehicle",
+                          "ground"
+                      ],
+    "flash_policy":  {
+                         "mode":  "app-only",
+                         "app_only":  true,
+                         "offset":  "0x10000",
+                         "upload_order":  [
+                                              "vehicle",
+                                              "ground"
+                                          ],
+                         "erase_flash":  false,
+                         "write_bootloader":  false,
+                         "write_partition_table":  false,
+                         "write_merged_image":  false
+                     },
+    "candidate_package":  {
+                              "header_count":  13,
+                              "header_names":  [
+                                                   "e220_high_speed_transport_model.hpp",
+                                                   "high_speed_phase6_adapter.hpp",
+                                                   "phase6_bulk_rx_tail_ledger.hpp",
+                                                   "phase6_high_speed_radio_session.hpp",
+                                                   "phase6_high_speed_role_config.hpp",
+                                                   "phase6_radio_writer_arbiter.hpp",
+                                                   "peer_completion_receipt.hpp",
+                                                   "r19_runtime_fail_diagnostic.hpp",
+                                                   "r19_runtime_stage_record.hpp",
+                                                   "terminal_ack_bridge.hpp",
+                                                   "terminal_ack_producer.hpp",
+                                                   "terminal_ack_wire.hpp",
+                                                   "vc_lora_high_speed_candidate.hpp"
+                                               ],
+                              "canonical_tree_sha256":  "3965916FD0C0608DD22A322EE018E72016241E9FC7D93AD102138371576AA041",
+                              "files":  [
+                                            {
+                                                "path":  "firmware/high_speed/e220_high_speed_transport_model.hpp",
+                                                "size_bytes":  106250,
+                                                "sha256":  "F72984F9DD907E3A27B0CE21774523F788B9D89D3BB8D3787E58F251DCB705C0"
+                                            },
+                                            {
+                                                "path":  "firmware/high_speed/high_speed_phase6_adapter.hpp",
+                                                "size_bytes":  52112,
+                                                "sha256":  "E27EC99BC2B105D79104C47077063D807ED0789BEB69E6AC9DB55CB1F3AF4C9C"
+                                            },
+                                            {
+                                                "path":  "firmware/high_speed/peer_completion_receipt.hpp",
+                                                "size_bytes":  21253,
+                                                "sha256":  "AFD2F61CEBD6A768D3E0D04B11498B2252076B084CF09145657EC759AC3767F4"
+                                            },
+                                            {
+                                                "path":  "firmware/high_speed/phase6_bulk_rx_tail_ledger.hpp",
+                                                "size_bytes":  11321,
+                                                "sha256":  "0E41966E36EFC43CD6FCFE2EFEC3D0859DD77C7138DA3A00FDDF697398745E21"
+                                            },
+                                            {
+                                                "path":  "firmware/high_speed/phase6_high_speed_radio_session.hpp",
+                                                "size_bytes":  18563,
+                                                "sha256":  "1017D7301344F48E9AD88715F36E75530FE5481D769508E70DE715232D58000C"
+                                            },
+                                            {
+                                                "path":  "firmware/high_speed/phase6_high_speed_role_config.hpp",
+                                                "size_bytes":  6518,
+                                                "sha256":  "2DB746252B18A476AC7CA32DDFAF674753ABF27F45E51D3501E408530D9F5A69"
+                                            },
+                                            {
+                                                "path":  "firmware/high_speed/phase6_radio_writer_arbiter.hpp",
+                                                "size_bytes":  14728,
+                                                "sha256":  "F5A11253CE0A3322BB9D89B60494B3A42F84CF92CF545B972F6130E2E5A5CC11"
+                                            },
+                                            {
+                                                "path":  "firmware/high_speed/r19_runtime_fail_diagnostic.hpp",
+                                                "size_bytes":  25344,
+                                                "sha256":  "DB675773BB4304A12E1A0D230B0B472C5B4EC43C44A7BACE123073BB5D3CE59F"
+                                            },
+                                            {
+                                                "path":  "firmware/high_speed/r19_runtime_stage_record.hpp",
+                                                "size_bytes":  10243,
+                                                "sha256":  "53A3713EA26EAB9547C4F3222D473EA3681AEF6001A270E9CDD6DEE39716A72D"
+                                            },
+                                            {
+                                                "path":  "firmware/high_speed/terminal_ack_bridge.hpp",
+                                                "size_bytes":  7337,
+                                                "sha256":  "D073709EA57B604AB1602B5C3542C70F53094FC83047890DE03C370D90CC2743"
+                                            },
+                                            {
+                                                "path":  "firmware/high_speed/terminal_ack_producer.hpp",
+                                                "size_bytes":  31937,
+                                                "sha256":  "8655DA7C65F4219D6F7922E345ABCD59A7958F28B3886CC3691B4975D8382B32"
+                                            },
+                                            {
+                                                "path":  "firmware/high_speed/terminal_ack_wire.hpp",
+                                                "size_bytes":  31958,
+                                                "sha256":  "AEC6EB39F7BC987EE05DD756D9211041F6D9FD22EC2B117EA6CB7929BF1A1848"
+                                            },
+                                            {
+                                                "path":  "firmware/high_speed/vc_lora_high_speed_candidate.hpp",
+                                                "size_bytes":  13448,
+                                                "sha256":  "53D047532E5BB2596D5C0613B12F583C304237986AA6E76B7EA1DEB08E52E811"
+                                            }
+                                        ]
+                          },
+    "canonical_source_snapshot":  {
+                                      "file_count":  63,
+                                      "tree_sha256":  "7401AC406B687B640F42E86BA1DB166A0CED915A0B389193955608DCD91F1387",
+                                      "files":  [
+                                                    {
+                                                        "path":  "core/include/vc_lora/bulk_data_codec.hpp",
+                                                        "size_bytes":  7972,
+                                                        "sha256":  "0ABF929F5119D6DCB18D8BCC88A6089369BA3FAEFB3B66811336BBEA2063958C"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/bulk_heartbeat_sla.hpp",
+                                                        "size_bytes":  3919,
+                                                        "sha256":  "D61F0D2096EDF6013F4DAE73F1952DC55A94E3B28382A1FC2C2D9066489FCB1A"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/bulk_negotiation_codec.hpp",
+                                                        "size_bytes":  5241,
+                                                        "sha256":  "2E910D835A07254CEC5DE944A0AEADC941E2598F9225EB91E72BBECB085A1A5C"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/bulk_session_controller.hpp",
+                                                        "size_bytes":  17733,
+                                                        "sha256":  "6A92DC55EF2EBCEA5ACFE062A94C31D345CA268116E7FEF79AFA3A9EF22633F4"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/bulk_transcript.hpp",
+                                                        "size_bytes":  5274,
+                                                        "sha256":  "CF5FC5D9AEDF05DD537C760E4992DFEB40B1BB53368732B47D07F6CC16335AFF"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/bulk_tx_lease.hpp",
+                                                        "size_bytes":  4918,
+                                                        "sha256":  "DA6D9FF0101E0E463F813D84CCE0545C1820B80D610270CBA4AA5EA865DE69BF"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/byte_ring_buffer.hpp",
+                                                        "size_bytes":  3467,
+                                                        "sha256":  "57D3F2411EA2837B14A98161A8D65CE0B3B6EBDAD21890AB92B1D9D07ACAA674"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/embedded_io_adapter.hpp",
+                                                        "size_bytes":  23878,
+                                                        "sha256":  "63F3687F1E7F3146D4EFA1C9BDE4AAEF6CBAAC4881F338B1900A0B4981CB4B3F"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/ground_parameter_download_proxy.hpp",
+                                                        "size_bytes":  14086,
+                                                        "sha256":  "E5ACB41E2D36028DBDDF20C7F3194D4AEE0F35AD608C442EEB9156DEB6CA3131"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/ground_usb_heartbeat_pacer.hpp",
+                                                        "size_bytes":  9269,
+                                                        "sha256":  "052EB8588AE150C8E53233AB6F8367663EDCC5138A162AAFCD1225848DD55E81"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/ground_usb_host_presence_filter.hpp",
+                                                        "size_bytes":  4237,
+                                                        "sha256":  "A125ECF770B72CD779714292A25F2CA343AEB9272EE089A7D98E6A709D47298E"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/ground_usb_ordered_frame_backlog.hpp",
+                                                        "size_bytes":  8885,
+                                                        "sha256":  "1D3BB7D5CBA1C3826096424628F9CD2D424E33C14CD312E698E1BC52DB5BA422"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/high_speed_tdd_coordinator.hpp",
+                                                        "size_bytes":  14131,
+                                                        "sha256":  "B877FA20BEF05574BBE5C9AE8255782CAF7BE78B973F79CB17390443B6C48AAE"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/late_uplink_recovery.hpp",
+                                                        "size_bytes":  2279,
+                                                        "sha256":  "607CBE9CD32D886DA0AEA975D9C047B4203261F3B3FE4F262FE301DEA677304B"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/legacy_silence_gate.hpp",
+                                                        "size_bytes":  1174,
+                                                        "sha256":  "2825DF10FB5F15CA8D8E6D51ABFEB08884318BC1911C6850AF8DBD4409A35402"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/link_data_codec.hpp",
+                                                        "size_bytes":  1297,
+                                                        "sha256":  "25384B3468CCD5F091A4076696451A4CD938C530DC1EBC6CD57D7BDCE9AD7D2C"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/link_diagnostics.hpp",
+                                                        "size_bytes":  3184,
+                                                        "sha256":  "DC353B681960DFD38481919F6B1FC2188DA94F8E6E781FD7DB497605E70A936D"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/mavlink_frame.hpp",
+                                                        "size_bytes":  3898,
+                                                        "sha256":  "C3E740599350B19F8EAD5C8DF7E12FB9D1F35E43C10CEA621AA832BB26856D57"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/mavlink_scheduler.hpp",
+                                                        "size_bytes":  16870,
+                                                        "sha256":  "5D607A54A7B522772DEFC6A9D529123512B17B046A14E6B6FD222A98F2D7DCD2"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/runtime_contract.hpp",
+                                                        "size_bytes":  13903,
+                                                        "sha256":  "4C1E05D03E72A40660971CFDE65EDC6901B5589C1990295A99F208B03D1CA2CF"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/tdd_control_codec.hpp",
+                                                        "size_bytes":  1310,
+                                                        "sha256":  "608689BE3549D874A19A51725EA36879DDAD19F0476F43B0B7FED9357F8D0C76"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/tdd_ground.hpp",
+                                                        "size_bytes":  3740,
+                                                        "sha256":  "CAE5E17E0936D772CE29BC6F9C457295E0DDB493BCA3DFE9C85DBA7F238FAE32"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/tdd_link_demux.hpp",
+                                                        "size_bytes":  3751,
+                                                        "sha256":  "7A255DF5D16AFBD93655CB85645E73DBDA1EBA57C74B6DBC647B2A326CD1F511"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/tdd_types.hpp",
+                                                        "size_bytes":  5535,
+                                                        "sha256":  "BD428D8153726964DDE609AFF12ECB8FF3D5D4171092C274125938746C4EBE95"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/tdd_vehicle.hpp",
+                                                        "size_bytes":  3629,
+                                                        "sha256":  "5A26F9FD46FB8808330EF982E7BB0B2D4D1744FD8EE4888864D229D1587A014A"
+                                                    },
+                                                    {
+                                                        "path":  "core/include/vc_lora/tx_gate.hpp",
+                                                        "size_bytes":  853,
+                                                        "sha256":  "34EFA4672519FA0ADC6A9CA5F014A66DDF5741FE80D51A52120B171FB2194055"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/bulk_data_codec.cpp",
+                                                        "size_bytes":  15068,
+                                                        "sha256":  "6BC7BF9C22D49E1122888ACA27F9322BF4E36B5DC3C8E68BBE99E4FDAEEF9691"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/bulk_heartbeat_sla.cpp",
+                                                        "size_bytes":  6654,
+                                                        "sha256":  "7B4F741855ED9350258B39C8A488E7751145BB891042A59FAADE9ACFEB40D124"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/bulk_negotiation_codec.cpp",
+                                                        "size_bytes":  16283,
+                                                        "sha256":  "AFCCD13D3B4EC550DF5BE3208CC19DE5477CE108B150683EE68BCBDAC29D258B"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/bulk_session_controller.cpp",
+                                                        "size_bytes":  36418,
+                                                        "sha256":  "2ECBB529D1588A4F45CBDF00CADFB4E153AF5C447AF6C6447C6483188A7FDA40"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/bulk_transcript.cpp",
+                                                        "size_bytes":  15834,
+                                                        "sha256":  "83CD7FC38B4F9A5AF86319A6D9E48FC3368C150A3DE7A0638E8D165421D3F8DA"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/bulk_tx_lease.cpp",
+                                                        "size_bytes":  6824,
+                                                        "sha256":  "4EF6B0D642F04143C9F0AB367906256D4BA022F9A10969978542B6417D8B82E1"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/ground_parameter_download_proxy.cpp",
+                                                        "size_bytes":  46311,
+                                                        "sha256":  "58F2AB0B77F0ABD8C3949649C172BEB43CB75C48DE7C1C6D78FFD9C15C208FE8"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/ground_usb_heartbeat_pacer.cpp",
+                                                        "size_bytes":  12279,
+                                                        "sha256":  "5FDE2D6885A691D8B1F20FA5A2609199455823405094A26B1A0F8639A31DF762"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/high_speed_tdd_coordinator.cpp",
+                                                        "size_bytes":  45658,
+                                                        "sha256":  "E5C62F4C46BC25AE1FD6E9A4137333DC8916BEACE352336A35752DDEA8C833A7"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/late_uplink_recovery.cpp",
+                                                        "size_bytes":  4360,
+                                                        "sha256":  "2E107949D842805DA811007D1D97366D556570EDD9E87D8C300431C94B46F094"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/link_data_codec.cpp",
+                                                        "size_bytes":  1552,
+                                                        "sha256":  "B00D07F92AFA42B6790F0C8B533F29A3DF7E5750ECA5AA82EF12872C0102C211"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/link_diagnostics.cpp",
+                                                        "size_bytes":  687,
+                                                        "sha256":  "3E4D18315752DA14612300CC3DE5693FB22394C99663F3B84EA23F5A9D33047A"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/mavlink_frame.cpp",
+                                                        "size_bytes":  16510,
+                                                        "sha256":  "BD2890D8973C5A694D53AB2866A6B3DBF319FAE40B3CC308AE2DAE91B634F3A8"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/mavlink_scheduler.cpp",
+                                                        "size_bytes":  44421,
+                                                        "sha256":  "128F9AEEB6B624244DF3146BF24F5FE5D46F04628A83E67FE20CCA0CA789605F"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/runtime_contract.cpp",
+                                                        "size_bytes":  7792,
+                                                        "sha256":  "1DDA0464CFFAEABF68F3782593C607965144AC2BF5DD774C77888847DEA668B5"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/tdd_control_codec.cpp",
+                                                        "size_bytes":  5773,
+                                                        "sha256":  "91DF9C17ACC4D4DDCE1B6456EB3865A8BD374885CAFFB4FC0C32B63923260155"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/tdd_ground.cpp",
+                                                        "size_bytes":  20278,
+                                                        "sha256":  "6021D0799274A92A5F7AF7EC28AF7D7883DFB0CA6AD688D1D4162F042FD67EDF"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/tdd_link_demux.cpp",
+                                                        "size_bytes":  7022,
+                                                        "sha256":  "861235A0DF5254FE0D7DB2386956E512B7F02C0B90EA099DF323F85BAF594A6C"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/tdd_vehicle.cpp",
+                                                        "size_bytes":  16282,
+                                                        "sha256":  "B64C9E253E52109C0B47BE6C4A64E3A7A42CC10458F54D3080EF6710D54325A8"
+                                                    },
+                                                    {
+                                                        "path":  "core/src/tx_gate.cpp",
+                                                        "size_bytes":  1570,
+                                                        "sha256":  "BE9E894ED9DD59023FCFF763E7AE575DCC80E1A295CF50D127A7FD48275F75BC"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/arduino_libraries/VC_LoRa_Core/src/VC_LoRa_Core.h",
+                                                        "size_bytes":  133,
+                                                        "sha256":  "6D537B590FCFFB95346BD328218A1A1CF54C6629BF6DA3CE1FE3DD2C4DFFE3AF"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/e220_high_speed_transport_model.hpp",
+                                                        "size_bytes":  106250,
+                                                        "sha256":  "F72984F9DD907E3A27B0CE21774523F788B9D89D3BB8D3787E58F251DCB705C0"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/high_speed_phase6_adapter.hpp",
+                                                        "size_bytes":  52112,
+                                                        "sha256":  "E27EC99BC2B105D79104C47077063D807ED0789BEB69E6AC9DB55CB1F3AF4C9C"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/peer_completion_receipt.hpp",
+                                                        "size_bytes":  21253,
+                                                        "sha256":  "AFD2F61CEBD6A768D3E0D04B11498B2252076B084CF09145657EC759AC3767F4"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/phase6_bulk_rx_tail_ledger.hpp",
+                                                        "size_bytes":  11321,
+                                                        "sha256":  "0E41966E36EFC43CD6FCFE2EFEC3D0859DD77C7138DA3A00FDDF697398745E21"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/phase6_high_speed_radio_session.hpp",
+                                                        "size_bytes":  18563,
+                                                        "sha256":  "1017D7301344F48E9AD88715F36E75530FE5481D769508E70DE715232D58000C"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/phase6_high_speed_role_config.hpp",
+                                                        "size_bytes":  6518,
+                                                        "sha256":  "2DB746252B18A476AC7CA32DDFAF674753ABF27F45E51D3501E408530D9F5A69"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/phase6_radio_writer_arbiter.hpp",
+                                                        "size_bytes":  14728,
+                                                        "sha256":  "F5A11253CE0A3322BB9D89B60494B3A42F84CF92CF545B972F6130E2E5A5CC11"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/r19_runtime_fail_diagnostic.hpp",
+                                                        "size_bytes":  25344,
+                                                        "sha256":  "DB675773BB4304A12E1A0D230B0B472C5B4EC43C44A7BACE123073BB5D3CE59F"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/r19_runtime_stage_record.hpp",
+                                                        "size_bytes":  10243,
+                                                        "sha256":  "53A3713EA26EAB9547C4F3222D473EA3681AEF6001A270E9CDD6DEE39716A72D"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/terminal_ack_bridge.hpp",
+                                                        "size_bytes":  7337,
+                                                        "sha256":  "D073709EA57B604AB1602B5C3542C70F53094FC83047890DE03C370D90CC2743"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/terminal_ack_producer.hpp",
+                                                        "size_bytes":  31937,
+                                                        "sha256":  "8655DA7C65F4219D6F7922E345ABCD59A7958F28B3886CC3691B4975D8382B32"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/terminal_ack_wire.hpp",
+                                                        "size_bytes":  31958,
+                                                        "sha256":  "AEC6EB39F7BC987EE05DD756D9211041F6D9FD22EC2B117EA6CB7929BF1A1848"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/high_speed/vc_lora_high_speed_candidate.hpp",
+                                                        "size_bytes":  13448,
+                                                        "sha256":  "53D047532E5BB2596D5C0613B12F583C304237986AA6E76B7EA1DEB08E52E811"
+                                                    },
+                                                    {
+                                                        "path":  "firmware/phase6/vc_lora_phase6_bridge.hpp",
+                                                        "size_bytes":  211616,
+                                                        "sha256":  "EF6F461D3E6C7F3628FE9A87285D99EF67DC30503DFE58CCE99A0FE12906A323"
+                                                    },
+                                                    {
+                                                        "path":  "vc_lora_ground_xiao_esp32s3/vc_lora_ground_xiao_esp32s3.ino",
+                                                        "size_bytes":  259,
+                                                        "sha256":  "33723E560F44D4D528C10425B62F8D36CCBF790D0B3ADFAB6615D01B575DE040"
+                                                    },
+                                                    {
+                                                        "path":  "vc_lora_vehicle_xiao_esp32s3/vc_lora_vehicle_xiao_esp32s3.ino",
+                                                        "size_bytes":  289,
+                                                        "sha256":  "B48C2E5197A7BF6F5C8B0896BACC7517997567FFDDBC835651C1FE56A88003B7"
+                                                    }
+                                                ]
+                                  },
+    "staged_package_snapshot":  {
+                                    "file_count":  124,
+                                    "tree_sha256":  "8228E669002A25579A0B59A060F6D0A7F67E5235692A2472DCE2FA5BBA032601",
+                                    "files":  [
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/e220_high_speed_transport_model.hpp",
+                                                      "size_bytes":  106250,
+                                                      "sha256":  "F72984F9DD907E3A27B0CE21774523F788B9D89D3BB8D3787E58F251DCB705C0"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/high_speed_phase6_adapter.hpp",
+                                                      "size_bytes":  52112,
+                                                      "sha256":  "E27EC99BC2B105D79104C47077063D807ED0789BEB69E6AC9DB55CB1F3AF4C9C"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/peer_completion_receipt.hpp",
+                                                      "size_bytes":  21253,
+                                                      "sha256":  "AFD2F61CEBD6A768D3E0D04B11498B2252076B084CF09145657EC759AC3767F4"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/phase6_bulk_rx_tail_ledger.hpp",
+                                                      "size_bytes":  11321,
+                                                      "sha256":  "0E41966E36EFC43CD6FCFE2EFEC3D0859DD77C7138DA3A00FDDF697398745E21"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/phase6_high_speed_radio_session.hpp",
+                                                      "size_bytes":  18563,
+                                                      "sha256":  "1017D7301344F48E9AD88715F36E75530FE5481D769508E70DE715232D58000C"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/phase6_high_speed_role_config.hpp",
+                                                      "size_bytes":  6518,
+                                                      "sha256":  "2DB746252B18A476AC7CA32DDFAF674753ABF27F45E51D3501E408530D9F5A69"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/phase6_radio_writer_arbiter.hpp",
+                                                      "size_bytes":  14728,
+                                                      "sha256":  "F5A11253CE0A3322BB9D89B60494B3A42F84CF92CF545B972F6130E2E5A5CC11"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/r19_runtime_fail_diagnostic.hpp",
+                                                      "size_bytes":  25344,
+                                                      "sha256":  "DB675773BB4304A12E1A0D230B0B472C5B4EC43C44A7BACE123073BB5D3CE59F"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/r19_runtime_stage_record.hpp",
+                                                      "size_bytes":  10243,
+                                                      "sha256":  "53A3713EA26EAB9547C4F3222D473EA3681AEF6001A270E9CDD6DEE39716A72D"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/terminal_ack_bridge.hpp",
+                                                      "size_bytes":  7337,
+                                                      "sha256":  "D073709EA57B604AB1602B5C3542C70F53094FC83047890DE03C370D90CC2743"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/terminal_ack_producer.hpp",
+                                                      "size_bytes":  31937,
+                                                      "sha256":  "8655DA7C65F4219D6F7922E345ABCD59A7958F28B3886CC3691B4975D8382B32"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/terminal_ack_wire.hpp",
+                                                      "size_bytes":  31958,
+                                                      "sha256":  "AEC6EB39F7BC987EE05DD756D9211041F6D9FD22EC2B117EA6CB7929BF1A1848"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/high_speed/vc_lora_high_speed_candidate.hpp",
+                                                      "size_bytes":  13448,
+                                                      "sha256":  "53D047532E5BB2596D5C0613B12F583C304237986AA6E76B7EA1DEB08E52E811"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/bulk_data_codec.cpp",
+                                                      "size_bytes":  15068,
+                                                      "sha256":  "6BC7BF9C22D49E1122888ACA27F9322BF4E36B5DC3C8E68BBE99E4FDAEEF9691"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/bulk_heartbeat_sla.cpp",
+                                                      "size_bytes":  6654,
+                                                      "sha256":  "7B4F741855ED9350258B39C8A488E7751145BB891042A59FAADE9ACFEB40D124"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/bulk_negotiation_codec.cpp",
+                                                      "size_bytes":  16283,
+                                                      "sha256":  "AFCCD13D3B4EC550DF5BE3208CC19DE5477CE108B150683EE68BCBDAC29D258B"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/bulk_session_controller.cpp",
+                                                      "size_bytes":  36418,
+                                                      "sha256":  "2ECBB529D1588A4F45CBDF00CADFB4E153AF5C447AF6C6447C6483188A7FDA40"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/bulk_transcript.cpp",
+                                                      "size_bytes":  15834,
+                                                      "sha256":  "83CD7FC38B4F9A5AF86319A6D9E48FC3368C150A3DE7A0638E8D165421D3F8DA"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/bulk_tx_lease.cpp",
+                                                      "size_bytes":  6824,
+                                                      "sha256":  "4EF6B0D642F04143C9F0AB367906256D4BA022F9A10969978542B6417D8B82E1"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/ground_parameter_download_proxy.cpp",
+                                                      "size_bytes":  46311,
+                                                      "sha256":  "58F2AB0B77F0ABD8C3949649C172BEB43CB75C48DE7C1C6D78FFD9C15C208FE8"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/ground_usb_heartbeat_pacer.cpp",
+                                                      "size_bytes":  12279,
+                                                      "sha256":  "5FDE2D6885A691D8B1F20FA5A2609199455823405094A26B1A0F8639A31DF762"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/high_speed_tdd_coordinator.cpp",
+                                                      "size_bytes":  45658,
+                                                      "sha256":  "E5C62F4C46BC25AE1FD6E9A4137333DC8916BEACE352336A35752DDEA8C833A7"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/late_uplink_recovery.cpp",
+                                                      "size_bytes":  4360,
+                                                      "sha256":  "2E107949D842805DA811007D1D97366D556570EDD9E87D8C300431C94B46F094"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/link_data_codec.cpp",
+                                                      "size_bytes":  1552,
+                                                      "sha256":  "B00D07F92AFA42B6790F0C8B533F29A3DF7E5750ECA5AA82EF12872C0102C211"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/link_diagnostics.cpp",
+                                                      "size_bytes":  687,
+                                                      "sha256":  "3E4D18315752DA14612300CC3DE5693FB22394C99663F3B84EA23F5A9D33047A"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/mavlink_frame.cpp",
+                                                      "size_bytes":  16510,
+                                                      "sha256":  "BD2890D8973C5A694D53AB2866A6B3DBF319FAE40B3CC308AE2DAE91B634F3A8"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/mavlink_scheduler.cpp",
+                                                      "size_bytes":  44421,
+                                                      "sha256":  "128F9AEEB6B624244DF3146BF24F5FE5D46F04628A83E67FE20CCA0CA789605F"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/runtime_contract.cpp",
+                                                      "size_bytes":  7792,
+                                                      "sha256":  "1DDA0464CFFAEABF68F3782593C607965144AC2BF5DD774C77888847DEA668B5"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/tdd_control_codec.cpp",
+                                                      "size_bytes":  5773,
+                                                      "sha256":  "91DF9C17ACC4D4DDCE1B6456EB3865A8BD374885CAFFB4FC0C32B63923260155"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/tdd_ground.cpp",
+                                                      "size_bytes":  20278,
+                                                      "sha256":  "6021D0799274A92A5F7AF7EC28AF7D7883DFB0CA6AD688D1D4162F042FD67EDF"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/tdd_link_demux.cpp",
+                                                      "size_bytes":  7022,
+                                                      "sha256":  "861235A0DF5254FE0D7DB2386956E512B7F02C0B90EA099DF323F85BAF594A6C"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/tdd_vehicle.cpp",
+                                                      "size_bytes":  16282,
+                                                      "sha256":  "B64C9E253E52109C0B47BE6C4A64E3A7A42CC10458F54D3080EF6710D54325A8"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/src/tx_gate.cpp",
+                                                      "size_bytes":  1570,
+                                                      "sha256":  "BE9E894ED9DD59023FCFF763E7AE575DCC80E1A295CF50D127A7FD48275F75BC"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/bulk_data_codec.hpp",
+                                                      "size_bytes":  7972,
+                                                      "sha256":  "0ABF929F5119D6DCB18D8BCC88A6089369BA3FAEFB3B66811336BBEA2063958C"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/bulk_heartbeat_sla.hpp",
+                                                      "size_bytes":  3919,
+                                                      "sha256":  "D61F0D2096EDF6013F4DAE73F1952DC55A94E3B28382A1FC2C2D9066489FCB1A"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/bulk_negotiation_codec.hpp",
+                                                      "size_bytes":  5241,
+                                                      "sha256":  "2E910D835A07254CEC5DE944A0AEADC941E2598F9225EB91E72BBECB085A1A5C"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/bulk_session_controller.hpp",
+                                                      "size_bytes":  17733,
+                                                      "sha256":  "6A92DC55EF2EBCEA5ACFE062A94C31D345CA268116E7FEF79AFA3A9EF22633F4"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/bulk_transcript.hpp",
+                                                      "size_bytes":  5274,
+                                                      "sha256":  "CF5FC5D9AEDF05DD537C760E4992DFEB40B1BB53368732B47D07F6CC16335AFF"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/bulk_tx_lease.hpp",
+                                                      "size_bytes":  4918,
+                                                      "sha256":  "DA6D9FF0101E0E463F813D84CCE0545C1820B80D610270CBA4AA5EA865DE69BF"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/byte_ring_buffer.hpp",
+                                                      "size_bytes":  3467,
+                                                      "sha256":  "57D3F2411EA2837B14A98161A8D65CE0B3B6EBDAD21890AB92B1D9D07ACAA674"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/embedded_io_adapter.hpp",
+                                                      "size_bytes":  23878,
+                                                      "sha256":  "63F3687F1E7F3146D4EFA1C9BDE4AAEF6CBAAC4881F338B1900A0B4981CB4B3F"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/ground_parameter_download_proxy.hpp",
+                                                      "size_bytes":  14086,
+                                                      "sha256":  "E5ACB41E2D36028DBDDF20C7F3194D4AEE0F35AD608C442EEB9156DEB6CA3131"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/ground_usb_heartbeat_pacer.hpp",
+                                                      "size_bytes":  9269,
+                                                      "sha256":  "052EB8588AE150C8E53233AB6F8367663EDCC5138A162AAFCD1225848DD55E81"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/ground_usb_host_presence_filter.hpp",
+                                                      "size_bytes":  4237,
+                                                      "sha256":  "A125ECF770B72CD779714292A25F2CA343AEB9272EE089A7D98E6A709D47298E"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/ground_usb_ordered_frame_backlog.hpp",
+                                                      "size_bytes":  8885,
+                                                      "sha256":  "1D3BB7D5CBA1C3826096424628F9CD2D424E33C14CD312E698E1BC52DB5BA422"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/high_speed_tdd_coordinator.hpp",
+                                                      "size_bytes":  14131,
+                                                      "sha256":  "B877FA20BEF05574BBE5C9AE8255782CAF7BE78B973F79CB17390443B6C48AAE"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/late_uplink_recovery.hpp",
+                                                      "size_bytes":  2279,
+                                                      "sha256":  "607CBE9CD32D886DA0AEA975D9C047B4203261F3B3FE4F262FE301DEA677304B"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/legacy_silence_gate.hpp",
+                                                      "size_bytes":  1174,
+                                                      "sha256":  "2825DF10FB5F15CA8D8E6D51ABFEB08884318BC1911C6850AF8DBD4409A35402"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/link_data_codec.hpp",
+                                                      "size_bytes":  1297,
+                                                      "sha256":  "25384B3468CCD5F091A4076696451A4CD938C530DC1EBC6CD57D7BDCE9AD7D2C"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/link_diagnostics.hpp",
+                                                      "size_bytes":  3184,
+                                                      "sha256":  "DC353B681960DFD38481919F6B1FC2188DA94F8E6E781FD7DB497605E70A936D"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/mavlink_frame.hpp",
+                                                      "size_bytes":  3898,
+                                                      "sha256":  "C3E740599350B19F8EAD5C8DF7E12FB9D1F35E43C10CEA621AA832BB26856D57"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/mavlink_scheduler.hpp",
+                                                      "size_bytes":  16870,
+                                                      "sha256":  "5D607A54A7B522772DEFC6A9D529123512B17B046A14E6B6FD222A98F2D7DCD2"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/runtime_contract.hpp",
+                                                      "size_bytes":  13903,
+                                                      "sha256":  "4C1E05D03E72A40660971CFDE65EDC6901B5589C1990295A99F208B03D1CA2CF"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/tdd_control_codec.hpp",
+                                                      "size_bytes":  1310,
+                                                      "sha256":  "608689BE3549D874A19A51725EA36879DDAD19F0476F43B0B7FED9357F8D0C76"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/tdd_ground.hpp",
+                                                      "size_bytes":  3740,
+                                                      "sha256":  "CAE5E17E0936D772CE29BC6F9C457295E0DDB493BCA3DFE9C85DBA7F238FAE32"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/tdd_link_demux.hpp",
+                                                      "size_bytes":  3751,
+                                                      "sha256":  "7A255DF5D16AFBD93655CB85645E73DBDA1EBA57C74B6DBC647B2A326CD1F511"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/tdd_types.hpp",
+                                                      "size_bytes":  5535,
+                                                      "sha256":  "BD428D8153726964DDE609AFF12ECB8FF3D5D4171092C274125938746C4EBE95"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/tdd_vehicle.hpp",
+                                                      "size_bytes":  3629,
+                                                      "sha256":  "5A26F9FD46FB8808330EF982E7BB0B2D4D1744FD8EE4888864D229D1587A014A"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora/tx_gate.hpp",
+                                                      "size_bytes":  853,
+                                                      "sha256":  "34EFA4672519FA0ADC6A9CA5F014A66DDF5741FE80D51A52120B171FB2194055"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/VC_LoRa_Core.h",
+                                                      "size_bytes":  133,
+                                                      "sha256":  "6D537B590FCFFB95346BD328218A1A1CF54C6629BF6DA3CE1FE3DD2C4DFFE3AF"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora_ground_xiao_esp32s3.ino",
+                                                      "size_bytes":  259,
+                                                      "sha256":  "33723E560F44D4D528C10425B62F8D36CCBF790D0B3ADFAB6615D01B575DE040"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora_phase6_bridge.hpp",
+                                                      "size_bytes":  211616,
+                                                      "sha256":  "EF6F461D3E6C7F3628FE9A87285D99EF67DC30503DFE58CCE99A0FE12906A323"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/e220_high_speed_transport_model.hpp",
+                                                      "size_bytes":  106250,
+                                                      "sha256":  "F72984F9DD907E3A27B0CE21774523F788B9D89D3BB8D3787E58F251DCB705C0"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/high_speed_phase6_adapter.hpp",
+                                                      "size_bytes":  52112,
+                                                      "sha256":  "E27EC99BC2B105D79104C47077063D807ED0789BEB69E6AC9DB55CB1F3AF4C9C"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/peer_completion_receipt.hpp",
+                                                      "size_bytes":  21253,
+                                                      "sha256":  "AFD2F61CEBD6A768D3E0D04B11498B2252076B084CF09145657EC759AC3767F4"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/phase6_bulk_rx_tail_ledger.hpp",
+                                                      "size_bytes":  11321,
+                                                      "sha256":  "0E41966E36EFC43CD6FCFE2EFEC3D0859DD77C7138DA3A00FDDF697398745E21"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/phase6_high_speed_radio_session.hpp",
+                                                      "size_bytes":  18563,
+                                                      "sha256":  "1017D7301344F48E9AD88715F36E75530FE5481D769508E70DE715232D58000C"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/phase6_high_speed_role_config.hpp",
+                                                      "size_bytes":  6518,
+                                                      "sha256":  "2DB746252B18A476AC7CA32DDFAF674753ABF27F45E51D3501E408530D9F5A69"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/phase6_radio_writer_arbiter.hpp",
+                                                      "size_bytes":  14728,
+                                                      "sha256":  "F5A11253CE0A3322BB9D89B60494B3A42F84CF92CF545B972F6130E2E5A5CC11"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/r19_runtime_fail_diagnostic.hpp",
+                                                      "size_bytes":  25344,
+                                                      "sha256":  "DB675773BB4304A12E1A0D230B0B472C5B4EC43C44A7BACE123073BB5D3CE59F"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/r19_runtime_stage_record.hpp",
+                                                      "size_bytes":  10243,
+                                                      "sha256":  "53A3713EA26EAB9547C4F3222D473EA3681AEF6001A270E9CDD6DEE39716A72D"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/terminal_ack_bridge.hpp",
+                                                      "size_bytes":  7337,
+                                                      "sha256":  "D073709EA57B604AB1602B5C3542C70F53094FC83047890DE03C370D90CC2743"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/terminal_ack_producer.hpp",
+                                                      "size_bytes":  31937,
+                                                      "sha256":  "8655DA7C65F4219D6F7922E345ABCD59A7958F28B3886CC3691B4975D8382B32"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/terminal_ack_wire.hpp",
+                                                      "size_bytes":  31958,
+                                                      "sha256":  "AEC6EB39F7BC987EE05DD756D9211041F6D9FD22EC2B117EA6CB7929BF1A1848"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/high_speed/vc_lora_high_speed_candidate.hpp",
+                                                      "size_bytes":  13448,
+                                                      "sha256":  "53D047532E5BB2596D5C0613B12F583C304237986AA6E76B7EA1DEB08E52E811"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/bulk_data_codec.cpp",
+                                                      "size_bytes":  15068,
+                                                      "sha256":  "6BC7BF9C22D49E1122888ACA27F9322BF4E36B5DC3C8E68BBE99E4FDAEEF9691"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/bulk_heartbeat_sla.cpp",
+                                                      "size_bytes":  6654,
+                                                      "sha256":  "7B4F741855ED9350258B39C8A488E7751145BB891042A59FAADE9ACFEB40D124"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/bulk_negotiation_codec.cpp",
+                                                      "size_bytes":  16283,
+                                                      "sha256":  "AFCCD13D3B4EC550DF5BE3208CC19DE5477CE108B150683EE68BCBDAC29D258B"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/bulk_session_controller.cpp",
+                                                      "size_bytes":  36418,
+                                                      "sha256":  "2ECBB529D1588A4F45CBDF00CADFB4E153AF5C447AF6C6447C6483188A7FDA40"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/bulk_transcript.cpp",
+                                                      "size_bytes":  15834,
+                                                      "sha256":  "83CD7FC38B4F9A5AF86319A6D9E48FC3368C150A3DE7A0638E8D165421D3F8DA"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/bulk_tx_lease.cpp",
+                                                      "size_bytes":  6824,
+                                                      "sha256":  "4EF6B0D642F04143C9F0AB367906256D4BA022F9A10969978542B6417D8B82E1"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/ground_parameter_download_proxy.cpp",
+                                                      "size_bytes":  46311,
+                                                      "sha256":  "58F2AB0B77F0ABD8C3949649C172BEB43CB75C48DE7C1C6D78FFD9C15C208FE8"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/ground_usb_heartbeat_pacer.cpp",
+                                                      "size_bytes":  12279,
+                                                      "sha256":  "5FDE2D6885A691D8B1F20FA5A2609199455823405094A26B1A0F8639A31DF762"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/high_speed_tdd_coordinator.cpp",
+                                                      "size_bytes":  45658,
+                                                      "sha256":  "E5C62F4C46BC25AE1FD6E9A4137333DC8916BEACE352336A35752DDEA8C833A7"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/late_uplink_recovery.cpp",
+                                                      "size_bytes":  4360,
+                                                      "sha256":  "2E107949D842805DA811007D1D97366D556570EDD9E87D8C300431C94B46F094"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/link_data_codec.cpp",
+                                                      "size_bytes":  1552,
+                                                      "sha256":  "B00D07F92AFA42B6790F0C8B533F29A3DF7E5750ECA5AA82EF12872C0102C211"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/link_diagnostics.cpp",
+                                                      "size_bytes":  687,
+                                                      "sha256":  "3E4D18315752DA14612300CC3DE5693FB22394C99663F3B84EA23F5A9D33047A"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/mavlink_frame.cpp",
+                                                      "size_bytes":  16510,
+                                                      "sha256":  "BD2890D8973C5A694D53AB2866A6B3DBF319FAE40B3CC308AE2DAE91B634F3A8"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/mavlink_scheduler.cpp",
+                                                      "size_bytes":  44421,
+                                                      "sha256":  "128F9AEEB6B624244DF3146BF24F5FE5D46F04628A83E67FE20CCA0CA789605F"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/runtime_contract.cpp",
+                                                      "size_bytes":  7792,
+                                                      "sha256":  "1DDA0464CFFAEABF68F3782593C607965144AC2BF5DD774C77888847DEA668B5"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/tdd_control_codec.cpp",
+                                                      "size_bytes":  5773,
+                                                      "sha256":  "91DF9C17ACC4D4DDCE1B6456EB3865A8BD374885CAFFB4FC0C32B63923260155"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/tdd_ground.cpp",
+                                                      "size_bytes":  20278,
+                                                      "sha256":  "6021D0799274A92A5F7AF7EC28AF7D7883DFB0CA6AD688D1D4162F042FD67EDF"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/tdd_link_demux.cpp",
+                                                      "size_bytes":  7022,
+                                                      "sha256":  "861235A0DF5254FE0D7DB2386956E512B7F02C0B90EA099DF323F85BAF594A6C"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/tdd_vehicle.cpp",
+                                                      "size_bytes":  16282,
+                                                      "sha256":  "B64C9E253E52109C0B47BE6C4A64E3A7A42CC10458F54D3080EF6710D54325A8"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/src/tx_gate.cpp",
+                                                      "size_bytes":  1570,
+                                                      "sha256":  "BE9E894ED9DD59023FCFF763E7AE575DCC80E1A295CF50D127A7FD48275F75BC"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/bulk_data_codec.hpp",
+                                                      "size_bytes":  7972,
+                                                      "sha256":  "0ABF929F5119D6DCB18D8BCC88A6089369BA3FAEFB3B66811336BBEA2063958C"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/bulk_heartbeat_sla.hpp",
+                                                      "size_bytes":  3919,
+                                                      "sha256":  "D61F0D2096EDF6013F4DAE73F1952DC55A94E3B28382A1FC2C2D9066489FCB1A"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/bulk_negotiation_codec.hpp",
+                                                      "size_bytes":  5241,
+                                                      "sha256":  "2E910D835A07254CEC5DE944A0AEADC941E2598F9225EB91E72BBECB085A1A5C"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/bulk_session_controller.hpp",
+                                                      "size_bytes":  17733,
+                                                      "sha256":  "6A92DC55EF2EBCEA5ACFE062A94C31D345CA268116E7FEF79AFA3A9EF22633F4"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/bulk_transcript.hpp",
+                                                      "size_bytes":  5274,
+                                                      "sha256":  "CF5FC5D9AEDF05DD537C760E4992DFEB40B1BB53368732B47D07F6CC16335AFF"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/bulk_tx_lease.hpp",
+                                                      "size_bytes":  4918,
+                                                      "sha256":  "DA6D9FF0101E0E463F813D84CCE0545C1820B80D610270CBA4AA5EA865DE69BF"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/byte_ring_buffer.hpp",
+                                                      "size_bytes":  3467,
+                                                      "sha256":  "57D3F2411EA2837B14A98161A8D65CE0B3B6EBDAD21890AB92B1D9D07ACAA674"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/embedded_io_adapter.hpp",
+                                                      "size_bytes":  23878,
+                                                      "sha256":  "63F3687F1E7F3146D4EFA1C9BDE4AAEF6CBAAC4881F338B1900A0B4981CB4B3F"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/ground_parameter_download_proxy.hpp",
+                                                      "size_bytes":  14086,
+                                                      "sha256":  "E5ACB41E2D36028DBDDF20C7F3194D4AEE0F35AD608C442EEB9156DEB6CA3131"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/ground_usb_heartbeat_pacer.hpp",
+                                                      "size_bytes":  9269,
+                                                      "sha256":  "052EB8588AE150C8E53233AB6F8367663EDCC5138A162AAFCD1225848DD55E81"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/ground_usb_host_presence_filter.hpp",
+                                                      "size_bytes":  4237,
+                                                      "sha256":  "A125ECF770B72CD779714292A25F2CA343AEB9272EE089A7D98E6A709D47298E"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/ground_usb_ordered_frame_backlog.hpp",
+                                                      "size_bytes":  8885,
+                                                      "sha256":  "1D3BB7D5CBA1C3826096424628F9CD2D424E33C14CD312E698E1BC52DB5BA422"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/high_speed_tdd_coordinator.hpp",
+                                                      "size_bytes":  14131,
+                                                      "sha256":  "B877FA20BEF05574BBE5C9AE8255782CAF7BE78B973F79CB17390443B6C48AAE"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/late_uplink_recovery.hpp",
+                                                      "size_bytes":  2279,
+                                                      "sha256":  "607CBE9CD32D886DA0AEA975D9C047B4203261F3B3FE4F262FE301DEA677304B"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/legacy_silence_gate.hpp",
+                                                      "size_bytes":  1174,
+                                                      "sha256":  "2825DF10FB5F15CA8D8E6D51ABFEB08884318BC1911C6850AF8DBD4409A35402"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/link_data_codec.hpp",
+                                                      "size_bytes":  1297,
+                                                      "sha256":  "25384B3468CCD5F091A4076696451A4CD938C530DC1EBC6CD57D7BDCE9AD7D2C"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/link_diagnostics.hpp",
+                                                      "size_bytes":  3184,
+                                                      "sha256":  "DC353B681960DFD38481919F6B1FC2188DA94F8E6E781FD7DB497605E70A936D"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/mavlink_frame.hpp",
+                                                      "size_bytes":  3898,
+                                                      "sha256":  "C3E740599350B19F8EAD5C8DF7E12FB9D1F35E43C10CEA621AA832BB26856D57"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/mavlink_scheduler.hpp",
+                                                      "size_bytes":  16870,
+                                                      "sha256":  "5D607A54A7B522772DEFC6A9D529123512B17B046A14E6B6FD222A98F2D7DCD2"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/runtime_contract.hpp",
+                                                      "size_bytes":  13903,
+                                                      "sha256":  "4C1E05D03E72A40660971CFDE65EDC6901B5589C1990295A99F208B03D1CA2CF"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/tdd_control_codec.hpp",
+                                                      "size_bytes":  1310,
+                                                      "sha256":  "608689BE3549D874A19A51725EA36879DDAD19F0476F43B0B7FED9357F8D0C76"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/tdd_ground.hpp",
+                                                      "size_bytes":  3740,
+                                                      "sha256":  "CAE5E17E0936D772CE29BC6F9C457295E0DDB493BCA3DFE9C85DBA7F238FAE32"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/tdd_link_demux.hpp",
+                                                      "size_bytes":  3751,
+                                                      "sha256":  "7A255DF5D16AFBD93655CB85645E73DBDA1EBA57C74B6DBC647B2A326CD1F511"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/tdd_types.hpp",
+                                                      "size_bytes":  5535,
+                                                      "sha256":  "BD428D8153726964DDE609AFF12ECB8FF3D5D4171092C274125938746C4EBE95"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/tdd_vehicle.hpp",
+                                                      "size_bytes":  3629,
+                                                      "sha256":  "5A26F9FD46FB8808330EF982E7BB0B2D4D1744FD8EE4888864D229D1587A014A"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora/tx_gate.hpp",
+                                                      "size_bytes":  853,
+                                                      "sha256":  "34EFA4672519FA0ADC6A9CA5F014A66DDF5741FE80D51A52120B171FB2194055"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/VC_LoRa_Core.h",
+                                                      "size_bytes":  133,
+                                                      "sha256":  "6D537B590FCFFB95346BD328218A1A1CF54C6629BF6DA3CE1FE3DD2C4DFFE3AF"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora_phase6_bridge.hpp",
+                                                      "size_bytes":  211616,
+                                                      "sha256":  "EF6F461D3E6C7F3628FE9A87285D99EF67DC30503DFE58CCE99A0FE12906A323"
+                                                  },
+                                                  {
+                                                      "path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora_vehicle_xiao_esp32s3.ino",
+                                                      "size_bytes":  289,
+                                                      "sha256":  "B48C2E5197A7BF6F5C8B0896BACC7517997567FFDDBC835651C1FE56A88003B7"
+                                                  }
+                                              ]
+                                },
+    "roles":  [
+                  {
+                      "role":  "vehicle",
+                      "name":  "Vehicle",
+                      "role_macro":  "VC_LORA_PHASE6_VEHICLE=1",
+                      "source_sketch":  "vc_lora_vehicle_xiao_esp32s3/vc_lora_vehicle_xiao_esp32s3.ino",
+                      "staged_sketch":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora_vehicle_xiao_esp32s3.ino",
+                      "compile":  {
+                                      "argv":  [
+                                                   "--config-file",
+                                                   "C:\\Users\\user\\.arduinoIDE\\arduino-cli.yaml",
+                                                   "compile",
+                                                   "--fqbn",
+                                                   "esp32:esp32:XIAO_ESP32S3",
+                                                   "--warnings",
+                                                   "all",
+                                                   "--clean",
+                                                   "--build-path",
+                                                   "C:\\Users\\user\\AppData\\Local\\Temp\\vc_lora_r19_candidate_artifact_233520f2d2604c7bb01347825f45e014\\build\\vehicle",
+                                                   "--output-dir",
+                                                   "C:\\Users\\user\\AppData\\Local\\Temp\\vc_lora_r19_candidate_artifact_233520f2d2604c7bb01347825f45e014\\output\\vehicle",
+                                                   "--build-property",
+                                                   "compiler.cpp.extra_flags=-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1 -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1",
+                                                   "--json",
+                                                   "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\package\\vc_lora_vehicle_xiao_esp32s3"
+                                               ],
+                                      "runtime_fail_diagnostics_enabled":  true,
+                                      "acceptance_eligible":  false,
+                                      "acceptance_authorized":  false,
+                                      "deployment_authorized":  false,
+                                      "flash_bytes":  431785,
+                                      "ram_bytes":  106296,
+                                      "evidence_path":  "evidence/compile-vehicle.json",
+                                      "evidence_sha256":  "165661F29DC4AB9D337CF4DF8D5B06787B837FB9EA3851EDDB71B7E08567AB13"
+                                  },
+                      "application":  {
+                                          "path":  "firmware/vehicle.application.bin",
+                                          "size_bytes":  431936,
+                                          "sha256":  "45126943A21D06BB28071B3975BF01B4F1023638839555C433E7B5A004CA0E12"
+                                      },
+                      "application_binary_provenance":  {
+                                                            "schema":  "vc-lora-r19-application-binary-provenance-v1",
+                                                            "exact_match":  true,
+                                                            "build_path":  {
+                                                                               "origin":  "build-path",
+                                                                               "file_name":  "vc_lora_vehicle_xiao_esp32s3.ino.bin",
+                                                                               "size_bytes":  431936,
+                                                                               "sha256":  "45126943A21D06BB28071B3975BF01B4F1023638839555C433E7B5A004CA0E12"
+                                                                           },
+                                                            "output_dir":  {
+                                                                               "origin":  "output-dir",
+                                                                               "file_name":  "vc_lora_vehicle_xiao_esp32s3.ino.bin",
+                                                                               "size_bytes":  431936,
+                                                                               "sha256":  "45126943A21D06BB28071B3975BF01B4F1023638839555C433E7B5A004CA0E12"
+                                                                           },
+                                                            "published":  {
+                                                                              "path":  "firmware/vehicle.application.bin",
+                                                                              "size_bytes":  431936,
+                                                                              "sha256":  "45126943A21D06BB28071B3975BF01B4F1023638839555C433E7B5A004CA0E12"
+                                                                          }
+                                                        },
+                      "application_flash_layout":  {
+                                                       "schema":  "vc-lora-r19-application-flash-layout-v1",
+                                                       "application_file_name":  "vc_lora_vehicle_xiao_esp32s3.ino.bin",
+                                                       "flash_args":  {
+                                                                          "sha256":  "4936AFFA8765570352FE0E614CB14DC6E5553277686821FEE7EE7E6D32F105AE",
+                                                                          "application_occurrences":  1,
+                                                                          "application_offset":  "0x10000"
+                                                                      },
+                                                       "partitions_csv":  {
+                                                                              "sha256":  "AB2F33C14EB855054613FD3A4BA85457AE281C6F371C25931CCC763BC79CB0E2",
+                                                                              "target_app_occurrences":  1,
+                                                                              "target_app_name":  "app0",
+                                                                              "target_app_subtype":  "ota_0",
+                                                                              "target_app_offset":  "0x10000",
+                                                                              "target_app_size_bytes":  3342336
+                                                                          }
+                                                   },
+                      "reproducibility_artifacts":  {
+                                                        "file_count":  6,
+                                                        "tree_sha256":  "D36E8E33BF600EC0C3536DE60E8F0A327879C5CA4BA123283947ED6353602B73",
+                                                        "files":  [
+                                                                      {
+                                                                          "path":  "evidence/build/vehicle/application.elf",
+                                                                          "size_bytes":  7855052,
+                                                                          "sha256":  "B2E6E6C5490E2EC1FAB30350AB7E1F9A274CEA8682A103DF74256DA214B0F779"
+                                                                      },
+                                                                      {
+                                                                          "path":  "evidence/build/vehicle/application.map",
+                                                                          "size_bytes":  8787812,
+                                                                          "sha256":  "B69A7B6951C70452BE787C3F660213729FDB5CC024CB49F309F405E74770C6C8"
+                                                                      },
+                                                                      {
+                                                                          "path":  "evidence/build/vehicle/build.options.json",
+                                                                          "size_bytes":  1479,
+                                                                          "sha256":  "54585801B0EBDD3915ED4838892E0B3826DBC80C089CFF89BDFA21E2F4C4821E"
+                                                                      },
+                                                                      {
+                                                                          "path":  "evidence/build/vehicle/flash_args",
+                                                                          "size_bytes":  238,
+                                                                          "sha256":  "4936AFFA8765570352FE0E614CB14DC6E5553277686821FEE7EE7E6D32F105AE"
+                                                                      },
+                                                                      {
+                                                                          "path":  "evidence/build/vehicle/partitions.csv",
+                                                                          "size_bytes":  305,
+                                                                          "sha256":  "AB2F33C14EB855054613FD3A4BA85457AE281C6F371C25931CCC763BC79CB0E2"
+                                                                      },
+                                                                      {
+                                                                          "path":  "evidence/build/vehicle/sdkconfig",
+                                                                          "size_bytes":  143539,
+                                                                          "sha256":  "534F3457AAF3FFBC82C45DC21D6B3AC57388C82D0D9A24BD2B8E6CADC3E48D9D"
+                                                                      }
+                                                                  ]
+                                                    }
+                  },
+                  {
+                      "role":  "ground",
+                      "name":  "Ground",
+                      "role_macro":  "VC_LORA_PHASE6_GROUND=1",
+                      "source_sketch":  "vc_lora_ground_xiao_esp32s3/vc_lora_ground_xiao_esp32s3.ino",
+                      "staged_sketch":  "package/vc_lora_ground_xiao_esp32s3/vc_lora_ground_xiao_esp32s3.ino",
+                      "compile":  {
+                                      "argv":  [
+                                                   "--config-file",
+                                                   "C:\\Users\\user\\.arduinoIDE\\arduino-cli.yaml",
+                                                   "compile",
+                                                   "--fqbn",
+                                                   "esp32:esp32:XIAO_ESP32S3",
+                                                   "--warnings",
+                                                   "all",
+                                                   "--clean",
+                                                   "--build-path",
+                                                   "C:\\Users\\user\\AppData\\Local\\Temp\\vc_lora_r19_candidate_artifact_233520f2d2604c7bb01347825f45e014\\build\\ground",
+                                                   "--output-dir",
+                                                   "C:\\Users\\user\\AppData\\Local\\Temp\\vc_lora_r19_candidate_artifact_233520f2d2604c7bb01347825f45e014\\output\\ground",
+                                                   "--build-property",
+                                                   "compiler.cpp.extra_flags=-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1 -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1",
+                                                   "--json",
+                                                   "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\package\\vc_lora_ground_xiao_esp32s3"
+                                               ],
+                                      "runtime_fail_diagnostics_enabled":  true,
+                                      "acceptance_eligible":  false,
+                                      "acceptance_authorized":  false,
+                                      "deployment_authorized":  false,
+                                      "flash_bytes":  403425,
+                                      "ram_bytes":  69904,
+                                      "evidence_path":  "evidence/compile-ground.json",
+                                      "evidence_sha256":  "E32286E0E8C921F28B0A16BE2D8F7CFE39ABE556CF1AD722FDCFA5609FFBA27B"
+                                  },
+                      "application":  {
+                                          "path":  "firmware/ground.application.bin",
+                                          "size_bytes":  403568,
+                                          "sha256":  "51D8891F093FC3A1F637570909AAADBE22676C59D77B302BD801FBC03394E344"
+                                      },
+                      "application_binary_provenance":  {
+                                                            "schema":  "vc-lora-r19-application-binary-provenance-v1",
+                                                            "exact_match":  true,
+                                                            "build_path":  {
+                                                                               "origin":  "build-path",
+                                                                               "file_name":  "vc_lora_ground_xiao_esp32s3.ino.bin",
+                                                                               "size_bytes":  403568,
+                                                                               "sha256":  "51D8891F093FC3A1F637570909AAADBE22676C59D77B302BD801FBC03394E344"
+                                                                           },
+                                                            "output_dir":  {
+                                                                               "origin":  "output-dir",
+                                                                               "file_name":  "vc_lora_ground_xiao_esp32s3.ino.bin",
+                                                                               "size_bytes":  403568,
+                                                                               "sha256":  "51D8891F093FC3A1F637570909AAADBE22676C59D77B302BD801FBC03394E344"
+                                                                           },
+                                                            "published":  {
+                                                                              "path":  "firmware/ground.application.bin",
+                                                                              "size_bytes":  403568,
+                                                                              "sha256":  "51D8891F093FC3A1F637570909AAADBE22676C59D77B302BD801FBC03394E344"
+                                                                          }
+                                                        },
+                      "application_flash_layout":  {
+                                                       "schema":  "vc-lora-r19-application-flash-layout-v1",
+                                                       "application_file_name":  "vc_lora_ground_xiao_esp32s3.ino.bin",
+                                                       "flash_args":  {
+                                                                          "sha256":  "929110FA5D4B163A66711BCECD998E7ADB6E07842F11AD8B461AD17B6F151D99",
+                                                                          "application_occurrences":  1,
+                                                                          "application_offset":  "0x10000"
+                                                                      },
+                                                       "partitions_csv":  {
+                                                                              "sha256":  "AB2F33C14EB855054613FD3A4BA85457AE281C6F371C25931CCC763BC79CB0E2",
+                                                                              "target_app_occurrences":  1,
+                                                                              "target_app_name":  "app0",
+                                                                              "target_app_subtype":  "ota_0",
+                                                                              "target_app_offset":  "0x10000",
+                                                                              "target_app_size_bytes":  3342336
+                                                                          }
+                                                   },
+                      "reproducibility_artifacts":  {
+                                                        "file_count":  6,
+                                                        "tree_sha256":  "1792C8BAFDCE89F28E5E7517B84E8AC00ABD4029335E196FE363CF2F6D91D3EC",
+                                                        "files":  [
+                                                                      {
+                                                                          "path":  "evidence/build/ground/application.elf",
+                                                                          "size_bytes":  7935388,
+                                                                          "sha256":  "6E5D501EE22FDFE1E2EFDCD235122BB448DCE4012FB83EF769CA841934D3CB65"
+                                                                      },
+                                                                      {
+                                                                          "path":  "evidence/build/ground/application.map",
+                                                                          "size_bytes":  8861989,
+                                                                          "sha256":  "FA7BC08DEBD9B37C9BD934C468300FEB287EB2A4D34B814AA81A821D8331D637"
+                                                                      },
+                                                                      {
+                                                                          "path":  "evidence/build/ground/build.options.json",
+                                                                          "size_bytes":  1478,
+                                                                          "sha256":  "CD320FFAD456F36FDD9A2C8EBD1DA0BB5C23C1C56064FB19B5F3A5C329150ECC"
+                                                                      },
+                                                                      {
+                                                                          "path":  "evidence/build/ground/flash_args",
+                                                                          "size_bytes":  235,
+                                                                          "sha256":  "929110FA5D4B163A66711BCECD998E7ADB6E07842F11AD8B461AD17B6F151D99"
+                                                                      },
+                                                                      {
+                                                                          "path":  "evidence/build/ground/partitions.csv",
+                                                                          "size_bytes":  305,
+                                                                          "sha256":  "AB2F33C14EB855054613FD3A4BA85457AE281C6F371C25931CCC763BC79CB0E2"
+                                                                      },
+                                                                      {
+                                                                          "path":  "evidence/build/ground/sdkconfig",
+                                                                          "size_bytes":  143539,
+                                                                          "sha256":  "534F3457AAF3FFBC82C45DC21D6B3AC57388C82D0D9A24BD2B8E6CADC3E48D9D"
+                                                                      }
+                                                                  ]
+                                                    }
+                  }
+              ],
+    "preservation":  {
+                         "default_sketches_before":  {
+                                                         "file_count":  120,
+                                                         "tree_sha256":  "298210EC045A5C6FEBA6BB315E4DFE34EC9EE7FFBFF5BC947718ABF1B957386F"
+                                                     },
+                         "default_sketches_after":  {
+                                                        "file_count":  120,
+                                                        "tree_sha256":  "298210EC045A5C6FEBA6BB315E4DFE34EC9EE7FFBFF5BC947718ABF1B957386F"
+                                                    },
+                         "standard_artifacts_before":  {
+                                                           "file_count":  47,
+                                                           "tree_sha256":  "4D1A3962A599D2931A0B36FB8C2C62C3B6FF94CC1122099A76CACE1BA1E5AF6D"
+                                                       },
+                         "standard_artifacts_after":  {
+                                                          "file_count":  47,
+                                                          "tree_sha256":  "4D1A3962A599D2931A0B36FB8C2C62C3B6FF94CC1122099A76CACE1BA1E5AF6D"
+                                                      },
+                         "unchanged":  true
+                     }
+}

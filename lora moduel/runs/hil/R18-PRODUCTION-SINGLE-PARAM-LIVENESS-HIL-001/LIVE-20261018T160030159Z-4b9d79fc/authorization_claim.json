@@ -1,0 +1,11 @@
+{
+    "schema":  "vc-lora-r18-single-param-atomic-claim-v1",
+    "authorization_id":  "4b9d79fc-52b8-446e-a6ed-39e804a96848",
+    "authorization_token_sha256":  "4EEB5CC999ECFA4D9A6CEA5FF4A365EB6BBF15C9DD1F19CF43429A565F6C9914",
+    "claimed_utc":  "2026-10-18T16:00:31.5440646Z",
+    "bound_evidence_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R18-PRODUCTION-SINGLE-PARAM-LIVENESS-HIL-001\\LIVE-20261018T160030159Z-4b9d79fc",
+    "authorization_consumed":  true,
+    "authorization_reusable":  false,
+    "retry_allowed":  false,
+    "simulation":  false
+}

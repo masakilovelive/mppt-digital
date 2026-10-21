@@ -1,0 +1,697 @@
+{
+  "schema": "r19-offline-implementation-evidence-inventory-v1",
+  "result": "PASS_OFFLINE_PHASE_1_HIL_PENDING",
+  "hardware_interaction": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "coverage": "Task evidence files and successful compile outputs; Arduino per-build caches excluded. This is not a candidate manifest, flash binding or deployment acceptance.",
+  "file_count": 137,
+  "tree_sha256": "71DDF1E11DF3A10FCF48B1112513E230FB3B94A3E71B0D29D6AE49F47AB25A4C",
+  "files": [
+    {
+      "path": "after/CMakeLists.txt",
+      "size_bytes": 9040,
+      "sha256": "6D683AA893107F83BFD303189CF1F099823F273CAD93734E9FEBE8B18A3FE7DA"
+    },
+    {
+      "path": "after/CURRENT_WORKSPACE_AND_SPEC_R19.md",
+      "size_bytes": 362064,
+      "sha256": "29277BB05C387D28F7A48A61790F530B28F99D8E82438E7383CDB4BFB003EC40"
+    },
+    {
+      "path": "after/firmware/diagnostics/r19_host_readiness.hpp",
+      "size_bytes": 13605,
+      "sha256": "AB2407134125CE8E64F8CF44B08A265DF7A1BA1D9A0BF3C89C74B740527F8D56"
+    },
+    {
+      "path": "after/firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "size_bytes": 249875,
+      "sha256": "4FDFB3FB2FBFA408E88C9C356C7D86E9692CDC98469ED5642DDC2C089B4708BE"
+    },
+    {
+      "path": "after/tests/hil/check_r19_continuous_reader_contract.ps1",
+      "size_bytes": 13884,
+      "sha256": "35F7BA97BBE7D3E3B066A77294168699EDE468CEAE413F8ABFCF7F2402C32732"
+    },
+    {
+      "path": "after/tests/hil/check_r19_continuous_reader_integration.ps1",
+      "size_bytes": 12524,
+      "sha256": "3563790930DF7D264193DD3928D34A27C7EDA18B39A0F8C486F4F34609146DBE"
+    },
+    {
+      "path": "after/tests/hil/check_r19_host_readiness_wire.ps1",
+      "size_bytes": 4929,
+      "sha256": "E0FD2952C60C83B381F7B93742ACC8A706526A9D06BC0E833E8E70495D52F0C7"
+    },
+    {
+      "path": "after/tests/hil/check_r19_startup_reader_contract.ps1",
+      "size_bytes": 10282,
+      "sha256": "06BA77B847162E8428D5E58D6E5251F667C0A7C685EDF01C7F5CC36AC4E46A9E"
+    },
+    {
+      "path": "after/tests/host/CMakeLists.txt",
+      "size_bytes": 36318,
+      "sha256": "E434DDDD8ACC3686ADE2D35A45135AA6AF7B7184620853677F066879278464F7"
+    },
+    {
+      "path": "after/tests/host/standalone/check_r19_host_readiness_integration.ps1",
+      "size_bytes": 7512,
+      "sha256": "9719EC9AC2A15DF3EFF9F1AA1B4B233040802C6A7ABF4730797061D58110F155"
+    },
+    {
+      "path": "after/tests/host/standalone/phase6_ground_host_readiness_tests.cpp",
+      "size_bytes": 5965,
+      "sha256": "1C219270EFBE3437A25AF3B637B899A852C12877A6050A57781461BA7852989F"
+    },
+    {
+      "path": "after/tests/host/standalone/r19_host_readiness_tests.cpp",
+      "size_bytes": 12256,
+      "sha256": "A727493461AA0E13D65C4D7A41540D83ED15369C15B3DAA2FD4E7E051DA9B892"
+    },
+    {
+      "path": "after/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "size_bytes": 175418,
+      "sha256": "F2CB12FBCD7613D7D37729D89903603C61A0DCC718C8CD4DC926E3CE2F4CD192"
+    },
+    {
+      "path": "after/tools/r19_continuous_reader.cs",
+      "size_bytes": 17494,
+      "sha256": "8DF5929114802926708BD42430CDCD7AF499B15B92EB7B7503BEF11C635B44F9"
+    },
+    {
+      "path": "after/tools/r19_host_readiness_wire.ps1",
+      "size_bytes": 7713,
+      "sha256": "91CEEF26F4CFF3E8DED4C6132CD274BDC325051592715D70CBAF08CDF71BCBE4"
+    },
+    {
+      "path": "after/tools/run_r19_runtime_fail_diagnostic_hil.ps1",
+      "size_bytes": 185622,
+      "sha256": "01C62A598FD9AEE52020F4FE72991FAB0502E3AD62DDA2957A6D282CC118966C"
+    },
+    {
+      "path": "after/tools/sync_arduino_sketch_core.ps1",
+      "size_bytes": 4470,
+      "sha256": "00FC27F805C00BA4CA5618EBEE219FB08537423A9CAA80772D711AE89760C517"
+    },
+    {
+      "path": "after/vc_lora_ground_xiao_esp32s3/diagnostics/r19_host_readiness.hpp",
+      "size_bytes": 13605,
+      "sha256": "AB2407134125CE8E64F8CF44B08A265DF7A1BA1D9A0BF3C89C74B740527F8D56"
+    },
+    {
+      "path": "after/vc_lora_ground_xiao_esp32s3/vc_lora_phase6_bridge.hpp",
+      "size_bytes": 249875,
+      "sha256": "4FDFB3FB2FBFA408E88C9C356C7D86E9692CDC98469ED5642DDC2C089B4708BE"
+    },
+    {
+      "path": "after/vc_lora_vehicle_xiao_esp32s3/diagnostics/r19_host_readiness.hpp",
+      "size_bytes": 13605,
+      "sha256": "AB2407134125CE8E64F8CF44B08A265DF7A1BA1D9A0BF3C89C74B740527F8D56"
+    },
+    {
+      "path": "after/vc_lora_vehicle_xiao_esp32s3/vc_lora_phase6_bridge.hpp",
+      "size_bytes": 249875,
+      "sha256": "4FDFB3FB2FBFA408E88C9C356C7D86E9692CDC98469ED5642DDC2C089B4708BE"
+    },
+    {
+      "path": "arduino/host_arm_diagnostic_vehicle/compile.json",
+      "size_bytes": 82376,
+      "sha256": "13B2EBF008CF6859B7CE6474739C7B987B5400E1C0F16F38986855F584D3AE2A"
+    },
+    {
+      "path": "arduino/host_arm_diagnostic_vehicle/invocation.json",
+      "size_bytes": 1397,
+      "sha256": "4347E921310CE28F60CF8587A109204A7DC8E4DAB526DDC0B542C0378F38D180"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_ground/compile.json",
+      "size_bytes": 67603,
+      "sha256": "9C70C51EAB3506DD8762DF5607444EF657C790443E02A7358BD6509ACE7C8B30"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_ground/invocation.json",
+      "size_bytes": 1400,
+      "sha256": "3BC1E0704D76F7A45B03C3D9DD201CC420C5139A8B85A6F5694D947A6145BB06"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_ground/output/vc_lora_ground_xiao_esp32s3.ino.bin",
+      "size_bytes": 422240,
+      "sha256": "E4F499D1E22C18DD3C4EA98FF21FB9CCA95275C74D0D70F22233177D8F50E617"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_ground/output/vc_lora_ground_xiao_esp32s3.ino.bootloader.bin",
+      "size_bytes": 19968,
+      "sha256": "73BD425E380C709F6ABD83AA987CB51C042A9AA8DE44A37A9EDB22D53BCA08DD"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_ground/output/vc_lora_ground_xiao_esp32s3.ino.elf",
+      "size_bytes": 8124348,
+      "sha256": "3849C79EC46E99F416403B2DAA896F34F20B3265430EBAF741AAF0F4876CFFC3"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_ground/output/vc_lora_ground_xiao_esp32s3.ino.map",
+      "size_bytes": 9369695,
+      "sha256": "1D97F8BBC3BCAE3BAA93CD3B0D15DFDBDCBF87B01A4E7CAC9B8D1B5B2F6DA36E"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_ground/output/vc_lora_ground_xiao_esp32s3.ino.merged.bin",
+      "size_bytes": 8388608,
+      "sha256": "C0C04771E4D4534CACFBE11E1B290EA2E55DFBF609BE3FABF5386EECACA36C6F"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_ground/output/vc_lora_ground_xiao_esp32s3.ino.partitions.bin",
+      "size_bytes": 3072,
+      "sha256": "1D9CCA96DE0FE07AD7FC0648B9878DDECD9CE565E38B589AD20FEA698ED4C80C"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_vehicle/compile.json",
+      "size_bytes": 67743,
+      "sha256": "2D8939B9B25DF88533688E1C48A1D7FE5A18C365A597AEED14B3F2255F3F59FF"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_vehicle/invocation.json",
+      "size_bytes": 1403,
+      "sha256": "695AF0271184987A95E4BAD4253B773FEDE212AF5470A02D974ED2D1BB5D9E35"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_vehicle/output/vc_lora_vehicle_xiao_esp32s3.ino.bin",
+      "size_bytes": 441280,
+      "sha256": "001F2664F53CF00B1076B07BFA8A4811338F5759375658B7C054877B44139AF9"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_vehicle/output/vc_lora_vehicle_xiao_esp32s3.ino.bootloader.bin",
+      "size_bytes": 19968,
+      "sha256": "73BD425E380C709F6ABD83AA987CB51C042A9AA8DE44A37A9EDB22D53BCA08DD"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_vehicle/output/vc_lora_vehicle_xiao_esp32s3.ino.elf",
+      "size_bytes": 7976452,
+      "sha256": "E4D4CB479C860BEF3012AEC1100F110B527BC166C7F3886340A9C01449B41BF9"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_vehicle/output/vc_lora_vehicle_xiao_esp32s3.ino.map",
+      "size_bytes": 9206540,
+      "sha256": "B7F55AB782498995134F3E80C76D9C7BCA308F78088EBFDF837A27CCC28EC3F3"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_vehicle/output/vc_lora_vehicle_xiao_esp32s3.ino.merged.bin",
+      "size_bytes": 8388608,
+      "sha256": "33E72624D8317ED549D86CD3075091C1C83DFFBA673A9A6E628ABF6038652484"
+    },
+    {
+      "path": "arduino/host_arm_include_fixed_vehicle/output/vc_lora_vehicle_xiao_esp32s3.ino.partitions.bin",
+      "size_bytes": 3072,
+      "sha256": "1D9CCA96DE0FE07AD7FC0648B9878DDECD9CE565E38B589AD20FEA698ED4C80C"
+    },
+    {
+      "path": "arduino/host_arm_parallel_vehicle/compile.json",
+      "size_bytes": 82238,
+      "sha256": "0C2ACD0C44D85356A5EDF6B5502C546382A00179BC71395777358CDA7AF72FA8"
+    },
+    {
+      "path": "arduino/host_arm_parallel_vehicle/invocation.json",
+      "size_bytes": 1393,
+      "sha256": "7621E9AFBB4FEEAFE7B9F7791E356D5333793BA8485BEEF63B90AFECABF30850"
+    },
+    {
+      "path": "arduino/standard_ground/compile.json",
+      "size_bytes": 65685,
+      "sha256": "CA2983C56713ACC5CE4D159FD463140C9DFE88187623CFF1896051827855D960"
+    },
+    {
+      "path": "arduino/standard_ground/invocation.json",
+      "size_bytes": 1165,
+      "sha256": "A5280A7786C25BDA663DF9AE26C9D5A398142B66358FB173E0DB90AEFBF8E117"
+    },
+    {
+      "path": "arduino/standard_ground/output/vc_lora_ground_xiao_esp32s3.ino.bin",
+      "size_bytes": 360992,
+      "sha256": "4F68C70A966C5D606630612ED1F0F58EECD1EE3EC3EE9BBDC412A9574F97019E"
+    },
+    {
+      "path": "arduino/standard_ground/output/vc_lora_ground_xiao_esp32s3.ino.bootloader.bin",
+      "size_bytes": 19968,
+      "sha256": "73BD425E380C709F6ABD83AA987CB51C042A9AA8DE44A37A9EDB22D53BCA08DD"
+    },
+    {
+      "path": "arduino/standard_ground/output/vc_lora_ground_xiao_esp32s3.ino.elf",
+      "size_bytes": 7177856,
+      "sha256": "3825E81E1CCD7CAB12BE100DB6019B213ECD40B7BE1A34C28406BC39C460C71A"
+    },
+    {
+      "path": "arduino/standard_ground/output/vc_lora_ground_xiao_esp32s3.ino.map",
+      "size_bytes": 8879671,
+      "sha256": "64E19DFED0857A4D0A1A85A11FAC728CE3CEC74B0FC3B023FB6122F1AE442A25"
+    },
+    {
+      "path": "arduino/standard_ground/output/vc_lora_ground_xiao_esp32s3.ino.merged.bin",
+      "size_bytes": 8388608,
+      "sha256": "A5AD9308D45332DC65A386C188D0150464FE613E01EDDB66524F94C1B7508685"
+    },
+    {
+      "path": "arduino/standard_ground/output/vc_lora_ground_xiao_esp32s3.ino.partitions.bin",
+      "size_bytes": 3072,
+      "sha256": "1D9CCA96DE0FE07AD7FC0648B9878DDECD9CE565E38B589AD20FEA698ED4C80C"
+    },
+    {
+      "path": "arduino/standard_vehicle/compile.json",
+      "size_bytes": 64216,
+      "sha256": "D7D850081F8AD3F24ABD14DDBE3A9BAED891CA8D9FDA1FA44CED5A8EE7DDDC8C"
+    },
+    {
+      "path": "arduino/standard_vehicle/invocation.json",
+      "size_bytes": 1168,
+      "sha256": "4DD8FF96C20FA8606C6ED65A9462E74CCC2DA86CC805824075643065118B413A"
+    },
+    {
+      "path": "arduino/standard_vehicle/output/vc_lora_vehicle_xiao_esp32s3.ino.bin",
+      "size_bytes": 390768,
+      "sha256": "DCF22933CB26C497598CA7487420F324F18490D77E534AAE1E0C1DE79697D8C1"
+    },
+    {
+      "path": "arduino/standard_vehicle/output/vc_lora_vehicle_xiao_esp32s3.ino.bootloader.bin",
+      "size_bytes": 19968,
+      "sha256": "73BD425E380C709F6ABD83AA987CB51C042A9AA8DE44A37A9EDB22D53BCA08DD"
+    },
+    {
+      "path": "arduino/standard_vehicle/output/vc_lora_vehicle_xiao_esp32s3.ino.elf",
+      "size_bytes": 7089996,
+      "sha256": "B6DFF51136EF5029E3DB9F8F97EFEB8E5F6C1DBBD45D891C95205D547AC8845C"
+    },
+    {
+      "path": "arduino/standard_vehicle/output/vc_lora_vehicle_xiao_esp32s3.ino.map",
+      "size_bytes": 8808933,
+      "sha256": "8789996E84A1C8E1C22290C3E0F431AB390D296C5942326E3243EE61A75D89B6"
+    },
+    {
+      "path": "arduino/standard_vehicle/output/vc_lora_vehicle_xiao_esp32s3.ino.merged.bin",
+      "size_bytes": 8388608,
+      "sha256": "02F23B4A8E62BFF2C654E946562DBAC1EE4924E7A1268C3FB95411D8DBE81291"
+    },
+    {
+      "path": "arduino/standard_vehicle/output/vc_lora_vehicle_xiao_esp32s3.ino.partitions.bin",
+      "size_bytes": 3072,
+      "sha256": "1D9CCA96DE0FE07AD7FC0648B9878DDECD9CE565E38B589AD20FEA698ED4C80C"
+    },
+    {
+      "path": "before/CMakeLists.txt",
+      "size_bytes": 8326,
+      "sha256": "CFB7D4A8DCF28C0A5C4153D4B6A1575A9859D1B92220657F7E3C9BF548DF9363"
+    },
+    {
+      "path": "before/CURRENT_WORKSPACE_AND_SPEC_R19.md",
+      "size_bytes": 356457,
+      "sha256": "530BD880E1FC48A6C9878668F2CEC641B4639177D6409DAA09C41D701492AD65"
+    },
+    {
+      "path": "before/firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "size_bytes": 241175,
+      "sha256": "A7759306694F93A425229A30C721121BD7B29C063860C8C58691FB049985BF34"
+    },
+    {
+      "path": "before/tests/arduino_compile/check_r19_candidate_artifact_builder_contract.ps1",
+      "size_bytes": 78127,
+      "sha256": "7E0885985D6775DB37AB2269FD00BEF2CCCEB54C8E2B3CCE59FB9EDAEE366AEC"
+    },
+    {
+      "path": "before/tests/hil/check_r19_startup_reader_contract.ps1",
+      "size_bytes": 9564,
+      "sha256": "5C8A3B9ED6C0AA87546B4F46E26AB697003A8865CFE4CD5073CA4DB010660E8E"
+    },
+    {
+      "path": "before/tests/host/CMakeLists.txt",
+      "size_bytes": 35237,
+      "sha256": "4C17A5E5FF3A3EF6C0C3C1737617DA38956732F9E80D3264120F3C5003C84605"
+    },
+    {
+      "path": "before/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "size_bytes": 175418,
+      "sha256": "93A6CA04130B3E575B6AE9A3582F7E1A43A5BD63E228CB06D31502C3D189E255"
+    },
+    {
+      "path": "before/tools/r19_candidate_artifact_common.ps1",
+      "size_bytes": 27053,
+      "sha256": "582B50BB6C4A981862D4CE716A90D8B88601476724E9B75889A414EBE8A25B39"
+    },
+    {
+      "path": "before/tools/run_r19_runtime_fail_diagnostic_hil.ps1",
+      "size_bytes": 173899,
+      "sha256": "79E908CBA3F120F007DB81FA08B5590337581BB4CE9433054EAD7E7A46543680"
+    },
+    {
+      "path": "before/tools/sync_arduino_sketch_core.ps1",
+      "size_bytes": 3725,
+      "sha256": "3FE7FFF88F37FEB821B6D688EA08B9DCA6B649970DA62794C8D0A1EE3A170E37"
+    },
+    {
+      "path": "before/vc_lora_ground_xiao_esp32s3/vc_lora_phase6_bridge.hpp",
+      "size_bytes": 241175,
+      "sha256": "A7759306694F93A425229A30C721121BD7B29C063860C8C58691FB049985BF34"
+    },
+    {
+      "path": "before/vc_lora_vehicle_xiao_esp32s3/vc_lora_phase6_bridge.hpp",
+      "size_bytes": 241175,
+      "sha256": "A7759306694F93A425229A30C721121BD7B29C063860C8C58691FB049985BF34"
+    },
+    {
+      "path": "compile_diagnostic_fixed_summary.json",
+      "size_bytes": 1851,
+      "sha256": "252EEDCD937D3F604E028CE1C729364E7EB2DBCC6999527B8225BFC73E5087E1"
+    },
+    {
+      "path": "compile_diagnostic_fixed.log",
+      "size_bytes": 204,
+      "sha256": "3A877AC7D5F58247376DCCBEE9DA5815F58F6041D947D45C9874621CE45EC513"
+    },
+    {
+      "path": "compile_diagnostic_only.log",
+      "size_bytes": 985,
+      "sha256": "B76BE231740B10646A0C929491F58D3E797C85E1863521702C0CDC63B93EC010"
+    },
+    {
+      "path": "compile_diagnostic_only.ps1",
+      "size_bytes": 2717,
+      "sha256": "2FEDAC4EEF77AC449B73240548B17695DE17F5FA5C70FCA42BFD31B36F4FF4F9"
+    },
+    {
+      "path": "compile_diagnostic_only.red.ps1",
+      "size_bytes": 2706,
+      "sha256": "0536F8F45C2812705C463AF5952649A9BBB043EF26B11E6460F1443D2E6273CB"
+    },
+    {
+      "path": "compile_diagnostic_summary.json",
+      "size_bytes": 1012,
+      "sha256": "BB23D764BA5FFAF27DD1A0FE6A327411935881966BBE5E3C4EEC7CC83F220682"
+    },
+    {
+      "path": "compile_only.log",
+      "size_bytes": 1253,
+      "sha256": "51D79CAC54F5F20D8AB0BE6526255FB434F377C5004A090DA55910E0F7250C32"
+    },
+    {
+      "path": "compile_only.ps1",
+      "size_bytes": 3195,
+      "sha256": "31A01946757FA79CB2D8723F740943E1B90B4AF8F142B8005B4699296C2A8DBD"
+    },
+    {
+      "path": "compile_summary.json",
+      "size_bytes": 2529,
+      "sha256": "F3C46B9B19E0C68AE68DF9F86F59E3B5B0043FB1B52CBD74B2EFA7007E79C12A"
+    },
+    {
+      "path": "continuous_integration_green_attempt1.log",
+      "size_bytes": 480,
+      "sha256": "8CBDC407167050CB96572B56B41FEF27A388BACCFAB0A50165603D2D8403B0A6"
+    },
+    {
+      "path": "continuous_integration_ps7.log",
+      "size_bytes": 480,
+      "sha256": "8CBDC407167050CB96572B56B41FEF27A388BACCFAB0A50165603D2D8403B0A6"
+    },
+    {
+      "path": "continuous_integration_red.log",
+      "size_bytes": 514,
+      "sha256": "08B126760D3EE71C5E56220129DD7C4F9915FA0548B2E769E3E4D5E792B1F77F"
+    },
+    {
+      "path": "diffs/CMakeLists.txt.diff",
+      "size_bytes": 1370,
+      "sha256": "1F1578F1D96610EAE5E67B35F1101083A07422762E3A44A0189502C87981808B"
+    },
+    {
+      "path": "diffs/CURRENT_WORKSPACE_AND_SPEC_R19.md.diff",
+      "size_bytes": 6453,
+      "sha256": "0B49917B86CBBFE36D9546498308A29CEFA840AE959E2333E325681C690D1A69"
+    },
+    {
+      "path": "diffs/firmware__diagnostics__r19_host_readiness.hpp.diff",
+      "size_bytes": 14426,
+      "sha256": "9C1F0FC8602E2F9CF3691773015B35117191D8221B30DB14B73E73193B045887"
+    },
+    {
+      "path": "diffs/firmware__phase6__vc_lora_phase6_bridge.hpp.diff",
+      "size_bytes": 15320,
+      "sha256": "3F553E4A8A84381855F1B5A01E67BCFA3B3F96DD39ABC02BF6A25B672C2D673B"
+    },
+    {
+      "path": "diffs/tests__hil__check_r19_continuous_reader_contract.ps1.diff",
+      "size_bytes": 14524,
+      "sha256": "876562BDF90F5748C10374766637E366EFA1FC1CC8BBDD0E570DF6EA80F8A9AC"
+    },
+    {
+      "path": "diffs/tests__hil__check_r19_continuous_reader_integration.ps1.diff",
+      "size_bytes": 13095,
+      "sha256": "69D0BFE93A44DDC988267E7EF29EEC099E4E27D50C403196D888424ADDE6CFDD"
+    },
+    {
+      "path": "diffs/tests__hil__check_r19_host_readiness_wire.ps1.diff",
+      "size_bytes": 5285,
+      "sha256": "2E606B69E4C63BA3D41129B886E05B2A856702DE0BCE8223913C736586C7FCB5"
+    },
+    {
+      "path": "diffs/tests__hil__check_r19_startup_reader_contract.ps1.diff",
+      "size_bytes": 2274,
+      "sha256": "26071F8E8C1A86743DF6A8D66814314CB4F9EE003187351562D073BFC6D5F5C3"
+    },
+    {
+      "path": "diffs/tests__host__CMakeLists.txt.diff",
+      "size_bytes": 2304,
+      "sha256": "99A9FFA10F17B5C56D1A12D0EA53427386A315999C49723DFAFD5BA9B5AC034F"
+    },
+    {
+      "path": "diffs/tests__host__standalone__check_r19_host_readiness_integration.ps1.diff",
+      "size_bytes": 8032,
+      "sha256": "4E30FD2113DA05D88BCCD66D465D7BC0452B5ACFA8D46315FF5C5B6119108349"
+    },
+    {
+      "path": "diffs/tests__host__standalone__phase6_ground_host_readiness_tests.cpp.diff",
+      "size_bytes": 6495,
+      "sha256": "FE4E682C0B1250213E41445134DA5D40DD1750EEF034F7893A9C2A9E99F069FC"
+    },
+    {
+      "path": "diffs/tests__host__standalone__r19_host_readiness_tests.cpp.diff",
+      "size_bytes": 12900,
+      "sha256": "492EB3A8810D4B71B6A42DFF61D28E86C716E5560982A69187D8704FF9A6C37F"
+    },
+    {
+      "path": "diffs/tools__invoke_r19_runtime_stage_cause_experiment_hil.ps1.diff",
+      "size_bytes": 998,
+      "sha256": "D5182401BEAE3C07643DF1579015D67E0CC23AF2C6251526B6FD5E850B5ED46E"
+    },
+    {
+      "path": "diffs/tools__r19_continuous_reader.cs.diff",
+      "size_bytes": 18268,
+      "sha256": "17E25730B31D3E03ADE3D0CB92FA413B8FAEFE651551EE5DC8E25278506A60DA"
+    },
+    {
+      "path": "diffs/tools__r19_host_readiness_wire.ps1.diff",
+      "size_bytes": 8202,
+      "sha256": "3B4D2939130DCA15A8DADD69E08A1649087F3096428812536EB0752E53187276"
+    },
+    {
+      "path": "diffs/tools__run_r19_runtime_fail_diagnostic_hil.ps1.diff",
+      "size_bytes": 18917,
+      "sha256": "B3B824396186309B0252B5FC90D8E51E58509F0A995DD2C0E0AFE1E9D5EA19BE"
+    },
+    {
+      "path": "diffs/tools__sync_arduino_sketch_core.ps1.diff",
+      "size_bytes": 1748,
+      "sha256": "CBECACD7FF5772E6ACDB8D73E0CAE632B80FE5B4FD4C3F145B81EC8B925FD0D8"
+    },
+    {
+      "path": "diffs/vc_lora_ground_xiao_esp32s3__diagnostics__r19_host_readiness.hpp.diff",
+      "size_bytes": 14483,
+      "sha256": "4CCB327DF9A5BC66621518162CEECC54A3E5F07AC589A8B2D7E1B2AA96E93B0A"
+    },
+    {
+      "path": "diffs/vc_lora_ground_xiao_esp32s3__vc_lora_phase6_bridge.hpp.diff",
+      "size_bytes": 15366,
+      "sha256": "BF779D25E109D3674B0493E1342E58EF8BAAEF48D9B4557508AD6EE9AA1DEC9B"
+    },
+    {
+      "path": "diffs/vc_lora_vehicle_xiao_esp32s3__diagnostics__r19_host_readiness.hpp.diff",
+      "size_bytes": 14486,
+      "sha256": "47802B66EF97F92B6D6DD6204A950289E1EF9050B76D470658CE573DC834A003"
+    },
+    {
+      "path": "diffs/vc_lora_vehicle_xiao_esp32s3__vc_lora_phase6_bridge.hpp.diff",
+      "size_bytes": 15370,
+      "sha256": "4EA0DB4FEC84C10CC8F13EAC1E9C4ECF642B1846AD0A5F7B61F216E19A06407B"
+    },
+    {
+      "path": "exact_flash_dependency_pin_green.log",
+      "size_bytes": 56,
+      "sha256": "7857EC09D42E07A37C8DB2A04528563B6C6554914B4FA65999A733373D8012DF"
+    },
+    {
+      "path": "existing_candidate_verification_explicit_root.log",
+      "size_bytes": 465,
+      "sha256": "3759CBDA69F09EE0D90AEA517EAC657CA8B75AA03F56C9E4CBCD1307C848B007"
+    },
+    {
+      "path": "existing_candidate_verification.log",
+      "size_bytes": 550,
+      "sha256": "5EE4FAFB5D5D490DF68CD4A1F10587EBF5C40A3069EAB8A6DD11DB54F414A68A"
+    },
+    {
+      "path": "final_powershell_continuous_reader_contract.log",
+      "size_bytes": 1178,
+      "sha256": "C34E6CBBC337B9F17153B18592AC31B65C2148F12000465351268F216572328E"
+    },
+    {
+      "path": "final_powershell_continuous_reader_integration.log",
+      "size_bytes": 696,
+      "sha256": "842260114F052876F232D6116E95EF5F8CC80D7568096D42E720675C5DABE69A"
+    },
+    {
+      "path": "final_powershell_host_readiness_wire.log",
+      "size_bytes": 53,
+      "sha256": "E4D54971E504C7B5C9F2B866523ACB70464D63FE4DEF7534B994167006BA7CD2"
+    },
+    {
+      "path": "final_pwsh_continuous_reader_contract.log",
+      "size_bytes": 1178,
+      "sha256": "C34E6CBBC337B9F17153B18592AC31B65C2148F12000465351268F216572328E"
+    },
+    {
+      "path": "final_pwsh_continuous_reader_integration.log",
+      "size_bytes": 696,
+      "sha256": "842260114F052876F232D6116E95EF5F8CC80D7568096D42E720675C5DABE69A"
+    },
+    {
+      "path": "final_pwsh_host_readiness_wire.log",
+      "size_bytes": 53,
+      "sha256": "E4D54971E504C7B5C9F2B866523ACB70464D63FE4DEF7534B994167006BA7CD2"
+    },
+    {
+      "path": "focused_0.log",
+      "size_bytes": 1310,
+      "sha256": "002D3F00B48F7B9349BA9953BA37B660D5626EB73D34E23223D0600C4EB365A7"
+    },
+    {
+      "path": "focused_1.log",
+      "size_bytes": 668,
+      "sha256": "B87D6167A3837727AFC760E1B9E5CAED739741319A7FB0A575C020BA60501CFF"
+    },
+    {
+      "path": "focused_2.log",
+      "size_bytes": 1178,
+      "sha256": "C34E6CBBC337B9F17153B18592AC31B65C2148F12000465351268F216572328E"
+    },
+    {
+      "path": "full_host_tests_final.log",
+      "size_bytes": 92017,
+      "sha256": "C7B440374AB7942DA69F6CB88ED08C809E135788AE21B490D0818E5CB0474660"
+    },
+    {
+      "path": "full_host_tests_frozen.log",
+      "size_bytes": 91637,
+      "sha256": "5C87CCE8A5FC8C2DBD235DBF26E9B319426DCBB408E5BBD3690B68C6BA6950EA"
+    },
+    {
+      "path": "full_host_tests.log",
+      "size_bytes": 92898,
+      "sha256": "796B7D816EE2C2442FF74DA792243657B4F03CC966EB688F9FFFD2B03B2E1523"
+    },
+    {
+      "path": "host_wire_ps5.log",
+      "size_bytes": 53,
+      "sha256": "E4D54971E504C7B5C9F2B866523ACB70464D63FE4DEF7534B994167006BA7CD2"
+    },
+    {
+      "path": "include_fix_before.hpp",
+      "size_bytes": 249869,
+      "sha256": "9373B24B81A534DA33BBC902444463380AF2500B709F039D0EFAB17C1A214BA1"
+    },
+    {
+      "path": "legacy_contract_migration_green.log",
+      "size_bytes": 692,
+      "sha256": "E626BC1F8E3C791EE8B79CEBE29D53A0CCB3C8B1FFBB52ABD6DEE03731455EF7"
+    },
+    {
+      "path": "normal_GROUND_after_fixed.preprocess.log",
+      "size_bytes": 177,
+      "sha256": "E1BE2EC40CF52DD9FE3A01155064773989ED2750905F6D431BB8AA495521A83F"
+    },
+    {
+      "path": "normal_GROUND_after_fixed.preprocessed",
+      "size_bytes": 2598958,
+      "sha256": "3396B43B1C7B9016E3CC8DE5EF8E621718FEA771406145DE39F03B021E1803D2"
+    },
+    {
+      "path": "normal_GROUND_before_fixed.preprocess.log",
+      "size_bytes": 247,
+      "sha256": "4A22E642A8569D2F5C57EF9915382CFF2CF761E40A9447F532BC2ECE5744C4D4"
+    },
+    {
+      "path": "normal_GROUND_before_fixed.preprocessed",
+      "size_bytes": 2598958,
+      "sha256": "3396B43B1C7B9016E3CC8DE5EF8E621718FEA771406145DE39F03B021E1803D2"
+    },
+    {
+      "path": "normal_preprocessed_equivalence.json",
+      "size_bytes": 608,
+      "sha256": "5DD39AB72373DD2D117CBEE20E4322B5763FCEBAB30ADFAA2FA01C2587D86245"
+    },
+    {
+      "path": "normal_VEHICLE_after_fixed.preprocess.log",
+      "size_bytes": 177,
+      "sha256": "E1BE2EC40CF52DD9FE3A01155064773989ED2750905F6D431BB8AA495521A83F"
+    },
+    {
+      "path": "normal_VEHICLE_after_fixed.preprocessed",
+      "size_bytes": 2569416,
+      "sha256": "1C35E310E977D71F53F392295619456CF097E595C23F74059AA26317AAAA140F"
+    },
+    {
+      "path": "normal_VEHICLE_before_fixed.preprocess.log",
+      "size_bytes": 247,
+      "sha256": "4A22E642A8569D2F5C57EF9915382CFF2CF761E40A9447F532BC2ECE5744C4D4"
+    },
+    {
+      "path": "normal_VEHICLE_before_fixed.preprocessed",
+      "size_bytes": 2569416,
+      "sha256": "1C35E310E977D71F53F392295619456CF097E595C23F74059AA26317AAAA140F"
+    },
+    {
+      "path": "normal_VEHICLE_before.preprocess.log",
+      "size_bytes": 73,
+      "sha256": "ECD1F5B26FCE7AA1B936D389C66A543BC3AE9B7EE93DEC9ED1379D0AB2346D06"
+    },
+    {
+      "path": "post_include_fix_build.log",
+      "size_bytes": 16111,
+      "sha256": "FE3CCA5E5554131AB308164096953BCB7EC0541E055461BE858341F7BB088071"
+    },
+    {
+      "path": "post_include_fix_related_tests.log",
+      "size_bytes": 8082,
+      "sha256": "5832EAFC3AEE46D5B5BC71E93DA36D4D0AD58E0DB23D495389C18703D48A4DC4"
+    },
+    {
+      "path": "preservation.json",
+      "size_bytes": 576,
+      "sha256": "C8B5E4E98FA46494A83E63D6230702CAF48E6E832816F8E6081C708ED17CEA9E"
+    },
+    {
+      "path": "source_changes.json",
+      "size_bytes": 5466,
+      "sha256": "1486744CC85DBBA05EAC80C8AA2091998751B61114E009C570BC46D769EEACC2"
+    },
+    {
+      "path": "summary.json",
+      "size_bytes": 7945,
+      "sha256": "B276F40382EDB1DBA9D0FF2415AE42865E2F8A3D2C6A492624A6CF3E1C43EA3C"
+    },
+    {
+      "path": "windows_xtensa_include_green.log",
+      "size_bytes": 2571,
+      "sha256": "5DB311C69D7562F70ED2075C5DAAFD956706B7B13B93FF3595FCDAC325CBF1A2"
+    },
+    {
+      "path": "windows_xtensa_include_red.log",
+      "size_bytes": 2679,
+      "sha256": "9891F467F4FDACEA21C852F2593ACA96BAAD398F64F408C63C2544A35BCA7DC4"
+    }
+  ]
+}

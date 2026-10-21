@@ -1,0 +1,23 @@
+diff --git "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\CMakeLists.txt" b/CMakeLists.txt
+index 74dcd1f..c1c0fd9 100644
+--- "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\CMakeLists.txt"
++++ b/CMakeLists.txt
+@@ -126,6 +126,18 @@ if(VC_LORA_BUILD_TESTS)
+         "${CMAKE_SOURCE_DIR}/tests/hil/check_r19_startup_reader_integration.ps1"
+         -RepoRoot "${CMAKE_SOURCE_DIR}"
+     )
++    foreach(r19_contract continuous_reader_contract continuous_reader_integration host_readiness_wire)
++      add_test(NAME R19-${r19_contract}-OFFLINE-001
++        COMMAND "${VC_LORA_POWERSHELL_EXECUTABLE}"
++          -NoProfile -NonInteractive -ExecutionPolicy Bypass -File
++          "${CMAKE_SOURCE_DIR}/tests/hil/check_r19_${r19_contract}.ps1"
++          -RepoRoot "${CMAKE_SOURCE_DIR}")
++    endforeach()
++    add_test(NAME R19-HOST-READINESS-INTEGRATION-OFFLINE-001
++      COMMAND "${VC_LORA_POWERSHELL_EXECUTABLE}"
++        -NoProfile -NonInteractive -ExecutionPolicy Bypass -File
++        "${CMAKE_SOURCE_DIR}/tests/host/standalone/check_r19_host_readiness_integration.ps1"
++        -RepoRoot "${CMAKE_SOURCE_DIR}")
+     add_test(
+       NAME R19-USB-EXTENDED-RECORDS-OFFLINE-CONTRACT-001
+       COMMAND "${VC_LORA_POWERSHELL_EXECUTABLE}"

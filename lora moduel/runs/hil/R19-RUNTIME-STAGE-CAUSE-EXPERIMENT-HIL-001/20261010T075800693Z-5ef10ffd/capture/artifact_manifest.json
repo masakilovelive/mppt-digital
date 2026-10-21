@@ -1,0 +1,76 @@
+{
+    "test_id":  "R19-RUNTIME-FAIL-DIAGNOSTIC-HIL-001",
+    "artifact_count":  14,
+    "artifacts":  [
+                      {
+                          "path":  "ground.raw.bin",
+                          "bytes":  0,
+                          "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                      },
+                      {
+                          "path":  "inputs/candidate.final_seal.json",
+                          "bytes":  1202,
+                          "sha256":  "34D8D0713E2B4C8BD69B2A44E6BD98A04F0577A6BA8279F8259C1B8A805FAB51"
+                      },
+                      {
+                          "path":  "inputs/candidate.final_seal.sha256",
+                          "bytes":  82,
+                          "sha256":  "1CB973438238622E0EF575EB3ABECE7FD71F1024F6CD8FD61C20B2B928D9185E"
+                      },
+                      {
+                          "path":  "inputs/candidate.handoff.json",
+                          "bytes":  3297,
+                          "sha256":  "4393C14073F7314B2939C6F0C60BD8795EE3DD67DFCC4017D72597C80BE95CEA"
+                      },
+                      {
+                          "path":  "inputs/candidate.handoff.sha256",
+                          "bytes":  79,
+                          "sha256":  "09B9D33ADA875918C36C9BE67836F33AF1DF49011D895C41FCABE52779A7BD15"
+                      },
+                      {
+                          "path":  "inputs/candidate.latest.json",
+                          "bytes":  1479,
+                          "sha256":  "F863F572218A1774BA0107F8201906E1A04A1E65A0B97FA186654A9F074456D5"
+                      },
+                      {
+                          "path":  "inputs/candidate.latest.sha256",
+                          "bytes":  78,
+                          "sha256":  "D0AA5D26DA02E689E5D7B3CF110B0875BA7B8BDE095C4098F4D76FD5E2413FBA"
+                      },
+                      {
+                          "path":  "inputs/candidate.manifest.json",
+                          "bytes":  119380,
+                          "sha256":  "9C75FC105C59A7B4D9D831A557AEB9E468B2BBB6DDFC50AD7B6677099C184E91"
+                      },
+                      {
+                          "path":  "inputs/core.mavlink_frame.cpp",
+                          "bytes":  16510,
+                          "sha256":  "BD2890D8973C5A694D53AB2866A6B3DBF319FAE40B3CC308AE2DAE91B634F3A8"
+                      },
+                      {
+                          "path":  "inputs/flash.final_seal.json",
+                          "bytes":  1268,
+                          "sha256":  "514C7772A4BA52ADF97830BB0B6F9DC97B716825579935BA7A13564C30F0A85B"
+                      },
+                      {
+                          "path":  "inputs/flash.final_seal.sha256",
+                          "bytes":  83,
+                          "sha256":  "5ECB72DF8D45C1E57C7536BEFE0D266A324D03DF4A7D27E88022AB5DDF71CE82"
+                      },
+                      {
+                          "path":  "inputs/flash.record.json",
+                          "bytes":  10750,
+                          "sha256":  "BC3864D474243DD250863C027A176BC4CEE243AFB264049FC23415A6BB8CE322"
+                      },
+                      {
+                          "path":  "summary.json",
+                          "bytes":  22921,
+                          "sha256":  "246FFB4565EE505D4CCCE57CCC001BCFD0AF5B6099A7F2933C955718692E8F04"
+                      },
+                      {
+                          "path":  "vehicle.raw.bin",
+                          "bytes":  0,
+                          "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                      }
+                  ]
+}

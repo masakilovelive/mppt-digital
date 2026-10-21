@@ -1,0 +1,168 @@
+﻿{
+    "schema":  "vc-lora-r19-runtime-stage-jtag-read-v1",
+    "result":  "PASS",
+    "mode":  "live-jtag",
+    "generated_at_utc":  "2026-10-10T08:00:06.6101444Z",
+    "hardware_interaction":  true,
+    "safety":  {
+                   "com_opened":  false,
+                   "flash_written":  false,
+                   "target_restart_issued":  false,
+                   "halted_for_reads":  true,
+                   "two_identical_reads":  true,
+                   "resume_shutdown_cleanup_attempted":  true,
+                   "resume_shutdown_cleanup_proven":  true,
+                   "capture_process_termination_proven":  true,
+                   "native_processes_termination_proven":  true,
+                   "target_may_be_halted":  false,
+                   "bounded_snapshot_attempts":  2
+               },
+    "binding":  {
+                    "artifact_id":  "20261003T110913332Z-04fb913b",
+                    "role":  "ground",
+                    "address":  "0x3fca2690",
+                    "probe":  {
+                                  "requested_serial":  "1c:db:d4:5a:83:80",
+                                  "requested_usb_location":  "1-3.2",
+                                  "opened_identity_proven_before_halt":  true
+                              },
+                    "artifact":  {
+                                     "root":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b",
+                                     "artifact_id":  "20261003T110913332Z-04fb913b",
+                                     "role":  "ground",
+                                     "address":  "0x3fca2690",
+                                     "manifest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\candidate_manifest.json",
+                                     "manifest_sha256":  "9C75FC105C59A7B4D9D831A557AEB9E468B2BBB6DDFC50AD7B6677099C184E91",
+                                     "final_seal_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\final_seal.json",
+                                     "final_seal_sha256":  "34D8D0713E2B4C8BD69B2A44E6BD98A04F0577A6BA8279F8259C1B8A805FAB51",
+                                     "application_sha256":  "51D8891F093FC3A1F637570909AAADBE22676C59D77B302BD801FBC03394E344",
+                                     "application_size_bytes":  403568,
+                                     "elf_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\evidence\\build\\ground\\application.elf",
+                                     "elf_sha256":  "6E5D501EE22FDFE1E2EFDCD235122BB448DCE4012FB83EF769CA841934D3CB65",
+                                     "symbol_size_bytes":  68,
+                                     "nm_path":  "C:\\Users\\user\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\esp-x32\\2601\\bin\\xtensa-esp32s3-elf-nm.exe",
+                                     "nm_sha256":  "AC8D55C45DBCAEFE082299357245D7F12786C61A4E3C06A8E21F31D6890FB29E",
+                                     "map_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\evidence\\build\\ground\\application.map",
+                                     "map_sha256":  "FA7BC08DEBD9B37C9BD934C468300FEB287EB2A4D34B814AA81A821D8331D637"
+                                 },
+                    "flash":  {
+                                  "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261010T075802125Z-052342da-install\\flash_record.json",
+                                  "sha256":  "BC3864D474243DD250863C027A176BC4CEE243AFB264049FC23415A6BB8CE322",
+                                  "role":  "ground",
+                                  "port":  "COM6",
+                                  "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                                  "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                                  "probe_serial":  "1c:db:d4:5a:83:80",
+                                  "application_sha256":  "51D8891F093FC3A1F637570909AAADBE22676C59D77B302BD801FBC03394E344"
+                              }
+                },
+    "reads":  [
+                  {
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\stage_ground\\runtime-stage-first.bin",
+                      "size_bytes":  68,
+                      "sha256":  "5C79FD12D4F73C21E5CF57FB51B51F60F6D7848D8F58A1919F44A27E30CA75C6"
+                  },
+                  {
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\stage_ground\\runtime-stage-second.bin",
+                      "size_bytes":  68,
+                      "sha256":  "5C79FD12D4F73C21E5CF57FB51B51F60F6D7848D8F58A1919F44A27E30CA75C6"
+                  }
+              ],
+    "decoded":  {
+                    "active_writer":  0,
+                    "sequence":  152631532,
+                    "magic":  "0x52313953",
+                    "schema":  1,
+                    "role":  "ground",
+                    "build_fingerprint":  [
+                                              "0x52313944",
+                                              "0x53544731",
+                                              "0x32303236",
+                                              "0x31303033"
+                                          ],
+                    "stage_mask":  "0x00003fff",
+                    "reached_stages":  [
+                                           "SetupEntered",
+                                           "SerialBeginReturned",
+                                           "CadenceStarted",
+                                           "IdentityReady",
+                                           "E220ProfileChecked",
+                                           "StartupAllowed",
+                                           "E220NormalMode",
+                                           "AdapterReady",
+                                           "SetupComplete",
+                                           "LoopEntered",
+                                           "HostGateObserved",
+                                           "FrameStaged",
+                                           "WriteAttempted",
+                                           "WriteAccepted"
+                                       ],
+                    "last_reached_stage":  "WriteAccepted",
+                    "mandatory_setup_witnesses":  {
+                                                      "setup_entered":  true,
+                                                      "serial_begin_returned":  true,
+                                                      "cadence_started":  true,
+                                                      "startup_allowed":  true,
+                                                      "e220_normal_mode":  true,
+                                                      "adapter_ready":  true,
+                                                      "setup_complete":  true
+                                                  },
+                    "conditional_setup_witnesses":  {
+                                                        "IdentityReady":  true,
+                                                        "E220ProfileChecked":  true
+                                                    },
+                    "missing_mandatory_setup_witnesses":  [
+
+                                                          ],
+                    "boundary_classification":  "write-accepted-before-flush",
+                    "counters":  {
+                                     "boot":  1,
+                                     "loop":  37953428,
+                                     "publish_attempt":  136294,
+                                     "exact_frame_restart":  0
+                                 },
+                    "first_failure":  {
+                                          "code":  "0x54520010",
+                                          "name":  "FlushFailed",
+                                          "stage_mask":  "0x00003fff",
+                                          "detail":  5076
+                                      }
+                },
+    "openocd_stage":  {
+                          "device_opened":  true,
+                          "target_examined":  true,
+                          "halt_possible":  true,
+                          "resume_proven":  true,
+                          "shutdown_proven":  true,
+                          "cleanup_required":  true,
+                          "failure_classification":  "FAIL_JTAG_AFTER_TARGET_EXAMINE"
+                      },
+    "capture_attempts":  [
+                             {
+                                 "attempt":  1,
+                                 "result":  "RETRY_AFTER_RESUME",
+                                 "error":  "active_writer is nonzero",
+                                 "capture_log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\stage_ground\\openocd-attempt-1-capture.log",
+                                 "cleanup_log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\stage_ground\\openocd-attempt-1-cleanup.log",
+                                 "cleanup_attempted":  true,
+                                 "cleanup_exit_code":  0,
+                                 "resume_shutdown_cleanup_proven":  true,
+                                 "smp_capture_proven":  true
+                             },
+                             {
+                                 "attempt":  2,
+                                 "result":  "STABLE",
+                                 "capture_log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\stage_ground\\openocd-attempt-2-capture.log",
+                                 "cleanup_log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\stage_ground\\openocd-attempt-2-cleanup.log",
+                                 "cleanup_attempted":  true,
+                                 "cleanup_exit_code":  0,
+                                 "resume_shutdown_cleanup_proven":  true,
+                                 "smp_capture_proven":  true
+                             }
+                         ],
+    "limitations":  [
+                        "The build fingerprint is a diagnostic generation marker, not an artifact digest.",
+                        "Live exact-image identity depends on the supplied installer verify evidence remaining current.",
+                        "A PASS proves the instrumented firmware boundary, not Windows user-space CDC consumption."
+                    ]
+}

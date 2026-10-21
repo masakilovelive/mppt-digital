@@ -1,0 +1,289 @@
+{
+    "result":  "FAIL",
+    "diagnostic_status":  "FAIL_NO_DIAGNOSTIC_BEACON",
+    "diagnostic_classification":  "NO_BEACON",
+    "engineering_disposition":  "EVIDENCE_REQUIRED_NO_BEACON",
+    "alive_role_coverage":  "NONE",
+    "alive_roles":  [
+
+                    ],
+    "armed_count":  0,
+    "alive_count":  0,
+    "r19f_count":  0,
+    "diagnostic_only":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false,
+    "serial_write_calls":  0,
+    "capture_seconds":  40,
+    "pump_service_limit_us":  100000,
+    "alive_sequence_time_monotonic":  true,
+    "parser_clean":  true,
+    "r19f_repeat_contract":  {
+                                 "valid":  true,
+                                 "maximum_repeats_per_role":  120,
+                                 "minimum_cadence_gap_us":  500000,
+                                 "maximum_cadence_gap_us":  1500000,
+                                 "roles":  [
+                                               {
+                                                   "role_code":  "V",
+                                                   "count":  0,
+                                                   "within_repeat_limit":  true,
+                                                   "immutable_snapshot":  true,
+                                                   "cadence_checked":  false,
+                                                   "cadence_sane":  true,
+                                                   "minimum_gap_us":  -1,
+                                                   "maximum_gap_us":  -1,
+                                                   "logical_snapshot_key_sha256":  ""
+                                               },
+                                               {
+                                                   "role_code":  "G",
+                                                   "count":  0,
+                                                   "within_repeat_limit":  true,
+                                                   "immutable_snapshot":  true,
+                                                   "cadence_checked":  false,
+                                                   "cadence_sane":  true,
+                                                   "minimum_gap_us":  -1,
+                                                   "maximum_gap_us":  -1,
+                                                   "logical_snapshot_key_sha256":  ""
+                                               }
+                                           ]
+                             },
+    "non_diagnostic_complete_frame_count":  0,
+    "ports":  [
+                  {
+                      "role":  "vehicle",
+                      "port":  "COM3",
+                      "raw_bytes":  0,
+                      "baud":  115200,
+                      "maximum_service_gap_us":  39134,
+                      "frame_count":  0,
+                      "noise_bytes":  0,
+                      "partial_bytes":  0,
+                      "bad_length":  0,
+                      "bad_crc":  0,
+                      "unsupported_flags":  0,
+                      "unknown_definition":  0,
+                      "valid_frame_count":  0,
+                      "parser_clean":  true,
+                      "non_diagnostic_complete_frame_count":  0,
+                      "armed_count":  0,
+                      "alive_count":  0,
+                      "r19f_count":  0,
+                      "diagnostics":  [
+
+                                      ]
+                  },
+                  {
+                      "role":  "ground",
+                      "port":  "COM6",
+                      "raw_bytes":  0,
+                      "baud":  57600,
+                      "maximum_service_gap_us":  39033,
+                      "frame_count":  0,
+                      "noise_bytes":  0,
+                      "partial_bytes":  0,
+                      "bad_length":  0,
+                      "bad_crc":  0,
+                      "unsupported_flags":  0,
+                      "unknown_definition":  0,
+                      "valid_frame_count":  0,
+                      "parser_clean":  true,
+                      "non_diagnostic_complete_frame_count":  0,
+                      "armed_count":  0,
+                      "alive_count":  0,
+                      "r19f_count":  0,
+                      "diagnostics":  [
+
+                                      ]
+                  }
+              ],
+    "valid_diagnostic_count":  0,
+    "invalid_diagnostic_count":  0,
+    "cleanup":  {
+                    "result":  "PASS",
+                    "error_count":  0,
+                    "errors":  [
+
+                               ],
+                    "steps":  [
+                                  {
+                                      "name":  "serial_close:vehicle",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  },
+                                  {
+                                      "name":  "serial_dispose:vehicle",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  },
+                                  {
+                                      "name":  "serial_close:ground",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  },
+                                  {
+                                      "name":  "serial_dispose:ground",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  },
+                                  {
+                                      "name":  "deferred_evidence_persistence",
+                                      "result":  "PASS",
+                                      "failure":  ""
+                                  }
+                              ]
+                },
+    "mode":  "LIVE_DIAGNOSTIC_ONLY",
+    "external_actions":  {
+                             "cim_queried":  true,
+                             "pnp_queried":  true,
+                             "process_inventory_queried":  true,
+                             "com_ports_opened":  true,
+                             "serial_write_attempted":  false,
+                             "opened_ports":  [
+                                                  "COM3",
+                                                  "COM6"
+                                              ],
+                             "firmware_write_attempted":  false,
+                             "e220_write_attempted":  false
+                         },
+    "candidate_provenance":  {
+                                 "runtime_fail_diagnostics_enabled":  true,
+                                 "acceptance_eligible":  false,
+                                 "acceptance_authorized":  false,
+                                 "deployment_authorized":  false,
+                                 "latest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\latest.json",
+                                 "latest_sha256":  "F863F572218A1774BA0107F8201906E1A04A1E65A0B97FA186654A9F074456D5",
+                                 "manifest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\candidate_manifest.json",
+                                 "manifest_sha256":  "9C75FC105C59A7B4D9D831A557AEB9E468B2BBB6DDFC50AD7B6677099C184E91",
+                                 "handoff_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\handoff.json",
+                                 "handoff_sha256":  "4393C14073F7314B2939C6F0C60BD8795EE3DD67DFCC4017D72597C80BE95CEA",
+                                 "candidate_final_seal_sha256":  "34D8D0713E2B4C8BD69B2A44E6BD98A04F0577A6BA8279F8259C1B8A805FAB51",
+                                 "flash_record_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261010T075802125Z-052342da-install\\flash_record.json",
+                                 "flash_record_sha256":  "BC3864D474243DD250863C027A176BC4CEE243AFB264049FC23415A6BB8CE322",
+                                 "flash_final_seal_sha256":  "514C7772A4BA52ADF97830BB0B6F9DC97B716825579935BA7A13564C30F0A85B",
+                                 "mavlink_definition_sha256":  "BD2890D8973C5A694D53AB2866A6B3DBF319FAE40B3CC308AE2DAE91B634F3A8",
+                                 "diagnostic_flash_status":  "PASS_R19_DIAGNOSTIC_INSTALLED_HIL_ONLY",
+                                 "diagnostic_authorization_scope":  "one immediate R19 runtime-fail diagnostic capture only",
+                                 "diagnostic_next_required_action":  "Run one dual-COM read-only runtime-fail diagnostic capture, then mandatory accepted R18 rollback",
+                                 "flash_readback_verified":  true,
+                                 "roles":  [
+                                               {
+                                                   "role":  "vehicle",
+                                                   "sha256":  "45126943A21D06BB28071B3975BF01B4F1023638839555C433E7B5A004CA0E12"
+                                               },
+                                               {
+                                                   "role":  "ground",
+                                                   "sha256":  "51D8891F093FC3A1F637570909AAADBE22676C59D77B302BD801FBC03394E344"
+                                               }
+                                           ],
+                                 "source_bindings":  [
+                                                         {
+                                                             "role":  "vehicle",
+                                                             "source_path":  "package/vc_lora_vehicle_xiao_esp32s3/vc_lora_phase6_bridge.hpp",
+                                                             "source_sha256":  "EF6F461D3E6C7F3628FE9A87285D99EF67DC30503DFE58CCE99A0FE12906A323",
+                                                             "verified_source_sha256":  "EF6F461D3E6C7F3628FE9A87285D99EF67DC30503DFE58CCE99A0FE12906A323",
+                                                             "source_verified":  true,
+                                                             "application_sha256":  "45126943A21D06BB28071B3975BF01B4F1023638839555C433E7B5A004CA0E12"
+                                                         },
+                                                         {
+                                                             "role":  "ground",
+                                                             "source_path":  "package/vc_lora_ground_xiao_esp32s3/vc_lora_phase6_bridge.hpp",
+                                                             "source_sha256":  "EF6F461D3E6C7F3628FE9A87285D99EF67DC30503DFE58CCE99A0FE12906A323",
+                                                             "verified_source_sha256":  "EF6F461D3E6C7F3628FE9A87285D99EF67DC30503DFE58CCE99A0FE12906A323",
+                                                             "source_verified":  true,
+                                                             "application_sha256":  "51D8891F093FC3A1F637570909AAADBE22676C59D77B302BD801FBC03394E344"
+                                                         }
+                                                     ],
+                                 "pinned_inputs":  [
+                                                       {
+                                                           "name":  "candidate.latest.json",
+                                                           "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\latest.json",
+                                                           "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\capture\\inputs\\candidate.latest.json",
+                                                           "bytes":  1479,
+                                                           "sha256":  "F863F572218A1774BA0107F8201906E1A04A1E65A0B97FA186654A9F074456D5"
+                                                       },
+                                                       {
+                                                           "name":  "candidate.latest.sha256",
+                                                           "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\latest.sha256",
+                                                           "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\capture\\inputs\\candidate.latest.sha256",
+                                                           "bytes":  78,
+                                                           "sha256":  "D0AA5D26DA02E689E5D7B3CF110B0875BA7B8BDE095C4098F4D76FD5E2413FBA"
+                                                       },
+                                                       {
+                                                           "name":  "candidate.handoff.json",
+                                                           "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\handoff.json",
+                                                           "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\capture\\inputs\\candidate.handoff.json",
+                                                           "bytes":  3297,
+                                                           "sha256":  "4393C14073F7314B2939C6F0C60BD8795EE3DD67DFCC4017D72597C80BE95CEA"
+                                                       },
+                                                       {
+                                                           "name":  "candidate.handoff.sha256",
+                                                           "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\handoff.sha256",
+                                                           "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\capture\\inputs\\candidate.handoff.sha256",
+                                                           "bytes":  79,
+                                                           "sha256":  "09B9D33ADA875918C36C9BE67836F33AF1DF49011D895C41FCABE52779A7BD15"
+                                                       },
+                                                       {
+                                                           "name":  "candidate.manifest.json",
+                                                           "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\candidate_manifest.json",
+                                                           "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\capture\\inputs\\candidate.manifest.json",
+                                                           "bytes":  119380,
+                                                           "sha256":  "9C75FC105C59A7B4D9D831A557AEB9E468B2BBB6DDFC50AD7B6677099C184E91"
+                                                       },
+                                                       {
+                                                           "name":  "candidate.final_seal.json",
+                                                           "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\final_seal.json",
+                                                           "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\capture\\inputs\\candidate.final_seal.json",
+                                                           "bytes":  1202,
+                                                           "sha256":  "34D8D0713E2B4C8BD69B2A44E6BD98A04F0577A6BA8279F8259C1B8A805FAB51"
+                                                       },
+                                                       {
+                                                           "name":  "candidate.final_seal.sha256",
+                                                           "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261003T110913332Z-04fb913b\\final_seal.sha256",
+                                                           "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\capture\\inputs\\candidate.final_seal.sha256",
+                                                           "bytes":  82,
+                                                           "sha256":  "1CB973438238622E0EF575EB3ABECE7FD71F1024F6CD8FD61C20B2B928D9185E"
+                                                       },
+                                                       {
+                                                           "name":  "flash.record.json",
+                                                           "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261010T075802125Z-052342da-install\\flash_record.json",
+                                                           "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\capture\\inputs\\flash.record.json",
+                                                           "bytes":  10750,
+                                                           "sha256":  "BC3864D474243DD250863C027A176BC4CEE243AFB264049FC23415A6BB8CE322"
+                                                       },
+                                                       {
+                                                           "name":  "flash.final_seal.json",
+                                                           "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261010T075802125Z-052342da-install\\final_seal.json",
+                                                           "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\capture\\inputs\\flash.final_seal.json",
+                                                           "bytes":  1268,
+                                                           "sha256":  "514C7772A4BA52ADF97830BB0B6F9DC97B716825579935BA7A13564C30F0A85B"
+                                                       },
+                                                       {
+                                                           "name":  "flash.final_seal.sha256",
+                                                           "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261010T075802125Z-052342da-install\\final_seal.sha256",
+                                                           "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\capture\\inputs\\flash.final_seal.sha256",
+                                                           "bytes":  83,
+                                                           "sha256":  "5ECB72DF8D45C1E57C7536BEFE0D266A324D03DF4A7D27E88022AB5DDF71CE82"
+                                                       },
+                                                       {
+                                                           "name":  "core.mavlink_frame.cpp",
+                                                           "source":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\core\\src\\mavlink_frame.cpp",
+                                                           "staged":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261010T075800693Z-5ef10ffd\\capture\\inputs\\core.mavlink_frame.cpp",
+                                                           "bytes":  16510,
+                                                           "sha256":  "BD2890D8973C5A694D53AB2866A6B3DBF319FAE40B3CC308AE2DAE91B634F3A8"
+                                                       }
+                                                   ]
+                             },
+    "schema":  "vc-lora-r19-runtime-fail-diagnostic-summary-v1",
+    "hardware_interaction":  true,
+    "test_id":  "R19-RUNTIME-FAIL-DIAGNOSTIC-HIL-001",
+    "started_utc":  "2026-10-10T07:59:12.5334807Z",
+    "finished_utc":  "2026-10-10T07:59:57.2053527Z",
+    "runner_integrity":  {
+                             "result":  "PASS",
+                             "start_sha256":  "CF2D3F9A690325541A90E6292E289276156FB577FEA08EB92F7C982DA6DB71F0",
+                             "end_sha256":  "CF2D3F9A690325541A90E6292E289276156FB577FEA08EB92F7C982DA6DB71F0"
+                         }
+}

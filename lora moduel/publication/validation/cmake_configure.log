@@ -1,0 +1,17 @@
+-- The CXX compiler identification is Clang 22.1.8
+CMake Error at E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCXXCompiler.cmake:1 (set):
+  Syntax error in cmake code at
+
+    E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build/CMakeFiles/3.22.1-g37088a8-dirty/CMakeCXXCompiler.cmake:1
+
+  when parsing string
+
+    C:\Users\user\AppData\Local\Temp\vc_lora_host_tools\llvm-mingw-20260616-complete\unpacked\llvm-mingw-20260616-ucrt-x86_64\bin\clang++.exe
+
+  Invalid character escape '\U'.
+Call Stack (most recent call first):
+  CMakeLists.txt:3 (project)
+
+
+-- Configuring incomplete, errors occurred!
+See also "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/publication/GITHUB-LORA-EXPORT-001/20261021T023621Z/validation/host-build/CMakeFiles/CMakeOutput.log".

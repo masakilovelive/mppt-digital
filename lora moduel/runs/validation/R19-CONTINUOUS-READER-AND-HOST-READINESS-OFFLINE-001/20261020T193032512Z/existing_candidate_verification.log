@@ -1,0 +1,8 @@
+Split-Path : Cannot bind argument to parameter 'Path' because it is an empty string.
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tools\verify_r19_candidate_artifact.ps1:3 char:43
++   [string]$RepoRoot = (Split-Path -Parent $PSScriptRoot),
++                                           ~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidData: (:) [Split-Path], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : ParameterArgumentValidationErrorEmptyStringNotAllowed,Microsoft.PowerShell.Commands.Spli 
+   tPathCommand
+ 

@@ -1,0 +1,232 @@
+{
+  "schema": "vc-lora-publication-inventory-v1",
+  "snapshot_utc": "2026-10-21T02:49:36.7845966Z",
+  "repository": "https://github.com/masakilovelive/mppt-digital",
+  "destination": "lora moduel",
+  "base_commit": "4ec20795d16bd8a8ad86e3309ec5cd3fa613fcff",
+  "source_provenance": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge",
+  "operation": "publication_only",
+  "hardware_interaction": false,
+  "firmware_changed": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "original_source_files_checked": 672,
+  "source_mismatches": [],
+  "evidence_files_checked": 435,
+  "evidence_mismatches": [],
+  "tree_hash_method": "SHA256 of UTF-8 LF-terminated sorted path|lowercase-SHA256 rows, paths relative to package, ordinal case-sensitive path sorting; excludes publication/",
+  "groups": [
+    {
+      "path": "[root]",
+      "files": 18,
+      "bytes": 617721,
+      "sha256_tree": "500a4b03075164b26b25f741205e78356e62005fba72fb573a796e7d4f619cc1"
+    },
+    {
+      "path": "core",
+      "files": 46,
+      "bytes": 512009,
+      "sha256_tree": "37a5eb2add360a536e9eb0b741ed0d6b68ba5e9a2f3f512a63d68d4c7b2dcde0"
+    },
+    {
+      "path": "docs",
+      "files": 1,
+      "bytes": 3453,
+      "sha256_tree": "c0c7e8ec0bb6a0143c8b9a466e306358fe889ab8e45308dd2bf39aedcb3c16f0"
+    },
+    {
+      "path": "firmware",
+      "files": 44,
+      "bytes": 657961,
+      "sha256_tree": "219f88b617180afb41e8284f4f21bb005ae19b79ef043e1dfc7a390d18bd8169"
+    },
+    {
+      "path": "runs",
+      "files": 435,
+      "bytes": 13477911,
+      "sha256_tree": "75bf203440adad55e5afdf437f54128889ad8a14b898a644c647014f917cfe7a"
+    },
+    {
+      "path": "tests",
+      "files": 185,
+      "bytes": 4486715,
+      "sha256_tree": "b5f834a10824c551af097c714c0da28b4bf2641a62cbeb60d1fe43380523ddf2"
+    },
+    {
+      "path": "third_party",
+      "files": 5,
+      "bytes": 181872,
+      "sha256_tree": "c74668a76828d77d8b7e33160b7709d9a7b3566e581567127e8f97da4f55d003"
+    },
+    {
+      "path": "tools",
+      "files": 68,
+      "bytes": 3302399,
+      "sha256_tree": "02333ffbd885cfbd6676189cdc636c9ecbeb3bcfc10cba5991f62eea8363df79"
+    },
+    {
+      "path": "vc_lora_bridge_xiao_esp32c3",
+      "files": 1,
+      "bytes": 32341,
+      "sha256_tree": "fca9e01b5d9916b5ddd858fd1a20a40bcf0c811a984ff5d8b3593261baa68e30"
+    },
+    {
+      "path": "vc_lora_e220_inventory_xiao_esp32s3",
+      "files": 1,
+      "bytes": 14399,
+      "sha256_tree": "9836871cf73628d6fd7ea068e300e528b59280a2e50a875b836f7b6b2b14a00b"
+    },
+    {
+      "path": "vc_lora_e220_link_test_receiver_xiao_esp32s3",
+      "files": 1,
+      "bytes": 230,
+      "sha256_tree": "cfb56214b723e2bb125b1dba2b5594c8c726116735678b84edc79c21815c508a"
+    },
+    {
+      "path": "vc_lora_e220_link_test_sender_xiao_esp32s3",
+      "files": 1,
+      "bytes": 224,
+      "sha256_tree": "314a9edd18048f69599fc5d0220435fd020ec05c09f197f83c153b78d8632d60"
+    },
+    {
+      "path": "vc_lora_ground_diag_v2_stable_xiao_esp32s3",
+      "files": 52,
+      "bytes": 698685,
+      "sha256_tree": "c3a1f62e96e583128a50c8e035522f070b4cff5bfcd1875283b85b194b6cd394"
+    },
+    {
+      "path": "vc_lora_ground_diag_xiao_esp32s3",
+      "files": 32,
+      "bytes": 221668,
+      "sha256_tree": "bab5eb4fafc422bbdf7678d83ef00b6c642491d011baafe2acc270068d3d9b1e"
+    },
+    {
+      "path": "vc_lora_ground_e220_diag_xiao_esp32c3",
+      "files": 1,
+      "bytes": 15027,
+      "sha256_tree": "b914612dd3ef643b31535d0eb26a3ebafebaa0b2cbc1d226b93cb842a84f58cf"
+    },
+    {
+      "path": "vc_lora_ground_e220_diag_xiao_esp32s3",
+      "files": 1,
+      "bytes": 23695,
+      "sha256_tree": "b9717ee532c812a8ad87635be3c772a5de9d8b61202fbadc5f5e10727216fc49"
+    },
+    {
+      "path": "vc_lora_ground_usb_selftest_xiao_esp32c3",
+      "files": 1,
+      "bytes": 302,
+      "sha256_tree": "417168d2390ad480f1e0afbb08e02979e839c2bf2d07cc2639b22970ddf9b156"
+    },
+    {
+      "path": "vc_lora_ground_usb_selftest_xiao_esp32s3",
+      "files": 1,
+      "bytes": 320,
+      "sha256_tree": "b50e28db57b22f56c7bc37203de5da80c422618c76c168724a6ffec399c3a583"
+    },
+    {
+      "path": "vc_lora_ground_xiao_esp32c3",
+      "files": 1,
+      "bytes": 331,
+      "sha256_tree": "6406af4cd3541060587e6329b858dbaf64748cac1157c7b694baaa5b986f27f3"
+    },
+    {
+      "path": "vc_lora_ground_xiao_esp32s3",
+      "files": 65,
+      "bytes": 1148479,
+      "sha256_tree": "75716cb4e6bc5e4b4b2e9cd7a425ba62d9aeb3b5de73cf799ea4afff94225c5f"
+    },
+    {
+      "path": "vc_lora_usb_serial_smoke_xiao_esp32s3",
+      "files": 1,
+      "bytes": 695,
+      "sha256_tree": "c1fbffde92b9a4c0d28491d88462d81e0277b3eebf2822e8cdab93a1691f2d37"
+    },
+    {
+      "path": "vc_lora_vehicle_diag_v2_stable_xiao_esp32s3",
+      "files": 52,
+      "bytes": 683929,
+      "sha256_tree": "3107971af31c400ed3034e9b050cf29b038ec31561dfca53f267ec2cf9dee1c8"
+    },
+    {
+      "path": "vc_lora_vehicle_diag_xiao_esp32s3",
+      "files": 32,
+      "bytes": 252065,
+      "sha256_tree": "6dcb2653cd79a318f3289ae8a1b6836d37ad826d2e49a8f2f89a06214ce85c1f"
+    },
+    {
+      "path": "vc_lora_vehicle_pixhawk_param_benchmark_xiao_esp32s3",
+      "files": 1,
+      "bytes": 24999,
+      "sha256_tree": "c4d1355b975ef7361f2c29b388820c5232bb7f5fa5251e339c07cc9665bbb869"
+    },
+    {
+      "path": "vc_lora_vehicle_pixhawk_sniff_xiao_esp32s3",
+      "files": 1,
+      "bytes": 12089,
+      "sha256_tree": "ab1a8cdb77815b0db169723796566fb8b889992722ce9c00d0c43fe25232860d"
+    },
+    {
+      "path": "vc_lora_vehicle_xiao_esp32c3",
+      "files": 1,
+      "bytes": 327,
+      "sha256_tree": "b35215345e865bcef4c057155329113e975097ae461bd9b2f546d633757d8da4"
+    },
+    {
+      "path": "vc_lora_vehicle_xiao_esp32s3",
+      "files": 65,
+      "bytes": 1148509,
+      "sha256_tree": "d7c1d169133ef02f49625449966e3f708bfa19119cd47527c43dddf346063876"
+    }
+  ],
+  "important_hashes": [
+    {
+      "path": "CURRENT_WORKSPACE_AND_SPEC_R19.md",
+      "sha256": "a07645f39d0a7bf6b4a8479c542f3cf471c2424f3088c101fdd5dc1dfe6df84e"
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "sha256": "4fdfb3fb2fbfa408e88c9c356c7d86e9692cdc98469ed5642ddc2c089b4708be"
+    },
+    {
+      "path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp",
+      "sha256": "d1b890a6c37587bf7775e4f9ddb7791c91085f9c2bc4d95cb9ec3c5809b24dca"
+    },
+    {
+      "path": "tools/r19_host_readiness_workflow.ps1",
+      "sha256": "1b0740c84fe8b54c8f573846e6ebcdcda7df330565833500f1ee557cf11bd099"
+    },
+    {
+      "path": "tools/r19_startup_boundary_evaluation.ps1",
+      "sha256": "34c23b79860987f29a40ffafc6e168131c8935ccb5da2977cf3f322b09dd1b1c"
+    },
+    {
+      "path": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261020T223348550Z-ccb3f550/summary.json",
+      "sha256": "7fd5763075d4db6d7d122632fe24947ea6ab5009f8a1b24fa55e2243204d6273"
+    },
+    {
+      "path": "runs/hil/E2E-MAV-CONNECTED-PASSIVE-RX-001/20261021T004656Z/summary.json",
+      "sha256": "3a472cb36a60717287d0d0ef3eefec71b0e37416c28ce8708debf76ff366d968"
+    },
+    {
+      "path": "runs/hil/CONNECTED-NO-POWER-CYCLE-JTAG-PREFLIGHT-001/20261021T013650Z/summary.json",
+      "sha256": "d6c16c8f1d567aec8a379d131e2be2f96a15c557fb9cb47f1571abfd6778d7a7"
+    }
+  ],
+  "exclusions": [
+    "whole runs/ history",
+    "build trees and compiler images",
+    "R19 sealed candidate dependency closure",
+    "full accepted baseline dependency closure",
+    "driver ZIP and executable tools",
+    "API credentials and session history",
+    "screenshots and unrelated reports"
+  ],
+  "notes": [
+    "Original README.md is preserved as PROJECT_README.md",
+    "Historical evidence is unchanged and can contain original local paths and USB device identifiers",
+    "Selected validation roots are partial; their original manifests can reference omitted files",
+    "Some archived R18 staged application images are deliberately retained as evidence",
+    "No blanket project license is added"
+  ]
+}

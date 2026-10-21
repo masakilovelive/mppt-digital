@@ -1,0 +1,202 @@
+{
+  "schema": "vc-lora-offline-readiness-and-history-validation-v1",
+  "result": "PASS_OFFLINE_REGRESSIONS_SYMPTOM_PREVIOUSLY_OBSERVED_LIVE_INTEGRATION_INCOMPLETE",
+  "hardware_interaction": false,
+  "com_opened": false,
+  "firmware_source_edited": false,
+  "sdk_source_edited": false,
+  "firmware_uploaded": false,
+  "jtag_connected": false,
+  "reset_or_power_operation": false,
+  "tests": {
+    "workflow": {
+      "checks_each_shell": 272,
+      "failures": 0,
+      "shells": [
+        "Windows PowerShell 5.1",
+        "PowerShell 7"
+      ],
+      "logs": [
+        "workflow_ps51.log",
+        "workflow_ps7.log"
+      ]
+    },
+    "evaluator": {
+      "checks_each_shell": 54,
+      "failures": 0,
+      "shells": [
+        "Windows PowerShell 5.1",
+        "PowerShell 7"
+      ],
+      "logs": [
+        "evaluation_ps51.log",
+        "evaluation_ps7.log"
+      ]
+    },
+    "related_ctest": {
+      "passed": 21,
+      "failed": 0,
+      "elapsed_seconds": 23.95,
+      "log": "related_ctest.log"
+    },
+    "current_no_frame_classifier": {
+      "status": "PASS",
+      "input": "current_passive_zero_input.json",
+      "result": "current_passive_zero_evaluation.json",
+      "classification": "UNKNOWN",
+      "usb_failure": "NOT_OBSERVED",
+      "rf": "NOT_EVALUATED",
+      "parameters": "NOT_EVALUATED",
+      "note": "No immutable record or device-readiness observation was acquired in the passive0-byte run. No-frame counters must not produce a healthy link or a proven USB cause."
+    },
+    "normal_arduino": {
+      "passed": 2,
+      "failed": 0,
+      "order": [
+        "vehicle",
+        "ground"
+      ],
+      "uploaded": false,
+      "vehicle": {
+        "elapsed_seconds": 25.8220539,
+        "bytes": 390768,
+        "sha256": "09E64D5E3CD3F07A2AD67D44EBD85B24F9CE28AD37DD77ED80E8669CEECAA861",
+        "log": "arduino/vehicle/compile.json"
+      },
+      "ground": {
+        "elapsed_seconds": 19.9064607,
+        "bytes": 360992,
+        "sha256": "0A6F26371530B595770A694F7853EBE28438740ED9A66253F54A6C609CAF872A",
+        "log": "arduino/ground/compile.json"
+      }
+    },
+    "full_345_suite_repeated": false,
+    "previous_full_suite": "runs/validation/R19-STARTUP-LAYER-CUT-OFFLINE-001/20261021T001127260Z/full_host_tests_final.log"
+  },
+  "history_conclusion": {
+    "zero_byte_symptom_is_new": false,
+    "same_cause_established": false,
+    "new_firmware_regression_proven": false,
+    "current_on_device_firmware_hash_verified": false,
+    "important_distinction": "Earlier R19 USB completion failure has immutable device evidence; current passive0-byte observation has no such record, so the causes cannot be equated."
+  },
+  "timeline_jst": [
+    {
+      "date": "2026-09-25",
+      "context": "R18 passive fresh reconnect",
+      "duration_s": 40.006537,
+      "rx_bytes": 1244,
+      "valid_frames": 42,
+      "heartbeat_count": 36,
+      "heartbeat_max_gap_ms": 2106.91,
+      "note": "Six unsolicited PARAM_VALUE and the initial ROM banner were also present; not a strict request-ready baseline."
+    },
+    {
+      "date": "2026-09-25",
+      "context": "R18 later read-only preflight",
+      "rx_bytes": 0,
+      "request_attempts": 0,
+      "note": "Canonical sections19/20 warn sameboot COM loss epoch fail-closed and one-sided TDD reconnect confound baseline comparison. Not proof this current run has the same cause."
+    },
+    {
+      "date": "2026-10-10 16:58–17:00",
+      "context": "R19 diagnostic",
+      "capture_duration_s": 40,
+      "vehicle_rx_bytes": 0,
+      "ground_rx_bytes": 0,
+      "known_failure_boundary": "WriteAccepted then FlushFailed in that run's device evidence"
+    },
+    {
+      "date": "2026-10-19 00:29–00:31",
+      "context": "accepted R18 evidenced singlePARAM preflight",
+      "heartbeat_wait_s": 90,
+      "rx_bytes": 0,
+      "request_attempts": 0,
+      "pump_max_ms": 61.341
+    },
+    {
+      "date": "2026-10-19 01:00–01:01",
+      "context": "R18 coldboot plus runner fixes",
+      "result": "PASS",
+      "rx_bytes": 676,
+      "valid_frames": 18,
+      "heartbeat_count": 16,
+      "param_response_count": 1,
+      "response_latency_ms": 5297.17,
+      "heartbeat_max_gap_ms": 2113.785,
+      "note": "Both startup state and runner changed; recovery does not prove the earlier zero-byte root cause."
+    },
+    {
+      "date": "2026-10-21 07:33–07:36",
+      "context": "R19 diagnostic",
+      "rx_bytes_each_role": 2646,
+      "diagnostic_frames_each_role": 42,
+      "product_frames": 0,
+      "first_usb_accepted_bytes": 21,
+      "first_usb_expected_bytes": 21,
+      "first_usb_elapsed_ms": 106.238
+    },
+    {
+      "date": "2026-10-21 09:46–09:47",
+      "context": "Current passive receive-only",
+      "duration_s": 60.011493,
+      "rx_bytes": 0,
+      "tx_bytes": 0,
+      "firmware_identity": "UNVERIFIED",
+      "cause": "UNKNOWN"
+    }
+  ],
+  "live_readiness": {
+    "ready": false,
+    "implemented": [
+      "MCU diagnostic gate/READY/ARM logic",
+      "Pure PC workflow",
+      "Evidence-scoped classifier"
+    ],
+    "remaining": [
+      "Versioned fixed/seqlock device readiness and first-product-enqueue record retaining full128bit build/boot identity and USB epoch",
+      "Strict decoder, ELF symbol and candidate manifest allowlists, JTAG acquisition integration for that record",
+      "Separate mode0/1/2 build-sealed candidates and an opt-in mode-aware live runner; preserve existing passive runner write0"
+    ],
+    "existing_sealed_candidate_usable_for_new_mode_comparison": false,
+    "pc_arm_write_is_device_arm_proof": false,
+    "ready_traffic_is_equal_between_mode1_and2": false
+  },
+  "known_candidate_not_currently_proven": "AcceptedR18 sameboot USB close/reopen loss-epoch fail-closed and TDD session mismatch are documented candidates; no current latch/epoch/RF/physical-power evidence was acquired.",
+  "evidence": [
+    {
+      "path": "runs/hil/R18-READONLY-HEARTBEAT-BASELINE-001/20260925T121214475Z/measurement.json",
+      "sha256": "F4DA1A0F005C7FB8CF588D3C46520758AACC0554F8CCBEC0831A524086812193"
+    },
+    {
+      "path": "runs/hil/R18-PIXHAWK-READONLY-PREFLIGHT-HIL-001/LIVE-20260925T122932016Z/summary.json",
+      "sha256": "D6D3154FF66A24B24F0699340477047DF5C51ED0BF539D12C29A4972D3260BB7"
+    },
+    {
+      "path": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261010T075800693Z-5ef10ffd/capture/summary.json",
+      "sha256": "246FFB4565EE505D4CCCE57CCC001BCFD0AF5B6099A7F2933C955718692E8F04"
+    },
+    {
+      "path": "runs/hil/R18-PRODUCTION-SINGLE-PARAM-LIVENESS-HIL-001/LIVE-20261018T152916883Z-4b2527fd/summary.json",
+      "sha256": "00E7B0F65C996222F2D2D0912A5F88ED3B3103D454C841FE9950FD63B598EA2F"
+    },
+    {
+      "path": "runs/hil/R18-PRODUCTION-SINGLE-PARAM-LIVENESS-HIL-001/LIVE-20261018T160030159Z-4b9d79fc/summary.json",
+      "sha256": "5C20D81F29C2B29DC2AD61562AD625F34F8F0FE0551B5BD8983FCA51D1CC2AD4"
+    },
+    {
+      "path": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261020T223348550Z-ccb3f550/summary.json",
+      "sha256": "7FD5763075D4DB6D7D122632FE24947EA6AB5009F8A1B24FA55E2243204D6273"
+    },
+    {
+      "path": "runs/hil/E2E-MAV-CONNECTED-PASSIVE-RX-001/20261021T004656Z/summary.json",
+      "sha256": "3A472CB36A60717287D0D0EF3EEFEC71B0E37416C28CE8708DEBF76FF366D968"
+    }
+  ],
+  "timeout_budget_ms": 106,
+  "communication_settings_changed": false,
+  "sealed_candidate_changed": false,
+  "root_cause_proven": false,
+  "acceptance_eligible": false,
+  "deployment_authorized": false
+}

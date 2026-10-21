@@ -1,0 +1,2 @@
+{"kind":"header","schema_version":1,"tool":"hil_capture_serial.ps1","test_id":"E2E-MAV-CONNECTED-PASSIVE-RX-001","endpoint":"ground_usb","port":"COM6","baud":57600,"format":"8N1","dtr_enabled":false,"started_utc":"2026-10-21T00:46:58.1141948Z"}
+{"kind":"footer","completed":true,"duration_us":60011493,"rx_bytes":0,"tx_bytes":0,"finished_utc":"2026-10-21T00:47:58.2342860Z"}

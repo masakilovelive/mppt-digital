@@ -1,0 +1,57 @@
+{
+    "schema":  "vc-lora-r19-candidate-artifact-handoff-v1",
+    "artifact_id":  "20261003T110913332Z-04fb913b",
+    "result":  "PASS",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false,
+    "artifact_root":  "runs/candidates/R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001/20261003T110913332Z-04fb913b",
+    "candidate_manifest":  {
+                               "path":  "runs/candidates/R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001/20261003T110913332Z-04fb913b/candidate_manifest.json",
+                               "sha256":  "9C75FC105C59A7B4D9D831A557AEB9E468B2BBB6DDFC50AD7B6677099C184E91"
+                           },
+    "final_seal":  {
+                       "path":  "runs/candidates/R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001/20261003T110913332Z-04fb913b/final_seal.json",
+                       "sha256":  "34D8D0713E2B4C8BD69B2A44E6BD98A04F0577A6BA8279F8259C1B8A805FAB51"
+                   },
+    "roles":  [
+                  {
+                      "role":  "vehicle",
+                      "application":  {
+                                          "path":  "runs/candidates/R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001/20261003T110913332Z-04fb913b/firmware/vehicle.application.bin",
+                                          "size_bytes":  431936,
+                                          "sha256":  "45126943A21D06BB28071B3975BF01B4F1023638839555C433E7B5A004CA0E12"
+                                      }
+                  },
+                  {
+                      "role":  "ground",
+                      "application":  {
+                                          "path":  "runs/candidates/R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001/20261003T110913332Z-04fb913b/firmware/ground.application.bin",
+                                          "size_bytes":  403568,
+                                          "sha256":  "51D8891F093FC3A1F637570909AAADBE22676C59D77B302BD801FBC03394E344"
+                                      }
+                  }
+              ],
+    "flash_policy":  {
+                         "mode":  "app-only",
+                         "app_only":  true,
+                         "offset":  "0x10000",
+                         "upload_order":  [
+                                              "vehicle",
+                                              "ground"
+                                          ],
+                         "erase_flash":  false,
+                         "write_bootloader":  false,
+                         "write_partition_table":  false,
+                         "write_merged_image":  false
+                     },
+    "candidate_enable":  {
+                             "macro":  "VC_LORA_R19_HIGH_SPEED_CANDIDATE",
+                             "value":  1,
+                             "compile_flag":  "-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1",
+                             "property":  "compiler.cpp.extra_flags=-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1 -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1",
+                             "bridge_default":  0,
+                             "mechanism":  "arduino-cli-build-property"
+                         }
+}

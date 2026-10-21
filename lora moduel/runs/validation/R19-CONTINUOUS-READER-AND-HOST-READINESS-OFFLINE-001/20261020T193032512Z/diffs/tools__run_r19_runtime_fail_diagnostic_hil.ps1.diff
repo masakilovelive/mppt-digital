@@ -1,0 +1,330 @@
+diff --git "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\tools\\run_r19_runtime_fail_diagnostic_hil.ps1" b/tools/run_r19_runtime_fail_diagnostic_hil.ps1
+index 5252bf8..bad3993 100644
+--- "a/runs\\validation\\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\\20261020T193032512Z\\before\\tools\\run_r19_runtime_fail_diagnostic_hil.ps1"
++++ b/tools/run_r19_runtime_fail_diagnostic_hil.ps1
+@@ -25,6 +25,8 @@ $PumpServiceLimitUs = [int64]100000
+ $PumpReadBudgetBytes = 8192
+ $ExpectedStartupReaderSha256 =
+     '939EF6C3333B1BC67782CFB02AEBFBC067EE6AAC7C789FB171F06C2B9F8A8C2E'
++$ExpectedContinuousReaderSha256 =
++    '8DF5929114802926708BD42430CDCD7AF499B15B92EB7B7503BEF11C635B44F9'
+ $TerminalTailDrainLimitUs = [int64]500000
+ $DiagnosticFlashStatus = 'PASS_R19_DIAGNOSTIC_INSTALLED_HIL_ONLY'
+ $DiagnosticAuthorizationScope =
+@@ -68,6 +70,7 @@ $script:CaptureCleanupResult = $null
+ $script:CaptureLifecycleTrace = $null
+ $script:StartupReaderEvidence = $null
+ $script:StartupReaderSource = $null
++$script:ContinuousReaderSource = $null
+ 
+ function Assert-Condition([bool]$Condition,[string]$Message) {
+   if (-not $Condition) {throw $Message}
+@@ -168,7 +171,7 @@ function ConvertTo-R19PcLifecycleEvidence([object]$Trace) {
+       [void]$events.Add([pscustomobject]@{event=$names[[int]$entry[0]]
+         event_code=[int]$entry[0];role=[string]$reader.role
+         elapsed_ticks=[string]$entry[1];batch_id=[long]$entry[2]
+-        byte_count=[long]$entry[3];detail=2;source='startup-native'})
++        byte_count=[long]$entry[3];detail=2;source=$(if($reader.PSObject.Properties['schema']-and$reader.schema-ceq'vc-lora-r19-continuous-reader-v1'){'continuous-native'}else{'startup-native'})})
+     }
+   }
+   $orderedEvents=@($events|Sort-Object {[long]$_.elapsed_ticks})
+@@ -191,6 +194,12 @@ function Save-DiagnosticCaptureEvidence([object[]]$States,
+     try{
+       $rawPath=Join-Path $evidence ("{0}.raw.bin"-f$role)
+       Write-DurableBytes $rawPath ([byte[]]$state.raw.ToArray())
++      if($state.PSObject.Properties['continuous_raw']-and$null-ne$state.continuous_raw){
++        # Includes unconsumed suffixes and identity-quarantined data on failures.
++        # This is the authoritative full native capture, not parser admission.
++        Write-DurableBytes (Join-Path $evidence ("{0}.continuous.raw.bin"-f$role)) `
++            ([byte[]]$state.continuous_raw)
++      }
+     }catch{
+       [void]$Errors.Add(
+           ('deferred raw evidence persistence failed for {0}: {1}' -f
+@@ -221,7 +230,11 @@ function Invoke-DiagnosticCaptureCleanup([object[]]$States,
+   # On failure the quarantined bytes still belong to evidence, not to a
+   # successful diagnostic classification. Join before persisting/disposal.
+   foreach($state in $States){
+-    if($state.PSObject.Properties['startup_reader']){
++    if($state.PSObject.Properties['continuous_reader']){
++      try{Stop-R19ContinuousCapture $state}catch{
++        [void]$Errors.Add(('continuous reader cleanup failed for {0}: {1}'-f
++            $state.spec.role,$_.Exception.Message))}
++    }elseif($state.PSObject.Properties['startup_reader']){
+       try{Stop-R19StartupCapture $state $true}catch{
+         [void]$Errors.Add(('startup reader cleanup failed for {0}: {1}' -f
+             $state.spec.role,$_.Exception.Message))}
+@@ -1215,7 +1228,146 @@ function Initialize-R19StartupReader {
+   Assert-Condition ((Get-ByteSha $bytes)-ceq$helper.sha256-and
+       $helper.sha256-ceq$ExpectedStartupReaderSha256) `
+       'Startup reader source changed after pinning.'
+-  Add-Type -TypeDefinition ([Text.Encoding]::UTF8.GetString($bytes))
++  $continuous=Copy-PinnedInput (Join-Path $repo 'tools/r19_continuous_reader.cs') `
++      'r19_continuous_reader.cs'
++  [byte[]]$continuousBytes=[IO.File]::ReadAllBytes($continuous.staged)
++  Assert-Condition ((Get-ByteSha $continuousBytes)-ceq$continuous.sha256-and
++      $continuous.sha256-ceq$ExpectedContinuousReaderSha256) `
++      'Continuous reader source changed after pinning.'
++  $script:ContinuousReaderSource=$continuous
++  Add-Type -TypeDefinition (([Text.Encoding]::UTF8.GetString($bytes))+
++      [Environment]::NewLine+([Text.Encoding]::UTF8.GetString($continuousBytes)))
++}
++
++function Start-R19ContinuousCapture([object[]]$States,[object]$Trace) {
++  foreach($state in $States){
++    $source=[VcLora.R19.SerialStartupSource]::new($state.serial)
++    $reader=[VcLora.R19.ContinuousReader]::new($source,$Trace.clock,1048576,4096)
++    $state|Add-Member NoteProperty continuous_reader $reader -Force
++    $state|Add-Member NoteProperty continuous_evidence $null -Force
++    $state|Add-Member NoteProperty continuous_raw $null -Force
++    $state.read_state|Add-Member NoteProperty continuous_reader $reader -Force
++    $state.read_state|Add-Member NoteProperty identity_verified $false -Force
++    $state.read_state|Add-Member NoteProperty first_service_us ([long]-1) -Force
++    $state.read_state|Add-Member NoteProperty maximum_gap_begin_us ([long]-1) -Force
++    $state.read_state|Add-Member NoteProperty maximum_gap_end_us ([long]-1) -Force
++  }
++  foreach($state in $States){
++    Assert-Condition ($state.continuous_reader.WaitReady(1000)) `
++        ('Continuous reader preparation timeout: '+$state.spec.role)
++    # Warm source-independent status/delivery paths without opening/reading COM.
++    [void]$state.continuous_reader.GetStatus()
++    [void]$state.continuous_reader.PollBytes(1)
++    [void]$state.continuous_reader.GetSnapshot()
++  }
++}
++
++function Confirm-R19ContinuousIdentity([object[]]$States) {
++  Assert-Condition (@($States|Where-Object{-not$_.startup_identity_verified}).Count-eq0) `
++      'Quarantined bytes cannot be parsed before both post-open identities pass.'
++  foreach($state in $States){
++    # Observation only: do not Stop/Join/Close or hand physical Read to PowerShell.
++    $phase=$state.continuous_reader.MarkPhase('IDENTITY_VERIFIED')
++    $state.read_state.identity_verified=$true
++    $state.last=[long][math]::Floor($phase.Ticks*1000000.0/[Diagnostics.Stopwatch]::Frequency)
++    [void]$state.continuous_reader.MarkPhase('LIVE')
++  }
++}
++
++function Read-R19ContinuousBytes([object]$ReadState,[object]$Parser,
++    [IO.MemoryStream]$Raw,[Diagnostics.Stopwatch]$Clock,[int]$Budget,
++    [ValidateSet('AUTO','TERMINAL_TAIL')][string]$Origin='AUTO') {
++  Assert-Condition $ReadState.identity_verified 'Continuous bytes remain identity-quarantined.'
++  $reader=$ReadState.continuous_reader;$status=$reader.GetStatus()
++  Assert-Condition ([string]::IsNullOrEmpty($status.Failure)-and-not$status.Stopped) `
++      ('Continuous reader failed or stopped: '+$status.Failure)
++  if($status.InitialBytes-ge0-and$ReadState.initial_drain_bytes-lt0){
++    $ReadState.initial_drain_bytes=[long]$status.InitialBytes
++    $ReadState.initial_drain_remaining=[long]$status.InitialBytes
++  }
++  [int]$total=0
++  foreach($block in $reader.PollBytes($Budget)){
++    Assert-Condition ($block.Offset-eq$Raw.Length-and$block.Data.Length-eq$block.Count) `
++        'Continuous parser/raw delivery lost exact prefix accounting.'
++    $ReadState.read_batch_id=[long]$block.Batch
++    [int]$offset=0
++    while($offset-lt$block.Count){
++      [bool]$initial=$offset-lt$block.InitialByteCount
++      [int]$count=if($initial){$block.InitialByteCount-$offset}else{$block.Count-$offset}
++      [byte[]]$part=New-Object byte[] $count
++      [Array]::Copy($block.Data,$offset,$part,0,$count)
++      $Raw.Write($part,0,$part.Length)
++      if($initial){$ReadState.initial_drain_remaining-=$count}
++      [long]$nativeUs=[long][math]::Floor($block.EndTicks*1000000.0/[Diagnostics.Stopwatch]::Frequency)
++      $captureOrigin=if($Origin-ceq'TERMINAL_TAIL'){'TERMINAL_TAIL'}elseif($initial){'STARTUP_DRAIN'}else{'LIVE'}
++      $trace=$ReadState.lifecycle_trace
++      # Native arrival observation and application parser observation are distinct.
++      Add-DiagnosticBytes $Parser $part $nativeUs ([long]$block.Batch) $captureOrigin `
++          $trace $trace.clock.ElapsedTicks
++      $offset+=$count;$total+=$count
++    }
++  }
++  return $total
++}
++
++function Stop-R19ContinuousCapture([object]$State) {
++  if($null-ne$State.continuous_evidence-and$State.continuous_evidence.stopped){return}
++  $reader=$State.continuous_reader
++  $joined=$reader.Stop(500)
++  if(-not$joined){
++    $State.startup_close_required=$true
++    $joined=$reader.CloseAndStop(1000)
++  }
++  # Even an unjoinable reader supports a consistent published-prefix snapshot.
++  # Preserve it before reporting cleanup failure; never lose the primary evidence.
++  $s=$reader.GetSnapshot();[byte[]]$bytes=$reader.ReadSlice(0,$s.ByteCount)
++  $State.continuous_raw=$bytes;$State.startup_snapshot=$s
++  $frequency=[double][Diagnostics.Stopwatch]::Frequency
++  $firstUs=if($s.FirstReadBeginTicks-ge0){($s.FirstReadBeginTicks-$s.OpenReturnTicks)*1000000.0/$frequency}else{-1.0}
++  $gapUs=$s.MaximumServiceGapTicks*1000000.0/$frequency
++  [byte[]]$parsed=$State.raw.ToArray()
++  $prefixExact=Test-ExactBytePrefix $parsed $bytes
++  $unparsed=$bytes.Length-$parsed.Length
++  $State.continuous_evidence=[pscustomobject][ordered]@{
++    schema='vc-lora-r19-continuous-reader-v1';role=[string]$State.spec.role
++    clock_domain_id=[string]$State.lifecycle_trace.clock_domain_id
++    frequency=[string][Diagnostics.Stopwatch]::Frequency
++    armed=$s.Armed;stopped=$s.Stopped;closed_by_reader=$s.Closed
++    identity_verified=[bool]$State.startup_identity_verified
++    raw_bytes=$s.ByteCount;raw_sha256=Get-ByteSha $bytes
++    native_raw_path=([string]$State.spec.role+'.continuous.raw.bin')
++    parser_bytes=$parsed.Length;parser_prefix_exact=$prefixExact
++    consumed_bytes=$s.ConsumedByteCount;unparsed_bytes=$unparsed
++    unparsed_suffix_accepted=$false;overflow=$s.Overflow
++    initial_drain_bytes=$s.InitialBytes
++    open_return_ticks=[string]$s.OpenReturnTicks;arm_ticks=[string]$s.ArmTicks
++    first_read_begin_ticks=[string]$s.FirstReadBeginTicks;first_read_end_ticks=[string]$s.FirstReadEndTicks
++    first_read_requested_count=$s.FirstReadRequestedCount
++    last_read_begin_ticks=[string]$s.LastReadBeginTicks;last_read_end_ticks=[string]$s.LastReadEndTicks
++    maximum_gap_begin_ticks=[string]$s.MaximumGapStartTicks
++    maximum_gap_end_ticks=[string]$s.MaximumGapEndTicks
++    open_to_first_read_us=$firstUs;maximum_service_gap_us=$gapUs
++    maximum_read_duration_us=$s.MaximumReadDurationTicks*1000000.0/$frequency
++    read_calls=$s.Calls;timeouts=$s.Timeouts;zero_reads=$s.ZeroReads
++    read_errors=$s.ReadErrors;cleanup_read_interruptions=$s.CleanupReadInterruptions
++    close_required=[bool]$State.startup_close_required;failure=[string]$s.Failure
++    cleanup_failure=[string]$s.CleanupFailure;blocks=@($s.Blocks);phases=@($s.Phases)
++    replayed=[bool]$State.read_state.identity_verified
++    valid=($s.Armed-and$s.Stopped-and$firstUs-ge0-and$firstUs-le$PumpServiceLimitUs-and
++      $gapUs-le$PumpServiceLimitUs-and
++      ($s.MaximumReadDurationTicks*1000000.0/$frequency)-le$PumpServiceLimitUs-and
++      -not$State.startup_close_required-and
++      [string]::IsNullOrEmpty($s.Failure)-and[string]::IsNullOrEmpty($s.CleanupFailure)-and
++      $State.startup_identity_verified-and$prefixExact-and$unparsed-eq0-and
++      $s.ConsumedByteCount-eq$parsed.Length)
++    limitations=@('Application Read is not proof of kernel-pending requests or physical host polling.',
++      'Continuous native Read and parser-pump fairness are evaluated independently.',
++      'Unparsed raw suffixes are preserved but never accepted as communication success.',
++      'Read timestamps cannot correlate MCU time without a bounded nonce exchange.')
++  }
++  # Compatibility field name; the schema explicitly distinguishes lifetime owner.
++  $State.startup_evidence=$State.continuous_evidence
++  Assert-Condition $joined ('Continuous reader did not terminate: '+$State.spec.role)
+ }
+ 
+ function Start-R19StartupCapture([object[]]$States,[object]$Trace) {
+@@ -1391,9 +1543,20 @@ function Read-DiagnosticSerial([object]$Serial,[object]$Parser,
+     Get-ElapsedUs $Clock}
+   if([int64]$LastServiceUs.Value-ge0){
+     [int64]$gap=$now-[int64]$LastServiceUs.Value
+-    if($gap-gt[int64]$MaximumGapUs.Value){$MaximumGapUs.Value=$gap}
++    if($gap-gt[int64]$MaximumGapUs.Value){
++      $MaximumGapUs.Value=$gap
++      if($ReadState.PSObject.Properties['maximum_gap_begin_us']){
++        $ReadState.maximum_gap_begin_us=[long]$LastServiceUs.Value
++        $ReadState.maximum_gap_end_us=$now
++      }
++    }
+   }
+   $LastServiceUs.Value=$now
++  if($ReadState.PSObject.Properties['continuous_reader']){
++    if($ReadState.first_service_us-lt0){$ReadState.first_service_us=$now}
++    [void](Read-R19ContinuousBytes $ReadState $Parser $Raw $Clock $PumpReadBudgetBytes)
++    return
++  }
+   if([int64]$ReadState.initial_drain_remaining-lt0){
+     [int64]$initial=[int]$Serial.BytesToRead
+     $ReadState.initial_drain_bytes=$initial
+@@ -1531,6 +1694,23 @@ function Invoke-DiagnosticExactTailDrain([object]$Serial,[object]$Parser,
+     [int64]$now=$tailStartUs
+     while($readTotal-lt$required){
+       if($now-ge$DeadlineUs){break}
++      if($ReadState.PSObject.Properties['continuous_reader']){
++        # The native owner may have prefetched later frames. Consume only this
++        # already-started frame's remainder; retain the suffix as separate evidence.
++        [long]$beforeLength=$Raw.Length
++        try{
++          [int]$read=Read-R19ContinuousBytes $ReadState $Parser $Raw $Clock `
++              ($required-$readTotal) 'TERMINAL_TAIL'
++        }catch{$readException=$_.Exception.Message;break}
++        if($read-gt0){
++          [byte[]]$slice=$Raw.ToArray()
++          for([int]$i=[int]$beforeLength;$i-lt$slice.Length;++$i){$observedBytes.Add($slice[$i])}
++          $readTotal+=$read
++          $partialLastProgress=Get-ElapsedUs $Clock
++        }elseif($null-eq$NowUs){Start-Sleep -Milliseconds 1}
++        $now=if($null-ne$NowUs){[int64](& $NowUs)}else{Get-ElapsedUs $Clock}
++        continue
++      }
+       [int]$available=[int]$Serial.BytesToRead
+       if($available-le0){
+         if($null-eq$NowUs){Start-Sleep -Milliseconds 1}
+@@ -2046,16 +2226,16 @@ function Invoke-R19RuntimeFailDiagnosticCapture([object]$Provenance) {
+   $clock=$lifecycleTrace.clock;$cleanupErrors=[Collections.ArrayList]::new()
+   $script:CaptureCleanupResult=$null
+   try{
+-    Start-R19StartupCapture $states $lifecycleTrace
++    Start-R19ContinuousCapture $states $lifecycleTrace
+     foreach($state in $states){
+       [void](Open-DiagnosticSerialPort $state.serial $state.open_evidence $null `
+-          $lifecycleTrace ([string]$state.spec.role) $state.startup_reader)
++          $lifecycleTrace ([string]$state.spec.role) $state.continuous_reader)
+       $script:ExternalActions.com_ports_opened=$true
+       [void]$script:ExternalActions.opened_ports.Add([string]$state.spec.port)
+     }
+     foreach($spec in $portSpecs){Assert-ExactPortIdentity $spec 'after_open'}
+     foreach($state in $states){$state.startup_identity_verified=$true}
+-    Receive-R19StartupCapture $states
++    Confirm-R19ContinuousIdentity $states
+     foreach($state in $states){Add-R19PcLifecycleEvent $lifecycleTrace 4 ([string]$state.spec.role)}
+     $clock.Start();[int]$turn=0
+     [long]$measurementWindowStartUs=Get-ElapsedUs $clock
+@@ -2070,9 +2250,21 @@ function Invoke-R19RuntimeFailDiagnosticCapture([object]$Provenance) {
+       }
+       ++$turn;Start-Sleep -Milliseconds 2
+     }
++    # Close the final LIVE interval: a slow last decode must not disappear merely
++    # because no subsequent pump call occurs before the measurement window ends.
++    [long]$lastLiveServiceUs=Get-ElapsedUs $clock
++    foreach($state in $states){
++      [long]$gap=$lastLiveServiceUs-$state.last
++      if($state.last-ge0-and$gap-gt$state.max_gap){
++        $state.max_gap=$gap
++        $state.read_state.maximum_gap_begin_us=$state.last
++        $state.read_state.maximum_gap_end_us=$lastLiveServiceUs
++      }
++    }
+     [int64]$tailDeadline=Get-ElapsedUs $clock
+     $tailDeadline+=$TerminalTailDrainLimitUs
+     foreach($state in $states){
++      [void]$state.continuous_reader.MarkPhase('TAIL')
+       [byte[]]$expectedFrame=Get-ExpectedNextR19FailureFrame $state.parser
+       [int]$expectedNext=if($null-ne$expectedFrame){
+         [int]$expectedFrame[4]}else{-1}
+@@ -2133,8 +2325,11 @@ function Invoke-R19RuntimeFailDiagnosticCapture([object]$Provenance) {
+     raw_includes_additional_startup_interval=$true
+     startup_readers_valid=$startupReadersValid
+     startup_reader_evidence=@($states|ForEach-Object{$_.startup_evidence})
++    continuous_readers_valid=$startupReadersValid
++    continuous_reader_evidence=@($states|ForEach-Object{$_.continuous_evidence})
+     pc_lifecycle_trace=$lifecycleEvidence
+     pump_service_limit_us=$PumpServiceLimitUs
++    parser_service_scope='LIVE parser pump including final interval; separate bounded terminal-tail drain excluded. Native Read service is checked for the entire Open-to-cleanup lifetime.'
+     terminal_tail_drain_limit_us=$TerminalTailDrainLimitUs
+     alive_sequence_time_monotonic=$aliveMonotonic
+     parser_clean=$parserClean
+@@ -2159,7 +2354,14 @@ function Invoke-R19RuntimeFailDiagnosticCapture([object]$Provenance) {
+         remaining=[int64]$_.read_state.initial_drain_remaining
+         completed=[int64]$_.read_state.initial_drain_remaining-eq0}
+       tail_drain=$_.tail_drain
+-      maximum_service_gap_us=$_.max_gap;frame_count=$_.parser.frames.Count
++      maximum_service_gap_us=$_.max_gap
++      parser_first_service_us=$_.read_state.first_service_us
++      parser_maximum_gap_begin_us=$_.read_state.maximum_gap_begin_us
++      parser_maximum_gap_end_us=$_.read_state.maximum_gap_end_us
++      native_read_maximum_service_gap_us=$_.continuous_evidence.maximum_service_gap_us
++      native_raw_bytes=$_.continuous_evidence.raw_bytes
++      unparsed_native_bytes=$_.continuous_evidence.unparsed_bytes
++      frame_count=$_.parser.frames.Count
+       noise_bytes=[int64]$_.parser.noise_bytes
+       partial_bytes=[int]$_.parser.partial_bytes
+       bad_length=[int64]$_.parser.bad_length
+@@ -3318,6 +3520,9 @@ function Invoke-OfflineSelfTest {
+ }
+ 
+ function Complete-Evidence([object]$Summary) {
++  if($null-ne$script:ContinuousReaderSource){
++    $Summary|Add-Member NoteProperty continuous_reader_source $script:ContinuousReaderSource -Force
++  }
+   if($null-ne$script:StartupReaderSource){
+     $Summary|Add-Member NoteProperty startup_reader_source $script:StartupReaderSource -Force
+   }

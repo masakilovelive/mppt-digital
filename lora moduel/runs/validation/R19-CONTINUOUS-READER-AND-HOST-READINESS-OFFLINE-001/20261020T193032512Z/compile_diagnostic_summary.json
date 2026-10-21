@@ -1,0 +1,24 @@
+{
+    "schema":  "r19-readiness-diagnostic-compile-only-v1",
+    "result":  "INCOMPLETE_OR_FAIL",
+    "hardware_interaction":  false,
+    "flash_attempted":  false,
+    "sealed_candidate_created":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false,
+    "cases":  [
+                  {
+                      "name":  "host_arm_parallel_vehicle",
+                      "role":  "vehicle",
+                      "mode":  "host_arm_diagnostic",
+                      "jobs":  6,
+                      "flags":  "-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1 -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1 -DVC_LORA_R19_USB_READINESS_MODE=2",
+                      "success":  false,
+                      "exit_code":  1,
+                      "elapsed_ms":  70709.6937,
+                      "log_path":  "arduino/host_arm_parallel_vehicle/compile.json",
+                      "binary_bytes":  0,
+                      "binary_sha256":  ""
+                  }
+              ]
+}

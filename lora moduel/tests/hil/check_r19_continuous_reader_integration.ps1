@@ -1,0 +1,153 @@
+[CmdletBinding()]
+param([string]$RepoRoot='')
+Set-StrictMode -Version Latest
+$ErrorActionPreference='Stop'
+if(-not$RepoRoot){$RepoRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)}
+$repo=(Resolve-Path -LiteralPath $RepoRoot).Path
+$tokens=$null;$errors=$null
+$ast=[Management.Automation.Language.Parser]::ParseFile(
+    (Join-Path $repo 'tools/run_r19_runtime_fail_diagnostic_hil.ps1'),[ref]$tokens,[ref]$errors)
+if($errors.Count){throw 'Runner parse failed.'}
+$names=@('Assert-Condition','Get-ByteSha','New-R19PcLifecycleTrace',
+ 'Add-R19PcLifecycleEvent','Update-X25Crc','New-SyntheticFrame',
+ 'New-DiagnosticParser','Add-DiagnosticBytes','Get-MavlinkDefinitions',
+ 'Open-DiagnosticSerialPort','Get-ElapsedUs','Read-DiagnosticSerial',
+ 'Start-R19ContinuousCapture','Confirm-R19ContinuousIdentity',
+ 'Read-R19ContinuousBytes','Stop-R19ContinuousCapture',
+ 'Invoke-DiagnosticExactTailDrain','Test-ExactBytePrefix')
+foreach($name in $names){
+ $found=@($ast.FindAll({param($n)$n-is[Management.Automation.Language.FunctionDefinitionAst]-and$n.Name-ceq$name},$true))
+ if($found.Count-ne1){throw "Missing production function $name"}
+ Invoke-Expression $found[0].Extent.Text
+}
+$live=@($ast.FindAll({param($n)$n-is[Management.Automation.Language.FunctionDefinitionAst]-and$n.Name-ceq'Invoke-R19RuntimeFailDiagnosticCapture'},$true))[0].Extent.Text
+Assert-Condition ($live.Contains('Start-R19ContinuousCapture')-and$live.Contains('Confirm-R19ContinuousIdentity')-and-not$live.Contains('Receive-R19StartupCapture')) 'Live path still hands read ownership over.'
+$PumpServiceLimitUs=[long]100000;$PumpReadBudgetBytes=8192
+$script:Definitions=Get-MavlinkDefinitions (Join-Path $repo 'core/src/mavlink_frame.cpp')
+$fixture=@'
+namespace VcLora.R19 {
+ public sealed class ContinuousIntegrationSerial {
+  readonly object gate=new object();
+  readonly System.Collections.Generic.Queue<byte> bytes=new System.Collections.Generic.Queue<byte>();
+  public bool IsOpen{get;private set;} public int Calls,Closes,Disposes;
+  public bool HangAfterFirstRead,FailAfterFirstRead; bool released;
+  public int BytesToRead {get{lock(gate)return bytes.Count;}}
+  public void Open(){IsOpen=true;}
+  public void Feed(byte[] b){lock(gate){foreach(byte v in b)bytes.Enqueue(v);System.Threading.Monitor.PulseAll(gate);}}
+  public int Read(byte[] output,int offset,int count){lock(gate){Calls++;System.Threading.Monitor.PulseAll(gate);if(FailAfterFirstRead&&Calls>1)throw new System.IO.IOException("injected native read failure");while(HangAfterFirstRead&&Calls>1&&!released)System.Threading.Monitor.Wait(gate,10);if(bytes.Count==0)System.Threading.Monitor.Wait(gate,10);if(bytes.Count==0)throw new System.TimeoutException();int n=System.Math.Min(count,bytes.Count);for(int i=0;i<n;i++)output[offset+i]=bytes.Dequeue();return n;}}
+  public bool WaitReads(int wanted){var t=System.Diagnostics.Stopwatch.StartNew();lock(gate){while(Calls<wanted&&t.ElapsedMilliseconds<2000)System.Threading.Monitor.Wait(gate,10);return Calls>=wanted;}}
+  public void Release(){lock(gate){released=true;System.Threading.Monitor.PulseAll(gate);}}
+  public void Close(){Closes++;IsOpen=false;} public void Dispose(){Disposes++;}
+ }
+}
+'@
+Add-Type -TypeDefinition (([IO.File]::ReadAllText((Join-Path $repo 'tools/r19_startup_reader.cs')))+[Environment]::NewLine+([IO.File]::ReadAllText((Join-Path $repo 'tools/r19_continuous_reader.cs')))+[Environment]::NewLine+$fixture)
+function New-State([string]$Role,[object]$Trace){
+ [pscustomobject]@{spec=[pscustomobject]@{role=$Role;code=$(if($Role-ceq'ground'){'G'}else{'V'})}
+  serial=[VcLora.R19.ContinuousIntegrationSerial]::new();raw=[IO.MemoryStream]::new()
+  parser=New-DiagnosticParser $Role;last=[long]-1;max_gap=[long]0;lifecycle_trace=$Trace
+  open_evidence=[pscustomobject]@{serial_port_open_before_utc=$null;serial_port_open_after_utc=$null;serial_port_open_duration_ms=$null;result='NOT_ATTEMPTED';failure=$null}
+  read_state=[pscustomobject]@{read_batch_id=[long]0;initial_drain_bytes=[long]-1;initial_drain_remaining=[long]-1;lifecycle_trace=$Trace}
+  startup_reader=$null;startup_evidence=$null;startup_identity_verified=$false
+  startup_snapshot=$null;startup_close_required=$false}
+}
+function Open-State($s,$t){Open-DiagnosticSerialPort $s.serial $s.open_evidence $null $t $s.spec.role $s.continuous_reader;Assert-Condition ($s.serial.WaitReads(2)) 'Read owner did not run.'}
+function Pump($s,$t){$last=[long]$s.last;$gap=[long]$s.max_gap;Read-DiagnosticSerial $s.serial $s.parser $s.raw $t.clock ([ref]$last) ([ref]$gap) $null $s.read_state;$s.last=$last;$s.max_gap=$gap}
+function Finish($states){foreach($s in $states){try{Stop-R19ContinuousCapture $s}finally{$s.raw.Dispose()}}}
+$passed=0
+function Check([string]$n,[scriptblock]$body){&$body;$script:passed++;Write-Output "PASS $n"}
+Check 'identity_is_marker_not_stop_and_both_roles_must_pass' {
+ $t=New-R19PcLifecycleTrace;$states=@((New-State 'vehicle' $t),(New-State 'ground' $t))
+ try{
+  foreach($s in $states){$s.serial.Feed([byte[]](New-SyntheticFrame $s.spec.code 1))}
+  Start-R19ContinuousCapture $states $t;foreach($s in $states){Open-State $s $t}
+  $states[0].startup_identity_verified=$true;$caught=$false
+  try{Confirm-R19ContinuousIdentity $states}catch{$caught=$true}
+  Assert-Condition ($caught-and$states[0].parser.total_bytes-eq0) 'Single identity released quarantine.'
+  $states[1].startup_identity_verified=$true;Confirm-R19ContinuousIdentity $states
+  foreach($s in $states){Pump $s $t;$before=$s.continuous_reader.GetStatus().Calls;$s.serial.Feed([byte[]](New-SyntheticFrame $s.spec.code 2));Assert-Condition ($s.serial.WaitReads([int]$before+2)) 'Read stopped after identity.';Pump $s $t
+   Assert-Condition ($s.parser.valid_frames-eq2-and$s.raw.Length-eq126-and-not$s.continuous_reader.GetStatus().Stopped-and$s.serial.Closes-eq0) 'Ownership changed or raw duplication.'}
+ }finally{Finish $states}
+}
+Check 'native_reader_survives_slow_parser_but_parser_fairness_stays_fail' {
+ $t=New-R19PcLifecycleTrace;$s=New-State 'ground' $t
+ try{Start-R19ContinuousCapture @($s) $t;Open-State $s $t;$s.startup_identity_verified=$true;Confirm-R19ContinuousIdentity @($s);Pump $s $t
+  $before=$s.continuous_reader.GetStatus().Calls;[Threading.Thread]::Sleep(160);Pump $s $t
+  Assert-Condition ($s.continuous_reader.GetStatus().Calls-gt$before-and$s.max_gap-gt100000-and$s.read_state.maximum_gap_end_us-gt$s.read_state.maximum_gap_begin_us) 'Parser delay was hidden or stopped physical Read.'
+ }finally{Finish @($s)}
+}
+Check 'bounded_byte_delivery_preserves_original_batch_and_native_timestamp' {
+ $t=New-R19PcLifecycleTrace;$s=New-State 'ground' $t
+ try{$s.serial.Feed([byte[]](New-SyntheticFrame 'G' 3));Start-R19ContinuousCapture @($s) $t;Open-State $s $t;$s.startup_identity_verified=$true;Confirm-R19ContinuousIdentity @($s)
+  $snapshot=$s.continuous_reader.GetSnapshot();Read-R19ContinuousBytes $s.read_state $s.parser $s.raw $t.clock 10 'AUTO'|Out-Null
+  Assert-Condition ($s.raw.Length-eq10-and$s.parser.frames.Count-eq0) 'Byte poll ignored budget.'
+  Pump $s $t;Assert-Condition ($s.parser.valid_frames-eq1-and$s.raw.Length-eq63-and$s.parser.frames[0].read_batch_id-eq$snapshot.Blocks[0].Batch) 'Slice fabricated a native Read batch.'
+  $nativeUs=[long][math]::Floor($snapshot.Blocks[0].EndTicks*1000000.0/[Diagnostics.Stopwatch]::Frequency)
+  Assert-Condition ($s.parser.frames[0].complete_us-eq$nativeUs) 'Parser dequeue time replaced native timestamp.'
+ }finally{Finish @($s)}
+}
+Check 'tail_reads_exact_remainder_and_preserves_prefetched_next_frame' {
+ $t=New-R19PcLifecycleTrace;$s=New-State 'ground' $t
+ try{$a=[byte[]](New-SyntheticFrame 'G' 4);$b=[byte[]](New-SyntheticFrame 'G' 5);$s.serial.Feed($a);Start-R19ContinuousCapture @($s) $t;Open-State $s $t;$s.startup_identity_verified=$true;Confirm-R19ContinuousIdentity @($s)
+  Read-R19ContinuousBytes $s.read_state $s.parser $s.raw $t.clock 32 'AUTO'|Out-Null
+  $s.serial.Feed($b);$c=$s.continuous_reader.GetStatus().Calls;Assert-Condition ($s.serial.WaitReads([int]$c+2)) 'Next frame was not prefetched.'
+  $tail=Invoke-DiagnosticExactTailDrain $s.serial $s.parser $s.raw $t.clock $s.read_state ((Get-ElapsedUs $t.clock)+500000) $null 'G' 4 $a
+  Assert-Condition ($tail.drain_completed-and$tail.bytes_read-eq31-and$s.raw.Length-eq63-and$s.parser.valid_frames-eq1-and$s.continuous_reader.GetStatus().PendingByteCount-eq63) 'Tail consumed a new frame or duplicated accepted bytes.'
+  Stop-R19ContinuousCapture $s
+  Assert-Condition ($s.continuous_evidence.unparsed_bytes-eq63-and-not$s.continuous_evidence.valid-and$s.continuous_raw.Length-eq126) 'Prefetched suffix was discarded or silently accepted.'
+ }finally{Finish @($s)}
+}
+Check 'identity_failure_keeps_entire_native_evidence_unparsed' {
+ $t=New-R19PcLifecycleTrace;$s=New-State 'ground' $t
+ try{$s.serial.Feed([byte[]](New-SyntheticFrame 'G' 6));Start-R19ContinuousCapture @($s) $t;Open-State $s $t;Stop-R19ContinuousCapture $s
+  Assert-Condition ($s.parser.total_bytes-eq0-and$s.continuous_raw.Length-eq63-and-not$s.continuous_evidence.identity_verified-and-not$s.continuous_evidence.valid) 'Unverified bytes were parsed or evidence lost.'
+ }finally{Finish @($s)}
+}
+Check 'empty_native_stream_is_not_communication_success' {
+ $t=New-R19PcLifecycleTrace;$s=New-State 'ground' $t
+ try{Start-R19ContinuousCapture @($s) $t;Open-State $s $t;$s.startup_identity_verified=$true;Confirm-R19ContinuousIdentity @($s);Pump $s $t;Stop-R19ContinuousCapture $s
+  Assert-Condition ($s.continuous_evidence.raw_bytes-eq0-and$s.parser.valid_frames-eq0) 'Empty input manufactured a frame.'
+ }finally{Finish @($s)}
+}
+Check 'failed_stop_and_close_join_preserve_native_prefix_without_acceptance' {
+ $t=New-R19PcLifecycleTrace;$s=New-State 'ground' $t
+ try{
+  $frame=[byte[]](New-SyntheticFrame 'G' 7);$s.serial.Feed($frame);$s.serial.HangAfterFirstRead=$true
+  Start-R19ContinuousCapture @($s) $t;Open-State $s $t
+  $caught=$false;$message=''
+  try{Stop-R19ContinuousCapture $s}catch{$caught=$true;$message=$_.Exception.Message}
+  Assert-Condition ($caught-and$message-like'*did not terminate*') 'Non-releasing native owner silently passed cleanup.'
+  Assert-Condition ($s.continuous_raw.Length-eq63-and
+    ([Convert]::ToBase64String($s.continuous_raw))-ceq([Convert]::ToBase64String($frame))) 'Failed join discarded or changed authoritative native evidence.'
+  Assert-Condition ($s.continuous_evidence.raw_bytes-eq63-and
+    -not$s.continuous_evidence.stopped-and-not$s.continuous_evidence.valid-and
+    $s.continuous_evidence.close_required-and$s.parser.total_bytes-eq0) 'Unjoined identity-quarantined prefix was accepted.'
+ }finally{
+  $s.serial.Release()
+  if($null-ne$s.continuous_reader){Assert-Condition ($s.continuous_reader.Stop(2000)) 'Fixture reader leaked after explicit release.'}
+  Finish @($s)
+ }
+}
+Check 'native_read_exception_is_explicit_and_keeps_full_unparsed_evidence' {
+ $t=New-R19PcLifecycleTrace;$s=New-State 'ground' $t
+ try{
+  $frame=[byte[]](New-SyntheticFrame 'G' 8);$s.serial.Feed($frame);$s.serial.FailAfterFirstRead=$true
+  Start-R19ContinuousCapture @($s) $t;Open-State $s $t
+  Stop-R19ContinuousCapture $s
+  Assert-Condition ($s.continuous_evidence.read_errors-eq1-and
+    $s.continuous_evidence.failure-like'*injected native read failure*'-and
+    -not$s.continuous_evidence.valid) 'Native read exception was suppressed or accepted.'
+  Assert-Condition ($s.parser.total_bytes-eq0-and
+    ([Convert]::ToBase64String($s.continuous_raw))-ceq([Convert]::ToBase64String($frame))) 'Read error lost quarantined native prefix.'
+ }finally{Finish @($s)}
+}
+Check 'compiled_continuous_helper_is_bound_to_verified_pinned_source' {
+ $initialize=@($ast.FindAll({param($n)$n-is[Management.Automation.Language.FunctionDefinitionAst]-and$n.Name-ceq'Initialize-R19StartupReader'},$true))[0].Extent.Text
+ $sha=(Get-FileHash -Algorithm SHA256 -LiteralPath (Join-Path $repo 'tools/r19_continuous_reader.cs')).Hash
+ $runner=[IO.File]::ReadAllText((Join-Path $repo 'tools/run_r19_runtime_fail_diagnostic_hil.ps1'))
+ Assert-Condition ($initialize.Contains("Copy-PinnedInput (Join-Path `$repo 'tools/r19_continuous_reader.cs')")-and
+   $initialize.Contains('(Get-ByteSha $continuousBytes)')-and
+   $initialize.Contains('$continuous.sha256-ceq$ExpectedContinuousReaderSha256')-and
+   $initialize.Contains('UTF8.GetString($continuousBytes)')-and$runner.Contains($sha)) 'Native helper compilation is not tied to the reviewed staged SHA.'
+}
+Write-Output "Continuous integration offline: PASS=$passed; no COM/PnP/hardware; timings are synthetic only."

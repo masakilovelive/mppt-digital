@@ -1,0 +1,200 @@
+diff --git a/tests/host/standalone/r19_host_readiness_tests.cpp b/tests/host/standalone/r19_host_readiness_tests.cpp
+new file mode 100644
+index 0000000..be7046f
+--- /dev/null
++++ b/tests/host/standalone/r19_host_readiness_tests.cpp
+@@ -0,0 +1,194 @@
++#include "diagnostics/r19_host_readiness.hpp"
++#include <cstdint>
++#include <iostream>
++#include <type_traits>
++
++int main() {
++  using namespace vc_lora;
++  using namespace vc_lora::experimental;
++  unsigned checks = 0U, failures = 0U;
++  const auto check = [&](bool ok, const char* text) {
++    ++checks; if (!ok) { ++failures; std::cerr << text << '\n'; }
++  };
++  static_assert(std::is_trivially_destructible<R19HostReadinessGate>::value,
++                "diagnostic gate must own no dynamic resources");
++  constexpr std::uint64_t nonce = 0x521912345678ABCDULL;
++  constexpr std::uint64_t boot = 0x1234567812345678ULL;
++  constexpr std::uint64_t session = 0xDEF1234567ULL;
++  constexpr std::uint32_t epoch = 7U;
++  const auto start = [&](R19HostReadinessGate& gate,
++                         R19HostReadinessMode mode = R19HostReadinessMode::ExplicitHostArm,
++                         R19HostReadinessRole role = R19HostReadinessRole::Ground) {
++    return gate.begin_session(mode, role, boot, epoch, session, 1000U, 5000U);
++  };
++  const auto sync = [&](R19HostReadinessGate& gate) {
++    return gate.observe_clock_request(nonce, epoch, 1100U) &&
++           gate.record_clock_reply(nonce, 1101U, epoch, 1102U);
++  };
++  const auto arm = [&]() {
++    R19HostReadinessCommand command{};
++    command.opcode = R19HostReadinessOpcode::Arm;
++    command.role = R19HostReadinessRole::Ground;
++    command.proof_flags = r19_host_arm_required_proof;
++    command.reader_session = session;
++    command.nonce = nonce;
++    command.boot_id = boot;
++    command.usb_epoch = epoch;
++    command.reply_device_us = 1101U;
++    return command;
++  };
++
++  R19HostReadinessGate disabled{};
++  check(disabled.allow_initial_ground_usb_heartbeat(), "default is inert production pass-through");
++  check(!disabled.observe_clock_request(nonce, epoch, 1U), "disabled ignores nonce");
++  check(!disabled.accept_arm(arm(), epoch, 1U), "disabled ignores arm");
++  check(start(disabled, R19HostReadinessMode::Disabled), "explicit disabled start");
++  check(disabled.allow_initial_ground_usb_heartbeat(), "disabled remains pass-through");
++
++  R19HostReadinessGate a{};
++  check(start(a, R19HostReadinessMode::SyncOnly), "A starts");
++  check(a.allow_initial_ground_usb_heartbeat(), "A does not gate initial heartbeat");
++  check(sync(a), "A observes private clock exchange");
++  check(!a.accept_arm(arm(), epoch, 1200U), "A does not accept Arm");
++  check(a.allow_initial_ground_usb_heartbeat(), "A admission unchanged after sync");
++
++  R19HostReadinessGate gate{};
++  check(start(gate), "B starts");
++  check(!gate.allow_initial_ground_usb_heartbeat(), "B defers initial Ground product heartbeat");
++  check(!gate.allow_ground_usb_product_admission(), "B keeps initial product boundary clean");
++  check(!gate.accept_arm(arm(), epoch, 1050U), "Arm without clock rejected");
++  check(gate.observe_clock_request(nonce, epoch, 1100U), "clock request observed");
++  check(!gate.accept_arm(arm(), epoch, 1101U), "OUT request alone is not PC reply proof");
++  check(gate.record_clock_reply(nonce, 1101U, epoch, 1102U), "reply publication recorded separately");
++  check(!gate.allow_initial_ground_usb_heartbeat(), "reply publication alone is not PC read proof");
++  auto command = arm();
++  for (unsigned bit = 0U; bit < 8U; ++bit) {
++    command = arm(); command.proof_flags = static_cast<std::uint8_t>(1U << bit);
++    check(!gate.accept_arm(command, epoch, 1200U), "partial/unknown PC proof rejected");
++  }
++  command = arm(); command.role = R19HostReadinessRole::Vehicle;
++  check(!gate.accept_arm(command, epoch, 1200U), "wrong role ignored");
++  command = arm(); ++command.boot_id;
++  check(!gate.accept_arm(command, epoch, 1200U), "wrong boot ignored");
++  command = arm(); ++command.usb_epoch;
++  check(!gate.accept_arm(command, epoch, 1200U), "stale command epoch ignored");
++  command = arm(); ++command.reader_session;
++  check(!gate.accept_arm(command, epoch, 1200U), "wrong continuous reader session ignored");
++  command = arm(); ++command.nonce;
++  check(!gate.accept_arm(command, epoch, 1200U), "wrong nonce ignored");
++  command = arm(); ++command.reply_device_us;
++  check(!gate.accept_arm(command, epoch, 1200U), "wrong reply instance ignored");
++  command = arm(); command.opcode = R19HostReadinessOpcode::Ready;
++  check(!gate.accept_arm(command, epoch, 1200U), "Ready is not an Arm command");
++  check(gate.accept_arm(arm(), epoch, 1200U), "bound explicit PC claim permits B");
++  check(gate.allow_initial_ground_usb_heartbeat(), "B arm opens initial heartbeat admission");
++  check(gate.allow_ground_usb_product_admission(), "B arm admits Ground USB product frames");
++  check(gate.snapshot().pc_reply_read_claimed && gate.snapshot().continuous_reader_claimed,
++        "record claims, not a claim of independently observed pending kernel Read");
++  check(!gate.accept_arm(arm(), epoch, 1201U), "duplicate arm ignored");
++  check(!gate.observe_clock_request(nonce + 1U, epoch, 1202U), "armed binding cannot be replaced");
++  gate.poll(epoch + 1U, session, 1203U);
++  check(!gate.allow_initial_ground_usb_heartbeat() &&
++        gate.snapshot().state == R19HostReadinessState::EpochAborted, "reset closes already armed gate");
++
++  R19HostReadinessGate timeout{}; check(start(timeout), "timeout starts");
++  check(sync(timeout), "timeout sync");
++  timeout.poll(epoch, session, 6001U);
++  check(timeout.snapshot().state == R19HostReadinessState::TimedOut &&
++        !timeout.allow_initial_ground_usb_heartbeat(), "no-arm timeout fail-closed");
++  check(!timeout.accept_arm(arm(), epoch, 6002U), "late arm cannot revive timeout");
++  check(!start(timeout), "cannot restart failed same instance to erase evidence");
++  R19HostReadinessGate boundary{}; check(start(boundary), "boundary starts");
++  check(sync(boundary), "boundary sync");
++  check(boundary.accept_arm(arm(), epoch, 6000U), "Arm at exact independent arm deadline accepted");
++  R19HostReadinessGate late{}; check(start(late), "late starts");
++  check(sync(late), "late sync");
++  check(!late.accept_arm(arm(), epoch, 6001U) &&
++        late.snapshot().state == R19HostReadinessState::TimedOut, "Arm cannot outrun deadline check");
++  R19HostReadinessGate changed{}; check(start(changed), "reader change starts");
++  check(sync(changed), "reader change sync");
++  changed.poll(epoch, session + 1U, 1200U);
++  check(changed.snapshot().state == R19HostReadinessState::SessionAborted &&
++        !changed.accept_arm(arm(), epoch, 1201U), "reader replacement invalidates challenge");
++  R19HostReadinessGate regressed{}; check(start(regressed), "clock regression starts");
++  check(regressed.observe_clock_request(nonce, epoch, 1100U), "clock regression observes request");
++  regressed.poll(epoch, session, 1099U);
++  check(regressed.snapshot().state == R19HostReadinessState::ClockRegressed, "time cannot run backwards");
++  R19HostReadinessGate vehicle{};
++  check(start(vehicle, R19HostReadinessMode::ExplicitHostArm, R19HostReadinessRole::Vehicle), "Vehicle diagnostic starts");
++  check(vehicle.allow_initial_ground_usb_heartbeat(), "gate never suppresses Vehicle or Pixhawk traffic");
++  R19HostReadinessGate invalid{};
++  check(!invalid.begin_session(R19HostReadinessMode::ExplicitHostArm,
++       R19HostReadinessRole::Ground, boot, epoch, session, UINT64_MAX - 1U, 10U), "deadline overflow rejected");
++  check(!invalid.allow_initial_ground_usb_heartbeat(), "invalid B start fails closed");
++  R19HostReadinessGate invalid_role{};
++  check(!start(invalid_role, R19HostReadinessMode::ExplicitHostArm,
++               static_cast<R19HostReadinessRole>(99U)), "invalid role rejected");
++  check(!invalid_role.allow_initial_ground_usb_heartbeat(), "invalid role does not bypass B gate");
++  R19HostReadinessGate invalid_mode{};
++  check(!start(invalid_mode, static_cast<R19HostReadinessMode>(99U)), "invalid mode rejected");
++  check(!invalid_mode.allow_initial_ground_usb_heartbeat(), "invalid mode does not become pass-through");
++  R19HostReadinessGate zero_epoch{};
++  check(zero_epoch.begin_session(R19HostReadinessMode::ExplicitHostArm,
++        R19HostReadinessRole::Ground, boot, 0U, session, 1000U, 5000U), "initial USB loss epoch zero is valid");
++  check(zero_epoch.observe_clock_request(nonce, 0U, 1100U) &&
++        zero_epoch.record_clock_reply(nonce, 1101U, 0U, 1102U), "zero epoch clock exchange");
++  command = arm(); command.usb_epoch = 0U;
++  check(zero_epoch.accept_arm(command, 0U, 1200U), "zero epoch matching ARM accepted");
++  MavlinkFrame zero_epoch_wire{};
++  check(r19_encode_host_readiness_frame(0U, command, zero_epoch_wire), "wire accepts initial zero epoch");
++
++  R19HostReadinessGate ready_gate{}; check(start(ready_gate), "Ready starts");
++  check(sync(ready_gate), "Ready sync");
++  R19HostReadinessCommand ready{};
++  check(ready_gate.ready_command(ready), "Ready exposes exact challenge binding");
++  check(ready.opcode == R19HostReadinessOpcode::Ready && ready.proof_flags == 0U &&
++        ready.boot_id == boot && ready.usb_epoch == epoch && ready.reader_session == session &&
++        ready.nonce == nonce && ready.reply_device_us == 1101U, "Ready contains no invented PC proof");
++  for (unsigned seq = 0U; seq < 256U; ++seq) {
++    MavlinkFrame frame{}; R19HostReadinessCommand decoded{};
++    check(r19_encode_host_readiness_frame(static_cast<std::uint8_t>(seq), arm(), frame), "encode Arm");
++    check(frame.size == 66U && frame.payload_length == 54U && frame.system_id == 249U &&
++          frame.component_id == 195U && frame.message_id == 253U, "exact canonical private envelope");
++    check(r19_is_host_readiness_namespace(frame), "Arm namespace consumed locally");
++    check(r19_decode_host_readiness_frame(frame, decoded) && decoded.nonce == nonce &&
++          decoded.boot_id == boot && decoded.reader_session == session && decoded.usb_epoch == epoch &&
++          decoded.reply_device_us == 1101U && decoded.proof_flags == r19_host_arm_required_proof,
++          "Arm roundtrip byte exact");
++  }
++  MavlinkFrame good{}, malformed{}; R19HostReadinessCommand decoded{};
++  auto parity_command = arm(); parity_command.boot_id = 123U;
++  parity_command.reader_session = 456U;
++  MavlinkFrame parity_frame{};
++  check(r19_encode_host_readiness_frame(10U, parity_command, parity_frame), "cross-language vector encode");
++  constexpr char parity_hex[] = "FD3600000AF9C3FD00005231394101010103C801000000000000CDAB7856341219527B00000000000000070000004D040000000000000000000000000000A55AA4F6";
++  constexpr char hex_digits[] = "0123456789ABCDEF";
++  bool parity_matches = parity_frame.size * 2U == sizeof(parity_hex) - 1U;
++  for (std::size_t i = 0U; i < parity_frame.size; ++i) {
++    parity_matches = parity_matches &&
++        hex_digits[parity_frame.bytes[i] >> 4U] == parity_hex[2U * i] &&
++        hex_digits[parity_frame.bytes[i] & 15U] == parity_hex[2U * i + 1U];
++  }
++  check(parity_matches, "C++ and PowerShell share exact54/66 canonical vector");
++  check(r19_encode_host_readiness_frame(3U, ready, good) && good.component_id == 196U &&
++        r19_decode_host_readiness_frame(good, decoded) && decoded.opcode == R19HostReadinessOpcode::Ready,
++        "Ready uses separate response component");
++  check(r19_encode_host_readiness_frame(4U, arm(), good), "prepare corruptions");
++  for (std::size_t i = 0U; i < good.size; ++i) {
++    malformed = good; malformed.bytes[i] ^= 1U;
++    check(!r19_decode_host_readiness_frame(malformed, decoded), "every single-byte wire corruption rejected");
++  }
++  auto payload = good;
++  payload.payload()[44U] = 1U;
++  check(encode_mavlink_v2(0U, 249U, 195U, 253U, payload.payload(), 54U, malformed) &&
++        !r19_decode_host_readiness_frame(malformed, decoded), "reserved bytes reject with valid CRC");
++  payload = good; payload.payload()[7U] = 7U;
++  check(encode_mavlink_v2(0U, 249U, 195U, 253U, payload.payload(), 54U, malformed) &&
++        !r19_decode_host_readiness_frame(malformed, decoded), "unknown proof bits reject with valid CRC");
++  check(!r19_encode_host_readiness_frame(0U, R19HostReadinessCommand{}, malformed), "empty command rejected");
++  MavlinkFrame timesync{};
++  check(r19_encode_usb_clock_response(0U, nonce, 1101U, timesync) &&
++        !r19_is_host_readiness_namespace(timesync), "TIMESYNC namespace remains distinct");
++  std::cout << "UT-R19-HOST-READINESS-001 checks=" << checks << " failures=" << failures << '\n';
++  return failures == 0U ? 0 : 1;
++}

@@ -1,0 +1,10 @@
+E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tools\run_r19_runtime_fail_diagnostic_hil.ps1 : R19 runtime-fail di
+agnostic failed: summary result FAIL; evidence=E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\hil\R19-RUNTIME
+-STAGE-CAUSE-EXPERIMENT-HIL-001\20261010T075800693Z-5ef10ffd\capture
+�����ꏊ E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tools\run_r19_runtime_fail_diagnostic_hil.ps1:1860 ����:3
++   Write-Error ("R19 runtime-fail diagnostic failed: {0}; evidence={1} ...
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:) [Write-Error], WriteErrorException
+    + FullyQualifiedErrorId : Microsoft.PowerShell.Commands.WriteErrorException,run_r19_runtime_fail_diagnostic_hil.ps 
+   1
+ 

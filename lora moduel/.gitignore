@@ -1,0 +1,14 @@
+# Local build and temporary output only. Curated runs/ evidence is versioned.
+/build/
+/build-*/
+**/build/
+__pycache__/
+*.pyc
+node_modules/
+.venv/
+.env
+.env.*
+!.env.example
+*.pem
+*.pfx
+*.p12

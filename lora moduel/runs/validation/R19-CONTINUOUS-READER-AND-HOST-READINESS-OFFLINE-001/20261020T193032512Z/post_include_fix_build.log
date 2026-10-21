@@ -1,0 +1,212 @@
+[1/45] Linking CXX executable tests\host\vc_lora_r19_host_readiness_tests.exe
+[2/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_alive_backpressure_tests.dir/standalone/phase6_ground_runtime_alive_backpressure_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_ground_runtime_alive_backpressure_tests.cpp:6:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 1929 |                             std::uint64_t now_ms) noexcept {
+      |                                           ^
+1 warning generated.
+[3/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_ground_usb_commit_latch_tests.dir/standalone/phase6_ground_usb_commit_latch_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_ground_usb_commit_latch_tests.cpp:28:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 1929 |                             std::uint64_t now_ms) noexcept {
+      |                                           ^
+1 warning generated.
+[4/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_fail_diagnostic_tests.dir/standalone/phase6_ground_runtime_fail_diagnostic_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_ground_runtime_fail_diagnostic_tests.cpp:6:
+
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 1929 |                             std::uint64_t now_ms) noexcept {
+
+      |                                           ^
+
+1 warning generated.
+
+[5/45] Linking CXX executable tests\host\vc_lora_phase6_ground_usb_commit_latch_tests.exe
+[6/45] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_alive_backpressure_tests.exe
+[7/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_alive_diagnostic_tests.dir/standalone/phase6_vehicle_runtime_alive_diagnostic_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_vehicle_runtime_alive_diagnostic_tests.cpp:6:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1820:40: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 1820 |                          std::uint64_t now_ms) noexcept {
+      |                                        ^
+1 warning generated.
+[8/45] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_fail_diagnostic_tests.exe
+[9/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_alive_diagnostic_tests.dir/standalone/phase6_ground_runtime_alive_diagnostic_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_ground_runtime_alive_diagnostic_tests.cpp:6:
+
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 1929 |                             std::uint64_t now_ms) noexcept {
+
+      |                                           ^
+
+1 warning generated.
+
+[10/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_fail_diagnostic_tests.dir/standalone/phase6_vehicle_runtime_fail_diagnostic_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_vehicle_runtime_fail_diagnostic_tests.cpp:6:
+
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1820:40: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 1820 |                          std::uint64_t now_ms) noexcept {
+
+      |                                        ^
+
+1 warning generated.
+
+[11/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_alive_starvation_tests.dir/standalone/phase6_ground_runtime_alive_starvation_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_ground_runtime_alive_starvation_tests.cpp:6:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 1929 |                             std::uint64_t now_ms) noexcept {
+      |                                           ^
+1 warning generated.
+[12/45] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_diagnostic_tests.exe
+[13/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_first_usb_failure_integration_tests.dir/standalone/phase6_first_usb_failure_integration_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_first_usb_failure_integration_tests.cpp:11:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 1929 |                             std::uint64_t now_ms) noexcept {
+
+      |                                           ^
+
+1 warning generated.
+
+[14/45] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_alive_diagnostic_tests.exe
+[15/45] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_alive_starvation_tests.exe
+[16/45] Linking CXX executable tests\host\vc_lora_phase6_first_usb_failure_integration_tests.exe
+[17/45] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_alive_diagnostic_tests.exe
+[18/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_fail_recovery_guard_tests.dir/standalone/phase6_vehicle_runtime_fail_recovery_guard_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_vehicle_runtime_fail_recovery_guard_tests.cpp:6:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1820:40: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 1820 |                          std::uint64_t now_ms) noexcept {
+      |                                        ^
+1 warning generated.
+[19/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_fail_recovery_guard_tests.dir/standalone/phase6_ground_runtime_fail_recovery_guard_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_ground_runtime_fail_recovery_guard_tests.cpp:28:
+
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 1929 |                             std::uint64_t now_ms) noexcept {
+
+      |                                           ^
+
+1 warning generated.
+
+[20/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_fail_boundary_loss_tests.dir/standalone/phase6_ground_runtime_fail_boundary_loss_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_ground_runtime_fail_boundary_loss_tests.cpp:6:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 1929 |                             std::uint64_t now_ms) noexcept {
+      |                                           ^
+1 warning generated.
+[21/45] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_recovery_guard_tests.exe
+[22/45] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_fail_boundary_loss_tests.exe
+[23/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_alive_read_only_bootstrap_tests.dir/standalone/phase6_vehicle_runtime_alive_read_only_bootstrap_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_vehicle_runtime_alive_read_only_bootstrap_tests.cpp:6:
+
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1820:40: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 1820 |                          std::uint64_t now_ms) noexcept {
+
+      |                                        ^
+
+1 warning generated.
+
+[24/45] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_alive_read_only_bootstrap_tests.exe
+[25/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_alive_read_only_bootstrap_tests.dir/standalone/phase6_ground_runtime_alive_read_only_bootstrap_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_ground_runtime_alive_read_only_bootstrap_tests.cpp:6:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 1929 |                             std::uint64_t now_ms) noexcept {
+      |                                           ^
+1 warning generated.
+[26/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_fail_deadline_tests.dir/standalone/phase6_ground_runtime_fail_deadline_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_ground_runtime_fail_deadline_tests.cpp:35:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 1929 |                             std::uint64_t now_ms) noexcept {
+      |                                           ^
+1 warning generated.
+[27/45] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_alive_read_only_bootstrap_tests.exe
+[28/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_ground_runtime_fail_pending_alive_tests.dir/standalone/phase6_ground_runtime_fail_pending_alive_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_ground_runtime_fail_pending_alive_tests.cpp:6:
+
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 1929 |                             std::uint64_t now_ms) noexcept {
+
+      |                                           ^
+
+1 warning generated.
+
+[29/45] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_fail_deadline_tests.exe
+[30/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_fail_staged_partial_tests.dir/standalone/phase6_vehicle_runtime_fail_staged_partial_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_vehicle_runtime_fail_staged_partial_tests.cpp:6:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1820:40: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 1820 |                          std::uint64_t now_ms) noexcept {
+
+      |                                        ^
+
+1 warning generated.
+
+[31/45] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_fail_pending_alive_tests.exe
+[32/45] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_staged_partial_tests.exe
+[33/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_fail_staged_zero_tests.dir/standalone/phase6_vehicle_runtime_fail_staged_zero_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_vehicle_runtime_fail_staged_zero_tests.cpp:6:
+
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1820:40: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 1820 |                          std::uint64_t now_ms) noexcept {
+
+      |                                        ^
+
+1 warning generated.
+
+[34/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_fail_partial_deadline_tests.dir/standalone/phase6_vehicle_runtime_fail_partial_deadline_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_vehicle_runtime_fail_partial_deadline_tests.cpp:6:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1820:40: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 1820 |                          std::uint64_t now_ms) noexcept {
+      |                                        ^
+1 warning generated.
+[35/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_vehicle_runtime_fail_flush_deadline_tests.dir/standalone/phase6_vehicle_runtime_fail_flush_deadline_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_vehicle_runtime_fail_flush_deadline_tests.cpp:6:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1820:40: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 1820 |                          std::uint64_t now_ms) noexcept {
+
+      |                                        ^
+
+1 warning generated.
+
+[36/45] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_staged_zero_tests.exe
+[37/45] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_partial_deadline_tests.exe
+[38/45] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_flush_deadline_tests.exe
+[39/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_vehicle_product_loop_tests.dir/standalone/phase6_vehicle_product_loop_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_vehicle_product_loop_tests.cpp:5:
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1820:40: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 1820 |                          std::uint64_t now_ms) noexcept {
+      |                                        ^
+1 warning generated.
+[40/45] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_fail_recovery_guard_tests.exe
+[41/45] Linking CXX executable tests\host\vc_lora_phase6_vehicle_product_loop_tests.exe
+[42/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_ground_host_readiness_tests.dir/standalone/phase6_ground_host_readiness_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_ground_host_readiness_tests.cpp:9:
+
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 1929 |                             std::uint64_t now_ms) noexcept {
+
+      |                                           ^
+
+1 warning generated.
+
+[43/45] Linking CXX executable tests\host\vc_lora_phase6_ground_host_readiness_tests.exe
+[44/45] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_ground_product_loop_tests.dir/standalone/phase6_ground_product_loop_tests.cpp.obj
+In file included from E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/host/standalone/phase6_ground_product_loop_tests.cpp:5:
+
+E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/firmware/phase6/vc_lora_phase6_bridge.hpp:1929:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 1929 |                             std::uint64_t now_ms) noexcept {
+
+      |                                           ^
+
+1 warning generated.
+
+[45/45] Linking CXX executable tests\host\vc_lora_phase6_ground_product_loop_tests.exe

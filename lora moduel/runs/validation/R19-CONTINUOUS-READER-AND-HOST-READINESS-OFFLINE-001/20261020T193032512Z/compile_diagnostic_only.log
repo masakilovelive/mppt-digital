@@ -1,0 +1,13 @@
+COMPILE_BEGIN host_arm_parallel_vehicle
+COMPILE_END host_arm_parallel_vehicle success=False
+Diagnostic compilation failed: E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-CONTINUOUS-READE
+R-AND-HOST-READINESS-OFFLINE-001\20261020T193032512Z\arduino\host_arm_parallel_vehicle
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE
+-001\20261020T193032512Z\compile_diagnostic_only.ps1:33 char:15
++   if(-not$ok){throw ('Diagnostic compilation failed: '+$base)}
++               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Diagnostic comp...arallel_vehicle:String) [], RuntimeException
+    + FullyQualifiedErrorId : Diagnostic compilation failed: E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\ 
+   validation\R19-CONTINUOUS-READER-AND-HOST-READINESS-OFFLINE-001\20261020T193032512Z\arduino\host_arm_parallel_vehi  
+  cle
+ 

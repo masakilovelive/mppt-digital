@@ -1,0 +1,17 @@
+{
+    "schema":  "vc-lora-r18-single-param-one-run-authorization-v1",
+    "claimed_utc":  "2026-10-18T15:29:34.5440730Z",
+    "authorization_id":  "4b2527fd-381a-4a82-8f47-a4d6ec2750aa",
+    "authorization_claim_sha256":  "CB596825CF73BB865BF31E4A219232E93A7E6E2E54397363F7AB81C5B6D518C5",
+    "authorization_token_sha256":  "4EEB5CC999ECFA4D9A6CEA5FF4A365EB6BBF15C9DD1F19CF43429A565F6C9914",
+    "authorization_supplied":  true,
+    "authorization_consumed":  true,
+    "authorization_reusable":  false,
+    "operator_safety_attestation_sha256":  "E80E5B41C124DD113EC0989D8E8D77F4257FA356C4B3419E5E731E5F01E526D4",
+    "operator_safety_attestation_verified":  true,
+    "cold_boot_attestation_sha256":  "8854A0D9813F2783F9A368558BE5E5D59862CD82695300E74ECD1423C43925C5",
+    "cold_boot_attestation_verified":  true,
+    "cold_boot_physical_state_verified_by_runner":  false,
+    "cold_boot_contract":  "both XIAOs plus Pixhawk/external power simultaneously OFF \u003e5 s before cold boot",
+    "retry_allowed":  false
+}

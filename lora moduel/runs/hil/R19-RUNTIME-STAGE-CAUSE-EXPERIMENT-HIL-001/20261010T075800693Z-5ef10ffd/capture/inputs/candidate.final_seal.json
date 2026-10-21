@@ -1,0 +1,19 @@
+{
+    "schema":  "vc-lora-r19-candidate-final-seal-v1",
+    "artifact_id":  "20261003T110913332Z-04fb913b",
+    "result":  "PASS",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "candidate_manifest_sha256":  "9C75FC105C59A7B4D9D831A557AEB9E468B2BBB6DDFC50AD7B6677099C184E91",
+    "artifact_manifest_sha256":  "009D6F6D4B87831F3E820F412FD03C4EBB91951D00E42E141C9A3E48EC83981D",
+    "sha256s_sha256":  "253028DAB9B4077D2F49939B633ABA6D56B2D2B83C59D2B34CCA4C5DC03BBE18",
+    "canonical_source_tree_sha256":  "7401AC406B687B640F42E86BA1DB166A0CED915A0B389193955608DCD91F1387",
+    "staged_package_tree_sha256":  "8228E669002A25579A0B59A060F6D0A7F67E5235692A2472DCE2FA5BBA032601",
+    "vehicle_application_sha256":  "45126943A21D06BB28071B3975BF01B4F1023638839555C433E7B5A004CA0E12",
+    "ground_application_sha256":  "51D8891F093FC3A1F637570909AAADBE22676C59D77B302BD801FBC03394E344",
+    "hwcdc_semantic_contract_required":  true,
+    "hwcdc_semantic_summary_sha256":  "380DE71C4A8F9F876511C80C9D0044156B482DDD83628452ADCECA88D9362DF7",
+    "deployment_authorized":  false,
+    "hardware_interaction":  false
+}

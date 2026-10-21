@@ -1,0 +1,37 @@
+{
+    "schema":  "r19-readiness-diagnostic-compile-only-v1",
+    "result":  "PASS",
+    "hardware_interaction":  false,
+    "flash_attempted":  false,
+    "sealed_candidate_created":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false,
+    "cases":  [
+                  {
+                      "name":  "host_arm_include_fixed_vehicle",
+                      "role":  "vehicle",
+                      "mode":  "host_arm_diagnostic",
+                      "jobs":  6,
+                      "flags":  "-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1 -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1 -DVC_LORA_R19_USB_READINESS_MODE=2",
+                      "success":  true,
+                      "exit_code":  0,
+                      "elapsed_ms":  225596.21120000002,
+                      "log_path":  "arduino/host_arm_include_fixed_vehicle/compile.json",
+                      "binary_bytes":  441280,
+                      "binary_sha256":  "001F2664F53CF00B1076B07BFA8A4811338F5759375658B7C054877B44139AF9"
+                  },
+                  {
+                      "name":  "host_arm_include_fixed_ground",
+                      "role":  "ground",
+                      "mode":  "host_arm_diagnostic",
+                      "jobs":  6,
+                      "flags":  "-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1 -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1 -DVC_LORA_R19_USB_READINESS_MODE=2",
+                      "success":  true,
+                      "exit_code":  0,
+                      "elapsed_ms":  252265.0755,
+                      "log_path":  "arduino/host_arm_include_fixed_ground/compile.json",
+                      "binary_bytes":  422240,
+                      "binary_sha256":  "E4F499D1E22C18DD3C4EA98FF21FB9CCA95275C74D0D70F22233177D8F50E617"
+                  }
+              ]
+}

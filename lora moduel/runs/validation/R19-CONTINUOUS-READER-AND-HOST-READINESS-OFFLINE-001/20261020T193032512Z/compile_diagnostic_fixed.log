@@ -1,0 +1,4 @@
+COMPILE_BEGIN host_arm_include_fixed_vehicle
+COMPILE_END host_arm_include_fixed_vehicle success=True
+COMPILE_BEGIN host_arm_include_fixed_ground
+COMPILE_END host_arm_include_fixed_ground success=True

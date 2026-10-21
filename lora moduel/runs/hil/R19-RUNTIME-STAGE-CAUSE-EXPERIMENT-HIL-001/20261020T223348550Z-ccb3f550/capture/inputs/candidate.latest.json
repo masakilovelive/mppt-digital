@@ -1,0 +1,24 @@
+{
+    "schema":  "vc-lora-r19-candidate-artifact-latest-v1",
+    "result":  "PASS",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false,
+    "published_at_utc":  "2026-10-20T12:44:25.0989840Z",
+    "artifact_id":  "20261020T123447347Z-b414028b",
+    "artifact_root":  "runs/candidates/R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001/20261020T123447347Z-b414028b",
+    "handoff":  {
+                    "path":  "runs/candidates/R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001/20261020T123447347Z-b414028b/handoff.json",
+                    "sha256":  "FEFE227F9449D75352657107CD46E71C1434F1FC4DDCDC91E0F14A6DD1873A5E"
+                },
+    "candidate_manifest":  {
+                               "path":  "runs/candidates/R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001/20261020T123447347Z-b414028b/candidate_manifest.json",
+                               "sha256":  "D0E8C5DAF27BA1131946FF3D0FA14389465E73E4F5E48C36AE672713F31920F2"
+                           },
+    "final_seal":  {
+                       "path":  "runs/candidates/R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001/20261020T123447347Z-b414028b/final_seal.json",
+                       "sha256":  "94B3DAF84DD17AC26D4691B9CCD9920F83EEF9EE22C77B6092CF72110A702EFC"
+                   },
+    "previous_latest_sha256":  "DC5DCCF0A270F59F55025EB049C279432757D630278D48599F48E6C63FED7320"
+}

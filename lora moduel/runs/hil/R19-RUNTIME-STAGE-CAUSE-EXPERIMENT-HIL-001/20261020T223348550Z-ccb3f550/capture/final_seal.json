@@ -1,0 +1,11 @@
+{
+    "test_id":  "R19-RUNTIME-FAIL-DIAGNOSTIC-HIL-001",
+    "result":  "FAIL",
+    "summary_sha256":  "9C56340B4672C6339DD0256F35CD2B7FAB8EA41B604CB22A0D424B4369DE7A5A",
+    "artifact_manifest_sha256":  "A31A562E84ABDE4D043B6FF01C28B29FAB869D4803DD92190A1620F309D59B74",
+    "sha256sums_sha256":  "500993512BB385E21E9383579277D708AACEA17166B976F0F49E271D35A352C1",
+    "diagnostic_only":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false
+}
