@@ -1,0 +1,372 @@
+{
+  "schema": "vc-lora-r19-timed-path-capture-persistence-fix-v1",
+  "result": "PASS_OFFLINE_PERSISTENCE_FIX_NOT_LIVE_ACCEPTANCE",
+  "hardware_interaction": false,
+  "device_inventory_queried": false,
+  "serial_ports_opened": false,
+  "jtag_invoked": false,
+  "flash_attempted": false,
+  "source_changes": [
+    {
+      "path": "tools/run_r19_timed_path_capture.ps1",
+      "before_sha256": "6937254E1AD45E756B8D2B6C33CE8E61A756891EB820E07D74FDDCDDE81D2EA5",
+      "after_sha256": "056F0F41F9A4BEADE5BC65D203EA0D09C313880F72DB706755FD9696247575A5"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "before_sha256": "4447FA7FAA33D0DB752377A7C082894E131D6D3E953C4DC2AD7FAF77AB3BD088",
+      "after_sha256": "4A6414CA1641AE35E85890888788474476AE8EE01730ECE9E007D99F0B48AF81"
+    },
+    {
+      "path": "tests/hil/check_r19_timed_path_capture_persistence.ps1",
+      "before_sha256": "",
+      "after_sha256": "E13EC3592D5DDB86140B64192B19ADED7D07213FF653678072EF9EDB7C513C79"
+    }
+  ],
+  "source_snapshot": "before/",
+  "diff": "changes.diff",
+  "root_cause": "A script-scoped byte[] permit variable b was reused by foreach for ContinuousReadBlock metadata, aborting the export after Vehicle raw and before Ground raw/summary.",
+  "fixes": [
+    "Separate permit byte-array and reader-block variable names, and isolate persistence in its own function scope.",
+    "Durably save both available raw streams with CreateNew, Flush(true) and byte/hash readback before per-role metadata conversion.",
+    "Treat unavailable raw data as null/unknown rather than a measured zero-byte stream.",
+    "Catch raw, metadata and source-hash failures independently, preserve the original failure and emit INVALID_CAPTURE.",
+    "Use a primitive-only failure summary after optional metadata serialization errors; preserve an existing/partial primary summary and write capture.failure.json separately.",
+    "Keep success schema/role fields and all execution-authorization guards unchanged."
+  ],
+  "test_first": {
+    "original_replay": {
+      "engines": [
+        "Windows PowerShell5.1",
+        "PowerShell7"
+      ],
+      "runner_sha256": "6937254E1AD45E756B8D2B6C33CE8E61A756891EB820E07D74FDDCDDE81D2EA5",
+      "result": "PASS_EXPECTED_RED",
+      "actual_type_exception": "ContinuousReadBlock to System.Byte[]",
+      "directories": [
+        "regression-red-ps51-final",
+        "regression-red-ps7-final"
+      ]
+    },
+    "fixed": {
+      "engines": [
+        "Windows PowerShell5.1",
+        "PowerShell7"
+      ],
+      "checks_per_engine": 295,
+      "result": "PASS",
+      "directories": [
+        "regression-green-v2-ps51",
+        "regression-green-v2-ps7"
+      ],
+      "runner_sha256": "056F0F41F9A4BEADE5BC65D203EA0D09C313880F72DB706755FD9696247575A5",
+      "test_sha256": "E13EC3592D5DDB86140B64192B19ADED7D07213FF653678072EF9EDB7C513C79"
+    },
+    "safety": "Actual immutable C# snapshot metadata and the exact CLI persistence assignment were exercised under AST allow-lists and forbidden device/process traps. No live runner authorization, COM/native reader, PnP, JTAG or hardware execution occurred.",
+    "coverage": [
+      "multiple native metadata blocks, exact offsets and string QPC ticks",
+      "complete raw byte count/SHA/base64/JSON round trips for both roles",
+      "typed caller variable contamination",
+      "measured empty stream versus missing raw and missing snapshot",
+      "both raw streams exist before metadata getter or JSON serialization failure",
+      "actual text conversion exception after valid block coverage",
+      "raw CreateNew collision and continued preservation of the other role",
+      "source hash mismatch and missing-file read exception",
+      "existing summary unchanged with separate capture.failure.json INVALID report",
+      "original failure retention and fail-only fallback"
+    ],
+    "earlier_green_258_retained": true,
+    "final_tests_strengthened_without_expectation_relaxation": true
+  },
+  "related_offline_tests": {
+    "engines": [
+      "Windows PowerShell5.1",
+      "PowerShell7"
+    ],
+    "entrypoint_checks": 46,
+    "acquisition_checks": 61,
+    "outer_checks": 40,
+    "result": "PASS_BOTH_ENGINES"
+  },
+  "full_host_suite": {
+    "result": "PASS",
+    "passed": 360,
+    "failed": 0,
+    "total": 360,
+    "exit_code": 0,
+    "elapsed_seconds": 482.96,
+    "log": "host_tests_full.log",
+    "final_persistence_checks": 295
+  },
+  "arduino_compile": {
+    "result": "PASS",
+    "order": [
+      "vehicle",
+      "ground"
+    ],
+    "default_off": true,
+    "log": "normal_compile.log",
+    "output": "normal_compile/",
+    "production_sketches_modified": false,
+    "published_artifacts_replaced": false,
+    "summary": "normal_compile_summary.json",
+    "summary_sha256": "28BAB2BE97471B82503E466E8F9C5181FDE643BA285641BCE5456361952FB505",
+    "cases": [
+      {
+        "role": "vehicle",
+        "success": true,
+        "exit_code": 0,
+        "elapsed_ms": 247925.3618,
+        "binary_bytes": 390768,
+        "binary_sha256": "CF51148C4D6152185C5AA070A100E7E00CBC4EFAD90C709487CF9EDC0F070580",
+        "canonical_bridge_sha256": "88DA2BEA50938D5CA83AEB715288F7D517B096098DF7B44556456DB3AAA77B6F"
+      },
+      {
+        "role": "ground",
+        "success": true,
+        "exit_code": 0,
+        "elapsed_ms": 322467.0843,
+        "binary_bytes": 360992,
+        "binary_sha256": "6A03F6E4719246626B3F753A8A0236F98F6B7E66CCD13EB22C92B41AF9D035BB",
+        "canonical_bridge_sha256": "88DA2BEA50938D5CA83AEB715288F7D517B096098DF7B44556456DB3AAA77B6F"
+      }
+    ]
+  },
+  "candidate": {
+    "artifact_id": "20261021T124607243Z-f0aa9080",
+    "rebuilt": false,
+    "independent_verification": "PASS_EXPLICIT_REPO_ROOT_WINDOWS_POWERSHELL51",
+    "log": "candidate_verify.log",
+    "latest_sha256": "89C77ACD76A501B6F6A3F91024F59B5FF7BE1F0E8CF45CC63ADA5640A0A50AA0"
+  },
+  "prepared_pin": {
+    "path": "prepared_explicit_host_arm.json",
+    "sha256": "DD400E43FC4D8EF14103C735901EA73B24E6194769D77EB151C1ADC6632C010F",
+    "tool_count": 17,
+    "contract": "PASS",
+    "independent_review": "PASS",
+    "changed_tool": "tools/run_r19_timed_path_capture.ps1",
+    "live_authorization_granted": false,
+    "acceptance_authorized": false,
+    "deployment_authorized": false,
+    "previous_pin_preserved_sha256": "59293625868B7CDAC93F86352B6A09084C36B8415F905D79A315AA60B1C61C43"
+  },
+  "safety_gates": {
+    "old_pin": "PASS_EXPECTED_DIGEST_DENIAL",
+    "new_pin_without_execute": "PASS_EXPECTED_DENIAL",
+    "hardware_interaction": false,
+    "child_steps": 0
+  },
+  "preservation": {
+    "product_budget_ms": 106,
+    "firmware_sources_modified": false,
+    "uart_tdd_e220_modified": false,
+    "hwcdc_sha256": "D1B890A6C37587BF7775E4F9DDB7791C91085F9C2BC4D95CB9EC3C5809B24DCA",
+    "canonical_bridge_sha256": "88DA2BEA50938D5CA83AEB715288F7D517B096098DF7B44556456DB3AAA77B6F",
+    "acquisition_sha256": "7DAF7E0E086CE15C5AA50D0497478571455C2CA83912C224A87B55BF0E148015",
+    "accepted_r18_vehicle_sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+    "accepted_r18_ground_sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+    "final_file_hash_checks": "PASS"
+  },
+  "independent_review": {
+    "result": "PASS",
+    "scope": "Code and old/new pin preservation; final295-check evidence and added failure cases including all retained raw byte/hash/base64 comparisons."
+  },
+  "limitations": [
+    "Offline persistence success does not prove a40-second live capture or product USB/RF communication repair.",
+    "No new PC/MCU clock trace, runtime-stage record,932-parameter30-second result or maximum2500ms Heartbeat acceptance was acquired.",
+    "No hardware operation was authorized or performed in this repair turn; no prior one-run grant is reused.",
+    "Disk/media failures can make any report impossible to save; the code must propagate failure rather than return successful capture.",
+    "No fresh sanitizer suite was run.",
+    "Arduino compile outputs are isolated verification builds, not accepted R18 replacement images."
+  ],
+  "next": "No live operation is pending or running. A future one-run hardware trial requires a fresh human grant and six-item safety confirmation. Use the new exact prepared pin, Windows PowerShell 5.1 and fresh USB role locations for one 40-second capture, both-role internal records and mandatory accepted R18 restoration.",
+  "final_verification": {
+    "result": "PASS",
+    "pinned_tools_verified": 17,
+    "checks": [
+      {
+        "path": "tools/run_r19_timed_path_capture.ps1",
+        "sha256": "056F0F41F9A4BEADE5BC65D203EA0D09C313880F72DB706755FD9696247575A5",
+        "result": "PASS"
+      },
+      {
+        "path": "CMakeLists.txt",
+        "sha256": "4A6414CA1641AE35E85890888788474476AE8EE01730ECE9E007D99F0B48AF81",
+        "result": "PASS"
+      },
+      {
+        "path": "tests/hil/check_r19_timed_path_capture_persistence.ps1",
+        "sha256": "E13EC3592D5DDB86140B64192B19ADED7D07213FF653678072EF9EDB7C513C79",
+        "result": "PASS"
+      },
+      {
+        "path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp",
+        "sha256": "D1B890A6C37587BF7775E4F9DDB7791C91085F9C2BC4D95CB9EC3C5809B24DCA",
+        "result": "PASS"
+      },
+      {
+        "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+        "sha256": "88DA2BEA50938D5CA83AEB715288F7D517B096098DF7B44556456DB3AAA77B6F",
+        "result": "PASS"
+      },
+      {
+        "path": "tools/r19_timed_path_acquisition.ps1",
+        "sha256": "7DAF7E0E086CE15C5AA50D0497478571455C2CA83912C224A87B55BF0E148015",
+        "result": "PASS"
+      },
+      {
+        "path": "runs/baselines/R18-PRODUCTION-R4-ACCEPTED/20260914T225054625Z/artifacts/vehicle.application.bin",
+        "sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+        "result": "PASS"
+      },
+      {
+        "path": "runs/baselines/R18-PRODUCTION-R4-ACCEPTED/20260914T225054625Z/artifacts/ground.application.bin",
+        "sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+        "result": "PASS"
+      },
+      {
+        "path": "runs/candidates/R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001/latest.json",
+        "sha256": "89C77ACD76A501B6F6A3F91024F59B5FF7BE1F0E8CF45CC63ADA5640A0A50AA0",
+        "result": "PASS"
+      },
+      {
+        "path": "runs\\validation\\R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001\\20261021T161610Z\\prepared_explicit_host_arm.json",
+        "sha256": "DD400E43FC4D8EF14103C735901EA73B24E6194769D77EB151C1ADC6632C010F",
+        "result": "PASS"
+      },
+      {
+        "path": "runs\\validation\\R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001\\20261021T161610Z\\previous_prepared_explicit_host_arm.json",
+        "sha256": "59293625868B7CDAC93F86352B6A09084C36B8415F905D79A315AA60B1C61C43",
+        "result": "PASS"
+      },
+      {
+        "path": "runs/validation/R19-TIMED-PATH-CAPTURE-IMPORT-SCOPE-FIX-001/20261021T154146Z/prepared_explicit_host_arm.json",
+        "sha256": "59293625868B7CDAC93F86352B6A09084C36B8415F905D79A315AA60B1C61C43",
+        "result": "PASS"
+      },
+      {
+        "path": "runs/candidates/R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001/20261021T124607243Z-f0aa9080/handoff.json",
+        "sha256": "C30EBD31BF77FEBAB2D5B79699DB8762CBAEAAB196669C6CBF0CABFAD893DB0B",
+        "result": "PASS"
+      },
+      {
+        "path": "runs/candidates/R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001/20261021T124607243Z-f0aa9080/candidate_manifest.json",
+        "sha256": "CDFB852AB49FB77DD684EC52F8FA4C2944D9710BAB2754D517EAA3D80076536D",
+        "result": "PASS"
+      },
+      {
+        "path": "runs/candidates/R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001/20261021T124607243Z-f0aa9080/final_seal.json",
+        "sha256": "EFB3670E79AF8707EDBF7BD734A9545DD1893BE7751D75FAFDF033AD3C96AF49",
+        "result": "PASS"
+      },
+      {
+        "path": "runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\firmware\\vehicle.application.bin",
+        "sha256": "D28EE6969DFA12CD11571962E260BDB29E2C640BD01FFD16CCBB6BCB553CE47A",
+        "result": "PASS"
+      },
+      {
+        "path": "runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\firmware\\ground.application.bin",
+        "sha256": "CBF7EFA748A00C1F9EA626E5BB2D506C18A6BB7D1C9700E71D5124D5431A1476",
+        "result": "PASS"
+      }
+    ]
+  },
+  "evidence_sha256": [
+    {
+      "path": "changes.diff",
+      "bytes": 42957,
+      "sha256": "AFB40EEDC9D1A879E58A0920414E5A8D2B4F75EEECCD37EBFAA184979E4BFB5B"
+    },
+    {
+      "path": "changed_source_files.json",
+      "bytes": 646,
+      "sha256": "1FD4F71A52611DB9E4241F8B1A493EC00A627C7958D3E7D04C641C8897B43914"
+    },
+    {
+      "path": "regression-red-ps51-final/red_reproduction.json",
+      "bytes": 690,
+      "sha256": "18E76A31A73D9689581C74D8403C745477E7E8E0832EDF889B98C714157DA1B5"
+    },
+    {
+      "path": "regression-red-ps7-final/red_reproduction.json",
+      "bytes": 654,
+      "sha256": "8110AA344519B1DB55C07A33FBDD2A38391A4C4A9C37CABEFEFBD462AD84BE40"
+    },
+    {
+      "path": "regression-green-v2-ps51/test_result.json",
+      "bytes": 498,
+      "sha256": "107A1178B95852DD44A454EE5777FFF151D69C14DCC06E9A78631E923D658056"
+    },
+    {
+      "path": "regression-green-v2-ps7/test_result.json",
+      "bytes": 465,
+      "sha256": "E5FE94816BD38D4A66F3C419590761B2ED76F7A287E6060D5E26ADBBC9B9DA7A"
+    },
+    {
+      "path": "related-capture_entrypoint-ps51.log",
+      "bytes": 5934,
+      "sha256": "3349E36AD0999534CDD38269812F2DC4C964994F95CD13EF42276918E9C3ABA1"
+    },
+    {
+      "path": "related-capture_entrypoint-ps7.log",
+      "bytes": 5925,
+      "sha256": "D3A7B832B1EE963FB374229C2C169A51D0C164135CCD1AB6751A551F808CA95A"
+    },
+    {
+      "path": "related-acquisition-ps51.log",
+      "bytes": 17,
+      "sha256": "4D8966AAAB20EA32AAF0A39617942C21095549AA0ADEBB184F82BF915280E29A"
+    },
+    {
+      "path": "related-acquisition-ps7.log",
+      "bytes": 17,
+      "sha256": "4D8966AAAB20EA32AAF0A39617942C21095549AA0ADEBB184F82BF915280E29A"
+    },
+    {
+      "path": "related-outer-ps51.log",
+      "bytes": 33,
+      "sha256": "D37C8B7573B2C0C1AB1BAAA3734CF5F54861B942BE30D9687F04AED7E2573914"
+    },
+    {
+      "path": "related-outer-ps7.log",
+      "bytes": 33,
+      "sha256": "D37C8B7573B2C0C1AB1BAAA3734CF5F54861B942BE30D9687F04AED7E2573914"
+    },
+    {
+      "path": "candidate_verify.log",
+      "bytes": 465,
+      "sha256": "20D97CEE0B6357D2A32449456AD6FB1B0EA0CCC33EB8EAA446E500B7C8C40217"
+    },
+    {
+      "path": "old_pin_expected_denial.log",
+      "bytes": 561,
+      "sha256": "D836D7FA629EF83674838953774CC13C0957E1A626CD30412872660175E1D18F"
+    },
+    {
+      "path": "new_pin_no_execute_expected_denial.log",
+      "bytes": 3970,
+      "sha256": "EDC587B624063EF2CD9C0E4F83C274B9188FC06D94928AD1B8A164549DB218DD"
+    },
+    {
+      "path": "host_tests_full.log",
+      "bytes": 78264,
+      "sha256": "6956494B09D24A089C8798D15E2AA120466C9A2D4A8F269EF954F1900D697FCD"
+    },
+    {
+      "path": "normal_compile.log",
+      "bytes": 140,
+      "sha256": "4D26E57C1A46F136DA7719A1AF131247ABC31AD78456CA4A14AC813152BE467C"
+    },
+    {
+      "path": "normal_compile_summary.json",
+      "bytes": 941,
+      "sha256": "28BAB2BE97471B82503E466E8F9C5181FDE643BA285641BCE5456361952FB505"
+    },
+    {
+      "path": "prepared_explicit_host_arm.json",
+      "bytes": 5200,
+      "sha256": "DD400E43FC4D8EF14103C735901EA73B24E6194769D77EB151C1ADC6632C010F"
+    }
+  ]
+}

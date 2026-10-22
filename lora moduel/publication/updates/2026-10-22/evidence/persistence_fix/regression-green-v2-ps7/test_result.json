@@ -1,0 +1,10 @@
+{
+  "schema": "vc-lora-r19-timed-path-persistence-regression-v1",
+  "result": "PASS",
+  "runner_path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tools\\run_r19_timed_path_capture.ps1",
+  "runner_sha256": "056F0F41F9A4BEADE5BC65D203EA0D09C313880F72DB706755FD9696247575A5",
+  "test_sha256": "E13EC3592D5DDB86140B64192B19ADED7D07213FF653678072EF9EDB7C513C79",
+  "powershell_version": "7.6.5",
+  "hardware_interaction": false,
+  "checks": 295
+}

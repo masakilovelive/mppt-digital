@@ -1,0 +1,277 @@
+{
+  "schema": "vc-lora-r19-persistence-retrial-operator-evaluation-v1",
+  "result": "PASS_PERSISTENCE_AND_RESTORE_PRODUCT_TRACE_INCOMPLETE",
+  "live_run": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial",
+  "preparation": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-PERSISTENCE-RETRIAL-READINESS-001/20261021T222742Z",
+  "executions": 1,
+  "one_run_authorization_consumed": true,
+  "automatic_retry_performed": false,
+  "candidate_id": "20261021T124607243Z-f0aa9080",
+  "prepared_pin_sha256": "DD400E43FC4D8EF14103C735901EA73B24E6194769D77EB151C1ADC6632C010F",
+  "started_utc": "2026-10-21T22:29:03.6065723Z",
+  "finished_utc": "2026-10-21T22:32:09.083712Z",
+  "measurement": {
+    "result": "PASS",
+    "status": "PASS_TIMED_PATH_EVIDENCE_CAPTURED_R18_RESTORED_NOT_ACCEPTANCE",
+    "capture_seconds": 40.0119898,
+    "cleanup_proven": true,
+    "preservation_errors": [],
+    "source_integrity_proven": true,
+    "roles": [
+      {
+        "role": "vehicle",
+        "raw_bytes": 2646,
+        "raw_sha256": "70742185E0A9998213B952CBA71087A127B55F8896F5222D283080C6B7A6B5F6",
+        "raw_saved": true,
+        "continuous_reader": true,
+        "overflow": false,
+        "export_error": "",
+        "max_read_service_gap_ms": 43.134,
+        "read_errors": 0,
+        "read_calls": 1448,
+        "workflow_failure": "PcAcquisitionDeadlineExpired",
+        "workflow_status": "Rejected",
+        "clock_reply_validated": false,
+        "ready_binding_validated": false,
+        "arm_built": false,
+        "arm_written": false,
+        "product_frames": 0,
+        "writes": [
+          {
+            "kind": "ClockRequest",
+            "accepted_bytes": 28,
+            "write_success": true,
+            "started_ticks": "63033197",
+            "returned_ticks": "63263915"
+          }
+        ]
+      },
+      {
+        "role": "ground",
+        "raw_bytes": 154,
+        "raw_sha256": "D7313CCBBF5506090D61B7430AE1505B931F4DABB47482FF9670BD3D8CBBBE52",
+        "raw_saved": true,
+        "continuous_reader": true,
+        "overflow": false,
+        "export_error": "",
+        "max_read_service_gap_ms": 43.1292,
+        "read_errors": 0,
+        "read_calls": 1346,
+        "workflow_failure": "PcAcquisitionDeadlineExpired",
+        "workflow_status": "Rejected",
+        "clock_reply_validated": true,
+        "ready_binding_validated": false,
+        "arm_built": false,
+        "arm_written": false,
+        "product_frames": 0,
+        "writes": [
+          {
+            "kind": "ClockRequest",
+            "accepted_bytes": 28,
+            "write_success": true,
+            "started_ticks": "64027982",
+            "returned_ticks": "64037167"
+          }
+        ]
+      }
+    ],
+    "evidence": [
+      {
+        "path": "summary.json",
+        "bytes": 154454,
+        "sha256": "05ADF5D36801C28B69E3E885CC377969B052853774CDD2730261926C83F79489"
+      },
+      {
+        "path": "capture/summary.json",
+        "bytes": 225480,
+        "sha256": "BEF2FD281308A44962DC93A5E44D44DD7D20CEA6F763B820C7C1A195017EAEE1"
+      },
+      {
+        "path": "capture/vehicle.raw.bin",
+        "bytes": 2646,
+        "sha256": "70742185E0A9998213B952CBA71087A127B55F8896F5222D283080C6B7A6B5F6"
+      },
+      {
+        "path": "capture/ground.raw.bin",
+        "bytes": 154,
+        "sha256": "D7313CCBBF5506090D61B7430AE1505B931F4DABB47482FF9670BD3D8CBBBE52"
+      },
+      {
+        "path": "stage_vehicle/summary.json",
+        "bytes": 58525,
+        "sha256": "DEAA3B4FB2F8D7370A1CBB88CAA8A79ECC6F7955E9559E039294219FF706CA8D"
+      },
+      {
+        "path": "stage_ground/summary.json",
+        "bytes": 57920,
+        "sha256": "ABD77DAB315BF24C8807EDFEFE3880948BC507FFFE06580D58D2601B1C8144D2"
+      },
+      {
+        "path": "timed_path_evaluation.json",
+        "bytes": 5972,
+        "sha256": "049813DD81C7A9AC00EC0CBBB783157A43F3BF1F5282715383A631C220845DBF"
+      }
+    ],
+    "classification": "TRACE_INCOMPLETE",
+    "binding_status": "MISSING_BOUND_FRAME_OR_SESSION",
+    "rollback": {
+      "attempted": true,
+      "proven": true,
+      "required_token": "RESTORE_ACCEPTED_R18_AFTER_R19_HIL",
+      "evidence_directory": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261021T222903927Z-3fefee7b-rollback"
+    },
+    "quiescence": {
+      "child_termination_proven": true,
+      "active_jtag_cleanup_proven": true,
+      "further_child_launch_blocked": false,
+      "rollback_skipped_due_unproven_child_termination": false
+    },
+    "power_off_required": false
+  },
+  "stage_reads": {
+    "result": "PASS",
+    "roles": [
+      "vehicle",
+      "ground"
+    ],
+    "raw_files_per_role": 12,
+    "record_kinds": 6,
+    "pairwise_equal": true,
+    "record_sizes_bytes": {
+      "runtime_stage": 68,
+      "endpoint_fifo": 112,
+      "hwcdc_restart": 128,
+      "ground_usb_commit": 128,
+      "first_usb_failure": 384,
+      "timed_path": 512
+    },
+    "all_cpus_explicit_curstate_running": true,
+    "shutdown_and_process_cleanup_proven": true
+  },
+  "independent_file_audit": {
+    "result": "PASS",
+    "install_manifest_files": 66,
+    "rollback_manifest_files": 58,
+    "all_manifest_and_sums_and_seal_hashes_match": true,
+    "raw_bytes_hash_base64_blocks_match": true,
+    "outer_summary_sha256": "05ADF5D36801C28B69E3E885CC377969B052853774CDD2730261926C83F79489"
+  },
+  "restore": {
+    "result": "PASS_ACCEPTED_R18_RESTORED",
+    "roles": [
+      {
+        "role": "vehicle",
+        "attempts": 1,
+        "bytes": 389280,
+        "sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+        "digest_matched": true,
+        "reenumeration_pass": true
+      },
+      {
+        "role": "ground",
+        "attempts": 1,
+        "bytes": 360208,
+        "sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+        "digest_matched": true,
+        "reenumeration_pass": true
+      }
+    ]
+  },
+  "findings": [
+    "Both available raw streams and complete capture metadata were preserved; the prior typed-variable export exception did not recur.",
+    "One continuous reader per role ran throughout the 40-second measurement; observed service gaps were below 100 ms with no recorded read error or overflow.",
+    "The Ground raw includes an earlier CRC-valid first-failure R19F at exact candidate bridge line 5970: E220WriteContract state FailClosed / fault AuxDidNotReturnHigh. Its completed PC receipt preceded the Ground clock request by 161.5536 ms.",
+    "Ground validated one same-nonce private TIMESYNC response. A nonce-bound READY was not validated, so no ARM was built or sent.",
+    "Both PC readiness workflows reached their 5-second acquisition deadline. The native reader continued through the full measurement afterward.",
+    "An unlatched product first-failure record after missing ARM is not evidence that a product 106 ms transaction passed.",
+    "Outer PASS records acquisition, normalization and restoration completion; TRACE_INCOMPLETE is retained for the product timing path.",
+    "The Ground clock-response payload reached the PC. READY requires local USB completion within its separate 500 ms budget plus successful gate update and READY encoding; the saved record does not identify which of those private-handshake conditions did not complete.",
+    "Runtime fail-closed alone is not a universal block on the failed-state private-reply service. The E220 AUX timeout is therefore not proven to directly cause the missing READY."
+  ],
+  "product_budget_ms": 106,
+  "product_timeout_changed": false,
+  "firmware_sources_modified": false,
+  "uart_tdd_e220_modified": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "usb_repair_proven": false,
+  "product_heartbeat_106ms_proven": false,
+  "parameters_932_30s_proven": false,
+  "heartbeat_2500ms_proven": false,
+  "rf_path_evaluated": false,
+  "current_device_state": "Both roles restored to accepted R18. No ongoing capture, COM/JTAG child or automatic retry remains.",
+  "next": "Offline separate the sampled AUX-high timeout from physical AUX behavior/observation delays, and instrument the clock-response completion, gate update and READY generation boundary. Vehicle clock response is also unobserved. Do not extend 106 ms, bypass READY/ARM, or classify untested product traffic as passed. Any additional hardware trial needs a new one-run authorization and safety confirmation.",
+  "raw_analysis": {
+    "method": "Independent read-only use of existing hil_analyze_capture.py parse_mavlink with candidate-compatible authoritative MAVLink definitions",
+    "vehicle": {
+      "bytes": 2646,
+      "valid_frames": 42,
+      "msgids": {
+        "253": 42
+      },
+      "diagnostic_kind": "R19A",
+      "sequences_first": 5,
+      "sequences_last": 46,
+      "bad_crc": 0,
+      "partial_frames": 0,
+      "noise_bytes": 0,
+      "heartbeat_frames": 0
+    },
+    "ground": {
+      "bytes": 154,
+      "valid_frames": 3,
+      "msgids": {
+        "111": 1,
+        "253": 2
+      },
+      "frame_order": [
+        "R19A:G:L (63 bytes)",
+        "R19F:G (63 bytes)",
+        "nonce-matched TIMESYNC response (28 bytes)"
+      ],
+      "bad_crc": 0,
+      "partial_frames": 0,
+      "noise_bytes": 0,
+      "heartbeat_frames": 0
+    }
+  },
+  "ground_first_runtime_failure": {
+    "observed": true,
+    "raw_frame_kind": "R19F",
+    "raw_text": "R19F:G:1752:0000000000002BFD:000505020005:00000001",
+    "source_line": 5970,
+    "device_ms": 11261,
+    "e220_write_state": {
+      "value": 5,
+      "name": "FailClosed"
+    },
+    "e220_write_fault": {
+      "value": 5,
+      "name": "AuxDidNotReturnHigh"
+    },
+    "timeout_ms": 2000,
+    "required_high_stable_ms": 15,
+    "required_service_floor_ms": 550,
+    "boundary": "observe_radio_completion() observes e220_write_contract.fail_closed() and latches runtime fail-closed",
+    "semantics": "After AUX LOW was observed, the local sampled AUX-HIGH-stability/service-floor conditions were not satisfied before the 2000 ms state timeout. This is not proof that the physical AUX line was continuously LOW or that the E220 module/RF link is defective.",
+    "pc_notification_before_ground_clock_request_ms": 161.5536,
+    "source_joins": [
+      {
+        "path": "tools/hil_analyze_capture.py",
+        "sha256": "5D62CC0F7982F45DEDA75E24E94BC2E7D8E53446C60F27183BD9FD2D75952839"
+      },
+      {
+        "path": "runs/candidates/R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001/20261021T124607243Z-f0aa9080/package/vc_lora_ground_xiao_esp32s3/vc_lora_phase6_bridge.hpp",
+        "sha256": "88DA2BEA50938D5CA83AEB715288F7D517B096098DF7B44556456DB3AAA77B6F"
+      },
+      {
+        "path": "runs/candidates/R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001/20261021T124607243Z-f0aa9080/package/vc_lora_ground_xiao_esp32s3/vc_lora/runtime_contract.hpp",
+        "sha256": "4C1E05D03E72A40660971CFDE65EDC6901B5589C1990295A99F208B03D1CA2CF"
+      },
+      {
+        "path": "runs/candidates/R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001/20261021T124607243Z-f0aa9080/package/vc_lora_ground_xiao_esp32s3/src/runtime_contract.cpp",
+        "sha256": "1DDA0464CFFAEABF68F3782593C607965144AC2BF5DD774C77888847DEA668B5"
+      }
+    ]
+  }
+}

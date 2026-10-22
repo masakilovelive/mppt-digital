@@ -1,0 +1,132 @@
+{
+  "schema": "vc-lora-r19-live-attempt-operator-evaluation-v2",
+  "candidate_id": "20261021T124607243Z-f0aa9080",
+  "mode": "ExplicitHostArm",
+  "started_utc": "2026-10-21T16:06:29.9513005Z",
+  "finished_utc": "2026-10-21T16:09:03.6548225Z",
+  "status": "FAIL_CAPTURE_METADATA_TYPED_VARIABLE_COLLISION_R18_RESTORED",
+  "outer_status": "FAIL_CAPTURE_R18_RESTORED",
+  "prepared_pin_sha256": "59293625868B7CDAC93F86352B6A09084C36B8415F905D79A315AA60B1C61C43",
+  "one_run_hardware_authorization_used": true,
+  "additional_live_trial_performed": false,
+  "tools_or_firmware_modified_in_this_trial": false,
+  "preflight": {
+    "cold_off_verified": true,
+    "fresh_six_item_safety": true,
+    "fresh_usb_role_identity": true,
+    "vehicle_probe_usb_location": "1-4.2",
+    "ground_probe_usb_location": "1-4.4",
+    "guarded_entrypoint_ps51_checks": 46,
+    "guarded_entrypoint_ps7_checks": 46,
+    "independent_candidate_and_17_tool_audit": "PASS",
+    "evidence_directory": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-TIMED-PATH-LIVE-PREFLIGHT-001\\20261021T160442Z"
+  },
+  "operations": {
+    "dual_active_jtag_preflight": "PASS",
+    "vehicle_then_ground_application_install": "PASS_DIGEST_VERIFIED",
+    "prior_import_only_error_resolved_in_real_entry": true,
+    "capture_serial_read_reached": true,
+    "execution_permit_consumed": true,
+    "requested_capture_seconds": 40,
+    "full_40_second_capture_completion_proven": false,
+    "capture_summary_saved": false,
+    "ground_raw_saved": false,
+    "stage_vehicle_performed": false,
+    "stage_ground_performed": false
+  },
+  "saved_vehicle_evidence": {
+    "file": "capture/vehicle.raw.bin",
+    "port": "COM3",
+    "role": "Vehicle diagnostic USB",
+    "bytes": 2646,
+    "complete_frames": 42,
+    "crc_failures": 0,
+    "partial_or_unparsed_bytes": 0,
+    "all_frames": {
+      "message_id": 253,
+      "system_id": 254,
+      "component_id": 190,
+      "diagnostic_kind": "R19A:V:L"
+    },
+    "sequence_first": 5,
+    "sequence_last": 46,
+    "first_device_ms": 23055,
+    "last_device_ms": 64674,
+    "device_timestamp_span_ms": 41619,
+    "device_timestamp_span_is_not_pc_capture_duration": true,
+    "product_heartbeat_count": 0,
+    "limitation": "This is diagnostic STATUSTEXT on the Vehicle USB port, not proof of Pixhawk/RF/Ground product MAVLink delivery or Ground USB publication success."
+  },
+  "failure": {
+    "component": "PC measurement runner post-capture metadata serialization",
+    "source": "tools/run_r19_timed_path_capture.ps1",
+    "typed_declaration_line": 47,
+    "conflicting_loop_line": 146,
+    "typed_declaration": "[byte[]]$b",
+    "conflicting_use": "foreach($b in $s.snapshot.Blocks)",
+    "cause": "The permit-claim byte array variable remains type-constrained in the script scope across try/finally. Reusing it for a ContinuousReadBlock loop element throws before the block metadata can be serialized.",
+    "observed_error": "Cannot convert VcLora.R19.ContinuousReadBlock to System.Byte[].",
+    "pure_offline_reproduction": "PASS Windows PowerShell5.1; typed byte-array variable assigned a block object reproduces the conversion exception before loop body.",
+    "independent_review": "CONFIRMED_READ_ONLY",
+    "firmware_or_rf_fault_proven_by_this_exception": false
+  },
+  "restoration": {
+    "result": "PASS_BOTH_ROLES_FIRST_ATTEMPT_DIGEST_VERIFIED",
+    "roles": [
+      {
+        "role": "vehicle",
+        "restored": true,
+        "attempts": 1,
+        "failures": [],
+        "accepted_r18_sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52"
+      },
+      {
+        "role": "ground",
+        "restored": true,
+        "attempts": 1,
+        "failures": [],
+        "accepted_r18_sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5"
+      }
+    ],
+    "evidence_directory": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261021T160631429Z-18ac712a-rollback\\flash_record.json",
+    "hardware_quiescence": {
+      "child_termination_proven": true,
+      "active_jtag_cleanup_proven": true,
+      "further_child_launch_blocked": false,
+      "rollback_skipped_due_unproven_child_termination": false
+    },
+    "power_off_required": false,
+    "fresh_r18_mavlink_liveness_test_performed": false
+  },
+  "limitations": [
+    "The capture summary and PC QPC ledger were not saved, so40-second completion and PC/MCU timing relationships remain unproven.",
+    "Ground raw bytes were not saved. Its received-byte count, product Heartbeat and startup state are unknown.",
+    "Both runtime-stage acquisitions were correctly skipped after the invalid capture; no new internal FIFO/USB completion record was obtained.",
+    "42 CRC-valid Vehicle diagnostic frames establish partial USB diagnostic reception only; they do not establish product communication acceptance.",
+    "932 parameters within30 seconds, Heartbeat maximum2500 ms, RF delivery and deployment remain unevaluated.",
+    "106 ms product timing, firmware, UART, E220 and TDD settings were not changed."
+  ],
+  "evidence_hashes": [
+    {
+      "path": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T160628Z-repaired-explicit-host-arm/summary.json",
+      "sha256": "E24E7686DAE110E6B19A872BCB3EF7CB061075B45B72CEE21D4BF1A714FB6591"
+    },
+    {
+      "path": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T160628Z-repaired-explicit-host-arm/capture.stderr.log",
+      "sha256": "F315163D2CC2567B1DD6458210879AED33F85E664898F97837BC70F0BC370D79"
+    },
+    {
+      "path": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T160628Z-repaired-explicit-host-arm/capture/vehicle.raw.bin",
+      "sha256": "60C0E7BF8E0F60562BBE9F69404EE3352D57A4586F5ECA8974E8098E1C86D9F1"
+    },
+    {
+      "path": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T160631429Z-18ac712a-rollback/flash_record.json",
+      "sha256": "0F2D0019212CCFC58C6C756F352C6B691CF4F47355DF94DE5983557207D0016D"
+    },
+    {
+      "path": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T160631429Z-18ac712a-install/flash_record.json",
+      "sha256": "0AED712308BC7ADC16592932183CB9426A0A6F5B8CEAF135BD49313F31702140"
+    }
+  ],
+  "next": "Before another hardware trial, add an offline regression using actual ContinuousReadBlock-shaped snapshots for the full capture serialization path, separate permit byte-array and block variables, and ensure both raw streams and a failure summary survive metadata conversion errors. Preserve original failed evidence and issue reviewed new tool pins. Do not reuse this consumed one-run grant."
+}

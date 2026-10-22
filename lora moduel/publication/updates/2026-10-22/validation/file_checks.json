@@ -1,0 +1,11 @@
+{
+  "result": "PASS_PUBLICATION_FILE_CHECKS",
+  "originals_verified": 172,
+  "scanned_files": 188,
+  "secret_findings": 0,
+  "broken_links": 0,
+  "unexpected_executables_or_large_files": 0,
+  "raw_bin_files": 51,
+  "max_raw_bin_bytes": 2646,
+  "update_bytes": 2006829
+}

@@ -1,0 +1,20 @@
+{
+    "schema":  "vc-lora-r19-candidate-flash-final-seal-v1",
+    "test_id":  "R19-CANDIDATE-APP-FLASH-HIL-001",
+    "finalized_utc":  "2026-10-21T22:32:08.9303800Z",
+    "result":  "PASS",
+    "status":  "PASS_R18_ROLLBACK_COMPLETE",
+    "flash_record_sha256":  "23ABDCD2F68CCE60AED49236AC9503F9CD619ED9E174BE0F17D00DB975504F0C",
+    "artifact_manifest_sha256":  "3A072BDA0F77648F7022674ABF19844D58312641BE5E59B82C68DBF2922FBD06",
+    "sha256sums_sha256":  "90A377AC0A634545899E5038A2D35D051C9326ECD8A8AC9EDA8769C16EF1036C",
+    "candidate_manifest_sha256":  "CDFB852AB49FB77DD684EC52F8FA4C2944D9710BAB2754D517EAA3D80076536D",
+    "final_seal_sha256":  "EFB3670E79AF8707EDBF7BD734A9545DD1893BE7751D75FAFDF033AD3C96AF49",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "hil_authorization_token":  "",
+    "authorization_scope":  "one immediate R19 runtime-fail diagnostic capture only",
+    "next_required_action":  "No R19 deployment authorization has been granted",
+    "one_run_hil_authorized":  false,
+    "deployment_authorized":  false
+}

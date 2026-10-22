@@ -1,0 +1,136 @@
+{
+  "schema": "vc-lora-r19-aux-busy-vs-observation-discrimination-v1",
+  "result": "OFFLINE_AMBIGUITY_REPRODUCED_ACTUAL_HARDWARE_CAUSE_UNRESOLVED",
+  "user_request": "Discriminate actual E220 busy versus MCU AUX observation/judgement delay.",
+  "hardware_interaction": false,
+  "device_inventory_queried": false,
+  "com_opened": false,
+  "jtag_invoked": false,
+  "firmware_written": false,
+  "product_sources_modified": false,
+  "candidate_id": "20261021T124607243Z-f0aa9080",
+  "source_binding": {
+    "compilation_source": "sealed candidate Ground package src/runtime_contract.cpp",
+    "source_sha256": "1DDA0464CFFAEABF68F3782593C607965144AC2BF5DD774C77888847DEA668B5",
+    "header_sha256": "4C1E05D03E72A40660971CFDE65EDC6901B5589C1990295A99F208B03D1CA2CF",
+    "bridge_sha256": "88DA2BEA50938D5CA83AEB715288F7D517B096098DF7B44556456DB3AAA77B6F"
+  },
+  "constraints_unchanged": {
+    "product_usb_budget_ms": 106,
+    "aux_timeout_ms": 2000,
+    "aux_high_stable_ms": 15,
+    "radio_service_floor_ms": 550,
+    "uart_tdd_e220_settings": true
+  },
+  "offline_probe": {
+    "source": "aux_observation_probe_final.cpp",
+    "result_file": "final_probe_result.json",
+    "result_sha256": "67B8F441882A3002491E0F43AD90C61E202CC70D8F01065477358DEA5AE9DCC0",
+    "result": "PASS_OFFLINE_DISCRIMINATION_NOT_HARDWARE_CAUSE",
+    "cases": 10,
+    "checks": 153,
+    "compiler": "C:\\Users\\user\\AppData\\Local\\Temp\\vc_lora_host_tools\\llvm-mingw-20260616-complete\\unpacked\\llvm-mingw-20260616-ucrt-x86_64\\bin\\clang++.exe",
+    "flags": "-std=c++17 -Wall -Wextra -Werror",
+    "physical_waveforms_are_assumptions_not_measurements": true,
+    "intermediate_states_and_no_early_completion_asserted": true,
+    "fault_latch_preserved": true,
+    "repository_source_diff": "NONE",
+    "added_artifact_diff": "diagnostic_probe.diff"
+  },
+  "key_cases": [
+    {
+      "name": "A_actual_busy_assumption",
+      "input": "UART accepted32 at100ms with LOW; subsequent sampled LOW until2100ms",
+      "expected_and_actual": "state5 fault5",
+      "physical_waveform_measured": false
+    },
+    {
+      "name": "B_observation_gap_assumption",
+      "input": "UART accepted32 at100ms with LOW; synthetic physical HIGH resumes120ms but next MCU observation is HIGH at2100ms",
+      "expected_and_actual": "state5 fault5, because first sampled HIGH stability age is0ms",
+      "physical_waveform_measured": false
+    },
+    {
+      "name": "C_prompt_HIGH_observation",
+      "input": "Same assumed short LOW; HIGH observed120ms, later observed650ms",
+      "expected_and_actual": "Ready at650ms with one-shot completion",
+      "physical_waveform_measured": false
+    }
+  ],
+  "interpretation": [
+    "Fault5 by itself does not prove physical AUX LOW lasted2000ms.",
+    "A prior observed LOW is required for the shown observation-gap path; missing an entire LOW pulse while remaining in AwaitingAuxLow is a distinct successful control case.",
+    "Timeout is evaluated only when observe_aux is called. Existing code checks successful stable-HIGH/service-floor conditions before timeout, so a sufficiently stable observed HIGH can complete on a sample after the nominal timeout.",
+    "This does not prove a defect in the conservative fail-closed policy. Missing timely observation means the software lacks evidence of the required stable-HIGH completion.",
+    "The source contains USB diagnostic/private-reply early-return paths before normal radio/AUX observation. No universal maximum AUX sampling interval is established by the per-flush USB budget.",
+    "No current record provides the actual AUX observation gap or complete physical edge waveform for the live failure."
+  ],
+  "live_evidence": {
+    "run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial",
+    "raw_ground_sha256": "D7313CCBBF5506090D61B7430AE1505B931F4DABB47482FF9670BD3D8CBBBE52",
+    "first_alive_text": "R19A:G:L:00000002:0000000000002B1D:000400020005",
+    "alive_device_ms": 11037,
+    "alive_state": 4,
+    "alive_fault": 0,
+    "alive_state_name": "AwaitingAuxHigh",
+    "first_failure_text": "R19F:G:1752:0000000000002BFD:000505020005:00000001",
+    "failure_device_ms": 11261,
+    "delta_between_recorded_images_ms": 224,
+    "failure_source_line": 5970,
+    "failure_state": 5,
+    "failure_fault": 5,
+    "alive_is_fresh_aux_sample": false,
+    "physical_aux_level_at_alive": "UNKNOWN",
+    "last_aux_sample_time": "NOT_RECORDED",
+    "low_state_start_time": "NOT_RECORDED",
+    "first_HIGH_time": "NOT_RECORDED",
+    "aux_edge_coverage": "NOT_RECORDED",
+    "pc_native_read_gap_ground_ms": 43.1292,
+    "pc_read_gap_bounds_mcu_aux_gap": false
+  },
+  "source_routes": {
+    "gpio_reader": "candidate bridge line2237: synchronous digitalRead, not edge recorder",
+    "normal_aux_observation": "candidate bridge line6434",
+    "usb_private_reply_return": "candidate bridge lines6401-6408",
+    "usb_diagnostic_return": "candidate bridge lines6418-6422",
+    "alive_reservation_return": "candidate bridge lines6424-6426",
+    "missing_endpoint_deadline_start": "candidate bridge lines4251-4252,4759-4763",
+    "first_HIGH_tracking": "candidate src/runtime_contract.cpp lines77-87",
+    "fault_condition": "candidate src/runtime_contract.cpp lines142-154"
+  },
+  "independent_reviews": {
+    "schedule_source_and_saved_live_record": "PASS_READ_ONLY",
+    "final_probe_source_result_and_intermediate_assertions": "PASS_READ_ONLY_153_CHECKS",
+    "reviewers_performed_hardware_operations": false
+  },
+  "initial_environment_issue": {
+    "initial_8case_compile": "PASS",
+    "initial_8case_executable_result": "NOT_EXECUTED_SUCCESSFULLY",
+    "exit_code": -1073741515,
+    "output_file": "probe_result.json",
+    "output_bytes": 0,
+    "interpretation": "Runtime dependency search failure, not an E220 logic failure.",
+    "resolution": "Compiler runtime bin was prepended only to the child shell PATH for the extended and final offline probes. No persistent system environment change.",
+    "earlier_artifacts_retained": true
+  },
+  "next_required_measurements": [
+    "Immutable first-fault snapshot: actual GPIO level/time, supplied now_ms, previous sample time, gap, state-entry time, HIGH tracking start, UART API accepted time/count, callsite.",
+    "Same-MCU-clock AUX rising/falling edge ledger with monotonic sequence and overflow/coverage-loss flags. ISR capture alone cannot prove waveform coverage during masked or delayed interrupts.",
+    "Same-clock USB diagnostic/private-reply entry/exit, wait reason and early-return interval, to align AUX observation gaps.",
+    "If firmware edge coverage cannot be bounded, independent external AUX/UART waveform measurement is required for a physical continuous-LOW claim."
+  ],
+  "next_decision_rules": [
+    "An edge returning HIGH inside a measured MCU observation gap supports the observation-delay path only when edge/timestamp coverage and stable-HIGH duration are proven.",
+    "Continuous physical LOW through the interval requires trustworthy edge/waveform coverage; sparse LOW samples alone are insufficient.",
+    "Fresh frequent HIGH observations satisfying stable-HIGH and service-floor requirements followed by fault5 would direct investigation toward state/time handling.",
+    "Missing sample or edge coverage remains UNKNOWN; do not replace missing data with success or change timeout to hide the fault."
+  ],
+  "limitations": [
+    "No hardware cause was resolved by these synthetic observations.",
+    "No firmware fix or new diagnostic candidate was implemented or flashed.",
+    "No fresh360-test full suite or Arduino build was required or run because repository production/test sources were not changed.",
+    "READY/ARM and prior USB106ms failure are separate boundaries; no causal link to this AUX fault is asserted.",
+    "Accepted R18 was not touched; its last proven restored state is the previous completed trial."
+  ],
+  "next": "Prepare the bounded diagnostic snapshot/edge acquisition offline, then obtain a fresh one-run authorization and six-item safety confirmation before another hardware trial."
+}

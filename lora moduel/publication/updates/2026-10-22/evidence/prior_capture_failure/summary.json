@@ -1,0 +1,394 @@
+{
+    "schema":  "vc-lora-r19-runtime-stage-cause-experiment-v1",
+    "test_id":  "R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001",
+    "started_utc":  "2026-10-21T16:06:29.9513005Z",
+    "finished_utc":  "2026-10-21T16:09:03.6548225Z",
+    "result":  "FAIL",
+    "status":  "FAIL_CAPTURE_R18_RESTORED",
+    "mode":  "LIVE_HIL",
+    "hardware_interaction":  true,
+    "diagnostic_only":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false,
+    "capture_seconds":  40,
+    "offline_scenario":  "",
+    "failure":  "Capture evidence contract failed before JTAG stage reads",
+    "timed_path_mode":  "ExplicitHostArm",
+    "timed_path_evaluation":  null,
+    "authorization":  {
+                          "hil_token":  "R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT",
+                          "safety_attestation":  "PIXHAWK_DISARMED_PROPULSION_ISOLATED_ANTENNAS_CONNECTED_GND_3V3_CHECKED_PARAM_BACKUP_SAVED",
+                          "rollback_token":  "RESTORE_ACCEPTED_R18_AFTER_R19_HIL"
+                      },
+    "candidate":  {
+                      "artifact_id":  "20261021T124607243Z-f0aa9080",
+                      "artifact_root":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080",
+                      "latest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\latest.json",
+                      "latest_sha256":  "89C77ACD76A501B6F6A3F91024F59B5FF7BE1F0E8CF45CC63ADA5640A0A50AA0",
+                      "handoff_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\handoff.json",
+                      "handoff_sha256":  "C30EBD31BF77FEBAB2D5B79699DB8762CBAEAAB196669C6CBF0CABFAD893DB0B",
+                      "candidate_manifest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\candidate_manifest.json",
+                      "candidate_manifest_sha256":  "CDFB852AB49FB77DD684EC52F8FA4C2944D9710BAB2754D517EAA3D80076536D",
+                      "endpoint_fifo_schema":  2,
+                      "endpoint_fifo_size_bytes":  112,
+                      "runtime_stage_size_bytes":  68,
+                      "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v5",
+                      "latest_lock_retained_until_outer_exit":  true
+                  },
+    "steps":  [
+                  {
+                      "name":  "jtag_preflight",
+                      "result":  "FAIL",
+                      "exit_code":  1,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  180000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\jtag_preflight.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\jtag_preflight.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "853A404C816D8C9C92B609FD697763977AEDE1849E87A494AEB70FBAA38F4210",
+                      "script_lock_retained_until_outer_exit":  false,
+                      "semantic_result":  "PASS_PNP_DRIVER_BINDING_ONLY_EXPECTED_EXIT_1"
+                  },
+                  {
+                      "name":  "active_jtag_vehicle",
+                      "result":  "PASS",
+                      "exit_code":  0,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  90000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\active_jtag_vehicle.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\active_jtag_vehicle.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "A94F5A76DE6A2A4162C5C01E137CB4411D8231C45D7C484EE3E210A5C131F145",
+                      "script_lock_retained_until_outer_exit":  false
+                  },
+                  {
+                      "name":  "active_jtag_ground",
+                      "result":  "PASS",
+                      "exit_code":  0,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  90000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\active_jtag_ground.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\active_jtag_ground.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "A94F5A76DE6A2A4162C5C01E137CB4411D8231C45D7C484EE3E210A5C131F145",
+                      "script_lock_retained_until_outer_exit":  false
+                  },
+                  {
+                      "name":  "install",
+                      "result":  "PASS",
+                      "exit_code":  0,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  240000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\install.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\install.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "0EC749D31C75807AEA8F803DAA113B47C98B5872453101528116674789396933",
+                      "script_lock_retained_until_outer_exit":  false
+                  },
+                  {
+                      "name":  "capture",
+                      "result":  "FAIL",
+                      "exit_code":  1,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  90000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\capture.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\capture.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "6937254E1AD45E756B8D2B6C33CE8E61A756891EB820E07D74FDDCDDE81D2EA5",
+                      "script_lock_retained_until_outer_exit":  false
+                  },
+                  {
+                      "name":  "rollback",
+                      "result":  "PASS",
+                      "exit_code":  0,
+                      "launch_failure":  "",
+                      "timed_out":  false,
+                      "timeout_ms":  300000,
+                      "termination_proven":  true,
+                      "process_tree_termination_proven":  true,
+                      "taskkill_exit_code":  null,
+                      "stdout_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\rollback.stdout.log",
+                      "stderr_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\rollback.stderr.log",
+                      "hardware_interaction":  true,
+                      "mock":  false,
+                      "metadata":  null,
+                      "script_sha256":  "0EC749D31C75807AEA8F803DAA113B47C98B5872453101528116674789396933",
+                      "script_lock_retained_until_outer_exit":  false
+                  }
+              ],
+    "jtag_preflight":  {
+                           "proven":  false,
+                           "driver_binding_proven":  true,
+                           "firmware_install_allowed":  false,
+                           "status":  "PASS_WINUSB_DRIVER_BINDING_PNP_ONLY",
+                           "roles":  [
+                                         {
+                                             "role":  "vehicle",
+                                             "com":  "COM3",
+                                             "serial":  "90:70:69:11:81:A4",
+                                             "parent":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                                             "mi00_instance_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                                             "mi02_instance_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02\\7\u00267131F6A\u00260\u00260002",
+                                             "mi02_status":  "OK",
+                                             "service":  "WinUSB",
+                                             "problem_code":  0,
+                                             "driver_inf":  "oem227.inf",
+                                             "driver_inf_sha256":  "0652254D989022A381EB91084C74A08BAF400E510CE6A2FE4C6EC834AE99EADA",
+                                             "driver_provider":  "libwdi",
+                                             "driver_version":  "6.1.7600.16386",
+                                             "matching_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02",
+                                             "device_class_guid":  "{88BAE032-5A81-49F0-BC3D-A4FF138216D6}",
+                                             "location_paths":  [
+                                                                    "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USBMI(2)",
+                                                                    "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USBMI(2)"
+                                                                ],
+                                             "pnp_port_chain":  "4.2",
+                                             "registry_interface_guids":  [
+                                                                              "{80869ad8-c37f-476a-a6b4-ae241c30a473}"
+                                                                          ],
+                                             "pnputil_interfaces":  [
+                                                                        "\\\\?\\USB#VID_303A\u0026PID_1001\u0026MI_02#7\u00267131f6a\u00260\u00260002#{dee824ef-729b-4a0e-9c14-b7117d33a817}",
+                                                                        "\\\\?\\USB#VID_303A\u0026PID_1001\u0026MI_02#7\u00267131f6a\u00260\u00260002#{80869ad8-c37f-476a-a6b4-ae241c30a473}"
+                                                                    ],
+                                             "driver_binding_proven":  true,
+                                             "interface_registration_proven":  true,
+                                             "openocd_usb_location":  "",
+                                             "reader_preflight_proven":  false,
+                                             "reader_summary_path":  "",
+                                             "reader_summary_sha256":  ""
+                                         },
+                                         {
+                                             "role":  "ground",
+                                             "com":  "COM6",
+                                             "serial":  "1C:DB:D4:5A:83:80",
+                                             "parent":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                                             "mi00_instance_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                                             "mi02_instance_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02\\7\u00262159A644\u00260\u00260002",
+                                             "mi02_status":  "OK",
+                                             "service":  "WinUSB",
+                                             "problem_code":  0,
+                                             "driver_inf":  "oem227.inf",
+                                             "driver_inf_sha256":  "0652254D989022A381EB91084C74A08BAF400E510CE6A2FE4C6EC834AE99EADA",
+                                             "driver_provider":  "libwdi",
+                                             "driver_version":  "6.1.7600.16386",
+                                             "matching_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02",
+                                             "device_class_guid":  "{88BAE032-5A81-49F0-BC3D-A4FF138216D6}",
+                                             "location_paths":  [
+                                                                    "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(4)#USBMI(2)",
+                                                                    "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(4)#USBMI(2)"
+                                                                ],
+                                             "pnp_port_chain":  "4.4",
+                                             "registry_interface_guids":  [
+                                                                              "{80869ad8-c37f-476a-a6b4-ae241c30a473}"
+                                                                          ],
+                                             "pnputil_interfaces":  [
+                                                                        "\\\\?\\USB#VID_303A\u0026PID_1001\u0026MI_02#7\u00262159a644\u00260\u00260002#{dee824ef-729b-4a0e-9c14-b7117d33a817}",
+                                                                        "\\\\?\\USB#VID_303A\u0026PID_1001\u0026MI_02#7\u00262159a644\u00260\u00260002#{80869ad8-c37f-476a-a6b4-ae241c30a473}"
+                                                                    ],
+                                             "driver_binding_proven":  true,
+                                             "interface_registration_proven":  true,
+                                             "openocd_usb_location":  "",
+                                             "reader_preflight_proven":  false,
+                                             "reader_summary_path":  "",
+                                             "reader_summary_sha256":  ""
+                                         }
+                                     ],
+                           "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\jtag_preflight",
+                           "summary_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\jtag_preflight\\summary.json",
+                           "summary_sha256":  "2A88F193352030116D1DFF2CDF5D3686424537FB554D0679C059148D20F80406"
+                       },
+    "active_jtag_preflight":  {
+                                  "proven":  true,
+                                  "firmware_install_allowed":  true,
+                                  "status":  "PASS_FRESH_DUAL_ACTIVE_JTAG_PREFLIGHT",
+                                  "roles":  [
+                                                {
+                                                    "proven":  true,
+                                                    "role":  "vehicle",
+                                                    "status":  "PASS_JTAG_PREFLIGHT_TAP_RESET_SCAN_POSSIBLE_NO_CPU_HALT_OR_SYSTEM_RESET_COMMAND",
+                                                    "hardware_interaction":  true,
+                                                    "requested_serial":  "90:70:69:11:81:a4",
+                                                    "opened_serial":  "90:70:69:11:81:a4",
+                                                    "requested_usb_location":  "1-4.2",
+                                                    "opened_usb_location":  "1-4.2",
+                                                    "pnp_port_chain":  "4.2",
+                                                    "pnp_location_suffix_matched":  true,
+                                                    "safety":  {
+                                                                   "com_opened":  false,
+                                                                   "flash_written":  false,
+                                                                   "target_config_loaded":  false,
+                                                                   "cpu_halt_command_issued":  false,
+                                                                   "system_reset_command_issued":  false,
+                                                                   "transport_init_requested":  true,
+                                                                   "transport_init_completion_proven":  true,
+                                                                   "jtag_clock_activity_possible":  true,
+                                                                   "tap_reset_or_scan_possible":  true,
+                                                                   "target_state_modified":  null,
+                                                                   "target_state_modification_known":  false,
+                                                                   "process_termination_proven":  true,
+                                                                   "shutdown_proven":  true
+                                                               },
+                                                    "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\active_jtag_preflight\\vehicle",
+                                                    "summary_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\active_jtag_preflight\\vehicle\\summary.json",
+                                                    "summary_sha256":  "30633AEED6CF84977F0B0C5F56E7DEBEF443162DF4BC22CC467EAB60C1306E5B"
+                                                },
+                                                {
+                                                    "proven":  true,
+                                                    "role":  "ground",
+                                                    "status":  "PASS_JTAG_PREFLIGHT_TAP_RESET_SCAN_POSSIBLE_NO_CPU_HALT_OR_SYSTEM_RESET_COMMAND",
+                                                    "hardware_interaction":  true,
+                                                    "requested_serial":  "1c:db:d4:5a:83:80",
+                                                    "opened_serial":  "1c:db:d4:5a:83:80",
+                                                    "requested_usb_location":  "1-4.4",
+                                                    "opened_usb_location":  "1-4.4",
+                                                    "pnp_port_chain":  "4.4",
+                                                    "pnp_location_suffix_matched":  true,
+                                                    "safety":  {
+                                                                   "com_opened":  false,
+                                                                   "flash_written":  false,
+                                                                   "target_config_loaded":  false,
+                                                                   "cpu_halt_command_issued":  false,
+                                                                   "system_reset_command_issued":  false,
+                                                                   "transport_init_requested":  true,
+                                                                   "transport_init_completion_proven":  true,
+                                                                   "jtag_clock_activity_possible":  true,
+                                                                   "tap_reset_or_scan_possible":  true,
+                                                                   "target_state_modified":  null,
+                                                                   "target_state_modification_known":  false,
+                                                                   "process_termination_proven":  true,
+                                                                   "shutdown_proven":  true
+                                                               },
+                                                    "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\active_jtag_preflight\\ground",
+                                                    "summary_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\active_jtag_preflight\\ground\\summary.json",
+                                                    "summary_sha256":  "4EBBCF807CB92F2EA79E5BB9CDAB613FCEB54EA8B28FF8F0EBFAEB054D50F3EF"
+                                                }
+                                            ],
+                                  "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\active_jtag_preflight"
+                              },
+    "capture":  {
+                    "acceptable":  false,
+                    "evidence_contract_proven":  false,
+                    "classification":  "TIMED_PATH_ACQUISITION_NOT_PRODUCT_ACCEPTANCE",
+                    "status":  "INVALID_CAPTURE",
+                    "timing_sla_result":  "NOT_EVALUATED",
+                    "timing_sla_failure_admitted_for_stage_read":  false,
+                    "tail_stall_failure_admitted_for_stage_read":  false,
+                    "alive_tail_stall_failure_admitted_for_stage_read":  false,
+                    "alive_tail_raw_replay":  null,
+                    "boundary_partial_failure_admitted_for_stage_read":  false,
+                    "boundary_partial_raw_replay":  null,
+                    "summary_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\capture\\summary.json",
+                    "summary_sha256":  "",
+                    "rejection_reasons":  [
+                                              "The property \u0027cleanup_proven\u0027 cannot be found on this object. Verify that the property exists."
+                                          ],
+                    "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\capture"
+                },
+    "stage_evidence":  {
+                           "vehicle":  {
+                                           "proven":  false,
+                                           "address":  "0x3fcab880",
+                                           "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\stage_vehicle"
+                                       },
+                           "ground":  {
+                                          "proven":  false,
+                                          "address":  "0x3fca2e98",
+                                          "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T160628Z-repaired-explicit-host-arm\\stage_ground"
+                                      }
+                       },
+    "stage_read_policy":  {
+                              "order":  [
+                                            "vehicle",
+                                            "ground"
+                                        ],
+                              "simultaneous":  false,
+                              "stage_mask_monotonic":  true,
+                              "first_failure_latched":  true,
+                              "authoritative_cause_fields":  [
+                                                                 "first_failure.code",
+                                                                 "first_failure.name",
+                                                                 "first_failure.stage_mask",
+                                                                 "first_failure.detail",
+                                                                 "extended_raw_replay.first_usb_failure.first_failure",
+                                                                 "extended_raw_replay.first_usb_failure.clock_sync"
+                                                             ],
+                              "limitation":  "The two roles are halted and read sequentially. Ground may advance after the Vehicle snapshot; stage masks are causal lower bounds, and the latched first_failure fields are authoritative."
+                          },
+    "diagnostic_outcomes":  {
+                                "record_acquisition_result":  "NOT_PROVEN",
+                                "usb_boundary_observation_result":  "NOT_PROVEN",
+                                "usb_observation_is_continuous_live_hardware_state":  false,
+                                "usb_observation_proves_windows_cdc_consumption":  false,
+                                "first_usb_failure":  {
+                                                          "vehicle":  {
+                                                                          "record_acquisition":  "NOT_RECORDED",
+                                                                          "first_failure_observation":  "NOT_RECORDED",
+                                                                          "wait_reason":  "NOT_OBSERVED",
+                                                                          "record":  null,
+                                                                          "pc_time_relation":  "UNKNOWN",
+                                                                          "pc_time_reason":  "No matched same-boot nonce exchange, uninterrupted clock continuity and guaranteed error bound supplied.",
+                                                                          "acquisition_proves_usb_success":  false,
+                                                                          "acquisition_proves_pc_consumption":  false,
+                                                                          "observation_is_continuous_state":  false,
+                                                                          "semantics":  "Immutable first-failure decision and terminal-boundary SDK snapshot; not physical fault onset or live host consumption."
+                                                                      },
+                                                          "ground":  {
+                                                                         "record_acquisition":  "NOT_RECORDED",
+                                                                         "first_failure_observation":  "NOT_RECORDED",
+                                                                         "wait_reason":  "NOT_OBSERVED",
+                                                                         "record":  null,
+                                                                         "pc_time_relation":  "UNKNOWN",
+                                                                         "pc_time_reason":  "No matched same-boot nonce exchange, uninterrupted clock continuity and guaranteed error bound supplied.",
+                                                                         "acquisition_proves_usb_success":  false,
+                                                                         "acquisition_proves_pc_consumption":  false,
+                                                                         "observation_is_continuous_state":  false,
+                                                                         "semantics":  "Immutable first-failure decision and terminal-boundary SDK snapshot; not physical fault onset or live host consumption."
+                                                                     }
+                                                      },
+                                "serial_ports_closed_before_jtag_read":  true
+                            },
+    "rollback":  {
+                     "attempted":  true,
+                     "proven":  true,
+                     "required_token":  "RESTORE_ACCEPTED_R18_AFTER_R19_HIL",
+                     "evidence_directory":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261021T160631429Z-18ac712a-rollback"
+                 },
+    "hardware_quiescence":  {
+                                "child_termination_proven":  true,
+                                "active_jtag_cleanup_proven":  true,
+                                "further_child_launch_blocked":  false,
+                                "rollback_skipped_due_unproven_child_termination":  false
+                            },
+    "power_off_required":  false
+}

@@ -1,0 +1,6 @@
+E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tools\run_r19_timed_path_capture.ps1 : "VcLora.R19.ContinuousReadBl
+ock" �̒l�� "VcLora.R19.ContinuousReadBlock" �^���� "System.Byte[]" �^�ɕϊ��ł��܂���B
+    + CategoryInfo          : MetadataError: (:) [run_r19_timed_path_capture.ps1], ArgumentTransformationMetadataExcep 
+   tion
+    + FullyQualifiedErrorId : RuntimeException,run_r19_timed_path_capture.ps1
+ 

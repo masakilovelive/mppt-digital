@@ -1,0 +1,1040 @@
+{
+  "schema": "vc-lora-publication-selected-originals-v1",
+  "result": "PASS_BYTE_IDENTICAL_SELECTION",
+  "items": [
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/capture.stderr.log",
+      "published": "evidence/live/capture.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/capture.stdout.log",
+      "published": "evidence/live/capture.stdout.log",
+      "bytes": 96,
+      "sha256": "6992AE00C1B4B702E69B96BF006DBEA5FF0723630A976204E6391C5FA738F2C0"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/install.stdout.log",
+      "published": "evidence/live/install.stdout.log",
+      "bytes": 497,
+      "sha256": "F2FAEC77ECEAE897DD4259617BAC447273881E70FFAB6F503AAAA27B4AEF200D"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/operator_evaluation.json",
+      "published": "evidence/live/operator_evaluation.json",
+      "bytes": 11412,
+      "sha256": "F4D6DD7EF38E0F39241306C005DB40A5ADCF00187CDF04A722F41EF0A658ACBA"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/rollback.stdout.log",
+      "published": "evidence/live/rollback.stdout.log",
+      "bytes": 487,
+      "sha256": "CD156459EAAF42290F4712788784AE39FEE5CE8A518E9CC90B68441FEDD89E92"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/summary.json",
+      "published": "evidence/live/summary.json",
+      "bytes": 154454,
+      "sha256": "05ADF5D36801C28B69E3E885CC377969B052853774CDD2730261926C83F79489"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/timed_path_evaluation.json",
+      "published": "evidence/live/timed_path_evaluation.json",
+      "bytes": 5972,
+      "sha256": "049813DD81C7A9AC00EC0CBBB783157A43F3BF1F5282715383A631C220845DBF"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/capture/ground.raw.bin",
+      "published": "evidence/live/capture/ground.raw.bin",
+      "bytes": 154,
+      "sha256": "D7313CCBBF5506090D61B7430AE1505B931F4DABB47482FF9670BD3D8CBBBE52"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/capture/summary.json",
+      "published": "evidence/live/capture/summary.json",
+      "bytes": 225480,
+      "sha256": "BEF2FD281308A44962DC93A5E44D44DD7D20CEA6F763B820C7C1A195017EAEE1"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/capture/vehicle.raw.bin",
+      "published": "evidence/live/capture/vehicle.raw.bin",
+      "bytes": 2646,
+      "sha256": "70742185E0A9998213B952CBA71087A127B55F8896F5222D283080C6B7A6B5F6"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/endpoint-fifo-attempt-1-first.bin",
+      "published": "evidence/live/stage_vehicle/endpoint-fifo-attempt-1-first.bin",
+      "bytes": 112,
+      "sha256": "074D3FBAFF6D19CAFD9D77FC27DDF674E63C74534A1A7825801A2BA6ADEE9B09"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/endpoint-fifo-attempt-1-second.bin",
+      "published": "evidence/live/stage_vehicle/endpoint-fifo-attempt-1-second.bin",
+      "bytes": 112,
+      "sha256": "074D3FBAFF6D19CAFD9D77FC27DDF674E63C74534A1A7825801A2BA6ADEE9B09"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/endpoint-fifo-first.bin",
+      "published": "evidence/live/stage_vehicle/endpoint-fifo-first.bin",
+      "bytes": 112,
+      "sha256": "074D3FBAFF6D19CAFD9D77FC27DDF674E63C74534A1A7825801A2BA6ADEE9B09"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/endpoint-fifo-second.bin",
+      "published": "evidence/live/stage_vehicle/endpoint-fifo-second.bin",
+      "bytes": 112,
+      "sha256": "074D3FBAFF6D19CAFD9D77FC27DDF674E63C74534A1A7825801A2BA6ADEE9B09"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/first-usb-failure-attempt-1-first.bin",
+      "published": "evidence/live/stage_vehicle/first-usb-failure-attempt-1-first.bin",
+      "bytes": 384,
+      "sha256": "CBE38FA5B347A96A02B20E015EE9D3880F9525AF28637FB17224DD441CA2CF31"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/first-usb-failure-attempt-1-second.bin",
+      "published": "evidence/live/stage_vehicle/first-usb-failure-attempt-1-second.bin",
+      "bytes": 384,
+      "sha256": "CBE38FA5B347A96A02B20E015EE9D3880F9525AF28637FB17224DD441CA2CF31"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/first-usb-failure-first.bin",
+      "published": "evidence/live/stage_vehicle/first-usb-failure-first.bin",
+      "bytes": 384,
+      "sha256": "CBE38FA5B347A96A02B20E015EE9D3880F9525AF28637FB17224DD441CA2CF31"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/first-usb-failure-second.bin",
+      "published": "evidence/live/stage_vehicle/first-usb-failure-second.bin",
+      "bytes": 384,
+      "sha256": "CBE38FA5B347A96A02B20E015EE9D3880F9525AF28637FB17224DD441CA2CF31"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/ground-usb-commit-attempt-1-first.bin",
+      "published": "evidence/live/stage_vehicle/ground-usb-commit-attempt-1-first.bin",
+      "bytes": 128,
+      "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/ground-usb-commit-attempt-1-second.bin",
+      "published": "evidence/live/stage_vehicle/ground-usb-commit-attempt-1-second.bin",
+      "bytes": 128,
+      "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/ground-usb-commit-first.bin",
+      "published": "evidence/live/stage_vehicle/ground-usb-commit-first.bin",
+      "bytes": 128,
+      "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/ground-usb-commit-second.bin",
+      "published": "evidence/live/stage_vehicle/ground-usb-commit-second.bin",
+      "bytes": 128,
+      "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/hwcdc-restart-attempt-1-first.bin",
+      "published": "evidence/live/stage_vehicle/hwcdc-restart-attempt-1-first.bin",
+      "bytes": 128,
+      "sha256": "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/hwcdc-restart-attempt-1-second.bin",
+      "published": "evidence/live/stage_vehicle/hwcdc-restart-attempt-1-second.bin",
+      "bytes": 128,
+      "sha256": "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/hwcdc-restart-first.bin",
+      "published": "evidence/live/stage_vehicle/hwcdc-restart-first.bin",
+      "bytes": 128,
+      "sha256": "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/hwcdc-restart-second.bin",
+      "published": "evidence/live/stage_vehicle/hwcdc-restart-second.bin",
+      "bytes": 128,
+      "sha256": "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/openocd-attempt-1-capture.log",
+      "published": "evidence/live/stage_vehicle/openocd-attempt-1-capture.log",
+      "bytes": 2331,
+      "sha256": "73EAAD26CEB71AA8A42E613503569FB5EDEC68EA3611480BB1A4BA085FE2BF6E"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/openocd-attempt-1-capture.log.stderr.log",
+      "published": "evidence/live/stage_vehicle/openocd-attempt-1-capture.log.stderr.log",
+      "bytes": 2297,
+      "sha256": "E133370AA2D017544D6121ED78587FFE721C1461FE4FFDC8CE23D5220CAA08CC"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/openocd-attempt-1-capture.log.stdout.log",
+      "published": "evidence/live/stage_vehicle/openocd-attempt-1-capture.log.stdout.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/openocd-attempt-1-cleanup.log",
+      "published": "evidence/live/stage_vehicle/openocd-attempt-1-cleanup.log",
+      "bytes": 1134,
+      "sha256": "260E44920B71DC4A3F9873EFE94A78C8BDE97A45C71324509038E5709AD18FCF"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/openocd-attempt-1-cleanup.log.stderr.log",
+      "published": "evidence/live/stage_vehicle/openocd-attempt-1-cleanup.log.stderr.log",
+      "bytes": 1100,
+      "sha256": "758F95381DD59C60C705021F88BC2B7BD83DADA2D1A546183897944E55416EAB"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/openocd-attempt-1-cleanup.log.stdout.log",
+      "published": "evidence/live/stage_vehicle/openocd-attempt-1-cleanup.log.stdout.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/runtime-stage-attempt-1-first.bin",
+      "published": "evidence/live/stage_vehicle/runtime-stage-attempt-1-first.bin",
+      "bytes": 68,
+      "sha256": "86B7393A9FD9F484D634BB4DE07F3DFA505BFE8B619CDA1F6E6B1889AA052B58"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/runtime-stage-attempt-1-second.bin",
+      "published": "evidence/live/stage_vehicle/runtime-stage-attempt-1-second.bin",
+      "bytes": 68,
+      "sha256": "86B7393A9FD9F484D634BB4DE07F3DFA505BFE8B619CDA1F6E6B1889AA052B58"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/runtime-stage-first.bin",
+      "published": "evidence/live/stage_vehicle/runtime-stage-first.bin",
+      "bytes": 68,
+      "sha256": "86B7393A9FD9F484D634BB4DE07F3DFA505BFE8B619CDA1F6E6B1889AA052B58"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/runtime-stage-second.bin",
+      "published": "evidence/live/stage_vehicle/runtime-stage-second.bin",
+      "bytes": 68,
+      "sha256": "86B7393A9FD9F484D634BB4DE07F3DFA505BFE8B619CDA1F6E6B1889AA052B58"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/summary.json",
+      "published": "evidence/live/stage_vehicle/summary.json",
+      "bytes": 58525,
+      "sha256": "DEAA3B4FB2F8D7370A1CBB88CAA8A79ECC6F7955E9559E039294219FF706CA8D"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/timed_path_first.bin",
+      "published": "evidence/live/stage_vehicle/timed_path_first.bin",
+      "bytes": 512,
+      "sha256": "44EA765E39263DB982A6D4CC7B71615599A0EF31AAC18BD28FFCBFA15E83EF3D"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/timed_path_second.bin",
+      "published": "evidence/live/stage_vehicle/timed_path_second.bin",
+      "bytes": 512,
+      "sha256": "44EA765E39263DB982A6D4CC7B71615599A0EF31AAC18BD28FFCBFA15E83EF3D"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/timed-path-attempt-1-first.bin",
+      "published": "evidence/live/stage_vehicle/timed-path-attempt-1-first.bin",
+      "bytes": 512,
+      "sha256": "44EA765E39263DB982A6D4CC7B71615599A0EF31AAC18BD28FFCBFA15E83EF3D"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_vehicle/timed-path-attempt-1-second.bin",
+      "published": "evidence/live/stage_vehicle/timed-path-attempt-1-second.bin",
+      "bytes": 512,
+      "sha256": "44EA765E39263DB982A6D4CC7B71615599A0EF31AAC18BD28FFCBFA15E83EF3D"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/endpoint-fifo-attempt-1-first.bin",
+      "published": "evidence/live/stage_ground/endpoint-fifo-attempt-1-first.bin",
+      "bytes": 112,
+      "sha256": "1EB06A26F6155DB298DC8FDEED4B582542794441674CA37A50A5AAD2B0DE4D6E"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/endpoint-fifo-attempt-1-second.bin",
+      "published": "evidence/live/stage_ground/endpoint-fifo-attempt-1-second.bin",
+      "bytes": 112,
+      "sha256": "1EB06A26F6155DB298DC8FDEED4B582542794441674CA37A50A5AAD2B0DE4D6E"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/endpoint-fifo-first.bin",
+      "published": "evidence/live/stage_ground/endpoint-fifo-first.bin",
+      "bytes": 112,
+      "sha256": "1EB06A26F6155DB298DC8FDEED4B582542794441674CA37A50A5AAD2B0DE4D6E"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/endpoint-fifo-second.bin",
+      "published": "evidence/live/stage_ground/endpoint-fifo-second.bin",
+      "bytes": 112,
+      "sha256": "1EB06A26F6155DB298DC8FDEED4B582542794441674CA37A50A5AAD2B0DE4D6E"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/first-usb-failure-attempt-1-first.bin",
+      "published": "evidence/live/stage_ground/first-usb-failure-attempt-1-first.bin",
+      "bytes": 384,
+      "sha256": "EA369D1B3581CCE27CC2F5A432F70B702250B2E85AC77015CCC733E9D683D4A4"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/first-usb-failure-attempt-1-second.bin",
+      "published": "evidence/live/stage_ground/first-usb-failure-attempt-1-second.bin",
+      "bytes": 384,
+      "sha256": "EA369D1B3581CCE27CC2F5A432F70B702250B2E85AC77015CCC733E9D683D4A4"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/first-usb-failure-first.bin",
+      "published": "evidence/live/stage_ground/first-usb-failure-first.bin",
+      "bytes": 384,
+      "sha256": "EA369D1B3581CCE27CC2F5A432F70B702250B2E85AC77015CCC733E9D683D4A4"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/first-usb-failure-second.bin",
+      "published": "evidence/live/stage_ground/first-usb-failure-second.bin",
+      "bytes": 384,
+      "sha256": "EA369D1B3581CCE27CC2F5A432F70B702250B2E85AC77015CCC733E9D683D4A4"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/ground-usb-commit-attempt-1-first.bin",
+      "published": "evidence/live/stage_ground/ground-usb-commit-attempt-1-first.bin",
+      "bytes": 128,
+      "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/ground-usb-commit-attempt-1-second.bin",
+      "published": "evidence/live/stage_ground/ground-usb-commit-attempt-1-second.bin",
+      "bytes": 128,
+      "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/ground-usb-commit-first.bin",
+      "published": "evidence/live/stage_ground/ground-usb-commit-first.bin",
+      "bytes": 128,
+      "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/ground-usb-commit-second.bin",
+      "published": "evidence/live/stage_ground/ground-usb-commit-second.bin",
+      "bytes": 128,
+      "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/hwcdc-restart-attempt-1-first.bin",
+      "published": "evidence/live/stage_ground/hwcdc-restart-attempt-1-first.bin",
+      "bytes": 128,
+      "sha256": "0DADB437E5361D05F8BDA2CC19E788B63211EE48481F5484B063EEE20C45561F"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/hwcdc-restart-attempt-1-second.bin",
+      "published": "evidence/live/stage_ground/hwcdc-restart-attempt-1-second.bin",
+      "bytes": 128,
+      "sha256": "0DADB437E5361D05F8BDA2CC19E788B63211EE48481F5484B063EEE20C45561F"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/hwcdc-restart-first.bin",
+      "published": "evidence/live/stage_ground/hwcdc-restart-first.bin",
+      "bytes": 128,
+      "sha256": "0DADB437E5361D05F8BDA2CC19E788B63211EE48481F5484B063EEE20C45561F"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/hwcdc-restart-second.bin",
+      "published": "evidence/live/stage_ground/hwcdc-restart-second.bin",
+      "bytes": 128,
+      "sha256": "0DADB437E5361D05F8BDA2CC19E788B63211EE48481F5484B063EEE20C45561F"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/openocd-attempt-1-capture.log",
+      "published": "evidence/live/stage_ground/openocd-attempt-1-capture.log",
+      "bytes": 2339,
+      "sha256": "E5F9D32A955782AED41E650173405C460D9842F9F539BAC3EFED7E9AAC997FA2"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/openocd-attempt-1-capture.log.stderr.log",
+      "published": "evidence/live/stage_ground/openocd-attempt-1-capture.log.stderr.log",
+      "bytes": 2305,
+      "sha256": "94285CEE37C0D1EA7AB132F11E7E8915B87F3C7454CD5E65AC4E1292FED99D8F"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/openocd-attempt-1-capture.log.stdout.log",
+      "published": "evidence/live/stage_ground/openocd-attempt-1-capture.log.stdout.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/openocd-attempt-1-cleanup.log",
+      "published": "evidence/live/stage_ground/openocd-attempt-1-cleanup.log",
+      "bytes": 1134,
+      "sha256": "5CBAAEDE1D18CF50FE1C761DE75CA275D340FC635D7DAC7654520FA49A534EEC"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/openocd-attempt-1-cleanup.log.stderr.log",
+      "published": "evidence/live/stage_ground/openocd-attempt-1-cleanup.log.stderr.log",
+      "bytes": 1100,
+      "sha256": "ADCA6E5D4622EFD37B915F0790ADE913B060A149CB53B0BB8BD664CA1CA5416C"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/openocd-attempt-1-cleanup.log.stdout.log",
+      "published": "evidence/live/stage_ground/openocd-attempt-1-cleanup.log.stdout.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/runtime-stage-attempt-1-first.bin",
+      "published": "evidence/live/stage_ground/runtime-stage-attempt-1-first.bin",
+      "bytes": 68,
+      "sha256": "96736611369838065D2E12C2974003B57F0C5767973B9047DB7AD894E4468860"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/runtime-stage-attempt-1-second.bin",
+      "published": "evidence/live/stage_ground/runtime-stage-attempt-1-second.bin",
+      "bytes": 68,
+      "sha256": "96736611369838065D2E12C2974003B57F0C5767973B9047DB7AD894E4468860"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/runtime-stage-first.bin",
+      "published": "evidence/live/stage_ground/runtime-stage-first.bin",
+      "bytes": 68,
+      "sha256": "96736611369838065D2E12C2974003B57F0C5767973B9047DB7AD894E4468860"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/runtime-stage-second.bin",
+      "published": "evidence/live/stage_ground/runtime-stage-second.bin",
+      "bytes": 68,
+      "sha256": "96736611369838065D2E12C2974003B57F0C5767973B9047DB7AD894E4468860"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/summary.json",
+      "published": "evidence/live/stage_ground/summary.json",
+      "bytes": 57920,
+      "sha256": "ABD77DAB315BF24C8807EDFEFE3880948BC507FFFE06580D58D2601B1C8144D2"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/timed_path_first.bin",
+      "published": "evidence/live/stage_ground/timed_path_first.bin",
+      "bytes": 512,
+      "sha256": "7B7C88A3CDE2F3F0C0E37E59EF473EB6D70C4B22E1048BEDAF622CCE096AC1AD"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/timed_path_second.bin",
+      "published": "evidence/live/stage_ground/timed_path_second.bin",
+      "bytes": 512,
+      "sha256": "7B7C88A3CDE2F3F0C0E37E59EF473EB6D70C4B22E1048BEDAF622CCE096AC1AD"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/timed-path-attempt-1-first.bin",
+      "published": "evidence/live/stage_ground/timed-path-attempt-1-first.bin",
+      "bytes": 512,
+      "sha256": "7B7C88A3CDE2F3F0C0E37E59EF473EB6D70C4B22E1048BEDAF622CCE096AC1AD"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T222742Z-persistence-retrial/stage_ground/timed-path-attempt-1-second.bin",
+      "published": "evidence/live/stage_ground/timed-path-attempt-1-second.bin",
+      "bytes": 512,
+      "sha256": "7B7C88A3CDE2F3F0C0E37E59EF473EB6D70C4B22E1048BEDAF622CCE096AC1AD"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T160628Z-repaired-explicit-host-arm/capture.stderr.log",
+      "published": "evidence/prior_capture_failure/capture.stderr.log",
+      "bytes": 456,
+      "sha256": "F315163D2CC2567B1DD6458210879AED33F85E664898F97837BC70F0BC370D79"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T160628Z-repaired-explicit-host-arm/operator_evaluation.json",
+      "published": "evidence/prior_capture_failure/operator_evaluation.json",
+      "bytes": 6966,
+      "sha256": "22972CD7DC9E0208628346021F3C62CDED10D511C68FDDB29199DDA7CDB73B92"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T160628Z-repaired-explicit-host-arm/summary.json",
+      "published": "evidence/prior_capture_failure/summary.json",
+      "bytes": 32801,
+      "sha256": "E24E7686DAE110E6B19A872BCB3EF7CB061075B45B72CEE21D4BF1A714FB6591"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261021T160628Z-repaired-explicit-host-arm/capture/vehicle.raw.bin",
+      "published": "evidence/prior_capture_failure/capture/vehicle.raw.bin",
+      "bytes": 2646,
+      "sha256": "60C0E7BF8E0F60562BBE9F69404EE3352D57A4586F5ECA8974E8098E1C86D9F1"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/candidate_verify.log",
+      "published": "evidence/persistence_fix/candidate_verify.log",
+      "bytes": 465,
+      "sha256": "20D97CEE0B6357D2A32449456AD6FB1B0EA0CCC33EB8EAA446E500B7C8C40217"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/changed_source_files.json",
+      "published": "evidence/persistence_fix/changed_source_files.json",
+      "bytes": 646,
+      "sha256": "1FD4F71A52611DB9E4241F8B1A493EC00A627C7958D3E7D04C641C8897B43914"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/changes.diff",
+      "published": "evidence/persistence_fix/changes.diff",
+      "bytes": 42957,
+      "sha256": "AFB40EEDC9D1A879E58A0920414E5A8D2B4F75EEECCD37EBFAA184979E4BFB5B"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/host_tests_full.log",
+      "published": "evidence/persistence_fix/host_tests_full.log",
+      "bytes": 78264,
+      "sha256": "6956494B09D24A089C8798D15E2AA120466C9A2D4A8F269EF954F1900D697FCD"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/new_pin_no_execute_expected_denial.log",
+      "published": "evidence/persistence_fix/new_pin_no_execute_expected_denial.log",
+      "bytes": 3970,
+      "sha256": "EDC587B624063EF2CD9C0E4F83C274B9188FC06D94928AD1B8A164549DB218DD"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/normal_compile_summary.json",
+      "published": "evidence/persistence_fix/normal_compile_summary.json",
+      "bytes": 941,
+      "sha256": "28BAB2BE97471B82503E466E8F9C5181FDE643BA285641BCE5456361952FB505"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/normal_compile.log",
+      "published": "evidence/persistence_fix/normal_compile.log",
+      "bytes": 140,
+      "sha256": "4D26E57C1A46F136DA7719A1AF131247ABC31AD78456CA4A14AC813152BE467C"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/old_pin_expected_denial.log",
+      "published": "evidence/persistence_fix/old_pin_expected_denial.log",
+      "bytes": 561,
+      "sha256": "D836D7FA629EF83674838953774CC13C0957E1A626CD30412872660175E1D18F"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/prepared_explicit_host_arm.json",
+      "published": "evidence/persistence_fix/prepared_explicit_host_arm.json",
+      "bytes": 5200,
+      "sha256": "DD400E43FC4D8EF14103C735901EA73B24E6194769D77EB151C1ADC6632C010F"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/previous_prepared_explicit_host_arm.json",
+      "published": "evidence/persistence_fix/previous_prepared_explicit_host_arm.json",
+      "bytes": 4926,
+      "sha256": "59293625868B7CDAC93F86352B6A09084C36B8415F905D79A315AA60B1C61C43"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/related-acquisition-ps51.log",
+      "published": "evidence/persistence_fix/related-acquisition-ps51.log",
+      "bytes": 17,
+      "sha256": "4D8966AAAB20EA32AAF0A39617942C21095549AA0ADEBB184F82BF915280E29A"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/related-acquisition-ps7.log",
+      "published": "evidence/persistence_fix/related-acquisition-ps7.log",
+      "bytes": 17,
+      "sha256": "4D8966AAAB20EA32AAF0A39617942C21095549AA0ADEBB184F82BF915280E29A"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/related-capture_entrypoint-ps51.log",
+      "published": "evidence/persistence_fix/related-capture_entrypoint-ps51.log",
+      "bytes": 5934,
+      "sha256": "3349E36AD0999534CDD38269812F2DC4C964994F95CD13EF42276918E9C3ABA1"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/related-capture_entrypoint-ps7.log",
+      "published": "evidence/persistence_fix/related-capture_entrypoint-ps7.log",
+      "bytes": 5925,
+      "sha256": "D3A7B832B1EE963FB374229C2C169A51D0C164135CCD1AB6751A551F808CA95A"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/related-outer-ps51.log",
+      "published": "evidence/persistence_fix/related-outer-ps51.log",
+      "bytes": 33,
+      "sha256": "D37C8B7573B2C0C1AB1BAAA3734CF5F54861B942BE30D9687F04AED7E2573914"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/related-outer-ps7.log",
+      "published": "evidence/persistence_fix/related-outer-ps7.log",
+      "bytes": 33,
+      "sha256": "D37C8B7573B2C0C1AB1BAAA3734CF5F54861B942BE30D9687F04AED7E2573914"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/summary.json",
+      "published": "evidence/persistence_fix/summary.json",
+      "bytes": 15692,
+      "sha256": "18A31D39D6E8DE546EAB14C2D606876260582B17919478D9901120DD9A51AF20"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/regression-red-ps51-final/red_reproduction.json",
+      "published": "evidence/persistence_fix/regression-red-ps51-final/red_reproduction.json",
+      "bytes": 690,
+      "sha256": "18E76A31A73D9689581C74D8403C745477E7E8E0832EDF889B98C714157DA1B5"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/regression-red-ps7-final/red_reproduction.json",
+      "published": "evidence/persistence_fix/regression-red-ps7-final/red_reproduction.json",
+      "bytes": 654,
+      "sha256": "8110AA344519B1DB55C07A33FBDD2A38391A4C4A9C37CABEFEFBD462AD84BE40"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/regression-green-v2-ps51/test_result.json",
+      "published": "evidence/persistence_fix/regression-green-v2-ps51/test_result.json",
+      "bytes": 498,
+      "sha256": "107A1178B95852DD44A454EE5777FFF151D69C14DCC06E9A78631E923D658056"
+    },
+    {
+      "source": "runs/validation/R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001/20261021T161610Z/regression-green-v2-ps7/test_result.json",
+      "published": "evidence/persistence_fix/regression-green-v2-ps7/test_result.json",
+      "bytes": 465,
+      "sha256": "E5FE94816BD38D4A66F3C419590761B2ED76F7A287E6060D5E26ADBBC9B9DA7A"
+    },
+    {
+      "source": "runs/validation/R19-AUX-BUSY-VS-OBSERVATION-DISCRIMINATION-001/20261021T234341158Z/aux_observation_probe_final.cpp",
+      "published": "evidence/aux_discrimination/aux_observation_probe_final.cpp",
+      "bytes": 6823,
+      "sha256": "1BF6EA18B65D6066AA8CC201C1D0252ADC27403B2B0593A5E2C30A93D4795AF5"
+    },
+    {
+      "source": "runs/validation/R19-AUX-BUSY-VS-OBSERVATION-DISCRIMINATION-001/20261021T234341158Z/diagnostic_probe.diff",
+      "published": "evidence/aux_discrimination/diagnostic_probe.diff",
+      "bytes": 7107,
+      "sha256": "A803D9308B37601B07392694DEB9AF0B3E1BEBE16208EC2E2071DB753D3ED6DF"
+    },
+    {
+      "source": "runs/validation/R19-AUX-BUSY-VS-OBSERVATION-DISCRIMINATION-001/20261021T234341158Z/final_compile.log",
+      "published": "evidence/aux_discrimination/final_compile.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-AUX-BUSY-VS-OBSERVATION-DISCRIMINATION-001/20261021T234341158Z/final_probe_result.json",
+      "published": "evidence/aux_discrimination/final_probe_result.json",
+      "bytes": 5029,
+      "sha256": "67B8F441882A3002491E0F43AD90C61E202CC70D8F01065477358DEA5AE9DCC0"
+    },
+    {
+      "source": "runs/validation/R19-AUX-BUSY-VS-OBSERVATION-DISCRIMINATION-001/20261021T234341158Z/summary.json",
+      "published": "evidence/aux_discrimination/summary.json",
+      "bytes": 8100,
+      "sha256": "497C046345883AD63854C05F290508EF9B9092FB4AB087B20E178E4F2D1F19F1"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/00_esptool_version.stderr.log",
+      "published": "evidence/install/00_esptool_version.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/00_esptool_version.stdout.log",
+      "published": "evidence/install/00_esptool_version.stdout.log",
+      "bytes": 48,
+      "sha256": "5A50D446456A765AB1BC914CC4202CAD5745F056999EEBE6EA4A1344E222D3A1"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/01_vehicle_read_mac.stderr.log",
+      "published": "evidence/install/01_vehicle_read_mac.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/01_vehicle_read_mac.stdout.log",
+      "published": "evidence/install/01_vehicle_read_mac.stdout.log",
+      "bytes": 1060,
+      "sha256": "32236FB64BD4BEEB3290CE6D9291A85CF1CB43E4ADF68A8968D29C798B75F951"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/02_vehicle_write.stderr.log",
+      "published": "evidence/install/02_vehicle_write.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/02_vehicle_write.stdout.log",
+      "published": "evidence/install/02_vehicle_write.stdout.log",
+      "bytes": 4144,
+      "sha256": "E89479F2AF92310DFF3DB9B48353A1D8A87577C824063DB746F10D8CD258B5C1"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/03_vehicle_verify.stderr.log",
+      "published": "evidence/install/03_vehicle_verify.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/03_vehicle_verify.stdout.log",
+      "published": "evidence/install/03_vehicle_verify.stdout.log",
+      "bytes": 1646,
+      "sha256": "533B61459A9A38EC06CC48AF2ADB9BE2B3555534DE9F08A56486B5AE80B831C6"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/05_ground_read_mac.stderr.log",
+      "published": "evidence/install/05_ground_read_mac.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/05_ground_read_mac.stdout.log",
+      "published": "evidence/install/05_ground_read_mac.stdout.log",
+      "bytes": 1060,
+      "sha256": "1375312B7601B4FD1CC2F1CE23F7E1FA5D61BAE1CA81F51E451B4C45EB76EB6E"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/06_ground_write.stderr.log",
+      "published": "evidence/install/06_ground_write.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/06_ground_write.stdout.log",
+      "published": "evidence/install/06_ground_write.stdout.log",
+      "bytes": 4322,
+      "sha256": "8ABA778AA0C074EE5C98464705755DED736B86786E4FD643A863B7370B156E3F"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/07_ground_verify.stderr.log",
+      "published": "evidence/install/07_ground_verify.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/07_ground_verify.stdout.log",
+      "published": "evidence/install/07_ground_verify.stdout.log",
+      "bytes": 1644,
+      "sha256": "6B1F30B6DC91E405BE9F0BE0A4B86EA0F67532BB1418BFDCE962FAF16B5BF747"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/artifact_manifest.json",
+      "published": "evidence/install/artifact_manifest.json",
+      "bytes": 17204,
+      "sha256": "AD245BCCA848419DDCC6FD84164FD90D375460095B8C205489B9A970E3CF72BD"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/candidate_verify_after_staging.log",
+      "published": "evidence/install/candidate_verify_after_staging.log",
+      "bytes": 465,
+      "sha256": "20D97CEE0B6357D2A32449456AD6FB1B0EA0CCC33EB8EAA446E500B7C8C40217"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/candidate_verify_before_candidate_write.log",
+      "published": "evidence/install/candidate_verify_before_candidate_write.log",
+      "bytes": 465,
+      "sha256": "20D97CEE0B6357D2A32449456AD6FB1B0EA0CCC33EB8EAA446E500B7C8C40217"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/candidate_verify_final_postflight.log",
+      "published": "evidence/install/candidate_verify_final_postflight.log",
+      "bytes": 465,
+      "sha256": "20D97CEE0B6357D2A32449456AD6FB1B0EA0CCC33EB8EAA446E500B7C8C40217"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/candidate_verify_initial_preflight.log",
+      "published": "evidence/install/candidate_verify_initial_preflight.log",
+      "bytes": 465,
+      "sha256": "20D97CEE0B6357D2A32449456AD6FB1B0EA0CCC33EB8EAA446E500B7C8C40217"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/final_seal.json",
+      "published": "evidence/install/final_seal.json",
+      "bytes": 1268,
+      "sha256": "714943F5A2DB01E46932981FBCAB11E44568E62E2F66854B98BC83E0A429A376"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/final_seal.sha256",
+      "published": "evidence/install/final_seal.sha256",
+      "bytes": 83,
+      "sha256": "412C4BC555B000FD832C28C06386F511BCEC8FC7733A0992109C6728147BCEAE"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/flash_record.json",
+      "published": "evidence/install/flash_record.json",
+      "bytes": 12131,
+      "sha256": "CC1444B06584163AB6E81483145248171D7B29B35CD788145C4006B5AA833583"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-install/SHA256SUMS.txt",
+      "published": "evidence/install/SHA256SUMS.txt",
+      "bytes": 6791,
+      "sha256": "F736BED352B51F2DD0FEE4BD30B24B3F15BEA4629B818576FB2A8EB558C3F252"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/00_esptool_version.stderr.log",
+      "published": "evidence/rollback/00_esptool_version.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/00_esptool_version.stdout.log",
+      "published": "evidence/rollback/00_esptool_version.stdout.log",
+      "bytes": 48,
+      "sha256": "5A50D446456A765AB1BC914CC4202CAD5745F056999EEBE6EA4A1344E222D3A1"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/artifact_manifest.json",
+      "published": "evidence/rollback/artifact_manifest.json",
+      "bytes": 15720,
+      "sha256": "3A072BDA0F77648F7022674ABF19844D58312641BE5E59B82C68DBF2922FBD06"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/candidate_verify_after_staging.log",
+      "published": "evidence/rollback/candidate_verify_after_staging.log",
+      "bytes": 465,
+      "sha256": "20D97CEE0B6357D2A32449456AD6FB1B0EA0CCC33EB8EAA446E500B7C8C40217"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/candidate_verify_initial_preflight.log",
+      "published": "evidence/rollback/candidate_verify_initial_preflight.log",
+      "bytes": 465,
+      "sha256": "20D97CEE0B6357D2A32449456AD6FB1B0EA0CCC33EB8EAA446E500B7C8C40217"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/final_seal.json",
+      "published": "evidence/rollback/final_seal.json",
+      "bytes": 1140,
+      "sha256": "2169FBFF4BD921750FF72CA8DA52714FAF45ABA4E609C8B65C30EE8A1A360BC9"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/final_seal.sha256",
+      "published": "evidence/rollback/final_seal.sha256",
+      "bytes": 83,
+      "sha256": "3F686829983B9E23B5E7F774E7BEE65EBFB99969177282388417213A2E3FFE9E"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/flash_record.json",
+      "published": "evidence/rollback/flash_record.json",
+      "bytes": 44312,
+      "sha256": "23ABDCD2F68CCE60AED49236AC9503F9CD619ED9E174BE0F17D00DB975504F0C"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/rollback_01_vehicle_r18_read_mac_attempt_1.stderr.log",
+      "published": "evidence/rollback/rollback_01_vehicle_r18_read_mac_attempt_1.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/rollback_01_vehicle_r18_read_mac_attempt_1.stdout.log",
+      "published": "evidence/rollback/rollback_01_vehicle_r18_read_mac_attempt_1.stdout.log",
+      "bytes": 1060,
+      "sha256": "32236FB64BD4BEEB3290CE6D9291A85CF1CB43E4ADF68A8968D29C798B75F951"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/rollback_02_vehicle_r18_write_attempt_1.stderr.log",
+      "published": "evidence/rollback/rollback_02_vehicle_r18_write_attempt_1.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/rollback_02_vehicle_r18_write_attempt_1.stdout.log",
+      "published": "evidence/rollback/rollback_02_vehicle_r18_write_attempt_1.stdout.log",
+      "bytes": 3788,
+      "sha256": "3339ECCB50906D7A638D003EE96A5176555A8BB67340FC2CFFC5EAAB486D77C1"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/rollback_03_vehicle_r18_verify_attempt_1.stderr.log",
+      "published": "evidence/rollback/rollback_03_vehicle_r18_verify_attempt_1.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/rollback_03_vehicle_r18_verify_attempt_1.stdout.log",
+      "published": "evidence/rollback/rollback_03_vehicle_r18_verify_attempt_1.stdout.log",
+      "bytes": 1654,
+      "sha256": "2A75158BC7B4F6F363B85CDF9AC69959F8C4395A67A76C83DD5A230A544DA4D0"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/rollback_05_ground_r18_read_mac_attempt_1.stderr.log",
+      "published": "evidence/rollback/rollback_05_ground_r18_read_mac_attempt_1.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/rollback_05_ground_r18_read_mac_attempt_1.stdout.log",
+      "published": "evidence/rollback/rollback_05_ground_r18_read_mac_attempt_1.stdout.log",
+      "bytes": 1060,
+      "sha256": "1375312B7601B4FD1CC2F1CE23F7E1FA5D61BAE1CA81F51E451B4C45EB76EB6E"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/rollback_06_ground_r18_write_attempt_1.stderr.log",
+      "published": "evidence/rollback/rollback_06_ground_r18_write_attempt_1.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/rollback_06_ground_r18_write_attempt_1.stdout.log",
+      "published": "evidence/rollback/rollback_06_ground_r18_write_attempt_1.stdout.log",
+      "bytes": 3788,
+      "sha256": "64FB2446F24761F1C05073A9249DAF9D939C9351ECB316DCADAC33DBF8299AC5"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/rollback_07_ground_r18_verify_attempt_1.stderr.log",
+      "published": "evidence/rollback/rollback_07_ground_r18_verify_attempt_1.stderr.log",
+      "bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/rollback_07_ground_r18_verify_attempt_1.stdout.log",
+      "published": "evidence/rollback/rollback_07_ground_r18_verify_attempt_1.stdout.log",
+      "bytes": 1652,
+      "sha256": "425F3F84940AB739DFB74E2C99E77C527E965AC69B4E96A10B12725C8E9016D6"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261021T222903927Z-3fefee7b-rollback/SHA256SUMS.txt",
+      "published": "evidence/rollback/SHA256SUMS.txt",
+      "bytes": 6555,
+      "sha256": "90A377AC0A634545899E5038A2D35D051C9326ECD8A8AC9EDA8769C16EF1036C"
+    },
+    {
+      "source": "tools/invoke_r19_candidate_app_flash_hil.ps1",
+      "published": "source_snapshot/tools/invoke_r19_candidate_app_flash_hil.ps1",
+      "bytes": 72512,
+      "sha256": "0EC749D31C75807AEA8F803DAA113B47C98B5872453101528116674789396933"
+    },
+    {
+      "source": "tools/invoke_r19_jtag_preflash_gate.ps1",
+      "published": "source_snapshot/tools/invoke_r19_jtag_preflash_gate.ps1",
+      "bytes": 32779,
+      "sha256": "853A404C816D8C9C92B609FD697763977AEDE1849E87A494AEB70FBAA38F4210"
+    },
+    {
+      "source": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "published": "source_snapshot/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "bytes": 188235,
+      "sha256": "C354AF716DED0666719BC95928D3F67E744E795BD0B819C651DA482C53A073A6"
+    },
+    {
+      "source": "tools/r19_candidate_artifact_common.ps1",
+      "published": "source_snapshot/tools/r19_candidate_artifact_common.ps1",
+      "bytes": 29824,
+      "sha256": "DCE02A5C0202C9B7A206F78872D8C3954C7112954CE61F455415AD2F46FACFED"
+    },
+    {
+      "source": "tools/r19_continuous_reader.cs",
+      "published": "source_snapshot/tools/r19_continuous_reader.cs",
+      "bytes": 17494,
+      "sha256": "8DF5929114802926708BD42430CDCD7AF499B15B92EB7B7503BEF11C635B44F9"
+    },
+    {
+      "source": "tools/r19_host_readiness_wire.ps1",
+      "published": "source_snapshot/tools/r19_host_readiness_wire.ps1",
+      "bytes": 7713,
+      "sha256": "91CEEF26F4CFF3E8DED4C6132CD274BDC325051592715D70CBAF08CDF71BCBE4"
+    },
+    {
+      "source": "tools/r19_host_readiness_workflow.ps1",
+      "published": "source_snapshot/tools/r19_host_readiness_workflow.ps1",
+      "bytes": 12934,
+      "sha256": "1B0740C84FE8B54C8F573846E6EBCDCDA7DF330565833500F1EE557CF11BD099"
+    },
+    {
+      "source": "tools/r19_startup_reader.cs",
+      "published": "source_snapshot/tools/r19_startup_reader.cs",
+      "bytes": 7610,
+      "sha256": "939EF6C3333B1BC67782CFB02AEBFBC067EE6AAC7C789FB171F06C2B9F8A8C2E"
+    },
+    {
+      "source": "tools/r19_timed_path_acquisition.ps1",
+      "published": "source_snapshot/tools/r19_timed_path_acquisition.ps1",
+      "bytes": 28193,
+      "sha256": "7DAF7E0E086CE15C5AA50D0497478571455C2CA83912C224A87B55BF0E148015"
+    },
+    {
+      "source": "tools/r19_timed_path_outer.ps1",
+      "published": "source_snapshot/tools/r19_timed_path_outer.ps1",
+      "bytes": 5797,
+      "sha256": "2DD23D0048277343732AFFF3B7FAB371D48BBA8214085270A2471CBBDCBBAF56"
+    },
+    {
+      "source": "tools/r19_timed_path_trace.ps1",
+      "published": "source_snapshot/tools/r19_timed_path_trace.ps1",
+      "bytes": 22932,
+      "sha256": "09786F523F0A5DDBC7B84B377E620886A574D552CABBF5EA5CEE5B4F2890660A"
+    },
+    {
+      "source": "tools/r19_usb_clock_correlation.ps1",
+      "published": "source_snapshot/tools/r19_usb_clock_correlation.ps1",
+      "bytes": 12420,
+      "sha256": "B6759C777FCC4C3F2BB3F8D8DA7A890EF54043CA5ECC4A3DC1EB2937FB8DD1D1"
+    },
+    {
+      "source": "tools/read_r19_first_usb_failure_record.ps1",
+      "published": "source_snapshot/tools/read_r19_first_usb_failure_record.ps1",
+      "bytes": 8232,
+      "sha256": "E11CDBF18EFA90F22BC9E69ADF357FD795396725EC0D2B091C759A69A929E47D"
+    },
+    {
+      "source": "tools/read_r19_runtime_stage_jtag.ps1",
+      "published": "source_snapshot/tools/read_r19_runtime_stage_jtag.ps1",
+      "bytes": 134314,
+      "sha256": "A94F5A76DE6A2A4162C5C01E137CB4411D8231C45D7C484EE3E210A5C131F145"
+    },
+    {
+      "source": "tools/read_r19_timed_path_record.ps1",
+      "published": "source_snapshot/tools/read_r19_timed_path_record.ps1",
+      "bytes": 5949,
+      "sha256": "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C"
+    },
+    {
+      "source": "tools/run_r19_timed_path_capture.ps1",
+      "published": "source_snapshot/tools/run_r19_timed_path_capture.ps1",
+      "bytes": 22378,
+      "sha256": "056F0F41F9A4BEADE5BC65D203EA0D09C313880F72DB706755FD9696247575A5"
+    },
+    {
+      "source": "tools/verify_r19_candidate_artifact.ps1",
+      "published": "source_snapshot/tools/verify_r19_candidate_artifact.ps1",
+      "bytes": 40125,
+      "sha256": "66DFCFC5B7E59D4B51B704F098ED5A1912312188A2785E1ED2DD59A3B55DE2F2"
+    },
+    {
+      "source": "tests/hil/check_r19_timed_path_acquisition.ps1",
+      "published": "source_snapshot/tests/hil/check_r19_timed_path_acquisition.ps1",
+      "bytes": 19811,
+      "sha256": "4C58393B1D24C30EA4D99EB7A5FD21D7BF1DBFDA5339B1AB0C57ABCF2DCD671C"
+    },
+    {
+      "source": "tests/hil/check_r19_timed_path_capture_entrypoint.ps1",
+      "published": "source_snapshot/tests/hil/check_r19_timed_path_capture_entrypoint.ps1",
+      "bytes": 12239,
+      "sha256": "1B16831CA650C1817B2B91CF950EED5EC61571156FD76F9C6262E7E112B5B808"
+    },
+    {
+      "source": "tests/hil/check_r19_timed_path_capture_persistence.ps1",
+      "published": "source_snapshot/tests/hil/check_r19_timed_path_capture_persistence.ps1",
+      "bytes": 26617,
+      "sha256": "E13EC3592D5DDB86140B64192B19ADED7D07213FF653678072EF9EDB7C513C79"
+    },
+    {
+      "source": "tests/hil/check_r19_timed_path_outer.ps1",
+      "published": "source_snapshot/tests/hil/check_r19_timed_path_outer.ps1",
+      "bytes": 5362,
+      "sha256": "FE33FC18EC856DFAFC28F7433853D402238F730F8DFD513D689D598F8FF953BD"
+    },
+    {
+      "source": "core/src/runtime_contract.cpp",
+      "published": "source_snapshot/core/src/runtime_contract.cpp",
+      "bytes": 7792,
+      "sha256": "1DDA0464CFFAEABF68F3782593C607965144AC2BF5DD774C77888847DEA668B5"
+    },
+    {
+      "source": "core/include/vc_lora/runtime_contract.hpp",
+      "published": "source_snapshot/core/include/vc_lora/runtime_contract.hpp",
+      "bytes": 13903,
+      "sha256": "4C1E05D03E72A40660971CFDE65EDC6901B5589C1990295A99F208B03D1CA2CF"
+    },
+    {
+      "source": "core/include/vc_lora/tdd_control_codec.hpp",
+      "published": "source_snapshot/core/include/vc_lora/tdd_control_codec.hpp",
+      "bytes": 1310,
+      "sha256": "608689BE3549D874A19A51725EA36879DDAD19F0476F43B0B7FED9357F8D0C76"
+    },
+    {
+      "source": "core/include/vc_lora/tdd_types.hpp",
+      "published": "source_snapshot/core/include/vc_lora/tdd_types.hpp",
+      "bytes": 5535,
+      "sha256": "BD428D8153726964DDE609AFF12ECB8FF3D5D4171092C274125938746C4EBE95"
+    },
+    {
+      "source": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "published": "source_snapshot/firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "bytes": 253983,
+      "sha256": "88DA2BEA50938D5CA83AEB715288F7D517B096098DF7B44556456DB3AAA77B6F"
+    }
+  ],
+  "file_count": 172,
+  "bytes": 1911039
+}

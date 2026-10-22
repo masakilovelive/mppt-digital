@@ -1,0 +1,11 @@
+{
+    "schema":  "vc-lora-r19-timed-path-persistence-regression-v1",
+    "result":  "RED",
+    "runner_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001\\20261021T161610Z\\before\\tools\\run_r19_timed_path_capture.ps1",
+    "runner_sha256":  "6937254E1AD45E756B8D2B6C33CE8E61A756891EB820E07D74FDDCDDE81D2EA5",
+    "powershell_version":  "5.1.26100.9711",
+    "exception":  "Cannot convert the \"VcLora.R19.ContinuousReadBlock\" value of type \"VcLora.R19.ContinuousReadBlock\" to type \"System.Byte[]\".",
+    "hardware_interaction":  false,
+    "expected_failure_reproduced":  true,
+    "checks":  31
+}

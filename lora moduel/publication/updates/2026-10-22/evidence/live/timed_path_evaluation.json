@@ -1,0 +1,75 @@
+{
+    "schema":  "vc-lora-r19-timed-path-normalization-v1",
+    "evidence":  {
+                     "schema":  "vc-lora-r19-timed-path-evidence-v1",
+                     "identity":  null,
+                     "clock_correlation":  null,
+                     "trace_complete":  false,
+                     "trace_overflow":  false,
+                     "events":  [
+
+                                ]
+                 },
+    "evaluation":  {
+                       "schema":  "vc-lora-r19-timed-path-evaluation-v1",
+                       "mode":  "OFFLINE_ONLY",
+                       "classification":  "TRACE_INCOMPLETE",
+                       "identity":  null,
+                       "last_observed_mcu_stage":  "NONE",
+                       "observed_stages":  [
+
+                                           ],
+                       "missing_stages":  [
+                                              "PC_READ_STARTED",
+                                              "MCU_ARM_ACCEPTED",
+                                              "MCU_FRAME_ENQUEUED",
+                                              "MCU_HWCDC_ACCEPTED",
+                                              "MCU_USB_PUBLISHED",
+                                              "MCU_USB_PICKUP_OBSERVED",
+                                              "MCU_USB_COMPLETED",
+                                              "MCU_USB_FAILED",
+                                              "PC_FRAME_VALIDATED"
+                                          ],
+                       "event_timeline":  [
+
+                                          ],
+                       "mcu_deltas":  [
+
+                                      ],
+                       "mcu_clock_continuity_verified":  false,
+                       "failure_elapsed_us":  null,
+                       "pc_frame_validated":  false,
+                       "local_usb_completed":  false,
+                       "clock_bounds_valid":  false,
+                       "clock_mapping_reasons":  [
+
+                                                 ],
+                       "trace_complete":  false,
+                       "trace_overflow":  false,
+                       "hardware_interaction":  false,
+                       "physical_fifo_fault_proven":  false,
+                       "kernel_pending_read_proven":  false,
+                       "root_cause_proven":  false,
+                       "acceptance_eligible":  false,
+                       "deployment_authorized":  false,
+                       "rf_status":  "NOT_EVALUATED",
+                       "parameters_status":  "NOT_EVALUATED",
+                       "limitations":  [
+                                           "This evaluates supplied records only. SHA256 syntax and equality establish claimed joins, not authenticity, ownership or acquisition provenance.",
+                                           "PC_READ_STARTED has a post-hoc frame tuple join; it does not prove that this frame was known at reader startup, a kernel-pending Read, or physical host polling.",
+                                           "Only a continuous common MCU_US clock establishes MCU elapsed times; SDK millis32 values cannot be substituted for caller 64-bit microseconds.",
+                                           "Every mapped MCU_US boundary must use the same continuous 64-bit microsecond clock and the common quantization bound supplied as observation.failure.quantization_us. Per-stage or SDK millisecond timestamps with different bounds are not interchangeable.",
+                                           "Mixed-domain array ordinals are acquisition indices, never a PC-to-MCU execution order. Clock bounds retain guaranteed-error and continuity assumptions.",
+                                           "Host ARM before a failure narrows an observed boundary; ARM after a failure calls for gate/binding review. Neither establishes host-readiness causation.",
+                                           "Publication and pickup counters, zero ring/stash byte counts, and later FIFO snapshots do not locate a physical FIFO fault or prove payload transmission. Counter subtraction is not missing-byte accounting.",
+                                           "MCU_HWCDC_ACCEPTED is one final cumulative acceptance observation for this bound frame, not a partial in-progress chunk. MCU_USB_PICKUP_OBSERVED is a counter observation only; a publish/pickup gap does not prove matching transaction pickup.",
+                                           "Missing stages are unobserved, not necessarily failed. MCU_USB_COMPLETED and MCU_USB_FAILED are alternative local terminals, not two required success stages.",
+                                           "Later complete CRC-valid PC reception cannot erase an earlier recorded local completion failure. Product Heartbeat and diagnostic frames are distinct transactions.",
+                                           "MCU_USB_FAILED covers only the 106 ms PRODUCT_HEARTBEAT contract. DIAGNOSTIC partial/success observations are permitted, but diagnostic failures and their separate 500 ms budget are not modeled or reinterpreted as product failures.",
+                                           "The frame enqueue timestamp is a prior-to-exposure boundary for this transaction. A strictly earlier bound PC frame validation is inconsistent evidence; equal or overlapping intervals do not establish order. A PC read may precede the later local flush return, which is not compared as a physical delivery boundary.",
+                                           "Local USB completion, PC frame validation, RF delivery and 932-parameter acquisition are separate layers; this trace cannot authorize acceptance or deployment."
+                                       ]
+                   },
+    "binding_status":  "MISSING_BOUND_FRAME_OR_SESSION",
+    "hardware_interaction":  false
+}

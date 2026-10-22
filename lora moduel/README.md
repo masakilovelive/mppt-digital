@@ -1,25 +1,28 @@
 # VC LoRa Bridge — 検証実験アーカイブ
 
-2026-10-21時点のLoRa通信検証・R19診断開発を、指定フォルダ `lora moduel` にまとめた公開スナップショットです。
-今回は資料・ソース・選別した証拠の公開のみで、ファームウェアの変更、実機操作、通信条件変更は行っていません。
+2026-10-22更新。LoRa通信検証・R19診断開発を、指定フォルダ `lora moduel` にまとめた公開アーカイブです。
+最新は[保存修正とAUX判定の切分け](publication/updates/2026-10-22/README.md)です。今回の公開操作自体では、ファームウェア変更・実機操作・通信条件変更を行っていません。
+直下のソースは既存の公開スナップショットを保持し、今回の測定ツール等は同更新内の `source_snapshot/` へ分離しています。
 
 ## 現在の結論
 
 - R18低速経路には、Mission Plannerで932/932パラメータを取得した過去の受入実績があります。取得時間6,045.839秒、同区間のHeartbeat最大間隔2,206.203 msです。
 - R19の目標は「932件を30秒以内、Heartbeat最大2,500 ms以下、全error 0」の同時達成ですが、**未達・受入未完了・Deployment未許可**です。
-- 直近のR19診断では、Groundの初回Heartbeat 21 byteをUSBライブラリが受理した後、プロジェクト固有の106 ms完了条件を満たさず停止した証拠があります。これはRF故障やPC読取り不良の確定ではありません。
-- その後の別の受信専用確認では、COM6を60.011493秒開いて受信0 byte／送信0 byteでした。この時の搭載ファームウェアhashは未照合で、過去R19と同一原因とは判定できません。
-- 最新のUSB-JTAG接続確認は両機PASSですが、CPU・USB FIFO・無線・MAVLink通信の正常性を証明したものではありません。
+- 最新の40.0119898秒試験は、Vehicle 2,646 byte／Ground 154 byteと両機の内部記録を保存し、両機をaccepted R18へ復旧しました。保存修正は実機でも機能しましたが、製品通信の受入PASSではありません。
+- GroundはAUXのHIGH安定条件を2秒以内に確認できず安全停止しました。時刻応答はPCへ届きましたが、READY未受信・ARM未成立で、今回の製品106 ms条件・932件30秒取得は未評価です。
+- 製品コアの合成入力10ケース153チェックで、実Busy継続の仮定とMCU観測遅延の仮定の両方から同じAUX異常を再現しました。今回の実機にはAUXエッジ・観測時刻がなく、どちらだったかは未確定です。
+- 過去には、Groundの初回Heartbeat 21 byteをUSBライブラリが受理した後、プロジェクト固有の106 ms完了条件を満たさず停止した証拠があります。今回のAUX停止と同一原因とは断定しません。
 
-詳しい現状・時系列は[作業場所と仕様の統合資料](CURRENT_WORKSPACE_AND_SPEC_R19.md)の§31.55〜31.60、図解は[通信シーケンス図](docs/SEQUENCE_DIAGRAMS.md)を参照してください。
+最新結果は[2026年10月22日の更新](publication/updates/2026-10-22/README.md)、従来の仕様・時系列は[作業場所と仕様の統合資料](CURRENT_WORKSPACE_AND_SPEC_R19.md)、過去の図解は[通信シーケンス図](docs/SEQUENCE_DIAGRAMS.md)を参照してください。
 後日更新された本資料と古いレポートで内容が異なる場合は、対象run・ソースhash・観測時刻を確認し、異なる試験を混同しないでください。
 
 ## 読む順番
 
 | ファイル／ディレクトリ | 内容 |
 |---|---|
+| [publication/updates/2026-10-22/](publication/updates/2026-10-22/) | 最新の実機保存確認、AUX切分け、原本記録、今回の測定ツール選別コピー |
 | [CURRENT_WORKSPACE_AND_SPEC_R19.md](CURRENT_WORKSPACE_AND_SPEC_R19.md) | 作業場所、固定仕様、受入実績、未解決事項、履歴 |
-| [docs/SEQUENCE_DIAGRAMS.md](docs/SEQUENCE_DIAGRAMS.md) | 現在の0 byte、過去R19のUSB完了失敗、JTAGの判定範囲 |
+| [docs/SEQUENCE_DIAGRAMS.md](docs/SEQUENCE_DIAGRAMS.md) | 過去の0 byte、R19のUSB完了失敗、JTAGの判定範囲 |
 | [SPEC.md](SPEC.md) / [PROTOCOL.md](PROTOCOL.md) | 製品仕様・通信プロトコル |
 | [PROJECT_README.md](PROJECT_README.md) | 元ワークスペースのREADME。古い段階の説明も含むため、現在判定は上記統合資料を優先 |
 | [core/](core/) | Arduino非依存の通信・TDD・schedulerコア |
@@ -90,9 +93,9 @@ SDKへのインストール・COM操作・書込みを行うツールは純オ�
 
 ## 今後の残作業
 
-1. PC読取り準備、機器ARM受理、初回製品enqueue、USB完了を同じbuild／boot／USB epochで結合して記録する。
-2. その固定記録をstrict decoder・manifest・JTAG取得へ統合し、mode別候補と専用live runnerを準備する。
-3. 許可・安全条件・cold boot・復旧条件をそろえた実機比較で、準備前の失敗と準備後のUSB停止を切り分ける。
+1. AUXエッジ、MCUの観測間隔、初回fault瞬間の状態を記録し、実Busy継続と観測遅延を切り分ける。
+2. 時刻応答のUSB完了確認、READY生成・送出、ARM受理のどこで止まるかを別に記録する。
+3. 許可・安全条件・cold boot・R18復旧条件をそろえ、初回製品frameと時刻付き記録を結合する実機比較を行う。
 4. 診断成立後、別の製品経路受入で932件／30秒／Heartbeat／全error 0を同時評価する。
 
 PowerShellは現時点ではPC側の開発・試験・証拠保存・復旧用です。
@@ -104,7 +107,7 @@ Jevは任意のPC側Shadow助言機能であり、製品の判定・実機操作
 - 元ワークスペース全体ではありません。巨大なbuild tree、全run履歴、Arduino compiler生成物、driver配布ZIP、APIキー、履歴・画面画像等は除外しました。
 - raw診断の小さな`.bin`と、一部の過去R18 run内に保存されたaccepted application imageは、そのrunの証拠整合のため保持しています。
 - R19のsealed candidate一式、復旧用baselineの完全な依存関係、ローカルtoolchainは同梱していません。**このcloneをそのまま実機書込み可能な認証済みパッケージとして扱わないでください。**
-- 選別したvalidationのmanifestやsealは省略ファイルも参照し得ます。公開コピー全体の同梱範囲は`publication/source_inventory.json`で区別します。
+- 選別したvalidationのmanifestやsealは省略ファイルも参照し得ます。初回公開分は`publication/source_inventory.json`、今回の追加原本は`publication/updates/2026-10-22/source_inventory.json`で区別します。初回公開の検証結果を、今回の追加物すべての再検証結果へ読み替えないでください。
 - 変更済みEspressifファイルのライセンス・帰属は[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)を参照。プロジェクト全体への新しいライセンス付与は行っていません。
 - GitHubへの公開・記載された過去の許可文言は、将来の実機操作・再試験の許可にはなりません。
 

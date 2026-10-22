@@ -1,0 +1,28 @@
+{
+  "schema": "vc-lora-r19-timed-path-default-off-compile-v1",
+  "hardware_interaction": false,
+  "flash_attempted": false,
+  "production_sketches_modified": false,
+  "canonical_bridge_compiled": true,
+  "cases": [
+    {
+      "role": "vehicle",
+      "success": true,
+      "exit_code": 0,
+      "elapsed_ms": 247925.3618,
+      "binary_bytes": 390768,
+      "binary_sha256": "CF51148C4D6152185C5AA070A100E7E00CBC4EFAD90C709487CF9EDC0F070580",
+      "canonical_bridge_sha256": "88DA2BEA50938D5CA83AEB715288F7D517B096098DF7B44556456DB3AAA77B6F"
+    },
+    {
+      "role": "ground",
+      "success": true,
+      "exit_code": 0,
+      "elapsed_ms": 322467.0843,
+      "binary_bytes": 360992,
+      "binary_sha256": "6A03F6E4719246626B3F753A8A0236F98F6B7E66CCD13EB22C92B41AF9D035BB",
+      "canonical_bridge_sha256": "88DA2BEA50938D5CA83AEB715288F7D517B096098DF7B44556456DB3AAA77B6F"
+    }
+  ],
+  "result": "PASS"
+}

@@ -1,0 +1,715 @@
+﻿{
+    "schema":  "vc-lora-r19-runtime-stage-jtag-read-v6",
+    "result":  "PASS",
+    "mode":  "live-jtag",
+    "generated_at_utc":  "2026-10-21T22:31:23.3240791Z",
+    "hardware_interaction":  true,
+    "safety":  {
+                   "com_opened":  false,
+                   "flash_written":  false,
+                   "target_restart_issued":  false,
+                   "halted_for_reads":  true,
+                   "two_identical_reads":  true,
+                   "resume_shutdown_cleanup_attempted":  true,
+                   "resume_shutdown_cleanup_proven":  true,
+                   "capture_process_termination_proven":  true,
+                   "native_processes_termination_proven":  true,
+                   "target_may_be_halted":  false,
+                   "bounded_snapshot_attempts":  1
+               },
+    "binding":  {
+                    "artifact_id":  "20261021T124607243Z-f0aa9080",
+                    "role":  "vehicle",
+                    "address":  "0x3fcab880",
+                    "runtime_stage_address":  "0x3fcab880",
+                    "endpoint_fifo_address":  "0x3fcabc74",
+                    "probe":  {
+                                  "requested_serial":  "90:70:69:11:81:a4",
+                                  "requested_usb_location":  "1-4.2",
+                                  "opened_identity_proven_before_halt":  true,
+                                  "opened_serial":  "90:70:69:11:81:a4",
+                                  "opened_usb_location":  "1-4.2"
+                              },
+                    "artifact":  {
+                                     "root":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080",
+                                     "artifact_id":  "20261021T124607243Z-f0aa9080",
+                                     "role":  "vehicle",
+                                     "address":  "0x3fcab880",
+                                     "runtime_stage_address":  "0x3fcab880",
+                                     "endpoint_fifo_address":  "0x3fcabc74",
+                                     "manifest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\candidate_manifest.json",
+                                     "manifest_sha256":  "CDFB852AB49FB77DD684EC52F8FA4C2944D9710BAB2754D517EAA3D80076536D",
+                                     "final_seal_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\final_seal.json",
+                                     "final_seal_sha256":  "EFB3670E79AF8707EDBF7BD734A9545DD1893BE7751D75FAFDF033AD3C96AF49",
+                                     "application_sha256":  "D28EE6969DFA12CD11571962E260BDB29E2C640BD01FFD16CCBB6BCB553CE47A",
+                                     "application_size_bytes":  441440,
+                                     "first_usb_failure_enabled":  true,
+                                     "timed_path_enabled":  true,
+                                     "elf_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\evidence\\build\\vehicle\\application.elf",
+                                     "elf_sha256":  "5E47072A9FE2E95C967502DBF6D7F839EBF5F0D70CDBEF5DC9A916FC88CD2C16",
+                                     "symbol_size_bytes":  68,
+                                     "symbols":  {
+                                                     "runtime_stage":  {
+                                                                           "name":  "vc_lora_r19_runtime_stage_record",
+                                                                           "address":  "0x3fcab880",
+                                                                           "size_bytes":  68,
+                                                                           "aligned_32_bit":  true
+                                                                       },
+                                                     "endpoint_fifo":  {
+                                                                           "name":  "vc_lora_r19_hwcdc_fifo_diagnostic_record",
+                                                                           "address":  "0x3fcabc74",
+                                                                           "size_bytes":  112,
+                                                                           "aligned_32_bit":  true
+                                                                       },
+                                                     "timed_path":  {
+                                                                        "name":  "vc_lora_r19_timed_path_record",
+                                                                        "address":  "0x3fcab480",
+                                                                        "size_bytes":  512,
+                                                                        "aligned_32_bit":  true
+                                                                    },
+                                                     "hwcdc_restart":  {
+                                                                           "name":  "vc_lora_r19_hwcdc_restart_diagnostic_record",
+                                                                           "address":  "0x3fcabbf4",
+                                                                           "size_bytes":  128,
+                                                                           "aligned_32_bit":  true
+                                                                       },
+                                                     "ground_usb_commit":  {
+                                                                               "name":  "vc_lora_r19_ground_usb_commit_record",
+                                                                               "address":  "0x3fcab800",
+                                                                               "size_bytes":  128,
+                                                                               "aligned_32_bit":  true
+                                                                           },
+                                                     "first_usb_failure":  {
+                                                                               "name":  "vc_lora_r19_first_usb_failure_record",
+                                                                               "address":  "0x3fcab680",
+                                                                               "size_bytes":  384,
+                                                                               "aligned_32_bit":  true
+                                                                           }
+                                                 },
+                                     "nm_path":  "C:\\Users\\user\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\esp-x32\\2601\\bin\\xtensa-esp32s3-elf-nm.exe",
+                                     "nm_sha256":  "AC8D55C45DBCAEFE082299357245D7F12786C61A4E3C06A8E21F31D6890FB29E",
+                                     "map_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\evidence\\build\\vehicle\\application.map",
+                                     "map_sha256":  "15A9C6FFDF08035E26EF15561EB2EF7D77FD52FCC6E0CA562BDECE901891D25F",
+                                     "timed_path_address":  "0x3fcab480",
+                                     "timed_path_diagnostics":  {
+                                                                    "schema":  "vc-lora-r19-timed-path-candidate-v1",
+                                                                    "enabled":  true,
+                                                                    "mode":  "ExplicitHostArm",
+                                                                    "mode_value":  2,
+                                                                    "macro":  "VC_LORA_R19_TIMED_PATH_DIAGNOSTICS",
+                                                                    "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v6",
+                                                                    "record":  {
+                                                                                   "symbol":  "vc_lora_r19_timed_path_record",
+                                                                                   "schema_version":  1,
+                                                                                   "size_bytes":  512
+                                                                               },
+                                                                    "decoder":  {
+                                                                                    "path":  "tools/read_r19_timed_path_record.ps1",
+                                                                                    "sha256":  "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C"
+                                                                                }
+                                                                },
+                                     "extended_records_enabled":  true,
+                                     "extended_record_metadata":  {
+                                                                      "schema":  "vc-lora-r19-runtime-diagnostic-symbols-v1",
+                                                                      "elf_sha256":  "5E47072A9FE2E95C967502DBF6D7F839EBF5F0D70CDBEF5DC9A916FC88CD2C16",
+                                                                      "map_sha256":  "15A9C6FFDF08035E26EF15561EB2EF7D77FD52FCC6E0CA562BDECE901891D25F",
+                                                                      "application_sha256":  "D28EE6969DFA12CD11571962E260BDB29E2C640BD01FFD16CCBB6BCB553CE47A",
+                                                                      "symbols":  {
+                                                                                      "runtime_stage":  {
+                                                                                                            "name":  "vc_lora_r19_runtime_stage_record",
+                                                                                                            "address":  "0x3fcab880",
+                                                                                                            "size_bytes":  68,
+                                                                                                            "aligned_32_bit":  true
+                                                                                                        },
+                                                                                      "endpoint_fifo":  {
+                                                                                                            "name":  "vc_lora_r19_hwcdc_fifo_diagnostic_record",
+                                                                                                            "address":  "0x3fcabc74",
+                                                                                                            "size_bytes":  112,
+                                                                                                            "aligned_32_bit":  true
+                                                                                                        },
+                                                                                      "hwcdc_restart":  {
+                                                                                                            "name":  "vc_lora_r19_hwcdc_restart_diagnostic_record",
+                                                                                                            "address":  "0x3fcabbf4",
+                                                                                                            "size_bytes":  128,
+                                                                                                            "aligned_32_bit":  true
+                                                                                                        },
+                                                                                      "ground_usb_commit":  {
+                                                                                                                "name":  "vc_lora_r19_ground_usb_commit_record",
+                                                                                                                "address":  "0x3fcab800",
+                                                                                                                "size_bytes":  128,
+                                                                                                                "aligned_32_bit":  true
+                                                                                                            },
+                                                                                      "first_usb_failure":  {
+                                                                                                                "name":  "vc_lora_r19_first_usb_failure_record",
+                                                                                                                "address":  "0x3fcab680",
+                                                                                                                "size_bytes":  384,
+                                                                                                                "aligned_32_bit":  true
+                                                                                                            },
+                                                                                      "timed_path":  {
+                                                                                                         "name":  "vc_lora_r19_timed_path_record",
+                                                                                                         "address":  "0x3fcab480",
+                                                                                                         "size_bytes":  512,
+                                                                                                         "aligned_32_bit":  true
+                                                                                                     }
+                                                                                  }
+                                                                  },
+                                     "hwcdc_restart_address":  "0x3fcabbf4",
+                                     "ground_usb_commit_address":  "0x3fcab800",
+                                     "handoff_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\handoff.json",
+                                     "handoff_sha256":  "C30EBD31BF77FEBAB2D5B79699DB8762CBAEAAB196669C6CBF0CABFAD893DB0B",
+                                     "first_usb_failure_address":  "0x3fcab680",
+                                     "first_usb_failure_decoder":  {
+                                                                       "path":  "tools/read_r19_first_usb_failure_record.ps1",
+                                                                       "sha256":  "E11CDBF18EFA90F22BC9E69ADF357FD795396725EC0D2B091C759A69A929E47D"
+                                                                   }
+                                 },
+                    "flash":  {
+                                  "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261021T222903927Z-3fefee7b-install\\flash_record.json",
+                                  "sha256":  "CC1444B06584163AB6E81483145248171D7B29B35CD788145C4006B5AA833583",
+                                  "role":  "vehicle",
+                                  "port":  "COM3",
+                                  "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                                  "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                                  "probe_serial":  "90:70:69:11:81:a4",
+                                  "application_sha256":  "D28EE6969DFA12CD11571962E260BDB29E2C640BD01FFD16CCBB6BCB553CE47A"
+                              },
+                    "hwcdc_restart_address":  "0x3fcabbf4",
+                    "ground_usb_commit_address":  "0x3fcab800",
+                    "first_usb_failure_address":  "0x3fcab680",
+                    "first_usb_failure_decoder":  {
+                                                      "path":  "tools/read_r19_first_usb_failure_record.ps1",
+                                                      "sha256":  "E11CDBF18EFA90F22BC9E69ADF357FD795396725EC0D2B091C759A69A929E47D"
+                                                  },
+                    "timed_path_diagnostics":  {
+                                                   "schema":  "vc-lora-r19-timed-path-candidate-v1",
+                                                   "enabled":  true,
+                                                   "mode":  "ExplicitHostArm",
+                                                   "mode_value":  2,
+                                                   "macro":  "VC_LORA_R19_TIMED_PATH_DIAGNOSTICS",
+                                                   "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v6",
+                                                   "record":  {
+                                                                  "symbol":  "vc_lora_r19_timed_path_record",
+                                                                  "schema_version":  1,
+                                                                  "size_bytes":  512
+                                                              },
+                                                   "decoder":  {
+                                                                   "path":  "tools/read_r19_timed_path_record.ps1",
+                                                                   "sha256":  "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C"
+                                                               }
+                                               },
+                    "timed_path_address":  "0x3fcab480"
+                },
+    "reads":  [
+                  {
+                      "record":  "runtime_stage",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\runtime-stage-first.bin",
+                      "size_bytes":  68,
+                      "sha256":  "86B7393A9FD9F484D634BB4DE07F3DFA505BFE8B619CDA1F6E6B1889AA052B58"
+                  },
+                  {
+                      "record":  "endpoint_fifo",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\endpoint-fifo-first.bin",
+                      "size_bytes":  112,
+                      "sha256":  "074D3FBAFF6D19CAFD9D77FC27DDF674E63C74534A1A7825801A2BA6ADEE9B09"
+                  },
+                  {
+                      "record":  "hwcdc_restart",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\hwcdc-restart-first.bin",
+                      "size_bytes":  128,
+                      "sha256":  "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80"
+                  },
+                  {
+                      "record":  "ground_usb_commit",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\ground-usb-commit-first.bin",
+                      "size_bytes":  128,
+                      "sha256":  "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+                  },
+                  {
+                      "record":  "first_usb_failure",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\first-usb-failure-first.bin",
+                      "size_bytes":  384,
+                      "sha256":  "CBE38FA5B347A96A02B20E015EE9D3880F9525AF28637FB17224DD441CA2CF31"
+                  },
+                  {
+                      "record":  "runtime_stage",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\runtime-stage-second.bin",
+                      "size_bytes":  68,
+                      "sha256":  "86B7393A9FD9F484D634BB4DE07F3DFA505BFE8B619CDA1F6E6B1889AA052B58"
+                  },
+                  {
+                      "record":  "endpoint_fifo",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\endpoint-fifo-second.bin",
+                      "size_bytes":  112,
+                      "sha256":  "074D3FBAFF6D19CAFD9D77FC27DDF674E63C74534A1A7825801A2BA6ADEE9B09"
+                  },
+                  {
+                      "record":  "hwcdc_restart",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\hwcdc-restart-second.bin",
+                      "size_bytes":  128,
+                      "sha256":  "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80"
+                  },
+                  {
+                      "record":  "ground_usb_commit",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\ground-usb-commit-second.bin",
+                      "size_bytes":  128,
+                      "sha256":  "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+                  },
+                  {
+                      "record":  "first_usb_failure",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\first-usb-failure-second.bin",
+                      "size_bytes":  384,
+                      "sha256":  "CBE38FA5B347A96A02B20E015EE9D3880F9525AF28637FB17224DD441CA2CF31"
+                  },
+                  {
+                      "record":  "timed_path",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\timed_path_first.bin",
+                      "size_bytes":  512,
+                      "sha256":  "44EA765E39263DB982A6D4CC7B71615599A0EF31AAC18BD28FFCBFA15E83EF3D"
+                  },
+                  {
+                      "record":  "timed_path",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\timed_path_second.bin",
+                      "size_bytes":  512,
+                      "sha256":  "44EA765E39263DB982A6D4CC7B71615599A0EF31AAC18BD28FFCBFA15E83EF3D"
+                  }
+              ],
+    "decoded":  {
+                    "active_writer":  0,
+                    "sequence":  6319856,
+                    "magic":  "0x52313953",
+                    "schema":  1,
+                    "role":  "vehicle",
+                    "build_fingerprint":  [
+                                              "0x52313944",
+                                              "0x53544731",
+                                              "0x32303236",
+                                              "0x31303033"
+                                          ],
+                    "stage_mask":  "0x0001ffff",
+                    "reached_stages":  [
+                                           "SetupEntered",
+                                           "SerialBeginReturned",
+                                           "CadenceStarted",
+                                           "IdentityReady",
+                                           "E220ProfileChecked",
+                                           "StartupAllowed",
+                                           "E220NormalMode",
+                                           "AdapterReady",
+                                           "SetupComplete",
+                                           "LoopEntered",
+                                           "HostGateObserved",
+                                           "FrameStaged",
+                                           "WriteAttempted",
+                                           "WriteAccepted",
+                                           "FlushCompleted",
+                                           "TransportRecoveryEntered",
+                                           "TransportRecoveryCompleted"
+                                       ],
+                    "last_reached_stage":  "TransportRecoveryCompleted",
+                    "mandatory_setup_witnesses":  {
+                                                      "setup_entered":  true,
+                                                      "serial_begin_returned":  true,
+                                                      "cadence_started":  true,
+                                                      "startup_allowed":  true,
+                                                      "e220_normal_mode":  true,
+                                                      "adapter_ready":  true,
+                                                      "setup_complete":  true
+                                                  },
+                    "conditional_setup_witnesses":  {
+                                                        "IdentityReady":  true,
+                                                        "E220ProfileChecked":  true
+                                                    },
+                    "missing_mandatory_setup_witnesses":  [
+
+                                                          ],
+                    "boundary_classification":  "flush-completed",
+                    "counters":  {
+                                     "boot":  1,
+                                     "loop":  1576793,
+                                     "publish_attempt":  95,
+                                     "exact_frame_restart":  4
+                                 },
+                    "first_failure":  {
+                                          "code":  "0x54520010",
+                                          "name":  "FlushFailed",
+                                          "stage_mask":  "0x00007fff",
+                                          "detail":  2620
+                                      },
+                    "endpoint_fifo":  {
+                                          "active_writer":  0,
+                                          "sequence":  42316,
+                                          "magic":  "0x48313946",
+                                          "schema":  2,
+                                          "state_semantics":  "last-committed-diagnostic-event-not-live-hardware-state",
+                                          "flags":  {
+                                                        "mask":  "0x00002417",
+                                                        "names":  [
+                                                                      "Initialized",
+                                                                      "ObservationActive",
+                                                                      "Connected",
+                                                                      "PayloadInFlight",
+                                                                      "FlushActive",
+                                                                      "PayloadFlushPending"
+                                                                  ],
+                                                        "initialized":  true,
+                                                        "observation_active":  true,
+                                                        "diagnostic_observation_window_started":  true,
+                                                        "fifo_write_attempt_observed":  true,
+                                                        "positive_fifo_write_observed":  true,
+                                                        "wr_done_observed":  true,
+                                                        "payload_pickup_observed":  true,
+                                                        "connected":  true,
+                                                        "fifo_writable":  false,
+                                                        "payload_in_flight":  true,
+                                                        "fifo_quarantined":  false,
+                                                        "reset_pending":  false,
+                                                        "bootstrap_fence":  false,
+                                                        "bootstrap_aborted":  false,
+                                                        "debug_writer_active":  false,
+                                                        "last_event_bus_reset":  false,
+                                                        "flush_active":  true,
+                                                        "payload_publish_pending":  false,
+                                                        "payload_publish_aborted":  false,
+                                                        "payload_flush_pending":  true
+                                                    },
+                                          "tx_loss_epoch":  1,
+                                          "counters":  {
+                                                           "fifo_write_attempt":  105,
+                                                           "fifo_write_bytes":  2993,
+                                                           "fifo_zero_write":  0,
+                                                           "wr_done":  105,
+                                                           "in_empty_irq":  105,
+                                                           "payload_in_empty":  104,
+                                                           "bus_reset":  0,
+                                                           "flush_attempt":  247,
+                                                           "flush_success":  47,
+                                                           "flush_timeout":  199,
+                                                           "flush_abort_inferred":  0,
+                                                           "zlp_flush":  0
+                                                       },
+                                          "last_fifo_write_size":  32,
+                                          "generations":  {
+                                                              "publish":  105,
+                                                              "pickup":  104,
+                                                              "relationship":  "publish-is-one-ahead-modulo-uint32"
+                                                          },
+                                          "pending_bytes":  {
+                                                                "ring":  31,
+                                                                "stash":  0
+                                                            },
+                                          "last_interrupt_status":  "0x00000000",
+                                          "flush_blockers":  {
+                                                                 "mask":  "0x0000001c",
+                                                                 "names":  [
+                                                                               "SoftwarePending",
+                                                                               "FifoNotWritable",
+                                                                               "PayloadPickupPending"
+                                                                           ]
+                                                             },
+                                          "last_flush_outcome":  "Active",
+                                          "last_flush_outcome_code":  1,
+                                          "last_flush_task_zlp_count":  0,
+                                          "last_flush_isr_zlp_count":  0,
+                                          "last_flush_terminal_blocker_mask":  "0x00000000",
+                                          "last_flush_terminal_blocker_mask_code":  0,
+                                          "last_flush_terminal_blocker_names":  [
+
+                                                                                ],
+                                          "last_flush_classification":  "flush-attempt-active",
+                                          "boundary_classification":  "flush-blocked",
+                                          "usb_tx_boundary_completion_proven":  false
+                                      },
+                    "usb_tx_boundary_classification":  "flush-blocked",
+                    "usb_tx_boundary_completion_proven":  false,
+                    "hwcdc_restart":  {
+                                          "schema":  1,
+                                          "size_bytes":  128,
+                                          "sequence":  176,
+                                          "flags":  "0x00000005",
+                                          "state_semantics":  "latched-diagnostic-events-not-live-hardware-state",
+                                          "initialized":  true,
+                                          "first_blocked_latched":  false,
+                                          "latest_restart_valid":  true,
+                                          "event_count":  86,
+                                          "blocked_count":  0,
+                                          "restart_count":  86,
+                                          "first":  {
+                                                        "phase":  0,
+                                                        "ordinal":  0,
+                                                        "state":  {
+                                                                      "flags":  "0x00000000",
+                                                                      "epoch":  0,
+                                                                      "ring_pending_bytes":  0,
+                                                                      "stash_pending_bytes":  0,
+                                                                      "publish_generation":  0,
+                                                                      "pickup_generation":  0,
+                                                                      "raw_interrupt_status":  "0x00000000",
+                                                                      "interrupt_enabled_mask":  "0x00000000"
+                                                                  }
+                                                    },
+                                          "latest":  {
+                                                         "origin":  1,
+                                                         "outcome":  1,
+                                                         "requested_bytes":  32,
+                                                         "written_bytes":  32,
+                                                         "ordinal":  86,
+                                                         "state":  {
+                                                                       "flags":  "0x00000016",
+                                                                       "epoch":  1,
+                                                                       "ring_pending_bytes":  0,
+                                                                       "stash_pending_bytes":  0,
+                                                                       "publish_generation":  105,
+                                                                       "pickup_generation":  104,
+                                                                       "raw_interrupt_status":  "0x00000102",
+                                                                       "interrupt_enabled_mask":  "0x0000020c"
+                                                                   }
+                                                     }
+                                      },
+                    "ground_usb_commit":  {
+                                              "schema":  1,
+                                              "size_bytes":  128,
+                                              "sequence":  2,
+                                              "role":  "vehicle",
+                                              "state_semantics":  "first-ground-usb-commit-failure-only-not-live-state",
+                                              "failure_latched":  false,
+                                              "reason":  0,
+                                              "reason_name":  "None",
+                                              "observed_mask":  0,
+                                              "true_mask":  0,
+                                              "source_line":  0,
+                                              "token":  0,
+                                              "expected_epoch":  0,
+                                              "observed_epoch":  0,
+                                              "values":  {
+                                                             "commit_started_ms":  0,
+                                                             "flush_started_ms":  0,
+                                                             "completed_ms":  0,
+                                                             "deadline_ms":  0,
+                                                             "committed_base":  0,
+                                                             "commit_goal":  0,
+                                                             "bytes_committed":  0
+                                                         },
+                                              "expected_frame_bytes":  0,
+                                              "accepted_frame_bytes":  0,
+                                              "predicates":  {
+                                                                 "transport_published":  {
+                                                                                             "observed":  false,
+                                                                                             "value":  false
+                                                                                         },
+                                                                 "endpoint_ready":  {
+                                                                                        "observed":  false,
+                                                                                        "value":  false
+                                                                                    },
+                                                                 "completed_within_deadline":  {
+                                                                                                   "observed":  false,
+                                                                                                   "value":  false
+                                                                                               }
+                                                             }
+                                          },
+                    "first_usb_failure":  {
+                                              "schema":  "vc-lora-r19-first-usb-failure-decoded-v1",
+                                              "result":  "PASS",
+                                              "mode":  "offline-only",
+                                              "hardware_interaction":  false,
+                                              "raw_size_bytes":  384,
+                                              "raw_sha256":  "CBE38FA5B347A96A02B20E015EE9D3880F9525AF28637FB17224DD441CA2CF31",
+                                              "sequence":  2,
+                                              "record_schema":  1,
+                                              "role":  "vehicle",
+                                              "build_fingerprint":  [
+                                                                        1378957636,
+                                                                        1398032177,
+                                                                        842019382,
+                                                                        825241651
+                                                                    ],
+                                              "boot_instance":  [
+                                                                    884669139,
+                                                                    1519264095,
+                                                                    3730729477,
+                                                                    1458858272
+                                                                ],
+                                              "failure_latched":  false,
+                                              "clock_sync":  {
+                                                                 "observed":  false,
+                                                                 "sync_count":  0,
+                                                                 "nonce":  "0",
+                                                                 "device_us":  "0"
+                                                             },
+                                              "first_failure":  {
+                                                                    "reason":  0,
+                                                                    "source_line":  0,
+                                                                    "token":  0,
+                                                                    "attempt_id":  0,
+                                                                    "wrapper_flags":  0,
+                                                                    "api_called":  false,
+                                                                    "raw_return":  null,
+                                                                    "budget_ms":  0,
+                                                                    "expected_epoch":  0,
+                                                                    "observed_epoch":  0,
+                                                                    "started_us":  "0",
+                                                                    "finished_us":  "0",
+                                                                    "deadline_us":  "0",
+                                                                    "failure_observed_us":  "0",
+                                                                    "elapsed_us":  "0",
+                                                                    "expected_frame_bytes":  0,
+                                                                    "accepted_frame_bytes":  0,
+                                                                    "sdk":  {
+                                                                                "schema":  0,
+                                                                                "validity_flags":  0,
+                                                                                "transaction_token":  0,
+                                                                                "attempt_id":  0,
+                                                                                "terminal_reason":  0,
+                                                                                "timeout_ms":  0,
+                                                                                "expected_loss_epoch":  0,
+                                                                                "started_ms":  0,
+                                                                                "finished_ms":  0,
+                                                                                "lock_wait_ms":  0,
+                                                                                "elapsed_ms":  0,
+                                                                                "raw_return":  0,
+                                                                                "state_flags":  0,
+                                                                                "observed_loss_epoch":  0,
+                                                                                "ring_pending_bytes":  0,
+                                                                                "stash_pending_bytes":  0,
+                                                                                "publish_generation":  0,
+                                                                                "pickup_generation":  0,
+                                                                                "raw_interrupt_status":  0,
+                                                                                "interrupt_enable_mask":  0,
+                                                                                "flush_blocker_mask":  0,
+                                                                                "snapshot_started_ms":  0,
+                                                                                "snapshot_finished_ms":  0,
+                                                                                "snapshot_duration_us":  0,
+                                                                                "snapshot_observed":  false,
+                                                                                "lock_acquired":  false,
+                                                                                "terminal_name":  "NotObserved"
+                                                                            }
+                                                                },
+                                              "acceptance":  "NOT_EVALUATED",
+                                              "limitations":  [
+                                                                  "Stable fixture decoding is not proof of hardware acquisition, host consumption, or communication acceptance.",
+                                                                  "SDK terminal-boundary snapshot is not continuous state; SnapshotWithoutTxLock does not prove ownership of the pending data.",
+                                                                  "No PC/device time ordering is inferred without a matched same-boot nonce and explicit uncertainty bounds.",
+                                                                  "Uncalled API raw_return is unknown, not false.",
+                                                                  "Boot identity must be generated afresh each firmware startup; a nonzero fixture alone cannot prove entropy."
+                                                              ]
+                                          },
+                    "timed_path":  {
+                                       "schema":  "vc-lora-r19-timed-path-record-v1",
+                                       "schema_version":  1,
+                                       "size_bytes":  512,
+                                       "sequence":  2,
+                                       "role":  "vehicle",
+                                       "mode":  "ExplicitHostArm",
+                                       "mode_value":  2,
+                                       "build_id":  [
+                                                        1378957636,
+                                                        1398032177,
+                                                        842019382,
+                                                        825241651
+                                                    ],
+                                       "boot_id":  [
+                                                       884669139,
+                                                       1519264095,
+                                                       3730729477,
+                                                       1458858272
+                                                   ],
+                                       "flags":  1,
+                                       "usb_epoch":  0,
+                                       "observed_epoch":  0,
+                                       "reader_session":  "0",
+                                       "nonce":  "0",
+                                       "token":  0,
+                                       "frame_bytes":  0,
+                                       "accepted_bytes":  0,
+                                       "failure_reason":  0,
+                                       "product_budget_ms":  0,
+                                       "initialized":  true,
+                                       "session_observed":  false,
+                                       "arm_accepted":  false,
+                                       "identity_mismatch":  false,
+                                       "clock_regressed":  false,
+                                       "frame_enqueued":  false,
+                                       "hwcdc_accepted_observed":  false,
+                                       "sdk_snapshot_observed":  false,
+                                       "usb_completed":  false,
+                                       "usb_failed":  false,
+                                       "timestamps":  {
+                                                          "arm_us":  "0",
+                                                          "enqueue_us":  "0",
+                                                          "accepted_us":  "0",
+                                                          "sdk_snapshot_us":  "0",
+                                                          "terminal_us":  "0",
+                                                          "failure_started_us":  "0",
+                                                          "failure_returned_us":  "0",
+                                                          "deadline_us":  "0",
+                                                          "clock_request_us":  "0"
+                                                      },
+                                       "raw_frame_base64":  "",
+                                       "frame_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                       "sdk":  {
+                                                   "publish_generation":  0,
+                                                   "pickup_generation":  0,
+                                                   "ring_bytes":  0,
+                                                   "stash_bytes":  0,
+                                                   "validity":  0,
+                                                   "state":  0,
+                                                   "terminal":  0,
+                                                   "blocker_mask":  0,
+                                                   "attempt":  0,
+                                                   "terminal_sample_valid":  false
+                                               },
+                                       "root_cause_proven":  false,
+                                       "acceptance_authorized":  false,
+                                       "deployment_authorized":  false,
+                                       "limitations":  [
+                                                           "Stable committed MCU record only; not a continuous physical FIFO or PC consumption proof.",
+                                                           "MAVLink CRC and PC/MCU bounded time correlation require independent evaluator input."
+                                                       ]
+                                   }
+                },
+    "openocd_stage":  {
+                          "device_opened":  true,
+                          "target_examined":  true,
+                          "halt_possible":  true,
+                          "resume_proven":  true,
+                          "shutdown_proven":  true,
+                          "cleanup_required":  true,
+                          "failure_classification":  "FAIL_JTAG_AFTER_TARGET_EXAMINE"
+                      },
+    "capture_attempts":  [
+                             {
+                                 "attempt":  1,
+                                 "result":  "STABLE",
+                                 "capture_log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\openocd-attempt-1-capture.log",
+                                 "cleanup_log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\\stage_vehicle\\openocd-attempt-1-cleanup.log",
+                                 "cleanup_attempted":  true,
+                                 "cleanup_exit_code":  0,
+                                 "resume_shutdown_cleanup_proven":  true,
+                                 "smp_capture_proven":  true
+                             }
+                         ],
+    "limitations":  [
+                        "The build fingerprint is a diagnostic generation marker, not an artifact digest.",
+                        "Live exact-image identity depends on the supplied installer verify evidence remaining current.",
+                        "Endpoint FIFO evidence reaches the native USB transaction boundary but does not prove Windows user-space CDC consumption.",
+                        "Extended restart and first Ground USB commit records are latched diagnostic events, not continuous hardware state.",
+                        "Record acquisition PASS does not establish USB completion, communication acceptance, or the 932-parameter throughput goal.",
+                        "Boot instance comes from the raw record; matching a later PC exchange requires its exact nonce/device sample and independent clock continuity/error bounds.",
+                        "PC/device causal time ordering is UNKNOWN until the independently bounded exchange is supplied.",
+                        "Timed path mode observes the first product Heartbeat; acquisition PASS is not product acceptance or physical FIFO proof."
+                    ],
+    "extended_records_required":  true,
+    "first_usb_failure_required":  true,
+    "timed_path_required":  true
+}

@@ -1,0 +1,77 @@
+{
+  "schema": "vc-lora-github-update-publication-validation-v1",
+  "result": "PASS_PUBLICATION_SUBSET_ONLY",
+  "source_repository": "https://github.com/masakilovelive/mppt-digital",
+  "base_commit": "87b5556",
+  "update_directory": "lora moduel/publication/updates/2026-10-22",
+  "selected_originals": {
+    "files": 172,
+    "bytes": 1911039,
+    "result": "ALL_BYTE_IDENTICAL",
+    "inventory": "../source_inventory.json"
+  },
+  "publication_tests": {
+    "engines": [
+      "Windows PowerShell 5.1",
+      "PowerShell 7"
+    ],
+    "checks_per_engine": {
+      "capture_entrypoint": 46,
+      "capture_persistence": 295,
+      "acquisition": 61,
+      "outer": 40
+    },
+    "cpp_aux_discrimination": {
+      "cases": 10,
+      "checks": 153,
+      "result": "PASS",
+      "flags": "-std=c++17 -Wall -Wextra -Werror",
+      "input_source": "../source_snapshot/core/src/runtime_contract.cpp",
+      "result_file": "aux_reproduced.json"
+    },
+    "isolated_test_root": "E:/VESC/_codex_build/lora-publication-checks-20261022",
+    "live_or_hardware_tests": false,
+    "full_360_suite_rerun": false,
+    "arduino_recompiled": false
+  },
+  "prior_original_validation": {
+    "persistence_fix_full_host_suite": "360/360 PASS in original workspace",
+    "arduino": "Vehicle then Ground PASS in original workspace",
+    "not_current_publication_reexecution": true
+  },
+  "independent_review": {
+    "originals_hashes": "172/172 PASS",
+    "factual_scope": "PASS",
+    "secret_pattern_findings": 0,
+    "executables_or_application_images_added": false
+  },
+  "source_scope": "Existing root production firmware remains the previous published snapshot. New measurement tools and the small AUX reproduction dependencies are provided separately under source_snapshot. A complete flashable candidate, toolchain or rollback package is not included.",
+  "product_state": {
+    "last_trial_restored_both_accepted_r18": true,
+    "persistence_repair_live_observed": true,
+    "actual_aux_cause": "UNKNOWN",
+    "ready_not_observed": true,
+    "arm_not_sent": true,
+    "product_trace": "TRACE_INCOMPLETE",
+    "physical_low_waveform_not_measured": true,
+    "product_106ms": "NOT_EVALUATED",
+    "parameters_932_30s": "NOT_EVALUATED",
+    "acceptance_authorized": false,
+    "deployment_authorized": false
+  },
+  "git_scope": {
+    "unrelated_user_changes_preserved": true,
+    "source_checkout": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge",
+    "publication_checkout": "E:/VESC/_codex_build/mppt-lora-aux-20261022",
+    "existing_main_checkout_not_modified": "E:/VESC/mppt-digital",
+    "force_push": false
+  },
+  "hardware_interaction": false,
+  "firmware_changed_in_publication": false,
+  "notes": [
+    "The original JSONs retain their original paths, nonces, device identifiers and UTC timestamps as provenance; their embedded paths are not portable execution settings.",
+    "Partial install/rollback manifests can reference files intentionally omitted from this update.",
+    "No API/Jev call, COM open, PnP access, JTAG, reset or flash was performed during publication.",
+    "The initial publication inventory and validation remain historical records; this update has its own selected-originals inventory and current subset validation."
+  ]
+}

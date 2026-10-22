@@ -1,0 +1,3546 @@
+[CmdletBinding()]
+param(
+  [string]$RepoRoot = '',
+  [string]$OutputDirectory = '',
+  [switch]$Execute,
+  [switch]$OfflineContractTest,
+  [switch]$ReadOnlyToolDiscoveryPreflight,
+  [ValidateSet('Disabled','SyncOnly','ExplicitHostArm')]
+  [string]$TimedPathMode = 'Disabled',
+  [string]$TimedPathPreparedPinPath = '',
+  [string]$TimedPathPreparedPinSha256 = '',
+  [ValidateSet('success','capture_no_beacon','capture_failure',
+    'usb_boundary_incomplete','ground_heartbeat_failure_observed',
+    'capture_timing_sla_failure',
+    'capture_terminal_prefix_stall',
+    'capture_terminal_prefix_stall_stage_failure',
+    'capture_alive_terminal_prefix_stall',
+    'capture_alive_terminal_prefix_stall_stage_failure',
+    'capture_boundary_partial','capture_boundary_partial_stage_failure',
+    'jtag_vehicle_failure','jtag_vehicle_cleanup_unproven',
+    'jtag_vehicle_timeout','jtag_ground_failure','rollback_failure',
+    'install_failure','jtag_preflight_failure','pnp_only_blocked',
+    'active_jtag_vehicle_failure','active_jtag_ground_failure',
+    'active_jtag_vehicle_cleanup_unproven',
+    'active_jtag_ground_cleanup_unproven',
+    'active_jtag_location_mismatch','reader_missing')]
+  [string]$OfflineScenario = 'success',
+  [ValidateSet('',
+    'R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT')]
+  [string]$HilAuthorization = '',
+  [ValidateSet('',
+    'PIXHAWK_DISARMED_PROPULSION_ISOLATED_ANTENNAS_CONNECTED_GND_3V3_CHECKED_PARAM_BACKUP_SAVED')]
+  [string]$OperatorSafetyAttestation = '',
+  [ValidateSet('', 'RESTORE_ACCEPTED_R18_AFTER_R19_HIL')]
+  [string]$RollbackAuthorization = '',
+  [ValidateRange(40,40)]
+  [int]$CaptureSeconds = 40,
+  [string]$VehicleProbeUsbLocation = '',
+  [string]$GroundProbeUsbLocation = '',
+  [string]$NmExecutable = '',
+  [string]$OpenOcdExecutable = '',
+  [string]$InterfaceConfig = '',
+  [string]$TargetConfig = ''
+)
+
+$ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
+$utf8 = [Text.UTF8Encoding]::new($false)
+$newline = [Environment]::NewLine
+$schema = 'vc-lora-r19-runtime-stage-cause-experiment-v1'
+$testId = 'R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001'
+$hilToken =
+    'R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT'
+$safetyToken =
+    'PIXHAWK_DISARMED_PROPULSION_ISOLATED_ANTENNAS_CONNECTED_GND_3V3_CHECKED_PARAM_BACKUP_SAVED'
+$rollbackToken = 'RESTORE_ACCEPTED_R18_AFTER_R19_HIL'
+$expectedVehicleR18 =
+    '9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52'
+$expectedGroundR18 =
+    '30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5'
+$expectedNmSha256 =
+    'AC8D55C45DBCAEFE082299357245D7F12786C61A4E3C06A8E21F31D6890FB29E'
+$expectedOpenOcdSha256 =
+    '7461DBBEC251F1D4A2189C3C57B74A45B2FE64DEC1EC1B9EDDCB348A2AB2EBAB'
+$expectedInterfaceConfigSha256 =
+    '9C2201DDCDB416A471E8D7F8BF309E4F20C364BBF416CA67D6475A8495934722'
+$expectedTargetConfigSha256 =
+    'D140078D0505475C8D8732CDD57938D0B81AC3E7B770A1BE6EBE5DB29A7DB18B'
+$expectedOpenOcdScriptsTreeSha256 =
+    '3FB3130F7D4B17FE870EA6532B3F8EB5B0F27F506F1953A1A4EC9E1369D7BB84'
+$expectedStageReaderSha256 =
+    'A94F5A76DE6A2A4162C5C01E137CB4411D8231C45D7C484EE3E210A5C131F145'
+$expectedJtagPreflightGateSha256 =
+    '853A404C816D8C9C92B609FD697763977AEDE1849E87A494AEB70FBAA38F4210'
+$expectedFlashToolSha256 =
+    '0EC749D31C75807AEA8F803DAA113B47C98B5872453101528116674789396933'
+$expectedCaptureToolSha256 =
+    '01C62A598FD9AEE52020F4FE72991FAB0502E3AD62DDA2957A6D282CC118966C'
+$expectedCandidateArtifactId = '20261020T123447347Z-b414028b'
+$expectedCandidateLatestSha256 =
+    '7B9E24D307963177D3489627AB305023B8A31744B5008FD36210590D60F4DA41'
+$expectedVehicleRuntimeStageAddress = '0x3fcab680'
+$expectedGroundRuntimeStageAddress = '0x3fca2bf8'
+
+if ([string]::IsNullOrWhiteSpace($RepoRoot)) {
+  $RepoRoot = Split-Path -Parent $PSScriptRoot
+}
+$repo = (Resolve-Path -LiteralPath $RepoRoot -ErrorAction Stop).Path.TrimEnd('\')
+$timedPathEnabled=$TimedPathMode-cne'Disabled'
+$timedPathEvaluation=$null
+$script:timedPathToolLocks=[Collections.Generic.List[IO.FileStream]]::new()
+$timedPathPreparedPin=$null
+if($timedPathEnabled){
+  if($OfflineContractTest-or$ReadOnlyToolDiscoveryPreflight){throw 'Timed-path mode uses its dedicated offline contracts, not legacy mock or device discovery'}
+  if($TimedPathPreparedPinSha256-cnotmatch'^[0-9A-F]{64}$'-or
+      -not(Test-Path -LiteralPath $TimedPathPreparedPinPath -PathType Leaf)){
+    throw 'Timed-path mode requires an independently reviewed exact prepared-pin path and SHA256'
+  }
+  $pinLock=[IO.FileStream]::new($TimedPathPreparedPinPath,[IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::Read)
+  $script:timedPathToolLocks.Add($pinLock)
+  if((Get-FileHash -LiteralPath $TimedPathPreparedPinPath -Algorithm SHA256).Hash-cne$TimedPathPreparedPinSha256){throw 'Prepared pin digest differs'}
+  $timedPathPreparedPin=Get-Content -LiteralPath $TimedPathPreparedPinPath -Raw|ConvertFrom-Json
+  $helperBinding=@($timedPathPreparedPin.tools|Where-Object{$_.path-ceq'tools/r19_timed_path_outer.ps1'})
+  $helperPath=Join-Path $repo 'tools/r19_timed_path_outer.ps1'
+  $helperLock=[IO.FileStream]::new($helperPath,[IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::Read)
+  $script:timedPathToolLocks.Add($helperLock)
+  if($helperBinding.Count-ne1-or(Get-FileHash -LiteralPath $helperPath -Algorithm SHA256).Hash-cne$helperBinding[0].sha256){throw 'Prepared outer helper digest differs'}
+  . $helperPath
+  $null=Assert-R19TimedPathPreparedContract $timedPathPreparedPin $TimedPathMode
+  foreach($entry in $timedPathPreparedPin.tools){
+    $path=Join-Path $repo $entry.path
+    $lock=[IO.FileStream]::new($path,[IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::Read)
+    $script:timedPathToolLocks.Add($lock)
+    if((Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash-cne$entry.sha256){throw "Prepared tool digest differs: $($entry.path)"}
+  }
+  . (Join-Path $repo 'tools/r19_candidate_artifact_common.ps1')
+  $expectedStageReaderSha256=[string](@($timedPathPreparedPin.tools|Where-Object{$_.path-ceq'tools/read_r19_runtime_stage_jtag.ps1'})[0].sha256)
+  $expectedFlashToolSha256=[string](@($timedPathPreparedPin.tools|Where-Object{$_.path-ceq'tools/invoke_r19_candidate_app_flash_hil.ps1'})[0].sha256)
+  $expectedCaptureToolSha256=[string](@($timedPathPreparedPin.tools|Where-Object{$_.path-ceq'tools/run_r19_timed_path_capture.ps1'})[0].sha256)
+  $expectedCandidateArtifactId=$timedPathPreparedPin.candidate_id
+  $expectedCandidateLatestSha256=$timedPathPreparedPin.latest_sha256
+  $expectedVehicleRuntimeStageAddress=$timedPathPreparedPin.vehicle_runtime_stage_address
+  $expectedGroundRuntimeStageAddress=$timedPathPreparedPin.ground_runtime_stage_address
+}elseif($TimedPathPreparedPinPath-or$TimedPathPreparedPinSha256){throw 'Prepared timed-path pin must not be used in legacy mode'}
+$flashTool = Join-Path $repo 'tools\invoke_r19_candidate_app_flash_hil.ps1'
+$captureTool = Join-Path $repo 'tools\run_r19_runtime_fail_diagnostic_hil.ps1'
+if($timedPathEnabled){$captureTool=Join-Path $repo 'tools/run_r19_timed_path_capture.ps1'}
+$stageTool = Join-Path $repo 'tools\read_r19_runtime_stage_jtag.ps1'
+$jtagPreflightTool = Join-Path $repo 'tools\invoke_r19_jtag_preflash_gate.ps1'
+$latestPath = Join-Path $repo `
+    'runs\candidates\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001\latest.json'
+if($timedPathEnabled){$latestPath=Join-Path $repo $timedPathPreparedPin.latest_path}
+$flashEvidenceBase = Join-Path $repo `
+    'runs\validation\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001'
+$steps = [Collections.ArrayList]::new()
+$startedUtc = [DateTime]::UtcNow.ToString('o')
+$hardwareInteraction = $false
+$preflightPassed = $false
+$experimentStarted = $false
+$primaryFailure = ''
+$candidate = $null
+$installDirectory = ''
+$rollbackDirectory = ''
+$captureDirectory = ''
+$flashRecordPath = ''
+$stageDirectories = [ordered]@{vehicle='';ground=''}
+$jtagPreflightDirectory = ''
+$jtagPreflightAttempted = $false
+$jtagPreflightEvidence = $null
+$activeJtagPreflightDirectory = ''
+$activeJtagVehicleDirectory = ''
+$activeJtagGroundDirectory = ''
+$activeJtagPreflightAttempted = $false
+$activeJtagLocationBindingFailed = $false
+$activeJtagCleanupUnproven = $false
+$activeJtagRoles = [Collections.ArrayList]::new()
+$activeJtagPreflightEvidence = $null
+$rollbackAttempted = $false
+$rollbackProven = $false
+$powerOffRequired = $false
+$childTerminationUnproven = $false
+$script:unprovenChildScriptLocks =
+    New-Object 'System.Collections.Generic.List[System.IO.FileStream]'
+$script:candidateLatestLock = $null
+
+function Assert-Condition([bool]$Condition, [string]$Message) {
+  if (-not $Condition) { throw $Message }
+}
+
+function Assert-CanonicalCandidatePin([string]$LatestSha256,
+    [string]$ArtifactId) {
+  Assert-Condition ($LatestSha256 -ceq $expectedCandidateLatestSha256) `
+      'Canonical latest pointer is not the exact reviewed file'
+  Assert-Condition ($ArtifactId -ceq $expectedCandidateArtifactId) `
+      'Canonical latest pointer selected a different candidate'
+}
+
+function Assert-CandidateDiagnosticAbiContract {
+  param(
+    [Parameter(Mandatory)][object]$Document,
+    [Parameter(Mandatory)][string]$Label
+  )
+  $timedPathRequested=[bool](Get-Variable -Name timedPathEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  if($timedPathRequested){
+    Assert-Condition ($null-ne$Document.PSObject.Properties['timed_path_diagnostics']) "$Label lacks timed-path diagnostic contract"
+    Assert-RawProjection $Document.timed_path_diagnostics `
+      (Get-R19TimedPathCandidateContract $repo $TimedPathMode) "$Label timed-path contract"
+  }else{Assert-Condition ($null-eq$Document.PSObject.Properties['timed_path_diagnostics']) "$Label timed-path candidate requires explicit mode"}
+  $expectedNumericFields = [ordered]@{
+    endpoint_fifo_schema = 2
+    endpoint_fifo_size_bytes = 112
+    runtime_stage_size_bytes = 68
+  }
+  [Type[]]$integralTypes = @(
+    [byte],[sbyte],[int16],[uint16],[int32],[uint32],[int64],[uint64])
+  foreach ($entry in $expectedNumericFields.GetEnumerator()) {
+    $property = $Document.PSObject.Properties[[string]$entry.Key]
+    Assert-Condition ($null -ne $property) `
+        "$Label lacks diagnostic ABI field: $($entry.Key)"
+    $value = $property.Value
+    Assert-Condition ($null -ne $value -and
+        $integralTypes -contains $value.GetType() -and
+        [int64]$value -eq [int64]$entry.Value) `
+        "$Label has invalid diagnostic ABI field: $($entry.Key)"
+  }
+  $readerProperty = $Document.PSObject.Properties['reader_schema']
+  Assert-Condition ($null -ne $readerProperty -and
+      $readerProperty.Value -is [string] -and
+      [string]$readerProperty.Value -cin @(
+        'vc-lora-r19-runtime-stage-jtag-read-v3',
+        'vc-lora-r19-runtime-stage-jtag-read-v4',
+        'vc-lora-r19-runtime-stage-jtag-read-v5')) `
+      "$Label has invalid diagnostic ABI field: reader_schema"
+  $extensionProperty=$Document.PSObject.Properties['usb_extended_diagnostics']
+  $firstDecoderProperty=$Document.PSObject.Properties['first_usb_failure_decoder']
+  if([string]$readerProperty.Value-ceq'vc-lora-r19-runtime-stage-jtag-read-v3'){
+    Assert-Condition ($null-eq$extensionProperty-and$null-eq$firstDecoderProperty) `
+        "$Label legacy reader must not declare extended records"
+    return
+  }
+  Assert-Condition ($null-ne$extensionProperty-and
+      $null-ne$extensionProperty.Value) "$Label lacks extended diagnostics"
+  $extension=$extensionProperty.Value
+  $isFirstFailure=([string]$readerProperty.Value-ceq'vc-lora-r19-runtime-stage-jtag-read-v5')
+  $extensionSchema=if($isFirstFailure){'vc-lora-r19-usb-extended-diagnostics-v2'}else{'vc-lora-r19-usb-extended-diagnostics-v1'}
+  $recordCount=if($isFirstFailure){3}else{2}
+  Assert-Condition ([string]$extension.schema-ceq
+      $extensionSchema-and
+      $extension.enabled-is[bool]-and[bool]$extension.enabled-and
+      @($extension.records.PSObject.Properties).Count-eq$recordCount) `
+      "$Label has invalid extended diagnostic policy"
+  $recordDefinitions=@(
+      @('hwcdc_restart','vc_lora_r19_hwcdc_restart_diagnostic_record',128),
+      @('ground_usb_commit','vc_lora_r19_ground_usb_commit_record',128))
+  if($isFirstFailure){$recordDefinitions+=,@('first_usb_failure','vc_lora_r19_first_usb_failure_record',384)}
+  foreach($entry in $recordDefinitions){
+    $record=$extension.records.PSObject.Properties[[string]$entry[0]]
+    Assert-Condition ($null-ne$record-and
+        [string]$record.Value.symbol-ceq[string]$entry[1]-and
+        $integralTypes-contains$record.Value.schema_version.GetType()-and
+        [int64]$record.Value.schema_version-eq1-and
+        $integralTypes-contains$record.Value.size_bytes.GetType()-and
+        [int64]$record.Value.size_bytes-eq[int64]$entry[2]) `
+        "$Label has invalid extended record: $($entry[0])"
+  }
+  if($isFirstFailure){
+    Assert-Condition ($null-ne$firstDecoderProperty-and
+        @($firstDecoderProperty.Value.PSObject.Properties).Count-eq2-and
+        $firstDecoderProperty.Value.path-is[string]-and
+        [string]$firstDecoderProperty.Value.path-ceq'tools/read_r19_first_usb_failure_record.ps1'-and
+        $firstDecoderProperty.Value.sha256-is[string]-and
+        [string]$firstDecoderProperty.Value.sha256-cmatch'^[0-9A-F]{64}$') `
+        "$Label has invalid first USB failure decoder binding"
+  }else{Assert-Condition ($null-eq$firstDecoderProperty) "$Label v4 must not declare a v5 decoder"}
+}
+
+function Get-Sha256([string]$Path) {
+  (Get-FileHash -LiteralPath $Path -Algorithm SHA256 -ErrorAction Stop).Hash.
+      ToUpperInvariant()
+}
+
+function Get-DirectoryTreeSha256([string]$Path) {
+  $root = (Resolve-Path -LiteralPath $Path -ErrorAction Stop).Path
+  [string[]]$lines = @(Get-ChildItem -LiteralPath $root -File -Recurse |
+    Sort-Object FullName | ForEach-Object {
+      $relative = $_.FullName.Substring($root.Length + 1).Replace('\','/')
+      "$relative`t$(Get-Sha256 $_.FullName)"
+    })
+  $body = [string]::Join($newline,$lines) + $newline
+  $sha = [Security.Cryptography.SHA256]::Create()
+  try {
+    [BitConverter]::ToString($sha.ComputeHash($utf8.GetBytes($body))).
+        Replace('-','')
+  } finally {$sha.Dispose()}
+}
+
+function Resolve-RepoPath([string]$Value, [string]$Description) {
+  Assert-Condition (-not [string]::IsNullOrWhiteSpace($Value)) `
+      "$Description is empty"
+  $full = if ([IO.Path]::IsPathRooted($Value)) {
+    [IO.Path]::GetFullPath($Value)
+  } else {
+    [IO.Path]::GetFullPath((Join-Path $repo $Value.Replace('/','\')))
+  }
+  Assert-Condition ($full.StartsWith(($repo + '\'),
+      [StringComparison]::OrdinalIgnoreCase)) `
+      "$Description escaped the repository"
+  (Resolve-Path -LiteralPath $full -ErrorAction Stop).Path
+}
+
+function Initialize-OutputDirectory {
+  if ([string]::IsNullOrWhiteSpace($script:OutputDirectory)) {
+    $base = Join-Path $repo ("runs\hil\$testId")
+    [void][IO.Directory]::CreateDirectory($base)
+    $script:OutputDirectory = Join-Path $base `
+        ([DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffZ') + '-' +
+          [Guid]::NewGuid().ToString('N').Substring(0,8))
+  }
+  $full = [IO.Path]::GetFullPath($script:OutputDirectory).TrimEnd('\')
+  if (-not $OfflineContractTest.IsPresent -and
+      -not $ReadOnlyToolDiscoveryPreflight.IsPresent) {
+    $base = [IO.Path]::GetFullPath((Join-Path $repo `
+        "runs\hil\$testId")).TrimEnd('\')
+    Assert-Condition ((Split-Path -Parent $full) -ieq $base) `
+        "OutputDirectory must be a direct child of $base"
+  }
+  Assert-Condition (-not (Test-Path -LiteralPath $full)) `
+      "Refusing to overwrite evidence: $full"
+  [void][IO.Directory]::CreateDirectory($full)
+  $script:OutputDirectory = (Resolve-Path -LiteralPath $full).Path.TrimEnd('\')
+}
+
+function Write-DurableJson([string]$Path, [object]$Value) {
+  $parent = Split-Path -Parent $Path
+  Assert-Condition (Test-Path -LiteralPath $parent -PathType Container) `
+      "Output parent is missing: $parent"
+  $bytes = $utf8.GetBytes(($Value | ConvertTo-Json -Depth 48) + $newline)
+  $stream = [IO.FileStream]::new($Path,[IO.FileMode]::CreateNew,
+      [IO.FileAccess]::Write,[IO.FileShare]::Read,4096,
+      [IO.FileOptions]::WriteThrough)
+  try {
+    $stream.Write($bytes,0,$bytes.Length)
+    $stream.Flush($true)
+  } finally {$stream.Dispose()}
+}
+
+function Write-Text([string]$Path, [string]$Text) {
+  [IO.File]::WriteAllText($Path,$Text,$utf8)
+}
+
+function Get-PowerShellExecutable {
+  $candidate = Join-Path $PSHOME 'powershell.exe'
+  Assert-Condition (Test-Path -LiteralPath $candidate -PathType Leaf) `
+      'Windows PowerShell executable is unavailable'
+  (Resolve-Path -LiteralPath $candidate).Path
+}
+
+function Convert-ArgumentForStartProcess([string]$Value) {
+  if ($Value -notmatch '[\s"]') { return $Value }
+  '"' + ($Value -replace '(\\*)"','$1$1\"' -replace '(\\+)$','$1$1') + '"'
+}
+
+function Invoke-TaskkillProcessTree([int]$ProcessId,
+    [int]$TimeoutMilliseconds=10000) {
+  $result=[ordered]@{started=$false;exit_code=125;timed_out=$false
+    process_exited=$false;tree_termination_proven=$false;failure=''}
+  $taskkill=Join-Path $env:SystemRoot 'System32\taskkill.exe'
+  $process=[Diagnostics.Process]::new()
+  $process.StartInfo=[Diagnostics.ProcessStartInfo]::new()
+  $process.StartInfo.FileName=$taskkill
+  $process.StartInfo.Arguments="/PID $ProcessId /T /F"
+  $process.StartInfo.UseShellExecute=$false
+  $process.StartInfo.CreateNoWindow=$true
+  $process.StartInfo.RedirectStandardOutput=$true
+  $process.StartInfo.RedirectStandardError=$true
+  $stdoutTask=$null;$stderrTask=$null
+  try{
+    $result.started=$process.Start()
+    if(-not$result.started){throw 'taskkill did not start'}
+    $stdoutTask=$process.StandardOutput.ReadToEndAsync()
+    $stderrTask=$process.StandardError.ReadToEndAsync()
+    if(-not$process.WaitForExit($TimeoutMilliseconds)){
+      $result.timed_out=$true
+      try{$process.Kill()}catch{}
+      [void]$process.WaitForExit(2000)
+    }else{
+      $process.WaitForExit();$process.Refresh()
+      $result.exit_code=[int]$process.ExitCode
+      $result.process_exited=$true
+    }
+  }catch{$result.failure=$_.Exception.Message
+  }finally{$process.Dispose()}
+  $result.tree_termination_proven=(
+    $result.started-and-not$result.timed_out-and$result.process_exited-and
+    [int]$result.exit_code-eq0)
+  [pscustomobject]$result
+}
+
+function Invoke-ChildPowerShell([string]$Name, [string]$ScriptPath,
+    [string[]]$Arguments, [int]$TimeoutMilliseconds,
+    [string]$ExpectedScriptSha256) {
+  $scriptLock = $null
+  $started = $false
+  $terminationProven = $true
+  $processTreeTerminationProven = $true
+  $retainScriptLock = $false
+  try {
+  Assert-Condition ($ExpectedScriptSha256 -match '^[0-9A-F]{64}$') `
+      "Expected child tool SHA-256 is invalid for step: $Name"
+  $resolvedScriptPath = (Resolve-Path -LiteralPath $ScriptPath `
+      -ErrorAction Stop).Path
+  $scriptLock = [IO.FileStream]::new($resolvedScriptPath,
+      [IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::Read)
+  $sha256 = [Security.Cryptography.SHA256]::Create()
+  try {
+    $scriptLock.Position = 0
+    $lockedScriptSha256 = ([BitConverter]::ToString(
+        $sha256.ComputeHash($scriptLock))).Replace('-','')
+    $scriptLock.Position = 0
+  } finally {$sha256.Dispose()}
+  Assert-Condition ($lockedScriptSha256 -ceq $ExpectedScriptSha256) `
+      "Child tool differs from the reviewed pinned tool at launch: $Name"
+  $ScriptPath = $resolvedScriptPath
+  $stdoutPath = Join-Path $OutputDirectory ($Name + '.stdout.log')
+  $stderrPath = Join-Path $OutputDirectory ($Name + '.stderr.log')
+  $argv = @('-NoProfile','-ExecutionPolicy','Bypass','-File',$ScriptPath) +
+      @($Arguments)
+  $argumentLine = (@($argv | ForEach-Object {
+        Convert-ArgumentForStartProcess ([string]$_
+        )}) -join ' ')
+  $exitCode = 255
+  $launchFailure = ''
+  $timedOut = $false
+  $stdout = ''
+  $stderr = ''
+  $taskkillResult = $null
+  $process = [Diagnostics.Process]::new()
+  $process.StartInfo = [Diagnostics.ProcessStartInfo]::new()
+  $process.StartInfo.FileName = Get-PowerShellExecutable
+  $process.StartInfo.Arguments = $argumentLine
+  $process.StartInfo.UseShellExecute = $false
+  $process.StartInfo.CreateNoWindow = $true
+  $process.StartInfo.RedirectStandardOutput = $true
+  $process.StartInfo.RedirectStandardError = $true
+  $stdoutTask = $null
+  $stderrTask = $null
+  try {
+    $started = $process.Start()
+    Assert-Condition $started 'Child process did not start'
+    $terminationProven = $false
+    $processTreeTerminationProven = $false
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    if (-not $process.WaitForExit($TimeoutMilliseconds)) {
+      $timedOut = $true
+      $taskkillResult=Invoke-TaskkillProcessTree -ProcessId $process.Id
+      $terminationProven = $process.WaitForExit(10000)
+      $processTreeTerminationProven=(
+        [bool]$taskkillResult.tree_termination_proven-and
+        $terminationProven)
+      $exitCode = 124
+      $stderr += "Child process timed out after $TimeoutMilliseconds ms.$newline"
+    } else {
+      $process.WaitForExit()
+      $process.Refresh()
+      $exitCode = [int]$process.ExitCode
+      $terminationProven = $true
+      $processTreeTerminationProven = $true
+    }
+  } catch {
+    $launchFailure = $_.Exception.Message
+    if ($started -and -not $process.HasExited) {
+      try { $process.Kill() } catch {}
+      try { $terminationProven=$process.WaitForExit(5000) } catch {
+        $terminationProven=$false}
+      $processTreeTerminationProven=$false
+    } elseif ($started) {
+      $terminationProven=$true
+      $processTreeTerminationProven=$true
+    }
+  } finally {
+    if ($null-ne$stdoutTask -and $stdoutTask.IsCompleted) {
+      try {$stdout=$stdoutTask.GetAwaiter().GetResult()} catch {
+        $launchFailure += ' stdout capture failed: ' + $_.Exception.Message}
+    }
+    if ($null-ne$stderrTask -and $stderrTask.IsCompleted) {
+      try {$stderr=$stderrTask.GetAwaiter().GetResult()+$stderr} catch {
+        $launchFailure += ' stderr capture failed: ' + $_.Exception.Message}
+    }
+    $process.Dispose()
+  }
+  $retainScriptLock=($started-and(
+      -not$terminationProven-or-not$processTreeTerminationProven))
+  if(-not[string]::IsNullOrWhiteSpace($launchFailure)){
+    $stderr += $launchFailure + $newline
+  }
+  Write-Text $stdoutPath $stdout
+  Write-Text $stderrPath $stderr
+  [pscustomobject][ordered]@{
+    name=$Name;result=if($exitCode-eq0){'PASS'}else{'FAIL'}
+    exit_code=$exitCode;launch_failure=$launchFailure
+    timed_out=$timedOut;timeout_ms=$TimeoutMilliseconds
+    termination_proven=$terminationProven
+    process_tree_termination_proven=$processTreeTerminationProven
+    taskkill_exit_code=if($null-ne$taskkillResult){
+      [int]$taskkillResult.exit_code}else{$null}
+    stdout_path=$stdoutPath;stderr_path=$stderrPath
+    hardware_interaction=$started;mock=$false;metadata=$null
+    script_sha256=$lockedScriptSha256
+    script_lock_retained_until_outer_exit=$retainScriptLock
+  }
+  } finally {
+    if ($null -ne $scriptLock) {
+      $retainScriptLock=($started-and(
+          -not$terminationProven-or-not$processTreeTerminationProven))
+      if($retainScriptLock){
+        [void]$script:unprovenChildScriptLocks.Add($scriptLock)
+        $scriptLock=$null
+      }else{$scriptLock.Dispose()}
+    }
+  }
+}
+
+function Invoke-OfflineMockStep([string]$Name) {
+  $exitCode = 0
+  $timedOut = $false
+  $metadata = [ordered]@{}
+  if ($Name -ceq 'jtag_preflight') {
+    $exitCode=1
+    $bindingFailure=($OfflineScenario-ceq'jtag_preflight_failure')
+    $metadata.proven=$false
+    $metadata.driver_binding_proven=(-not$bindingFailure)
+    $metadata.firmware_install_allowed=$false
+    $metadata.offline_downstream_branch_mock=$false
+    $metadata.status=if($bindingFailure){
+      'FAIL_JTAG_WINUSB_INTERFACE_UNREGISTERED'
+    }else{'PASS_WINUSB_DRIVER_BINDING_PNP_ONLY'}
+    $metadata.roles=@(
+      [pscustomobject]@{role='vehicle';com='COM3'
+        serial='90:70:69:11:81:A4';pnp_port_chain='4.2'
+        driver_binding_proven=(-not$bindingFailure)
+        interface_registration_proven=(-not$bindingFailure)
+        openocd_usb_location='';reader_preflight_proven=$false},
+      [pscustomobject]@{role='ground';com='COM6'
+        serial='1C:DB:D4:5A:83:80';pnp_port_chain='4.4'
+        driver_binding_proven=(-not$bindingFailure)
+        interface_registration_proven=(-not$bindingFailure)
+        openocd_usb_location='';reader_preflight_proven=$false})
+  } elseif ($Name -in @('active_jtag_vehicle','active_jtag_ground')) {
+    $role=if($Name-ceq'active_jtag_vehicle'){'vehicle'}else{'ground'}
+    $serial=if($role-ceq'vehicle'){
+      '90:70:69:11:81:a4'}else{'1c:db:d4:5a:83:80'}
+    $location=if($role-ceq'vehicle'){
+      [string]$VehicleProbeUsbLocation}else{[string]$GroundProbeUsbLocation}
+    $pnpChain=if($role-ceq'vehicle'){'4.2'}else{'4.4'}
+    $cleanupUnproven=(($role-ceq'vehicle'-and
+        $OfflineScenario-ceq'active_jtag_vehicle_cleanup_unproven')-or
+      ($role-ceq'ground'-and
+        $OfflineScenario-ceq'active_jtag_ground_cleanup_unproven'))
+    $stepFailure=(($role-ceq'vehicle'-and
+        $OfflineScenario-ceq'active_jtag_vehicle_failure')-or
+      ($role-ceq'ground'-and
+        $OfflineScenario-ceq'active_jtag_ground_failure')-or
+      $cleanupUnproven)
+    $exitCode=if($stepFailure){1}else{0}
+    $metadata.proven=(-not$stepFailure)
+    $metadata.role=$role
+    $metadata.status=if($stepFailure){'FAIL_JTAG_PREFLIGHT'}else{
+      'PASS_JTAG_PREFLIGHT_TAP_RESET_SCAN_POSSIBLE_NO_CPU_HALT_OR_SYSTEM_RESET_COMMAND'}
+    $metadata.requested_serial=$serial
+    $metadata.opened_serial=$serial
+    $metadata.requested_usb_location=$location
+    $metadata.opened_usb_location=$location
+    $metadata.pnp_port_chain=$pnpChain
+    $metadata.pnp_location_suffix_matched=$true
+    $metadata.hardware_interaction=$true
+    $metadata.safety=[pscustomobject]@{
+      com_opened=$false;flash_written=$false;target_config_loaded=$false
+      cpu_halt_command_issued=$false;system_reset_command_issued=$false
+      transport_init_requested=$true
+      transport_init_completion_proven=(-not$stepFailure)
+      tap_reset_or_scan_possible=$true
+      process_termination_proven=$true
+      shutdown_proven=(-not$cleanupUnproven)}
+  } elseif ($Name -ceq 'install' -and $OfflineScenario -ceq 'install_failure') {
+    $exitCode = 1
+  } elseif ($Name -ceq 'capture') {
+    if ($OfflineScenario -ceq 'capture_no_beacon') {
+      $exitCode = 1
+      $metadata.diagnostic_classification = 'NO_BEACON'
+      $metadata.diagnostic_status = 'FAIL_NO_DIAGNOSTIC_BEACON'
+    } elseif ($OfflineScenario -ceq 'capture_timing_sla_failure') {
+      $exitCode = 1
+      $metadata.diagnostic_classification = 'ALIVE_WITH_PRODUCT_TRAFFIC'
+      $metadata.diagnostic_status = 'PASS_ALIVE_BEACON_CAPTURED'
+      $metadata.timing_sla_failure_admitted_for_stage_read = $true
+    } elseif ($OfflineScenario -in @('capture_terminal_prefix_stall',
+        'capture_terminal_prefix_stall_stage_failure')) {
+      $exitCode = 1
+      $metadata.diagnostic_classification = 'R19F_TERMINAL_PREFIX_STALL'
+      $metadata.diagnostic_status = 'FAIL_R19F_TERMINAL_PREFIX_STALL'
+      $metadata.tail_stall_failure_admitted_for_stage_read = $true
+    } elseif ($OfflineScenario -in @('capture_alive_terminal_prefix_stall',
+        'capture_alive_terminal_prefix_stall_stage_failure')) {
+      $exitCode = 1
+      $metadata.diagnostic_classification = 'R19A_TERMINAL_PREFIX_STALL'
+      $metadata.diagnostic_status = 'FAIL_R19A_TERMINAL_PREFIX_STALL'
+      $metadata.alive_tail_stall_failure_admitted_for_stage_read = $true
+    } elseif ($OfflineScenario -in @('capture_boundary_partial',
+        'capture_boundary_partial_stage_failure')) {
+      $exitCode = 1
+      $metadata.diagnostic_classification = 'R19F_CAPTURE_BOUNDARY_PARTIAL'
+      $metadata.diagnostic_status = 'FAIL_R19F_CAPTURE_BOUNDARY_PARTIAL'
+      $metadata.boundary_partial_failure_admitted_for_stage_read = $true
+    } elseif ($OfflineScenario -ceq 'capture_failure') {
+      $exitCode = 3
+      $metadata.diagnostic_classification = 'INVALID'
+      $metadata.diagnostic_status = 'FAIL_PROCESS_ERROR'
+    } else {
+      $metadata.diagnostic_classification = 'R19F'
+      $metadata.diagnostic_status = 'PASS_DIAGNOSTIC_CAPTURED'
+    }
+  } elseif ($Name -ceq 'stage_vehicle' -and
+      $OfflineScenario -in @('jtag_vehicle_failure',
+        'capture_terminal_prefix_stall_stage_failure',
+        'capture_alive_terminal_prefix_stall_stage_failure',
+        'capture_boundary_partial_stage_failure')) {
+    $exitCode = 1
+    $metadata.cleanup_proven = $true
+    $metadata.target_may_be_halted = $false
+    $metadata.native_processes_termination_proven = $true
+  } elseif ($Name -ceq 'stage_vehicle' -and
+      $OfflineScenario -ceq 'jtag_vehicle_cleanup_unproven') {
+    $exitCode = 1
+    $metadata.cleanup_proven = $false
+    $metadata.target_may_be_halted = $true
+    $metadata.native_processes_termination_proven = $true
+  } elseif ($Name -ceq 'stage_vehicle' -and
+      $OfflineScenario -ceq 'jtag_vehicle_timeout') {
+    $exitCode = 124
+    $timedOut = $true
+    $metadata.cleanup_proven = $false
+    $metadata.target_may_be_halted = $true
+    $metadata.native_processes_termination_proven = $false
+  } elseif ($Name -ceq 'stage_ground' -and
+      $OfflineScenario -ceq 'jtag_ground_failure') {
+    $exitCode = 1
+    $metadata.native_processes_termination_proven = $true
+  } elseif ($Name -ceq 'rollback') {
+    if ($OfflineScenario -ceq 'rollback_failure') {$exitCode = 1}
+    $metadata.rollback_proven = ($exitCode -eq 0)
+    $metadata.status = if($exitCode-eq0){
+      'PASS_R18_ROLLBACK_COMPLETE'}else{
+      'FAIL_ROLLBACK_UNPROVEN_POWER_OFF_REQUIRED'}
+  }
+  $stdoutPath = Join-Path $OutputDirectory ($Name + '.stdout.log')
+  $stderrPath = Join-Path $OutputDirectory ($Name + '.stderr.log')
+  Write-Text $stdoutPath (([ordered]@{name=$Name;exit_code=$exitCode
+        metadata=$metadata}|ConvertTo-Json -Compress) + $newline)
+  Write-Text $stderrPath ''
+  [pscustomobject][ordered]@{
+    name=$Name;result=if($exitCode-eq0){'PASS'}else{'FAIL'}
+    exit_code=$exitCode;launch_failure='';stdout_path=$stdoutPath
+    timed_out=$timedOut;timeout_ms=0
+    termination_proven=($OfflineScenario-cne'jtag_vehicle_timeout'-or
+      $Name-cne'stage_vehicle')
+    process_tree_termination_proven=(
+      $OfflineScenario-cne'jtag_vehicle_timeout'-or
+      $Name-cne'stage_vehicle')
+    stderr_path=$stderrPath;hardware_interaction=$false;mock=$true
+    metadata=[pscustomobject]$metadata
+  }
+}
+
+function Invoke-ExperimentStep([string]$Name, [string]$ScriptPath,
+    [string[]]$Arguments, [string]$ExpectedScriptSha256) {
+  $step = if ($OfflineContractTest.IsPresent) {
+    Invoke-OfflineMockStep $Name
+  } else {
+    $timeout = switch ($Name) {
+      'jtag_preflight' {180000}
+      'active_jtag_vehicle' {90000}
+      'active_jtag_ground' {90000}
+      'install' {240000}
+      'capture' {90000}
+      'stage_vehicle' {90000}
+      'stage_ground' {90000}
+      'rollback' {300000}
+      default {throw "No bounded timeout is defined for child step: $Name"}
+    }
+    $liveStep=Invoke-ChildPowerShell $Name $ScriptPath $Arguments $timeout `
+        $ExpectedScriptSha256
+    if($Name -cne 'jtag_preflight'-and[bool]$liveStep.hardware_interaction){
+      $script:hardwareInteraction = $true
+    }
+    $liveStep
+  }
+  [void]$steps.Add($step)
+  $stepTerminationProven=if(
+      $step.PSObject.Properties['process_tree_termination_proven']){
+    [bool]$step.process_tree_termination_proven
+  }elseif($step.PSObject.Properties['termination_proven']){
+    [bool]$step.termination_proven
+  }else{$true}
+  if (-not $stepTerminationProven) {
+    $script:childTerminationUnproven=$true
+    throw "Child process termination is unproven after step: $Name"
+  }
+  $step
+}
+
+function Read-JsonIfPresent([string]$Path) {
+  if (-not (Test-Path -LiteralPath $Path -PathType Leaf)) { return $null }
+  try {[IO.File]::ReadAllText($Path, $utf8) | ConvertFrom-Json}
+  catch {return $null}
+}
+
+function Assert-InstallProof([object]$Step, [string]$RecordPath) {
+  Assert-Condition ([int]$Step.exit_code -eq 0) 'Candidate install process failed'
+  $record = Read-JsonIfPresent $RecordPath
+  Assert-Condition ($null -ne $record -and
+      [string]$record.schema -ceq 'vc-lora-r19-candidate-flash-evidence-v1' -and
+      [string]$record.result -ceq 'PASS' -and
+      [string]$record.status -ceq 'PASS_R19_DIAGNOSTIC_INSTALLED_HIL_ONLY' -and
+      [bool]$record.runtime_fail_diagnostics_enabled -and
+      -not [bool]$record.acceptance_authorized -and
+      -not [bool]$record.deployment_authorized -and
+      [string]$record.hil_authorization_token -ceq $hilToken -and
+      [string]$record.candidate.artifact_id -ceq
+        [string]$candidate.artifact_id -and
+      [string]$record.candidate.latest_sha256 -ceq
+        [string]$candidate.latest_sha256 -and
+      [string]$record.candidate.handoff_sha256 -ceq
+        [string]$candidate.handoff_sha256) `
+      'Candidate install evidence is absent or invalid'
+}
+
+function Test-RollbackProof([object]$Step, [string]$RecordPath) {
+  if ([int]$Step.exit_code -ne 0) {return $false}
+  if ($OfflineContractTest.IsPresent) {
+    return [bool]$Step.metadata.rollback_proven
+  }
+  $record = Read-JsonIfPresent $RecordPath
+  if ($null -eq $record -or
+      [string]$record.schema -cne 'vc-lora-r19-candidate-flash-evidence-v1' -or
+      [string]$record.result -cne 'PASS' -or
+      [string]$record.status -cne 'PASS_R18_ROLLBACK_COMPLETE' -or
+      -not [bool]$record.runtime_fail_diagnostics_enabled -or
+      [bool]$record.acceptance_authorized -or
+      [bool]$record.deployment_authorized -or
+      [string]$record.rollback.result -cne 'PASS') {return $false}
+  $roles = @($record.rollback.roles)
+  if ($roles.Count -ne 2) {return $false}
+  $vehicle = @($roles | Where-Object {[string]$_.role -ceq 'vehicle'})
+  $ground = @($roles | Where-Object {[string]$_.role -ceq 'ground'})
+  $vehicle.Count -eq 1 -and $ground.Count -eq 1 -and
+      [bool]$vehicle[0].restored -and [bool]$ground[0].restored -and
+      [string]$vehicle[0].accepted_r18_sha256 -ceq $expectedVehicleR18 -and
+      [string]$ground[0].accepted_r18_sha256 -ceq $expectedGroundR18
+}
+
+function Get-JtagPreflightProof([object]$Step, [string]$EvidenceDirectory) {
+  if ($OfflineContractTest.IsPresent) {
+    return [pscustomobject][ordered]@{
+      proven=([int]$Step.exit_code-eq0-and[bool]$Step.metadata.proven)
+      driver_binding_proven=[bool]$Step.metadata.driver_binding_proven
+      firmware_install_allowed=[bool]$Step.metadata.firmware_install_allowed
+      status=[string]$Step.metadata.status;roles=@($Step.metadata.roles)
+      evidence_directory=$EvidenceDirectory;summary_path='';summary_sha256=''
+    }
+  }
+  $summaryPath=Join-Path $EvidenceDirectory 'summary.json'
+  $summary=Read-JsonIfPresent $summaryPath
+  $driverBindingProven=$false
+  $roles=@()
+  if($null-ne$summary){
+    try{
+      $roles=@($summary.roles)
+      $vehicle=@($roles|Where-Object{[string]$_.role-ceq'vehicle'})
+      $ground=@($roles|Where-Object{[string]$_.role-ceq'ground'})
+      $vehiclePortChain=[string]$vehicle[0].pnp_port_chain
+      $groundPortChain=[string]$ground[0].pnp_port_chain
+      $driverBindingProven=([int]$Step.exit_code-eq1-and
+        [string]$summary.schema-ceq'vc-lora-r19-jtag-preflash-gate-v1'-and
+        [string]$summary.result-ceq'PASS'-and
+        [string]$summary.status-ceq
+          'PASS_WINUSB_DRIVER_BINDING_PNP_ONLY'-and
+        [string]$summary.mode-ceq'LIVE_PNP_ONLY'-and
+        -not[bool]$summary.hardware_interaction-and
+        [bool]$summary.fail_closed-and
+        -not[bool]$summary.safety.com_opened-and
+        -not[bool]$summary.safety.flash_written-and
+        -not[bool]$summary.safety.target_config_loaded-and
+        -not[bool]$summary.safety.target_halt_or_reset_issued-and
+        -not[bool]$summary.safety.target_state_modified-and
+        -not[bool]$summary.safety.device_opened-and
+        -not[bool]$summary.safety.jtag_clocks_issued-and
+        -not[bool]$summary.safety.tap_reset_issued-and
+        -not[bool]$summary.safety.openocd_invoked-and
+        -not[bool]$summary.safety.reader_preflight_invoked-and
+        -not[bool]$summary.safety.active_jtag_proven-and
+        -not[bool]$summary.safety.firmware_install_allowed-and
+        [string]$summary.toolchain.policy-ceq
+          'PNP_ONLY_OPENOCD_AND_READER_NOT_INVOKED'-and
+        -not[bool]$summary.toolchain.openocd_invoked-and
+        -not[bool]$summary.toolchain.reader_invoked-and
+        $roles.Count-eq2-and
+        $vehicle.Count-eq1-and$ground.Count-eq1-and
+        $vehiclePortChain-match'^\d+(?:\.\d+)*$'-and
+        $groundPortChain-match'^\d+(?:\.\d+)*$'-and
+        $vehiclePortChain -cne $groundPortChain -and
+        [string]$vehicle[0].com-ceq'COM3'-and
+        [string]$vehicle[0].serial-ceq'90:70:69:11:81:A4'-and
+        [bool]$vehicle[0].driver_binding_proven-and
+        [bool]$vehicle[0].interface_registration_proven-and
+        [string]$vehicle[0].openocd_usb_location-ceq''-and
+        -not[bool]$vehicle[0].reader_preflight_proven-and
+        [string]$ground[0].com-ceq'COM6'-and
+        [string]$ground[0].serial-ceq'1C:DB:D4:5A:83:80'-and
+        [bool]$ground[0].driver_binding_proven-and
+        [bool]$ground[0].interface_registration_proven-and
+        [string]$ground[0].openocd_usb_location-ceq''-and
+        -not[bool]$ground[0].reader_preflight_proven)
+    }catch{$driverBindingProven=$false;$roles=@()}
+  }
+  [pscustomobject][ordered]@{
+    proven=$false
+    driver_binding_proven=$driverBindingProven
+    firmware_install_allowed=$false
+    status=if($null-ne$summary){[string]$summary.status}else{''}
+    roles=@($roles);evidence_directory=$EvidenceDirectory
+    summary_path=if(Test-Path -LiteralPath $summaryPath -PathType Leaf){
+      $summaryPath}else{''}
+    summary_sha256=if(Test-Path -LiteralPath $summaryPath -PathType Leaf){
+      Get-Sha256 $summaryPath}else{''}
+  }
+}
+
+function Test-ProbeLocationMatchesPnpChain([string]$ProbeUsbLocation,
+    [string]$PnpPortChain) {
+  if ($ProbeUsbLocation -notmatch
+      '^(?<bus>\d{1,3})-(?<chain>\d{1,3}(?:\.\d{1,3})*)$') {
+    return $false
+  }
+  -not [string]::IsNullOrWhiteSpace($PnpPortChain) -and
+      [string]$Matches.chain -ceq $PnpPortChain
+}
+
+function Get-ActiveJtagPreflightProof([object]$Step, [string]$Role,
+    [string]$ProbeSerial, [string]$ProbeUsbLocation,
+    [string]$PnpPortChain, [string]$EvidenceDirectory) {
+  if ($OfflineContractTest.IsPresent) {
+    return [pscustomobject][ordered]@{
+      proven=([int]$Step.exit_code-eq0-and[bool]$Step.metadata.proven)
+      role=$Role;status=[string]$Step.metadata.status
+      hardware_interaction=[bool]$Step.metadata.hardware_interaction
+      requested_serial=[string]$Step.metadata.requested_serial
+      opened_serial=[string]$Step.metadata.opened_serial
+      requested_usb_location=[string]$Step.metadata.requested_usb_location
+      opened_usb_location=[string]$Step.metadata.opened_usb_location
+      pnp_port_chain=$PnpPortChain
+      pnp_location_suffix_matched=
+        [bool]$Step.metadata.pnp_location_suffix_matched
+      safety=$Step.metadata.safety;evidence_directory=$EvidenceDirectory
+      summary_path='';summary_sha256=''
+    }
+  }
+  $summaryPath=Join-Path $EvidenceDirectory 'summary.json'
+  $summary=Read-JsonIfPresent $summaryPath
+  $proven=$false
+  $hardwareInteraction=if(
+      $Step.PSObject.Properties['hardware_interaction']){
+    [bool]$Step.hardware_interaction
+  }else{$false}
+  $status=''
+  $requestedSerial=''
+  $openedSerial=''
+  $requestedLocation=''
+  $openedLocation=''
+  $safety=[pscustomobject][ordered]@{
+    com_opened=$false;flash_written=$false;target_config_loaded=$false
+    cpu_halt_command_issued=$false;system_reset_command_issued=$false
+    transport_init_requested=$false;transport_init_completion_proven=$false
+    jtag_clock_activity_possible=$false;tap_reset_or_scan_possible=$false
+    target_state_modified=$false;target_state_modification_known=$true
+    process_termination_proven=$false;shutdown_proven=$false}
+  if($null-ne$summary){
+    try{
+      $reportedHardwareInteraction=[bool]$summary.hardware_interaction
+      $sourceSafety=$summary.safety
+      $parsedSafety=[pscustomobject][ordered]@{
+        com_opened=[bool]$sourceSafety.com_opened
+        flash_written=[bool]$sourceSafety.flash_written
+        target_config_loaded=[bool]$sourceSafety.target_config_loaded
+        cpu_halt_command_issued=[bool]$sourceSafety.cpu_halt_command_issued
+        system_reset_command_issued=
+          [bool]$sourceSafety.system_reset_command_issued
+        transport_init_requested=
+          [bool]$sourceSafety.transport_init_requested
+        transport_init_completion_proven=
+          [bool]$sourceSafety.transport_init_completion_proven
+        jtag_clock_activity_possible=
+          [bool]$sourceSafety.jtag_clock_activity_possible
+        tap_reset_or_scan_possible=
+          [bool]$sourceSafety.tap_reset_or_scan_possible
+        target_state_modified=$sourceSafety.target_state_modified
+        target_state_modification_known=
+          [bool]$sourceSafety.target_state_modification_known
+        process_termination_proven=
+          [bool]$sourceSafety.process_termination_proven
+        shutdown_proven=[bool]$sourceSafety.shutdown_proven}
+      $hardwareInteraction=$reportedHardwareInteraction
+      $safety=$parsedSafety
+    }catch{}
+    try{
+      $status=[string]$summary.status
+      $requestedSerial=[string]$summary.binding.requested_serial
+      $requestedLocation=[string]$summary.binding.requested_usb_location
+      if($summary.binding.PSObject.Properties['opened_serial']){
+        $openedSerial=[string]$summary.binding.opened_serial
+      }
+      if($summary.binding.PSObject.Properties['opened_usb_location']){
+        $openedLocation=[string]$summary.binding.opened_usb_location
+      }
+      $expectedSerial=$ProbeSerial.ToLowerInvariant()
+      $locationMatched=Test-ProbeLocationMatchesPnpChain `
+          $ProbeUsbLocation $PnpPortChain
+      $proven=([int]$Step.exit_code-eq0-and
+        [bool]$Step.process_tree_termination_proven-and
+        [string]$summary.schema-ceq'vc-lora-r19-jtag-preflight-v1'-and
+        [string]$summary.result-ceq'PASS'-and
+        $status-ceq
+          'PASS_JTAG_PREFLIGHT_TAP_RESET_SCAN_POSSIBLE_NO_CPU_HALT_OR_SYSTEM_RESET_COMMAND'-and
+        [string]$summary.mode-ceq'live-jtag-preflight'-and
+        $hardwareInteraction-and
+        [string]$summary.binding.role-ceq$Role-and
+        $requestedSerial-ceq$expectedSerial-and
+        $openedSerial-ceq$expectedSerial-and
+        $requestedLocation-ceq$ProbeUsbLocation-and
+        $openedLocation-ceq$ProbeUsbLocation-and
+        $locationMatched-and
+        -not[bool]$safety.com_opened-and
+        -not[bool]$safety.flash_written-and
+        -not[bool]$safety.target_config_loaded-and
+        -not[bool]$safety.cpu_halt_command_issued-and
+        -not[bool]$safety.system_reset_command_issued-and
+        [bool]$safety.transport_init_requested-and
+        [bool]$safety.transport_init_completion_proven-and
+        [bool]$safety.jtag_clock_activity_possible-and
+        [bool]$safety.tap_reset_or_scan_possible-and
+        $null-eq$safety.target_state_modified-and
+        -not[bool]$safety.target_state_modification_known-and
+        [bool]$safety.process_termination_proven-and
+        [bool]$safety.shutdown_proven-and
+        [int]$summary.native.exit_code-eq0-and
+        -not[bool]$summary.native.timed_out-and
+        [bool]$summary.native.termination_proven)
+    }catch{$proven=$false}
+  }
+  [pscustomobject][ordered]@{
+    proven=$proven;role=$Role;status=$status
+    hardware_interaction=$hardwareInteraction
+    requested_serial=$requestedSerial;opened_serial=$openedSerial
+    requested_usb_location=$requestedLocation
+    opened_usb_location=$openedLocation
+    pnp_port_chain=$PnpPortChain
+    pnp_location_suffix_matched=(
+      Test-ProbeLocationMatchesPnpChain $ProbeUsbLocation $PnpPortChain)
+    safety=$safety;evidence_directory=$EvidenceDirectory
+    summary_path=if(Test-Path -LiteralPath $summaryPath -PathType Leaf){
+      $summaryPath}else{''}
+    summary_sha256=if(Test-Path -LiteralPath $summaryPath -PathType Leaf){
+      Get-Sha256 $summaryPath}else{''}
+  }
+}
+
+function Assert-RawProjection([object]$Actual,[object]$Expected,[string]$Label){
+  if($null-eq$Expected){Assert-Condition ($null-eq$Actual) "$Label differs from raw null"}
+  elseif($Expected-is[array]){
+    Assert-Condition ($Actual-is[array]-and$Actual.Count-eq$Expected.Count) "$Label differs from raw array"
+    for($i=0;$i-lt$Expected.Count;++$i){Assert-RawProjection $Actual[$i] $Expected[$i] ($Label+'['+$i+']')}
+  }elseif($Expected-is[Collections.IDictionary]-or$Expected-is[pscustomobject]){
+    $keys=if($Expected-is[Collections.IDictionary]){@($Expected.Keys)}else{
+      @($Expected.PSObject.Properties.Name)}
+    foreach($key in $keys){
+      $property=$Actual.PSObject.Properties[[string]$key]
+      Assert-Condition ($null-ne$property) "$Label lacks raw field $key"
+      $expectedValue=if($Expected-is[Collections.IDictionary]){$Expected[$key]}else{
+        $Expected.PSObject.Properties[[string]$key].Value}
+      Assert-RawProjection $property.Value $expectedValue ($Label+'.'+$key)
+    }
+  }else{
+    $integralTypes=@([byte],[sbyte],[int16],[uint16],[int32],[uint32],[int64],[uint64])
+    $kindValid=if($Expected-is[bool]){$Actual-is[bool]}
+      elseif($Expected-is[string]){$Actual-is[string]}
+      elseif($integralTypes-contains$Expected.GetType()){
+        $null-ne$Actual-and$integralTypes-contains$Actual.GetType()
+      }else{$true}
+    Assert-Condition ($null-ne$Actual-and
+        $kindValid-and
+        [string]$Actual-ceq[string]$Expected) "$Label differs from raw record"
+  }
+}
+
+function Get-RawRestartState([uint32[]]$Words,[int]$Offset){
+  [uint32]$flags=$Words[$Offset]
+  Assert-Condition (($flags-band0xffffc000)-eq0) 'restart raw unknown flags'
+  [uint64]$expected=if(($flags-band16)-ne0){
+    ([uint64]$Words[$Offset+5]+1)%[uint64]4294967296
+  }else{[uint64]$Words[$Offset+5]}
+  Assert-Condition ([uint64]$Words[$Offset+4]-eq$expected) `
+      'restart raw inconsistent generation'
+  [ordered]@{flags=('0x{0:x8}'-f$flags);epoch=$Words[$Offset+1]
+    ring_pending_bytes=$Words[$Offset+2];stash_pending_bytes=$Words[$Offset+3]
+    publish_generation=$Words[$Offset+4];pickup_generation=$Words[$Offset+5]
+    raw_interrupt_status=('0x{0:x8}'-f$Words[$Offset+6])
+    interrupt_enabled_mask=('0x{0:x8}'-f$Words[$Offset+7])}
+}
+
+function Get-RawFifoBoundary([uint32[]]$Words){
+  [uint32]$flags=$Words[4];[uint32]$blockers=$Words[23]
+  [uint64]$accounted=[uint64]$Words[17]+[uint64]$Words[18]
+  if(($flags-band0x400)-ne0){++$accounted}
+  Assert-Condition ($accounted-le[uint64]$Words[16]) 'v4 raw flush accounting invalid'
+  [uint64]$aborted=[uint64]$Words[16]-$accounted
+  $classification=if(($Words[22]-band0x200)-ne0){'last-event-bus-reset'}
+    elseif(($flags-band0x1000)-ne0){'payload-publish-aborted'}
+    elseif(($flags-band0x200)-ne0){'diagnostic-writer-active'}
+    elseif(($flags-band0x40)-ne0-or($blockers-band0x40)-ne0){'usb-reset-pending'}
+    elseif(($flags-band0x20)-ne0-or($blockers-band0x20)-ne0){'fifo-quarantined'}
+    elseif(($flags-band0x100)-ne0){'bootstrap-aborted'}
+    elseif(($flags-band0x80)-ne0){'bootstrap-fenced'}
+    elseif($aborted-gt0-and($blockers-band2)-ne0){'flush-aborted-epoch-mismatch'}
+    elseif($blockers-ne0){'flush-blocked'}
+    elseif(($flags-band0x800)-ne0){'payload-publish-pending'}
+    elseif(($flags-band0x2000)-ne0){'payload-flush-pending'}
+    elseif($Words[6]-eq0){'fifo-write-not-attempted'}
+    elseif($Words[9]-eq0){'last-fifo-write-zero'}
+    elseif($Words[10]-eq0){'fifo-written-before-wr-done'}
+    elseif(($flags-band16)-ne0){'payload-published-awaiting-pickup'}
+    elseif($Words[16]-eq0){'payload-picked-up-before-flush-attempt'}
+    elseif(($flags-band0x400)-ne0){'flush-attempt-active'}
+    elseif($aborted-gt0){'flush-abort-observed'}
+    elseif($Words[17]-gt0){'usb-tx-boundary-complete'}
+    elseif($Words[18]-gt0){'flush-timeout-observed'}else{'fifo-evidence-observed'}
+  [pscustomobject]@{classification=$classification
+    complete=($classification-ceq'usb-tx-boundary-complete')}
+}
+
+function Get-RawFirstFailureU64([uint32[]]$Words,[int]$Offset){
+  [uint64]$Words[$Offset]+([uint64]$Words[$Offset+1]*[uint64]4294967296)
+}
+
+function Get-RawFirstUsbFailureRecord([uint32[]]$Words,[string]$Role,[string]$RawSha){
+  # Independent decoder. Do not invoke or import the child decoder here.
+  $w=$Words
+  Assert-Condition ($w.Count-eq96-and$w[0]-eq0-and($w[1]-band1)-eq0-and
+      $w[2]-eq0x52313955-and$w[3]-eq1) 'v5 first USB failure header/seqlock invalid'
+  $roleCode=if($Role-ceq'ground'){1}else{2}
+  Assert-Condition ($w[4]-eq$roleCode) 'v5 first USB failure role differs'
+  [uint32[]]$fingerprint=@(0x52313944,0x53544731,0x32303236,0x31303033)
+  for($i=0;$i-lt4;++$i){Assert-Condition ($w[5+$i]-eq$fingerprint[$i]) 'v5 first USB failure build fingerprint differs'}
+  Assert-Condition (($w[9]-bor$w[10]-bor$w[11]-bor$w[12])-ne0) 'v5 first USB failure zero boot identity'
+  Assert-Condition (($w[13]-band1)-ne0-and($w[13]-band0xfffffff8L)-eq0-and$w[15]-eq0) 'v5 first USB failure flags/reserved header invalid'
+  foreach($i in 62..95){Assert-Condition ($w[$i]-eq0) 'v5 first USB failure reserved body invalid'}
+  $latched=(($w[13]-band2)-ne0);$sync=(($w[13]-band4)-ne0)
+  $nonce=Get-RawFirstFailureU64 $w 16;$syncUs=Get-RawFirstFailureU64 $w 18
+  if($sync){Assert-Condition ($w[14]-gt0-and$w[17]-ge0x52190000-and$w[17]-le0x5219ffff-and
+        ($nonce-band[uint64]281474976710655)-ne0) 'v5 first USB failure sync nonce/count invalid'}
+  else{Assert-Condition ($w[14]-eq0-and$nonce-eq0-and$syncUs-eq0) 'v5 unobserved sync payload is nonzero'}
+  $called=(($w[24]-band1)-ne0);$rawReturn=$null
+  $sdkNames=@('schema','validity_flags','transaction_token','attempt_id','terminal_reason','timeout_ms','expected_loss_epoch','started_ms','finished_ms','lock_wait_ms','elapsed_ms','raw_return','state_flags','observed_loss_epoch','ring_pending_bytes','stash_pending_bytes','publish_generation','pickup_generation','raw_interrupt_status','interrupt_enable_mask','flush_blocker_mask','snapshot_started_ms','snapshot_finished_ms','snapshot_duration_us')
+  $sdk=[ordered]@{};for($i=0;$i-lt24;++$i){$sdk[$sdkNames[$i]]=$w[36+$i]}
+  if($latched){
+    Assert-Condition ($Role-ceq'ground'-and$w[20]-ge1-and$w[20]-le4-and
+        ($w[24]-band0xfffffff0L)-eq0-and$w[35]-le$w[34]) 'v5 first USB failure reason/wrapper/accounting invalid'
+    Assert-Condition ((Get-RawFirstFailureU64 $w 30)-ge(Get-RawFirstFailureU64 $w 28)-and
+        (Get-RawFirstFailureU64 $w 60)-ge(Get-RawFirstFailureU64 $w 30)) 'v5 first USB failure times are backward'
+    if($called){
+      Assert-Condition ($sdk.schema-eq1-and($sdk.validity_flags-band0x13)-eq0x13-and
+          ($sdk.validity_flags-band0xffffff00L)-eq0-and$sdk.transaction_token-eq$w[22]-and
+          $sdk.attempt_id-eq$w[23]) 'v5 first USB failure SDK identity/validity invalid'
+      Assert-Condition ($sdk.terminal_reason-ge1-and$sdk.terminal_reason-le6-and$sdk.raw_return-le1-and
+          $sdk.raw_return-eq(($w[24]-shr1)-band1)-and
+          (($sdk.terminal_reason-eq1)-eq($sdk.raw_return-eq1))) 'v5 first USB failure SDK terminal/result invalid'
+      if(($sdk.validity_flags-band8)-ne0){
+        Assert-Condition (($sdk.state_flags-band0xffffc000L)-eq0-and
+            ($sdk.flush_blocker_mask-band0xffffff00L)-eq0) 'v5 first USB failure SDK state/blocker mask invalid'
+      }else{
+        Assert-Condition (($sdk.validity_flags-band128)-eq0) 'v5 unobserved lockless SDK snapshot'
+        foreach($i in 48..59){Assert-Condition ($w[$i]-eq0) 'v5 unobserved SDK snapshot is nonzero'}
+      }
+      $rawReturn=($sdk.raw_return-eq1)
+    }else{
+      Assert-Condition (($w[24]-band2)-eq0-and$sdk.schema-eq1) 'v5 uncalled SDK claims a return'
+      foreach($i in 37..59){Assert-Condition ($w[$i]-eq0) 'v5 uncalled SDK payload is nonzero'}
+    }
+  }else{foreach($i in 20..61){Assert-Condition ($w[$i]-eq0) 'v5 unlatched first USB failure payload is nonzero'}}
+  $sdk['snapshot_observed']=($latched-and$called-and($sdk.validity_flags-band8)-ne0)
+  $sdk['lock_acquired']=($latched-and$called-and($sdk.validity_flags-band4)-ne0)
+  $sdk['terminal_name']=if($latched-and$called){@('NotInvoked','Success','NullRing','NullLock','LockTimeout','LoopTimeout','EpochAbort')[$sdk.terminal_reason]}else{'NotObserved'}
+  [pscustomobject][ordered]@{schema='vc-lora-r19-first-usb-failure-decoded-v1';result='PASS';mode='offline-only';hardware_interaction=$false
+    raw_size_bytes=384;raw_sha256=$RawSha;sequence=$w[1];record_schema=$w[3];role=$Role
+    build_fingerprint=@($w[5..8]);boot_instance=@($w[9..12]);failure_latched=$latched
+    clock_sync=[ordered]@{observed=$sync;sync_count=$w[14];nonce=$nonce.ToString();device_us=$syncUs.ToString()}
+    first_failure=[ordered]@{reason=$w[20];source_line=$w[21];token=$w[22];attempt_id=$w[23];wrapper_flags=$w[24];api_called=$called;raw_return=$rawReturn;budget_ms=$w[25];expected_epoch=$w[26];observed_epoch=$w[27]
+      started_us=(Get-RawFirstFailureU64 $w 28).ToString();finished_us=(Get-RawFirstFailureU64 $w 30).ToString();deadline_us=(Get-RawFirstFailureU64 $w 32).ToString();failure_observed_us=(Get-RawFirstFailureU64 $w 60).ToString()
+      elapsed_us=((Get-RawFirstFailureU64 $w 30)-(Get-RawFirstFailureU64 $w 28)).ToString();expected_frame_bytes=$w[34];accepted_frame_bytes=$w[35];sdk=$sdk}
+    acceptance='NOT_EVALUATED'}
+}
+
+function Get-FirstUsbFailureCauseObservation([object]$StageEvidence){
+  $record=$null
+  if($null-ne$StageEvidence-and[bool]$StageEvidence.proven-and
+      $null-ne$StageEvidence.PSObject.Properties['extended_raw_replay']-and
+      $null-ne$StageEvidence.extended_raw_replay-and
+      $null-ne$StageEvidence.extended_raw_replay.PSObject.Properties['first_usb_failure']){
+    $record=$StageEvidence.extended_raw_replay.first_usb_failure
+  }
+  [pscustomobject][ordered]@{record_acquisition=if($null-ne$record){'PROVEN'}else{'NOT_RECORDED'}
+    first_failure_observation=if($null-eq$record){'NOT_RECORDED'}elseif([bool]$record.failure_latched){'LATCHED'}else{'NOT_LATCHED'}
+    wait_reason=if($null-eq$record-or-not[bool]$record.failure_latched){'NOT_OBSERVED'}elseif(-not[bool]$record.first_failure.api_called){'API_NOT_INVOKED'}else{[string]$record.first_failure.sdk.terminal_name}
+    record=$record
+    pc_time_relation='UNKNOWN'
+    pc_time_reason='No matched same-boot nonce exchange, uninterrupted clock continuity and guaranteed error bound supplied.'
+    acquisition_proves_usb_success=$false;acquisition_proves_pc_consumption=$false
+    observation_is_continuous_state=$false
+    semantics='Immutable first-failure decision and terminal-boundary SDK snapshot; not physical fault onset or live host consumption.'}
+}
+
+function Get-ExtendedStageRawReplay([object]$Summary,[string]$Role,
+    [string]$EvidenceDirectory){
+  # Independent byte-to-word replay: never invoke the reader or trust its
+  # decoded JSON as a substitute for any immutable raw file.
+  $hasTimedPath=([string]$Summary.schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v6')
+  $timedPathRequested=[bool](Get-Variable -Name timedPathEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  Assert-Condition ($hasTimedPath-eq$timedPathRequested) 'Timed-path reader generation differs from requested mode'
+  $hasFirstFailure=([string]$Summary.schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v6'))
+  $sizes=[ordered]@{runtime_stage=68;endpoint_fifo=112
+    hwcdc_restart=128;ground_usb_commit=128}
+  $names=[ordered]@{runtime_stage='vc_lora_r19_runtime_stage_record'
+    endpoint_fifo='vc_lora_r19_hwcdc_fifo_diagnostic_record'
+    hwcdc_restart='vc_lora_r19_hwcdc_restart_diagnostic_record'
+    ground_usb_commit='vc_lora_r19_ground_usb_commit_record'}
+  $leaves=@{runtime_stage='runtime-stage';endpoint_fifo='endpoint-fifo'
+    hwcdc_restart='hwcdc-restart';ground_usb_commit='ground-usb-commit'}
+  if($hasFirstFailure){$sizes['first_usb_failure']=384
+    $names['first_usb_failure']='vc_lora_r19_first_usb_failure_record'
+    $leaves['first_usb_failure']='first-usb-failure'}
+  $symbolCount=$sizes.Count+$(if($hasTimedPath){1}else{0});$rawCount=2*$symbolCount
+  foreach($field in @('com_opened','flash_written','target_restart_issued',
+      'halted_for_reads','two_identical_reads','resume_shutdown_cleanup_attempted',
+      'resume_shutdown_cleanup_proven','capture_process_termination_proven',
+      'native_processes_termination_proven','target_may_be_halted')){
+    Assert-Condition ($Summary.safety.$field-is[bool]) "v4 safety $field must be boolean"
+  }
+  Assert-Condition ([bool]$Summary.safety.halted_for_reads-and
+      [bool]$Summary.safety.capture_process_termination_proven) `
+      'v4 halt or capture-process termination is unproven'
+  if($hasTimedPath){
+    Assert-Condition ($Summary.safety.resume_shutdown_cleanup_attempted-and
+      $Summary.safety.resume_shutdown_cleanup_proven-and
+      $Summary.safety.native_processes_termination_proven-and
+      -not$Summary.safety.target_may_be_halted) 'Timed-path CPU resume/shutdown or native termination is unproven'
+  }
+  foreach($value in @($Summary.hardware_interaction,
+      $Summary.binding.probe.opened_identity_proven_before_halt,
+      $Summary.binding.artifact.extended_records_enabled,
+      $Summary.decoded.usb_tx_boundary_completion_proven,
+      $Summary.decoded.endpoint_fifo.usb_tx_boundary_completion_proven)){
+    Assert-Condition ($value-is[bool]) 'v4 proof flag must be boolean'
+  }
+  foreach($property in $Summary.decoded.endpoint_fifo.flags.PSObject.Properties){
+    if($property.Name-notin@('mask','names')){
+      Assert-Condition ($property.Value-is[bool]) 'v4 operational flag must be boolean'
+    }
+  }
+  $raw=@{};$ranges=@();$reads=@($Summary.reads)
+  Assert-Condition ($reads.Count-eq$rawCount) 'extended reader raw read count differs'
+  $manifestPath=[string]$candidate.candidate_manifest_path
+  Assert-Condition ((Get-Sha256 $manifestPath)-ceq
+      [string]$candidate.candidate_manifest_sha256) 'v4 manifest changed'
+  $manifest=Read-JsonIfPresent $manifestPath
+  Assert-CandidateDiagnosticAbiContract $manifest 'v4 replay manifest'
+  $expectedReader=if($hasTimedPath){[string]$manifest.timed_path_diagnostics.reader_schema}else{[string]$manifest.reader_schema}
+  Assert-Condition ([string]$Summary.schema-ceq$expectedReader-and
+      [string]$manifest.reader_schema-ceq[string]$candidate.reader_schema) 'extended reader/candidate schema downgrade or mixture'
+  if($hasFirstFailure){
+    $descriptor=$manifest.first_usb_failure_decoder
+    Assert-RawProjection $Summary.binding.first_usb_failure_decoder $descriptor 'v5 top-level decoder binding'
+    Assert-RawProjection $Summary.binding.artifact.first_usb_failure_decoder $descriptor 'v5 decoder binding'
+    $canonicalDecoder=Join-Path $repo 'tools/read_r19_first_usb_failure_record.ps1'
+    $sealedDecoder=Join-Path ([string]$candidate.artifact_root) 'evidence/tools/read_r19_first_usb_failure_record.ps1'
+    Assert-Condition ((Get-Sha256 $canonicalDecoder)-ceq[string]$descriptor.sha256-and
+        (Get-Sha256 $sealedDecoder)-ceq[string]$descriptor.sha256) 'v5 canonical/sealed decoder SHA differs'
+  }
+  Assert-Condition ([string]$manifest.artifact_id-ceq
+      [string]$candidate.artifact_id-and
+      [string]$Summary.binding.artifact.artifact_id-ceq
+      [string]$candidate.artifact_id-and
+      [string]$Summary.binding.artifact.role-ceq$Role-and
+      [string]$Summary.binding.artifact.root-ieq
+      [string]$candidate.artifact_root-and
+      [string]$Summary.binding.artifact.manifest_path-ieq$manifestPath-and
+      [string]$Summary.binding.artifact.manifest_sha256-ceq
+      [string]$candidate.candidate_manifest_sha256) 'v4 artifact identity differs'
+  $roles=@($manifest.roles|Where-Object{[string]$_.role-ceq$Role})
+  Assert-Condition ($roles.Count-eq1) 'v4 role is not unique'
+  $sealed=$roles[0].runtime_diagnostic_symbols
+  Assert-Condition ([string]$sealed.schema-ceq
+      'vc-lora-r19-runtime-diagnostic-symbols-v1'-and
+      [bool]$Summary.binding.artifact.extended_records_enabled) `
+      'v4 sealed symbol binding is absent'
+  Assert-Condition (@($sealed.symbols.PSObject.Properties).Count-eq$symbolCount-and
+      @($Summary.binding.artifact.symbols.PSObject.Properties).Count-eq$symbolCount) `
+      'extended reader bound symbol count differs'
+  Assert-RawProjection $Summary.binding.artifact.extended_record_metadata `
+      $sealed 'v4 full symbol metadata'
+  foreach($hashName in @('elf_sha256','map_sha256','application_sha256')){
+    Assert-Condition ([string]$sealed.$hashName-match'^[0-9A-F]{64}$'-and
+        [string]$Summary.binding.artifact.extended_record_metadata.$hashName-ceq
+          [string]$sealed.$hashName) 'v4 artifact hash metadata differs'
+  }
+  foreach($kind in @('elf','map')){
+    $sealedFiles=@($roles[0].reproducibility_artifacts.files|Where-Object{
+      [string]$_.path-cmatch('\.'+$kind+'$')})
+    Assert-Condition ($sealedFiles.Count-eq1) "v4 requires one sealed $kind file"
+    $path=[IO.Path]::GetFullPath((Join-Path ([string]$candidate.artifact_root) `
+      ([string]$sealedFiles[0].path).Replace('/','\')))
+    Assert-Condition ($path.StartsWith(([string]$candidate.artifact_root+'\'),
+        [StringComparison]::OrdinalIgnoreCase)-and
+        [string]$Summary.binding.artifact.($kind+'_path')-ieq$path-and
+        [string]$Summary.binding.artifact.($kind+'_sha256')-ceq
+          [string]$sealed.($kind+'_sha256')-and
+        [string]$sealedFiles[0].sha256-ceq[string]$sealed.($kind+'_sha256')-and
+        (Get-Sha256 $path)-ceq[string]$sealed.($kind+'_sha256')) `
+        "v4 sealed $kind hash/path differs"
+  }
+  $applicationPath=[IO.Path]::GetFullPath((Join-Path ([string]$candidate.artifact_root) `
+    ([string]$roles[0].application.path).Replace('/','\')))
+  Assert-Condition ($applicationPath.StartsWith(([string]$candidate.artifact_root+'\'),
+      [StringComparison]::OrdinalIgnoreCase)-and
+      [string]$roles[0].application.sha256-ceq[string]$sealed.application_sha256-and
+      [string]$Summary.binding.artifact.application_sha256-ceq
+        [string]$sealed.application_sha256-and
+      (Get-Sha256 $applicationPath)-ceq[string]$sealed.application_sha256) `
+      'v4 application hash/path differs'
+  $expectedSerial=if($Role-ceq'vehicle'){
+    '90:70:69:11:81:A4'}else{'1C:DB:D4:5A:83:80'}
+  Assert-Condition ([string]$Summary.binding.probe.requested_serial-ieq
+      $expectedSerial-and[string]$Summary.binding.probe.opened_serial-ieq
+      $expectedSerial-and
+      [string]$Summary.binding.probe.opened_usb_location-ceq
+        [string]$Summary.binding.probe.requested_usb_location) `
+      'v4 opened role identity differs'
+  $flash=Read-JsonIfPresent $flashRecordPath
+  Assert-Condition ($null-ne$flash-and
+      [string]$Summary.binding.flash.path-ieq$flashRecordPath-and
+      [string]$Summary.binding.flash.sha256-ceq(Get-Sha256 $flashRecordPath)-and
+      [string]$flash.schema-ceq'vc-lora-r19-candidate-flash-evidence-v1'-and
+      [string]$flash.result-ceq'PASS'-and
+      [string]$flash.status-ceq'PASS_R19_DIAGNOSTIC_INSTALLED_HIL_ONLY'-and
+      [string]$flash.candidate.artifact_id-ceq[string]$candidate.artifact_id) `
+      'v4 flash evidence identity differs'
+  $flashRoles=@($flash.roles|Where-Object{[string]$_.role-ceq$Role})
+  Assert-Condition ($flashRoles.Count-eq1) 'v4 flash role is not unique'
+  $flashRole=$flashRoles[0]
+  $expectedPort=if($Role-ceq'vehicle'){'COM3'}else{'COM6'}
+  Assert-Condition ([string]$Summary.binding.flash.role-ceq$Role-and
+      [string]$Summary.binding.flash.port-ceq$expectedPort-and
+      [string]$flashRole.port-ceq$expectedPort-and
+      [string]$Summary.binding.flash.pnp_device_id-ceq[string]$flashRole.pnp_device_id-and
+      [string]$Summary.binding.flash.parent_device_id-ceq[string]$flashRole.parent_device_id-and
+      [string]$flashRole.parent_device_id-ieq('USB\VID_303A&PID_1001\'+$expectedSerial)-and
+      [string]$Summary.binding.flash.probe_serial-ieq$expectedSerial-and
+      [string]$flashRole.mac-ieq$expectedSerial-and
+      [string]$Summary.binding.flash.application_sha256-ceq[string]$sealed.application_sha256-and
+      [string]$flashRole.sha256-ceq[string]$sealed.application_sha256-and
+      [bool]$flashRole.write_pass-and[bool]$flashRole.verify_pass-and
+      [bool]$flashRole.reenumeration_pass) 'v4 flash role/PNP/application binding differs'
+  $index=0
+  foreach($sample in 1,2){
+    foreach($name in $sizes.Keys){
+      $size=[int]$sizes[$name];$r=$reads[$index];++$index
+      $path=(Resolve-Path -LiteralPath ([string]$r.path)).Path
+      $sampleName=if($sample-eq1){'first'}else{'second'}
+      Assert-Condition ([string]$r.record-ceq$name-and[int]$r.sample-eq$sample-and
+          [int]$r.size_bytes-eq$size-and
+          (Split-Path -Parent $path)-ieq$EvidenceDirectory-and
+          (Split-Path -Leaf $path)-ceq($leaves[$name]+'-'+$sampleName+'.bin')-and
+          (Get-Item -LiteralPath $path).Length-eq$size-and
+          [string]$r.sha256-match'^[0-9A-F]{64}$'-and
+          [string]$r.sha256-ceq(Get-Sha256 $path)) 'v4 raw file binding differs'
+      [byte[]]$bytes=[IO.File]::ReadAllBytes($path)
+      if($sample-eq2){
+        Assert-Condition ([Linq.Enumerable]::SequenceEqual(
+          [byte[]]$raw[$name],[byte[]]$bytes)) 'v4 raw samples differ'
+      }else{$raw[$name]=$bytes}
+    }
+  }
+  $words=@{}
+  foreach($name in $sizes.Keys){
+    $symbol=$sealed.symbols.$name
+    Assert-Condition ([string]$symbol.name-ceq[string]$names[$name]-and
+        [int]$symbol.size_bytes-eq[int]$sizes[$name]-and
+        $symbol.aligned_32_bit-is[bool]-and[bool]$symbol.aligned_32_bit-and
+        [string]$symbol.address-match'^0x[0-9a-f]{8}$') `
+        'v4 sealed symbol layout differs'
+    $reported=$Summary.binding.artifact.symbols.$name
+    $reportedMetadata=$Summary.binding.artifact.extended_record_metadata.symbols.$name
+    foreach($binding in @($reported,$reportedMetadata)){
+      Assert-Condition ([string]$binding.name-ceq[string]$symbol.name-and
+          [string]$binding.address-ceq[string]$symbol.address-and
+          [int]$binding.size_bytes-eq[int]$symbol.size_bytes-and
+          $binding.aligned_32_bit-is[bool]-and
+          [bool]$binding.aligned_32_bit) 'v4 reader symbol metadata differs'
+    }
+    $address=[string]$Summary.binding.($name+'_address')
+    Assert-Condition ($address-ceq[string]$symbol.address) 'v4 raw address differs'
+    $mapText=[IO.File]::ReadAllText([string]$Summary.binding.artifact.map_path,$utf8)
+    $mapSymbols=[regex]::Matches($mapText,('(?m)^\s*(0x[0-9a-fA-F]+)\s+'+
+      [regex]::Escape([string]$names[$name])+'\s*$'))
+    Assert-Condition ($mapSymbols.Count-eq1-and
+        $mapSymbols[0].Groups[1].Value.ToLowerInvariant()-ceq$address) `
+        'v4 raw address does not match the sealed MAP symbol'
+    [uint64]$start=[Convert]::ToUInt32($address.Substring(2),16)
+    [uint64]$end=$start+[uint64]$sizes[$name]
+    Assert-Condition (($start%4)-eq0-and$end-le4294967296) 'v4 invalid raw range'
+    foreach($range in $ranges){
+      Assert-Condition ($end-le$range.start-or$start-ge$range.end) `
+          'v4 raw address ranges overlap'
+    }
+    $ranges+=@{start=$start;end=$end}
+    [uint32[]]$w=@(for($offset=0;$offset-lt$raw[$name].Length;$offset+=4){
+      [BitConverter]::ToUInt32([byte[]]$raw[$name],$offset)})
+    Assert-Condition ($w[0]-eq0-and($w[1]-band1)-eq0) 'v4 raw writer is active'
+    $magic=switch($name){runtime_stage{0x52313953}endpoint_fifo{0x48313946}
+      hwcdc_restart{0x48313952}ground_usb_commit{0x52313943}first_usb_failure{0x52313955}}
+    $version=if($name-ceq'endpoint_fifo'){2}else{1}
+    Assert-Condition ($w[2]-eq$magic-and$w[3]-eq$version) 'v4 raw header differs'
+    $words[$name]=$w
+  }
+  $s=$words.runtime_stage;$f=$words.endpoint_fifo;$r=$words.hwcdc_restart
+  $c=$words.ground_usb_commit
+  $roleCode=if($Role-ceq'ground'){1}else{2}
+  Assert-Condition ($s[4]-eq$roleCode-and$c[4]-eq$roleCode-and
+      ($s[9]-band0xfffe0000)-eq0-and($s[15]-band0xfffe0000)-eq0) `
+      'v4 raw runtime role/mask differs'
+  [uint32[]]$fingerprint=@(0x52313944,0x53544731,0x32303236,0x31303033)
+  for($i=0;$i-lt4;++$i){Assert-Condition ($s[5+$i]-eq$fingerprint[$i]-and
+      $c[5+$i]-eq$fingerprint[$i]) 'v4 raw build fingerprint differs'}
+  $failureLabels=@('None','CadenceStartRejected','CadenceFailClosedObserved',
+    'GroundBoundaryImpossible','GroundReservationEpochChanged',
+    'GroundReservationDeadlineExpired','GroundReservationDeadlineOverflow',
+    'GroundReservationFlushFailed','GroundReservationFlushEpochChanged',
+    'GroundReservationFlushLate','FrameDeadlineExpired','StageRejected',
+    'EpochChangedBeforeWrite','AcceptedBeyondRequest','PublisherWriteStateInvalid',
+    'FlushDeadlineInvalidOrExpired','FlushFailed','EpochChangedAfterFlush',
+    'FlushCompletedLate','CadenceCommitRejected','AlivePublisherResetRejected',
+    'GroundBoundaryHostLostWhileDraining','GroundBoundaryHostAbsentWithIrreversiblePrefix',
+    'GroundBoundaryEpochChanged','GroundBoundaryDeadlineExpired',
+    'GroundBoundaryOrderedBacklogDiscardFailed','GroundBoundaryHeldHeartbeatDiscardFailed',
+    'GroundBoundaryEgressPumpInvalid','GroundBoundaryFlushFailed',
+    'GroundBoundaryFlushEpochChanged','GroundBoundaryFlushLate')
+  $failureIndex=[int]($s[14]-band255)
+  Assert-Condition (($s[14]-eq0-and$s[15]-eq0-and$s[16]-eq0)-or
+      (($s[14]-band0xffffff00)-eq0x54520000-and$failureIndex-gt0-and
+       $failureIndex-lt$failureLabels.Count)) 'v4 runtime first failure domain/detail invalid'
+  $stageLabels=[ordered]@{1='SetupEntered';2='SerialBeginReturned'
+    4='CadenceStarted';8='IdentityReady';16='E220ProfileChecked'
+    32='StartupAllowed';64='E220NormalMode';128='AdapterReady'
+    256='SetupComplete';512='LoopEntered';1024='HostGateObserved'
+    2048='FrameStaged';4096='WriteAttempted';8192='WriteAccepted'
+    16384='FlushCompleted';32768='TransportRecoveryEntered'
+    65536='TransportRecoveryCompleted'}
+  $reached=@(foreach($stageEntry in $stageLabels.GetEnumerator()){
+    if(($s[9]-band[uint32]$stageEntry.Key)-ne0){[string]$stageEntry.Value}})
+  $lastStage=if($reached.Count-eq0){'None'}else{[string]$reached[-1]}
+  $runtimeBoundary='record-initialized-without-setup-witness'
+  foreach($entry in @(@(16384,'flush-completed'),@(8192,'write-accepted-before-flush'),
+      @(4096,'write-attempted-not-accepted'),@(2048,'frame-staged-before-write'),
+      @(1024,'host-gate-observed-before-frame-stage'),@(512,'loop-entered-before-host-gate'),
+      @(256,'setup-complete-before-loop'),@(1,'setup-incomplete'))){
+    if(($s[9]-band[uint32]$entry[0])-ne0){$runtimeBoundary=[string]$entry[1];break}
+  }
+  Assert-Condition ((@($Summary.decoded.reached_stages)-join'|')-ceq
+      ($reached-join'|')) 'v4 runtime reached stages differ from raw mask'
+  Assert-RawProjection $Summary.decoded ([ordered]@{active_writer=$s[0]
+    sequence=$s[1];magic=('0x{0:x8}'-f$s[2]);schema=$s[3];role=$Role
+    boundary_classification=$runtimeBoundary;last_reached_stage=$lastStage
+    stage_mask=('0x{0:x8}'-f$s[9]);counters=[ordered]@{boot=$s[10]
+      loop=$s[11];publish_attempt=$s[12];exact_frame_restart=$s[13]}
+    first_failure=[ordered]@{code=('0x{0:x8}'-f$s[14])
+      name=$failureLabels[$failureIndex]
+      stage_mask=('0x{0:x8}'-f$s[15]);detail=$s[16]}}) 'runtime'
+  $fifoProjection=[ordered]@{active_writer=$f[0];sequence=$f[1]
+    magic=('0x{0:x8}'-f$f[2]);schema=$f[3]
+    flags=[ordered]@{mask=('0x{0:x8}'-f$f[4])};tx_loss_epoch=$f[5]
+    counters=[ordered]@{fifo_write_attempt=$f[6];fifo_write_bytes=$f[7]
+      fifo_zero_write=$f[8];wr_done=$f[10];in_empty_irq=$f[11]
+      payload_in_empty=$f[12];bus_reset=$f[15];flush_attempt=$f[16]
+      flush_success=$f[17];flush_timeout=$f[18];zlp_flush=$f[19]}
+    last_fifo_write_size=$f[9];generations=[ordered]@{publish=$f[13];pickup=$f[14]}
+    pending_bytes=[ordered]@{ring=$f[20];stash=$f[21]}
+    last_interrupt_status=('0x{0:x8}'-f$f[22])
+    flush_blockers=[ordered]@{mask=('0x{0:x8}'-f$f[23])}
+    last_flush_outcome_code=$f[24];last_flush_task_zlp_count=$f[25]
+    last_flush_isr_zlp_count=$f[26]
+    last_flush_terminal_blocker_mask=('0x{0:x8}'-f$f[27])}
+  Assert-RawProjection $Summary.decoded.endpoint_fifo $fifoProjection 'fifo'
+  $rawFifoBoundary=Get-RawFifoBoundary $f
+  Assert-Condition ([string]$Summary.decoded.usb_tx_boundary_classification-ceq
+      [string]$rawFifoBoundary.classification-and
+      [string]$Summary.decoded.endpoint_fifo.boundary_classification-ceq
+      [string]$rawFifoBoundary.classification-and
+      [bool]$Summary.decoded.usb_tx_boundary_completion_proven-eq
+      [bool]$rawFifoBoundary.complete-and
+      [bool]$Summary.decoded.endpoint_fifo.usb_tx_boundary_completion_proven-eq
+      [bool]$rawFifoBoundary.complete-and
+      (-not[bool]$rawFifoBoundary.complete-or($f[20]-eq0-and$f[21]-eq0))) `
+      'v4 reported USB completion differs from independent raw classification'
+  $firstValid=($r[4]-band2)-ne0;$latestValid=($r[4]-band4)-ne0
+  Assert-Condition (($r[4]-band0xfffffff8)-eq0-and($r[4]-band1)-ne0-and
+      $r[31]-eq0-and$r[6]-le$r[5]-and$r[7]-le$r[5]-and
+      $firstValid-eq($r[6]-gt0)-and$latestValid-eq($r[7]-gt0)) `
+      'v4 restart validity/counters differ'
+  if($firstValid){Assert-Condition ($r[8]-in1,2-and$r[9]-gt0-and
+      $r[9]-le$r[5]-and($r[10]-band8)-ne0-and
+      ($r[10]-band0x3f0)-eq0-and($r[12]-gt0-or$r[13]-gt0)) `
+      'v4 first blocked restart is invalid'
+  }else{foreach($i in 8..17){Assert-Condition ($r[$i]-eq0) 'v4 unlatch restart payload'}}
+  if($latestValid){Assert-Condition ($r[18]-in1,2-and$r[19]-in1,2,3,4,5-and
+      $r[20]-gt0-and$r[20]-le32-and$r[21]-le$r[20]-and
+      $r[22]-gt0-and$r[22]-le$r[5]-and
+      (($r[19]-in1,4-and$r[21]-gt0)-or($r[19]-in2,3,5-and$r[21]-eq0))-and
+      ($r[19]-ne1-or($r[23]-band16)-ne0)) 'v4 latest restart is invalid'
+  }else{foreach($i in 18..30){Assert-Condition ($r[$i]-eq0) 'v4 absent restart payload'}}
+  $restartProjection=[ordered]@{schema=1;size_bytes=128;sequence=$r[1]
+    flags=('0x{0:x8}'-f$r[4]);initialized=$true;first_blocked_latched=$firstValid
+    latest_restart_valid=$latestValid;event_count=$r[5];blocked_count=$r[6]
+    restart_count=$r[7];first=[ordered]@{phase=$r[8];ordinal=$r[9]
+      state=(Get-RawRestartState $r 10)}
+    latest=[ordered]@{origin=$r[18];outcome=$r[19];requested_bytes=$r[20]
+      written_bytes=$r[21];ordinal=$r[22];state=(Get-RawRestartState $r 23)}}
+  Assert-RawProjection $Summary.decoded.hwcdc_restart $restartProjection 'restart'
+  Assert-Condition ($c[9]-le4-and($c[10]-band0xfffffff8)-eq0-and
+      ($c[11]-band0xfffffff8)-eq0-and($c[11]-band$c[10])-eq$c[11]-and
+      $c[31]-le$c[30]) 'v4 commit mask/accounting invalid'
+  if($c[9]-eq0){foreach($i in 10..31){Assert-Condition ($c[$i]-eq0) 'v4 absent commit payload'}}
+  else{
+    $allowed=if($c[9]-in1,4){@(7)}elseif($c[9]-eq3){@(6,7)}else{@(6)}
+    Assert-Condition ($Role-ceq'ground'-and$c[10]-in$allowed-and$c[12]-gt0) `
+        'v4 commit reason observation invalid'
+  }
+  $values=[ordered]@{}
+  foreach($entry in @(@('commit_started_ms',16),@('flush_started_ms',18),
+      @('completed_ms',20),@('deadline_ms',22),@('committed_base',24),
+      @('commit_goal',26),@('bytes_committed',28))){
+    $i=[int]$entry[1]
+    $values[[string]$entry[0]]=[uint64]$c[$i]+([uint64]$c[$i+1]*[uint64]4294967296)
+  }
+  $predicates=[ordered]@{};$bit=1
+  foreach($name in @('transport_published','endpoint_ready','completed_within_deadline')){
+    $predicates[$name]=[ordered]@{observed=(($c[10]-band$bit)-ne0)
+      value=(($c[11]-band$bit)-ne0)};$bit*=2
+  }
+  $commitProjection=[ordered]@{schema=1;size_bytes=128;sequence=$c[1];role=$Role
+    failure_latched=($c[9]-ne0);reason=$c[9]
+    reason_name=@('None','PublicationRejected','BeforeFlushDeadline','Retired','PacerCompletionRejected')[$c[9]]
+    observed_mask=$c[10];true_mask=$c[11];source_line=$c[12];token=$c[13]
+    expected_epoch=$c[14];observed_epoch=$c[15];values=$values
+    expected_frame_bytes=$c[30];accepted_frame_bytes=$c[31];predicates=$predicates}
+  Assert-RawProjection $Summary.decoded.ground_usb_commit $commitProjection 'commit'
+  $failedPredicates=@()
+  foreach($name in $predicates.Keys){if($predicates[$name].observed-and
+      -not$predicates[$name].value){$failedPredicates+=$name}}
+  $firstUsbFailure=$null
+  $timedRecord=$null
+  if($hasFirstFailure){
+    $firstRawSha=[string]$reads[4].sha256
+    $firstUsbFailure=Get-RawFirstUsbFailureRecord $words.first_usb_failure $Role $firstRawSha
+    Assert-RawProjection $Summary.decoded.first_usb_failure $firstUsbFailure 'v5 first USB failure'
+  }else{
+    Assert-Condition ($null-eq$Summary.decoded.PSObject.Properties['first_usb_failure']-and
+        $null-eq$Summary.binding.PSObject.Properties['first_usb_failure_address']-and
+        $null-eq$Summary.binding.artifact.PSObject.Properties['first_usb_failure_decoder']) 'v4 summary contains undeclared v5 evidence'
+  }
+  if($hasTimedPath){
+    Assert-RawProjection $Summary.binding.timed_path_diagnostics $manifest.timed_path_diagnostics 'timed-path JTAG binding'
+    $timedSymbol=$sealed.symbols.timed_path
+    Assert-Condition ($timedSymbol.name-ceq'vc_lora_r19_timed_path_record'-and
+      $timedSymbol.size_bytes-eq512-and$timedSymbol.aligned_32_bit-is[bool]-and
+      $timedSymbol.aligned_32_bit-and$Summary.binding.timed_path_address-ceq$timedSymbol.address) 'Timed-path symbol binding differs'
+    [uint64]$timedStart=[Convert]::ToUInt32($timedSymbol.address.Substring(2),16)
+    foreach($range in $ranges){Assert-Condition ($timedStart+512-le$range.start-or$timedStart-ge$range.end) 'Timed-path record overlaps an existing record'}
+    $timedRaw=@()
+    foreach($sample in 1,2){
+      $read=$reads[10+$sample-1];$sampleName=if($sample-eq1){'first'}else{'second'}
+      $path=(Resolve-Path -LiteralPath ([string]$read.path)).Path
+      Assert-Condition ($read.record-ceq'timed_path'-and$read.sample-eq$sample-and
+        $read.size_bytes-eq512-and(Split-Path -Parent $path)-ieq$EvidenceDirectory-and
+        (Split-Path -Leaf $path)-ceq("timed_path_$sampleName.bin")-and
+        (Get-Item -LiteralPath $path).Length-eq512-and
+        $read.sha256-ceq(Get-Sha256 $path)) 'Timed-path raw read binding differs'
+      $timedRaw+=,([IO.File]::ReadAllBytes($path))
+    }
+    $descriptor=$manifest.timed_path_diagnostics.decoder
+    $decoderPath=Join-Path $repo $descriptor.path
+    $sealedDecoder=Join-Path $candidate.artifact_root ('evidence/'+$descriptor.path)
+    Assert-Condition ((Get-Sha256 $decoderPath)-ceq$descriptor.sha256-and
+      (Get-Sha256 $sealedDecoder)-ceq$descriptor.sha256) 'Timed-path decoder binding differs'
+    . $decoderPath
+    $timedRecord=ConvertFrom-R19TimedPathRecord -First $timedRaw[0] -Second $timedRaw[1] -ExpectedRole $Role -ExpectedMode $TimedPathMode
+    Assert-RawProjection $Summary.decoded.timed_path $timedRecord 'timed-path raw projection'
+    for($i=0;$i-lt4;$i++){Assert-Condition ($timedRecord.build_id[$i]-eq$s[5+$i]-and
+      $timedRecord.boot_id[$i]-eq$firstUsbFailure.boot_instance[$i]) 'Timed-path build or boot differs from first failure record'}
+    if($timedRecord.session_observed){
+      Assert-Condition ($firstUsbFailure.clock_sync.observed-is[bool]-and
+        $firstUsbFailure.clock_sync.observed-and
+        $timedRecord.nonce-ceq$firstUsbFailure.clock_sync.nonce-and
+        $timedRecord.timestamps.clock_request_us-ceq$firstUsbFailure.clock_sync.device_us) 'Timed-path private clock nonce or sample differs from first failure record'
+    }
+  }
+  [pscustomobject][ordered]@{proven=$true;raw_read_count=$rawCount
+    usb_boundary_classification=[string]$rawFifoBoundary.classification
+    usb_boundary_completion_proven=[bool]$rawFifoBoundary.complete
+    interpretation='latched-events-not-continuous-live-hardware-state'
+    first_heartbeat_failure_latched=($c[9]-ne0)
+    first_heartbeat_reason=[string]$commitProjection.reason_name
+    first_heartbeat_failed_predicates=@($failedPredicates)
+    first_heartbeat_predicates=$predicates
+    restart_classification=if(-not$firstValid-and-not$latestValid){'no-restart-event-observed'}
+      elseif($latestValid-and$r[19]-eq1){'restart-payload-published-host-pickup-not-proven'}
+      elseif($latestValid-and$r[19]-eq2){'restart-zero-write-rejected'}
+      elseif($latestValid){'restart-reset-or-epoch-invalidation-observed'}
+      else{'idle-pending-observed-no-restart-outcome'}
+    hwcdc_restart=$Summary.decoded.hwcdc_restart
+    ground_usb_commit=$Summary.decoded.ground_usb_commit
+    first_usb_failure=$firstUsbFailure
+    timed_path_record=$timedRecord
+    first_usb_failure_pc_time_relation=[pscustomobject]@{classification='UNKNOWN'
+      reason='No matched same-boot nonce exchange, uninterrupted clock continuity and guaranteed error bound supplied.'
+      inferred_from_utc_or_elapsed_time=$false
+      semantics='failure-decision-sample-not-physical-fault-onset'}
+    record_acquisition_proves_usb_success=$false}
+}
+
+function Get-StageProof([object]$Step, [string]$Role, [string]$Address,
+    [string]$ProbeUsbLocation, [string]$EvidenceDirectory) {
+  $timedPathEnabled=[bool](Get-Variable -Name timedPathEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  if ($OfflineContractTest.IsPresent) {
+    $cleanupProven = if($Step.metadata.PSObject.Properties['cleanup_proven']){
+      [bool]$Step.metadata.cleanup_proven}else{[int]$Step.exit_code-eq0}
+    $targetMayBeHalted = if(
+        $Step.metadata.PSObject.Properties['target_may_be_halted']){
+      [bool]$Step.metadata.target_may_be_halted}else{$false}
+    $nativeProcessesTerminationProven = if(
+        $Step.metadata.PSObject.Properties[
+          'native_processes_termination_proven']){
+      [bool]$Step.metadata.native_processes_termination_proven}else{$true}
+    return [pscustomobject][ordered]@{
+      proven=([int]$Step.exit_code-eq0);role=$Role;address=$Address
+      probe_usb_location=$ProbeUsbLocation
+      cleanup_proven=$cleanupProven;target_may_be_halted=$targetMayBeHalted
+      native_processes_termination_proven=$nativeProcessesTerminationProven
+      boundary_classification=if([int]$Step.exit_code-eq0){
+        'offline-mock-boundary'}else{''}
+      usb_tx_boundary_classification=if([int]$Step.exit_code-eq0){
+        'offline-mock-usb-tx-boundary'}else{''}
+      usb_tx_boundary_completion_proven=([int]$Step.exit_code-eq0-and
+        $OfflineScenario-cne'usb_boundary_incomplete')
+      extended_raw_replay=[pscustomobject]@{proven=([int]$Step.exit_code-eq0)
+        first_heartbeat_failure_latched=($Role-ceq'ground'-and
+          $OfflineScenario-ceq'ground_heartbeat_failure_observed')}
+      endpoint_fifo=if([int]$Step.exit_code-eq0){
+        [pscustomobject]@{magic='0x48313946';schema=2
+          last_flush_outcome='Success';last_flush_outcome_code=2
+          last_flush_task_zlp_count=1;last_flush_isr_zlp_count=0
+          last_flush_terminal_blocker_mask='0x00000000'
+          last_flush_terminal_blocker_mask_code=0
+          last_flush_terminal_blocker_names=@()
+          last_flush_classification='success-with-task-zlp'
+          boundary_classification='offline-mock-usb-tx-boundary'
+          usb_tx_boundary_completion_proven=$true}
+      }else{$null}
+      first_failure=[pscustomobject]@{code='0x00000000';name='None'
+        stage_mask='0x00000000';detail=0}
+      evidence_directory=$EvidenceDirectory
+      summary_path='';summary_sha256=''
+    }
+  }
+  $summaryPath = Join-Path $EvidenceDirectory 'summary.json'
+  $summary = Read-JsonIfPresent $summaryPath
+  $proven = $false
+  $boundary = ''
+  $usbTxBoundary = ''
+  $endpointFifo = $null
+  $firstFailure = $null
+  $usbTxBoundaryCompletionProven = $false
+  $cleanupProven = $false
+  $targetMayBeHalted = $true
+  $nativeProcessesTerminationProven = $false
+  $extendedRawReplay=$null
+  $validationError=''
+  if ($null-ne$summary) {
+    try {
+      $cleanupProven = ($summary.safety.resume_shutdown_cleanup_proven -is [bool] -and
+          $summary.safety.resume_shutdown_cleanup_proven)
+      $targetMayBeHalted = ($summary.safety.target_may_be_halted -isnot [bool] -or
+          $summary.safety.target_may_be_halted)
+      $nativeProcessesTerminationProven =
+        ($summary.safety.native_processes_termination_proven -is [bool] -and
+          $summary.safety.native_processes_termination_proven)
+      $boundary = [string]$summary.decoded.boundary_classification
+      $usbTxBoundary =
+        [string]$summary.decoded.usb_tx_boundary_classification
+      $endpointFifo = $summary.decoded.endpoint_fifo
+      $firstFailure = [pscustomobject][ordered]@{
+        code=[string]$summary.decoded.first_failure.code
+        name=[string]$summary.decoded.first_failure.name
+        stage_mask=[string]$summary.decoded.first_failure.stage_mask
+        detail=[uint32]$summary.decoded.first_failure.detail}
+      [object[]]$reads = @($summary.reads)
+      $recordEvidenceValid = ($reads.Count -eq 4)
+      [object[]]$expectedReads = @(
+        [pscustomobject]@{record='runtime_stage';sample=1;size=68
+          leaf='runtime-stage-first.bin'},
+        [pscustomobject]@{record='endpoint_fifo';sample=1;size=112
+          leaf='endpoint-fifo-first.bin'},
+        [pscustomobject]@{record='runtime_stage';sample=2;size=68
+          leaf='runtime-stage-second.bin'},
+        [pscustomobject]@{record='endpoint_fifo';sample=2;size=112
+          leaf='endpoint-fifo-second.bin'}
+      )
+      $resolvedEvidenceDirectory =
+        (Resolve-Path -LiteralPath $EvidenceDirectory -ErrorAction Stop).Path
+      if ($recordEvidenceValid) {
+        for ($index = 0; $index -lt $expectedReads.Count; ++$index) {
+          $read = $reads[$index]
+          $expectedRead = $expectedReads[$index]
+          $resolvedReadPath = (Resolve-Path -LiteralPath ([string]$read.path) `
+              -ErrorAction Stop).Path
+          $recordEvidenceValid = ($recordEvidenceValid -and
+            [string]$read.record -ceq [string]$expectedRead.record -and
+            [int]$read.sample -eq [int]$expectedRead.sample -and
+            [int]$read.size_bytes -eq [int]$expectedRead.size -and
+            (Split-Path -Leaf $resolvedReadPath) -ceq
+              [string]$expectedRead.leaf -and
+            (Split-Path -Parent $resolvedReadPath) -ieq
+              $resolvedEvidenceDirectory -and
+            (Get-Item -LiteralPath $resolvedReadPath -ErrorAction Stop).Length -eq
+              [int64]$expectedRead.size -and
+            [string]$read.sha256 -match '^[0-9A-F]{64}$' -and
+            [string]$read.sha256 -ceq (Get-Sha256 $resolvedReadPath))
+        }
+      }
+      $recordEvidenceValid = ($recordEvidenceValid -and
+        [string]$reads[0].sha256 -ceq [string]$reads[2].sha256 -and
+        [string]$reads[1].sha256 -ceq [string]$reads[3].sha256)
+      $isExtended=([string]$summary.schema-cin@(
+          'vc-lora-r19-runtime-stage-jtag-read-v4','vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v6'))
+      $candidateHasExtension=($null-ne$candidate.PSObject.Properties['reader_schema']-and
+        [string]$candidate.reader_schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v4','vc-lora-r19-runtime-stage-jtag-read-v5'))
+      Assert-Condition ($isExtended-eq$candidateHasExtension) `
+          'Reader generation does not match the pinned candidate'
+      if($isExtended){$expectedReader=if($timedPathEnabled){'vc-lora-r19-runtime-stage-jtag-read-v6'}else{[string]$candidate.reader_schema};Assert-Condition ([string]$summary.schema-ceq$expectedReader) 'Reader generation downgrade does not match the pinned candidate'}
+      if($isExtended){
+        Assert-Condition ($Step.timed_out-is[bool]-and
+            $Step.termination_proven-is[bool]-and
+            $Step.process_tree_termination_proven-is[bool]-and
+            -not[bool]$Step.timed_out-and
+            [bool]$Step.termination_proven-and
+            [bool]$Step.process_tree_termination_proven) `
+            'v4 child process termination is not proven'
+        $extendedRawReplay=Get-ExtendedStageRawReplay $summary $Role `
+            $resolvedEvidenceDirectory
+        $recordEvidenceValid=[bool]$extendedRawReplay.proven
+      }
+
+      $runtimeAddress = [string]$summary.binding.runtime_stage_address
+      $fifoAddress = [string]$summary.binding.endpoint_fifo_address
+      $addressEvidenceValid = ($runtimeAddress -match '^0x[0-9a-f]{8}$' -and
+        $fifoAddress -match '^0x[0-9a-f]{8}$' -and
+        $runtimeAddress -ceq $Address.ToLowerInvariant() -and
+        [string]$summary.binding.address -ceq $runtimeAddress -and
+        $fifoAddress -cne $runtimeAddress)
+      if ($addressEvidenceValid) {
+        [uint64]$runtimeStart = [Convert]::ToUInt32(
+            $runtimeAddress.Substring(2),16)
+        [uint64]$fifoStart = [Convert]::ToUInt32($fifoAddress.Substring(2),16)
+        $addressEvidenceValid = (($runtimeStart % 4) -eq 0 -and
+          ($fifoStart % 4) -eq 0 -and
+          (($runtimeStart + 68) -le $fifoStart -or
+           ($fifoStart + 112) -le $runtimeStart))
+      }
+
+      [uint32]$fifoFlagsMask = [Convert]::ToUInt32(
+          ([string]$endpointFifo.flags.mask).Substring(2),16)
+      $decodedOperationalFlagMasks = [ordered]@{
+        'connected' = [uint32]0x00000004
+        'fifo_writable' = [uint32]0x00000008
+        'payload_in_flight' = [uint32]0x00000010
+        'fifo_quarantined' = [uint32]0x00000020
+        'reset_pending' = [uint32]0x00000040
+        'bootstrap_fence' = [uint32]0x00000080
+        'bootstrap_aborted' = [uint32]0x00000100
+        'debug_writer_active' = [uint32]0x00000200
+      }
+      $decodedOperationalFlagsMatchMask = $true
+      foreach ($decodedOperationalFlag in
+          $decodedOperationalFlagMasks.GetEnumerator()) {
+        $decodedOperationalProperty = $endpointFifo.flags.PSObject.Properties[
+            [string]$decodedOperationalFlag.Key]
+        $decodedOperationalBitSet = (($fifoFlagsMask -band
+            [uint32]$decodedOperationalFlag.Value) -ne 0)
+        if ($null -eq $decodedOperationalProperty -or
+            [bool]$decodedOperationalProperty.Value -ne
+              $decodedOperationalBitSet) {
+          $decodedOperationalFlagsMatchMask = $false
+        }
+      }
+      $payloadPublishPending =
+        [bool]$endpointFifo.flags.payload_publish_pending
+      $payloadPublishAborted =
+        [bool]$endpointFifo.flags.payload_publish_aborted
+      $payloadFlushPending =
+        [bool]$endpointFifo.flags.payload_flush_pending
+      $payloadInFlight = [bool]$endpointFifo.flags.payload_in_flight
+      [uint32]$fifoBlockerMask = [Convert]::ToUInt32(
+          ([string]$endpointFifo.flush_blockers.mask).Substring(2),16)
+      [uint32]$lastFlushTerminalBlockerMask = [Convert]::ToUInt32(
+          ([string]$endpointFifo.last_flush_terminal_blocker_mask).Substring(2),
+          16)
+      [string]$lastInterruptStatusText =
+        [string]$endpointFifo.last_interrupt_status
+      $lastInterruptStatusValid =
+        ($lastInterruptStatusText -match '^0x[0-9a-f]{8}$')
+      [uint32]$lastInterruptStatus = 0
+      if ($lastInterruptStatusValid) {
+        $lastInterruptStatus = [Convert]::ToUInt32(
+            $lastInterruptStatusText.Substring(2),16)
+      }
+      $lastEventBusReset = ($lastInterruptStatusValid -and
+        ($lastInterruptStatus -band 0x00000200) -ne 0)
+      $usbTxBoundaryCompletionProven = (
+        -not $lastEventBusReset -and
+        -not $payloadPublishPending -and
+        -not $payloadPublishAborted -and
+        -not $payloadFlushPending -and
+        $usbTxBoundary -ceq 'usb-tx-boundary-complete')
+      $lastEventClassificationValid = if ($lastEventBusReset) {
+        $usbTxBoundary -ceq 'last-event-bus-reset'
+      } else {
+        $usbTxBoundary -cne 'last-event-bus-reset'
+      }
+      [uint64]$fifoWriteAttemptCount =
+        [uint64]$endpointFifo.counters.fifo_write_attempt
+      [uint64]$fifoZeroWriteCount =
+        [uint64]$endpointFifo.counters.fifo_zero_write
+      [uint64]$wrDoneCount = [uint64]$endpointFifo.counters.wr_done
+      [uint64]$zlpFlushCount = [uint64]$endpointFifo.counters.zlp_flush
+      [uint64]$payloadInEmptyCount =
+        [uint64]$endpointFifo.counters.payload_in_empty
+      $fifoCounterBasesValid = ($zlpFlushCount -le $wrDoneCount -and
+        $fifoZeroWriteCount -le $fifoWriteAttemptCount)
+      [uint64]$nonZlpWrDone = 0
+      [uint64]$positiveFifoWriteAttempts = 0
+      if ($fifoCounterBasesValid) {
+        $nonZlpWrDone = $wrDoneCount - $zlpFlushCount
+        $positiveFifoWriteAttempts =
+          $fifoWriteAttemptCount - $fifoZeroWriteCount
+      }
+      $fifoCausalInvariantValid = ($fifoCounterBasesValid -and
+        $payloadInEmptyCount -le $nonZlpWrDone -and
+        $nonZlpWrDone -le $positiveFifoWriteAttempts -and
+        (-not $payloadPublishPending -or
+          $positiveFifoWriteAttempts -gt $nonZlpWrDone) -and
+        (-not $payloadPublishPending -or $payloadFlushPending) -and
+        (-not $payloadInFlight -or $payloadFlushPending) -and
+        (-not $payloadPublishAborted -or
+          (-not $payloadPublishPending -and -not $payloadFlushPending)) -and
+        (-not $payloadFlushPending -or
+          $positiveFifoWriteAttempts -gt 0))
+      [uint64]$publishGeneration = [uint64]$endpointFifo.generations.publish
+      [uint64]$pickupGeneration = [uint64]$endpointFifo.generations.pickup
+      [uint64]$expectedPublishGeneration =
+        ($pickupGeneration + [uint64]1) % [uint64]4294967296
+      $generationEvidenceValid = if ($payloadInFlight) {
+        $publishGeneration -eq $expectedPublishGeneration -and
+        [string]$endpointFifo.generations.relationship -ceq
+          'publish-is-one-ahead-modulo-uint32'
+      } else {
+        $publishGeneration -eq $pickupGeneration -and
+        [string]$endpointFifo.generations.relationship -ceq
+          'publish-equals-pickup'
+      }
+      [uint64]$flushTerminalCount =
+        [uint64]$endpointFifo.counters.flush_success +
+        [uint64]$endpointFifo.counters.flush_timeout
+      $flushActive = [bool]$endpointFifo.flags.flush_active
+      [uint64]$flushOpenCount = if ($flushActive) { 1 } else { 0 }
+      [uint64]$flushAccountedCount = $flushTerminalCount + $flushOpenCount
+      [uint64]$flushAttemptCount =
+        [uint64]$endpointFifo.counters.flush_attempt
+      $flushAccountingValid = ($flushAccountedCount -le $flushAttemptCount)
+      [uint64]$flushAbortCount = if ($flushAccountingValid) {
+        $flushAttemptCount - $flushAccountedCount
+      } else { 0 }
+      $flushAccountingValid = ($flushAccountingValid -and
+        [uint64]$endpointFifo.counters.flush_abort_inferred -eq
+          $flushAbortCount)
+      [string[]]$lastFlushOutcomeNames = @(
+        'None','Active','Success','Timeout','Abort')
+      [string[]]$lastFlushRequiredProperties = @(
+        'last_flush_outcome','last_flush_outcome_code',
+        'last_flush_task_zlp_count','last_flush_isr_zlp_count',
+        'last_flush_terminal_blocker_mask',
+        'last_flush_terminal_blocker_mask_code',
+        'last_flush_terminal_blocker_names','last_flush_classification')
+      $lastFlushShapeValid = @(
+        $lastFlushRequiredProperties | Where-Object {
+          $null -eq $endpointFifo.PSObject.Properties[$_]
+        }).Count -eq 0
+      [uint32]$lastFlushOutcomeCode =
+        [uint32]$endpointFifo.last_flush_outcome_code
+      [string]$lastFlushOutcome =
+        [string]$endpointFifo.last_flush_outcome
+      [uint64]$lastFlushTaskZlpCount =
+        [uint64]$endpointFifo.last_flush_task_zlp_count
+      [uint64]$lastFlushIsrZlpCount =
+        [uint64]$endpointFifo.last_flush_isr_zlp_count
+      $shortPacketSuccessWithoutZlp =
+          $lastFlushOutcomeCode -eq 2 -and
+          $lastFlushTaskZlpCount -eq 0 -and
+          $lastFlushIsrZlpCount -eq 0 -and
+          [uint32]$endpointFifo.last_fifo_write_size -gt 0 -and
+          [uint32]$endpointFifo.last_fifo_write_size -lt 64
+      [string]$expectedLastFlushClassification = if (
+          $lastFlushTaskZlpCount -gt 1) {
+        'multiple-task-zlp-during-attempt'
+      } elseif ($lastFlushIsrZlpCount -gt 1) {
+        'multiple-isr-zlp-during-attempt'
+      } elseif ($lastFlushOutcomeCode -eq 3 -and
+          $lastFlushTerminalBlockerMask -eq 0) {
+        'timeout-without-terminal-blocker'
+      } elseif ($lastFlushOutcomeCode -eq 0) {
+        'no-flush-attempt'
+      } elseif ($lastFlushOutcomeCode -eq 1) {
+        'flush-attempt-active'
+      } elseif ($shortPacketSuccessWithoutZlp) {
+        'success-with-short-packet-no-zlp'
+      } elseif ($lastFlushOutcomeCode -eq 2 -and
+          $lastFlushTaskZlpCount -gt 0 -and $lastFlushIsrZlpCount -gt 0) {
+        'success-with-task-and-isr-zlp'
+      } elseif ($lastFlushOutcomeCode -eq 2 -and
+          $lastFlushTaskZlpCount -gt 0) {
+        'success-with-task-zlp'
+      } elseif ($lastFlushOutcomeCode -eq 3) {
+        'timeout-with-terminal-blocker'
+      } else {
+        'abort-epoch-mismatch'
+      }
+      $lastFlushOutcomeValid = (
+        $lastFlushShapeValid -and
+        [string]$endpointFifo.last_flush_terminal_blocker_mask -match
+          '^0x[0-9a-f]{8}$' -and
+        $lastFlushOutcomeCode -lt $lastFlushOutcomeNames.Count -and
+        $lastFlushOutcome -ceq
+          $lastFlushOutcomeNames[$lastFlushOutcomeCode] -and
+        [string]$endpointFifo.last_flush_classification -ceq
+          $expectedLastFlushClassification -and
+        $flushActive -eq ($lastFlushOutcomeCode -eq 1) -and
+        [uint32]$endpointFifo.last_flush_terminal_blocker_mask_code -eq
+          $lastFlushTerminalBlockerMask -and
+        ($lastFlushTerminalBlockerMask -band 0xFFFFFF00) -eq 0 -and
+        ($lastFlushTaskZlpCount + $lastFlushIsrZlpCount) -le
+          [uint64]$endpointFifo.counters.zlp_flush -and
+        -not ($lastFlushOutcomeCode -eq 0 -and
+          ($flushAttemptCount -ne 0 -or
+           ($lastFlushTaskZlpCount + $lastFlushIsrZlpCount) -ne 0 -or
+           $lastFlushTerminalBlockerMask -ne 0)) -and
+        -not ($lastFlushOutcomeCode -ne 0 -and $flushAttemptCount -eq 0) -and
+        -not ($lastFlushOutcomeCode -eq 2 -and
+          [uint64]$endpointFifo.counters.flush_success -eq 0) -and
+        -not ($lastFlushOutcomeCode -eq 3 -and
+          [uint64]$endpointFifo.counters.flush_timeout -eq 0) -and
+        -not ($lastFlushOutcomeCode -eq 4 -and $flushAbortCount -eq 0) -and
+        -not ($lastFlushOutcomeCode -eq 2 -and
+          $lastFlushTaskZlpCount -eq 0 -and
+          -not $shortPacketSuccessWithoutZlp) -and
+        -not ($lastFlushOutcomeCode -eq 4 -and
+          ($lastFlushTerminalBlockerMask -band 0x00000002) -eq 0) -and
+        -not ($lastFlushOutcomeCode -in @(1,2) -and
+          $lastFlushTerminalBlockerMask -ne 0))
+      $endpointFifoValid = (
+        [uint32]$endpointFifo.active_writer -eq 0 -and
+        ([uint32]$endpointFifo.sequence -band 1) -eq 0 -and
+        [string]$endpointFifo.magic -ceq '0x48313946' -and
+        [uint32]$endpointFifo.schema -eq 2 -and
+        [string]$endpointFifo.state_semantics -ceq
+          'last-committed-diagnostic-event-not-live-hardware-state' -and
+        ($fifoFlagsMask -band 0xFFFFC000) -eq 0 -and
+        ($fifoFlagsMask -band 0x00000003) -eq 0x00000003 -and
+        [bool]$endpointFifo.flags.initialized -and
+        [bool]$endpointFifo.flags.observation_active -and
+        [bool]$endpointFifo.flags.diagnostic_observation_window_started -and
+        $decodedOperationalFlagsMatchMask -and
+        [bool]$endpointFifo.flags.fifo_write_attempt_observed -eq
+          ($fifoWriteAttemptCount -gt 0) -and
+        [bool]$endpointFifo.flags.positive_fifo_write_observed -eq
+          ([uint64]$endpointFifo.counters.fifo_write_bytes -gt 0) -and
+        [bool]$endpointFifo.flags.wr_done_observed -eq
+          ($wrDoneCount -gt 0) -and
+        [bool]$endpointFifo.flags.payload_pickup_observed -eq
+          ($payloadInEmptyCount -gt 0) -and
+        [bool]$endpointFifo.flags.payload_publish_pending -eq
+          (($fifoFlagsMask -band 0x00000800) -ne 0) -and
+        [bool]$endpointFifo.flags.payload_publish_aborted -eq
+          (($fifoFlagsMask -band 0x00001000) -ne 0) -and
+        [bool]$endpointFifo.flags.payload_flush_pending -eq
+          (($fifoFlagsMask -band 0x00002000) -ne 0) -and
+        $lastInterruptStatusValid -and
+        [bool]$endpointFifo.flags.last_event_bus_reset -eq
+          $lastEventBusReset -and
+        (-not $lastEventBusReset -or
+          [uint64]$endpointFifo.counters.bus_reset -gt 0) -and
+        $lastEventClassificationValid -and
+        [bool]$endpointFifo.usb_tx_boundary_completion_proven -eq
+          $usbTxBoundaryCompletionProven -and
+        [bool]$summary.decoded.usb_tx_boundary_completion_proven -eq
+          $usbTxBoundaryCompletionProven -and
+        $flushActive -eq (($fifoFlagsMask -band 0x00000400) -ne 0) -and
+        ($fifoBlockerMask -band 0xFFFFFF00) -eq 0 -and
+        [uint64]$endpointFifo.counters.payload_in_empty -le
+          [uint64]$endpointFifo.counters.in_empty_irq -and
+        $fifoCausalInvariantValid -and
+        [uint32]$endpointFifo.last_fifo_write_size -le 32 -and
+        $flushAccountingValid -and
+        $lastFlushOutcomeValid -and
+        $generationEvidenceValid -and
+        -not [string]::IsNullOrWhiteSpace($usbTxBoundary) -and
+        $usbTxBoundary -ceq
+          [string]$endpointFifo.boundary_classification)
+      $runtimeStageValid = (
+        [uint32]$summary.decoded.active_writer -eq 0 -and
+        ([uint32]$summary.decoded.sequence -band 1) -eq 0 -and
+        [string]$summary.decoded.magic -ceq '0x52313953' -and
+        [uint32]$summary.decoded.schema -eq 1)
+
+      $proven = ([int]$Step.exit_code-eq0 -and
+        [string]$summary.schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v3',
+          'vc-lora-r19-runtime-stage-jtag-read-v4','vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v6') -and
+        [string]$summary.result-ceq'PASS' -and
+        [string]$summary.mode-ceq'live-jtag' -and
+        [bool]$summary.hardware_interaction -and
+        [string]$summary.binding.artifact_id-ceq[string]$candidate.artifact_id -and
+        [string]$summary.binding.role-ceq$Role -and
+        $addressEvidenceValid -and
+        [string]$summary.binding.probe.requested_usb_location-ceq
+          $ProbeUsbLocation -and
+        [bool]$summary.binding.probe.opened_identity_proven_before_halt -and
+        [string]$summary.decoded.role-ceq$Role -and
+        $runtimeStageValid -and
+        $endpointFifoValid -and
+        $recordEvidenceValid -and
+        -not [string]::IsNullOrWhiteSpace($boundary) -and
+        -not [bool]$summary.safety.com_opened -and
+        -not [bool]$summary.safety.flash_written -and
+        -not [bool]$summary.safety.target_restart_issued -and
+        [bool]$summary.safety.two_identical_reads -and
+        [bool]$summary.safety.resume_shutdown_cleanup_attempted -and
+        [bool]$summary.safety.resume_shutdown_cleanup_proven -and
+        -not [bool]$summary.safety.target_may_be_halted -and
+        [bool]$summary.safety.native_processes_termination_proven)
+      $usbTxBoundaryCompletionProven =
+        ($proven -and $usbTxBoundaryCompletionProven)
+    } catch {
+      $validationError=$_.Exception.Message
+      $proven = $false
+      $boundary = ''
+      $usbTxBoundary = ''
+      $usbTxBoundaryCompletionProven = $false
+      $endpointFifo = $null
+      $firstFailure = $null
+      try {
+        $cleanupProven = ($summary.safety.resume_shutdown_cleanup_proven -is [bool] -and
+            $summary.safety.resume_shutdown_cleanup_proven)
+        $targetMayBeHalted = ($summary.safety.target_may_be_halted -isnot [bool] -or
+            $summary.safety.target_may_be_halted)
+        $nativeProcessesTerminationProven =
+          ($summary.safety.native_processes_termination_proven -is [bool] -and
+            $summary.safety.native_processes_termination_proven)
+      } catch {
+        $cleanupProven = $false
+        $targetMayBeHalted = $true
+        $nativeProcessesTerminationProven = $false
+      }
+    }
+  }
+  [pscustomobject][ordered]@{
+    proven=$proven;role=$Role;address=$Address
+    probe_usb_location=$ProbeUsbLocation
+    cleanup_proven=$cleanupProven;target_may_be_halted=$targetMayBeHalted
+    native_processes_termination_proven=$nativeProcessesTerminationProven
+    boundary_classification=$boundary
+    usb_tx_boundary_classification=$usbTxBoundary
+    usb_tx_boundary_completion_proven=$usbTxBoundaryCompletionProven
+    extended_raw_replay=$extendedRawReplay
+    validation_error=$validationError
+    endpoint_fifo=$endpointFifo
+    first_failure=$firstFailure
+    evidence_directory=$EvidenceDirectory
+    summary_path=if(Test-Path -LiteralPath $summaryPath -PathType Leaf){
+      $summaryPath}else{''}
+    summary_sha256=if(Test-Path -LiteralPath $summaryPath -PathType Leaf){
+      Get-Sha256 $summaryPath}else{''}
+  }
+}
+
+function Get-CanonicalCandidate {
+  $timedPathEnabled=[bool](Get-Variable -Name timedPathEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  Assert-Condition (Test-Path -LiteralPath $latestPath -PathType Leaf) `
+      'Canonical diagnostic candidate latest.json is missing'
+  Assert-Condition ($null -eq $script:candidateLatestLock) `
+      'Canonical diagnostic candidate latest.json is already locked'
+  $script:candidateLatestLock = [IO.FileStream]::new($latestPath,
+      [IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::Read)
+  $latestSha256 = Get-Sha256 $latestPath
+  $latest = [IO.File]::ReadAllText($latestPath, $utf8) | ConvertFrom-Json
+  Assert-CanonicalCandidatePin $latestSha256 ([string]$latest.artifact_id)
+  Assert-Condition ([string]$latest.schema -ceq
+      'vc-lora-r19-candidate-artifact-latest-v1' -and
+      [string]$latest.result -ceq 'PASS' -and
+      [bool]$latest.runtime_fail_diagnostics_enabled -and
+      -not [bool]$latest.acceptance_authorized -and
+      -not [bool]$latest.deployment_authorized) `
+      'Canonical latest pointer is not a sealed diagnostic candidate'
+  $handoff = Resolve-RepoPath ([string]$latest.handoff.path) `
+      'candidate handoff'
+  Assert-Condition ((Get-Sha256 $handoff) -ceq
+      [string]$latest.handoff.sha256) 'Candidate handoff SHA-256 mismatch'
+  $candidateManifest = Resolve-RepoPath `
+      ([string]$latest.candidate_manifest.path) 'candidate manifest'
+  Assert-Condition ((Get-Sha256 $candidateManifest) -ceq
+      [string]$latest.candidate_manifest.sha256) `
+      'Candidate manifest SHA-256 mismatch'
+  $candidateManifestDocument =
+      [IO.File]::ReadAllText($candidateManifest,$utf8) | ConvertFrom-Json
+  $handoffDocument =
+      [IO.File]::ReadAllText($handoff,$utf8) | ConvertFrom-Json
+  Assert-Condition ([string]$candidateManifestDocument.artifact_id -ceq
+      [string]$latest.artifact_id -and
+      [string]$candidateManifestDocument.result -ceq 'PASS' -and
+      [bool]$candidateManifestDocument.runtime_fail_diagnostics_enabled -and
+      -not[bool]$candidateManifestDocument.acceptance_authorized -and
+      -not[bool]$candidateManifestDocument.deployment_authorized) `
+      'Candidate manifest identity or diagnostic-only policy is invalid'
+  Assert-CandidateDiagnosticAbiContract $candidateManifestDocument `
+      'candidate manifest'
+  Assert-Condition ([string]$handoffDocument.artifact_id -ceq
+      [string]$latest.artifact_id -and
+      [string]$handoffDocument.result -ceq 'PASS' -and
+      [bool]$handoffDocument.runtime_fail_diagnostics_enabled -and
+      -not[bool]$handoffDocument.acceptance_authorized -and
+      -not[bool]$handoffDocument.deployment_authorized) `
+      'Candidate handoff identity or diagnostic-only policy is invalid'
+  Assert-CandidateDiagnosticAbiContract $handoffDocument 'candidate handoff'
+  Assert-Condition ([string]$handoffDocument.reader_schema-ceq
+      [string]$candidateManifestDocument.reader_schema) 'Candidate reader schemas differ'
+  if([string]$candidateManifestDocument.reader_schema-cin@(
+      'vc-lora-r19-runtime-stage-jtag-read-v4','vc-lora-r19-runtime-stage-jtag-read-v5')){
+    $finalSealPath=Resolve-RepoPath ([string]$latest.final_seal.path) 'candidate final seal'
+    Assert-Condition ((Get-Sha256 $finalSealPath)-ceq
+        [string]$latest.final_seal.sha256) 'Candidate final seal SHA differs'
+    $finalSeal=Read-JsonIfPresent $finalSealPath
+    Assert-Condition ([string]$finalSeal.schema-ceq
+        'vc-lora-r19-candidate-final-seal-v1'-and
+        [string]$finalSeal.artifact_id-ceq[string]$latest.artifact_id-and
+        [string]$finalSeal.result-ceq'PASS'-and
+        [string]$finalSeal.candidate_manifest_sha256-ceq
+          [string]$latest.candidate_manifest.sha256-and
+        -not[bool]$finalSeal.acceptance_authorized-and
+        -not[bool]$finalSeal.deployment_authorized) 'Candidate final seal identity differs'
+    Assert-RawProjection $finalSeal.usb_extended_diagnostics `
+        $candidateManifestDocument.usb_extended_diagnostics 'seal extension'
+    Assert-RawProjection $handoffDocument.usb_extended_diagnostics `
+        $candidateManifestDocument.usb_extended_diagnostics 'handoff extension'
+    if($timedPathEnabled){
+      Assert-RawProjection $finalSeal.timed_path_diagnostics $candidateManifestDocument.timed_path_diagnostics 'seal timed-path contract'
+      Assert-RawProjection $handoffDocument.timed_path_diagnostics $candidateManifestDocument.timed_path_diagnostics 'handoff timed-path contract'
+    }
+    Assert-CandidateDiagnosticAbiContract $finalSeal 'candidate final seal'
+    Assert-Condition ([string]$finalSeal.reader_schema-ceq[string]$candidateManifestDocument.reader_schema) 'Candidate final seal reader schema differs'
+    if([string]$candidateManifestDocument.reader_schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v5'){
+      Assert-RawProjection $finalSeal.first_usb_failure_decoder $candidateManifestDocument.first_usb_failure_decoder 'seal first decoder'
+      Assert-RawProjection $handoffDocument.first_usb_failure_decoder $candidateManifestDocument.first_usb_failure_decoder 'handoff first decoder'
+    }
+    foreach($roleName in @('vehicle','ground')){
+      $manifestRoles=@($candidateManifestDocument.roles|Where-Object{
+        [string]$_.role-ceq$roleName})
+      $handoffRoles=@($handoffDocument.roles|Where-Object{
+        [string]$_.role-ceq$roleName})
+      $sealRoles=@($finalSeal.roles|Where-Object{[string]$_.role-ceq$roleName})
+      Assert-Condition ($manifestRoles.Count-eq1-and$handoffRoles.Count-eq1-and
+          $sealRoles.Count-eq1) `
+          'Candidate extended role metadata is not unique'
+      Assert-Condition (($manifestRoles[0].runtime_diagnostic_symbols|
+          ConvertTo-Json -Depth 16 -Compress)-ceq
+        ($handoffRoles[0].runtime_diagnostic_symbols|
+          ConvertTo-Json -Depth 16 -Compress)) 'Candidate extended role symbols differ'
+      Assert-RawProjection $sealRoles[0].runtime_diagnostic_symbols `
+          $manifestRoles[0].runtime_diagnostic_symbols 'seal role symbols'
+    }
+  }
+  $artifactRoot = Resolve-RepoPath ([string]$latest.artifact_root) `
+      'candidate artifact root'
+  [pscustomobject][ordered]@{
+    artifact_id=[string]$latest.artifact_id;artifact_root=$artifactRoot
+    latest_path=$latestPath;latest_sha256=$latestSha256
+    handoff_path=$handoff;handoff_sha256=Get-Sha256 $handoff
+    candidate_manifest_path=$candidateManifest
+    candidate_manifest_sha256=Get-Sha256 $candidateManifest
+    endpoint_fifo_schema=2;endpoint_fifo_size_bytes=112
+    runtime_stage_size_bytes=68
+    reader_schema=[string]$candidateManifestDocument.reader_schema
+    latest_lock_retained_until_outer_exit=$true
+  }
+}
+
+function Resolve-SingleOpenOcdTooling {
+  if ([string]::IsNullOrWhiteSpace($script:NmExecutable)) {
+    $nmBase = Join-Path $env:LOCALAPPDATA 'Arduino15\packages\esp32\tools'
+    [object[]]$nmMatches = @(
+      if(Test-Path -LiteralPath $nmBase -PathType Container){
+        Get-ChildItem -LiteralPath $nmBase -Recurse `
+            -Filter 'xtensa-esp32s3-elf-nm.exe' -File
+      }
+    )
+    Assert-Condition ($nmMatches.Count -eq 1) `
+        'Exactly one Xtensa ESP32-S3 nm executable must be selected explicitly or installed'
+    $script:NmExecutable = $nmMatches[0].FullName
+  }
+  $script:NmExecutable =
+      (Resolve-Path -LiteralPath $script:NmExecutable -ErrorAction Stop).Path
+  if ([string]::IsNullOrWhiteSpace($script:OpenOcdExecutable)) {
+    $base = Join-Path $env:LOCALAPPDATA `
+        'Arduino15\packages\esp32\tools\openocd-esp32'
+    [object[]]$openOcdMatches = @(
+      if(Test-Path -LiteralPath $base -PathType Container){
+        Get-ChildItem -LiteralPath $base -Recurse -Filter 'openocd.exe' -File |
+            Where-Object {$_.FullName -match '\\bin\\openocd\.exe$'}
+      }
+    )
+    Assert-Condition ($openOcdMatches.Count -eq 1) `
+        'Exactly one OpenOCD executable must be selected explicitly or installed'
+    $script:OpenOcdExecutable = $openOcdMatches[0].FullName
+  }
+  $script:OpenOcdExecutable =
+      (Resolve-Path -LiteralPath $script:OpenOcdExecutable -ErrorAction Stop).Path
+  $installRoot = Split-Path -Parent (Split-Path -Parent $script:OpenOcdExecutable)
+  $scriptsRoot = (Resolve-Path -LiteralPath (Join-Path $installRoot `
+      'share\openocd\scripts') -ErrorAction Stop).Path
+  if ([string]::IsNullOrWhiteSpace($script:InterfaceConfig)) {
+    $script:InterfaceConfig = Join-Path $scriptsRoot 'interface\esp_usb_jtag.cfg'
+  }
+  if ([string]::IsNullOrWhiteSpace($script:TargetConfig)) {
+    $script:TargetConfig = Join-Path $scriptsRoot 'target\esp32s3.cfg'
+  }
+  $script:InterfaceConfig =
+      (Resolve-Path -LiteralPath $script:InterfaceConfig -ErrorAction Stop).Path
+  $script:TargetConfig =
+      (Resolve-Path -LiteralPath $script:TargetConfig -ErrorAction Stop).Path
+  Assert-Condition ((Get-Sha256 $script:NmExecutable) -ceq
+      $expectedNmSha256) 'Xtensa nm executable is not the pinned tested binary'
+  Assert-Condition ((Get-Sha256 $script:OpenOcdExecutable) -ceq
+      $expectedOpenOcdSha256) 'OpenOCD executable is not the pinned tested binary'
+  Assert-Condition ((Get-Sha256 $script:InterfaceConfig) -ceq
+      $expectedInterfaceConfigSha256) `
+      'OpenOCD interface config is not the pinned tested file'
+  Assert-Condition ((Get-Sha256 $script:TargetConfig) -ceq
+      $expectedTargetConfigSha256) `
+      'OpenOCD target config is not the pinned tested file'
+  Assert-Condition ((Get-DirectoryTreeSha256 $scriptsRoot) -ceq
+      $expectedOpenOcdScriptsTreeSha256) `
+      'OpenOCD scripts tree is not the pinned tested tree'
+  [pscustomobject][ordered]@{
+    nm_executable=$script:NmExecutable
+    nm_sha256=Get-Sha256 $script:NmExecutable
+    executable=$script:OpenOcdExecutable
+    executable_sha256=Get-Sha256 $script:OpenOcdExecutable
+    interface_config=$script:InterfaceConfig
+    interface_config_sha256=Get-Sha256 $script:InterfaceConfig
+    target_config=$script:TargetConfig
+    target_config_sha256=Get-Sha256 $script:TargetConfig
+    scripts_root=$scriptsRoot
+    scripts_tree_sha256=$expectedOpenOcdScriptsTreeSha256
+  }
+}
+
+function Get-StageArguments([string]$Role, [string]$Address,
+    [string]$ProbeSerial, [string]$ProbeUsbLocation,
+    [string]$FlashRecordPath, [object]$Tooling) {
+  $flashSha = Get-Sha256 $FlashRecordPath
+  @('-Execute','-Role',$Role,'-Address',$Address,
+    '-ArtifactRoot',[string]$candidate.artifact_root,
+    '-ArtifactId',[string]$candidate.artifact_id,
+    '-ProbeSerial',$ProbeSerial,
+    '-ProbeUsbLocation',$ProbeUsbLocation,
+    '-FlashEvidencePath',$FlashRecordPath,
+    '-FlashEvidenceSha256',$flashSha,
+    '-NmExecutable',[string]$Tooling.nm_executable,
+    '-NmSha256',[string]$Tooling.nm_sha256,
+    '-OpenOcdExecutable',[string]$Tooling.executable,
+    '-OpenOcdSha256',[string]$Tooling.executable_sha256,
+    '-InterfaceConfig',[string]$Tooling.interface_config,
+    '-InterfaceConfigSha256',[string]$Tooling.interface_config_sha256,
+    '-TargetConfig',[string]$Tooling.target_config,
+    '-TargetConfigSha256',[string]$Tooling.target_config_sha256,
+    '-ScriptsRoot',[string]$Tooling.scripts_root,
+    '-OutputRoot',[string]$stageDirectories[$Role])
+}
+
+function Test-R19AliveTerminalPartialEvidence([object]$Summary,
+    [string]$EvidenceDirectory) {
+  # This is an independent raw replay, not a trust in capture-side booleans.
+  # No bytes from the missing timestamp/status/CRC suffix are synthesized.
+  $rejections=[Collections.Generic.List[string]]::new()
+  $rawEvidence=[Collections.ArrayList]::new()
+  try{
+    $tail=$Summary.r19a_terminal_partial_contract
+    Assert-Condition ([string]$tail.schema-ceq
+      'vc-lora-r19a-terminal-partial-cause-contract-v1'-and
+      [bool]$tail.valid-and[bool]$tail.fail_only-and
+      -not[bool]$tail.reconstruction_performed-and
+      -not[bool]$tail.missing_crc_verified-and
+      [string]$tail.role-ceq'ground'-and[string]$tail.port-ceq'COM6'-and
+      [int]$tail.expected_size-eq63-and[int]$tail.partial_bytes-eq32-and
+      [int]$tail.remaining-eq31-and[int]$tail.bytes_read-eq0-and
+      [bool]$tail.only_parser_defect-and[bool]$tail.drain_attempted-and
+      -not[bool]$tail.drain_completed-and[bool]$tail.no_read_exception-and
+      [bool]$tail.prior_alive_contiguous-and
+      [bool]$tail.prior_complete_frames_crc_valid-and
+      [bool]$tail.prior_source_binding_verified-and
+      [bool]$tail.prefix_identity_valid-and
+      [bool]$tail.prefix_next_identity_valid-and
+      [string]$tail.result-ceq'TIMEOUT_INCOMPLETE_SAME_FRAME'-and
+      [int64]$tail.no_progress_us-ge500000) 'r19a_tail_scope_invalid'
+    Assert-Condition (-not[bool]$Summary.parser_clean-and
+      [bool]$Summary.alive_sequence_time_monotonic-and
+      [bool]$Summary.r19f_repeat_contract.valid-and
+      [int]$Summary.invalid_diagnostic_count-eq0-and
+      [int]$Summary.r19f_count-eq0-and[int]$Summary.armed_count-eq0-and
+      [int64]$Summary.pump_service_limit_us-eq100000-and
+      [int64]$Summary.terminal_tail_drain_limit_us-eq500000) `
+      'r19a_capture_shape_invalid'
+    Assert-Condition ((Get-Sha256 $candidate.candidate_manifest_path)-ceq
+      [string]$candidate.candidate_manifest_sha256) 'r19a_manifest_hash_mismatch'
+    $manifest=[IO.File]::ReadAllText($candidate.candidate_manifest_path,$utf8)|
+      ConvertFrom-Json
+    $definitionPath=Join-Path $repo 'core\src\mavlink_frame.cpp'
+    Assert-Condition ((Get-Sha256 $definitionPath)-ceq
+      [string]$Summary.candidate_provenance.mavlink_definition_sha256) `
+      'r19a_definition_hash_mismatch'
+    $definitions=@{}
+    foreach($match in [regex]::Matches([IO.File]::ReadAllText($definitionPath),
+        '\{(?<id>[0-9]+)U,\s*(?<crc>[0-9]+)U,\s*(?<min>[0-9]+)U,\s*(?<max>[0-9]+)U\}')){
+      $definitions[[int]$match.Groups['id'].Value]=@(
+        [int]$match.Groups['crc'].Value,[int]$match.Groups['min'].Value,
+        [int]$match.Groups['max'].Value)
+    }
+    Assert-Condition ($definitions.Count-eq80) 'r19a_definition_count_invalid'
+    $crcByte={param([uint16]$Crc,[byte]$Value)
+      [int]$mixed=($Value-bxor($Crc-band255))-band255
+      $mixed=($mixed-bxor(($mixed-shl4)-band255))-band255
+      [uint16]((($Crc-shr8)-bxor($mixed-shl8)-bxor
+        ($mixed-shl3)-bxor($mixed-shr4))-band65535)
+    }
+    $portRows=@($Summary.ports)
+    Assert-Condition ($portRows.Count-eq2) 'r19a_port_count_invalid'
+    foreach($role in @('vehicle','ground')){
+      $isGround=$role-ceq'ground';$port=if($isGround){'COM6'}else{'COM3'}
+      $code=if($isGround){'G'}else{'V'}
+      $baud=if($isGround){57600}else{115200}
+      $pnp=if($isGround){'USB\VID_303A&PID_1001&MI_00\7&2159A644&0&0000'}else{
+        'USB\VID_303A&PID_1001&MI_00\7&7131F6A&0&0000'}
+      $parent=if($isGround){'USB\VID_303A&PID_1001\1C:DB:D4:5A:83:80'}else{
+        'USB\VID_303A&PID_1001\90:70:69:11:81:A4'}
+      $rows=@($portRows|Where-Object{$_.role-ceq$role-and$_.port-ceq$port})
+      Assert-Condition ($rows.Count-eq1-and[int]$rows[0].baud-eq$baud) `
+        'r19a_role_port_baud_invalid'
+      $row=$rows[0]
+      $identityRows=@($Summary.external_actions.port_identity_evidence|
+        Where-Object{$_.role-ceq$role-and$_.port-ceq$port})
+      Assert-Condition ($identityRows.Count-eq2) 'r19a_serial_identity_absent'
+      foreach($checkpoint in @('before_open','after_open')){
+        $identity=@($identityRows|Where-Object{$_.checkpoint-ceq$checkpoint})
+        Assert-Condition ($identity.Count-eq1-and
+          [string]$identity[0].pnp-ceq$pnp-and
+          [string]$identity[0].parent-ceq$parent-and
+          [string]$identity[0].result-ceq'PASS') 'r19a_serial_identity_mismatch'
+      }
+      $sourceRelative=('package/vc_lora_{0}_xiao_esp32s3/'+
+        'vc_lora_phase6_bridge.hpp')-f$role
+      $sources=@($manifest.staged_package_snapshot.files|Where-Object{
+        $_.path-ceq$sourceRelative})
+      $apps=@($manifest.roles|Where-Object{$_.role-ceq$role})
+      $bindings=@($Summary.candidate_provenance.source_bindings|Where-Object{
+        $_.role-ceq$role})
+      Assert-Condition ($sources.Count-eq1-and$apps.Count-eq1-and
+        $bindings.Count-eq1) 'r19a_source_binding_count_invalid'
+      $sourcePath=Join-Path $candidate.artifact_root $sourceRelative
+      $sourceSha=Get-Sha256 $sourcePath
+      $appSha=[string]$apps[0].application.sha256
+      $binding=$bindings[0]
+      Assert-Condition ($sourceSha-ceq[string]$sources[0].sha256-and
+        [string]$binding.source_path-ceq$sourceRelative-and
+        [string]$binding.source_sha256-ceq$sourceSha-and
+        [string]$binding.verified_source_sha256-ceq$sourceSha-and
+        [bool]$binding.source_verified-and
+        [string]$binding.application_sha256-ceq$appSha) `
+        'r19a_source_binding_mismatch'
+      $rawPath=Join-Path $EvidenceDirectory ($role+'.raw.bin')
+      [byte[]]$raw=[IO.File]::ReadAllBytes($rawPath)
+      $rawSha=Get-Sha256 $rawPath
+      Assert-Condition ($raw.Length-eq[int64]$row.raw_bytes-and
+        $rawSha-ceq[string]$row.raw_sha256) 'r19a_raw_hash_length_mismatch'
+      Assert-Condition ([int64]$row.noise_bytes-eq0-and
+        [int64]$row.bad_length-eq0-and[int64]$row.bad_crc-eq0-and
+        [int64]$row.unsupported_flags-eq0-and
+        [int64]$row.unknown_definition-eq0-and
+        [int64]$row.maximum_service_gap_us-ge0-and
+        [int]$row.partial_bytes-eq$(if($isGround){32}else{0})-and
+        [bool]$row.parser_clean-eq(-not$isGround)) 'r19a_parser_shape_invalid'
+      $offset=0;$frameCount=0;$aliveCount=0;$otherCount=0
+      $lastSequence=-1;$lastOrdinal=[int64]-1;$lastTime=[uint64]0
+      while($offset-lt$raw.Length){
+        $v2=$raw[$offset]-eq253;$v1=$raw[$offset]-eq254
+        Assert-Condition ($v2-or$v1) 'r19a_raw_noise'
+        $header=if($v2){10}else{6}
+        Assert-Condition ($raw.Length-$offset-ge$header) 'r19a_header_incomplete'
+        $payload=[int]$raw[$offset+1];$size=$header+$payload+2
+        if($v2){Assert-Condition ($raw[$offset+2]-eq0-and
+          $raw[$offset+3]-eq0) 'r19a_raw_flags'}
+        if($raw.Length-$offset-lt$size){break}
+        $id=if($v2){[int]$raw[$offset+7]+256*[int]$raw[$offset+8]+
+          65536*[int]$raw[$offset+9]}else{[int]$raw[$offset+5]}
+        Assert-Condition ($definitions.ContainsKey($id)) 'r19a_unknown_message'
+        $definition=$definitions[$id]
+        Assert-Condition ($payload-le$definition[2]-and
+          ($v2-or$payload-ge$definition[1])) 'r19a_payload_length'
+        [uint16]$crc=65535
+        for($i=1;$i-lt$size-2;++$i){$crc=& $crcByte $crc $raw[$offset+$i]}
+        $crc=& $crcByte $crc ([byte]$definition[0])
+        Assert-Condition ([int]$crc-eq([int]$raw[$offset+$size-2]+
+          256*[int]$raw[$offset+$size-1])) 'r19a_raw_crc'
+        if($v2-and$id-eq253-and$payload-ge5-and
+            [Text.Encoding]::ASCII.GetString($raw,$offset+11,4)-cin@('R19A','R19F')){
+          Assert-Condition ($size-eq63-and$raw[$offset+5]-eq254-and
+            $raw[$offset+6]-eq190-and$raw[$offset+10]-eq6) 'r19a_complete_identity'
+          $text=[Text.Encoding]::ASCII.GetString($raw,$offset+11,50)
+          $match=[regex]::Match($text,('^R19A:'+ $code+
+            ':L:(?<ordinal>[0-9A-F]{8}):(?<time>[0-9A-F]{16}):[0-9A-F]{12}\x00{3}$'))
+          Assert-Condition ($match.Success) 'r19a_complete_format'
+          $sequence=[int]$raw[$offset+4]
+          $ordinal=[Convert]::ToUInt32($match.Groups['ordinal'].Value,16)
+          $time=[Convert]::ToUInt64($match.Groups['time'].Value,16)
+          if($aliveCount-gt0){Assert-Condition (
+            $sequence-eq(($lastSequence+1)-band255)-and
+            [uint64]$ordinal-eq[uint64]$lastOrdinal+1-and$time-gt$lastTime) `
+            'r19a_complete_continuity'}
+          $lastSequence=$sequence;$lastOrdinal=[int64]$ordinal;$lastTime=$time
+          ++$aliveCount
+        }else{++$otherCount}
+        ++$frameCount;$offset+=$size
+      }
+      Assert-Condition ($frameCount-eq[int]$row.frame_count-and
+        $frameCount-eq[int]$row.valid_frame_count-and
+        $aliveCount-eq[int]$row.alive_count-and
+        $otherCount-eq[int]$row.non_diagnostic_complete_frame_count-and
+        $aliveCount-ge2) 'r19a_raw_counts_mismatch'
+      if($isGround){
+        Assert-Condition ($raw.Length-$offset-eq32-and
+          $offset-eq[int64]$tail.raw_offset-and$rawSha-ceq$tail.raw_sha256-and
+          $raw.Length-eq[int64]$tail.raw_bytes-and
+          $raw[$offset]-eq253-and$raw[$offset+1]-eq51-and
+          $raw[$offset+2]-eq0-and$raw[$offset+3]-eq0-and
+          $raw[$offset+4]-eq(($lastSequence+1)-band255)-and
+          $raw[$offset+5]-eq254-and$raw[$offset+6]-eq190-and
+          $raw[$offset+7]-eq253-and$raw[$offset+8]-eq0-and
+          $raw[$offset+9]-eq0-and$raw[$offset+10]-eq6-and
+          $lastOrdinal-lt[uint32]::MaxValue) 'r19a_raw_terminal_identity'
+        $prefixText=[Text.Encoding]::ASCII.GetString($raw,$offset+11,21)
+        Assert-Condition ($prefixText-cmatch'^R19A:G:L:[0-9A-F]{8}:[0-9A-F]{3}$'-and
+          $prefixText.Substring(9,8)-ceq('{0:X8}'-f($lastOrdinal+1))-and
+          [int]$tail.next_sequence-eq(($lastSequence+1)-band255)-and
+          [int64]$tail.next_ordinal-eq$lastOrdinal+1-and
+          [int]$tail.prior_alive_count-eq$aliveCount-and
+          [string]$tail.source_path-ceq$sourceRelative-and
+          [string]$tail.source_sha256-ceq$sourceSha-and
+          [string]$tail.application_sha256-ceq$appSha) 'r19a_raw_terminal_ordinal'
+        $sha=[Security.Cryptography.SHA256]::Create()
+        try{$prefixSha=([BitConverter]::ToString(
+          $sha.ComputeHash([byte[]]$raw[$offset..($raw.Length-1)]))).Replace('-','')}
+        finally{$sha.Dispose()}
+        Assert-Condition ($prefixSha-ceq[string]$tail.prefix_sha256) `
+          'r19a_prefix_hash_mismatch'
+        $drain=$row.tail_drain
+        Assert-Condition ([bool]$drain.valid-and[bool]$drain.drain_attempted-and
+          -not[bool]$drain.drain_completed-and[bool]$drain.no_read_exception-and
+          [string]::IsNullOrEmpty([string]$drain.read_exception)-and
+          [string]$drain.result-ceq'TIMEOUT_INCOMPLETE_SAME_FRAME'-and
+          [int]$drain.initial_partial_bytes-eq32-and
+          [int]$drain.partial_bytes-eq32-and[int]$drain.bytes_required-eq31-and
+          [int]$drain.bytes_read-eq0-and[int]$drain.bytes_remaining-eq31-and
+          [int64]$drain.raw_offset-eq$offset-and
+          [int64]$drain.raw_bytes-eq$raw.Length-and
+          [int64]$drain.partial_first_seen_us-ge0-and
+          [int64]$drain.last_progress_before_tail_us-eq
+            [int64]$drain.last_progress_us-and
+          [int64]$drain.last_progress_us-ge[int64]$drain.partial_first_seen_us-and
+          [int64]$drain.tail_start_us-ge[int64]$drain.last_progress_us-and
+          [int64]$drain.deadline_us-[int64]$drain.tail_start_us-gt0-and
+          [int64]$drain.deadline_us-[int64]$drain.tail_start_us-le500000-and
+          [int64]$drain.deadline_us-[int64]$drain.last_progress_us-eq
+            [int64]$tail.no_progress_us-and
+          [int64]$tail.no_progress_us-ge500000) 'r19a_terminal_progress_invalid'
+      }else{Assert-Condition ($offset-eq$raw.Length-and
+        -not[bool]$row.tail_drain.drain_attempted) 'r19a_other_port_partial'}
+      [void]$rawEvidence.Add([pscustomobject]@{role=$role;path=$rawPath
+        sha256=$rawSha;bytes=$raw.Length;complete_frames=$frameCount
+        alive_frames=$aliveCount;partial_bytes=$raw.Length-$offset})
+    }
+  }catch{[void]$rejections.Add($_.Exception.Message)}
+  [pscustomobject][ordered]@{valid=$rejections.Count-eq0
+    raw_recomputed=$rejections.Count-eq0;fail_only=$true
+    reconstruction_performed=$false;missing_crc_verified=$false
+    raw_evidence=@($rawEvidence);rejection_reasons=@($rejections)}
+}
+
+function Test-R19FailureBoundaryPartialEvidence([object]$Summary,
+    [string]$EvidenceDirectory) {
+  # Independently reparse actual files. Templates identify boundary bytes;
+  # neither missing prefix nor missing terminal suffix is counted as received.
+  $rejections=[Collections.Generic.List[string]]::new()
+  $rawEvidence=[Collections.ArrayList]::new()
+  try{
+    $tail=$Summary.r19f_boundary_partial_contract
+    Assert-Condition ([string]$tail.schema-ceq
+      'vc-lora-r19f-boundary-partial-cause-contract-v1'-and
+      [bool]$tail.valid-and[bool]$tail.fail_only-and
+      -not[bool]$tail.reconstruction_performed-and
+      -not[bool]$tail.missing_prefix_received-and
+      -not[bool]$tail.missing_terminal_crc_verified-and
+      [string]$tail.role-ceq'ground'-and[string]$tail.port-ceq'COM6'-and
+      [int]$tail.leading_bytes-eq31-and[int64]$tail.leading_raw_offset-eq0-and
+      [bool]$tail.leading_sequence_unique-and[bool]$tail.leading_suffix_exact-and
+      [int]$tail.prior_r19f_count-ge2-and
+      [bool]$tail.prior_complete_frames_crc_valid-and
+      [bool]$tail.prior_source_binding_verified-and
+      [bool]$tail.prior_snapshots_identical-and
+      [bool]$tail.prior_sequences_contiguous-and
+      [int]$tail.terminal_partial_bytes-eq32-and
+      [bool]$tail.terminal_prefix_exact-and[bool]$tail.only_parser_defects-and
+      [int64]$tail.no_progress_us-ge500000) 'r19f_boundary_scope_invalid'
+    Assert-Condition (-not[bool]$Summary.parser_clean-and
+      [bool]$Summary.alive_sequence_time_monotonic-and
+      [bool]$Summary.r19f_repeat_contract.valid-and
+      [int]$Summary.invalid_diagnostic_count-eq0-and
+      [int64]$Summary.pump_service_limit_us-eq100000-and
+      [int64]$Summary.terminal_tail_drain_limit_us-eq500000) `
+      'r19f_boundary_capture_shape_invalid'
+    Assert-Condition ((Get-Sha256 $candidate.candidate_manifest_path)-ceq
+      [string]$candidate.candidate_manifest_sha256) 'r19f_boundary_manifest_hash'
+    $manifest=[IO.File]::ReadAllText($candidate.candidate_manifest_path,$utf8)|
+      ConvertFrom-Json
+    $definitionPath=Join-Path $repo 'core\src\mavlink_frame.cpp'
+    Assert-Condition ((Get-Sha256 $definitionPath)-ceq
+      [string]$Summary.candidate_provenance.mavlink_definition_sha256) `
+      'r19f_boundary_definition_hash'
+    $definitions=@{}
+    foreach($match in [regex]::Matches([IO.File]::ReadAllText($definitionPath),
+        '\{(?<id>[0-9]+)U,\s*(?<crc>[0-9]+)U,\s*(?<min>[0-9]+)U,\s*(?<max>[0-9]+)U\}')){
+      $definitions[[int]$match.Groups['id'].Value]=@(
+        [int]$match.Groups['crc'].Value,[int]$match.Groups['min'].Value,
+        [int]$match.Groups['max'].Value)
+    }
+    Assert-Condition ($definitions.Count-eq80) 'r19f_boundary_definition_count'
+    $crcByte={param([uint16]$Crc,[byte]$Value)
+      [int]$mixed=($Value-bxor($Crc-band255))-band255
+      $mixed=($mixed-bxor(($mixed-shl4)-band255))-band255
+      [uint16]((($Crc-shr8)-bxor($mixed-shl8)-bxor
+        ($mixed-shl3)-bxor($mixed-shr4))-band65535)
+    }
+    $bytesEqual={param([byte[]]$Left,[byte[]]$Right)
+      if($Left.Length-ne$Right.Length){return $false}
+      for($j=0;$j-lt$Left.Length;++$j){
+        if($Left[$j]-ne$Right[$j]){return $false}}
+      return $true
+    }
+    $bytesSha={param([byte[]]$Bytes)
+      $sha=[Security.Cryptography.SHA256]::Create()
+      try{([BitConverter]::ToString($sha.ComputeHash($Bytes))).Replace('-','')}
+      finally{$sha.Dispose()}
+    }
+    $derive={param([byte[]]$Template,[int]$Sequence)
+      [byte[]]$expected=$Template.Clone();$expected[4]=[byte]$Sequence
+      [uint16]$crc=65535
+      for($j=1;$j-lt61;++$j){$crc=& $crcByte $crc $expected[$j]}
+      $crc=& $crcByte $crc 83
+      $expected[61]=[byte]($crc-band255)
+      $expected[62]=[byte](($crc-shr8)-band255)
+      return ,$expected
+    }
+    $portRows=@($Summary.ports)
+    Assert-Condition ($portRows.Count-eq2) 'r19f_boundary_port_count'
+    foreach($role in @('vehicle','ground')){
+      $isGround=$role-ceq'ground';$port=if($isGround){'COM6'}else{'COM3'}
+      $code=if($isGround){'G'}else{'V'}
+      $baud=if($isGround){57600}else{115200}
+      $pnp=if($isGround){'USB\VID_303A&PID_1001&MI_00\7&2159A644&0&0000'}else{
+        'USB\VID_303A&PID_1001&MI_00\7&7131F6A&0&0000'}
+      $parent=if($isGround){'USB\VID_303A&PID_1001\1C:DB:D4:5A:83:80'}else{
+        'USB\VID_303A&PID_1001\90:70:69:11:81:A4'}
+      $rows=@($portRows|Where-Object{$_.role-ceq$role-and$_.port-ceq$port})
+      Assert-Condition ($rows.Count-eq1-and[int]$rows[0].baud-eq$baud) `
+        'r19f_boundary_port_identity'
+      $row=$rows[0]
+      $identityRows=@($Summary.external_actions.port_identity_evidence|
+        Where-Object{$_.role-ceq$role-and$_.port-ceq$port})
+      Assert-Condition ($identityRows.Count-eq2) 'r19f_boundary_identity_absent'
+      foreach($checkpoint in @('before_open','after_open')){
+        $identity=@($identityRows|Where-Object{$_.checkpoint-ceq$checkpoint})
+        Assert-Condition ($identity.Count-eq1-and
+          [string]$identity[0].pnp-ceq$pnp-and
+          [string]$identity[0].parent-ceq$parent-and
+          [string]$identity[0].result-ceq'PASS') 'r19f_boundary_identity_mismatch'
+      }
+      $sourceRelative=('package/vc_lora_{0}_xiao_esp32s3/'+
+        'vc_lora_phase6_bridge.hpp')-f$role
+      $sources=@($manifest.staged_package_snapshot.files|Where-Object{
+        $_.path-ceq$sourceRelative})
+      $apps=@($manifest.roles|Where-Object{$_.role-ceq$role})
+      $bindings=@($Summary.candidate_provenance.source_bindings|Where-Object{
+        $_.role-ceq$role})
+      Assert-Condition ($sources.Count-eq1-and$apps.Count-eq1-and
+        $bindings.Count-eq1) 'r19f_boundary_source_count'
+      $sourceSha=Get-Sha256 (Join-Path $candidate.artifact_root $sourceRelative)
+      $appSha=[string]$apps[0].application.sha256;$binding=$bindings[0]
+      Assert-Condition ($sourceSha-ceq[string]$sources[0].sha256-and
+        [string]$binding.source_path-ceq$sourceRelative-and
+        [string]$binding.source_sha256-ceq$sourceSha-and
+        [string]$binding.verified_source_sha256-ceq$sourceSha-and
+        [bool]$binding.source_verified-and
+        [string]$binding.application_sha256-ceq$appSha) `
+        'r19f_boundary_source_binding'
+      $rawPath=Join-Path $EvidenceDirectory ($role+'.raw.bin')
+      [byte[]]$raw=[IO.File]::ReadAllBytes($rawPath);$rawSha=Get-Sha256 $rawPath
+      Assert-Condition ($raw.Length-eq[int64]$row.raw_bytes-and
+        $rawSha-ceq[string]$row.raw_sha256-and
+        [int64]$row.noise_bytes-eq$(if($isGround){31}else{0})-and
+        [int64]$row.bad_length-eq0-and[int64]$row.bad_crc-eq0-and
+        [int64]$row.unsupported_flags-eq0-and
+        [int64]$row.unknown_definition-eq0-and
+        [int64]$row.maximum_service_gap_us-ge0-and
+        [int]$row.partial_bytes-eq$(if($isGround){32}else{0})-and
+        [bool]$row.parser_clean-eq(-not$isGround)) 'r19f_boundary_raw_shape'
+      $offset=if($isGround){31}else{0};$frameCount=0;$failureCount=0
+      $aliveCount=0;$otherCount=0;$first=$null;$lastSequence=-1
+      while($offset-lt$raw.Length){
+        Assert-Condition ($raw.Length-$offset-ge10-and$raw[$offset]-eq253-and
+          $raw[$offset+2]-eq0-and$raw[$offset+3]-eq0) `
+          'r19f_boundary_raw_header'
+        $payload=[int]$raw[$offset+1];$size=12+$payload
+        if($raw.Length-$offset-lt$size){break}
+        $id=[int]$raw[$offset+7]+256*[int]$raw[$offset+8]+
+          65536*[int]$raw[$offset+9]
+        Assert-Condition ($definitions.ContainsKey($id)) 'r19f_boundary_raw_id'
+        $definition=$definitions[$id];$minimum=[int]$definition[1]
+        if($id-eq20){$minimum=4};if($id-eq76){$minimum=30}
+        Assert-Condition ($payload-ge$minimum-and$payload-le$definition[2]) `
+          'r19f_boundary_raw_length'
+        [uint16]$crc=65535
+        for($j=1;$j-lt$size-2;++$j){$crc=& $crcByte $crc $raw[$offset+$j]}
+        $crc=& $crcByte $crc ([byte]$definition[0])
+        Assert-Condition ([int]$crc-eq([int]$raw[$offset+$size-2]+
+          256*[int]$raw[$offset+$size-1])) 'r19f_boundary_raw_crc'
+        $kind=if($id-eq253-and$payload-ge5){
+          [Text.Encoding]::ASCII.GetString($raw,$offset+11,4)}else{''}
+        if($kind-cin@('R19A','R19F')){
+          Assert-Condition ($size-eq63-and$raw[$offset+5]-eq254-and
+            $raw[$offset+6]-eq190) 'r19f_boundary_diagnostic_identity'
+          $text=[Text.Encoding]::ASCII.GetString($raw,$offset+11,50)
+          $pattern=if($kind-ceq'R19F'){'^R19F:'+$code+
+            ':[0-9A-F]{4}:[0-9A-F]{16}:[0-9A-F]{12}:[0-9A-F]{8}$'}else{
+            '^R19A:'+$code+':[AL]:[0-9A-F]{8}:[0-9A-F]{16}:[0-9A-F]{12}\x00{3}$'}
+          Assert-Condition ($text-cmatch$pattern-and$raw[$offset+10]-eq
+            $(if($kind-ceq'R19F'){2}else{6})) 'r19f_boundary_diagnostic_format'
+          if($kind-ceq'R19F'){
+            ++$failureCount
+            Assert-Condition ([Convert]::ToInt32($text.Substring(7,4),16)-gt0) `
+              'r19f_boundary_source_line_zero'
+          }else{++$aliveCount}
+        }else{++$otherCount}
+        if($isGround){
+          Assert-Condition ($kind-ceq'R19F') 'r19f_boundary_unexpected_ground_frame'
+          [byte[]]$observed=$raw[$offset..($offset+62)]
+          if($null-eq$first){$first=[byte[]]$observed.Clone()}
+          [byte[]]$expected=& $derive $first (([int]$first[4]+$frameCount)-band255)
+          Assert-Condition (& $bytesEqual $observed $expected) `
+            'r19f_boundary_snapshot_or_sequence'
+          $lastSequence=[int]$observed[4]
+        }
+        ++$frameCount;$offset+=$size
+      }
+      Assert-Condition ($frameCount-eq[int]$row.frame_count-and
+        $frameCount-eq[int]$row.valid_frame_count-and
+        $failureCount-eq[int]$row.r19f_count-and
+        $aliveCount-eq[int]$row.alive_count-and
+        $otherCount-eq[int]$row.non_diagnostic_complete_frame_count) `
+        'r19f_boundary_raw_counts'
+      if($isGround){
+        Assert-Condition ($failureCount-ge2-and$raw.Length-$offset-eq32-and
+          $offset-eq31+63*$failureCount-and
+          $failureCount-eq[int]$tail.prior_r19f_count-and
+          $offset-eq[int64]$tail.terminal_raw_offset-and
+          $rawSha-ceq[string]$tail.raw_sha256-and
+          $raw.Length-eq[int64]$tail.raw_bytes-and
+          [string]$tail.source_path-ceq$sourceRelative-and
+          [string]$tail.source_sha256-ceq$sourceSha-and
+          [string]$tail.application_sha256-ceq$appSha) 'r19f_boundary_ground_shape'
+        [byte[]]$leading=$raw[0..30];$matches=@()
+        for($sequence=0;$sequence-lt256;++$sequence){
+          [byte[]]$expected=& $derive $first $sequence
+          if(& $bytesEqual $leading ([byte[]]$expected[32..62])){$matches+=,$sequence}
+        }
+        Assert-Condition ($matches.Count-eq1-and
+          [int]$matches[0]-eq(([int]$first[4]+255)-band255)-and
+          [int]$tail.leading_prior_sequence-eq[int]$matches[0]-and
+          (& $bytesSha $leading)-ceq[string]$tail.leading_sha256) `
+          'r19f_boundary_leading_not_unique_previous'
+        [byte[]]$expected=& $derive $first (($lastSequence+1)-band255)
+        [byte[]]$prefix=$raw[$offset..($raw.Length-1)]
+        Assert-Condition ((& $bytesEqual $prefix ([byte[]]$expected[0..31]))-and
+          [int]$tail.terminal_sequence-eq(($lastSequence+1)-band255)-and
+          (& $bytesSha $prefix)-ceq[string]$tail.terminal_prefix_sha256) `
+          'r19f_boundary_terminal_not_exact_next'
+        $drain=$row.tail_drain
+        Assert-Condition ([bool]$drain.valid-and[bool]$drain.drain_attempted-and
+          -not[bool]$drain.drain_completed-and[bool]$drain.no_read_exception-and
+          [string]::IsNullOrEmpty([string]$drain.read_exception)-and
+          [string]$drain.result-ceq'TIMEOUT_INCOMPLETE_SAME_FRAME'-and
+          [int]$drain.expected_size-eq63-and
+          [int]$drain.initial_partial_bytes-eq32-and
+          [int]$drain.partial_bytes-eq32-and[int]$drain.bytes_required-eq31-and
+          [int]$drain.bytes_read-eq0-and[int]$drain.bytes_remaining-eq31-and
+          [int64]$drain.raw_offset-eq$offset-and
+          [int64]$drain.raw_bytes-eq$raw.Length-and
+          [int64]$drain.partial_first_seen_us-ge0-and
+          [int64]$drain.last_progress_before_tail_us-eq
+            [int64]$drain.last_progress_us-and
+          [int64]$drain.last_progress_us-ge[int64]$drain.partial_first_seen_us-and
+          [int64]$drain.tail_start_us-ge[int64]$drain.last_progress_us-and
+          [int64]$drain.deadline_us-[int64]$drain.tail_start_us-gt0-and
+          [int64]$drain.deadline_us-[int64]$drain.tail_start_us-le500000-and
+          [int64]$drain.deadline_us-[int64]$drain.last_progress_us-eq
+            [int64]$tail.no_progress_us-and
+          [int64]$tail.no_progress_us-ge500000) 'r19f_boundary_progress_invalid'
+      }else{Assert-Condition ($offset-eq$raw.Length-and
+        -not[bool]$row.tail_drain.drain_attempted) 'r19f_boundary_other_partial'}
+      [void]$rawEvidence.Add([pscustomobject]@{role=$role;path=$rawPath
+        sha256=$rawSha;bytes=$raw.Length;complete_frames=$frameCount
+        r19f_frames=$failureCount;leading_bytes=if($isGround){31}else{0}
+        partial_bytes=$raw.Length-$offset})
+    }
+  }catch{[void]$rejections.Add($_.Exception.Message)}
+  [pscustomobject][ordered]@{valid=$rejections.Count-eq0
+    raw_recomputed=$rejections.Count-eq0;fail_only=$true
+    reconstruction_performed=$false;missing_prefix_received=$false
+    missing_terminal_crc_verified=$false
+    raw_evidence=@($rawEvidence);rejection_reasons=@($rejections)}
+}
+
+function Get-CaptureDisposition([object]$Step) {
+  $timedPathEnabled=[bool](Get-Variable -Name timedPathEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  if($timedPathEnabled){
+    $summaryPath=Join-Path $captureDirectory 'summary.json'
+    $summary=Read-JsonIfPresent $summaryPath
+    $disposition=Get-R19TimedPathOuterCaptureDisposition $summary $Step $candidate.artifact_id $TimedPathMode
+    if($disposition.acceptable){
+      try{
+        Assert-Condition ($summary.handoff_sha256-ceq$candidate.handoff_sha256-and
+          $summary.flash_evidence_sha256-ceq(Get-Sha256 $flashRecordPath)) 'Timed-path capture provenance differs'
+        Assert-Condition (@($summary.roles).Count-eq2) 'Timed-path capture requires both roles'
+        foreach($roleName in @('vehicle','ground')){
+          $rows=@($summary.roles|Where-Object{$_.role-ceq$roleName})
+          Assert-Condition ($rows.Count-eq1) 'Timed-path capture role is not unique'
+          $row=$rows[0];$rawPath=Join-Path $captureDirectory ($roleName+'.raw.bin')
+          Assert-Condition ((Get-Item -LiteralPath $rawPath).Length-eq$row.raw_bytes-and
+            (Get-Sha256 $rawPath)-ceq$row.raw_sha256-and
+            [Convert]::ToBase64String([IO.File]::ReadAllBytes($rawPath))-ceq$row.raw_base64-and
+            $row.reader_continuous-is[bool]-and$row.reader_continuous-and
+            $row.overflow-is[bool]-and-not$row.overflow-and
+            $row.clock_domain_id-ceq$summary.clock_domain_id-and
+            $row.frequency-ceq$summary.frequency) 'Timed-path raw capture or reader binding differs'
+        }
+        Assert-Condition (Test-Path -LiteralPath (Join-Path $OutputDirectory 'execution-permit.json.consumed') -PathType Leaf) 'Timed-path one-time permit was not consumed'
+      }catch{$disposition.acceptable=$false;$disposition.evidence_contract_proven=$false;$disposition.rejection_reasons+= $_.Exception.Message}
+    }
+    $disposition.summary_path=$summaryPath
+    if(Test-Path -LiteralPath $summaryPath -PathType Leaf){$disposition.summary_sha256=Get-Sha256 $summaryPath}
+    return $disposition
+  }
+  if ($OfflineContractTest.IsPresent) {
+    $offlineTimingProperty=$Step.metadata.PSObject.Properties[
+      'timing_sla_failure_admitted_for_stage_read']
+    $offlineTimingFailure=([int]$Step.exit_code-eq1-and
+      [string]$Step.metadata.diagnostic_classification-ceq
+        'ALIVE_WITH_PRODUCT_TRAFFIC'-and
+      [string]$Step.metadata.diagnostic_status-ceq
+        'PASS_ALIVE_BEACON_CAPTURED'-and
+      $null-ne$offlineTimingProperty-and[bool]$offlineTimingProperty.Value)
+    $offlineTailProperty=$Step.metadata.PSObject.Properties[
+      'tail_stall_failure_admitted_for_stage_read']
+    $offlineTailStallFailure=([int]$Step.exit_code-eq1-and
+      [string]$Step.metadata.diagnostic_classification-ceq
+        'R19F_TERMINAL_PREFIX_STALL'-and
+      [string]$Step.metadata.diagnostic_status-ceq
+        'FAIL_R19F_TERMINAL_PREFIX_STALL'-and
+      $null-ne$offlineTailProperty-and[bool]$offlineTailProperty.Value)
+    $offlineAliveTailProperty=$Step.metadata.PSObject.Properties[
+      'alive_tail_stall_failure_admitted_for_stage_read']
+    $offlineAliveTailStallFailure=([int]$Step.exit_code-eq1-and
+      [string]$Step.metadata.diagnostic_classification-ceq
+        'R19A_TERMINAL_PREFIX_STALL'-and
+      [string]$Step.metadata.diagnostic_status-ceq
+        'FAIL_R19A_TERMINAL_PREFIX_STALL'-and
+      $null-ne$offlineAliveTailProperty-and[bool]$offlineAliveTailProperty.Value)
+    $offlineBoundaryProperty=$Step.metadata.PSObject.Properties[
+      'boundary_partial_failure_admitted_for_stage_read']
+    $offlineBoundaryFailure=([int]$Step.exit_code-eq1-and
+      [string]$Step.metadata.diagnostic_classification-ceq
+        'R19F_CAPTURE_BOUNDARY_PARTIAL'-and
+      [string]$Step.metadata.diagnostic_status-ceq
+        'FAIL_R19F_CAPTURE_BOUNDARY_PARTIAL'-and
+      $null-ne$offlineBoundaryProperty-and[bool]$offlineBoundaryProperty.Value)
+    $offlineAcceptable=([int]$Step.exit_code-eq0 -or
+      ([int]$Step.exit_code-eq1 -and
+        [string]$Step.metadata.diagnostic_classification-ceq'NO_BEACON')-or
+      $offlineTimingFailure-or$offlineTailStallFailure-or
+      $offlineAliveTailStallFailure-or$offlineBoundaryFailure)
+    return [pscustomobject]@{
+      acceptable=$offlineAcceptable
+      evidence_contract_proven=$offlineAcceptable
+      classification=[string]$Step.metadata.diagnostic_classification
+      status=[string]$Step.metadata.diagnostic_status
+      timing_sla_result=if($offlineTimingFailure){'FAIL'}elseif(
+        [int]$Step.exit_code-eq0){'PASS'}else{'NOT_PROVEN'}
+      timing_sla_failure_admitted_for_stage_read=$offlineTimingFailure
+      tail_stall_failure_admitted_for_stage_read=$offlineTailStallFailure
+      alive_tail_stall_failure_admitted_for_stage_read=$offlineAliveTailStallFailure
+      alive_tail_raw_replay=$null
+      boundary_partial_failure_admitted_for_stage_read=$offlineBoundaryFailure
+      boundary_partial_raw_replay=$null
+      summary_path='';summary_sha256='';rejection_reasons=@()
+    }
+  }
+  $summaryPath=Join-Path $captureDirectory 'summary.json'
+  $summary = Read-JsonIfPresent $summaryPath
+  $classification=''
+  $status=''
+  if($null-ne$summary){
+    $classificationProperty=
+        $summary.PSObject.Properties['diagnostic_classification']
+    if($null-ne$classificationProperty){
+      $classification=[string]$classificationProperty.Value
+    }
+    $statusProperty=$summary.PSObject.Properties['diagnostic_status']
+    if($null-ne$statusProperty){$status=[string]$statusProperty.Value}
+  }
+  $rejections=[Collections.Generic.List[string]]::new()
+  $evidenceContractProven=$false
+  $timingSlaResult='NOT_PROVEN'
+  $timingSlaFailureAdmitted=$false
+  $tailStallFailureAdmitted=$false
+  $aliveTailStallFailureAdmitted=$false
+  $aliveTailRawReplay=$null
+  $boundaryPartialFailureAdmitted=$false
+  $boundaryPartialRawReplay=$null
+  if($null-eq$summary){
+    [void]$rejections.Add('summary_absent_or_invalid_utf8_json')
+  }else{
+    try{
+      $integrityStart=[string]$summary.runner_integrity.start_sha256
+      $integrityEnd=[string]$summary.runner_integrity.end_sha256
+      $actualFlashPath=[IO.Path]::GetFullPath(
+          [string]$summary.candidate_provenance.flash_record_path)
+      $expectedFlashPath=(Resolve-Path -LiteralPath $flashRecordPath `
+          -ErrorAction Stop).Path
+      $commonValid=(
+        [string]$summary.schema-ceq
+          'vc-lora-r19-runtime-fail-diagnostic-summary-v1'-and
+        [string]$summary.test_id-ceq
+          'R19-RUNTIME-FAIL-DIAGNOSTIC-HIL-001'-and
+        [string]$summary.mode-ceq'LIVE_DIAGNOSTIC_ONLY'-and
+        [bool]$summary.hardware_interaction-and
+        [bool]$summary.diagnostic_only-and
+        -not[bool]$summary.acceptance_eligible-and
+        -not[bool]$summary.acceptance_authorized-and
+        -not[bool]$summary.deployment_authorized-and
+        [int]$summary.serial_write_calls-eq0-and
+        [int]$summary.capture_seconds-eq$CaptureSeconds-and
+        [string]$summary.cleanup.result-ceq'PASS'-and
+        @($summary.cleanup.errors).Count-eq0-and
+        [bool]$summary.external_actions.com_ports_opened-and
+        -not[bool]$summary.external_actions.serial_write_attempted-and
+        -not[bool]$summary.external_actions.firmware_write_attempted-and
+        -not[bool]$summary.external_actions.e220_write_attempted-and
+        [string]$summary.runner_integrity.result-ceq'PASS'-and
+        $integrityStart-match'^[0-9A-Fa-f]{64}$'-and
+        $integrityStart-ceq$expectedCaptureToolSha256-and
+        $integrityStart-ceq$integrityEnd-and
+        [bool]$summary.candidate_provenance.runtime_fail_diagnostics_enabled-and
+        -not[bool]$summary.candidate_provenance.acceptance_eligible-and
+        -not[bool]$summary.candidate_provenance.acceptance_authorized-and
+        -not[bool]$summary.candidate_provenance.deployment_authorized-and
+        [bool]$summary.candidate_provenance.flash_readback_verified-and
+        [string]$summary.candidate_provenance.latest_sha256-ceq
+          [string]$candidate.latest_sha256-and
+        [string]$summary.candidate_provenance.handoff_sha256-ceq
+          [string]$candidate.handoff_sha256-and
+        $actualFlashPath.Equals($expectedFlashPath,
+          [StringComparison]::OrdinalIgnoreCase)-and
+        [string]$summary.candidate_provenance.flash_record_sha256-ceq
+          (Get-Sha256 $expectedFlashPath)-and
+        [string]$summary.candidate_provenance.diagnostic_flash_status-ceq
+          'PASS_R19_DIAGNOSTIC_INSTALLED_HIL_ONLY')
+      if(-not$commonValid){[void]$rejections.Add(
+          'summary_schema_scope_safety_or_provenance_invalid')}
+      $passPair=(
+        ($classification-ceq'R19F'-and
+          $status-ceq'PASS_DIAGNOSTIC_CAPTURED')-or
+        ($classification-cin@('ALIVE_WITH_PRODUCT_TRAFFIC',
+            'ALIVE_NO_TRAFFIC')-and
+          $status-ceq'PASS_ALIVE_BEACON_CAPTURED'))
+      $passDisposition=([int]$Step.exit_code-eq0-and
+        [string]$summary.result-ceq'PASS'-and$passPair)
+      $noBeaconDisposition=([int]$Step.exit_code-eq1-and
+        [string]$summary.result-ceq'FAIL'-and
+        $classification-ceq'NO_BEACON'-and
+        $status-ceq'FAIL_NO_DIAGNOSTIC_BEACON')
+      [object[]]$capturePorts=@($summary.ports)
+      [int64]$timingLimitUs=[int64]$summary.pump_service_limit_us
+      $exactTimingRoles=($capturePorts.Count-eq2-and
+        @($capturePorts|Where-Object{[string]$_.role-ceq'vehicle'}).Count-eq1-and
+        @($capturePorts|Where-Object{[string]$_.role-ceq'ground'}).Count-eq1)
+      $timingPortShapeValid=$exactTimingRoles
+      $timingSlaExceeded=$false
+      foreach($capturePort in $capturePorts){
+        [int64]$serviceGapUs=[int64]$capturePort.maximum_service_gap_us
+        if($serviceGapUs-lt0-or-not[bool]$capturePort.parser_clean){
+          $timingPortShapeValid=$false
+        }
+        if($serviceGapUs-gt$timingLimitUs){$timingSlaExceeded=$true}
+      }
+      $timingOnlyContract=($timingLimitUs-eq100000-and
+        $timingPortShapeValid-and$timingSlaExceeded-and
+        [bool]$summary.parser_clean-and
+        [bool]$summary.alive_sequence_time_monotonic-and
+        [bool]$summary.r19f_repeat_contract.valid-and
+        [int]$summary.invalid_diagnostic_count-eq0)
+      $timingOnlyDisposition=([int]$Step.exit_code-eq1-and
+        [string]$summary.result-ceq'FAIL'-and$passPair-and
+        $timingOnlyContract)
+      $tailStallPair=([int]$Step.exit_code-eq1-and
+        [string]$summary.result-ceq'FAIL'-and
+        $classification-ceq'R19F_TERMINAL_PREFIX_STALL'-and
+        $status-ceq'FAIL_R19F_TERMINAL_PREFIX_STALL')
+      $tailStallContractValid=$false
+      if($tailStallPair){
+        $tail=[object]$summary.terminal_partial_contract
+        [object[]]$tailPorts=@($tail.ports)
+        [object[]]$dirtyPorts=@($capturePorts|Where-Object{
+          -not[bool]$_.parser_clean})
+        [object[]]$affectedPorts=@($capturePorts|Where-Object{
+          [string]$_.role-ceq[string]$tail.role-and
+          [string]$_.port-ceq[string]$tail.port})
+        [object[]]$tailAttemptedPorts=@($tailPorts|Where-Object{
+          [bool]$_.tail_drain.drain_attempted})
+        $exactTailRecordRoles=($tailPorts.Count-eq2-and
+          @($tailPorts|Where-Object{[string]$_.role-ceq'vehicle'-and
+            [string]$_.port-ceq'COM3'}).Count-eq1-and
+          @($tailPorts|Where-Object{[string]$_.role-ceq'ground'-and
+            [string]$_.port-ceq'COM6'}).Count-eq1)
+        $exactTailRolePort=($exactTimingRoles-and
+          $affectedPorts.Count-eq1-and$dirtyPorts.Count-eq1-and
+          [string]$dirtyPorts[0].role-ceq[string]$tail.role-and
+          [string]$dirtyPorts[0].port-ceq[string]$tail.port-and
+          (($tail.role-ceq'vehicle'-and$tail.port-ceq'COM3')-or
+           ($tail.role-ceq'ground'-and$tail.port-ceq'COM6'))-and
+          $exactTailRecordRoles-and$tailAttemptedPorts.Count-eq1-and
+          [string]$tailAttemptedPorts[0].role-ceq[string]$tail.role-and
+          [string]$tailAttemptedPorts[0].port-ceq[string]$tail.port)
+        $allPortParserCountersZero=@($capturePorts|Where-Object{
+          [int64]$_.noise_bytes-ne0-or[int64]$_.bad_length-ne0-or
+          [int64]$_.bad_crc-ne0-or[int64]$_.unsupported_flags-ne0-or
+          [int64]$_.unknown_definition-ne0}).Count-eq0
+        $onlyAffectedPartial=@($capturePorts|Where-Object{
+          [int]$_.partial_bytes-gt0}).Count-eq1-and
+          [int]$affectedPorts[0].partial_bytes-eq[int]$tail.partial_bytes
+        [int]$partialBytes=[int]$tail.partial_bytes
+        [int64]$rawOffset=[int64]$tail.raw_offset
+        [int64]$rawBytes=[int64]$tail.raw_bytes
+        [int]$tailRequired=[int]$tail.exact_tail_bytes_required
+        [int]$tailRead=[int]$tail.exact_tail_bytes_read
+        [int]$observed=[int]$tail.observed
+        [int]$remaining=[int]$tail.remaining
+        [int]$sequence=[int]$tail.mavlink_sequence
+        [int]$expectedSequence=[int]$tail.expected_next_sequence
+        $tailArithmeticValid=($partialBytes-ge23-and$partialBytes-le62-and
+          [int]$tail.expected_size-eq63-and$observed-eq$partialBytes-and
+          $remaining-eq63-$partialBytes-and$remaining-gt0-and
+          $tailRequired-ge$tailRead-and
+          $tailRequired-$tailRead-eq$remaining-and
+          $rawOffset-ge0-and$rawOffset+$partialBytes-eq$rawBytes-and
+          [int64]$affectedPorts[0].raw_bytes-eq$rawBytes-and
+          $sequence-ge0-and$sequence-le255-and
+          $expectedSequence-ge0-and$expectedSequence-le255-and
+          $sequence-eq$expectedSequence)
+        $tailStallContractValid=(
+          [bool]$tail.valid-and[bool]$tail.one_role_only-and
+          [bool]$tail.only_parser_defect-and
+          [int]$tail.prior_r19f_count-ge2-and
+          [int]$tail.attempted_port_count-eq1-and
+          [bool]$tail.drain_attempted-and-not[bool]$tail.drain_completed-and
+          [string]$tail.result-ceq'TIMEOUT_INCOMPLETE_SAME_FRAME'-and
+          [bool]$tail.no_read_exception-and
+          [string]::IsNullOrEmpty([string]$tail.read_exception)-and
+          [bool]$tail.started_frame-and[bool]$tail.header_known-and
+          [bool]$tail.raw_suffix_exact-and
+          [bool]$tail.terminal_offset_plus_length_equals_raw_bytes-and
+          [bool]$tail.prefix_is_source_bound_r19f-and
+          [bool]$tail.role_matches_port-and
+          [bool]$tail.source_binding_verified-and
+          [bool]$tail.sequence_matches_next-and
+          [bool]$tail.expected_frame_available-and
+          [bool]$tail.byte_exact_expected_next_r19f_prefix-and
+          [bool]$tail.failure_snapshot_matches_previous-and
+          [bool]$tail.all_other_parser_counters_zero-and
+          -not[bool]$summary.parser_clean-and
+          [bool]$summary.r19f_repeat_contract.valid-and
+          [int]$summary.invalid_diagnostic_count-eq0-and
+          $exactTailRolePort-and$allPortParserCountersZero-and
+          $onlyAffectedPartial-and$tailArithmeticValid)
+      }
+      $tailStallDisposition=$commonValid-and$tailStallPair-and
+          $tailStallContractValid
+      if($tailStallDisposition){$tailStallFailureAdmitted=$true}
+      $aliveTailStallPair=([int]$Step.exit_code-eq1-and
+        [string]$summary.result-ceq'FAIL'-and
+        $classification-ceq'R19A_TERMINAL_PREFIX_STALL'-and
+        $status-ceq'FAIL_R19A_TERMINAL_PREFIX_STALL')
+      $aliveTailStallDisposition=$false
+      if($commonValid-and$aliveTailStallPair){
+        $aliveTailRawReplay=Test-R19AliveTerminalPartialEvidence $summary `
+          $captureDirectory
+        $aliveTailStallDisposition=[bool]$aliveTailRawReplay.valid
+        $aliveTailStallFailureAdmitted=$aliveTailStallDisposition
+        if($aliveTailStallDisposition){
+          $timingSlaResult=if($timingSlaExceeded){'FAIL'}else{'PASS'}
+        }
+        if(-not$aliveTailStallDisposition){foreach($reason in
+            @($aliveTailRawReplay.rejection_reasons)){
+          [void]$rejections.Add('r19a_raw_replay: '+[string]$reason)}}
+      }
+      if($passDisposition){$timingSlaResult='PASS'}
+      elseif($timingOnlyDisposition){
+        $timingSlaResult='FAIL';$timingSlaFailureAdmitted=$true
+      }
+      $boundaryPartialPair=([int]$Step.exit_code-eq1-and
+        [string]$summary.result-ceq'FAIL'-and
+        $classification-ceq'R19F_CAPTURE_BOUNDARY_PARTIAL'-and
+        $status-ceq'FAIL_R19F_CAPTURE_BOUNDARY_PARTIAL')
+      $boundaryPartialDisposition=$false
+      if($commonValid-and$boundaryPartialPair){
+        $boundaryPartialRawReplay=Test-R19FailureBoundaryPartialEvidence `
+          $summary $captureDirectory
+        $boundaryPartialDisposition=[bool]$boundaryPartialRawReplay.valid
+        $boundaryPartialFailureAdmitted=$boundaryPartialDisposition
+        if($boundaryPartialDisposition){
+          $timingSlaResult=if($timingSlaExceeded){'FAIL'}else{'PASS'}
+        }else{foreach($reason in @($boundaryPartialRawReplay.rejection_reasons)){
+          [void]$rejections.Add('r19f_boundary_raw_replay: '+[string]$reason)}}
+      }
+      if(-not($passDisposition-or$noBeaconDisposition-or
+          $timingOnlyDisposition-or$tailStallDisposition-or
+          $aliveTailStallDisposition-or$boundaryPartialDisposition)){
+        [void]$rejections.Add('exit_result_classification_status_mismatch')}
+      $evidenceContractProven=$commonValid-and
+          ($passDisposition-or$noBeaconDisposition-or$timingOnlyDisposition-or
+           $tailStallDisposition-or$aliveTailStallDisposition-or
+           $boundaryPartialDisposition)
+    }catch{
+      [void]$rejections.Add('summary_contract_exception: '+$_.Exception.Message)
+      $evidenceContractProven=$false
+    }
+  }
+  [pscustomobject]@{
+    acceptable=$evidenceContractProven
+    evidence_contract_proven=$evidenceContractProven
+    classification=$classification;status=$status
+    timing_sla_result=$timingSlaResult
+    timing_sla_failure_admitted_for_stage_read=$timingSlaFailureAdmitted
+    tail_stall_failure_admitted_for_stage_read=$tailStallFailureAdmitted
+    alive_tail_stall_failure_admitted_for_stage_read=$aliveTailStallFailureAdmitted
+    alive_tail_raw_replay=$aliveTailRawReplay
+    boundary_partial_failure_admitted_for_stage_read=$boundaryPartialFailureAdmitted
+    boundary_partial_raw_replay=$boundaryPartialRawReplay
+    summary_path=if(Test-Path -LiteralPath $summaryPath -PathType Leaf){
+      $summaryPath}else{''}
+    summary_sha256=if(Test-Path -LiteralPath $summaryPath -PathType Leaf){
+      Get-Sha256 $summaryPath}else{''}
+    rejection_reasons=@($rejections)
+  }
+}
+
+Initialize-OutputDirectory
+if ($ReadOnlyToolDiscoveryPreflight.IsPresent) {
+  $tooling = $null
+  $failure = ''
+  $result = 'FAIL'
+  $status = 'FAIL_TOOL_DISCOVERY_NO_HARDWARE'
+  try {
+    Assert-Condition (-not $Execute.IsPresent -and
+        -not $OfflineContractTest.IsPresent) `
+        'ReadOnlyToolDiscoveryPreflight rejects execution modes'
+    Assert-Condition ([string]::IsNullOrEmpty($HilAuthorization) -and
+        [string]::IsNullOrEmpty($OperatorSafetyAttestation) -and
+        [string]::IsNullOrEmpty($RollbackAuthorization) -and
+        [string]::IsNullOrEmpty($VehicleProbeUsbLocation) -and
+        [string]::IsNullOrEmpty($GroundProbeUsbLocation)) `
+        'ReadOnlyToolDiscoveryPreflight rejects live authorization tokens'
+    $tooling = Resolve-SingleOpenOcdTooling
+    $result = 'PASS'
+    $status = 'PASS_TOOL_DISCOVERY_NO_HARDWARE'
+  } catch {
+    $failure = $_.Exception.Message
+  }
+  $preflightSummary = [pscustomobject][ordered]@{
+    schema=$schema;test_id=$testId;started_utc=$startedUtc
+    finished_utc=[DateTime]::UtcNow.ToString('o')
+    result=$result;status=$status;mode='READ_ONLY_TOOL_DISCOVERY'
+    hardware_interaction=$false;diagnostic_only=$true
+    acceptance_eligible=$false;acceptance_authorized=$false
+    deployment_authorized=$false;failure=$failure;tooling=$tooling
+    steps=@()
+  }
+  Write-DurableJson (Join-Path $OutputDirectory 'summary.json') `
+      $preflightSummary
+  Write-Output ($preflightSummary | ConvertTo-Json -Depth 12 -Compress)
+  if ($result -ceq 'PASS') {exit 0}else{exit 1}
+}
+$captureDisposition = [pscustomobject]@{
+  acceptable=$false;evidence_contract_proven=$false
+  classification='';status='NOT_RUN';timing_sla_result='NOT_PROVEN'
+  timing_sla_failure_admitted_for_stage_read=$false
+  tail_stall_failure_admitted_for_stage_read=$false
+  alive_tail_stall_failure_admitted_for_stage_read=$false
+  alive_tail_raw_replay=$null
+  boundary_partial_failure_admitted_for_stage_read=$false
+  boundary_partial_raw_replay=$null
+  summary_path='';summary_sha256=''
+  rejection_reasons=@('capture_not_run')}
+$installProven = $false
+$stageVehicleProven = $false
+$stageGroundProven = $false
+$stageVehicleEvidence = $null
+$stageGroundEvidence = $null
+$terminalStatus = 'FAIL_PREFLIGHT_NO_HARDWARE'
+$exitCode = 1
+
+try {
+  Assert-Condition (-not ($Execute.IsPresent -and
+      $OfflineContractTest.IsPresent)) `
+      'Execute and OfflineContractTest are mutually exclusive'
+  Assert-Condition ($Execute.IsPresent -or $OfflineContractTest.IsPresent) `
+      'Choose -OfflineContractTest or explicitly supply -Execute'
+  if ($OfflineContractTest.IsPresent) {
+    Assert-Condition ([string]::IsNullOrEmpty($HilAuthorization) -and
+        [string]::IsNullOrEmpty($OperatorSafetyAttestation) -and
+        [string]::IsNullOrEmpty($RollbackAuthorization) -and
+        [string]::IsNullOrEmpty($VehicleProbeUsbLocation) -and
+        [string]::IsNullOrEmpty($GroundProbeUsbLocation)) `
+        'Offline contract mode rejects live authorization tokens and probe locations'
+    $candidate = [pscustomobject][ordered]@{
+      artifact_id=$expectedCandidateArtifactId
+      artifact_root='OFFLINE_CONTRACT_PINNED_CANDIDATE'
+      latest_path='OFFLINE_CONTRACT_PINNED_LATEST'
+      latest_sha256=$expectedCandidateLatestSha256
+      handoff_path='OFFLINE_CONTRACT_PINNED_HANDOFF'
+      handoff_sha256='OFFLINE_CONTRACT_PINNED_HANDOFF_SHA256'
+      candidate_manifest_path='OFFLINE_CONTRACT_PINNED_MANIFEST'
+      candidate_manifest_sha256='OFFLINE_CONTRACT_PINNED_MANIFEST_SHA256'
+      endpoint_fifo_schema=2;endpoint_fifo_size_bytes=112
+      runtime_stage_size_bytes=68
+      reader_schema='vc-lora-r19-runtime-stage-jtag-read-v3'
+      latest_lock_retained_until_outer_exit=$false
+    }
+    Assert-Condition ($OfflineScenario -cne 'reader_missing') `
+        'Simulated JTAG reader is absent'
+    $offlineVehicleLocation=if(
+        $OfflineScenario-ceq'active_jtag_location_mismatch'){
+      '1-9.9'}else{'1-4.2'}
+    $offlineGroundLocation='1-4.4'
+    $VehicleProbeUsbLocation=$offlineVehicleLocation
+    $GroundProbeUsbLocation=$offlineGroundLocation
+  } else {
+    Assert-Condition ($HilAuthorization -ceq $hilToken) `
+        'Exact diagnostic one-run authorization is required'
+    Assert-Condition ($OperatorSafetyAttestation -ceq $safetyToken) `
+        'Exact operator safety attestation is required'
+    Assert-Condition ($RollbackAuthorization -ceq $rollbackToken) `
+        'Exact mandatory rollback authorization is required'
+    Assert-Condition ($VehicleProbeUsbLocation -match
+        '^\d{1,3}-\d{1,3}(?:\.\d{1,3})*$' -and
+        $GroundProbeUsbLocation -match
+        '^\d{1,3}-\d{1,3}(?:\.\d{1,3})*$') `
+        'Explicit Vehicle and Ground OpenOCD USB locations are required'
+    Assert-Condition ($VehicleProbeUsbLocation -cne
+        $GroundProbeUsbLocation) `
+        'Vehicle and Ground OpenOCD USB locations must be distinct'
+    foreach ($required in @($flashTool,$captureTool,$stageTool,
+        $jtagPreflightTool)) {
+      Assert-Condition (Test-Path -LiteralPath $required -PathType Leaf) `
+          "Required child tool is absent: $required"
+    }
+    Assert-Condition ((Get-Sha256 $flashTool) -ceq
+        $expectedFlashToolSha256) `
+        'Candidate flash/rollback tool differs from the reviewed pinned tool'
+    Assert-Condition ((Get-Sha256 $captureTool) -ceq
+        $expectedCaptureToolSha256) `
+        'Dual-COM capture tool differs from the reviewed pinned tool'
+    Assert-Condition ((Get-Sha256 $stageTool) -ceq
+        $expectedStageReaderSha256) `
+        'Runtime-stage JTAG reader differs from the reviewed pinned tool'
+    Assert-Condition ((Get-Sha256 $jtagPreflightTool) -ceq
+        $expectedJtagPreflightGateSha256) `
+        'JTAG pre-flash gate differs from the reviewed pinned tool'
+    $candidate = Get-CanonicalCandidate
+  }
+  $runLeaf = [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffZ') + '-' +
+      [Guid]::NewGuid().ToString('N').Substring(0,8)
+  $installDirectory = Join-Path $flashEvidenceBase ($runLeaf + '-install')
+  $rollbackDirectory = Join-Path $flashEvidenceBase ($runLeaf + '-rollback')
+  $captureDirectory = Join-Path $OutputDirectory 'capture'
+  $jtagPreflightDirectory = Join-Path $OutputDirectory 'jtag_preflight'
+  $activeJtagPreflightDirectory = Join-Path $OutputDirectory `
+      'active_jtag_preflight'
+  $activeJtagVehicleDirectory = Join-Path $activeJtagPreflightDirectory `
+      'vehicle'
+  $activeJtagGroundDirectory = Join-Path $activeJtagPreflightDirectory `
+      'ground'
+  $stageDirectories.vehicle = Join-Path $OutputDirectory 'stage_vehicle'
+  $stageDirectories.ground = Join-Path $OutputDirectory 'stage_ground'
+  $tooling = $null
+  if (-not $OfflineContractTest.IsPresent) {$tooling=Resolve-SingleOpenOcdTooling}
+
+  $jtagPreflightArguments=if($OfflineContractTest){@()}else{@(
+    '-Execute','-RepoRoot',$repo,'-OutputDirectory',$jtagPreflightDirectory,
+    '-ReaderPath',$stageTool,'-ReaderSha256',$expectedStageReaderSha256,
+    '-OpenOcdExecutable',[string]$tooling.executable,
+    '-OpenOcdSha256',[string]$tooling.executable_sha256,
+    '-InterfaceConfig',[string]$tooling.interface_config,
+    '-InterfaceConfigSha256',[string]$tooling.interface_config_sha256,
+    '-ScriptsRoot',[string]$tooling.scripts_root,
+    '-ScriptsTreeSha256',[string]$tooling.scripts_tree_sha256)}
+  $jtagPreflightAttempted=$true
+  $jtagPreflightStep=Invoke-ExperimentStep 'jtag_preflight' `
+      $jtagPreflightTool $jtagPreflightArguments $expectedJtagPreflightGateSha256
+  $jtagPreflightEvidence=Get-JtagPreflightProof $jtagPreflightStep `
+      $jtagPreflightDirectory
+  $jtagPreflightStep|Add-Member NoteProperty semantic_result $(
+    if([bool]$jtagPreflightEvidence.driver_binding_proven){
+      'PASS_PNP_DRIVER_BINDING_ONLY_EXPECTED_EXIT_1'
+    }else{'FAIL_PNP_DRIVER_BINDING_EVIDENCE'})
+  Assert-Condition ([bool]$jtagPreflightEvidence.driver_binding_proven-and
+      [string]$jtagPreflightEvidence.status-ceq
+        'PASS_WINUSB_DRIVER_BINDING_PNP_ONLY'-and
+      -not[bool]$jtagPreflightEvidence.proven-and
+      -not[bool]$jtagPreflightEvidence.firmware_install_allowed) `
+      'Exact PnP-only JTAG driver proof was not established'
+  if($OfflineContractTest.IsPresent-and
+      $OfflineScenario-ceq'pnp_only_blocked'){
+    throw 'Offline proof stops after PnP-only evidence'
+  }
+  $vehiclePreflight=@($jtagPreflightEvidence.roles|Where-Object{
+    [string]$_.role-ceq'vehicle'})
+  $groundPreflight=@($jtagPreflightEvidence.roles|Where-Object{
+    [string]$_.role-ceq'ground'})
+  Assert-Condition ($vehiclePreflight.Count-eq1-and
+      $groundPreflight.Count-eq1) `
+      'JTAG pre-flash role bindings are incomplete'
+  $vehiclePortChain=[string]$vehiclePreflight[0].pnp_port_chain
+  $groundPortChain=[string]$groundPreflight[0].pnp_port_chain
+  $locationBindingsValid=(
+    $vehiclePortChain -cne $groundPortChain-and
+    $VehicleProbeUsbLocation -cne $GroundProbeUsbLocation-and
+    (Test-ProbeLocationMatchesPnpChain $VehicleProbeUsbLocation `
+      $vehiclePortChain)-and
+    (Test-ProbeLocationMatchesPnpChain $GroundProbeUsbLocation `
+      $groundPortChain))
+  if(-not$locationBindingsValid){
+    $activeJtagLocationBindingFailed=$true
+    throw 'Explicit OpenOCD USB locations do not match the fresh PnP port chains'
+  }
+
+  $activeJtagPreflightAttempted=$true
+  $activeJtagVehicleArguments=if($OfflineContractTest){@()}else{@(
+    '-Execute','-Preflight','-Role','vehicle',
+    '-ProbeSerial','90:70:69:11:81:A4',
+    '-ProbeUsbLocation',$VehicleProbeUsbLocation,
+    '-OpenOcdExecutable',[string]$tooling.executable,
+    '-OpenOcdSha256',[string]$tooling.executable_sha256,
+    '-InterfaceConfig',[string]$tooling.interface_config,
+    '-InterfaceConfigSha256',[string]$tooling.interface_config_sha256,
+    '-ScriptsRoot',[string]$tooling.scripts_root,
+    '-OutputRoot',$activeJtagVehicleDirectory)}
+  $activeJtagVehicleStep=Invoke-ExperimentStep 'active_jtag_vehicle' `
+      $stageTool $activeJtagVehicleArguments $expectedStageReaderSha256
+  $activeJtagVehicleEvidence=Get-ActiveJtagPreflightProof `
+      $activeJtagVehicleStep 'vehicle' '90:70:69:11:81:A4' `
+      $VehicleProbeUsbLocation $vehiclePortChain $activeJtagVehicleDirectory
+  [void]$activeJtagRoles.Add($activeJtagVehicleEvidence)
+  $activeJtagPreflightEvidence=[pscustomobject][ordered]@{
+    proven=$false;firmware_install_allowed=$false
+    status='FAIL_ACTIVE_JTAG_PREFLIGHT';roles=@($activeJtagRoles)
+    evidence_directory=$activeJtagPreflightDirectory}
+  if([bool]$activeJtagVehicleEvidence.hardware_interaction-and
+      (-not[bool]$activeJtagVehicleEvidence.safety.process_termination_proven-or
+       -not[bool]$activeJtagVehicleEvidence.safety.shutdown_proven)){
+    $activeJtagCleanupUnproven=$true
+    if(-not[bool]$activeJtagVehicleEvidence.safety.process_termination_proven){
+      $childTerminationUnproven=$true
+    }
+    throw 'Vehicle active JTAG preflight cleanup is unproven'
+  }
+  Assert-Condition ([bool]$activeJtagVehicleEvidence.proven) `
+      'Vehicle active JTAG preflight was not proven'
+
+  $activeJtagGroundArguments=if($OfflineContractTest){@()}else{@(
+    '-Execute','-Preflight','-Role','ground',
+    '-ProbeSerial','1C:DB:D4:5A:83:80',
+    '-ProbeUsbLocation',$GroundProbeUsbLocation,
+    '-OpenOcdExecutable',[string]$tooling.executable,
+    '-OpenOcdSha256',[string]$tooling.executable_sha256,
+    '-InterfaceConfig',[string]$tooling.interface_config,
+    '-InterfaceConfigSha256',[string]$tooling.interface_config_sha256,
+    '-ScriptsRoot',[string]$tooling.scripts_root,
+    '-OutputRoot',$activeJtagGroundDirectory)}
+  $activeJtagGroundStep=Invoke-ExperimentStep 'active_jtag_ground' `
+      $stageTool $activeJtagGroundArguments $expectedStageReaderSha256
+  $activeJtagGroundEvidence=Get-ActiveJtagPreflightProof `
+      $activeJtagGroundStep 'ground' '1C:DB:D4:5A:83:80' `
+      $GroundProbeUsbLocation $groundPortChain $activeJtagGroundDirectory
+  [void]$activeJtagRoles.Add($activeJtagGroundEvidence)
+  $dualActiveJtagProven=([bool]$activeJtagVehicleEvidence.proven-and
+      [bool]$activeJtagGroundEvidence.proven)
+  $activeJtagPreflightEvidence=[pscustomobject][ordered]@{
+    proven=$dualActiveJtagProven
+    firmware_install_allowed=$dualActiveJtagProven
+    status=if($dualActiveJtagProven){
+      'PASS_FRESH_DUAL_ACTIVE_JTAG_PREFLIGHT'
+    }else{'FAIL_ACTIVE_JTAG_PREFLIGHT'}
+    roles=@($activeJtagRoles)
+    evidence_directory=$activeJtagPreflightDirectory}
+  if([bool]$activeJtagGroundEvidence.hardware_interaction-and
+      (-not[bool]$activeJtagGroundEvidence.safety.process_termination_proven-or
+       -not[bool]$activeJtagGroundEvidence.safety.shutdown_proven)){
+    $activeJtagCleanupUnproven=$true
+    if(-not[bool]$activeJtagGroundEvidence.safety.process_termination_proven){
+      $childTerminationUnproven=$true
+    }
+    throw 'Ground active JTAG preflight cleanup is unproven'
+  }
+  Assert-Condition ([bool]$activeJtagPreflightEvidence.proven-and
+      [bool]$activeJtagPreflightEvidence.firmware_install_allowed) `
+      'Ground active JTAG preflight was not proven'
+  $preflightPassed = $true
+
+  try {
+    $experimentStarted = $true
+    $installArguments = if($OfflineContractTest){@()}else{@(
+      '-Execute','-RuntimeFailDiagnostics','-CandidateLatestPath',
+      [string]$candidate.latest_path,'-EvidenceDirectory',$installDirectory,
+      '-HilAuthorization',$hilToken,'-OperatorSafetyAttestation',$safetyToken)}
+    if($timedPathEnabled){$installArguments+=@('-TimedPathMode',$TimedPathMode)}
+    $installStep = Invoke-ExperimentStep 'install' $flashTool `
+        $installArguments $expectedFlashToolSha256
+    if ($OfflineContractTest.IsPresent) {
+      $installProven = ([int]$installStep.exit_code -eq 0)
+    } else {
+      Assert-InstallProof $installStep (Join-Path $installDirectory `
+          'flash_record.json')
+      $installProven = $true
+    }
+    Assert-Condition $installProven 'Candidate install was not proven'
+
+    $flashRecordPath = if($OfflineContractTest){''}else{
+      Join-Path $installDirectory 'flash_record.json'}
+    $captureArguments = if($OfflineContractTest){@()}else{@(
+      '-Execute','-RepoRoot',$repo,'-OutputDirectory',$captureDirectory,
+      '-CandidateHandoffPath',[string]$candidate.handoff_path,
+      '-CandidateFlashEvidencePath',$flashRecordPath,
+      '-CaptureSeconds',[string]$CaptureSeconds)}
+    if($timedPathEnabled){
+      $flash=Read-JsonIfPresent $flashRecordPath
+      $permitPath=Join-Path $OutputDirectory 'execution-permit.json'
+      $issued=[DateTime]::UtcNow
+      $permitPorts=@(foreach($row in @($flash.roles)){
+        [pscustomobject]@{role=[string]$row.role;port=[string]$row.port
+          baud=$(if($row.role-ceq'ground'){57600}else{115200})
+          pnp_instance_id=[string]$row.pnp_device_id
+          usb_parent_instance_id=[string]$row.parent_device_id}
+      })
+      Write-DurableJson $permitPath ([ordered]@{
+        schema='vc-lora-r19-timed-path-execution-permit-v1';status='AUTHORIZED_SINGLE_CAPTURE'
+        candidate_id=$candidate.artifact_id;mode=$TimedPathMode
+        handoff_sha256=$candidate.handoff_sha256;flash_evidence_sha256=Get-Sha256 $flashRecordPath
+        issued_utc=$issued.ToString('o');expires_utc=$issued.AddSeconds(120).ToString('o')
+        safety_confirmed=$true;one_time=$true;restore_required=$true;capture_seconds=40;ports=$permitPorts})
+      $captureArguments+=@('-Mode',$TimedPathMode,'-ExecutionPermitPath',$permitPath)
+    }
+    $captureStep = Invoke-ExperimentStep 'capture' $captureTool `
+        $captureArguments $expectedCaptureToolSha256
+    $captureDisposition = Get-CaptureDisposition $captureStep
+    Assert-Condition ([bool]$captureDisposition.acceptable) `
+        'Capture evidence contract failed before JTAG stage reads'
+
+    $vehicleArguments = if($OfflineContractTest){@()}else{
+      Get-StageArguments 'vehicle' $expectedVehicleRuntimeStageAddress `
+          '90:70:69:11:81:A4' `
+          $VehicleProbeUsbLocation $flashRecordPath $tooling}
+    $stageVehicleStep = Invoke-ExperimentStep 'stage_vehicle' $stageTool `
+        $vehicleArguments $expectedStageReaderSha256
+    $stageVehicleEvidence = Get-StageProof $stageVehicleStep 'vehicle' `
+        $expectedVehicleRuntimeStageAddress $VehicleProbeUsbLocation `
+        $stageDirectories.vehicle
+    if (-not [bool]$stageVehicleEvidence.native_processes_termination_proven) {
+      $script:childTerminationUnproven=$true
+      throw 'Vehicle stage native-process termination is unproven'
+    }
+    $stageVehicleProven = [bool]$stageVehicleEvidence.proven
+    if (-not $stageVehicleProven) {
+      Assert-Condition (-not [bool]$stageVehicleStep.timed_out -and
+          [bool]$stageVehicleEvidence.cleanup_proven -and
+          -not [bool]$stageVehicleEvidence.target_may_be_halted) `
+          'Vehicle stage failure did not prove resume/shutdown; skipping Ground and rolling back'
+    }
+
+    $groundArguments = if($OfflineContractTest){@()}else{
+      Get-StageArguments 'ground' $expectedGroundRuntimeStageAddress `
+          '1C:DB:D4:5A:83:80' `
+          $GroundProbeUsbLocation $flashRecordPath $tooling}
+    $stageGroundStep = Invoke-ExperimentStep 'stage_ground' $stageTool `
+        $groundArguments $expectedStageReaderSha256
+    $stageGroundEvidence = Get-StageProof $stageGroundStep 'ground' `
+        $expectedGroundRuntimeStageAddress $GroundProbeUsbLocation `
+        $stageDirectories.ground
+    if (-not [bool]$stageGroundEvidence.native_processes_termination_proven) {
+      $script:childTerminationUnproven=$true
+      throw 'Ground stage native-process termination is unproven'
+    }
+    $stageGroundProven = [bool]$stageGroundEvidence.proven
+    if($timedPathEnabled-and$stageGroundProven){
+      . (Join-Path $repo 'tools/r19_timed_path_acquisition.ps1') -ImportOnly
+      $captureDocument=Read-JsonIfPresent (Join-Path $captureDirectory 'summary.json')
+      $record=$stageGroundEvidence.extended_raw_replay.timed_path_record
+      $recordPath=Join-Path $stageDirectories.ground 'timed_path_first.bin'
+      $timedPathEvaluation=ConvertTo-R19TimedPathEvidence -Capture $captureDocument `
+        -DeviceRecord $record -CandidateId $candidate.artifact_id -DeviceRecordSha256 (Get-Sha256 $recordPath)
+      Write-DurableJson (Join-Path $OutputDirectory 'timed_path_evaluation.json') $timedPathEvaluation
+    }
+  } finally {
+    if ($experimentStarted -and -not $childTerminationUnproven) {
+      $rollbackAttempted = $true
+      $rollbackArguments = if($OfflineContractTest){@()}else{@(
+        '-Execute','-RuntimeFailDiagnostics','-RollbackOnly',
+        '-RollbackAuthorization',$rollbackToken,
+        '-EvidenceDirectory',$rollbackDirectory)}
+      if($timedPathEnabled){$rollbackArguments+=@('-TimedPathMode',$TimedPathMode)}
+      $rollbackStep = Invoke-ExperimentStep 'rollback' $flashTool `
+          $rollbackArguments $expectedFlashToolSha256
+      $rollbackProven = Test-RollbackProof $rollbackStep `
+          (Join-Path $rollbackDirectory 'flash_record.json')
+    }
+  }
+} catch {
+  $primaryFailure = $_.Exception.Message
+}
+
+if ($childTerminationUnproven) {
+  $terminalStatus = 'FAIL_CHILD_TERMINATION_UNPROVEN_POWER_OFF_REQUIRED'
+  $powerOffRequired = $true
+  $exitCode = 2
+} elseif ($activeJtagCleanupUnproven) {
+  $terminalStatus = 'FAIL_ACTIVE_JTAG_CLEANUP_UNPROVEN_POWER_OFF_REQUIRED'
+  $powerOffRequired = $true
+  $exitCode = 2
+} elseif ($rollbackAttempted -and -not $rollbackProven) {
+  $terminalStatus = 'FAIL_ROLLBACK_UNPROVEN_POWER_OFF_REQUIRED'
+  $powerOffRequired = $true
+  $exitCode = 2
+} elseif (-not $preflightPassed) {
+  $terminalStatus = if($activeJtagLocationBindingFailed){
+    'FAIL_ACTIVE_JTAG_LOCATION_BINDING_NO_FLASH'
+  }elseif($activeJtagPreflightAttempted){
+    'FAIL_ACTIVE_JTAG_PREFLIGHT_NO_FLASH'
+  }elseif($jtagPreflightAttempted-and
+      $null-ne$jtagPreflightEvidence-and
+      [bool]$jtagPreflightEvidence.driver_binding_proven-and
+      [string]$jtagPreflightEvidence.status-ceq
+        'PASS_WINUSB_DRIVER_BINDING_PNP_ONLY'){
+    'FAIL_ACTIVE_JTAG_UNPROVEN_PNP_ONLY_NO_FLASH'
+  }elseif($jtagPreflightAttempted){
+    'FAIL_JTAG_PREFLIGHT_NO_FLASH'
+  }else{'FAIL_PREFLIGHT_NO_HARDWARE'}
+  $exitCode = 1
+} elseif (-not $installProven) {
+  $terminalStatus = 'FAIL_INSTALL_R18_RESTORED'
+  $exitCode = 1
+} elseif (-not [bool]$captureDisposition.acceptable) {
+  $terminalStatus = 'FAIL_CAPTURE_R18_RESTORED'
+  $exitCode = 1
+} elseif (-not $stageVehicleProven -or -not $stageGroundProven) {
+  $terminalStatus = 'FAIL_STAGE_READ_R18_RESTORED'
+  $exitCode = 1
+} elseif ($timedPathEnabled) {
+  $outcome=Get-R19TimedPathOuterOutcome -Evaluation $timedPathEvaluation -Failure $primaryFailure `
+    -Saved (Test-Path -LiteralPath (Join-Path $OutputDirectory 'timed_path_evaluation.json') -PathType Leaf)
+  $terminalStatus=$outcome.status
+  $exitCode=if($outcome.result-ceq'PASS'){0}else{1}
+} elseif (-not[bool]$stageVehicleEvidence.usb_tx_boundary_completion_proven-or
+    -not[bool]$stageGroundEvidence.usb_tx_boundary_completion_proven) {
+  $terminalStatus = 'FAIL_USB_TX_BOUNDARY_CAUSE_EVIDENCE_CAPTURED_R18_RESTORED'
+  $exitCode = 1
+} elseif ($null-ne$stageGroundEvidence.extended_raw_replay-and
+    ([bool]$stageGroundEvidence.extended_raw_replay.first_heartbeat_failure_latched-or
+      ($null-ne$stageGroundEvidence.extended_raw_replay.PSObject.Properties['first_usb_failure']-and
+       $null-ne$stageGroundEvidence.extended_raw_replay.first_usb_failure-and
+       [bool]$stageGroundEvidence.extended_raw_replay.first_usb_failure.failure_latched))) {
+  $terminalStatus = 'FAIL_GROUND_HEARTBEAT_PUBLICATION_CAUSE_EVIDENCE_CAPTURED_R18_RESTORED'
+  $exitCode = 1
+} elseif ([bool]$captureDisposition.boundary_partial_failure_admitted_for_stage_read) {
+  $terminalStatus =
+    'FAIL_CAPTURE_R19F_BOUNDARY_PARTIAL_CAUSE_EVIDENCE_CAPTURED_R18_RESTORED'
+  $exitCode = 1
+} elseif ([bool]$captureDisposition.timing_sla_failure_admitted_for_stage_read) {
+  $terminalStatus =
+    'FAIL_CAPTURE_TIMING_SLA_CAUSE_EVIDENCE_CAPTURED_R18_RESTORED'
+  $exitCode = 1
+} elseif ([bool]$captureDisposition.alive_tail_stall_failure_admitted_for_stage_read) {
+  $terminalStatus =
+    'FAIL_CAPTURE_R19A_TAIL_STALL_CAUSE_EVIDENCE_CAPTURED_R18_RESTORED'
+  $exitCode = 1
+  } elseif ([bool]$captureDisposition.tail_stall_failure_admitted_for_stage_read) {
+    $terminalStatus =
+      'FAIL_CAPTURE_R19F_TAIL_STALL_CAUSE_EVIDENCE_CAPTURED_R18_RESTORED'
+    $exitCode = 1
+} elseif ($rollbackProven) {
+  $terminalStatus = 'PASS_CAUSE_EVIDENCE_CAPTURED_R18_RESTORED'
+  $exitCode = 0
+}
+
+$summary = [pscustomobject][ordered]@{
+  schema=$schema;test_id=$testId;started_utc=$startedUtc
+  finished_utc=[DateTime]::UtcNow.ToString('o')
+  result=if($exitCode-eq0){'PASS'}else{'FAIL'};status=$terminalStatus
+  mode=if($OfflineContractTest){'OFFLINE_CONTRACT'}else{'LIVE_HIL'}
+  hardware_interaction=[bool]$hardwareInteraction
+  diagnostic_only=$true;acceptance_eligible=$false
+  acceptance_authorized=$false;deployment_authorized=$false
+  capture_seconds=$CaptureSeconds;offline_scenario=if($OfflineContractTest){
+    $OfflineScenario}else{''};failure=$primaryFailure
+  timed_path_mode=$TimedPathMode;timed_path_evaluation=$timedPathEvaluation
+  authorization=[pscustomobject][ordered]@{
+    hil_token=if($Execute){$HilAuthorization}else{''}
+    safety_attestation=if($Execute){$OperatorSafetyAttestation}else{''}
+    rollback_token=if($Execute){$RollbackAuthorization}else{''}}
+  candidate=$candidate;steps=@($steps)
+  jtag_preflight=if($null-ne$jtagPreflightEvidence){
+    $jtagPreflightEvidence}else{[pscustomobject][ordered]@{
+      proven=$false;driver_binding_proven=$false
+      firmware_install_allowed=$false;status='NOT_RUN'
+      roles=@();evidence_directory=$jtagPreflightDirectory
+      summary_path='';summary_sha256=''}}
+  active_jtag_preflight=if($null-ne$activeJtagPreflightEvidence){
+    $activeJtagPreflightEvidence}else{[pscustomobject][ordered]@{
+      proven=$false;firmware_install_allowed=$false;status='NOT_RUN'
+      roles=@($activeJtagRoles)
+      evidence_directory=$activeJtagPreflightDirectory}}
+  capture=[pscustomobject][ordered]@{
+    acceptable=[bool]$captureDisposition.acceptable
+    evidence_contract_proven=[bool]$captureDisposition.evidence_contract_proven
+    classification=[string]$captureDisposition.classification
+    status=[string]$captureDisposition.status
+    timing_sla_result=[string]$captureDisposition.timing_sla_result
+    timing_sla_failure_admitted_for_stage_read=
+      [bool]$captureDisposition.timing_sla_failure_admitted_for_stage_read
+    tail_stall_failure_admitted_for_stage_read=
+      [bool]$captureDisposition.tail_stall_failure_admitted_for_stage_read
+    alive_tail_stall_failure_admitted_for_stage_read=
+      [bool]$captureDisposition.alive_tail_stall_failure_admitted_for_stage_read
+    alive_tail_raw_replay=$captureDisposition.alive_tail_raw_replay
+    boundary_partial_failure_admitted_for_stage_read=
+      [bool]$captureDisposition.boundary_partial_failure_admitted_for_stage_read
+    boundary_partial_raw_replay=$captureDisposition.boundary_partial_raw_replay
+    summary_path=[string]$captureDisposition.summary_path
+    summary_sha256=[string]$captureDisposition.summary_sha256
+    rejection_reasons=@($captureDisposition.rejection_reasons)
+    evidence_directory=$captureDirectory}
+  stage_evidence=[pscustomobject][ordered]@{
+    vehicle=if($null-ne$stageVehicleEvidence){$stageVehicleEvidence}else{
+      [pscustomobject]@{proven=$false
+        address=$expectedVehicleRuntimeStageAddress
+        evidence_directory=$stageDirectories.vehicle}}
+    ground=if($null-ne$stageGroundEvidence){$stageGroundEvidence}else{
+      [pscustomobject]@{proven=$false
+        address=$expectedGroundRuntimeStageAddress
+        evidence_directory=$stageDirectories.ground}}}
+  stage_read_policy=[pscustomobject][ordered]@{
+    order=@('vehicle','ground');simultaneous=$false
+    stage_mask_monotonic=$true;first_failure_latched=$true
+    authoritative_cause_fields=@('first_failure.code','first_failure.name',
+      'first_failure.stage_mask','first_failure.detail',
+      'extended_raw_replay.first_usb_failure.first_failure',
+      'extended_raw_replay.first_usb_failure.clock_sync')
+    limitation=('The two roles are halted and read sequentially. Ground may ' +
+      'advance after the Vehicle snapshot; stage masks are causal lower bounds, ' +
+      'and the latched first_failure fields are authoritative.')}
+  diagnostic_outcomes=[pscustomobject][ordered]@{
+    record_acquisition_result=if($stageVehicleProven-and$stageGroundProven){
+      'PASS'}else{'NOT_PROVEN'}
+    usb_boundary_observation_result=if($stageVehicleProven-and$stageGroundProven){
+      if([bool]$stageVehicleEvidence.usb_tx_boundary_completion_proven-and
+          [bool]$stageGroundEvidence.usb_tx_boundary_completion_proven){
+        'COMPLETE_AT_RECORDED_BOUNDARY'}else{'INCOMPLETE_AT_RECORDED_BOUNDARY'}
+    }else{'NOT_PROVEN'}
+    usb_observation_is_continuous_live_hardware_state=$false
+    usb_observation_proves_windows_cdc_consumption=$false
+    first_usb_failure=[pscustomobject][ordered]@{
+      vehicle=(Get-FirstUsbFailureCauseObservation $stageVehicleEvidence)
+      ground=(Get-FirstUsbFailureCauseObservation $stageGroundEvidence)}
+    serial_ports_closed_before_jtag_read=$true}
+  rollback=[pscustomobject][ordered]@{
+    attempted=$rollbackAttempted;proven=$rollbackProven
+      required_token=$rollbackToken;evidence_directory=$rollbackDirectory}
+  hardware_quiescence=[pscustomobject][ordered]@{
+    child_termination_proven=(-not $childTerminationUnproven)
+    active_jtag_cleanup_proven=(-not $activeJtagCleanupUnproven)
+    further_child_launch_blocked=[bool]$childTerminationUnproven
+    rollback_skipped_due_unproven_child_termination=
+      ([bool]$childTerminationUnproven -and -not $rollbackAttempted)}
+  power_off_required=$powerOffRequired
+}
+Write-DurableJson (Join-Path $OutputDirectory 'summary.json') $summary
+Write-Output ($summary | ConvertTo-Json -Depth 12 -Compress)
+exit $exitCode

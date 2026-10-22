@@ -1,0 +1,203 @@
+{
+    "schema":  "vc-lora-r19-candidate-flash-evidence-v1",
+    "test_id":  "R19-CANDIDATE-APP-FLASH-HIL-001",
+    "started_utc":  "2026-10-21T22:29:48.2990916Z",
+    "finished_utc":  "2026-10-21T22:30:30.7100965Z",
+    "result":  "PASS",
+    "status":  "PASS_R19_DIAGNOSTIC_INSTALLED_HIL_ONLY",
+    "mode":  "Execute",
+    "failure":  "",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "one_run_hil_authorized":  true,
+    "deployment_authorized":  false,
+    "hil_authorization_token":  "R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT",
+    "authorization_scope":  "one immediate private USB timed-path diagnostic capture only; no flight arming or parameter commands",
+    "authorization":  {
+                          "scope":  "one immediate R19 runtime-fail diagnostic capture only",
+                          "reusable":  false,
+                          "deployment_authorization":  false,
+                          "attestation_sha256":  "E083B2B3483B1698711C5E68706E1EB5F2E0EB00BFF475E7669C1E7A6749F832",
+                          "operator_safety_attestation_sha256":  "E80E5B41C124DD113EC0989D8E8D77F4257FA356C4B3419E5E731E5F01E526D4",
+                          "operator_safety_conditions":  [
+                                                             "Pixhawk DISARMED",
+                                                             "propulsion and actuator power isolated",
+                                                             "both E220 antennas connected",
+                                                             "common GND and 3.3 V logic checked",
+                                                             "Pixhawk parameter backup saved"
+                                                         ]
+                      },
+    "candidate":  {
+                      "runtime_fail_diagnostics_enabled":  true,
+                      "latest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\latest.json",
+                      "latest_sha256":  "89C77ACD76A501B6F6A3F91024F59B5FF7BE1F0E8CF45CC63ADA5640A0A50AA0",
+                      "handoff_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\handoff.json",
+                      "handoff_sha256":  "C30EBD31BF77FEBAB2D5B79699DB8762CBAEAAB196669C6CBF0CABFAD893DB0B",
+                      "candidate_manifest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\candidate_manifest.json",
+                      "candidate_manifest_sha256":  "CDFB852AB49FB77DD684EC52F8FA4C2944D9710BAB2754D517EAA3D80076536D",
+                      "candidate_final_seal_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\final_seal.json",
+                      "candidate_final_seal_sha256":  "EFB3670E79AF8707EDBF7BD734A9545DD1893BE7751D75FAFDF033AD3C96AF49",
+                      "artifact_id":  "20261021T124607243Z-f0aa9080"
+                  },
+    "flash_policy":  {
+                         "app_only":  true,
+                         "offset":  "0x10000",
+                         "erase_flash":  false,
+                         "write_bootloader":  false,
+                         "write_partition_table":  false,
+                         "write_merged_image":  false,
+                         "upload_order":  [
+                                              "vehicle",
+                                              "ground"
+                                          ]
+                     },
+    "roles":  [
+                  {
+                      "role":  "vehicle",
+                      "port":  "COM3",
+                      "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                      "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                      "mac":  "90:70:69:11:81:a4",
+                      "size_bytes":  441440,
+                      "sha256":  "D28EE6969DFA12CD11571962E260BDB29E2C640BD01FFD16CCBB6BCB553CE47A",
+                      "write_pass":  true,
+                      "verify_pass":  true,
+                      "reenumeration_pass":  true,
+                      "rollback_sha256":  "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52"
+                  },
+                  {
+                      "role":  "ground",
+                      "port":  "COM6",
+                      "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                      "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                      "mac":  "1c:db:d4:5a:83:80",
+                      "size_bytes":  425296,
+                      "sha256":  "CBF7EFA748A00C1F9EA626E5BB2D506C18A6BB7D1C9700E71D5124D5431A1476",
+                      "write_pass":  true,
+                      "verify_pass":  true,
+                      "reenumeration_pass":  true,
+                      "rollback_sha256":  "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5"
+                  }
+              ],
+    "operations":  [
+                       {
+                           "label":  "vehicle_read_mac",
+                           "role":  "vehicle",
+                           "kind":  "read_mac",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "01_vehicle_read_mac.record.json",
+                           "record_sha256":  "99EC12B136E5711E31DE229D15A49913FD4F1B9554C899EAD43B72392AA1BCF8"
+                       },
+                       {
+                           "label":  "vehicle_write",
+                           "role":  "vehicle",
+                           "kind":  "write",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "02_vehicle_write.record.json",
+                           "record_sha256":  "1717F89129CDBF3C7D992544E064625AB4E8AEA43FD1456970C461EB7D50A7CB"
+                       },
+                       {
+                           "label":  "vehicle_verify",
+                           "role":  "vehicle",
+                           "kind":  "verify",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "03_vehicle_verify.record.json",
+                           "record_sha256":  "2780D924D2EF314FC8CA276E6ABA8C258CC3B2877F784445B67C25D928DB834C"
+                       },
+                       {
+                           "label":  "vehicle_reenumeration",
+                           "role":  "vehicle",
+                           "kind":  "reenumeration",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "04_vehicle_reenumeration.record.json",
+                           "record_sha256":  "619944BC14A1C5D2E2B222ED7A719D46B2573043DD88512E0C627C6B8FAB8176"
+                       },
+                       {
+                           "label":  "ground_read_mac",
+                           "role":  "ground",
+                           "kind":  "read_mac",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "05_ground_read_mac.record.json",
+                           "record_sha256":  "78E5A6C6BA3002394239ED43121ABA508EFDD0FFEFFA6F462F3B210AB62E5241"
+                       },
+                       {
+                           "label":  "ground_write",
+                           "role":  "ground",
+                           "kind":  "write",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "06_ground_write.record.json",
+                           "record_sha256":  "EB3FF397C68946862BAF8912F781025BBCABCFE9AC7923428FA6AF31FB5AFD0F"
+                       },
+                       {
+                           "label":  "ground_verify",
+                           "role":  "ground",
+                           "kind":  "verify",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "07_ground_verify.record.json",
+                           "record_sha256":  "CC43FB0AA012DAD15530B09D06BA0A1F59CB25E827EA990165BB8C8CFBDC28B3"
+                       },
+                       {
+                           "label":  "ground_reenumeration",
+                           "role":  "ground",
+                           "kind":  "reenumeration",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "08_ground_reenumeration.record.json",
+                           "record_sha256":  "597758C299DD148BF545BE1E91165CB98361708A2A77A8DED5F39C442DF77ED8"
+                       }
+                   ],
+    "rollback":  {
+                     "required":  false,
+                     "result":  "NOT_REQUIRED",
+                     "roles":  [
+
+                               ],
+                     "operations":  [
+
+                                    ]
+                 },
+    "accepted_r18_rollback_root":  "runs/baselines/R18-PRODUCTION-R4-ACCEPTED/20260914T225054625Z/artifacts",
+    "max_rollback_attempts":  3,
+    "competing_client_gate_failures":  [
+
+                                       ],
+    "external_actions":  {
+                             "device_access_attempted":  true,
+                             "process_inventory_queried":  true,
+                             "esptool_executed":  true,
+                             "firmware_write_attempted":  true,
+                             "firmware_may_have_changed":  true,
+                             "device_power_changed":  false,
+                             "erase_performed":  false,
+                             "bootloader_written":  false,
+                             "partition_table_written":  false,
+                             "merged_image_written":  false
+                         },
+    "simulated_terminal_status":  "",
+    "next_required_action":  "Run exactly one mode-bound timed-path capture, acquire JTAG records, then mandatory accepted R18 rollback",
+    "timed_path_diagnostics":  {
+                                   "schema":  "vc-lora-r19-timed-path-candidate-v1",
+                                   "enabled":  true,
+                                   "mode":  "ExplicitHostArm",
+                                   "mode_value":  2,
+                                   "macro":  "VC_LORA_R19_TIMED_PATH_DIAGNOSTICS",
+                                   "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v6",
+                                   "record":  {
+                                                  "symbol":  "vc_lora_r19_timed_path_record",
+                                                  "schema_version":  1,
+                                                  "size_bytes":  512
+                                              },
+                                   "decoder":  {
+                                                   "path":  "tools/read_r19_timed_path_record.ps1",
+                                                   "sha256":  "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C"
+                                               }
+                               }
+}

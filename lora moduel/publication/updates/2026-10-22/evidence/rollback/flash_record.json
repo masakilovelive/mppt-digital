@@ -1,0 +1,446 @@
+{
+    "schema":  "vc-lora-r19-candidate-flash-evidence-v1",
+    "test_id":  "R19-CANDIDATE-APP-FLASH-HIL-001",
+    "started_utc":  "2026-10-21T22:31:32.9677438Z",
+    "finished_utc":  "2026-10-21T22:32:08.6873658Z",
+    "result":  "PASS",
+    "status":  "PASS_R18_ROLLBACK_COMPLETE",
+    "mode":  "Execute",
+    "failure":  "",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "one_run_hil_authorized":  false,
+    "deployment_authorized":  false,
+    "hil_authorization_token":  "",
+    "authorization_scope":  "one immediate private USB timed-path diagnostic capture only; no flight arming or parameter commands",
+    "authorization":  {
+                          "scope":  "one immediate R19 runtime-fail diagnostic capture only",
+                          "reusable":  false,
+                          "deployment_authorization":  false,
+                          "attestation_sha256":  "",
+                          "operator_safety_attestation_sha256":  "",
+                          "operator_safety_conditions":  {
+
+                                                         }
+                      },
+    "candidate":  {
+                      "runtime_fail_diagnostics_enabled":  true,
+                      "latest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\latest.json",
+                      "latest_sha256":  "89C77ACD76A501B6F6A3F91024F59B5FF7BE1F0E8CF45CC63ADA5640A0A50AA0",
+                      "handoff_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\handoff.json",
+                      "handoff_sha256":  "C30EBD31BF77FEBAB2D5B79699DB8762CBAEAAB196669C6CBF0CABFAD893DB0B",
+                      "candidate_manifest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\candidate_manifest.json",
+                      "candidate_manifest_sha256":  "CDFB852AB49FB77DD684EC52F8FA4C2944D9710BAB2754D517EAA3D80076536D",
+                      "candidate_final_seal_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-TIMED-PATH-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261021T124607243Z-f0aa9080\\final_seal.json",
+                      "candidate_final_seal_sha256":  "EFB3670E79AF8707EDBF7BD734A9545DD1893BE7751D75FAFDF033AD3C96AF49",
+                      "artifact_id":  "20261021T124607243Z-f0aa9080"
+                  },
+    "flash_policy":  {
+                         "app_only":  true,
+                         "offset":  "0x10000",
+                         "erase_flash":  false,
+                         "write_bootloader":  false,
+                         "write_partition_table":  false,
+                         "write_merged_image":  false,
+                         "upload_order":  [
+                                              "vehicle",
+                                              "ground"
+                                          ]
+                     },
+    "roles":  [
+                  {
+                      "role":  "vehicle",
+                      "port":  "COM3",
+                      "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                      "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                      "mac":  "90:70:69:11:81:a4",
+                      "size_bytes":  441440,
+                      "sha256":  "D28EE6969DFA12CD11571962E260BDB29E2C640BD01FFD16CCBB6BCB553CE47A",
+                      "write_pass":  false,
+                      "verify_pass":  false,
+                      "reenumeration_pass":  false,
+                      "rollback_sha256":  "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52"
+                  },
+                  {
+                      "role":  "ground",
+                      "port":  "COM6",
+                      "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                      "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                      "mac":  "1c:db:d4:5a:83:80",
+                      "size_bytes":  425296,
+                      "sha256":  "CBF7EFA748A00C1F9EA626E5BB2D506C18A6BB7D1C9700E71D5124D5431A1476",
+                      "write_pass":  false,
+                      "verify_pass":  false,
+                      "reenumeration_pass":  false,
+                      "rollback_sha256":  "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5"
+                  }
+              ],
+    "operations":  [
+
+                   ],
+    "rollback":  {
+                     "required":  true,
+                     "reason":  "operator-requested post-HIL accepted R18 restore",
+                     "result":  "PASS",
+                     "max_attempts_per_role":  3,
+                     "roles":  [
+                                   {
+                                       "role":  "vehicle",
+                                       "restored":  true,
+                                       "attempts":  1,
+                                       "failures":  [
+
+                                                    ],
+                                       "accepted_r18_sha256":  "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52"
+                                   },
+                                   {
+                                       "role":  "ground",
+                                       "restored":  true,
+                                       "attempts":  1,
+                                       "failures":  [
+
+                                                    ],
+                                       "accepted_r18_sha256":  "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5"
+                                   }
+                               ],
+                     "operations":  [
+                                        {
+                                            "label":  "vehicle_r18_read_mac_attempt_1",
+                                            "role":  "vehicle",
+                                            "kind":  "read_mac",
+                                            "result":  "PASS",
+                                            "exit_code":  0,
+                                            "issues":  [
+
+                                                       ],
+                                            "parsed_mac":  "90:70:69:11:81:a4",
+                                            "identity_before":  {
+                                                                    "captured_utc":  "2026-10-21T22:31:43.6961797Z",
+                                                                    "port":  "COM3",
+                                                                    "name":  "USB シリアル デバイス (COM3)",
+                                                                    "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                                                                    "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                                                                    "status":  "OK",
+                                                                    "config_manager_error_code":  0,
+                                                                    "location_paths":  [
+                                                                                           "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USBMI(0)",
+                                                                                           "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USB(2)",
+                                                                                           "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USBMI(0)",
+                                                                                           "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USB(2)"
+                                                                                       ]
+                                                                },
+                                            "competing_client_gate":  null,
+                                            "argv_path":  "rollback_01_vehicle_r18_read_mac_attempt_1.argv.json",
+                                            "stdout_path":  "rollback_01_vehicle_r18_read_mac_attempt_1.stdout.log",
+                                            "stderr_path":  "rollback_01_vehicle_r18_read_mac_attempt_1.stderr.log",
+                                            "application_sha256":  null,
+                                            "record_path":  "rollback_01_vehicle_r18_read_mac_attempt_1.record.json",
+                                            "record_sha256":  "8870FE180800BE6EC3562B53E9DFD3025CD64FC52809390CD0D4CAB93BCE109F"
+                                        },
+                                        {
+                                            "label":  "vehicle_r18_write_attempt_1",
+                                            "role":  "vehicle",
+                                            "kind":  "write",
+                                            "result":  "PASS",
+                                            "exit_code":  0,
+                                            "issues":  [
+
+                                                       ],
+                                            "parsed_mac":  null,
+                                            "identity_before":  {
+                                                                    "captured_utc":  "2026-10-21T22:31:46.5117968Z",
+                                                                    "port":  "COM3",
+                                                                    "name":  "USB シリアル デバイス (COM3)",
+                                                                    "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                                                                    "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                                                                    "status":  "OK",
+                                                                    "config_manager_error_code":  0,
+                                                                    "location_paths":  [
+                                                                                           "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USBMI(0)",
+                                                                                           "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USB(2)",
+                                                                                           "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USBMI(0)",
+                                                                                           "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USB(2)"
+                                                                                       ]
+                                                                },
+                                            "competing_client_gate":  {
+                                                                          "captured_utc":  "2026-10-21T22:31:45.7090873Z",
+                                                                          "trusted_launcher_ancestors":  [
+                                                                                                             {
+                                                                                                                 "ProcessId":  10384,
+                                                                                                                 "ParentProcessId":  5296,
+                                                                                                                 "Name":  "pwsh.exe",
+                                                                                                                 "ExecutablePath":  "C:\\Users\\user\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+                                                                                                                 "CommandLine":  "\"C:\\Users\\user\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe\" -NoProfile -Command \"try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\n\n$ErrorActionPreference = \u0027Stop\u0027\n\u0026 \u0027C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\u0027 -NoProfile -NonInteractive -ExecutionPolicy Bypass -File \u0027E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tools\\invoke_r19_runtime_stage_cause_experiment_hil.ps1\u0027 -RepoRoot \u0027E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\u0027 -OutputDirectory \u0027E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\u0027 -Execute -TimedPathMode ExplicitHostArm -TimedPathPreparedPinPath \u0027E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001\\20261021T161610Z\\prepared_explicit_host_arm.json\u0027 -TimedPathPreparedPinSha256 \u0027DD400E43FC4D8EF14103C735901EA73B24E6194769D77EB151C1ADC6632C010F\u0027 -HilAuthorization \u0027R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT\u0027 -OperatorSafetyAttestation \u0027PIXHAWK_DISARMED_PROPULSION_ISOLATED_ANTENNAS_CONNECTED_GND_3V3_CHECKED_PARAM_BACKUP_SAVED\u0027 -RollbackAuthorization \u0027RESTORE_ACCEPTED_R18_AFTER_R19_HIL\u0027 -CaptureSeconds 40 -VehicleProbeUsbLocation \u00271-4.2\u0027 -GroundProbeUsbLocation \u00271-4.4\u0027 *\u003e \u0027E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-PERSISTENCE-RETRIAL-READINESS-001\\20261021T222742Z\\outer_live.log\u0027\n$trialExit = $LASTEXITCODE\nGet-Content -LiteralPath \u0027E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-PERSISTENCE-RETRIAL-READINESS-001\\20261021T222742Z\\outer_live.log\u0027 -Tail 15\nexit $trialExit\n\""
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "ProcessId":  23432,
+                                                                                                                 "ParentProcessId":  10384,
+                                                                                                                 "Name":  "powershell.exe",
+                                                                                                                 "ExecutablePath":  "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                                                                                                                 "CommandLine":  "\"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -NonInteractive -ExecutionPolicy Bypass -File E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tools\\invoke_r19_runtime_stage_cause_experiment_hil.ps1 -RepoRoot E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge -OutputDirectory E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial -Execute -TimedPathMode ExplicitHostArm -TimedPathPreparedPinPath E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001\\20261021T161610Z\\prepared_explicit_host_arm.json -TimedPathPreparedPinSha256 DD400E43FC4D8EF14103C735901EA73B24E6194769D77EB151C1ADC6632C010F -HilAuthorization R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT -OperatorSafetyAttestation PIXHAWK_DISARMED_PROPULSION_ISOLATED_ANTENNAS_CONNECTED_GND_3V3_CHECKED_PARAM_BACKUP_SAVED -RollbackAuthorization RESTORE_ACCEPTED_R18_AFTER_R19_HIL -CaptureSeconds 40 -VehicleProbeUsbLocation 1-4.2 -GroundProbeUsbLocation 1-4.4"
+                                                                                                             }
+                                                                                                         ],
+                                                                          "known_serial_clients":  [
+
+                                                                                                   ],
+                                                                          "explicit_com3_or_com6_refs":  [
+
+                                                                                                         ]
+                                                                      },
+                                            "argv_path":  "rollback_02_vehicle_r18_write_attempt_1.argv.json",
+                                            "stdout_path":  "rollback_02_vehicle_r18_write_attempt_1.stdout.log",
+                                            "stderr_path":  "rollback_02_vehicle_r18_write_attempt_1.stderr.log",
+                                            "application_sha256":  "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+                                            "record_path":  "rollback_02_vehicle_r18_write_attempt_1.record.json",
+                                            "record_sha256":  "37097ED2C0AEAD24AE13B9A28BE88BC51F54F193BCAA38C6804B0A22A11113E9"
+                                        },
+                                        {
+                                            "label":  "vehicle_r18_verify_attempt_1",
+                                            "role":  "vehicle",
+                                            "kind":  "verify",
+                                            "result":  "PASS",
+                                            "exit_code":  0,
+                                            "issues":  [
+
+                                                       ],
+                                            "parsed_mac":  null,
+                                            "identity_before":  {
+                                                                    "captured_utc":  "2026-10-21T22:31:52.7539467Z",
+                                                                    "port":  "COM3",
+                                                                    "name":  "USB シリアル デバイス (COM3)",
+                                                                    "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                                                                    "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                                                                    "status":  "OK",
+                                                                    "config_manager_error_code":  0,
+                                                                    "location_paths":  [
+                                                                                           "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USBMI(0)",
+                                                                                           "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USB(2)",
+                                                                                           "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USBMI(0)",
+                                                                                           "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USB(2)"
+                                                                                       ]
+                                                                },
+                                            "competing_client_gate":  null,
+                                            "argv_path":  "rollback_03_vehicle_r18_verify_attempt_1.argv.json",
+                                            "stdout_path":  "rollback_03_vehicle_r18_verify_attempt_1.stdout.log",
+                                            "stderr_path":  "rollback_03_vehicle_r18_verify_attempt_1.stderr.log",
+                                            "application_sha256":  "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+                                            "record_path":  "rollback_03_vehicle_r18_verify_attempt_1.record.json",
+                                            "record_sha256":  "3916A8D441B7128CB84A31D3BA1CB9CA54AF9AC28F724072DD394BC9EC5E9079"
+                                        },
+                                        {
+                                            "label":  "vehicle_r18_reenumeration_attempt_1",
+                                            "role":  "vehicle",
+                                            "kind":  "reenumeration",
+                                            "result":  "PASS",
+                                            "exit_code":  0,
+                                            "issues":  [
+
+                                                       ],
+                                            "identity":  {
+                                                             "captured_utc":  "2026-10-21T22:31:55.9304067Z",
+                                                             "port":  "COM3",
+                                                             "name":  "USB シリアル デバイス (COM3)",
+                                                             "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                                                             "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                                                             "status":  "OK",
+                                                             "config_manager_error_code":  0,
+                                                             "location_paths":  [
+                                                                                    "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USBMI(0)",
+                                                                                    "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USB(2)",
+                                                                                    "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USBMI(0)",
+                                                                                    "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USB(2)"
+                                                                                ]
+                                                         },
+                                            "record_path":  "rollback_04_vehicle_r18_reenumeration_attempt_1.record.json",
+                                            "record_sha256":  "02E4F8650EECA2697F393A228D2E0377843018FF792C571E27881743EF5D20CE"
+                                        },
+                                        {
+                                            "label":  "ground_r18_read_mac_attempt_1",
+                                            "role":  "ground",
+                                            "kind":  "read_mac",
+                                            "result":  "PASS",
+                                            "exit_code":  0,
+                                            "issues":  [
+
+                                                       ],
+                                            "parsed_mac":  "1c:db:d4:5a:83:80",
+                                            "identity_before":  {
+                                                                    "captured_utc":  "2026-10-21T22:31:56.6401076Z",
+                                                                    "port":  "COM6",
+                                                                    "name":  "USB シリアル デバイス (COM6)",
+                                                                    "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                                                                    "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                                                                    "status":  "OK",
+                                                                    "config_manager_error_code":  0,
+                                                                    "location_paths":  [
+                                                                                           "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(4)#USBMI(0)",
+                                                                                           "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(4)#USB(4)",
+                                                                                           "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(4)#USBMI(0)",
+                                                                                           "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(4)#USB(4)"
+                                                                                       ]
+                                                                },
+                                            "competing_client_gate":  null,
+                                            "argv_path":  "rollback_05_ground_r18_read_mac_attempt_1.argv.json",
+                                            "stdout_path":  "rollback_05_ground_r18_read_mac_attempt_1.stdout.log",
+                                            "stderr_path":  "rollback_05_ground_r18_read_mac_attempt_1.stderr.log",
+                                            "application_sha256":  null,
+                                            "record_path":  "rollback_05_ground_r18_read_mac_attempt_1.record.json",
+                                            "record_sha256":  "300EB07E31484F539C3D08C7172AB0D2BB6F6BF76EAF06BC1343E60D9A7983CF"
+                                        },
+                                        {
+                                            "label":  "ground_r18_write_attempt_1",
+                                            "role":  "ground",
+                                            "kind":  "write",
+                                            "result":  "PASS",
+                                            "exit_code":  0,
+                                            "issues":  [
+
+                                                       ],
+                                            "parsed_mac":  null,
+                                            "identity_before":  {
+                                                                    "captured_utc":  "2026-10-21T22:31:59.4308523Z",
+                                                                    "port":  "COM6",
+                                                                    "name":  "USB シリアル デバイス (COM6)",
+                                                                    "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                                                                    "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                                                                    "status":  "OK",
+                                                                    "config_manager_error_code":  0,
+                                                                    "location_paths":  [
+                                                                                           "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(4)#USBMI(0)",
+                                                                                           "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(4)#USB(4)",
+                                                                                           "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(4)#USBMI(0)",
+                                                                                           "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(4)#USB(4)"
+                                                                                       ]
+                                                                },
+                                            "competing_client_gate":  {
+                                                                          "captured_utc":  "2026-10-21T22:31:58.6671695Z",
+                                                                          "trusted_launcher_ancestors":  [
+                                                                                                             {
+                                                                                                                 "ProcessId":  10384,
+                                                                                                                 "ParentProcessId":  5296,
+                                                                                                                 "Name":  "pwsh.exe",
+                                                                                                                 "ExecutablePath":  "C:\\Users\\user\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe",
+                                                                                                                 "CommandLine":  "\"C:\\Users\\user\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\native\\powershell\\pwsh.exe\" -NoProfile -Command \"try { [Console]::OutputEncoding=[System.Text.Encoding]::UTF8 } catch {}\n\n$ErrorActionPreference = \u0027Stop\u0027\n\u0026 \u0027C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\u0027 -NoProfile -NonInteractive -ExecutionPolicy Bypass -File \u0027E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tools\\invoke_r19_runtime_stage_cause_experiment_hil.ps1\u0027 -RepoRoot \u0027E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\u0027 -OutputDirectory \u0027E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial\u0027 -Execute -TimedPathMode ExplicitHostArm -TimedPathPreparedPinPath \u0027E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001\\20261021T161610Z\\prepared_explicit_host_arm.json\u0027 -TimedPathPreparedPinSha256 \u0027DD400E43FC4D8EF14103C735901EA73B24E6194769D77EB151C1ADC6632C010F\u0027 -HilAuthorization \u0027R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT\u0027 -OperatorSafetyAttestation \u0027PIXHAWK_DISARMED_PROPULSION_ISOLATED_ANTENNAS_CONNECTED_GND_3V3_CHECKED_PARAM_BACKUP_SAVED\u0027 -RollbackAuthorization \u0027RESTORE_ACCEPTED_R18_AFTER_R19_HIL\u0027 -CaptureSeconds 40 -VehicleProbeUsbLocation \u00271-4.2\u0027 -GroundProbeUsbLocation \u00271-4.4\u0027 *\u003e \u0027E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-PERSISTENCE-RETRIAL-READINESS-001\\20261021T222742Z\\outer_live.log\u0027\n$trialExit = $LASTEXITCODE\nGet-Content -LiteralPath \u0027E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-PERSISTENCE-RETRIAL-READINESS-001\\20261021T222742Z\\outer_live.log\u0027 -Tail 15\nexit $trialExit\n\""
+                                                                                                             },
+                                                                                                             {
+                                                                                                                 "ProcessId":  23432,
+                                                                                                                 "ParentProcessId":  10384,
+                                                                                                                 "Name":  "powershell.exe",
+                                                                                                                 "ExecutablePath":  "C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+                                                                                                                 "CommandLine":  "\"C:\\WINDOWS\\System32\\WindowsPowerShell\\v1.0\\powershell.exe\" -NoProfile -NonInteractive -ExecutionPolicy Bypass -File E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tools\\invoke_r19_runtime_stage_cause_experiment_hil.ps1 -RepoRoot E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge -OutputDirectory E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261021T222742Z-persistence-retrial -Execute -TimedPathMode ExplicitHostArm -TimedPathPreparedPinPath E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-TIMED-PATH-CAPTURE-PERSISTENCE-FIX-001\\20261021T161610Z\\prepared_explicit_host_arm.json -TimedPathPreparedPinSha256 DD400E43FC4D8EF14103C735901EA73B24E6194769D77EB151C1ADC6632C010F -HilAuthorization R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT -OperatorSafetyAttestation PIXHAWK_DISARMED_PROPULSION_ISOLATED_ANTENNAS_CONNECTED_GND_3V3_CHECKED_PARAM_BACKUP_SAVED -RollbackAuthorization RESTORE_ACCEPTED_R18_AFTER_R19_HIL -CaptureSeconds 40 -VehicleProbeUsbLocation 1-4.2 -GroundProbeUsbLocation 1-4.4"
+                                                                                                             }
+                                                                                                         ],
+                                                                          "known_serial_clients":  [
+
+                                                                                                   ],
+                                                                          "explicit_com3_or_com6_refs":  [
+
+                                                                                                         ]
+                                                                      },
+                                            "argv_path":  "rollback_06_ground_r18_write_attempt_1.argv.json",
+                                            "stdout_path":  "rollback_06_ground_r18_write_attempt_1.stdout.log",
+                                            "stderr_path":  "rollback_06_ground_r18_write_attempt_1.stderr.log",
+                                            "application_sha256":  "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+                                            "record_path":  "rollback_06_ground_r18_write_attempt_1.record.json",
+                                            "record_sha256":  "C687E9AAF1FEBAE22AE0540A4B28E924C9CF890D9E3336147EF3B4F564BA6C19"
+                                        },
+                                        {
+                                            "label":  "ground_r18_verify_attempt_1",
+                                            "role":  "ground",
+                                            "kind":  "verify",
+                                            "result":  "PASS",
+                                            "exit_code":  0,
+                                            "issues":  [
+
+                                                       ],
+                                            "parsed_mac":  null,
+                                            "identity_before":  {
+                                                                    "captured_utc":  "2026-10-21T22:32:05.3234546Z",
+                                                                    "port":  "COM6",
+                                                                    "name":  "USB シリアル デバイス (COM6)",
+                                                                    "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                                                                    "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                                                                    "status":  "OK",
+                                                                    "config_manager_error_code":  0,
+                                                                    "location_paths":  [
+                                                                                           "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(4)#USBMI(0)",
+                                                                                           "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(4)#USB(4)",
+                                                                                           "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(4)#USBMI(0)",
+                                                                                           "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(4)#USB(4)"
+                                                                                       ]
+                                                                },
+                                            "competing_client_gate":  null,
+                                            "argv_path":  "rollback_07_ground_r18_verify_attempt_1.argv.json",
+                                            "stdout_path":  "rollback_07_ground_r18_verify_attempt_1.stdout.log",
+                                            "stderr_path":  "rollback_07_ground_r18_verify_attempt_1.stderr.log",
+                                            "application_sha256":  "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+                                            "record_path":  "rollback_07_ground_r18_verify_attempt_1.record.json",
+                                            "record_sha256":  "2EE35B5C9313D509156541B0BBB583D533FBACA12AC2EDAA4ABE09F524F03519"
+                                        },
+                                        {
+                                            "label":  "ground_r18_reenumeration_attempt_1",
+                                            "role":  "ground",
+                                            "kind":  "reenumeration",
+                                            "result":  "PASS",
+                                            "exit_code":  0,
+                                            "issues":  [
+
+                                                       ],
+                                            "identity":  {
+                                                             "captured_utc":  "2026-10-21T22:32:08.6063725Z",
+                                                             "port":  "COM6",
+                                                             "name":  "USB シリアル デバイス (COM6)",
+                                                             "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                                                             "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                                                             "status":  "OK",
+                                                             "config_manager_error_code":  0,
+                                                             "location_paths":  [
+                                                                                    "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(4)#USBMI(0)",
+                                                                                    "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(4)#USB(4)",
+                                                                                    "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(4)#USBMI(0)",
+                                                                                    "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(4)#USB(4)"
+                                                                                ]
+                                                         },
+                                            "record_path":  "rollback_08_ground_r18_reenumeration_attempt_1.record.json",
+                                            "record_sha256":  "4D1A4284EFD339574DFBDE11D9B81654B146D582906CD46C5F83A6CA10F4559B"
+                                        }
+                                    ]
+                 },
+    "accepted_r18_rollback_root":  "runs/baselines/R18-PRODUCTION-R4-ACCEPTED/20260914T225054625Z/artifacts",
+    "max_rollback_attempts":  3,
+    "competing_client_gate_failures":  [
+
+                                       ],
+    "external_actions":  {
+                             "device_access_attempted":  true,
+                             "process_inventory_queried":  true,
+                             "esptool_executed":  true,
+                             "firmware_write_attempted":  true,
+                             "firmware_may_have_changed":  true,
+                             "device_power_changed":  false,
+                             "erase_performed":  false,
+                             "bootloader_written":  false,
+                             "partition_table_written":  false,
+                             "merged_image_written":  false
+                         },
+    "simulated_terminal_status":  "",
+    "next_required_action":  "Run exactly one mode-bound timed-path capture, acquire JTAG records, then mandatory accepted R18 rollback",
+    "timed_path_diagnostics":  {
+                                   "schema":  "vc-lora-r19-timed-path-candidate-v1",
+                                   "enabled":  true,
+                                   "mode":  "ExplicitHostArm",
+                                   "mode_value":  2,
+                                   "macro":  "VC_LORA_R19_TIMED_PATH_DIAGNOSTICS",
+                                   "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v6",
+                                   "record":  {
+                                                  "symbol":  "vc_lora_r19_timed_path_record",
+                                                  "schema_version":  1,
+                                                  "size_bytes":  512
+                                              },
+                                   "decoder":  {
+                                                   "path":  "tools/read_r19_timed_path_record.ps1",
+                                                   "sha256":  "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C"
+                                               }
+                               }
+}

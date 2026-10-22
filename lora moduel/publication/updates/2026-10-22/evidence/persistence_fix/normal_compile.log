@@ -1,0 +1,4 @@
+NORMAL_COMPILE_BEGIN vehicle
+NORMAL_COMPILE_END vehicle success=True
+NORMAL_COMPILE_BEGIN ground
+NORMAL_COMPILE_END ground success=True
