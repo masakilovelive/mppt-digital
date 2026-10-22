@@ -1,0 +1,47 @@
+{
+  "schema": "vc-lora-github-progress-publication-validation-v1",
+  "publication_date_jst": "2026-10-23",
+  "repository": "masakilovelive/mppt-digital",
+  "base_commit": "e8b1c37f603ae3fe24e1bfed69b6e23628090da1",
+  "published_original_files": 158,
+  "published_original_bytes": 2718351,
+  "original_size_and_sha256_matches": 158,
+  "git_index_original_blob_bytes_verified": 158,
+  "staged_paths": 162,
+  "unrelated_staged_paths": 0,
+  "new_document_whitespace_check": "PASS",
+  "original_evidence_crlf_and_whitespace_preserved": true,
+  "source_snapshot_files": 15,
+  "relative_markdown_links_checked": 36,
+  "relative_markdown_links_missing": [],
+  "json_parse_check": {
+    "json_files_parsed": 27,
+    "json_parse_failures": 0
+  },
+  "security_scan_review": "publication_security_review.json retained outside published tree",
+  "security_pattern_categories_checked": 9,
+  "credential_pattern_findings": 0,
+  "raw_or_fixed_diagnostic_record_bins": 58,
+  "application_binaries_or_executables": 0,
+  "hardware_operations_for_publication": 0,
+  "live_authorization_granted_by_publication": false,
+  "original_workspace_results": {
+    "full_host_ctest": "371/371 PASS",
+    "vehicle_ground_arduino_compile": "PASS",
+    "vehicle_ground_role_reproduction": "17/17 checks PASS"
+  },
+  "tests_executed_on_this_publication_copy": {
+    "full_host_ctest": "NOT_RUN",
+    "arduino_compile": "NOT_RUN",
+    "live_hil": "NOT_RUN"
+  },
+  "scope_limitations": [
+    "Selected progress/source/evidence archive only; not a complete build or sealed flash/rollback package",
+    "Existing root source tree and earlier daily updates retained, not synchronized to this diagnostic candidate",
+    "Original absolute paths, device identifiers and omitted-file references preserved as provenance; not anonymized",
+    "The original aux_fix summary retains a pre-live limitation sentence; current live evaluation supplies the measured values",
+    "R19 acceptance and deployment remain unauthorized; 932 parameters within 30 seconds and all-error-zero simultaneous acceptance not evaluated"
+  ],
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

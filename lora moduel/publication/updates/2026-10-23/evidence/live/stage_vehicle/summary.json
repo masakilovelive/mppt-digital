@@ -1,0 +1,1501 @@
+﻿{
+    "schema":  "vc-lora-r19-runtime-stage-jtag-read-v7",
+    "result":  "PASS",
+    "mode":  "live-jtag",
+    "generated_at_utc":  "2026-10-22T14:58:30.6221370Z",
+    "hardware_interaction":  true,
+    "safety":  {
+                   "com_opened":  false,
+                   "flash_written":  false,
+                   "target_restart_issued":  false,
+                   "halted_for_reads":  true,
+                   "two_identical_reads":  true,
+                   "resume_shutdown_cleanup_attempted":  true,
+                   "resume_shutdown_cleanup_proven":  true,
+                   "capture_process_termination_proven":  true,
+                   "native_processes_termination_proven":  true,
+                   "target_may_be_halted":  false,
+                   "bounded_snapshot_attempts":  1
+               },
+    "binding":  {
+                    "artifact_id":  "20261022T144157999Z-de92540d",
+                    "role":  "vehicle",
+                    "address":  "0x3fcad390",
+                    "runtime_stage_address":  "0x3fcad390",
+                    "endpoint_fifo_address":  "0x3fcad784",
+                    "probe":  {
+                                  "requested_serial":  "90:70:69:11:81:a4",
+                                  "requested_usb_location":  "1-4.2",
+                                  "opened_identity_proven_before_halt":  true,
+                                  "opened_serial":  "90:70:69:11:81:a4",
+                                  "opened_usb_location":  "1-4.2"
+                              },
+                    "artifact":  {
+                                     "root":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261022T144157999Z-de92540d",
+                                     "artifact_id":  "20261022T144157999Z-de92540d",
+                                     "role":  "vehicle",
+                                     "address":  "0x3fcad390",
+                                     "runtime_stage_address":  "0x3fcad390",
+                                     "endpoint_fifo_address":  "0x3fcad784",
+                                     "manifest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261022T144157999Z-de92540d\\candidate_manifest.json",
+                                     "manifest_sha256":  "557B915A26ECADBF8702A1340D12255CA1B9F2F2A843DBC8EE0787911E95DD60",
+                                     "final_seal_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261022T144157999Z-de92540d\\final_seal.json",
+                                     "final_seal_sha256":  "91651CC0D246A10EA0E16820F36B53D1F22F9B112BB470CA7F9821C422C92616",
+                                     "application_sha256":  "34AD22DEDBA8D1D5911DBD88525BBAA48ACCCD90D4585B5E0A9C511F077E4FC9",
+                                     "application_size_bytes":  447760,
+                                     "first_usb_failure_enabled":  true,
+                                     "timed_path_enabled":  true,
+                                     "aux_readiness_enabled":  true,
+                                     "elf_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261022T144157999Z-de92540d\\evidence\\build\\vehicle\\application.elf",
+                                     "elf_sha256":  "AB49401BA76C66AA63FA9762FAF943729D018B40FAB33FBB799E86F6072CC457",
+                                     "symbol_size_bytes":  68,
+                                     "symbols":  {
+                                                     "runtime_stage":  {
+                                                                           "name":  "vc_lora_r19_runtime_stage_record",
+                                                                           "address":  "0x3fcad390",
+                                                                           "size_bytes":  68,
+                                                                           "aligned_32_bit":  true
+                                                                       },
+                                                     "endpoint_fifo":  {
+                                                                           "name":  "vc_lora_r19_hwcdc_fifo_diagnostic_record",
+                                                                           "address":  "0x3fcad784",
+                                                                           "size_bytes":  112,
+                                                                           "aligned_32_bit":  true
+                                                                       },
+                                                     "timed_path":  {
+                                                                        "name":  "vc_lora_r19_timed_path_record",
+                                                                        "address":  "0x3fcacf90",
+                                                                        "size_bytes":  512,
+                                                                        "aligned_32_bit":  true
+                                                                    },
+                                                     "aux_readiness":  {
+                                                                           "name":  "vc_lora_r19_aux_readiness_record",
+                                                                           "address":  "0x3fcab790",
+                                                                           "size_bytes":  6144,
+                                                                           "aligned_32_bit":  true
+                                                                       },
+                                                     "hwcdc_restart":  {
+                                                                           "name":  "vc_lora_r19_hwcdc_restart_diagnostic_record",
+                                                                           "address":  "0x3fcad704",
+                                                                           "size_bytes":  128,
+                                                                           "aligned_32_bit":  true
+                                                                       },
+                                                     "ground_usb_commit":  {
+                                                                               "name":  "vc_lora_r19_ground_usb_commit_record",
+                                                                               "address":  "0x3fcad310",
+                                                                               "size_bytes":  128,
+                                                                               "aligned_32_bit":  true
+                                                                           },
+                                                     "first_usb_failure":  {
+                                                                               "name":  "vc_lora_r19_first_usb_failure_record",
+                                                                               "address":  "0x3fcad190",
+                                                                               "size_bytes":  384,
+                                                                               "aligned_32_bit":  true
+                                                                           }
+                                                 },
+                                     "nm_path":  "C:\\Users\\user\\AppData\\Local\\Arduino15\\packages\\esp32\\tools\\esp-x32\\2601\\bin\\xtensa-esp32s3-elf-nm.exe",
+                                     "nm_sha256":  "AC8D55C45DBCAEFE082299357245D7F12786C61A4E3C06A8E21F31D6890FB29E",
+                                     "map_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261022T144157999Z-de92540d\\evidence\\build\\vehicle\\application.map",
+                                     "map_sha256":  "01048B51EBBCCF7DDB33746126B7E2378988953431BA6B2E480E588BEC203C7F",
+                                     "timed_path_address":  "0x3fcacf90",
+                                     "timed_path_diagnostics":  {
+                                                                    "schema":  "vc-lora-r19-timed-path-candidate-v1",
+                                                                    "enabled":  true,
+                                                                    "mode":  "ExplicitHostArm",
+                                                                    "mode_value":  2,
+                                                                    "macro":  "VC_LORA_R19_TIMED_PATH_DIAGNOSTICS",
+                                                                    "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v6",
+                                                                    "record":  {
+                                                                                   "symbol":  "vc_lora_r19_timed_path_record",
+                                                                                   "schema_version":  1,
+                                                                                   "size_bytes":  512
+                                                                               },
+                                                                    "decoder":  {
+                                                                                    "path":  "tools/read_r19_timed_path_record.ps1",
+                                                                                    "sha256":  "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C"
+                                                                                }
+                                                                },
+                                     "aux_readiness_address":  "0x3fcab790",
+                                     "aux_readiness_diagnostics":  {
+                                                                       "schema":  "vc-lora-r19-aux-readiness-candidate-v1",
+                                                                       "enabled":  true,
+                                                                       "macro":  "VC_LORA_R19_AUX_READINESS_DIAGNOSTICS",
+                                                                       "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v7",
+                                                                       "record":  {
+                                                                                      "symbol":  "vc_lora_r19_aux_readiness_record",
+                                                                                      "schema_version":  1,
+                                                                                      "size_bytes":  6144
+                                                                                  },
+                                                                       "decoder":  {
+                                                                                       "path":  "tools/read_r19_aux_readiness_record.ps1",
+                                                                                       "sha256":  "C011580259EA94F3092B1B3CCAF34DB30C4D9CA1158D2A51D2DC96EA76D880DF"
+                                                                                   }
+                                                                   },
+                                     "extended_records_enabled":  true,
+                                     "extended_record_metadata":  {
+                                                                      "schema":  "vc-lora-r19-runtime-diagnostic-symbols-v1",
+                                                                      "elf_sha256":  "AB49401BA76C66AA63FA9762FAF943729D018B40FAB33FBB799E86F6072CC457",
+                                                                      "map_sha256":  "01048B51EBBCCF7DDB33746126B7E2378988953431BA6B2E480E588BEC203C7F",
+                                                                      "application_sha256":  "34AD22DEDBA8D1D5911DBD88525BBAA48ACCCD90D4585B5E0A9C511F077E4FC9",
+                                                                      "symbols":  {
+                                                                                      "runtime_stage":  {
+                                                                                                            "name":  "vc_lora_r19_runtime_stage_record",
+                                                                                                            "address":  "0x3fcad390",
+                                                                                                            "size_bytes":  68,
+                                                                                                            "aligned_32_bit":  true
+                                                                                                        },
+                                                                                      "endpoint_fifo":  {
+                                                                                                            "name":  "vc_lora_r19_hwcdc_fifo_diagnostic_record",
+                                                                                                            "address":  "0x3fcad784",
+                                                                                                            "size_bytes":  112,
+                                                                                                            "aligned_32_bit":  true
+                                                                                                        },
+                                                                                      "hwcdc_restart":  {
+                                                                                                            "name":  "vc_lora_r19_hwcdc_restart_diagnostic_record",
+                                                                                                            "address":  "0x3fcad704",
+                                                                                                            "size_bytes":  128,
+                                                                                                            "aligned_32_bit":  true
+                                                                                                        },
+                                                                                      "ground_usb_commit":  {
+                                                                                                                "name":  "vc_lora_r19_ground_usb_commit_record",
+                                                                                                                "address":  "0x3fcad310",
+                                                                                                                "size_bytes":  128,
+                                                                                                                "aligned_32_bit":  true
+                                                                                                            },
+                                                                                      "first_usb_failure":  {
+                                                                                                                "name":  "vc_lora_r19_first_usb_failure_record",
+                                                                                                                "address":  "0x3fcad190",
+                                                                                                                "size_bytes":  384,
+                                                                                                                "aligned_32_bit":  true
+                                                                                                            },
+                                                                                      "timed_path":  {
+                                                                                                         "name":  "vc_lora_r19_timed_path_record",
+                                                                                                         "address":  "0x3fcacf90",
+                                                                                                         "size_bytes":  512,
+                                                                                                         "aligned_32_bit":  true
+                                                                                                     },
+                                                                                      "aux_readiness":  {
+                                                                                                            "name":  "vc_lora_r19_aux_readiness_record",
+                                                                                                            "address":  "0x3fcab790",
+                                                                                                            "size_bytes":  6144,
+                                                                                                            "aligned_32_bit":  true
+                                                                                                        }
+                                                                                  }
+                                                                  },
+                                     "hwcdc_restart_address":  "0x3fcad704",
+                                     "ground_usb_commit_address":  "0x3fcad310",
+                                     "handoff_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261022T144157999Z-de92540d\\handoff.json",
+                                     "handoff_sha256":  "69E7E0C70D98D1F43836CA82746754581F32E22F5A34E9E1B23231110B6A884F",
+                                     "first_usb_failure_address":  "0x3fcad190",
+                                     "first_usb_failure_decoder":  {
+                                                                       "path":  "tools/read_r19_first_usb_failure_record.ps1",
+                                                                       "sha256":  "E11CDBF18EFA90F22BC9E69ADF357FD795396725EC0D2B091C759A69A929E47D"
+                                                                   }
+                                 },
+                    "flash":  {
+                                  "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-install\\flash_record.json",
+                                  "sha256":  "8685BC2136159CAB7F4EC654763F93C8C920BEA33B9452EEB829CB2063D0AFA6",
+                                  "role":  "vehicle",
+                                  "port":  "COM3",
+                                  "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                                  "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                                  "probe_serial":  "90:70:69:11:81:a4",
+                                  "application_sha256":  "34AD22DEDBA8D1D5911DBD88525BBAA48ACCCD90D4585B5E0A9C511F077E4FC9"
+                              },
+                    "hwcdc_restart_address":  "0x3fcad704",
+                    "ground_usb_commit_address":  "0x3fcad310",
+                    "first_usb_failure_address":  "0x3fcad190",
+                    "first_usb_failure_decoder":  {
+                                                      "path":  "tools/read_r19_first_usb_failure_record.ps1",
+                                                      "sha256":  "E11CDBF18EFA90F22BC9E69ADF357FD795396725EC0D2B091C759A69A929E47D"
+                                                  },
+                    "timed_path_diagnostics":  {
+                                                   "schema":  "vc-lora-r19-timed-path-candidate-v1",
+                                                   "enabled":  true,
+                                                   "mode":  "ExplicitHostArm",
+                                                   "mode_value":  2,
+                                                   "macro":  "VC_LORA_R19_TIMED_PATH_DIAGNOSTICS",
+                                                   "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v6",
+                                                   "record":  {
+                                                                  "symbol":  "vc_lora_r19_timed_path_record",
+                                                                  "schema_version":  1,
+                                                                  "size_bytes":  512
+                                                              },
+                                                   "decoder":  {
+                                                                   "path":  "tools/read_r19_timed_path_record.ps1",
+                                                                   "sha256":  "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C"
+                                                               }
+                                               },
+                    "timed_path_address":  "0x3fcacf90",
+                    "aux_readiness_diagnostics":  {
+                                                      "schema":  "vc-lora-r19-aux-readiness-candidate-v1",
+                                                      "enabled":  true,
+                                                      "macro":  "VC_LORA_R19_AUX_READINESS_DIAGNOSTICS",
+                                                      "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v7",
+                                                      "record":  {
+                                                                     "symbol":  "vc_lora_r19_aux_readiness_record",
+                                                                     "schema_version":  1,
+                                                                     "size_bytes":  6144
+                                                                 },
+                                                      "decoder":  {
+                                                                      "path":  "tools/read_r19_aux_readiness_record.ps1",
+                                                                      "sha256":  "C011580259EA94F3092B1B3CCAF34DB30C4D9CA1158D2A51D2DC96EA76D880DF"
+                                                                  }
+                                                  },
+                    "aux_readiness_address":  "0x3fcab790"
+                },
+    "reads":  [
+                  {
+                      "record":  "runtime_stage",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\runtime-stage-first.bin",
+                      "size_bytes":  68,
+                      "sha256":  "D53835A90CDB89AE95E61E29EDD3B050024D8786A09B6E1570E6F2B8439062BA"
+                  },
+                  {
+                      "record":  "endpoint_fifo",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\endpoint-fifo-first.bin",
+                      "size_bytes":  112,
+                      "sha256":  "3E57A2609A7DF1C458D29728853B71C5CDBBE20EA4A67CCA09CE790D2BCD2E8C"
+                  },
+                  {
+                      "record":  "hwcdc_restart",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\hwcdc-restart-first.bin",
+                      "size_bytes":  128,
+                      "sha256":  "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80"
+                  },
+                  {
+                      "record":  "ground_usb_commit",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\ground-usb-commit-first.bin",
+                      "size_bytes":  128,
+                      "sha256":  "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+                  },
+                  {
+                      "record":  "first_usb_failure",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\first-usb-failure-first.bin",
+                      "size_bytes":  384,
+                      "sha256":  "0E6F2EE9F3C62D0BC382E099FC955EE2C9014BBCED2F425486E640CE9DD37EF8"
+                  },
+                  {
+                      "record":  "runtime_stage",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\runtime-stage-second.bin",
+                      "size_bytes":  68,
+                      "sha256":  "D53835A90CDB89AE95E61E29EDD3B050024D8786A09B6E1570E6F2B8439062BA"
+                  },
+                  {
+                      "record":  "endpoint_fifo",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\endpoint-fifo-second.bin",
+                      "size_bytes":  112,
+                      "sha256":  "3E57A2609A7DF1C458D29728853B71C5CDBBE20EA4A67CCA09CE790D2BCD2E8C"
+                  },
+                  {
+                      "record":  "hwcdc_restart",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\hwcdc-restart-second.bin",
+                      "size_bytes":  128,
+                      "sha256":  "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80"
+                  },
+                  {
+                      "record":  "ground_usb_commit",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\ground-usb-commit-second.bin",
+                      "size_bytes":  128,
+                      "sha256":  "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+                  },
+                  {
+                      "record":  "first_usb_failure",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\first-usb-failure-second.bin",
+                      "size_bytes":  384,
+                      "sha256":  "0E6F2EE9F3C62D0BC382E099FC955EE2C9014BBCED2F425486E640CE9DD37EF8"
+                  },
+                  {
+                      "record":  "timed_path",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\timed_path_first.bin",
+                      "size_bytes":  512,
+                      "sha256":  "539C27C66EFEA0A8F31B3992B4E6B74721BFBC683BAB3133EC681D1121E4C9A0"
+                  },
+                  {
+                      "record":  "timed_path",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\timed_path_second.bin",
+                      "size_bytes":  512,
+                      "sha256":  "539C27C66EFEA0A8F31B3992B4E6B74721BFBC683BAB3133EC681D1121E4C9A0"
+                  },
+                  {
+                      "record":  "aux_readiness",
+                      "sample":  1,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\aux_readiness_first.bin",
+                      "size_bytes":  6144,
+                      "sha256":  "429A6555DE5C6041F7422BD80EFD8CC910E73872FEBC52AD62A6635AE3D8A612"
+                  },
+                  {
+                      "record":  "aux_readiness",
+                      "sample":  2,
+                      "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\aux_readiness_second.bin",
+                      "size_bytes":  6144,
+                      "sha256":  "429A6555DE5C6041F7422BD80EFD8CC910E73872FEBC52AD62A6635AE3D8A612"
+                  }
+              ],
+    "decoded":  {
+                    "active_writer":  0,
+                    "sequence":  4471362,
+                    "magic":  "0x52313953",
+                    "schema":  1,
+                    "role":  "vehicle",
+                    "build_fingerprint":  [
+                                              "0x52313944",
+                                              "0x53544731",
+                                              "0x32303236",
+                                              "0x31303033"
+                                          ],
+                    "stage_mask":  "0x0001ffff",
+                    "reached_stages":  [
+                                           "SetupEntered",
+                                           "SerialBeginReturned",
+                                           "CadenceStarted",
+                                           "IdentityReady",
+                                           "E220ProfileChecked",
+                                           "StartupAllowed",
+                                           "E220NormalMode",
+                                           "AdapterReady",
+                                           "SetupComplete",
+                                           "LoopEntered",
+                                           "HostGateObserved",
+                                           "FrameStaged",
+                                           "WriteAttempted",
+                                           "WriteAccepted",
+                                           "FlushCompleted",
+                                           "TransportRecoveryEntered",
+                                           "TransportRecoveryCompleted"
+                                       ],
+                    "last_reached_stage":  "TransportRecoveryCompleted",
+                    "mandatory_setup_witnesses":  {
+                                                      "setup_entered":  true,
+                                                      "serial_begin_returned":  true,
+                                                      "cadence_started":  true,
+                                                      "startup_allowed":  true,
+                                                      "e220_normal_mode":  true,
+                                                      "adapter_ready":  true,
+                                                      "setup_complete":  true
+                                                  },
+                    "conditional_setup_witnesses":  {
+                                                        "IdentityReady":  true,
+                                                        "E220ProfileChecked":  true
+                                                    },
+                    "missing_mandatory_setup_witnesses":  [
+
+                                                          ],
+                    "boundary_classification":  "flush-completed",
+                    "counters":  {
+                                     "boot":  1,
+                                     "loop":  1115341,
+                                     "publish_attempt":  95,
+                                     "exact_frame_restart":  5
+                                 },
+                    "first_failure":  {
+                                          "code":  "0x54520010",
+                                          "name":  "FlushFailed",
+                                          "stage_mask":  "0x00007fff",
+                                          "detail":  2586
+                                      },
+                    "endpoint_fifo":  {
+                                          "active_writer":  0,
+                                          "sequence":  41360,
+                                          "magic":  "0x48313946",
+                                          "schema":  2,
+                                          "state_semantics":  "last-committed-diagnostic-event-not-live-hardware-state",
+                                          "flags":  {
+                                                        "mask":  "0x00002417",
+                                                        "names":  [
+                                                                      "Initialized",
+                                                                      "ObservationActive",
+                                                                      "Connected",
+                                                                      "PayloadInFlight",
+                                                                      "FlushActive",
+                                                                      "PayloadFlushPending"
+                                                                  ],
+                                                        "initialized":  true,
+                                                        "observation_active":  true,
+                                                        "diagnostic_observation_window_started":  true,
+                                                        "fifo_write_attempt_observed":  true,
+                                                        "positive_fifo_write_observed":  true,
+                                                        "wr_done_observed":  true,
+                                                        "payload_pickup_observed":  true,
+                                                        "connected":  true,
+                                                        "fifo_writable":  false,
+                                                        "payload_in_flight":  true,
+                                                        "fifo_quarantined":  false,
+                                                        "reset_pending":  false,
+                                                        "bootstrap_fence":  false,
+                                                        "bootstrap_aborted":  false,
+                                                        "debug_writer_active":  false,
+                                                        "last_event_bus_reset":  false,
+                                                        "flush_active":  true,
+                                                        "payload_publish_pending":  false,
+                                                        "payload_publish_aborted":  false,
+                                                        "payload_flush_pending":  true
+                                                    },
+                                          "tx_loss_epoch":  1,
+                                          "counters":  {
+                                                           "fifo_write_attempt":  105,
+                                                           "fifo_write_bytes":  2993,
+                                                           "fifo_zero_write":  0,
+                                                           "wr_done":  105,
+                                                           "in_empty_irq":  105,
+                                                           "payload_in_empty":  104,
+                                                           "bus_reset":  0,
+                                                           "flush_attempt":  242,
+                                                           "flush_success":  47,
+                                                           "flush_timeout":  194,
+                                                           "flush_abort_inferred":  0,
+                                                           "zlp_flush":  0
+                                                       },
+                                          "last_fifo_write_size":  32,
+                                          "generations":  {
+                                                              "publish":  105,
+                                                              "pickup":  104,
+                                                              "relationship":  "publish-is-one-ahead-modulo-uint32"
+                                                          },
+                                          "pending_bytes":  {
+                                                                "ring":  31,
+                                                                "stash":  0
+                                                            },
+                                          "last_interrupt_status":  "0x00000000",
+                                          "flush_blockers":  {
+                                                                 "mask":  "0x0000001c",
+                                                                 "names":  [
+                                                                               "SoftwarePending",
+                                                                               "FifoNotWritable",
+                                                                               "PayloadPickupPending"
+                                                                           ]
+                                                             },
+                                          "last_flush_outcome":  "Active",
+                                          "last_flush_outcome_code":  1,
+                                          "last_flush_task_zlp_count":  0,
+                                          "last_flush_isr_zlp_count":  0,
+                                          "last_flush_terminal_blocker_mask":  "0x00000000",
+                                          "last_flush_terminal_blocker_mask_code":  0,
+                                          "last_flush_terminal_blocker_names":  [
+
+                                                                                ],
+                                          "last_flush_classification":  "flush-attempt-active",
+                                          "boundary_classification":  "flush-blocked",
+                                          "usb_tx_boundary_completion_proven":  false
+                                      },
+                    "usb_tx_boundary_classification":  "flush-blocked",
+                    "usb_tx_boundary_completion_proven":  false,
+                    "hwcdc_restart":  {
+                                          "schema":  1,
+                                          "size_bytes":  128,
+                                          "sequence":  176,
+                                          "flags":  "0x00000005",
+                                          "state_semantics":  "latched-diagnostic-events-not-live-hardware-state",
+                                          "initialized":  true,
+                                          "first_blocked_latched":  false,
+                                          "latest_restart_valid":  true,
+                                          "event_count":  86,
+                                          "blocked_count":  0,
+                                          "restart_count":  86,
+                                          "first":  {
+                                                        "phase":  0,
+                                                        "ordinal":  0,
+                                                        "state":  {
+                                                                      "flags":  "0x00000000",
+                                                                      "epoch":  0,
+                                                                      "ring_pending_bytes":  0,
+                                                                      "stash_pending_bytes":  0,
+                                                                      "publish_generation":  0,
+                                                                      "pickup_generation":  0,
+                                                                      "raw_interrupt_status":  "0x00000000",
+                                                                      "interrupt_enabled_mask":  "0x00000000"
+                                                                  }
+                                                    },
+                                          "latest":  {
+                                                         "origin":  1,
+                                                         "outcome":  1,
+                                                         "requested_bytes":  32,
+                                                         "written_bytes":  32,
+                                                         "ordinal":  86,
+                                                         "state":  {
+                                                                       "flags":  "0x00000016",
+                                                                       "epoch":  1,
+                                                                       "ring_pending_bytes":  0,
+                                                                       "stash_pending_bytes":  0,
+                                                                       "publish_generation":  105,
+                                                                       "pickup_generation":  104,
+                                                                       "raw_interrupt_status":  "0x00000102",
+                                                                       "interrupt_enabled_mask":  "0x0000020c"
+                                                                   }
+                                                     }
+                                      },
+                    "ground_usb_commit":  {
+                                              "schema":  1,
+                                              "size_bytes":  128,
+                                              "sequence":  2,
+                                              "role":  "vehicle",
+                                              "state_semantics":  "first-ground-usb-commit-failure-only-not-live-state",
+                                              "failure_latched":  false,
+                                              "reason":  0,
+                                              "reason_name":  "None",
+                                              "observed_mask":  0,
+                                              "true_mask":  0,
+                                              "source_line":  0,
+                                              "token":  0,
+                                              "expected_epoch":  0,
+                                              "observed_epoch":  0,
+                                              "values":  {
+                                                             "commit_started_ms":  0,
+                                                             "flush_started_ms":  0,
+                                                             "completed_ms":  0,
+                                                             "deadline_ms":  0,
+                                                             "committed_base":  0,
+                                                             "commit_goal":  0,
+                                                             "bytes_committed":  0
+                                                         },
+                                              "expected_frame_bytes":  0,
+                                              "accepted_frame_bytes":  0,
+                                              "predicates":  {
+                                                                 "transport_published":  {
+                                                                                             "observed":  false,
+                                                                                             "value":  false
+                                                                                         },
+                                                                 "endpoint_ready":  {
+                                                                                        "observed":  false,
+                                                                                        "value":  false
+                                                                                    },
+                                                                 "completed_within_deadline":  {
+                                                                                                   "observed":  false,
+                                                                                                   "value":  false
+                                                                                               }
+                                                             }
+                                          },
+                    "first_usb_failure":  {
+                                              "schema":  "vc-lora-r19-first-usb-failure-decoded-v1",
+                                              "result":  "PASS",
+                                              "mode":  "offline-only",
+                                              "hardware_interaction":  false,
+                                              "raw_size_bytes":  384,
+                                              "raw_sha256":  "0E6F2EE9F3C62D0BC382E099FC955EE2C9014BBCED2F425486E640CE9DD37EF8",
+                                              "sequence":  2,
+                                              "record_schema":  1,
+                                              "role":  "vehicle",
+                                              "build_fingerprint":  [
+                                                                        1378957636,
+                                                                        1398032177,
+                                                                        842019382,
+                                                                        825241651
+                                                                    ],
+                                              "boot_instance":  [
+                                                                    725024194,
+                                                                    468265122,
+                                                                    2046046970,
+                                                                    2774808104
+                                                                ],
+                                              "failure_latched":  false,
+                                              "clock_sync":  {
+                                                                 "observed":  false,
+                                                                 "sync_count":  0,
+                                                                 "nonce":  "0",
+                                                                 "device_us":  "0"
+                                                             },
+                                              "first_failure":  {
+                                                                    "reason":  0,
+                                                                    "source_line":  0,
+                                                                    "token":  0,
+                                                                    "attempt_id":  0,
+                                                                    "wrapper_flags":  0,
+                                                                    "api_called":  false,
+                                                                    "raw_return":  null,
+                                                                    "budget_ms":  0,
+                                                                    "expected_epoch":  0,
+                                                                    "observed_epoch":  0,
+                                                                    "started_us":  "0",
+                                                                    "finished_us":  "0",
+                                                                    "deadline_us":  "0",
+                                                                    "failure_observed_us":  "0",
+                                                                    "elapsed_us":  "0",
+                                                                    "expected_frame_bytes":  0,
+                                                                    "accepted_frame_bytes":  0,
+                                                                    "sdk":  {
+                                                                                "schema":  0,
+                                                                                "validity_flags":  0,
+                                                                                "transaction_token":  0,
+                                                                                "attempt_id":  0,
+                                                                                "terminal_reason":  0,
+                                                                                "timeout_ms":  0,
+                                                                                "expected_loss_epoch":  0,
+                                                                                "started_ms":  0,
+                                                                                "finished_ms":  0,
+                                                                                "lock_wait_ms":  0,
+                                                                                "elapsed_ms":  0,
+                                                                                "raw_return":  0,
+                                                                                "state_flags":  0,
+                                                                                "observed_loss_epoch":  0,
+                                                                                "ring_pending_bytes":  0,
+                                                                                "stash_pending_bytes":  0,
+                                                                                "publish_generation":  0,
+                                                                                "pickup_generation":  0,
+                                                                                "raw_interrupt_status":  0,
+                                                                                "interrupt_enable_mask":  0,
+                                                                                "flush_blocker_mask":  0,
+                                                                                "snapshot_started_ms":  0,
+                                                                                "snapshot_finished_ms":  0,
+                                                                                "snapshot_duration_us":  0,
+                                                                                "snapshot_observed":  false,
+                                                                                "lock_acquired":  false,
+                                                                                "terminal_name":  "NotObserved"
+                                                                            }
+                                                                },
+                                              "acceptance":  "NOT_EVALUATED",
+                                              "limitations":  [
+                                                                  "Stable fixture decoding is not proof of hardware acquisition, host consumption, or communication acceptance.",
+                                                                  "SDK terminal-boundary snapshot is not continuous state; SnapshotWithoutTxLock does not prove ownership of the pending data.",
+                                                                  "No PC/device time ordering is inferred without a matched same-boot nonce and explicit uncertainty bounds.",
+                                                                  "Uncalled API raw_return is unknown, not false.",
+                                                                  "Boot identity must be generated afresh each firmware startup; a nonzero fixture alone cannot prove entropy."
+                                                              ]
+                                          },
+                    "timed_path":  {
+                                       "schema":  "vc-lora-r19-timed-path-record-v1",
+                                       "schema_version":  1,
+                                       "size_bytes":  512,
+                                       "sequence":  2,
+                                       "role":  "vehicle",
+                                       "mode":  "ExplicitHostArm",
+                                       "mode_value":  2,
+                                       "build_id":  [
+                                                        1378957636,
+                                                        1398032177,
+                                                        842019382,
+                                                        825241651
+                                                    ],
+                                       "boot_id":  [
+                                                       725024194,
+                                                       468265122,
+                                                       2046046970,
+                                                       2774808104
+                                                   ],
+                                       "flags":  1,
+                                       "usb_epoch":  0,
+                                       "observed_epoch":  0,
+                                       "reader_session":  "0",
+                                       "nonce":  "0",
+                                       "token":  0,
+                                       "frame_bytes":  0,
+                                       "accepted_bytes":  0,
+                                       "failure_reason":  0,
+                                       "product_budget_ms":  0,
+                                       "initialized":  true,
+                                       "session_observed":  false,
+                                       "arm_accepted":  false,
+                                       "identity_mismatch":  false,
+                                       "clock_regressed":  false,
+                                       "frame_enqueued":  false,
+                                       "hwcdc_accepted_observed":  false,
+                                       "sdk_snapshot_observed":  false,
+                                       "usb_completed":  false,
+                                       "usb_failed":  false,
+                                       "timestamps":  {
+                                                          "arm_us":  "0",
+                                                          "enqueue_us":  "0",
+                                                          "accepted_us":  "0",
+                                                          "sdk_snapshot_us":  "0",
+                                                          "terminal_us":  "0",
+                                                          "failure_started_us":  "0",
+                                                          "failure_returned_us":  "0",
+                                                          "deadline_us":  "0",
+                                                          "clock_request_us":  "0"
+                                                      },
+                                       "raw_frame_base64":  "",
+                                       "frame_sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+                                       "sdk":  {
+                                                   "publish_generation":  0,
+                                                   "pickup_generation":  0,
+                                                   "ring_bytes":  0,
+                                                   "stash_bytes":  0,
+                                                   "validity":  0,
+                                                   "state":  0,
+                                                   "terminal":  0,
+                                                   "blocker_mask":  0,
+                                                   "attempt":  0,
+                                                   "terminal_sample_valid":  false
+                                               },
+                                       "root_cause_proven":  false,
+                                       "acceptance_authorized":  false,
+                                       "deployment_authorized":  false,
+                                       "limitations":  [
+                                                           "Stable committed MCU record only; not a continuous physical FIFO or PC consumption proof.",
+                                                           "MAVLink CRC and PC/MCU bounded time correlation require independent evaluator input."
+                                                       ]
+                                   },
+                    "aux_readiness":  {
+                                          "schema":  "vc-lora-r19-aux-readiness-decoded-v1",
+                                          "result":  "PASS",
+                                          "mode":  "offline-only",
+                                          "hardware_interaction":  false,
+                                          "raw_size_bytes":  6144,
+                                          "raw_sha256":  "429A6555DE5C6041F7422BD80EFD8CC910E73872FEBC52AD62A6635AE3D8A612",
+                                          "record_symbol":  "vc_lora_r19_aux_readiness_record",
+                                          "record_schema":  1,
+                                          "role":  "vehicle",
+                                          "build_fingerprint":  [
+                                                                    1378957636,
+                                                                    1398032177,
+                                                                    842019382,
+                                                                    825241651
+                                                                ],
+                                          "boot_instance":  [
+                                                                725024194,
+                                                                468265122,
+                                                                2046046970,
+                                                                2774808104
+                                                            ],
+                                          "section_sequences":  {
+                                                                    "aux":  2231584,
+                                                                    "edges":  4,
+                                                                    "ready":  4461364
+                                                                },
+                                          "aux_observation":  {
+                                                                  "flags":  9,
+                                                                  "event_count":  1115791,
+                                                                  "poll_count":  1115521,
+                                                                  "history_used":  48,
+                                                                  "history_next":  31,
+                                                                  "history_wraps":  1115743,
+                                                                  "history_capacity":  48,
+                                                                  "first_low_us":  null,
+                                                                  "first_high_us":  "832882",
+                                                                  "last_gpio_begin_us":  "68252862",
+                                                                  "last_gpio_end_us":  "68252863",
+                                                                  "maximum_poll_gap_us":  "110010",
+                                                                  "supplied_runtime_now_ms":  "68252",
+                                                                  "last_aux_level":  1,
+                                                                  "uart_calls":  90,
+                                                                  "last_requested_bytes":  32,
+                                                                  "last_written_bytes":  32,
+                                                                  "last_backend_state":  3,
+                                                                  "last_uart_begin_us":  "67845591",
+                                                                  "last_uart_end_us":  "67845632",
+                                                                  "first_accepted_us":  "877167",
+                                                                  "state_changes":  180,
+                                                                  "fault_code":  0,
+                                                                  "first_fault_latched":  false,
+                                                                  "first_fault":  null,
+                                                                  "transaction_sequence":  90,
+                                                                  "transaction_accepted_us":  "67845632",
+                                                                  "transaction_first_low_us":  null,
+                                                                  "transaction_first_high_us":  "67845648",
+                                                                  "maximum_gap_previous_end_us":  "17848864",
+                                                                  "maximum_gap_next_begin_us":  "17958874",
+                                                                  "history":  [
+                                                                                  {
+                                                                                      "ring_slot":  31,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "65489875",
+                                                                                      "end_us":  "65489878",
+                                                                                      "a":  65489,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  32,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "65589866",
+                                                                                      "end_us":  "65589867",
+                                                                                      "a":  65589,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  33,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "65691874",
+                                                                                      "end_us":  "65691875",
+                                                                                      "a":  65691,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  34,
+                                                                                      "kind":  3,
+                                                                                      "name":  "BackendState",
+                                                                                      "begin_us":  "65691892",
+                                                                                      "end_us":  "65691892",
+                                                                                      "a":  3,
+                                                                                      "b":  1,
+                                                                                      "c":  0
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  35,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "65692056",
+                                                                                      "end_us":  "65692057",
+                                                                                      "a":  65691,
+                                                                                      "b":  1,
+                                                                                      "c":  1
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  36,
+                                                                                      "kind":  2,
+                                                                                      "name":  "UartWrite",
+                                                                                      "begin_us":  "65692074",
+                                                                                      "end_us":  "65692108",
+                                                                                      "a":  32,
+                                                                                      "b":  32,
+                                                                                      "c":  2
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  37,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "65692125",
+                                                                                      "end_us":  "65692129",
+                                                                                      "a":  65692,
+                                                                                      "b":  1,
+                                                                                      "c":  2
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  38,
+                                                                                      "kind":  3,
+                                                                                      "name":  "BackendState",
+                                                                                      "begin_us":  "65692137",
+                                                                                      "end_us":  "65692137",
+                                                                                      "a":  2,
+                                                                                      "b":  3,
+                                                                                      "c":  0
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  39,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "65787905",
+                                                                                      "end_us":  "65787910",
+                                                                                      "a":  65787,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  40,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "65891877",
+                                                                                      "end_us":  "65891879",
+                                                                                      "a":  65891,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  41,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66001869",
+                                                                                      "end_us":  "66001872",
+                                                                                      "a":  66001,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  42,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66102872",
+                                                                                      "end_us":  "66102874",
+                                                                                      "a":  66102,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  43,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66204870",
+                                                                                      "end_us":  "66204871",
+                                                                                      "a":  66204,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  44,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66304866",
+                                                                                      "end_us":  "66304867",
+                                                                                      "a":  66304,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  45,
+                                                                                      "kind":  3,
+                                                                                      "name":  "BackendState",
+                                                                                      "begin_us":  "66304872",
+                                                                                      "end_us":  "66304872",
+                                                                                      "a":  3,
+                                                                                      "b":  1,
+                                                                                      "c":  0
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  46,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66306987",
+                                                                                      "end_us":  "66306989",
+                                                                                      "a":  66304,
+                                                                                      "b":  1,
+                                                                                      "c":  1
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  47,
+                                                                                      "kind":  2,
+                                                                                      "name":  "UartWrite",
+                                                                                      "begin_us":  "66307006",
+                                                                                      "end_us":  "66307046",
+                                                                                      "a":  32,
+                                                                                      "b":  32,
+                                                                                      "c":  2
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  0,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66307061",
+                                                                                      "end_us":  "66307062",
+                                                                                      "a":  66307,
+                                                                                      "b":  1,
+                                                                                      "c":  2
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  1,
+                                                                                      "kind":  3,
+                                                                                      "name":  "BackendState",
+                                                                                      "begin_us":  "66307069",
+                                                                                      "end_us":  "66307069",
+                                                                                      "a":  2,
+                                                                                      "b":  3,
+                                                                                      "c":  0
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  2,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66407875",
+                                                                                      "end_us":  "66407881",
+                                                                                      "a":  66407,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  3,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66508870",
+                                                                                      "end_us":  "66508872",
+                                                                                      "a":  66508,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  4,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66608863",
+                                                                                      "end_us":  "66608864",
+                                                                                      "a":  66608,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  5,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66710871",
+                                                                                      "end_us":  "66710872",
+                                                                                      "a":  66710,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  6,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66810863",
+                                                                                      "end_us":  "66810867",
+                                                                                      "a":  66810,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  7,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66917873",
+                                                                                      "end_us":  "66917874",
+                                                                                      "a":  66917,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  8,
+                                                                                      "kind":  3,
+                                                                                      "name":  "BackendState",
+                                                                                      "begin_us":  "66917894",
+                                                                                      "end_us":  "66917894",
+                                                                                      "a":  3,
+                                                                                      "b":  1,
+                                                                                      "c":  0
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  9,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66925035",
+                                                                                      "end_us":  "66925037",
+                                                                                      "a":  66917,
+                                                                                      "b":  1,
+                                                                                      "c":  1
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  10,
+                                                                                      "kind":  2,
+                                                                                      "name":  "UartWrite",
+                                                                                      "begin_us":  "66925054",
+                                                                                      "end_us":  "66925096",
+                                                                                      "a":  32,
+                                                                                      "b":  32,
+                                                                                      "c":  2
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  11,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "66925111",
+                                                                                      "end_us":  "66925114",
+                                                                                      "a":  66925,
+                                                                                      "b":  1,
+                                                                                      "c":  2
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  12,
+                                                                                      "kind":  3,
+                                                                                      "name":  "BackendState",
+                                                                                      "begin_us":  "66925123",
+                                                                                      "end_us":  "66925123",
+                                                                                      "a":  2,
+                                                                                      "b":  3,
+                                                                                      "c":  0
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  13,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "67025876",
+                                                                                      "end_us":  "67025881",
+                                                                                      "a":  67025,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  14,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "67127866",
+                                                                                      "end_us":  "67127867",
+                                                                                      "a":  67127,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  15,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "67229867",
+                                                                                      "end_us":  "67229868",
+                                                                                      "a":  67229,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  16,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "67329865",
+                                                                                      "end_us":  "67329866",
+                                                                                      "a":  67329,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  17,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "67431866",
+                                                                                      "end_us":  "67431867",
+                                                                                      "a":  67431,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  18,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "67532877",
+                                                                                      "end_us":  "67532878",
+                                                                                      "a":  67532,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  19,
+                                                                                      "kind":  3,
+                                                                                      "name":  "BackendState",
+                                                                                      "begin_us":  "67532894",
+                                                                                      "end_us":  "67532894",
+                                                                                      "a":  3,
+                                                                                      "b":  1,
+                                                                                      "c":  0
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  20,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "67634870",
+                                                                                      "end_us":  "67634872",
+                                                                                      "a":  67634,
+                                                                                      "b":  1,
+                                                                                      "c":  1
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  21,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "67735866",
+                                                                                      "end_us":  "67735867",
+                                                                                      "a":  67735,
+                                                                                      "b":  1,
+                                                                                      "c":  1
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  22,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "67835865",
+                                                                                      "end_us":  "67835866",
+                                                                                      "a":  67835,
+                                                                                      "b":  1,
+                                                                                      "c":  1
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  23,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "67845568",
+                                                                                      "end_us":  "67845572",
+                                                                                      "a":  67835,
+                                                                                      "b":  1,
+                                                                                      "c":  1
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  24,
+                                                                                      "kind":  2,
+                                                                                      "name":  "UartWrite",
+                                                                                      "begin_us":  "67845591",
+                                                                                      "end_us":  "67845632",
+                                                                                      "a":  32,
+                                                                                      "b":  32,
+                                                                                      "c":  2
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  25,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "67845648",
+                                                                                      "end_us":  "67845649",
+                                                                                      "a":  67845,
+                                                                                      "b":  1,
+                                                                                      "c":  2
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  26,
+                                                                                      "kind":  3,
+                                                                                      "name":  "BackendState",
+                                                                                      "begin_us":  "67845656",
+                                                                                      "end_us":  "67845656",
+                                                                                      "a":  2,
+                                                                                      "b":  3,
+                                                                                      "c":  0
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  27,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "67945875",
+                                                                                      "end_us":  "67945879",
+                                                                                      "a":  67945,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  28,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "68050871",
+                                                                                      "end_us":  "68050874",
+                                                                                      "a":  68050,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  29,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "68152868",
+                                                                                      "end_us":  "68152869",
+                                                                                      "a":  68152,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  },
+                                                                                  {
+                                                                                      "ring_slot":  30,
+                                                                                      "kind":  1,
+                                                                                      "name":  "GpioPoll",
+                                                                                      "begin_us":  "68252862",
+                                                                                      "end_us":  "68252863",
+                                                                                      "a":  68252,
+                                                                                      "b":  1,
+                                                                                      "c":  3
+                                                                                  }
+                                                                              ]
+                                                              },
+                                          "aux_edges":  {
+                                                            "flags":  1,
+                                                            "event_count":  0,
+                                                            "history_used":  0,
+                                                            "history_capacity":  120,
+                                                            "overflow_count":  0,
+                                                            "initial_level":  1,
+                                                            "initial_us":  "5531",
+                                                            "first_edge_us":  null,
+                                                            "last_edge_us":  null,
+                                                            "first_low_us":  null,
+                                                            "first_high_us":  null,
+                                                            "last_edge_sequence":  0,
+                                                            "history":  [
+
+                                                                        ],
+                                                            "irq_attach_events":  [
+                                                                                      {
+                                                                                          "slot":  0,
+                                                                                          "timestamp_us":  "5732",
+                                                                                          "kind":  9,
+                                                                                          "name":  "IrqAttach",
+                                                                                          "a":  0,
+                                                                                          "b":  0,
+                                                                                          "c":  0,
+                                                                                          "d":  0,
+                                                                                          "sequence":  1,
+                                                                                          "clock_context_budget_ms":  null,
+                                                                                          "clock_context_expected_epoch":  null,
+                                                                                          "clock_context_deadline_us":  null
+                                                                                      }
+                                                                                  ],
+                                                            "continuous_interrupt_coverage_proven":  false
+                                                        },
+                                          "usb_readiness":  {
+                                                                "flags":  1,
+                                                                "event_count":  1,
+                                                                "history_used":  1,
+                                                                "history_capacity":  54,
+                                                                "dropped_events":  0,
+                                                                "last_event_kind":  9,
+                                                                "last_observation_us":  "68252893",
+                                                                "epoch":  0,
+                                                                "gate_flags":  0,
+                                                                "first_arm_us":  null,
+                                                                "last_ready_publish_us":  null,
+                                                                "intervals":  [
+                                                                                  {
+                                                                                      "kind":  0,
+                                                                                      "name":  "PrivateReply",
+                                                                                      "count":  0,
+                                                                                      "last_begin_us":  null,
+                                                                                      "last_end_us":  null,
+                                                                                      "maximum_duration_us":  "0",
+                                                                                      "maximum_begin_us":  null,
+                                                                                      "maximum_end_us":  null,
+                                                                                      "early_return_count":  0
+                                                                                  },
+                                                                                  {
+                                                                                      "kind":  1,
+                                                                                      "name":  "RuntimeDiagnostic",
+                                                                                      "count":  1115340,
+                                                                                      "last_begin_us":  "68152928",
+                                                                                      "last_end_us":  "68252859",
+                                                                                      "maximum_duration_us":  "100892",
+                                                                                      "maximum_begin_us":  "23041970",
+                                                                                      "maximum_end_us":  "23142862",
+                                                                                      "early_return_count":  0
+                                                                                  },
+                                                                                  {
+                                                                                      "kind":  2,
+                                                                                      "name":  "AliveDrain",
+                                                                                      "count":  0,
+                                                                                      "last_begin_us":  null,
+                                                                                      "last_end_us":  null,
+                                                                                      "maximum_duration_us":  "0",
+                                                                                      "maximum_begin_us":  null,
+                                                                                      "maximum_end_us":  null,
+                                                                                      "early_return_count":  0
+                                                                                  },
+                                                                                  {
+                                                                                      "kind":  3,
+                                                                                      "name":  "Loop",
+                                                                                      "count":  1115340,
+                                                                                      "last_begin_us":  "68152926",
+                                                                                      "last_end_us":  "68252893",
+                                                                                      "maximum_duration_us":  "110489",
+                                                                                      "maximum_begin_us":  "5770276",
+                                                                                      "maximum_end_us":  "5880765",
+                                                                                      "early_return_count":  0
+                                                                                  }
+                                                                              ],
+                                                                "history":  [
+                                                                                {
+                                                                                    "slot":  0,
+                                                                                    "timestamp_us":  "5732",
+                                                                                    "kind":  9,
+                                                                                    "name":  "IrqAttach",
+                                                                                    "a":  0,
+                                                                                    "b":  0,
+                                                                                    "c":  0,
+                                                                                    "d":  0,
+                                                                                    "sequence":  1,
+                                                                                    "clock_context_budget_ms":  null,
+                                                                                    "clock_context_expected_epoch":  null,
+                                                                                    "clock_context_deadline_us":  null
+                                                                                }
+                                                                            ],
+                                                                "ready_received_by_pc_proven":  false,
+                                                                "arm_protocol_success_proven":  false
+                                                            },
+                                          "usb_vs_aux_observation_gap":  {
+                                                                             "first_fault_gap_available":  false,
+                                                                             "first_fault_gap_begin_us":  null,
+                                                                             "first_fault_gap_end_us":  null,
+                                                                             "first_fault_gap_us":  null,
+                                                                             "gap_relation_to_fault_transaction":  "UNKNOWN",
+                                                                             "intervals":  [
+                                                                                               {
+                                                                                                   "kind":  0,
+                                                                                                   "name":  "PrivateReply",
+                                                                                                   "classification":  "UNKNOWN",
+                                                                                                   "intersection_us":  null,
+                                                                                                   "maximum_begin_us":  null,
+                                                                                                   "maximum_end_us":  null,
+                                                                                                   "maximum_duration_us":  "0",
+                                                                                                   "early_return_count":  0
+                                                                                               },
+                                                                                               {
+                                                                                                   "kind":  1,
+                                                                                                   "name":  "RuntimeDiagnostic",
+                                                                                                   "classification":  "UNKNOWN",
+                                                                                                   "intersection_us":  null,
+                                                                                                   "maximum_begin_us":  "23041970",
+                                                                                                   "maximum_end_us":  "23142862",
+                                                                                                   "maximum_duration_us":  "100892",
+                                                                                                   "early_return_count":  0
+                                                                                               },
+                                                                                               {
+                                                                                                   "kind":  2,
+                                                                                                   "name":  "AliveDrain",
+                                                                                                   "classification":  "UNKNOWN",
+                                                                                                   "intersection_us":  null,
+                                                                                                   "maximum_begin_us":  null,
+                                                                                                   "maximum_end_us":  null,
+                                                                                                   "maximum_duration_us":  "0",
+                                                                                                   "early_return_count":  0
+                                                                                               },
+                                                                                               {
+                                                                                                   "kind":  3,
+                                                                                                   "name":  "Loop",
+                                                                                                   "classification":  "UNKNOWN",
+                                                                                                   "intersection_us":  null,
+                                                                                                   "maximum_begin_us":  "5770276",
+                                                                                                   "maximum_end_us":  "5880765",
+                                                                                                   "maximum_duration_us":  "110489",
+                                                                                                   "early_return_count":  0
+                                                                                               }
+                                                                                           ],
+                                                                             "root_cause_proven":  false,
+                                                                             "limitation":  "Compares separately recorded maximum intervals only. Overlap is not causation; maxima can belong to different transactions and unrecorded shorter intervals may overlap."
+                                                                         },
+                                          "aux_busy_vs_observation_delay":  {
+                                                                                "verdict":  "UNKNOWN",
+                                                                                "physical_busy_proven":  false,
+                                                                                "observation_delay_root_cause_proven":  false,
+                                                                                "reasons":  [
+                                                                                                "ISR events show observed digital transitions only; continuous interrupt and physical waveform coverage are not independently proven.",
+                                                                                                "Ordinal/event sequence is not physical ordering across independent writers; compare same-clock brackets and retain overlaps as ambiguous.",
+                                                                                                "AUX LOW alone is not proof of RF airtime or E220 hardware failure."
+                                                                                            ]
+                                                                            },
+                                          "acceptance":  "NOT_EVALUATED",
+                                          "root_cause_proven":  false,
+                                          "acceptance_authorized":  false,
+                                          "deployment_authorized":  false,
+                                          "limitations":  [
+                                                              "Committed duplicate record decoding is not hardware acquisition, USB completion, RF delivery, READY receipt or 932-parameter acceptance.",
+                                                              "Independent sections have different commit times; first-fault snapshot is the immutable boundary, not a simultaneous aggregate sample.",
+                                                              "Clock-regression, overflow, history wrap and invalid-input flags are preserved; missing evidence is not converted into success.",
+                                                              "MCU microseconds are unsigned decimal strings; no PC/MCU clock correlation or cross-writer ordering is inferred."
+                                                          ]
+                                      }
+                },
+    "openocd_stage":  {
+                          "device_opened":  true,
+                          "target_examined":  true,
+                          "halt_possible":  true,
+                          "resume_proven":  true,
+                          "shutdown_proven":  true,
+                          "cleanup_required":  true,
+                          "failure_classification":  "FAIL_JTAG_AFTER_TARGET_EXAMINE"
+                      },
+    "capture_attempts":  [
+                             {
+                                 "attempt":  1,
+                                 "result":  "STABLE",
+                                 "capture_log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\openocd-attempt-1-capture.log",
+                                 "cleanup_log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\openocd-attempt-1-cleanup.log",
+                                 "cleanup_attempted":  true,
+                                 "cleanup_exit_code":  0,
+                                 "resume_shutdown_cleanup_proven":  true,
+                                 "smp_capture_proven":  true
+                             }
+                         ],
+    "limitations":  [
+                        "The build fingerprint is a diagnostic generation marker, not an artifact digest.",
+                        "Live exact-image identity depends on the supplied installer verify evidence remaining current.",
+                        "Endpoint FIFO evidence reaches the native USB transaction boundary but does not prove Windows user-space CDC consumption.",
+                        "Extended restart and first Ground USB commit records are latched diagnostic events, not continuous hardware state.",
+                        "Record acquisition PASS does not establish USB completion, communication acceptance, or the 932-parameter throughput goal.",
+                        "Boot instance comes from the raw record; matching a later PC exchange requires its exact nonce/device sample and independent clock continuity/error bounds.",
+                        "PC/device causal time ordering is UNKNOWN until the independently bounded exchange is supplied.",
+                        "Timed path mode observes the first product Heartbeat; acquisition PASS is not product acceptance or physical FIFO proof.",
+                        "AUX GPIO observations, independent ISR edges and USB readiness milestones are diagnostic witnesses, not physical waveform proof or product acceptance. Missing or incomplete edge coverage cannot prove continuous RF Busy."
+                    ],
+    "extended_records_required":  true,
+    "first_usb_failure_required":  true,
+    "timed_path_required":  true,
+    "aux_readiness_required":  true
+}

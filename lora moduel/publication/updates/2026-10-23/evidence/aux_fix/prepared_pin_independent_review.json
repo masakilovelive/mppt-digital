@@ -1,0 +1,92 @@
+{
+  "schema": "r19_aux_prepared_pin_independent_review_v1",
+  "reviewer": "/root/aux_independent_review",
+  "verdict": "PASS_INDEPENDENT_PIN_AND_ARTIFACT_CHECKS",
+  "prepared_pin": {
+    "path": "prepared_aux_readiness_explicit_host_arm.json",
+    "sha256": "AA4443FB15B750295272CFE2E8D20CA9A88D39E4CF4C684F3C8F71E69E5D4D06",
+    "pure_prepared_contract_check": "PASS",
+    "mode": "ExplicitHostArm",
+    "aux_readiness_diagnostics": true,
+    "capture_seconds": 40,
+    "product_budget_ms": 106,
+    "acceptance_authorized": false,
+    "deployment_authorized": false,
+    "live_authorization_granted": false,
+    "hardware_interaction": false
+  },
+  "candidate": {
+    "id": "20261022T144157999Z-de92540d",
+    "latest_sha256": "71D9EBA2028795FC8C21DC24FA85FE3ABF8972AD2FD05F943A9C61C32490D85E",
+    "manifest_sha256": "557B915A26ECADBF8702A1340D12255CA1B9F2F2A843DBC8EE0787911E95DD60",
+    "handoff_sha256": "69E7E0C70D98D1F43836CA82746754581F32E22F5A34E9E1B23231110B6A884F",
+    "seal_sha256": "91651CC0D246A10EA0E16820F36B53D1F22F9B112BB470CA7F9821C422C92616",
+    "diagnostic_only": true,
+    "acceptance_eligible": false,
+    "acceptance_authorized": false,
+    "deployment_authorized": false,
+    "latest_identity_and_hash_match": true,
+    "official_verifier": {
+      "path": "tools/verify_r19_candidate_artifact.ps1",
+      "powershell": "Windows PowerShell 5.1",
+      "repo_root_explicitly_supplied": true,
+      "mode": "RuntimeFailDiagnostics + ExplicitHostArm + AuxReadinessDiagnostics",
+      "expected_latest_sha256_explicitly_supplied": true,
+      "exit_code": 0,
+      "result": "FW-R19-CANDIDATE-ARTIFACT-VERIFY-001 PASS"
+    }
+  },
+  "tools": {
+    "expected_count": 18,
+    "prepared_count": 18,
+    "current_file_sha256_matches": 18,
+    "missing_duplicate_or_mismatched_tools": 0
+  },
+  "roles": [
+    {
+      "role": "vehicle",
+      "prepared_runtime_stage_address": "0x3fcad390",
+      "elf_derived_runtime_stage_address": "0x3fcad390",
+      "runtime_stage_size_bytes": 68,
+      "elf_sha256": "AB49401BA76C66AA63FA9762FAF943729D018B40FAB33FBB799E86F6072CC457",
+      "application_sha256": "34AD22DEDBA8D1D5911DBD88525BBAA48ACCCD90D4585B5E0A9C511F077E4FC9",
+      "binding_verified": true
+    },
+    {
+      "role": "ground",
+      "prepared_runtime_stage_address": "0x3fca49a8",
+      "elf_derived_runtime_stage_address": "0x3fca49a8",
+      "runtime_stage_size_bytes": 68,
+      "elf_sha256": "0A449C8236DC550C38E4DEE8B13D20F0A6EB0A23E3CC6A80DF963BE77F251871",
+      "application_sha256": "1E629A8311978A7E79750FFE55D69CECD266449BC5A946DD936196277B4D3CD6",
+      "binding_verified": true
+    }
+  ],
+  "bridge_source_identity": {
+    "canonical_path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+    "sha256": "B277B26972D6F945C64ECDF3CCBFB31ECFD0016DD04CBC55EA8FC7A250E84F4C",
+    "vehicle_staged_package_matches": true,
+    "ground_staged_package_matches": true
+  },
+  "accepted_r18_rollback": [
+    {
+      "role": "vehicle",
+      "path": "runs/baselines/R18-PRODUCTION-R4-ACCEPTED/20260914T225054625Z/artifacts/vehicle.application.bin",
+      "size_bytes": 389280,
+      "sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+      "expected_hash_matches": true
+    },
+    {
+      "role": "ground",
+      "path": "runs/baselines/R18-PRODUCTION-R4-ACCEPTED/20260914T225054625Z/artifacts/ground.application.bin",
+      "size_bytes": 360208,
+      "sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+      "expected_hash_matches": true
+    }
+  ],
+  "hardware_or_device_access_performed_by_reviewer": false,
+  "pnp_or_process_audit_performed_by_reviewer": false,
+  "candidate_or_protected_source_written_by_reviewer": false,
+  "authorization_note": "Prepared artifacts do not grant live, acceptance, or Deployment authorization. This review is offline only.",
+  "review_complete_no_further_background_audit": true
+}

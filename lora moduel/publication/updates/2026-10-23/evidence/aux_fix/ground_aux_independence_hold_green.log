@@ -1,0 +1,2 @@
+hold elapsed_ms=10800 loops=108 aux_reads=108 staged=1 flush=1 failed=1 recovery=1 reason=16
+IT-R19-GROUND-AUX-INDEPENDENCE-001 scenario=hold checks=18 failures=0

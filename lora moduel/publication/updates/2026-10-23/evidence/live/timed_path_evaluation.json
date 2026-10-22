@@ -1,0 +1,509 @@
+{
+    "schema":  "vc-lora-r19-timed-path-normalization-v1",
+    "evidence":  {
+                     "schema":  "vc-lora-r19-timed-path-evidence-v1",
+                     "identity":  {
+                                      "role":  "ground",
+                                      "candidate_id":  "20261022T144157999Z-de92540d",
+                                      "build_fingerprint":  [
+                                                                1378957636,
+                                                                1398032177,
+                                                                842019382,
+                                                                825241651
+                                                            ],
+                                      "boot_instance":  [
+                                                            676554008,
+                                                            2131784031,
+                                                            2739496661,
+                                                            2255419712
+                                                        ],
+                                      "usb_epoch":  1,
+                                      "reader_session":  "3251959628439888193",
+                                      "nonce":  "5915899170943966055",
+                                      "frame_id":  "first-product-heartbeat-token-1",
+                                      "frame_sha256":  "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A",
+                                      "frame_kind":  "PRODUCT_HEARTBEAT",
+                                      "expected_frame_bytes":  21
+                                  },
+                     "clock_correlation":  null,
+                     "trace_complete":  true,
+                     "trace_overflow":  false,
+                     "events":  [
+                                    {
+                                        "kind":  "PC_READ_STARTED",
+                                        "ordinal":  0,
+                                        "domain":  "PC_TICKS",
+                                        "timestamp":  "57923356",
+                                        "identity":  {
+                                                         "role":  "ground",
+                                                         "candidate_id":  "20261022T144157999Z-de92540d",
+                                                         "build_fingerprint":  [
+                                                                                   1378957636,
+                                                                                   1398032177,
+                                                                                   842019382,
+                                                                                   825241651
+                                                                               ],
+                                                         "boot_instance":  [
+                                                                               676554008,
+                                                                               2131784031,
+                                                                               2739496661,
+                                                                               2255419712
+                                                                           ],
+                                                         "usb_epoch":  1,
+                                                         "reader_session":  "3251959628439888193",
+                                                         "nonce":  "5915899170943966055",
+                                                         "frame_id":  "first-product-heartbeat-token-1",
+                                                         "frame_sha256":  "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A",
+                                                         "frame_kind":  "PRODUCT_HEARTBEAT",
+                                                         "expected_frame_bytes":  21
+                                                     },
+                                        "evidence_sha256":  "A3B71958263BDC0820379D3E004F18950D02EBA4EDC0B2BC1F855F57EEB0D940",
+                                        "details":  {
+                                                        "clock_domain_id":  "0c136ebe62384df9877c271cf375369c",
+                                                        "reader_owner_verified":  true,
+                                                        "frequency":  "10000000"
+                                                    }
+                                    },
+                                    {
+                                        "kind":  "MCU_ARM_ACCEPTED",
+                                        "ordinal":  1,
+                                        "domain":  "MCU_US",
+                                        "timestamp":  "11605010",
+                                        "identity":  {
+                                                         "role":  "ground",
+                                                         "candidate_id":  "20261022T144157999Z-de92540d",
+                                                         "build_fingerprint":  [
+                                                                                   1378957636,
+                                                                                   1398032177,
+                                                                                   842019382,
+                                                                                   825241651
+                                                                               ],
+                                                         "boot_instance":  [
+                                                                               676554008,
+                                                                               2131784031,
+                                                                               2739496661,
+                                                                               2255419712
+                                                                           ],
+                                                         "usb_epoch":  1,
+                                                         "reader_session":  "3251959628439888193",
+                                                         "nonce":  "5915899170943966055",
+                                                         "frame_id":  "first-product-heartbeat-token-1",
+                                                         "frame_sha256":  "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A",
+                                                         "frame_kind":  "PRODUCT_HEARTBEAT",
+                                                         "expected_frame_bytes":  21
+                                                     },
+                                        "evidence_sha256":  "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+                                        "details":  {
+                                                        "accepted":  true,
+                                                        "device_clock_continuity_verified":  true
+                                                    }
+                                    },
+                                    {
+                                        "kind":  "MCU_FRAME_ENQUEUED",
+                                        "ordinal":  2,
+                                        "domain":  "MCU_US",
+                                        "timestamp":  "11605210",
+                                        "identity":  {
+                                                         "role":  "ground",
+                                                         "candidate_id":  "20261022T144157999Z-de92540d",
+                                                         "build_fingerprint":  [
+                                                                                   1378957636,
+                                                                                   1398032177,
+                                                                                   842019382,
+                                                                                   825241651
+                                                                               ],
+                                                         "boot_instance":  [
+                                                                               676554008,
+                                                                               2131784031,
+                                                                               2739496661,
+                                                                               2255419712
+                                                                           ],
+                                                         "usb_epoch":  1,
+                                                         "reader_session":  "3251959628439888193",
+                                                         "nonce":  "5915899170943966055",
+                                                         "frame_id":  "first-product-heartbeat-token-1",
+                                                         "frame_sha256":  "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A",
+                                                         "frame_kind":  "PRODUCT_HEARTBEAT",
+                                                         "expected_frame_bytes":  21
+                                                     },
+                                        "evidence_sha256":  "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+                                        "details":  {
+                                                        "frame_bytes":  21
+                                                    }
+                                    },
+                                    {
+                                        "kind":  "MCU_USB_PICKUP_OBSERVED",
+                                        "ordinal":  3,
+                                        "domain":  "MCU_US",
+                                        "timestamp":  "11605681",
+                                        "identity":  {
+                                                         "role":  "ground",
+                                                         "candidate_id":  "20261022T144157999Z-de92540d",
+                                                         "build_fingerprint":  [
+                                                                                   1378957636,
+                                                                                   1398032177,
+                                                                                   842019382,
+                                                                                   825241651
+                                                                               ],
+                                                         "boot_instance":  [
+                                                                               676554008,
+                                                                               2131784031,
+                                                                               2739496661,
+                                                                               2255419712
+                                                                           ],
+                                                         "usb_epoch":  1,
+                                                         "reader_session":  "3251959628439888193",
+                                                         "nonce":  "5915899170943966055",
+                                                         "frame_id":  "first-product-heartbeat-token-1",
+                                                         "frame_sha256":  "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A",
+                                                         "frame_kind":  "PRODUCT_HEARTBEAT",
+                                                         "expected_frame_bytes":  21
+                                                     },
+                                        "evidence_sha256":  "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+                                        "details":  {
+                                                        "pickup_generation":  12
+                                                    }
+                                    },
+                                    {
+                                        "kind":  "MCU_USB_COMPLETED",
+                                        "ordinal":  4,
+                                        "domain":  "MCU_US",
+                                        "timestamp":  "11605681",
+                                        "identity":  {
+                                                         "role":  "ground",
+                                                         "candidate_id":  "20261022T144157999Z-de92540d",
+                                                         "build_fingerprint":  [
+                                                                                   1378957636,
+                                                                                   1398032177,
+                                                                                   842019382,
+                                                                                   825241651
+                                                                               ],
+                                                         "boot_instance":  [
+                                                                               676554008,
+                                                                               2131784031,
+                                                                               2739496661,
+                                                                               2255419712
+                                                                           ],
+                                                         "usb_epoch":  1,
+                                                         "reader_session":  "3251959628439888193",
+                                                         "nonce":  "5915899170943966055",
+                                                         "frame_id":  "first-product-heartbeat-token-1",
+                                                         "frame_sha256":  "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A",
+                                                         "frame_kind":  "PRODUCT_HEARTBEAT",
+                                                         "expected_frame_bytes":  21
+                                                     },
+                                        "evidence_sha256":  "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+                                        "details":  {
+                                                        "completed_bytes":  21
+                                                    }
+                                    },
+                                    {
+                                        "kind":  "MCU_HWCDC_ACCEPTED",
+                                        "ordinal":  5,
+                                        "domain":  "MCU_US",
+                                        "timestamp":  "11605681",
+                                        "identity":  {
+                                                         "role":  "ground",
+                                                         "candidate_id":  "20261022T144157999Z-de92540d",
+                                                         "build_fingerprint":  [
+                                                                                   1378957636,
+                                                                                   1398032177,
+                                                                                   842019382,
+                                                                                   825241651
+                                                                               ],
+                                                         "boot_instance":  [
+                                                                               676554008,
+                                                                               2131784031,
+                                                                               2739496661,
+                                                                               2255419712
+                                                                           ],
+                                                         "usb_epoch":  1,
+                                                         "reader_session":  "3251959628439888193",
+                                                         "nonce":  "5915899170943966055",
+                                                         "frame_id":  "first-product-heartbeat-token-1",
+                                                         "frame_sha256":  "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A",
+                                                         "frame_kind":  "PRODUCT_HEARTBEAT",
+                                                         "expected_frame_bytes":  21
+                                                     },
+                                        "evidence_sha256":  "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+                                        "details":  {
+                                                        "accepted_bytes":  21
+                                                    }
+                                    },
+                                    {
+                                        "kind":  "MCU_USB_PUBLISHED",
+                                        "ordinal":  6,
+                                        "domain":  "MCU_US",
+                                        "timestamp":  "11605681",
+                                        "identity":  {
+                                                         "role":  "ground",
+                                                         "candidate_id":  "20261022T144157999Z-de92540d",
+                                                         "build_fingerprint":  [
+                                                                                   1378957636,
+                                                                                   1398032177,
+                                                                                   842019382,
+                                                                                   825241651
+                                                                               ],
+                                                         "boot_instance":  [
+                                                                               676554008,
+                                                                               2131784031,
+                                                                               2739496661,
+                                                                               2255419712
+                                                                           ],
+                                                         "usb_epoch":  1,
+                                                         "reader_session":  "3251959628439888193",
+                                                         "nonce":  "5915899170943966055",
+                                                         "frame_id":  "first-product-heartbeat-token-1",
+                                                         "frame_sha256":  "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A",
+                                                         "frame_kind":  "PRODUCT_HEARTBEAT",
+                                                         "expected_frame_bytes":  21
+                                                     },
+                                        "evidence_sha256":  "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+                                        "details":  {
+                                                        "publish_generation":  12,
+                                                        "ring_pending_bytes":  0,
+                                                        "stash_pending_bytes":  0
+                                                    }
+                                    },
+                                    {
+                                        "kind":  "PC_FRAME_VALIDATED",
+                                        "ordinal":  7,
+                                        "domain":  "PC_TICKS",
+                                        "timestamp":  "68129870",
+                                        "identity":  {
+                                                         "role":  "ground",
+                                                         "candidate_id":  "20261022T144157999Z-de92540d",
+                                                         "build_fingerprint":  [
+                                                                                   1378957636,
+                                                                                   1398032177,
+                                                                                   842019382,
+                                                                                   825241651
+                                                                               ],
+                                                         "boot_instance":  [
+                                                                               676554008,
+                                                                               2131784031,
+                                                                               2739496661,
+                                                                               2255419712
+                                                                           ],
+                                                         "usb_epoch":  1,
+                                                         "reader_session":  "3251959628439888193",
+                                                         "nonce":  "5915899170943966055",
+                                                         "frame_id":  "first-product-heartbeat-token-1",
+                                                         "frame_sha256":  "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A",
+                                                         "frame_kind":  "PRODUCT_HEARTBEAT",
+                                                         "expected_frame_bytes":  21
+                                                     },
+                                        "evidence_sha256":  "A3B71958263BDC0820379D3E004F18950D02EBA4EDC0B2BC1F855F57EEB0D940",
+                                        "details":  {
+                                                        "received_bytes":  21,
+                                                        "crc_valid":  true,
+                                                        "complete_frame":  true,
+                                                        "frame_sha256":  "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A"
+                                                    }
+                                    }
+                                ]
+                 },
+    "evaluation":  {
+                       "schema":  "vc-lora-r19-timed-path-evaluation-v1",
+                       "mode":  "OFFLINE_ONLY",
+                       "classification":  "PC_FRAME_VALIDATED_OBSERVED",
+                       "identity":  {
+                                        "role":  "ground",
+                                        "candidate_id":  "20261022T144157999Z-de92540d",
+                                        "build_fingerprint":  [
+                                                                  1378957636,
+                                                                  1398032177,
+                                                                  842019382,
+                                                                  825241651
+                                                              ],
+                                        "boot_instance":  [
+                                                              676554008,
+                                                              2131784031,
+                                                              2739496661,
+                                                              2255419712
+                                                          ],
+                                        "usb_epoch":  1,
+                                        "reader_session":  "3251959628439888193",
+                                        "nonce":  "5915899170943966055",
+                                        "frame_id":  "first-product-heartbeat-token-1",
+                                        "frame_sha256":  "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A",
+                                        "frame_kind":  "PRODUCT_HEARTBEAT",
+                                        "expected_frame_bytes":  21
+                                    },
+                       "last_observed_mcu_stage":  "MCU_USB_PUBLISHED",
+                       "observed_stages":  [
+                                               "PC_READ_STARTED",
+                                               "MCU_ARM_ACCEPTED",
+                                               "MCU_FRAME_ENQUEUED",
+                                               "MCU_USB_PICKUP_OBSERVED",
+                                               "MCU_USB_COMPLETED",
+                                               "MCU_HWCDC_ACCEPTED",
+                                               "MCU_USB_PUBLISHED",
+                                               "PC_FRAME_VALIDATED"
+                                           ],
+                       "missing_stages":  [
+                                              "MCU_USB_FAILED"
+                                          ],
+                       "event_timeline":  [
+                                              {
+                                                  "kind":  "PC_READ_STARTED",
+                                                  "domain":  "PC_TICKS",
+                                                  "timestamp":  "57923356",
+                                                  "evidence_sha256":  "A3B71958263BDC0820379D3E004F18950D02EBA4EDC0B2BC1F855F57EEB0D940",
+                                                  "details":  {
+                                                                  "clock_domain_id":  "0c136ebe62384df9877c271cf375369c",
+                                                                  "reader_owner_verified":  true,
+                                                                  "frequency":  "10000000"
+                                                              },
+                                                  "pc_bounds":  null
+                                              },
+                                              {
+                                                  "kind":  "MCU_ARM_ACCEPTED",
+                                                  "domain":  "MCU_US",
+                                                  "timestamp":  "11605010",
+                                                  "evidence_sha256":  "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+                                                  "details":  {
+                                                                  "accepted":  true,
+                                                                  "device_clock_continuity_verified":  true
+                                                              },
+                                                  "pc_bounds":  null
+                                              },
+                                              {
+                                                  "kind":  "MCU_FRAME_ENQUEUED",
+                                                  "domain":  "MCU_US",
+                                                  "timestamp":  "11605210",
+                                                  "evidence_sha256":  "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+                                                  "details":  {
+                                                                  "frame_bytes":  21
+                                                              },
+                                                  "pc_bounds":  null
+                                              },
+                                              {
+                                                  "kind":  "MCU_USB_PICKUP_OBSERVED",
+                                                  "domain":  "MCU_US",
+                                                  "timestamp":  "11605681",
+                                                  "evidence_sha256":  "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+                                                  "details":  {
+                                                                  "pickup_generation":  12
+                                                              },
+                                                  "pc_bounds":  null
+                                              },
+                                              {
+                                                  "kind":  "MCU_USB_COMPLETED",
+                                                  "domain":  "MCU_US",
+                                                  "timestamp":  "11605681",
+                                                  "evidence_sha256":  "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+                                                  "details":  {
+                                                                  "completed_bytes":  21
+                                                              },
+                                                  "pc_bounds":  null
+                                              },
+                                              {
+                                                  "kind":  "MCU_HWCDC_ACCEPTED",
+                                                  "domain":  "MCU_US",
+                                                  "timestamp":  "11605681",
+                                                  "evidence_sha256":  "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+                                                  "details":  {
+                                                                  "accepted_bytes":  21
+                                                              },
+                                                  "pc_bounds":  null
+                                              },
+                                              {
+                                                  "kind":  "MCU_USB_PUBLISHED",
+                                                  "domain":  "MCU_US",
+                                                  "timestamp":  "11605681",
+                                                  "evidence_sha256":  "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+                                                  "details":  {
+                                                                  "publish_generation":  12,
+                                                                  "ring_pending_bytes":  0,
+                                                                  "stash_pending_bytes":  0
+                                                              },
+                                                  "pc_bounds":  null
+                                              },
+                                              {
+                                                  "kind":  "PC_FRAME_VALIDATED",
+                                                  "domain":  "PC_TICKS",
+                                                  "timestamp":  "68129870",
+                                                  "evidence_sha256":  "A3B71958263BDC0820379D3E004F18950D02EBA4EDC0B2BC1F855F57EEB0D940",
+                                                  "details":  {
+                                                                  "received_bytes":  21,
+                                                                  "crc_valid":  true,
+                                                                  "complete_frame":  true,
+                                                                  "frame_sha256":  "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A"
+                                                              },
+                                                  "pc_bounds":  null
+                                              }
+                                          ],
+                       "mcu_deltas":  [
+                                          {
+                                              "from":  "MCU_ARM_ACCEPTED",
+                                              "to":  "MCU_FRAME_ENQUEUED",
+                                              "elapsed_us":  "200"
+                                          },
+                                          {
+                                              "from":  "MCU_FRAME_ENQUEUED",
+                                              "to":  "MCU_USB_PICKUP_OBSERVED",
+                                              "elapsed_us":  "471"
+                                          },
+                                          {
+                                              "from":  "MCU_USB_PICKUP_OBSERVED",
+                                              "to":  "MCU_USB_COMPLETED",
+                                              "elapsed_us":  "0"
+                                          },
+                                          {
+                                              "from":  "MCU_USB_COMPLETED",
+                                              "to":  "MCU_HWCDC_ACCEPTED",
+                                              "elapsed_us":  "0"
+                                          },
+                                          {
+                                              "from":  "MCU_HWCDC_ACCEPTED",
+                                              "to":  "MCU_USB_PUBLISHED",
+                                              "elapsed_us":  "0"
+                                          }
+                                      ],
+                       "mcu_clock_continuity_verified":  true,
+                       "failure_elapsed_us":  null,
+                       "pc_frame_validated":  true,
+                       "local_usb_completed":  true,
+                       "clock_bounds_valid":  false,
+                       "clock_mapping_reasons":  [
+
+                                                 ],
+                       "trace_complete":  true,
+                       "trace_overflow":  false,
+                       "hardware_interaction":  false,
+                       "physical_fifo_fault_proven":  false,
+                       "kernel_pending_read_proven":  false,
+                       "root_cause_proven":  false,
+                       "acceptance_eligible":  false,
+                       "deployment_authorized":  false,
+                       "rf_status":  "NOT_EVALUATED",
+                       "parameters_status":  "NOT_EVALUATED",
+                       "limitations":  [
+                                           "This evaluates supplied records only. SHA256 syntax and equality establish claimed joins, not authenticity, ownership or acquisition provenance.",
+                                           "PC_READ_STARTED has a post-hoc frame tuple join; it does not prove that this frame was known at reader startup, a kernel-pending Read, or physical host polling.",
+                                           "Only a continuous common MCU_US clock establishes MCU elapsed times; SDK millis32 values cannot be substituted for caller 64-bit microseconds.",
+                                           "Every mapped MCU_US boundary must use the same continuous 64-bit microsecond clock and the common quantization bound supplied as observation.failure.quantization_us. Per-stage or SDK millisecond timestamps with different bounds are not interchangeable.",
+                                           "Mixed-domain array ordinals are acquisition indices, never a PC-to-MCU execution order. Clock bounds retain guaranteed-error and continuity assumptions.",
+                                           "Host ARM before a failure narrows an observed boundary; ARM after a failure calls for gate/binding review. Neither establishes host-readiness causation.",
+                                           "Publication and pickup counters, zero ring/stash byte counts, and later FIFO snapshots do not locate a physical FIFO fault or prove payload transmission. Counter subtraction is not missing-byte accounting.",
+                                           "MCU_HWCDC_ACCEPTED is one final cumulative acceptance observation for this bound frame, not a partial in-progress chunk. MCU_USB_PICKUP_OBSERVED is a counter observation only; a publish/pickup gap does not prove matching transaction pickup.",
+                                           "Missing stages are unobserved, not necessarily failed. MCU_USB_COMPLETED and MCU_USB_FAILED are alternative local terminals, not two required success stages.",
+                                           "Later complete CRC-valid PC reception cannot erase an earlier recorded local completion failure. Product Heartbeat and diagnostic frames are distinct transactions.",
+                                           "MCU_USB_FAILED covers only the 106 ms PRODUCT_HEARTBEAT contract. DIAGNOSTIC partial/success observations are permitted, but diagnostic failures and their separate 500 ms budget are not modeled or reinterpreted as product failures.",
+                                           "The frame enqueue timestamp is a prior-to-exposure boundary for this transaction. A strictly earlier bound PC frame validation is inconsistent evidence; equal or overlapping intervals do not establish order. A PC read may precede the later local flush return, which is not compared as a physical delivery boundary.",
+                                           "Local USB completion, PC frame validation, RF delivery and 932-parameter acquisition are separate layers; this trace cannot authorize acceptance or deployment."
+                                       ]
+                   },
+    "binding_status":  "RAW_BYTES_AND_MCU_RECORD_BOUND",
+    "matched_pc_frame_occurrences":  1,
+    "record_observation_us":  "11605681",
+    "clock_mapping":  "UNKNOWN_NO_GUARANTEED_RATE_BOUND_OR_CONTINUITY_PROOF",
+    "hardware_interaction":  false,
+    "limitations":  [
+                        "Event MCU_USB_PUBLISHED is the recorded SDK counter observation timestamp, not physical FIFO publication time.",
+                        "Private ARM is host-readiness admission, never flight arming.",
+                        "Same boot tuple and nominal clocks alone do not establish guaranteed PC/MCU time bounds.",
+                        "API accepted bytes zero is not proof that no physical byte was emitted."
+                    ]
+}

@@ -1,0 +1,90 @@
+{
+  "schema": "vc-lora-r19-timed-path-prepared-run-v1",
+  "mode": "ExplicitHostArm",
+  "aux_readiness_diagnostics": true,
+  "candidate_id": "20261022T144157999Z-de92540d",
+  "latest_sha256": "71D9EBA2028795FC8C21DC24FA85FE3ABF8972AD2FD05F943A9C61C32490D85E",
+  "latest_path": "runs/candidates/R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001/latest.json",
+  "capture_seconds": 40,
+  "product_budget_ms": 106,
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "live_authorization_granted": false,
+  "vehicle_runtime_stage_address": "0x3fcad390",
+  "ground_runtime_stage_address": "0x3fca49a8",
+  "hardware_interaction": false,
+  "tools": [
+    {
+      "path": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "sha256": "2235E55F1B5628C1FF135327D8C831DA9F0906D614F94BC78894BB1780C03313"
+    },
+    {
+      "path": "tools/invoke_r19_candidate_app_flash_hil.ps1",
+      "sha256": "2691247E2CAB4D20C38C8C93D0416B6FBA96851347AE12DFBF102D2F99EBF884"
+    },
+    {
+      "path": "tools/read_r19_runtime_stage_jtag.ps1",
+      "sha256": "E3601EA0F59E2EE9F0422A9D5BAC051453592B82A74F1F6EE32850369654ED7E"
+    },
+    {
+      "path": "tools/invoke_r19_jtag_preflash_gate.ps1",
+      "sha256": "853A404C816D8C9C92B609FD697763977AEDE1849E87A494AEB70FBAA38F4210"
+    },
+    {
+      "path": "tools/run_r19_timed_path_capture.ps1",
+      "sha256": "0EAE966774482481D99FB41D6FBF04B783C1C0B177B27FD51FDE85BF701D6C4C"
+    },
+    {
+      "path": "tools/r19_timed_path_acquisition.ps1",
+      "sha256": "7DAF7E0E086CE15C5AA50D0497478571455C2CA83912C224A87B55BF0E148015"
+    },
+    {
+      "path": "tools/r19_timed_path_outer.ps1",
+      "sha256": "669CB7BB26909DBB1A33F5EC8D3EB06D95D389B03875371C49280D5AD5985188"
+    },
+    {
+      "path": "tools/read_r19_timed_path_record.ps1",
+      "sha256": "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C"
+    },
+    {
+      "path": "tools/read_r19_first_usb_failure_record.ps1",
+      "sha256": "E11CDBF18EFA90F22BC9E69ADF357FD795396725EC0D2B091C759A69A929E47D"
+    },
+    {
+      "path": "tools/r19_host_readiness_wire.ps1",
+      "sha256": "91CEEF26F4CFF3E8DED4C6132CD274BDC325051592715D70CBAF08CDF71BCBE4"
+    },
+    {
+      "path": "tools/r19_host_readiness_workflow.ps1",
+      "sha256": "1B0740C84FE8B54C8F573846E6EBCDCDA7DF330565833500F1EE557CF11BD099"
+    },
+    {
+      "path": "tools/r19_usb_clock_correlation.ps1",
+      "sha256": "B6759C777FCC4C3F2BB3F8D8DA7A890EF54043CA5ECC4A3DC1EB2937FB8DD1D1"
+    },
+    {
+      "path": "tools/r19_timed_path_trace.ps1",
+      "sha256": "09786F523F0A5DDBC7B84B377E620886A574D552CABBF5EA5CEE5B4F2890660A"
+    },
+    {
+      "path": "tools/r19_startup_reader.cs",
+      "sha256": "939EF6C3333B1BC67782CFB02AEBFBC067EE6AAC7C789FB171F06C2B9F8A8C2E"
+    },
+    {
+      "path": "tools/r19_continuous_reader.cs",
+      "sha256": "8DF5929114802926708BD42430CDCD7AF499B15B92EB7B7503BEF11C635B44F9"
+    },
+    {
+      "path": "tools/r19_candidate_artifact_common.ps1",
+      "sha256": "37A87C94E3DB89B3EA73C67E129FCA457347A8349B3B9AF51AF5B240062AFABE"
+    },
+    {
+      "path": "tools/verify_r19_candidate_artifact.ps1",
+      "sha256": "3E79F96F2891923ADE132E3128962CAB3340F4246375E25F65EE7BD5749704CA"
+    },
+    {
+      "path": "tools/read_r19_aux_readiness_record.ps1",
+      "sha256": "C011580259EA94F3092B1B3CCAF34DB30C4D9CA1158D2A51D2DC96EA76D880DF"
+    }
+  ]
+}

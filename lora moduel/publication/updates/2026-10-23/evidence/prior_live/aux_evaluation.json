@@ -1,0 +1,86 @@
+{
+  "schema": "vc-lora-r19-ready32-live-aux-readiness-evaluation-v1",
+  "source": "stage_ground/summary.json decoded.aux_readiness; stage_vehicle/summary.json decoded.aux_readiness",
+  "comparison_run": "../20261022T122014Z-aux-ready-routing-fix-retrial",
+  "ready": {
+    "clock_flush_begin_us": "11331430",
+    "clock_flush_end_us": "11331496",
+    "gate_update_us": "11331515",
+    "encode_us": "11331570",
+    "publish_begin_us": "11331676",
+    "ready_flush_begin_us": "11331918",
+    "ready_flush_end_us": "11332889",
+    "publish_end_us": "11332893",
+    "publish_elapsed_us": 1217,
+    "arm_received_us": "11541026",
+    "arm_accepted_event_us": "11541097",
+    "epoch": 1,
+    "bytes": 66,
+    "pc_ready_validated": true,
+    "mcu_arm_accepted": true,
+    "suppressed_events": 0,
+    "actual_per_call_chunk_acceptance_sequence_recorded": false
+  },
+  "aux": {
+    "ground": {
+      "poll_count": 230951,
+      "last_gpio_end_us": "52020976",
+      "last_loop_end_us": "62821887",
+      "unobserved_tail_us": 10800911,
+      "previous_unobserved_tail_us": 51683612,
+      "observed_after_ready_complete_us": 40688083,
+      "maximum_completed_poll_gap_us": 7598147,
+      "maximum_completed_poll_gap_begin_us": "832621",
+      "maximum_completed_poll_gap_end_us": "8430768",
+      "first_uart_acceptance_us": "11011320",
+      "uart_acceptance_count": 8,
+      "aux_fault_code": 0,
+      "first_fault_latched": false,
+      "normal_observer_bypass_count": 315513,
+      "irq_event_count": 198,
+      "irq_events_retained": 120,
+      "irq_overflow": 78,
+      "maximum_retained_low_us": 536758
+    },
+    "vehicle": {
+      "poll_count": 1121095,
+      "last_gpio_end_us": "68547873",
+      "last_loop_end_us": "68548034",
+      "unobserved_tail_us": 161,
+      "maximum_completed_poll_gap_us": 110008,
+      "aux_fault_code": 0,
+      "first_fault_latched": false,
+      "irq_event_count": 0,
+      "irq_overflow": 0
+    }
+  },
+  "diagnosis": {
+    "ready_stall_reproduced": false,
+    "ready_owned_long_aux_starvation_reproduced": false,
+    "all_early_return_aux_starvation_eliminated": "NOT_PROVEN",
+    "ground_tail_definitively_after_capture": "NOT_PROVEN",
+    "remaining_tail_candidate": "Ground runtime-diagnostic staged/flush_pending/transport_failed/committed_this_service early return; not a proven causal diagnosis.",
+    "capture_end_nominal_mcu_estimate_seconds": 51.058,
+    "nominal_mapping_has_guaranteed_clock_bound": false,
+    "disconnect_or_final_transport_fault_timestamp_recorded": false
+  },
+  "separate_usb_observations": {
+    "ground_first_diagnostic_transport_failure": "FlushFailed",
+    "ground_diagnostic_failure_detail": 9930,
+    "vehicle_first_diagnostic_transport_failure": "FlushFailed",
+    "vehicle_diagnostic_failure_detail": 2609,
+    "ground_product_usb_failure_latched": false,
+    "ground_commit_failure_latched": false,
+    "ground_endpoint_cumulative_flush_attempts": 207,
+    "ground_endpoint_cumulative_flush_successes": 93,
+    "ground_endpoint_cumulative_timeouts": 113,
+    "ground_endpoint_final_terminal": "Active",
+    "cumulative_counters_are_not_40_second_product_failure_counts": true
+  },
+  "limitations": [
+    "IRQ history overflow prevents a whole-run continuous waveform claim. AUX fault not latched is not proof that the pin was never LOW for 2 seconds.",
+    "Vehicle zero IRQ edges does not prove no physical transition or correct interrupt operation.",
+    "Normal observer bypass flags retain their original meaning and do not negate supplemental observe-only GPIO samples.",
+    "The remaining tail cannot be definitively attributed to measurement shutdown without direct same-MCU close/disconnect/transport-fault timestamps."
+  ]
+}

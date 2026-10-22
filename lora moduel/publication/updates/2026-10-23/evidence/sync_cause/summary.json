@@ -1,0 +1,103 @@
+{
+  "schema": "vc-lora-r19-diagnostic-usb-and-vehicle-sync-cause-offline-v1",
+  "scope": "DIAGNOSIS_ONLY_SAVED_EVIDENCE_AND_HOST_MODEL",
+  "status": "COMPLETE_VEHICLE_HANDLER_CAUSE_PROVEN_DIAGNOSTIC_USB_PHYSICAL_CAUSE_UNRESOLVED",
+  "user_facing_date_jst": "2026-10-23",
+  "candidate_id": "20261022T144157999Z-de92540d",
+  "live_source_run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix",
+  "comparison_live_run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T133353Z-ready32-aux-observer-fix",
+  "hardware_operations_this_investigation": 0,
+  "firmware_changes": false,
+  "runner_changes": false,
+  "additional_live_run_authorized": false,
+  "vehicle_clock_sync": {
+    "finding": "RUNNER_REQUESTS_AN_UNIMPLEMENTED_VEHICLE_USB_LOCAL_CLOCK_HANDLER",
+    "classification": "ROLE_CAPABILITY_CONTRACT_MISMATCH",
+    "runner_source": "tools/run_r19_timed_path_capture.ps1:196",
+    "firmware_ground_only_handler_source": "firmware/phase6/vc_lora_phase6_bridge.hpp:532",
+    "firmware_vehicle_ingress_source": "firmware/phase6/vc_lora_phase6_bridge.hpp:5598",
+    "pc_request_bytes_accepted": 28,
+    "request_sent_after_pc_reader_started_ms": 1242.11,
+    "pc_timeout_budget_ms": 5000,
+    "pc_timeout_observed_overrun_ms": 7.7109,
+    "pc_clock_reply_observations": 0,
+    "mcu_sync_count": 0,
+    "vehicle_raw_crc_valid_diagnostic_frames": 42,
+    "exact_candidate_actual_loop_reproduction": {
+      "vehicle_checks_passed": 9,
+      "vehicle_loops": 600,
+      "vehicle_elapsed_ms": 6000,
+      "vehicle_usb_rx_bytes_remaining": 28,
+      "vehicle_sync_count": 0,
+      "vehicle_clock_replies": 0,
+      "ground_positive_control_checks_passed": 8,
+      "ground_usb_rx_bytes_remaining": 0,
+      "ground_sync_count": 1,
+      "ground_clock_replies": 1
+    },
+    "also_present_in_previous_saved_trial": true,
+    "limitations": [
+      "PC write acceptance alone does not prove physical MCU USB OUT arrival",
+      "The actual-loop model establishes that even a delivered valid request is unhandled in Vehicle firmware",
+      "The host model disables AUX ISR diagnostic recording; it does not model physical USB FIFO timing"
+    ]
+  },
+  "diagnostic_usb_retry": {
+    "finding": "HISTORICAL_DIAGNOSTIC_FLUSH_FAILURE_WITH_SUBSEQUENT_RECOVERY_NOT_CURRENT_PRODUCT_HEARTBEAT_FAILURE",
+    "first_failure_code": "0x54520010",
+    "first_failure_name": "FlushFailed",
+    "ground_first_failure_uptime_ms": 10029,
+    "vehicle_first_failure_uptime_ms": 2586,
+    "detail_is_uptime_ms_not_bytes_or_flush_duration": true,
+    "first_failure_stage_mask": "0x00007fff",
+    "a_flush_completed_before_first_recorded_failure": true,
+    "transport_recovery_completed_witness_both_roles": true,
+    "ground_clock_request_device_us": 11401570,
+    "ground_failure_precedes_clock_request_same_mcu_us": 1372570,
+    "product_heartbeat_first_usb_failure_latched": false,
+    "first_product_heartbeat_usb_completed_us": 471,
+    "first_product_heartbeat_pc_crc_validated": true,
+    "physical_initiating_cause": "NOT_DETERMINED_FROM_EXISTING_FIRST_FAILURE_RECORD",
+    "branch_limitation": "FlushFailed can follow stable-epoch deadline expiry or a non-bootstrap epoch change; the first-failure record does not preserve that decision's epoch and FIFO state",
+    "history_limitation": "The FIFO record is the final committed diagnostic event, not the original FlushFailed snapshot; cumulative retry counters are not 40-second product-error counts",
+    "next_required_evidence": [
+      "Immutable first diagnostic failure frame sequence, action and bootstrap state",
+      "Expected and observed epoch plus endpoint state at that failure",
+      "Flush caller start/end/deadline and terminal SDK wait reason",
+      "Software ring/stash, FIFO and publish/pickup generation snapshot at the same boundary"
+    ]
+  },
+  "recommended_fix_targets_not_implemented": [
+    "Add and integration-test a Vehicle-only USB-local diagnostic ClockRequest handler and reply, without routing the private namespace to Pixhawk or E220",
+    "Make runner role capabilities explicit so unsupported Vehicle features fail preflight rather than waiting for a reply that cannot be generated",
+    "Capture the first diagnostic USB failure separately from the existing first product Heartbeat failure record, preserving the 106 ms product contract"
+  ],
+  "source_integrity": {
+    "firmware/phase6/vc_lora_phase6_bridge.hpp": "B277B26972D6F945C64ECDF3CCBFB31ECFD0016DD04CBC55EA8FC7A250E84F4C",
+    "tools/run_r19_timed_path_capture.ps1": "0EAE966774482481D99FB41D6FBF04B783C1C0B177B27FD51FDE85BF701D6C4C",
+    "tools/r19_host_readiness_workflow.ps1": "1B0740C84FE8B54C8F573846E6EBCDCDA7DF330565833500F1EE557CF11BD099"
+  },
+  "evidence": [
+    "pc_workflow_facts.json",
+    "vehicle_sync_cause.json",
+    "diagnostic_usb_cause.json",
+    "runner_workflow_audit.json",
+    "repro.cpp",
+    "repro_vehicle.log",
+    "repro_ground.log"
+  ],
+  "independent_evidence_sha256": {
+    "vehicle_sync_cause.json": "C119FB9271FEA0F44A6AD46E3DF704D7B193C31C3B005DBADAB22584327F17D4",
+    "diagnostic_usb_cause.json": "4615C679DC67CEC59FE063B99E6239D93C057FEEDABFF2BC60F7D0F89B8F3149",
+    "runner_workflow_audit.json": "E1386F9EA017FB3202B1C128FA8C26521C9A3809285F768065878AC1D598E09E"
+  },
+  "saved_raw_validation": {
+    "ground_crc_valid_frames": 91,
+    "vehicle_crc_valid_frames": 42,
+    "bad_crc_noise_partial_or_unknown_frames": 0,
+    "is_a_whole_system_error_zero_claim": false
+  },
+  "diagnostic_repro_diff_reverse_check_passed": true,
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

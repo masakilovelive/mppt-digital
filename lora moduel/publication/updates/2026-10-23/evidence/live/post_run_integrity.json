@@ -1,0 +1,819 @@
+{
+  "schema": "vc-lora-r19-post-run-file-integrity-audit-v1",
+  "verdict": "PASS_FILE_INTEGRITY_AND_RECORDED_ROLLBACK_NOT_ACCEPTANCE",
+  "audited_run": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix",
+  "source_outer_summary_sha256": "B520EFA9365231DE63751541CE40E5E63534A62AF10A679FCF946E9650CD7B86",
+  "generated_utc": "2026-10-22T15:05:18.8273437Z",
+  "audit_mode": "file-only",
+  "new_hardware_interaction": false,
+  "new_com_jtag_pnp_process_queries": false,
+  "parent_result": "PASS",
+  "parent_status": "PASS_TIMED_PATH_EVIDENCE_CAPTURED_R18_RESTORED_NOT_ACCEPTANCE",
+  "acceptance_eligible": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "parent_child_summary_digest_checks": [
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\jtag_preflight\\summary.json",
+      "expected_sha256": "0BD3993B353ED1507D85495C0482C6EACD2E0A3F516B77971C274B31078E7056",
+      "actual_sha256": "0BD3993B353ED1507D85495C0482C6EACD2E0A3F516B77971C274B31078E7056",
+      "size_bytes": 12274,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\capture\\summary.json",
+      "expected_sha256": "0E5EC9774BEDA9DB53628CEEB97642D3B2CA5D1B42BCE25320A0EB078BEE4501",
+      "actual_sha256": "0E5EC9774BEDA9DB53628CEEB97642D3B2CA5D1B42BCE25320A0EB078BEE4501",
+      "size_bytes": 634000,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\active_jtag_preflight\\vehicle\\summary.json",
+      "expected_sha256": "D68B21A05A2B90D529234ECD9DFFB7417447CCEB651EED9257672160C37D45BC",
+      "actual_sha256": "D68B21A05A2B90D529234ECD9DFFB7417447CCEB651EED9257672160C37D45BC",
+      "size_bytes": 3079,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\active_jtag_preflight\\ground\\summary.json",
+      "expected_sha256": "B127B388D76626FC59DF3DED5BF8889F0AEE04CC417D2D2E73D88AA9FD6D507C",
+      "actual_sha256": "B127B388D76626FC59DF3DED5BF8889F0AEE04CC417D2D2E73D88AA9FD6D507C",
+      "size_bytes": 3075,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\summary.json",
+      "expected_sha256": "B619FF0E4F8A8C374D78F0A09B8E82DDFD49C2971C423224783B678AE1ADA8D4",
+      "actual_sha256": "B619FF0E4F8A8C374D78F0A09B8E82DDFD49C2971C423224783B678AE1ADA8D4",
+      "size_bytes": 136992,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\summary.json",
+      "expected_sha256": "97463BFE68E4D9855A4716F6F3A22457AA53E5BDEFA53D2CB3F5B2FBDA25B5AB",
+      "actual_sha256": "97463BFE68E4D9855A4716F6F3A22457AA53E5BDEFA53D2CB3F5B2FBDA25B5AB",
+      "size_bytes": 220873,
+      "expected_size_bytes": -1,
+      "pass": true
+    }
+  ],
+  "parent_child_summaries_verified_count": 6,
+  "candidate_reference_digest_checks": [
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\latest.json",
+      "expected_sha256": "71D9EBA2028795FC8C21DC24FA85FE3ABF8972AD2FD05F943A9C61C32490D85E",
+      "actual_sha256": "71D9EBA2028795FC8C21DC24FA85FE3ABF8972AD2FD05F943A9C61C32490D85E",
+      "size_bytes": 3845,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261022T144157999Z-de92540d\\handoff.json",
+      "expected_sha256": "69E7E0C70D98D1F43836CA82746754581F32E22F5A34E9E1B23231110B6A884F",
+      "actual_sha256": "69E7E0C70D98D1F43836CA82746754581F32E22F5A34E9E1B23231110B6A884F",
+      "size_bytes": 19380,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\\20261022T144157999Z-de92540d\\candidate_manifest.json",
+      "expected_sha256": "557B915A26ECADBF8702A1340D12255CA1B9F2F2A843DBC8EE0787911E95DD60",
+      "actual_sha256": "557B915A26ECADBF8702A1340D12255CA1B9F2F2A843DBC8EE0787911E95DD60",
+      "size_bytes": 156180,
+      "expected_size_bytes": -1,
+      "pass": true
+    }
+  ],
+  "children": [
+    {
+      "name": "jtag_preflight",
+      "result": "FAIL",
+      "semantic_result": "PASS_PNP_DRIVER_BINDING_ONLY_EXPECTED_EXIT_1",
+      "exit_code": 1,
+      "termination_proven": true,
+      "process_tree_termination_proven": true,
+      "timed_out": false
+    },
+    {
+      "name": "active_jtag_vehicle",
+      "result": "PASS",
+      "semantic_result": null,
+      "exit_code": 0,
+      "termination_proven": true,
+      "process_tree_termination_proven": true,
+      "timed_out": false
+    },
+    {
+      "name": "active_jtag_ground",
+      "result": "PASS",
+      "semantic_result": null,
+      "exit_code": 0,
+      "termination_proven": true,
+      "process_tree_termination_proven": true,
+      "timed_out": false
+    },
+    {
+      "name": "install",
+      "result": "PASS",
+      "semantic_result": null,
+      "exit_code": 0,
+      "termination_proven": true,
+      "process_tree_termination_proven": true,
+      "timed_out": false
+    },
+    {
+      "name": "capture",
+      "result": "PASS",
+      "semantic_result": null,
+      "exit_code": 0,
+      "termination_proven": true,
+      "process_tree_termination_proven": true,
+      "timed_out": false
+    },
+    {
+      "name": "stage_vehicle",
+      "result": "PASS",
+      "semantic_result": null,
+      "exit_code": 0,
+      "termination_proven": true,
+      "process_tree_termination_proven": true,
+      "timed_out": false
+    },
+    {
+      "name": "stage_ground",
+      "result": "PASS",
+      "semantic_result": null,
+      "exit_code": 0,
+      "termination_proven": true,
+      "process_tree_termination_proven": true,
+      "timed_out": false
+    },
+    {
+      "name": "rollback",
+      "result": "PASS",
+      "semantic_result": null,
+      "exit_code": 0,
+      "termination_proven": true,
+      "process_tree_termination_proven": true,
+      "timed_out": false
+    }
+  ],
+  "child_count": 8,
+  "child_termination_proven_count": 8,
+  "all_child_termination_proven": true,
+  "direct_raw_hash_checks": [
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\runtime-stage-first.bin",
+      "expected_sha256": "D53835A90CDB89AE95E61E29EDD3B050024D8786A09B6E1570E6F2B8439062BA",
+      "actual_sha256": "D53835A90CDB89AE95E61E29EDD3B050024D8786A09B6E1570E6F2B8439062BA",
+      "size_bytes": 68,
+      "expected_size_bytes": 68,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\endpoint-fifo-first.bin",
+      "expected_sha256": "3E57A2609A7DF1C458D29728853B71C5CDBBE20EA4A67CCA09CE790D2BCD2E8C",
+      "actual_sha256": "3E57A2609A7DF1C458D29728853B71C5CDBBE20EA4A67CCA09CE790D2BCD2E8C",
+      "size_bytes": 112,
+      "expected_size_bytes": 112,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\hwcdc-restart-first.bin",
+      "expected_sha256": "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80",
+      "actual_sha256": "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80",
+      "size_bytes": 128,
+      "expected_size_bytes": 128,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\ground-usb-commit-first.bin",
+      "expected_sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F",
+      "actual_sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F",
+      "size_bytes": 128,
+      "expected_size_bytes": 128,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\first-usb-failure-first.bin",
+      "expected_sha256": "0E6F2EE9F3C62D0BC382E099FC955EE2C9014BBCED2F425486E640CE9DD37EF8",
+      "actual_sha256": "0E6F2EE9F3C62D0BC382E099FC955EE2C9014BBCED2F425486E640CE9DD37EF8",
+      "size_bytes": 384,
+      "expected_size_bytes": 384,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\runtime-stage-second.bin",
+      "expected_sha256": "D53835A90CDB89AE95E61E29EDD3B050024D8786A09B6E1570E6F2B8439062BA",
+      "actual_sha256": "D53835A90CDB89AE95E61E29EDD3B050024D8786A09B6E1570E6F2B8439062BA",
+      "size_bytes": 68,
+      "expected_size_bytes": 68,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\endpoint-fifo-second.bin",
+      "expected_sha256": "3E57A2609A7DF1C458D29728853B71C5CDBBE20EA4A67CCA09CE790D2BCD2E8C",
+      "actual_sha256": "3E57A2609A7DF1C458D29728853B71C5CDBBE20EA4A67CCA09CE790D2BCD2E8C",
+      "size_bytes": 112,
+      "expected_size_bytes": 112,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\hwcdc-restart-second.bin",
+      "expected_sha256": "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80",
+      "actual_sha256": "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80",
+      "size_bytes": 128,
+      "expected_size_bytes": 128,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\ground-usb-commit-second.bin",
+      "expected_sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F",
+      "actual_sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F",
+      "size_bytes": 128,
+      "expected_size_bytes": 128,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\first-usb-failure-second.bin",
+      "expected_sha256": "0E6F2EE9F3C62D0BC382E099FC955EE2C9014BBCED2F425486E640CE9DD37EF8",
+      "actual_sha256": "0E6F2EE9F3C62D0BC382E099FC955EE2C9014BBCED2F425486E640CE9DD37EF8",
+      "size_bytes": 384,
+      "expected_size_bytes": 384,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\timed_path_first.bin",
+      "expected_sha256": "539C27C66EFEA0A8F31B3992B4E6B74721BFBC683BAB3133EC681D1121E4C9A0",
+      "actual_sha256": "539C27C66EFEA0A8F31B3992B4E6B74721BFBC683BAB3133EC681D1121E4C9A0",
+      "size_bytes": 512,
+      "expected_size_bytes": 512,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\timed_path_second.bin",
+      "expected_sha256": "539C27C66EFEA0A8F31B3992B4E6B74721BFBC683BAB3133EC681D1121E4C9A0",
+      "actual_sha256": "539C27C66EFEA0A8F31B3992B4E6B74721BFBC683BAB3133EC681D1121E4C9A0",
+      "size_bytes": 512,
+      "expected_size_bytes": 512,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\aux_readiness_first.bin",
+      "expected_sha256": "429A6555DE5C6041F7422BD80EFD8CC910E73872FEBC52AD62A6635AE3D8A612",
+      "actual_sha256": "429A6555DE5C6041F7422BD80EFD8CC910E73872FEBC52AD62A6635AE3D8A612",
+      "size_bytes": 6144,
+      "expected_size_bytes": 6144,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\aux_readiness_second.bin",
+      "expected_sha256": "429A6555DE5C6041F7422BD80EFD8CC910E73872FEBC52AD62A6635AE3D8A612",
+      "actual_sha256": "429A6555DE5C6041F7422BD80EFD8CC910E73872FEBC52AD62A6635AE3D8A612",
+      "size_bytes": 6144,
+      "expected_size_bytes": 6144,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\runtime-stage-first.bin",
+      "expected_sha256": "939102F79A2A0EA6F9181CD31EE71371CE2C14F9B40CE10CB4770E45645269FB",
+      "actual_sha256": "939102F79A2A0EA6F9181CD31EE71371CE2C14F9B40CE10CB4770E45645269FB",
+      "size_bytes": 68,
+      "expected_size_bytes": 68,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\endpoint-fifo-first.bin",
+      "expected_sha256": "A8D718726BEA368845B711EC5503B1729D2FD9C0996DADE40CB63CF8F894E59B",
+      "actual_sha256": "A8D718726BEA368845B711EC5503B1729D2FD9C0996DADE40CB63CF8F894E59B",
+      "size_bytes": 112,
+      "expected_size_bytes": 112,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\hwcdc-restart-first.bin",
+      "expected_sha256": "485A0F4C0061B7A74B8637E649BC05BCC74F5FEEB243A20D05CB46278DF10E1A",
+      "actual_sha256": "485A0F4C0061B7A74B8637E649BC05BCC74F5FEEB243A20D05CB46278DF10E1A",
+      "size_bytes": 128,
+      "expected_size_bytes": 128,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\ground-usb-commit-first.bin",
+      "expected_sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669",
+      "actual_sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669",
+      "size_bytes": 128,
+      "expected_size_bytes": 128,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\first-usb-failure-first.bin",
+      "expected_sha256": "9C8F141B2F7889561A8A090F5673F9242D5A8A5C90F561169365EC5A8BF8A9DA",
+      "actual_sha256": "9C8F141B2F7889561A8A090F5673F9242D5A8A5C90F561169365EC5A8BF8A9DA",
+      "size_bytes": 384,
+      "expected_size_bytes": 384,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\runtime-stage-second.bin",
+      "expected_sha256": "939102F79A2A0EA6F9181CD31EE71371CE2C14F9B40CE10CB4770E45645269FB",
+      "actual_sha256": "939102F79A2A0EA6F9181CD31EE71371CE2C14F9B40CE10CB4770E45645269FB",
+      "size_bytes": 68,
+      "expected_size_bytes": 68,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\endpoint-fifo-second.bin",
+      "expected_sha256": "A8D718726BEA368845B711EC5503B1729D2FD9C0996DADE40CB63CF8F894E59B",
+      "actual_sha256": "A8D718726BEA368845B711EC5503B1729D2FD9C0996DADE40CB63CF8F894E59B",
+      "size_bytes": 112,
+      "expected_size_bytes": 112,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\hwcdc-restart-second.bin",
+      "expected_sha256": "485A0F4C0061B7A74B8637E649BC05BCC74F5FEEB243A20D05CB46278DF10E1A",
+      "actual_sha256": "485A0F4C0061B7A74B8637E649BC05BCC74F5FEEB243A20D05CB46278DF10E1A",
+      "size_bytes": 128,
+      "expected_size_bytes": 128,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\ground-usb-commit-second.bin",
+      "expected_sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669",
+      "actual_sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669",
+      "size_bytes": 128,
+      "expected_size_bytes": 128,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\first-usb-failure-second.bin",
+      "expected_sha256": "9C8F141B2F7889561A8A090F5673F9242D5A8A5C90F561169365EC5A8BF8A9DA",
+      "actual_sha256": "9C8F141B2F7889561A8A090F5673F9242D5A8A5C90F561169365EC5A8BF8A9DA",
+      "size_bytes": 384,
+      "expected_size_bytes": 384,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\timed_path_first.bin",
+      "expected_sha256": "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+      "actual_sha256": "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+      "size_bytes": 512,
+      "expected_size_bytes": 512,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\timed_path_second.bin",
+      "expected_sha256": "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+      "actual_sha256": "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509",
+      "size_bytes": 512,
+      "expected_size_bytes": 512,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\aux_readiness_first.bin",
+      "expected_sha256": "C7C78B8C1F5E783F980D094D52721B4A001A635C4C1F88FFB78C70D207E01960",
+      "actual_sha256": "C7C78B8C1F5E783F980D094D52721B4A001A635C4C1F88FFB78C70D207E01960",
+      "size_bytes": 6144,
+      "expected_size_bytes": 6144,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\aux_readiness_second.bin",
+      "expected_sha256": "C7C78B8C1F5E783F980D094D52721B4A001A635C4C1F88FFB78C70D207E01960",
+      "actual_sha256": "C7C78B8C1F5E783F980D094D52721B4A001A635C4C1F88FFB78C70D207E01960",
+      "size_bytes": 6144,
+      "expected_size_bytes": 6144,
+      "pass": true
+    }
+  ],
+  "raw_read_verified_count": 28,
+  "stable_duplicate_pairs": [
+    {
+      "role": "vehicle",
+      "record": "aux_readiness",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "vehicle",
+      "record": "endpoint_fifo",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "vehicle",
+      "record": "first_usb_failure",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "vehicle",
+      "record": "ground_usb_commit",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "vehicle",
+      "record": "hwcdc_restart",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "vehicle",
+      "record": "runtime_stage",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "vehicle",
+      "record": "timed_path",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "ground",
+      "record": "aux_readiness",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "ground",
+      "record": "endpoint_fifo",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "ground",
+      "record": "first_usb_failure",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "ground",
+      "record": "ground_usb_commit",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "ground",
+      "record": "hwcdc_restart",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "ground",
+      "record": "runtime_stage",
+      "samples": 2,
+      "identical": true
+    },
+    {
+      "role": "ground",
+      "record": "timed_path",
+      "samples": 2,
+      "identical": true
+    }
+  ],
+  "identical_pair_count": 14,
+  "stage_cleanup": [
+    {
+      "role": "vehicle",
+      "summary_result": "PASS",
+      "capture_result": "STABLE",
+      "raw_read_count": 14,
+      "raw_size_sum": 14952,
+      "cleanup_log": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_vehicle\\openocd-attempt-1-cleanup.log",
+      "cleanup_log_sha256": "260E44920B71DC4A3F9873EFE94A78C8BDE97A45C71324509038E5709AD18FCF",
+      "cleanup_exit_code": 0,
+      "cpu0_running": true,
+      "cpu1_running": true,
+      "shutdown": true,
+      "native_processes_termination_proven": true,
+      "target_may_be_halted": false,
+      "not_halted_error_text_present": true,
+      "generic_failure_classification": "FAIL_JTAG_AFTER_TARGET_EXAMINE",
+      "pass": true
+    },
+    {
+      "role": "ground",
+      "summary_result": "PASS",
+      "capture_result": "STABLE",
+      "raw_read_count": 14,
+      "raw_size_sum": 14952,
+      "cleanup_log": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261022T145610Z-aux-independent-observe-fix\\stage_ground\\openocd-attempt-1-cleanup.log",
+      "cleanup_log_sha256": "5CBAAEDE1D18CF50FE1C761DE75CA275D340FC635D7DAC7654520FA49A534EEC",
+      "cleanup_exit_code": 0,
+      "cpu0_running": true,
+      "cpu1_running": true,
+      "shutdown": true,
+      "native_processes_termination_proven": true,
+      "target_may_be_halted": false,
+      "not_halted_error_text_present": true,
+      "generic_failure_classification": "FAIL_JTAG_AFTER_TARGET_EXAMINE",
+      "pass": true
+    }
+  ],
+  "explicit_running_cpu_count": 4,
+  "shutdown_proven_role_count": 2,
+  "sealed_artifact_inventories": [
+    {
+      "kind": "install",
+      "root": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-install",
+      "declared_file_count": 66,
+      "verified_file_count": 66,
+      "all_sizes_and_hashes_match": true,
+      "failures": []
+    },
+    {
+      "kind": "rollback",
+      "root": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback",
+      "declared_file_count": 58,
+      "verified_file_count": 58,
+      "all_sizes_and_hashes_match": true,
+      "failures": []
+    }
+  ],
+  "sealed_inventory_total_file_count": 124,
+  "sealed_inventory_verified_file_count": 124,
+  "final_seal_digest_checks": [
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-install/final_seal.json",
+      "expected_sha256": "EC8AF2ACA33043E4A10B7921A846B4386D23732E2F2FA2FA5B154FE344DE343F",
+      "actual_sha256": "EC8AF2ACA33043E4A10B7921A846B4386D23732E2F2FA2FA5B154FE344DE343F",
+      "size_bytes": 1268,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-install/flash_record.json",
+      "expected_sha256": "8685BC2136159CAB7F4EC654763F93C8C920BEA33B9452EEB829CB2063D0AFA6",
+      "actual_sha256": "8685BC2136159CAB7F4EC654763F93C8C920BEA33B9452EEB829CB2063D0AFA6",
+      "size_bytes": 13294,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-install/artifact_manifest.json",
+      "expected_sha256": "4A380D24B10D79B417454D425F3874045F77DCC0C6B2F0D0C89D8F65603A6C4E",
+      "actual_sha256": "4A380D24B10D79B417454D425F3874045F77DCC0C6B2F0D0C89D8F65603A6C4E",
+      "size_bytes": 17207,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-install/SHA256SUMS.txt",
+      "expected_sha256": "6159B54E4DEDC2614E82A0CD53BB44E90AD66049AE362CD3C4129E0A337DF9F5",
+      "actual_sha256": "6159B54E4DEDC2614E82A0CD53BB44E90AD66049AE362CD3C4129E0A337DF9F5",
+      "size_bytes": 6791,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback/final_seal.json",
+      "expected_sha256": "4A82FEA303007232D8E5EEB127605C91C4F700EDCDAC0CD667EB2AB9A040B00B",
+      "actual_sha256": "4A82FEA303007232D8E5EEB127605C91C4F700EDCDAC0CD667EB2AB9A040B00B",
+      "size_bytes": 1140,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback/flash_record.json",
+      "expected_sha256": "BA307DF7C237306878B2F3787C8B1FBD15019C6ADBAD159AF86CF2A54C298458",
+      "actual_sha256": "BA307DF7C237306878B2F3787C8B1FBD15019C6ADBAD159AF86CF2A54C298458",
+      "size_bytes": 44417,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback/artifact_manifest.json",
+      "expected_sha256": "AC6965E5A5D0B91C1125B8104DF62931E87714F050D6597F377D20995398F585",
+      "actual_sha256": "AC6965E5A5D0B91C1125B8104DF62931E87714F050D6597F377D20995398F585",
+      "size_bytes": 15723,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback/SHA256SUMS.txt",
+      "expected_sha256": "51F6F6CFD596F4AC45D1E57B41B55292FFC32751DF1B7E8C11484DE1DB9DC11F",
+      "actual_sha256": "51F6F6CFD596F4AC45D1E57B41B55292FFC32751DF1B7E8C11484DE1DB9DC11F",
+      "size_bytes": 6555,
+      "expected_size_bytes": -1,
+      "pass": true
+    }
+  ],
+  "rollback_operation_checks": [
+    {
+      "role": "vehicle",
+      "kind": "read_mac",
+      "result": "PASS",
+      "exit_code": 0,
+      "application_sha256": null,
+      "record_digest": {
+        "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback\\rollback_01_vehicle_r18_read_mac_attempt_1.record.json",
+        "expected_sha256": "9E161057A34AFB263D2981F1105EAEC5509E08FD93D8FAEB00A872BC175FF479",
+        "actual_sha256": "9E161057A34AFB263D2981F1105EAEC5509E08FD93D8FAEB00A872BC175FF479",
+        "size_bytes": 1687,
+        "expected_size_bytes": -1,
+        "pass": true
+      },
+      "pass": true
+    },
+    {
+      "role": "vehicle",
+      "kind": "write",
+      "result": "PASS",
+      "exit_code": 0,
+      "application_sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+      "record_digest": {
+        "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback\\rollback_02_vehicle_r18_write_attempt_1.record.json",
+        "expected_sha256": "EAAC4C17B89E36DF20B9F1D54B7FCD4B21F4103C713DC4B2C3472988A8B842A4",
+        "actual_sha256": "EAAC4C17B89E36DF20B9F1D54B7FCD4B21F4103C713DC4B2C3472988A8B842A4",
+        "size_bytes": 6208,
+        "expected_size_bytes": -1,
+        "pass": true
+      },
+      "pass": true
+    },
+    {
+      "role": "vehicle",
+      "kind": "verify",
+      "result": "PASS",
+      "exit_code": 0,
+      "application_sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+      "record_digest": {
+        "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback\\rollback_03_vehicle_r18_verify_attempt_1.record.json",
+        "expected_sha256": "508DB87347FAD83E985D8422F1F4BF9AB5E75BC802AA85D3350ABF60823674C4",
+        "actual_sha256": "508DB87347FAD83E985D8422F1F4BF9AB5E75BC802AA85D3350ABF60823674C4",
+        "size_bytes": 1724,
+        "expected_size_bytes": -1,
+        "pass": true
+      },
+      "pass": true
+    },
+    {
+      "role": "vehicle",
+      "kind": "reenumeration",
+      "result": "PASS",
+      "exit_code": 0,
+      "application_sha256": null,
+      "record_digest": {
+        "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback\\rollback_04_vehicle_r18_reenumeration_attempt_1.record.json",
+        "expected_sha256": "9CE8AF541CFCC9330E7AD69A9E35132357E16E8707328FF01BF23D75B8C844B9",
+        "actual_sha256": "9CE8AF541CFCC9330E7AD69A9E35132357E16E8707328FF01BF23D75B8C844B9",
+        "size_bytes": 1249,
+        "expected_size_bytes": -1,
+        "pass": true
+      },
+      "pass": true
+    },
+    {
+      "role": "ground",
+      "kind": "read_mac",
+      "result": "PASS",
+      "exit_code": 0,
+      "application_sha256": null,
+      "record_digest": {
+        "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback\\rollback_05_ground_r18_read_mac_attempt_1.record.json",
+        "expected_sha256": "6BF527929CD4C987DF3E7C5E4522E333C79D58E8542999162F38AA238E536CDD",
+        "actual_sha256": "6BF527929CD4C987DF3E7C5E4522E333C79D58E8542999162F38AA238E536CDD",
+        "size_bytes": 1683,
+        "expected_size_bytes": -1,
+        "pass": true
+      },
+      "pass": true
+    },
+    {
+      "role": "ground",
+      "kind": "write",
+      "result": "PASS",
+      "exit_code": 0,
+      "application_sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+      "record_digest": {
+        "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback\\rollback_06_ground_r18_write_attempt_1.record.json",
+        "expected_sha256": "289E93434030E678A50E8E5B957E523EFCFD64D1E16BB666663B7CC6B6F4E7AA",
+        "actual_sha256": "289E93434030E678A50E8E5B957E523EFCFD64D1E16BB666663B7CC6B6F4E7AA",
+        "size_bytes": 6204,
+        "expected_size_bytes": -1,
+        "pass": true
+      },
+      "pass": true
+    },
+    {
+      "role": "ground",
+      "kind": "verify",
+      "result": "PASS",
+      "exit_code": 0,
+      "application_sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+      "record_digest": {
+        "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback\\rollback_07_ground_r18_verify_attempt_1.record.json",
+        "expected_sha256": "C24B21EBAFC43F2E66257248A3AC2AF0DC96E44AC8E01C5DECD55349FF37F1A9",
+        "actual_sha256": "C24B21EBAFC43F2E66257248A3AC2AF0DC96E44AC8E01C5DECD55349FF37F1A9",
+        "size_bytes": 1720,
+        "expected_size_bytes": -1,
+        "pass": true
+      },
+      "pass": true
+    },
+    {
+      "role": "ground",
+      "kind": "reenumeration",
+      "result": "PASS",
+      "exit_code": 0,
+      "application_sha256": null,
+      "record_digest": {
+        "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T145629696Z-acbd598c-rollback\\rollback_08_ground_r18_reenumeration_attempt_1.record.json",
+        "expected_sha256": "7BD834CABF96E85BCB08347DEE214EE56B3164CB77C904F378FDC0CECB492645",
+        "actual_sha256": "7BD834CABF96E85BCB08347DEE214EE56B3164CB77C904F378FDC0CECB492645",
+        "size_bytes": 1248,
+        "expected_size_bytes": -1,
+        "pass": true
+      },
+      "pass": true
+    }
+  ],
+  "rollback_operation_pass_count": 8,
+  "rollback_roles": [
+    {
+      "role": "vehicle",
+      "restored": true,
+      "attempts": 1,
+      "accepted_r18_sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+      "write_pass": true,
+      "digest_verify_pass": true,
+      "reenumeration_pass": true
+    },
+    {
+      "role": "ground",
+      "restored": true,
+      "attempts": 1,
+      "accepted_r18_sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+      "write_pass": true,
+      "digest_verify_pass": true,
+      "reenumeration_pass": true
+    }
+  ],
+  "rollback_proven": true,
+  "hardware_quiescence_record": {
+    "child_termination_proven": true,
+    "active_jtag_cleanup_proven": true,
+    "further_child_launch_blocked": false,
+    "rollback_skipped_due_unproven_child_termination": false
+  },
+  "power_off_required": false,
+  "protected_source_and_accepted_baseline_hash_checks": [
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\firmware\\phase6\\vc_lora_phase6_bridge.hpp",
+      "expected_sha256": "B277B26972D6F945C64ECDF3CCBFB31ECFD0016DD04CBC55EA8FC7A250E84F4C",
+      "actual_sha256": "B277B26972D6F945C64ECDF3CCBFB31ECFD0016DD04CBC55EA8FC7A250E84F4C",
+      "size_bytes": 268124,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\vc_lora_vehicle_xiao_esp32s3\\vc_lora_phase6_bridge.hpp",
+      "expected_sha256": "4FDFB3FB2FBFA408E88C9C356C7D86E9692CDC98469ED5642DDC2C089B4708BE",
+      "actual_sha256": "4FDFB3FB2FBFA408E88C9C356C7D86E9692CDC98469ED5642DDC2C089B4708BE",
+      "size_bytes": 249875,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\vc_lora_ground_xiao_esp32s3\\vc_lora_phase6_bridge.hpp",
+      "expected_sha256": "4FDFB3FB2FBFA408E88C9C356C7D86E9692CDC98469ED5642DDC2C089B4708BE",
+      "actual_sha256": "4FDFB3FB2FBFA408E88C9C356C7D86E9692CDC98469ED5642DDC2C089B4708BE",
+      "size_bytes": 249875,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\baselines\\R18-PRODUCTION-R4-ACCEPTED\\20260914T225054625Z\\artifacts\\vehicle.application.bin",
+      "expected_sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+      "actual_sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+      "size_bytes": 389280,
+      "expected_size_bytes": -1,
+      "pass": true
+    },
+    {
+      "path": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\baselines\\R18-PRODUCTION-R4-ACCEPTED\\20260914T225054625Z\\artifacts\\ground.application.bin",
+      "expected_sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+      "actual_sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+      "size_bytes": 360208,
+      "expected_size_bytes": -1,
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "New file-only audit of completed test records, not a fresh device, COM, JTAG, PnP, or process query.",
+    "Initial jtag_preflight child exits 1 with result FAIL in PnP-only mode; semantic_result is PASS_PNP_DRIVER_BINDING_ONLY_EXPECTED_EXIT_1. Both fresh active preflights separately pass.",
+    "Both cleanup logs contain not halted / Failed to prepare for resume. Each ends with explicit CPU0 and CPU1 curstate=running plus shutdown, cleanup exit 0. Generic openocd_stage.failure_classification remains FAIL_JTAG_AFTER_TARGET_EXAMINE. Error text and positive cleanup proof are both preserved, not equated.",
+    "Stable paired records and matching hashes prove captured-file consistency, not USB completion or continuous RF waveform.",
+    "Accepted R18 restoration is historical write/digest/reenumeration evidence plus unchanged baseline hashes, not new live flash readback.",
+    "No whole-product acceptance, deployment, 932-parameter or 30-second-throughput qualification is implied."
+  ],
+  "failures": []
+}

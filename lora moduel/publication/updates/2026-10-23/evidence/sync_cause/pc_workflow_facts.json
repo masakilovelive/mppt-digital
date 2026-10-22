@@ -1,0 +1,14 @@
+{
+  "source_bridge_sha256": "B277B26972D6F945C64ECDF3CCBFB31ECFD0016DD04CBC55EA8FC7A250E84F4C",
+  "capture_summary_sha256": "0E5EC9774BEDA9DB53628CEEB97642D3B2CA5D1B42BCE25320A0EB078BEE4501",
+  "vehicle_read_started_ticks": "52460642",
+  "vehicle_request_started_ticks": "64881742",
+  "vehicle_request_returned_ticks": "65074927",
+  "request_after_read_start_ms": 1242.11,
+  "vehicle_workflow_budget_ms": 5000,
+  "deadline_overrun_ms": 7.7109,
+  "request_accepted_bytes": 28,
+  "private_observations": 0,
+  "vehicle_raw_bytes": 2646,
+  "source_capture": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/capture/summary.json"
+}

@@ -1,0 +1,325 @@
+{
+  "schema": "vc-lora-r19-aux-independent-live-observations-v1",
+  "candidate_id": "20261022T144157999Z-de92540d",
+  "evidence_method": "Offline CRC parser replay of every contiguous saved Ground native-read block; offsets/hash/read-completion timestamps uniquely joined to historical runtime validation ledger.",
+  "capture_seconds_actual": 40.0006509,
+  "ground_raw_bytes": 3693,
+  "vehicle_raw_bytes": 2646,
+  "ground_raw_sha256": "A3B71958263BDC0820379D3E004F18950D02EBA4EDC0B2BC1F855F57EEB0D940",
+  "vehicle_raw_sha256": "2A0A0C61EE4C36AD5627F41A168DF7374B1AF4894B536901FBCA89D40FA87873",
+  "capture_summary_sha256": "0E5EC9774BEDA9DB53628CEEB97642D3B2CA5D1B42BCE25320A0EB078BEE4501",
+  "both_readers_continuous": true,
+  "both_reader_overflow_clear": true,
+  "ground_read_chunks_verified": 208,
+  "ground_raw_chunk_coverage_bytes": 3693,
+  "ground_ready_validated": true,
+  "ground_arm_write_accepted": true,
+  "ground_mcu_arm_accepted": true,
+  "first_heartbeat_record": {
+    "schema": "vc-lora-r19-timed-path-record-v1",
+    "schema_version": 1,
+    "size_bytes": 512,
+    "sequence": 14,
+    "role": "ground",
+    "mode": "ExplicitHostArm",
+    "mode_value": 2,
+    "build_id": [
+      1378957636,
+      1398032177,
+      842019382,
+      825241651
+    ],
+    "boot_id": [
+      676554008,
+      2131784031,
+      2739496661,
+      2255419712
+    ],
+    "flags": 127,
+    "usb_epoch": 1,
+    "observed_epoch": 1,
+    "reader_session": "3251959628439888193",
+    "nonce": "5915899170943966055",
+    "token": 1,
+    "frame_bytes": 21,
+    "accepted_bytes": 21,
+    "failure_reason": 0,
+    "product_budget_ms": 106,
+    "initialized": true,
+    "session_observed": true,
+    "arm_accepted": true,
+    "identity_mismatch": false,
+    "clock_regressed": false,
+    "frame_enqueued": true,
+    "hwcdc_accepted_observed": true,
+    "sdk_snapshot_observed": true,
+    "usb_completed": true,
+    "usb_failed": false,
+    "timestamps": {
+      "arm_us": "11605010",
+      "enqueue_us": "11605210",
+      "accepted_us": "11605681",
+      "sdk_snapshot_us": "11605681",
+      "terminal_us": "11605681",
+      "failure_started_us": "0",
+      "failure_returned_us": "0",
+      "deadline_us": "11711000",
+      "clock_request_us": "11401570"
+    },
+    "raw_frame_base64": "/QkAABYBAQAAAAQAAAALAwEFAxmZ",
+    "frame_sha256": "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A",
+    "sdk": {
+      "publish_generation": 12,
+      "pickup_generation": 12,
+      "ring_bytes": 0,
+      "stash_bytes": 0,
+      "validity": 127,
+      "state": 14,
+      "terminal": 1,
+      "blocker_mask": 0,
+      "attempt": 1,
+      "terminal_sample_valid": true
+    },
+    "root_cause_proven": false,
+    "acceptance_authorized": false,
+    "deployment_authorized": false,
+    "limitations": [
+      "Stable committed MCU record only; not a continuous physical FIFO or PC consumption proof.",
+      "MAVLink CRC and PC/MCU bounded time correlation require independent evaluator input."
+    ]
+  },
+  "first_heartbeat_enqueue_to_usb_completed_ms": 0.471,
+  "first_heartbeat_usb_completed_within_106_ms": true,
+  "ground_heartbeat_crc_valid_frames": 40,
+  "ground_heartbeat_intervals": [
+    {
+      "from_offset": 157,
+      "to_offset": 304,
+      "gap_ms": 2100.2658
+    },
+    {
+      "from_offset": 304,
+      "to_offset": 388,
+      "gap_ms": 691.4549
+    },
+    {
+      "from_offset": 388,
+      "to_offset": 409,
+      "gap_ms": 548.2306
+    },
+    {
+      "from_offset": 409,
+      "to_offset": 493,
+      "gap_ms": 1099.9564
+    },
+    {
+      "from_offset": 493,
+      "to_offset": 577,
+      "gap_ms": 549.9236
+    },
+    {
+      "from_offset": 577,
+      "to_offset": 661,
+      "gap_ms": 549.3168
+    },
+    {
+      "from_offset": 661,
+      "to_offset": 808,
+      "gap_ms": 2014.0064
+    },
+    {
+      "from_offset": 808,
+      "to_offset": 829,
+      "gap_ms": 549.8411
+    },
+    {
+      "from_offset": 829,
+      "to_offset": 913,
+      "gap_ms": 549.9901
+    },
+    {
+      "from_offset": 913,
+      "to_offset": 1097,
+      "gap_ms": 2100.0449
+    },
+    {
+      "from_offset": 1097,
+      "to_offset": 1118,
+      "gap_ms": 650.9665
+    },
+    {
+      "from_offset": 1118,
+      "to_offset": 1265,
+      "gap_ms": 2013.9661
+    },
+    {
+      "from_offset": 1265,
+      "to_offset": 1349,
+      "gap_ms": 549.7291
+    },
+    {
+      "from_offset": 1349,
+      "to_offset": 1433,
+      "gap_ms": 550.1149
+    },
+    {
+      "from_offset": 1433,
+      "to_offset": 1534,
+      "gap_ms": 1100.1611
+    },
+    {
+      "from_offset": 1534,
+      "to_offset": 1555,
+      "gap_ms": 550.9251
+    },
+    {
+      "from_offset": 1555,
+      "to_offset": 1639,
+      "gap_ms": 958.7068
+    },
+    {
+      "from_offset": 1639,
+      "to_offset": 1786,
+      "gap_ms": 2013.2855
+    },
+    {
+      "from_offset": 1786,
+      "to_offset": 1870,
+      "gap_ms": 549.824
+    },
+    {
+      "from_offset": 1870,
+      "to_offset": 1891,
+      "gap_ms": 550.118
+    },
+    {
+      "from_offset": 1891,
+      "to_offset": 1992,
+      "gap_ms": 1099.5436
+    },
+    {
+      "from_offset": 1992,
+      "to_offset": 2093,
+      "gap_ms": 1100.3772
+    },
+    {
+      "from_offset": 2093,
+      "to_offset": 2240,
+      "gap_ms": 2014.7057
+    },
+    {
+      "from_offset": 2240,
+      "to_offset": 2324,
+      "gap_ms": 549.8463
+    },
+    {
+      "from_offset": 2324,
+      "to_offset": 2408,
+      "gap_ms": 549.9381
+    },
+    {
+      "from_offset": 2408,
+      "to_offset": 2509,
+      "gap_ms": 1100.3726
+    },
+    {
+      "from_offset": 2509,
+      "to_offset": 2530,
+      "gap_ms": 550.9176
+    },
+    {
+      "from_offset": 2530,
+      "to_offset": 2614,
+      "gap_ms": 921.1495
+    },
+    {
+      "from_offset": 2614,
+      "to_offset": 2761,
+      "gap_ms": 2013.4228
+    },
+    {
+      "from_offset": 2761,
+      "to_offset": 2845,
+      "gap_ms": 550.063
+    },
+    {
+      "from_offset": 2845,
+      "to_offset": 2866,
+      "gap_ms": 549.2233
+    },
+    {
+      "from_offset": 2866,
+      "to_offset": 2967,
+      "gap_ms": 1101.3476
+    },
+    {
+      "from_offset": 2967,
+      "to_offset": 3068,
+      "gap_ms": 1099.5564
+    },
+    {
+      "from_offset": 3068,
+      "to_offset": 3215,
+      "gap_ms": 2015.4734
+    },
+    {
+      "from_offset": 3215,
+      "to_offset": 3299,
+      "gap_ms": 549.3477
+    },
+    {
+      "from_offset": 3299,
+      "to_offset": 3383,
+      "gap_ms": 548.8287
+    },
+    {
+      "from_offset": 3383,
+      "to_offset": 3504,
+      "gap_ms": 1650.0808
+    },
+    {
+      "from_offset": 3504,
+      "to_offset": 3588,
+      "gap_ms": 551.1931
+    },
+    {
+      "from_offset": 3588,
+      "to_offset": 3609,
+      "gap_ms": 549.7885
+    }
+  ],
+  "maximum_heartbeat_interval_ms": 2100.2658,
+  "average_heartbeat_interval_ms": 1007.8462461538461,
+  "last_heartbeat_age_at_capture_end_ms": 223.7901,
+  "matching_first_heartbeat_wire_images": [
+    {
+      "raw_offset": 157,
+      "frame_bytes": 21,
+      "frame_sha256": "6235971F4EACB2242B2BA4A3ABD919A412DCF93F21D8BD83914CA8A58CEBA11A",
+      "read_completed_ticks": "67819801",
+      "validation_ticks": "68129870",
+      "clock_domain_id": "0c136ebe62384df9877c271cf375369c",
+      "frequency": "10000000"
+    }
+  ],
+  "timed_path_normalizer_classification": "PC_FRAME_VALIDATED_OBSERVED",
+  "timed_path_pc_frame_validated": true,
+  "matched_pc_frame_occurrences": 1,
+  "clock_mapping": "UNKNOWN_NO_GUARANTEED_RATE_BOUND_OR_CONTINUITY_PROOF",
+  "ground_product_first_usb_failure_latched": false,
+  "vehicle_sync_workflow_status": "Rejected",
+  "vehicle_sync_workflow_failure": "PcAcquisitionDeadlineExpired",
+  "product_parameters_test": "NOT_EVALUATED",
+  "physical_rf_status": "NOT_EVALUATED",
+  "all_protocol_errors_status": "NOT_EVALUATED_BY_HEARTBEAT_ONLY_PARSER",
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "hardware_interaction_during_analysis": false,
+  "limitations": [
+    "Heartbeat intervals and final age use native PC read-completion timestamps, not physical RF arrival or MCU/PC bounded synchronization.",
+    "Replay validation uses recorded read timestamps as injected deterministic placeholders; historical validation_ticks come only from uniquely matched runtime ledger entries.",
+    "40 CRC-valid Heartbeats and a successful first local USB completion do not authorize whole-product acceptance, 932-parameter/30-second performance, or all-error-zero claims.",
+    "The first bound Heartbeat has one exact CRC-valid PC wire occurrence in this run; the prior run had two and could not add PC_FRAME_VALIDATED. This difference does not establish root-cause proof.",
+    "Generic boot-to-JTAG diagnostic FlushFailed evidence must not be reinterpreted as a failed product Heartbeat/106-ms transaction."
+  ]
+}

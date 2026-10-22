@@ -1,0 +1,71 @@
+{
+  "schema": "vc-lora-r19-aux-independent-observation-operator-evaluation-v1",
+  "candidate_id": "20261022T144157999Z-de92540d",
+  "conclusion": "AUX_OBSERVATION_STARVATION_IMPROVED_IN_ONE_LIVE_RUN_NOT_PRODUCT_ACCEPTANCE",
+  "cause_and_fix": {
+    "mechanism": "Ground USB diagnostic ownership exits bypassed the ordinary AUX observer",
+    "change": "Add fresh AUX-only samples before three early returns, without consuming radio completion or releasing transmission ownership",
+    "test_first": "Five scenarios, 66 checks: 15 pre-fix failures, zero post-fix failures",
+    "full_host_regression": "371/371 PASS",
+    "vehicle_and_ground_compile": "PASS",
+    "fixed_pins_uart_e220_profile_tdd_usb_deadlines": "UNCHANGED"
+  },
+  "live_acquisition": {
+    "authorized_runs_used": 1,
+    "additional_runs_performed": 0,
+    "capture_seconds_actual": 40.0006509,
+    "ground_raw_bytes": 3693,
+    "vehicle_raw_bytes": 2646,
+    "ready_validated": true,
+    "host_arm_accepted_by_mcu": true,
+    "ground_aux_last_sample_to_last_recorded_loop_before_us": 10800911,
+    "ground_aux_last_sample_to_last_recorded_loop_after_us": 4,
+    "ground_max_recorded_gpio_gap_us": 100551,
+    "vehicle_aux_last_sample_to_last_recorded_loop_us": 30,
+    "both_aux_fault_codes_zero": true,
+    "first_product_heartbeat_usb_elapsed_us": 471,
+    "product_usb_budget_ms": 106,
+    "first_product_heartbeat_pc_crc_validated": true,
+    "crc_valid_ground_heartbeat_count": 40,
+    "heartbeat_pc_read_completion_max_interval_ms": 2100.2658,
+    "heartbeat_pc_read_completion_average_interval_ms": 1007.846246,
+    "heartbeat_last_age_at_capture_end_ms": 223.7901,
+    "pc_frame_unique_match": true,
+    "pc_mcu_guaranteed_clock_bound_established": false
+  },
+  "safety_and_restore": {
+    "independent_file_audit": "PASS_NOT_ACCEPTANCE",
+    "child_process_trees_terminated": 8,
+    "cpu_running_witnesses": 4,
+    "sealed_install_and_rollback_inventory_files_verified": 124,
+    "accepted_r18_rollback_proven_by_outer": true,
+    "child_termination_proven_by_outer": true,
+    "active_jtag_cleanup_proven_by_outer": true,
+    "power_off_required": false,
+    "further_hardware_operations_planned": false
+  },
+  "remaining_limitations": [
+    "The 4 us tail compares the final committed GPIO and loop records, not a guaranteed waveform until every CPU halt",
+    "The Ground IRQ history overflowed by 68 events; continuous physical AUX waveform is not proved",
+    "AUX samples occur after bounded USB calls, not continuously inside them",
+    "Diagnostic startup FlushFailed records remain; they are distinct from the successfully completed first product Heartbeat",
+    "Vehicle SyncOnly diagnostic clock-response acquisition remains separate from Ground READY/ARM and product Heartbeat success",
+    "All protocol/parser/error-zero conditions were not evaluated by the Heartbeat-only analysis",
+    "932 parameters within 30 seconds and Mission Planner product acceptance were not tested",
+    "One successful run does not establish long-duration reliability or deployment readiness"
+  ],
+  "evidence": {
+    "firmware_fix_and_offline_results": "../../../validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/summary.json",
+    "outer_summary": "summary.json",
+    "aux_evaluation": "aux_evaluation.json",
+    "quantitative_observations": "quantitative_observations.json",
+    "post_run_integrity": "post_run_integrity.json"
+  },
+  "independent_evidence_sha256": {
+    "aux_evaluation.json": "B00B6B7E6160E842DA17FBBDB9743C799981119E73D1E1503D5E8224EF997D51",
+    "quantitative_observations.json": "FEEDCA42A890D63E3577221C3FB113277436EF5844B648C91D6B1BB4E3CB96A0",
+    "post_run_integrity.json": "09FB729BC819909D9AABE96C3ECDF62CEC194AB280208E709BBC32F93F403097"
+  },
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

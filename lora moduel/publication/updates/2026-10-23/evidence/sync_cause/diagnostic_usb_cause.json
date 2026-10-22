@@ -1,0 +1,253 @@
+{
+  "schema": "vc-lora-r19-diagnostic-usb-first-failure-analysis-v1",
+  "mode": "OFFLINE_FILE_ONLY",
+  "hardware_interaction": false,
+  "source_or_measurement_tool_modified": false,
+  "current_run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix",
+  "previous_run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T133353Z-ready32-aux-observer-fix",
+  "conclusion": {
+    "proven": "Both boots recorded an early diagnostic transport FlushFailed, after at least one successful diagnostic flush, and later reached TransportRecoveryCompleted. This immutable historical record is not a failed product Heartbeat/106-ms transaction and is not evidence of a current E220/RF failure.",
+    "physical_cause": "UNRESOLVED_AT_FIRST_FAILURE_BOUNDARY",
+    "detail_semantics": "MCU monotonic now_ms low32 at the first transport failure; not byte deficit, error count, source line, or elapsed flush duration.",
+    "not_first_transmission_failure": "first_failure.stage_mask 0x00007fff includes FlushCompleted and excludes prior TransportRecoveryEntered; therefore at least one diagnostic flush succeeded before the recorded first failure.",
+    "retry_semantics": "A same-epoch completed diagnostic is held and only its flush retried. The immutable 68-byte record persists even after recovery; its detail does not mean a present permanent stop."
+  },
+  "source_bindings": [
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 472,
+      "meaning": "r19_latch_runtime_stage_transport_failure stores domain OR reason and low32(now_ms)."
+    },
+    {
+      "path": "firmware/high_speed/r19_runtime_stage_record.hpp",
+      "line": 170,
+      "meaning": "latch_first_failure returns without replacement once first_failure is nonzero."
+    },
+    {
+      "path": "firmware/high_speed/r19_runtime_stage_record.hpp",
+      "line": 45,
+      "meaning": "FlushCompleted is bit14; TransportRecoveryEntered is bit15."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 312,
+      "meaning": "diagnostic per-flush budget100ms, complete-frame deadline500ms, flush-only recovery120000ms."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 4992,
+      "meaning": "Ground calls wrapper flush_ground_usb_transport; Vehicle directly calls flushTxComplete."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 5022,
+      "meaning": "stable epoch with time remaining returns for another bounded flush; otherwise FlushFailed is latched. Non-bootstrap epoch change can also reach FlushFailed before deadline."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 5037,
+      "meaning": "reason FlushFailed; stable epoch and completed publisher may arm FrameFlush recovery."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 4606,
+      "meaning": "same-epoch completed publisher recovery retries only flush, never replaying accepted payload."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 4682,
+      "meaning": "successful recovery clears active transport_failed and records TransportRecoveryCompleted, not immutable first failure."
+    },
+    {
+      "path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp",
+      "line": 1067,
+      "meaning": "diagnostic isCDC_Connected trusts cached payload pickup, not explicit application reader arm."
+    },
+    {
+      "path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp",
+      "line": 2042,
+      "meaning": "flush may fail for unavailable buffers/lock or for timeout/host/epoch/software/FIFO/pickup conditions; first diagnostic failure lacks this snapshot."
+    }
+  ],
+  "current": {
+    "ground": {
+      "first_failure_code": "0x54520010",
+      "reason": "FlushFailed",
+      "first_failure_mcu_ms": 10029,
+      "first_failure_mask": "0x00007fff",
+      "clock_request_mcu_us": "11401570",
+      "first_failure_before_clock_request_same_mcu_us": 1372570,
+      "latest_stage": "TransportRecoveryCompleted",
+      "first_captured_r19a": {
+        "raw_offset": 0,
+        "ordinal": 2,
+        "state": "ALIVE",
+        "frame_staged_mcu_ms": 11077
+      },
+      "last_captured_r19a": {
+        "raw_offset": 3630,
+        "ordinal": 42,
+        "state": "ALIVE",
+        "frame_staged_mcu_ms": 51109
+      },
+      "captured_r19a_count": 41,
+      "duplicate_r19a_sha256_groups": 0,
+      "first_failure_frame_candidate": "ALIVE ordinal1 is consistent with prior successful ARMED ordinal0 and first captured ordinal2 prepared later than the failure. Exact failed ordinal/action was not latched; keep as candidate, not direct observation.",
+      "first_pc_read_started_ticks": "57923356",
+      "first_pc_read_end_ticks": "62538964",
+      "initial_buffered_bytes": 0,
+      "final_fifo": {
+        "epoch": 1,
+        "bus_reset_count": 0,
+        "flush_attempt": 204,
+        "flush_success": 93,
+        "flush_timeout": 110,
+        "last_outcome": "Active",
+        "ring_bytes": 42,
+        "stash_bytes": 0,
+        "publish_generation": 155,
+        "pickup_generation": 154
+      },
+      "product_first_usb_failure_latched": false
+    },
+    "vehicle": {
+      "first_failure_code": "0x54520010",
+      "reason": "FlushFailed",
+      "first_failure_mcu_ms": 2586,
+      "first_failure_mask": "0x00007fff",
+      "clock_sync_observed": false,
+      "latest_stage": "TransportRecoveryCompleted",
+      "first_captured_r19a": {
+        "raw_offset": 0,
+        "ordinal": 5,
+        "state": "ALIVE",
+        "frame_staged_mcu_ms": 22724
+      },
+      "last_captured_r19a": {
+        "raw_offset": 2583,
+        "ordinal": 46,
+        "state": "ALIVE",
+        "frame_staged_mcu_ms": 64286
+      },
+      "captured_r19a_count": 42,
+      "duplicate_r19a_sha256_groups": 0,
+      "first_failure_frame_candidate": "After an earlier successful diagnostic flush, before captured ordinal5; exact failed frame ordinal/action not recorded.",
+      "first_pc_read_started_ticks": "52460642",
+      "first_pc_read_end_ticks": "52463916",
+      "initial_buffered_bytes": 63,
+      "final_fifo": {
+        "epoch": 1,
+        "bus_reset_count": 0,
+        "flush_attempt": 242,
+        "flush_success": 47,
+        "flush_timeout": 194,
+        "last_outcome": "Active",
+        "publish_generation": 105,
+        "pickup_generation": 104
+      },
+      "product_first_usb_failure_latched": false
+    }
+  },
+  "previous": {
+    "ground": {
+      "first_failure_mcu_ms": 9930,
+      "first_failure_mask": "0x00007fff",
+      "clock_request_mcu_us": "11330962",
+      "first_failure_before_clock_request_same_mcu_us": 1400962,
+      "latest_stage": "TransportRecoveryCompleted",
+      "captured_r19a_ordinals": "2..42",
+      "captured_r19a_count": 41,
+      "flush_attempt": 207,
+      "flush_success": 93,
+      "flush_timeout": 113
+    },
+    "vehicle": {
+      "first_failure_mcu_ms": 2609,
+      "first_failure_mask": "0x00007fff",
+      "clock_sync_observed": false,
+      "latest_stage": "TransportRecoveryCompleted",
+      "captured_r19a_ordinals": "5..46",
+      "captured_r19a_count": 42,
+      "flush_attempt": 246,
+      "flush_success": 47,
+      "flush_timeout": 198
+    }
+  },
+  "raw_replay": {
+    "method": "Selected pure function definitions only from the existing diagnostic parser, loaded through PowerShell AST. Pinned80 message definitions from core/src/mavlink_frame.cpp. Every saved native read chunk replayed in order; R19A payload format, CRC, ordinal, and full-frame SHA compared.",
+    "current_ground": {
+      "valid_frames": 91,
+      "bad_crc": 0,
+      "noise_bytes": 0,
+      "partial_bytes": 0,
+      "bad_length": 0,
+      "unknown_definition": 0,
+      "unsupported_flags": 0
+    },
+    "current_vehicle": {
+      "valid_frames": 42,
+      "bad_crc": 0,
+      "noise_bytes": 0,
+      "partial_bytes": 0,
+      "bad_length": 0,
+      "unknown_definition": 0,
+      "unsupported_flags": 0
+    },
+    "previous_ground": {
+      "valid_frames": 91,
+      "bad_crc": 0,
+      "noise_bytes": 0,
+      "partial_bytes": 0,
+      "bad_length": 0,
+      "unknown_definition": 0,
+      "unsupported_flags": 0
+    },
+    "previous_vehicle": {
+      "valid_frames": 42,
+      "bad_crc": 0,
+      "noise_bytes": 0,
+      "partial_bytes": 0,
+      "bad_length": 0,
+      "unknown_definition": 0,
+      "unsupported_flags": 0
+    },
+    "all_four_raws_duplicate_r19a_sha256_groups": 0,
+    "scope": "Saved post-open raw stream only; absence of duplicate payload does not measure how many flush-only calls occurred or what happened before raw coverage."
+  },
+  "hypotheses": [
+    {
+      "name": "Mission Planner protocol/RF corruption caused this diagnostic failure",
+      "support": "LOW",
+      "reason": "The failing path is local MCU diagnostic USB flushing. Saved current Ground stream has40 CRC-valid product Heartbeats and no product-first-failure latch."
+    },
+    {
+      "name": "Application reader not yet ready / host pickup paused",
+      "support": "POSSIBLE_NOT_PROVEN",
+      "reason": "Diagnostic admission accepts cached USB connectivity or complete bootstrap capacity without explicit reader ARM. However there are no guaranteed PC/MCU clock bounds for first failure and no preserved first diagnostic FIFO snapshot."
+    },
+    {
+      "name": "Internal USB ring/FIFO/pickup completion logic stall",
+      "support": "POSSIBLE_NOT_PROVEN",
+      "reason": "Flush false is proven but first-failure wait reason, queues, lock ownership, expected/observed epochs, payload generations and call timestamps were not latched for that diagnostic transaction."
+    },
+    {
+      "name": "Epoch change rather than500ms diagnostic deadline",
+      "support": "NOT_SEPARATED_AT_FIRST_FAILURE",
+      "reason": "The same reason code can be reached by a non-bootstrap changed epoch. Final epoch1/bus-reset0 is a later snapshot and cannot replace first-failure evidence."
+    }
+  ],
+  "required_next_evidence": [
+    "Immutable first diagnostic failure record: action, ordinal, frame hash/size, accepted offset, start/deadline/end MCU64 timestamps.",
+    "Same-boundary expected/observed epoch, HWCDC terminal/blocker snapshot, ring/stash/FIFO/publish/pickup state and actual per-call return.",
+    "Keep first-ever diagnostic failure separate from latest successful recovery and post-reader-close backpressure.",
+    "Use matched nonce and guaranteed clock uncertainty bounds before claiming first failure preceded PC reader start."
+  ],
+  "limitations": [
+    "Ground failure preceding its ClockRequest is established in one MCU clock only; no cross-clock ordering against PC COM open/read is claimed.",
+    "0x7fff does not identify the failed frame; Ground ordinal1 is a bounded candidate under ordinary diagnostic cadence/source assumptions, not a directly saved identity.",
+    "Final FIFO counters cover boot through JTAG, including after capture closed. 110/194 timeouts are not first-startup-only counts.",
+    "No500ms exceedance, missing byte count, physical FIFO location or causal host-readiness defect can be inferred from detail10029/2586 alone.",
+    "Recovery and successful captured traffic do not erase historical failures or authorize product acceptance/deployment.",
+    "No source changes, measurement tool changes, COM/PnP/process/JTAG operations or new hardware test were performed."
+  ]
+}

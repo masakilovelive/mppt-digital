@@ -1,0 +1,6 @@
+hold elapsed_ms=10800 loops=108 aux_reads=0 staged=1 flush=1 failed=1 recovery=1 reason=16
+FAIL every held diagnostic loop observes AUX once during 10.8 seconds
+FAIL fresh AUX samples reach ready while completion remains unconsumed
+FAIL expired recovery still samples AUX
+FAIL permanent diagnostic failure cannot permanently stop AUX observation
+IT-R19-GROUND-AUX-INDEPENDENCE-001 scenario=expiry checks=19 failures=4

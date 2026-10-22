@@ -1,0 +1,86 @@
+{
+  "schema": 1,
+  "verdict": "PASS_OFFLINE_CAUSAL_MECHANISM_REPRODUCTION",
+  "production_changed": false,
+  "hardware_operated": false,
+  "fixture": {
+    "actual_production_loop_bridge": true,
+    "ground_role": true,
+    "r19_high_speed": true,
+    "runtime_fail_diagnostics": true,
+    "usb_readiness_mode": 2,
+    "aux_readiness_diagnostics": false,
+    "gpio_observation": "Local digitalRead wrapper counts D8 reads without changing GPIO results",
+    "usb_no_pickup_model": "Endpoint cached readiness remains true; epoch stays stable; queued writes accepted; flush completion fails and consumes its fixed timeout",
+    "full_product_hostarm_negotiation": false,
+    "initial_diagnostic_armed_bytes": 63,
+    "aux_reads_after_initial_armed": 19,
+    "aux_reads_after_ten_normal_loops": 39
+  },
+  "blocked_interval": {
+    "start_ms": 1800,
+    "end_ms": 12600,
+    "duration_ms": 10800,
+    "loop_calls": 109,
+    "aux_reads_before": 39,
+    "aux_reads_after": 39,
+    "aux_reads_in_interval": 0,
+    "additional_alive_bytes": 63,
+    "additional_write_calls": 2,
+    "write_chunks": [32, 31],
+    "payload_replays": 0,
+    "total_flush_calls_at_interval_end": 109,
+    "staged": true,
+    "flush_pending": true,
+    "transport_failed": true,
+    "transport_recovery": "FrameFlush",
+    "transport_recovery_enum": 1,
+    "first_failure_reason": "FlushFailed",
+    "first_failure_reason_enum": 16,
+    "frame_budget_ms": 500,
+    "recovery_budget_ms": 120000,
+    "recovery_until_ms": 122300,
+    "runtime_fail_closed": false,
+    "epoch": 0,
+    "cached_endpoint_ready": true,
+    "extra_e220_uart_bytes": 0
+  },
+  "recovery_control": {
+    "intervention": "Only fake flush completion changed from failure to success; no real USB operation",
+    "ownership_released": true,
+    "aux_reads_after_first_recovery_loop": 39,
+    "aux_reads_after_next_normal_loop": 41,
+    "payload_replays": 0,
+    "same_loop_committed_early_return_preserved": true
+  },
+  "checks": 16,
+  "failures": 0,
+  "compile": {
+    "exit_code": 0,
+    "warning_count": 1,
+    "warning": "Existing unused parameter now_ms in bridge line 2045 when AUX diagnostic instrumentation is disabled",
+    "compiler": "C:/Users/user/AppData/Local/Temp/vc_lora_host_tools/llvm-mingw-20260616-complete/unpacked/llvm-mingw-20260616-ucrt-x86_64/bin/clang++.exe",
+    "options": ["-std=c++17", "-static", "-Wall", "-Wextra", "-Wpedantic", "-Wconversion"]
+  },
+  "source_mechanism": [
+    "Periodic ALIVE admits its exact 63-byte frame then awaits USB flush completion",
+    "The absolute 500-ms frame deadline fails while the epoch is stable and the publisher is complete",
+    "The adapter retains the boundary and arms 120000-ms same-epoch flush-only FrameFlush recovery",
+    "loop_bridge runtime diagnostic staged/flush_pending/transport_failed gate returns before ordinary observe_radio_completion and D8 sampling",
+    "Successful same-epoch flush clears the held diagnostic state; committed_this_service retains one final early return; the next normal loop resumes sampling"
+  ],
+  "limitations": [
+    "This reproduces the mechanism in actual production control flow; it does not alone prove the real PC closed its COM handle or stopped issuing IN transactions",
+    "The fake has no physical endpoint FIFO/ring/interrupt behavior, USB waveform, GPIO ISR, or independent oscilloscope AUX waveform",
+    "AUX_READINESS_DIAGNOSTICS is disabled because the host fake does not provide live GPIO ISR instrumentation; AUX GPIO samples are counted through a local wrapper",
+    "Explicit HostArm product negotiation, heartbeat publication, RF E2E delivery, 106-ms product completion, and 932-parameter throughput are not exercised",
+    "No firmware, core, shared fake, registered tests, CMake, candidate, COM, JTAG, PnP, process, or device state was modified"
+  ],
+  "sha256": {
+    "firmware/phase6/vc_lora_phase6_bridge.hpp": "DCEADD4CF80EF68F48A7498CA3BEDE46C87BF0E9312CC0899CBC9FC292E8E180",
+    "build/host/libvc_lora_core.a": "CF2F1EC5CA1ECBAA6866B9DFCACAF4D1C56FFBD6DC4B7A33603410FEBDEC6CCE",
+    "repro.cpp": "90348C8B7565DB2A548E19B1B1401DD22362FF56D7140803A6944D20D94DD485",
+    "repro.exe": "4B13324EE58FD47129B56F0AFD9ED8726C029DA1F6991AD255BC9B14AFE1F72B",
+    "repro_output.log": "62EFBF6AC690B5A9CD21A52B8402FA6A9EDD4A2EAFBB4F350B48934A0A3A468A"
+  }
+}

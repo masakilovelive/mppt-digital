@@ -1,0 +1,5 @@
+In file included from E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\validation\R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001\20261022T223013Z/repro.cpp:14:
+E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\candidates\R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001\20261022T144157999Z-de92540d\package/vc_lora_vehicle_xiao_esp32s3/vc_lora_phase6_bridge.hpp:1936:40: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 1936 |                          std::uint64_t now_ms) noexcept {
+      |                                        ^
+1 warning generated.

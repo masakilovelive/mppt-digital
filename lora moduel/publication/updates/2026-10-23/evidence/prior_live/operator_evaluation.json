@@ -1,0 +1,137 @@
+{
+  "schema": "vc-lora-r19-ready32-aux-observer-live-evaluation-v1",
+  "result": "IMPROVEMENT_CONFIRMED_PARTIAL_NOT_PRODUCT_ACCEPTANCE",
+  "run_directory": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T133353Z-ready32-aux-observer-fix",
+  "candidate_id": "20261022T125857174Z-1a04b7ea",
+  "trial": {
+    "authorized_runs": 1,
+    "executed_runs": 1,
+    "authorization_consumed": true,
+    "additional_hardware_run_authorized": false,
+    "safety_six_conditions_confirmed_by_operator": true,
+    "power_off_observed": true,
+    "power_off_observed_utc": "2026-10-22 13:33:53 UTC",
+    "off_serial_ports": [],
+    "off_esp32_usb_functions": [],
+    "reconnected_roles": {
+      "vehicle": {
+        "port": "COM3",
+        "usb_parent": "USB\\VID_303A&PID_1001\\90:70:69:11:81:A4",
+        "probe_location": "1-4.2"
+      },
+      "ground": {
+        "port": "COM6",
+        "usb_parent": "USB\\VID_303A&PID_1001\\1C:DB:D4:5A:83:80",
+        "probe_location": "1-4.4"
+      }
+    },
+    "parallel_hardware_audits_during_execution": false
+  },
+  "evidence_acquisition": {
+    "outer_result": "PASS",
+    "outer_status": "PASS_TIMED_PATH_EVIDENCE_CAPTURED_R18_RESTORED_NOT_ACCEPTANCE",
+    "outer_summary_sha256": "6A2E8385D69ADCD4EA638F21CFCC75D0A3C9A47791B7C1F606291EDC1E1C1B1E",
+    "capture_seconds_actual": 40.0036348,
+    "ground_raw_bytes": 3689,
+    "vehicle_raw_bytes": 2646,
+    "continuous_readers": true,
+    "reader_overflow": false,
+    "read_errors": 0,
+    "stage_raw_files_per_role": 14,
+    "stage_unique_raw_bytes_per_role": 14952,
+    "duplicate_record_pairs_per_role": 7,
+    "record_pairs_identical": true,
+    "install_inventory_files_verified": 66,
+    "rollback_inventory_files_verified": 58,
+    "new_candidate_inventory_files_verified": 155,
+    "old_candidate_inventory_files_verified": 155
+  },
+  "verdicts": {
+    "ready_arm": {
+      "result": "PASS_THIS_TRIAL",
+      "ready_bytes": 66,
+      "ready_publication_ms": 1.217,
+      "pc_ready_validated": true,
+      "mcu_diagnostic_arm_accepted": true,
+      "flight_arming_command_sent": false
+    },
+    "first_product_heartbeat_local_usb": {
+      "result": "PASS_THIS_FIRST_FRAME",
+      "frame_bytes": 21,
+      "accepted_bytes": 21,
+      "elapsed_ms": 0.487,
+      "deadline_ms": 106,
+      "source": "stage_ground/summary.json decoded.timed_path",
+      "failure_latched": false,
+      "all_frames_or_operating_states_proven": false
+    },
+    "pc_heartbeat_reception": {
+      "result": "PASS_CAPTURED_INTERFRAME_INTERVALS",
+      "crc_valid_frames": 39,
+      "interval_count": 38,
+      "maximum_read_completion_interval_ms": 2099.8295,
+      "average_read_completion_interval_ms": 1026.121960526316,
+      "threshold_ms": 2500,
+      "last_heartbeat_age_at_capture_end_ms": 238.1377,
+      "first_mcu_frame_exact_wire_matches": 2,
+      "first_frame_unique_mcu_pc_binding": false,
+      "explanation": "39 CRC-valid Heartbeats were observed by the PC. The immutable first MCU frame image occurs twice, so the conservative normalizer does not emit a unique PC_FRAME_VALIDATED event. This is not evidence of no PC reception or by itself of an erroneous duplicate."
+    },
+    "ready_owned_aux_starvation": {
+      "result": "IMPROVED_NOT_REPRODUCED_THIS_TRIAL",
+      "gpio_polls": 230951,
+      "gpio_observation_after_ready_complete_ms": 40688.083
+    },
+    "aux_all_exit_paths": {
+      "result": "PARTIAL_UNRESOLVED",
+      "ground_unobserved_tail_ms": 10800.911,
+      "tail_proven_after_capture_end": false,
+      "continuous_physical_waveform_proven": false
+    },
+    "vehicle_diagnostic_clock_reply": {
+      "result": "NOT_OBTAINED",
+      "workflow_status": "Rejected",
+      "reason": "PcAcquisitionDeadlineExpired",
+      "interpretation": "Separate Vehicle diagnostic time-sync limitation; do not label it a product Heartbeat 106 ms failure."
+    },
+    "parameters_932_in_30_seconds": {
+      "result": "NOT_EVALUATED"
+    },
+    "rf_uplink_and_command_ack": {
+      "result": "NOT_EVALUATED"
+    },
+    "mission_planner_product_acceptance": {
+      "result": "NOT_EVALUATED"
+    }
+  },
+  "restoration": {
+    "result": "PASS",
+    "accepted_r18_both_roles_restored": true,
+    "restore_attempts_per_role": 1,
+    "digest_verification_both_roles": true,
+    "reenumeration_both_roles": true,
+    "child_process_trees_terminated": 8,
+    "both_cpus_running_per_role_proven": true,
+    "shutdown_proven_both_roles": true,
+    "power_off_required": false,
+    "evidence_directory": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261022T133623576Z-f7890aee-rollback"
+  },
+  "limitations": [
+    "Diagnostic startup transport FlushFailed latches and boot-to-JTAG FIFO timeout counters remain in both-role records. These are not the first product Heartbeat 106 ms outcome and are not zero-error whole-run proof.",
+    "Ground IRQ history overflowed by 78 events; no whole-run continuous physical AUX claim is made.",
+    "The remaining 10.800911-second Ground AUX observation tail may relate to capture-close or runtime diagnostic early return, but direct same-MCU shutdown/fault timestamps are absent; the cause is not proven.",
+    "Only this 40-second diagnostic sample was evaluated. Full-parameter throughput, Mission Planner acceptance, RF uplink, long-duration behavior and all operating states remain unproven."
+  ],
+  "next_step": "Offline diagnosis should add direct same-MCU close/disconnect/diagnostic-stop or return-reason evidence to separate the remaining Ground AUX tail; any new live run requires fresh user authorization.",
+  "hardware_or_source_changes_after_trial": false,
+  "source_integrity_result": "PASS",
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "files": {
+    "outer": "summary.json",
+    "observations": "quantitative_observations.json",
+    "aux": "aux_evaluation.json",
+    "preservation": "post_run_source_integrity.json",
+    "timed_path": "timed_path_evaluation.json"
+  }
+}

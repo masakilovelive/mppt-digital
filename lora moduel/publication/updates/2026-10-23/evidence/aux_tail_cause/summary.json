@@ -1,0 +1,196 @@
+{
+  "schema": "vc-lora-r19-aux-tail-cause-offline-diagnosis-v1",
+  "result": "AUX_STARVATION_MECHANISM_IDENTIFIED_AND_REPRODUCED_TRIGGER_NOT_PROVEN",
+  "diagnostic_only": true,
+  "hardware_interaction": false,
+  "firmware_written": false,
+  "serial_ports_opened": false,
+  "jtag_used": false,
+  "production_source_modified": false,
+  "additional_live_authorization_consumed": false,
+  "source_run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T133353Z-ready32-aux-observer-fix",
+  "source_run_summary_sha256": "6A2E8385D69ADCD4EA638F21CFCC75D0A3C9A47791B7C1F606291EDC1E1C1B1E",
+  "exact_candidate_id": "20261022T125857174Z-1a04b7ea",
+  "bridge_sha256": "DCEADD4CF80EF68F48A7498CA3BEDE46C87BF0E9312CC0899CBC9FC292E8E180",
+  "conclusion": {
+    "software_mechanism": "Runtime diagnostic USB ownership returns before the normal AUX observer. The private Clock/READY path has supplemental observation, but RuntimeDiagnostic staged/flush-pending/failure/recovery ownership does not.",
+    "mechanism_reproduced": true,
+    "incident_path_strongly_supported": true,
+    "exact_live_guard_bit_proven": false,
+    "real_pc_close_trigger_proven": false,
+    "e220_continuous_low_10_8_seconds_proven": false,
+    "whole_communication_root_cause_proven": false
+  },
+  "source_path": [
+    {
+      "file": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 6711,
+      "stage": "r19_service_runtime_fail_diagnostic"
+    },
+    {
+      "file": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 6719,
+      "stage": "Any diagnostic staged/flush_pending/transport_failed/committed flag returns before AUX"
+    },
+    {
+      "file": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 6738,
+      "stage": "observe_radio_completion normally observes AUX; skipped by earlier return"
+    },
+    {
+      "file": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 6525,
+      "stage": "Supplemental observe-only wrapper applies only to occupied/held private Clock/READY boundary"
+    },
+    {
+      "file": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 4611,
+      "stage": "Same-epoch diagnostic FrameFlush recovery can repeat bounded USB waits without AUX sampling"
+    },
+    {
+      "file": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 316,
+      "stage": "Diagnostic recovery budget is 120000 ms; not product Heartbeat 106 ms"
+    }
+  ],
+  "incident_evidence": {
+    "ground_last_gpio_end_us": "52020976",
+    "ground_last_loop_end_us": "62821887",
+    "unobserved_tail_us": 10800911,
+    "runtime_diagnostic_last_begin_us": "62721891",
+    "runtime_diagnostic_last_end_us": "62821882",
+    "runtime_diagnostic_last_duration_us": 99991,
+    "private_reply_last_begin_us": "62821884",
+    "private_reply_last_end_us": "62821885",
+    "private_reply_occupied_return_count": 4,
+    "alive_drain_last_end_us": "50019179",
+    "irq_last_edge_us": "62483096",
+    "irq_edge_after_last_gpio_us": 10462120,
+    "irq_overflow": 78,
+    "ready_completed": true,
+    "arm_accepted": true,
+    "ready_suppressed": false,
+    "aux_first_fault_latched": false,
+    "endpoint_final_record": {
+      "semantics": "last-committed-diagnostic-event-not-live-hardware-state",
+      "ring_pending_bytes": 38,
+      "last_fifo_write_bytes": 25,
+      "publish_generation": 155,
+      "pickup_generation": 154,
+      "last_flush_outcome": "Active",
+      "flush_blockers": [
+        "SoftwarePending",
+        "FifoNotWritable",
+        "PayloadPickupPending"
+      ]
+    },
+    "initial_diagnostic_flush_failed_ms": 9930,
+    "initial_failure_is_not_final_failure_time": true,
+    "confirmed_source_record": "stage_ground/summary.json decoded",
+    "raw_crc_checks": {
+      "raw_bytes": 3689,
+      "crc_valid_alive_frames": 41,
+      "last_alive_frames": [
+        {
+          "raw_offset": 3441,
+          "mavlink_sequence": 40,
+          "wire_bytes": 63,
+          "text": "R19A:G:L:00000028:000000000000BF7A:000100040000",
+          "diagnostic_sequence": 40,
+          "mcu_ms": 49018,
+          "status": "000100040000",
+          "crc_valid": true
+        },
+        {
+          "raw_offset": 3542,
+          "mavlink_sequence": 41,
+          "wire_bytes": 63,
+          "text": "R19A:G:L:00000029:000000000000C363:000400020005",
+          "diagnostic_sequence": 41,
+          "mcu_ms": 50019,
+          "status": "000400020005",
+          "crc_valid": true
+        },
+        {
+          "raw_offset": 3626,
+          "mavlink_sequence": 42,
+          "wire_bytes": 63,
+          "text": "R19A:G:L:0000002A:000000000000C74C:000100040000",
+          "diagnostic_sequence": 42,
+          "mcu_ms": 51020,
+          "status": "000100040000",
+          "crc_valid": true
+        }
+      ]
+    }
+  },
+  "clock_evidence": {
+    "pc_frequency": 10000000,
+    "measurement_start_ticks": "62311111",
+    "measurement_end_ticks": "462347459",
+    "actual_measurement_seconds": 40.0036348,
+    "last_alive_read_complete_ticks": "461970063",
+    "last_alive_read_before_end_ms": 37.7396,
+    "last_alive_mcu_ms": 51020,
+    "last_gpio_after_last_alive_generation_us": 1000976,
+    "nominal_equal_clock_estimate_gpio_after_capture_ms_range": [
+      962.5487,
+      963.9209
+    ],
+    "nominal_estimate_is_guaranteed": false,
+    "exact_pc_stop_or_close_ticks_recorded": false,
+    "exact_mcu_disconnect_or_final_diagnostic_failure_time_recorded": false,
+    "explanation": "Timing and the next one-second ALIVE schedule support PC capture stop followed by an unconsumed diagnostic frame. No persisted guaranteed drift/continuity bound or exact close/final-guard record proves that trigger. PC/MCU nominal offsets must not be promoted to a causal proof."
+  },
+  "offline_reproduction": {
+    "result": "PASS_16_CHECKS",
+    "independently_rerun": true,
+    "checks": 16,
+    "failures": 0,
+    "held_duration_ms": 10800,
+    "loop_calls": 109,
+    "aux_read_count_before": 39,
+    "aux_read_count_after": 39,
+    "pending_alive_bytes": 63,
+    "prefix_write_sizes": [
+      32,
+      31
+    ],
+    "prefix_replayed": false,
+    "radio_uart_bytes_added": 0,
+    "held_flags": {
+      "staged": true,
+      "flush_pending": true,
+      "transport_failed": true,
+      "recovery": "FrameFlush",
+      "runtime_fail_closed": false
+    },
+    "recovery_only_change": "Fake USB flush result changed from unsuccessful to successful; no production code or epoch/readiness changes.",
+    "ownership_released": true,
+    "aux_after_first_recovery_loop": 39,
+    "aux_after_next_normal_loop": 41,
+    "limitations": [
+      "Host fake models no pickup through unsuccessful USB flush calls with cached ready/epoch stable; it is not a physical USB or AUX waveform model.",
+      "AUX diagnostics instrumentation is disabled in the harness because existing host fakes lack GPIO ISR support. The unchanged loop/ownership branch is exercised; diagnostic-on evidence comes from the frozen live records.",
+      "Private HostArm negotiation is not exercised by this liveness-only reproduction."
+    ],
+    "source": "repro.cpp",
+    "output": "repro_output.log",
+    "independent_output": "independent_repro_output.log",
+    "details": "quantitative_results.json"
+  },
+  "proposed_fix_not_implemented": {
+    "principle": "Keep USB/RF writer exclusion and fail-closed behavior, but run observe-only AUX sampling independently of runtime-diagnostic early returns; never consume RF completion or release writer/lease/tail ownership from that observer.",
+    "diagnostic_evidence": "Latch return-reason bits and the first skip timestamp on the MCU; separately record PC reader Stop/Close boundaries and a session-bound capture-end MCU event if added.",
+    "product_usb_deadline_ms_must_remain": 106,
+    "uart_tdd_parameters_must_remain": true
+  },
+  "preservation": {
+    "result": "PASS",
+    "protected_files": 14,
+    "details": "post_diagnosis_integrity.json"
+  },
+  "remaining_work": "Production fix is not implemented in this diagnosis-only request. A further hardware trial requires fresh authorization.",
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

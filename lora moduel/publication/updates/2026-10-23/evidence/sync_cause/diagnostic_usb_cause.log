@@ -1,0 +1,38 @@
+OFFLINE FILE-ONLY DIAGNOSTIC USB CAUSE CHECK
+Source and measurement tools were not modified. No hardware APIs or hardware commands were called.
+
+Parsed only six pure function definitions through PowerShell AST:
+Assert-Condition, Get-ByteSha, Update-X25Crc, Get-MavlinkDefinitions,
+New-DiagnosticParser, Add-DiagnosticBytes.
+The containing run_r19_runtime_fail_diagnostic_hil.ps1 entry point was NOT executed.
+Get-MavlinkDefinitions loaded the existing pinned80 definitions from core/src/mavlink_frame.cpp.
+Each raw file was fed through its saved contiguous native-read blocks.
+
+CURRENT 20261022T145610Z-aux-independent-observe-fix
+Ground: valid91, badCRC0, noise0, partial0, badLength0, unknown0, unsupported0.
+Ground:41 R19A ALIVE frames, ordinals2..42, duplicate full-frame SHA groups0.
+Ground first captured R19A ordinal2 was prepared at MCU11077ms; raw offset0.
+Ground immutable first transport failure: reason16 FlushFailed, detail10029ms, stage_mask0x7fff.
+Ground ClockRequest MCU11401570us; same-clock difference from first failure1372570us.
+Vehicle: valid42, badCRC0, noise0, partial0, badLength0, unknown0, unsupported0.
+Vehicle:42 R19A ALIVE frames, ordinals5..46, duplicate full-frame SHA groups0.
+Vehicle first captured R19A ordinal5 was prepared at MCU22724ms; raw offset0.
+Vehicle immutable first transport failure: reason16 FlushFailed, detail2586ms, stage_mask0x7fff.
+Both latest runtime-stage records say TransportRecoveryCompleted.
+
+PREVIOUS 20261022T133353Z-ready32-aux-observer-fix
+Ground: valid91, all listed parser anomalies0;41 R19A ordinal2..42; duplicate SHA groups0.
+Ground first transport failure detail9930ms; ClockRequest11330962us; same-clock difference1400962us.
+Vehicle: valid42, all listed parser anomalies0;42 R19A ordinal5..46; duplicate SHA groups0.
+Vehicle first transport failure detail2609ms. No MCU ClockRequest observed.
+Both first-failure masks0x7fff; both latest stagesTransportRecoveryCompleted.
+
+CAUSAL LIMITS
+detail is failure observation time, not bytes or elapsed flush duration.
+Mask0x7fff includes an earlier FlushCompleted witness, so this is not proof that the first diagnostic transmission failed.
+FlushFailed can arise after stable-epoch deadline exhaustion or a non-bootstrap epoch mismatch; the saved68-byte record does not preserve that branch.
+Final FIFO timeout counters and last blockers are later boot-to-JTAG snapshots and cannot identify the initial failure's physical cause.
+No guaranteed PC/MCU clock mapping exists for first-failure versus COM-open/read ordering.
+Ground ordinal1 is a source/cadence-derived candidate only; exact failed frame ID/action was not latched.
+
+RESULT: historical recoverable diagnostic completion failure is confirmed; physical first-failure location and host-readiness causation remain unproven.

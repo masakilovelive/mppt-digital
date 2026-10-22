@@ -1,0 +1,956 @@
+{
+  "schema": "vc-lora-progress-publication-inventory-v1",
+  "source_root": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge",
+  "file_count": 158,
+  "total_bytes": 2718351,
+  "files": [
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/CMakeLists.txt",
+      "original": "CMakeLists.txt",
+      "size_bytes": 9415,
+      "sha256": "CB6ED478767FB42833D50D7367EA1B96C713084A03E84BBADF37138A17F31532"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/tests/host/CMakeLists.txt",
+      "original": "tests/host/CMakeLists.txt",
+      "size_bytes": 39396,
+      "sha256": "2DF493B7B4E5E6F87AD2EED5840921E2CB517DAA265C551E102DEB3426649A71"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/tests/host/standalone/phase6_ground_aux_independence_tests.cpp",
+      "original": "tests/host/standalone/phase6_ground_aux_independence_tests.cpp",
+      "size_bytes": 13633,
+      "sha256": "611CEC3FB91A8FBD7C7237B1D0F85892B1DE468BE73651F3F03A9D45CA40C034"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/tests/host/standalone/phase6_ground_host_readiness_tests.cpp",
+      "original": "tests/host/standalone/phase6_ground_host_readiness_tests.cpp",
+      "size_bytes": 19650,
+      "sha256": "A61A5C1FFE5FBBB5748E8DACF4A4EDE0C35CD32E0A63F913DCCBB229395042A4"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/tests/hil/check_r19_aux_readiness_bridge.ps1",
+      "original": "tests/hil/check_r19_aux_readiness_bridge.ps1",
+      "size_bytes": 8910,
+      "sha256": "DAE1978421272F62D68C4D6D1281BFBB905BA4540BD8DD0F0417F5439656F37C"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "original": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "size_bytes": 268124,
+      "sha256": "B277B26972D6F945C64ECDF3CCBFB31ECFD0016DD04CBC55EA8FC7A250E84F4C"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/firmware/high_speed/r19_aux_readiness_record.hpp",
+      "original": "firmware/high_speed/r19_aux_readiness_record.hpp",
+      "size_bytes": 19236,
+      "sha256": "F3965E54988F9D35F4B20A0720D41405E5AD76F7A481955198FEA318577BE0BC"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/firmware/high_speed/r19_runtime_stage_record.hpp",
+      "original": "firmware/high_speed/r19_runtime_stage_record.hpp",
+      "size_bytes": 18783,
+      "sha256": "8A587AF9AF324781FD58575A73BC00931A2697CBCA8BBD028A9B0742A5F110A8"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/firmware/high_speed/r19_runtime_fail_diagnostic.hpp",
+      "original": "firmware/high_speed/r19_runtime_fail_diagnostic.hpp",
+      "size_bytes": 25790,
+      "sha256": "FC566FD26C258F060AF25002705E3120D24BBBEAAAB7D036DA35F4DA81C336C7"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/firmware/high_speed/r19_usb_clock_sync.hpp",
+      "original": "firmware/high_speed/r19_usb_clock_sync.hpp",
+      "size_bytes": 2661,
+      "sha256": "D540FFCD9F9B61B1AE617168EEFEA3306CD96404B49055AA904AAD3D27EC7B5B"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/firmware/high_speed/r19_timed_path_record.hpp",
+      "original": "firmware/high_speed/r19_timed_path_record.hpp",
+      "size_bytes": 13249,
+      "sha256": "EA448319F2B4208E3D76934F3F543B9C49C418B98947A135319895F73DBEB5A4"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/tools/run_r19_timed_path_capture.ps1",
+      "original": "tools/run_r19_timed_path_capture.ps1",
+      "size_bytes": 22703,
+      "sha256": "0EAE966774482481D99FB41D6FBF04B783C1C0B177B27FD51FDE85BF701D6C4C"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/tools/r19_host_readiness_workflow.ps1",
+      "original": "tools/r19_host_readiness_workflow.ps1",
+      "size_bytes": 12934,
+      "sha256": "1B0740C84FE8B54C8F573846E6EBCDCDA7DF330565833500F1EE557CF11BD099"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/tools/read_r19_aux_readiness_record.ps1",
+      "original": "tools/read_r19_aux_readiness_record.ps1",
+      "size_bytes": 22317,
+      "sha256": "C011580259EA94F3092B1B3CCAF34DB30C4D9CA1158D2A51D2DC96EA76D880DF"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/source_snapshot/tools/read_r19_runtime_stage_jtag.ps1",
+      "original": "tools/read_r19_runtime_stage_jtag.ps1",
+      "size_bytes": 142011,
+      "sha256": "E3601EA0F59E2EE9F0422A9D5BAC051453592B82A74F1F6EE32850369654ED7E"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_tail_cause/summary.json",
+      "original": "runs/validation/R19-AUX-TAIL-CAUSE-OFFLINE-001/20261022T141350Z/summary.json",
+      "size_bytes": 8102,
+      "sha256": "FE89CC1666AABCDB9B190F117A35DAFB497ED22239792AE8ACE2B3963613D5EA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_tail_cause/quantitative_results.json",
+      "original": "runs/validation/R19-AUX-TAIL-CAUSE-OFFLINE-001/20261022T141350Z/quantitative_results.json",
+      "size_bytes": 4330,
+      "sha256": "5212D2925CDB8BCA72CC9F300F91857AFD95DF6C943D718DA3CAA0B9CC924868"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_tail_cause/repro.cpp",
+      "original": "runs/validation/R19-AUX-TAIL-CAUSE-OFFLINE-001/20261022T141350Z/repro.cpp",
+      "size_bytes": 8026,
+      "sha256": "90348C8B7565DB2A548E19B1B1401DD22362FF56D7140803A6944D20D94DD485"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_tail_cause/repro_output.log",
+      "original": "runs/validation/R19-AUX-TAIL-CAUSE-OFFLINE-001/20261022T141350Z/repro_output.log",
+      "size_bytes": 1131,
+      "sha256": "62EFBF6AC690B5A9CD21A52B8402FA6A9EDD4A2EAFBB4F350B48934A0A3A468A"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_tail_cause/independent_repro_output.log",
+      "original": "runs/validation/R19-AUX-TAIL-CAUSE-OFFLINE-001/20261022T141350Z/independent_repro_output.log",
+      "size_bytes": 1131,
+      "sha256": "62EFBF6AC690B5A9CD21A52B8402FA6A9EDD4A2EAFBB4F350B48934A0A3A468A"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/prior_live/operator_evaluation.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T133353Z-ready32-aux-observer-fix/operator_evaluation.json",
+      "size_bytes": 6078,
+      "sha256": "F3C73DAF1C461904102B6FE2F7D2E96A80E69FEF2B878659DFD9150C58B27FB4"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/prior_live/aux_evaluation.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T133353Z-ready32-aux-observer-fix/aux_evaluation.json",
+      "size_bytes": 3709,
+      "sha256": "9A4F6CD284AC278473BA07D32DFE0E055C1504C61462C61D9974A7A2FA1616D8"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/prior_live/quantitative_observations.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T133353Z-ready32-aux-observer-fix/quantitative_observations.json",
+      "size_bytes": 6926,
+      "sha256": "18C8A5AB17EDD930ED5E70E458FF0FC953E3A5A5FF8A12E944F4D6A71EA614E8"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/aux_bridge_contract_green.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/aux_bridge_contract_green.log",
+      "size_bytes": 37,
+      "sha256": "30581356107C447DE3AE2920901BDAF966401625C6E3036E40A0D538A37CA797"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/candidate_build.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/candidate_build.log",
+      "size_bytes": 1522,
+      "sha256": "195FC9DFD627693CEFC16E1D476D4EA4E078464B8B5D8879B4AA4A6DFF302F34"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/changes.diff",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/changes.diff",
+      "size_bytes": 21596,
+      "sha256": "950ED575F147887AC9321BDFABF2B3D2D500577D919E16DB27059A8E33858D44"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/full_host_tests_windows_ps51.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/full_host_tests_windows_ps51.log",
+      "size_bytes": 96668,
+      "sha256": "F872B862D18EB1486F3AE700162E68C850E021DEA3FD41BF56FA7FCD5DA4B090"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/ground_aux_independence_alive_green.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/ground_aux_independence_alive_green.log",
+      "size_bytes": 71,
+      "sha256": "F7D54D61CCC1F1CE2125467C5E45B804C9B91EA8684FED665F81EE9AB2F8BD9F"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/ground_aux_independence_alive_red.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/ground_aux_independence_alive_red.log",
+      "size_bytes": 188,
+      "sha256": "5884102A86A1A4A02E7CD5D827E55846E9B5957BCE671979832843E4581DA8FF"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/ground_aux_independence_expiry_green.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/ground_aux_independence_expiry_green.log",
+      "size_bytes": 167,
+      "sha256": "CF0151789E4324A54D8D5A420D34C637FD0A3066029CDAFCBDB45436536C9FA6"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/ground_aux_independence_expiry_red.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/ground_aux_independence_expiry_red.log",
+      "size_bytes": 424,
+      "sha256": "D88347C798790E5BFC367AA49833D237E98120CE5D26CFBB2C7BBBDF0FFEB1E4"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/ground_aux_independence_hold_green.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/ground_aux_independence_hold_green.log",
+      "size_bytes": 165,
+      "sha256": "E49904578EF663E0F65FA27D7B47D17D7D04518C6F7D3EAD3319BA14C1D57BF8"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/ground_aux_independence_hold_red.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/ground_aux_independence_hold_red.log",
+      "size_bytes": 358,
+      "sha256": "A4452032AAD333B6238EF3F184CC4493F796F0A293D4F1589E1AAA1D1D468EAA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/ground_aux_independence_notready_green.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/ground_aux_independence_notready_green.log",
+      "size_bytes": 75,
+      "sha256": "58FE0AA0AB22A268333FD268A05BC93D32A4F63E4F5DD6640B47AEB78A2CA3DA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/ground_aux_independence_notready_red.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/ground_aux_independence_notready_red.log",
+      "size_bytes": 295,
+      "sha256": "AF937C5A0FE2523B74A1DDD35E81DCCDC880FAF7AE5C0D1B7B8438A99F8E3FC7"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/ground_aux_independence_runtime_green.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/ground_aux_independence_runtime_green.log",
+      "size_bytes": 74,
+      "sha256": "D6D5282CB9C6E0F0FDAB84C22725299D61BE90FE14112D368F226CA39C474DCC"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/ground_aux_independence_runtime_red.log",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/ground_aux_independence_runtime_red.log",
+      "size_bytes": 294,
+      "sha256": "9C86C6E6AB3096E1FE2F993797E397E0CD6CA92EBE1CB4C8F3BF70E8A8F7F9C7"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/independent_review.json",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/independent_review.json",
+      "size_bytes": 2742,
+      "sha256": "EC10087BEAC16CED1248D50FB1E6289FF7339AF26BC88ECF96D3D46D1A4374E9"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/prepared_aux_readiness_explicit_host_arm.json",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/prepared_aux_readiness_explicit_host_arm.json",
+      "size_bytes": 3399,
+      "sha256": "AA4443FB15B750295272CFE2E8D20CA9A88D39E4CF4C684F3C8F71E69E5D4D06"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/prepared_pin_independent_review.json",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/prepared_pin_independent_review.json",
+      "size_bytes": 3897,
+      "sha256": "6DD214B7606BB70D2CA9AFBA25493AE6A4369699B6E8FDA16E2D3A8B57859E87"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/aux_fix/summary.json",
+      "original": "runs/validation/R19-AUX-INDEPENDENT-OBSERVE-FIX-001/20261022T142906Z/summary.json",
+      "size_bytes": 4732,
+      "sha256": "8B2CCDB178332D448E5755DA0B1B85530C56679311DF6D287B4A4518E17EC295"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/active_jtag_ground.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/active_jtag_ground.stderr.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/active_jtag_ground.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/active_jtag_ground.stdout.log",
+      "size_bytes": 2157,
+      "sha256": "DA457985CAAC375F6F6F47E8F3913F2E4FB2C551EDA814190A54FBEE267F5102"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/active_jtag_vehicle.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/active_jtag_vehicle.stderr.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/active_jtag_vehicle.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/active_jtag_vehicle.stdout.log",
+      "size_bytes": 2161,
+      "sha256": "A7EFEAB707C55E3A124A8FC219547685B8D608A447E48EEB156C5A0655CB66EF"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/aux_evaluation.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/aux_evaluation.json",
+      "size_bytes": 7542,
+      "sha256": "B00B6B7E6160E842DA17FBBDB9743C799981119E73D1E1503D5E8224EF997D51"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/capture.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/capture.stderr.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/capture.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/capture.stdout.log",
+      "size_bytes": 96,
+      "sha256": "06A73BACC15AB509D1218A8259D3E37ED67DCD236E23FBD5ADCA39526BA296C3"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/install.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/install.stderr.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/install.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/install.stdout.log",
+      "size_bytes": 497,
+      "sha256": "35416F424FF3873A0508E731AD5487EEFB4221718D973ABB8C03F310566D6D88"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/jtag_preflight.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/jtag_preflight.stderr.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/jtag_preflight.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/jtag_preflight.stdout.log",
+      "size_bytes": 5523,
+      "sha256": "6A3DC16DF7159B89B203FD0A9EDB27F66262598B8172D6FD56733CD9214AABD5"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/operator_evaluation.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/operator_evaluation.json",
+      "size_bytes": 3829,
+      "sha256": "815EE1FDF549712F6A334FBD3718243DE38CEC8D23562508A010A79B81D96902"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/post_run_integrity.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/post_run_integrity.json",
+      "size_bytes": 39027,
+      "sha256": "09FB729BC819909D9AABE96C3ECDF62CEC194AB280208E709BBC32F93F403097"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/quantitative_observations.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/quantitative_observations.json",
+      "size_bytes": 8748,
+      "sha256": "FEEDCA42A890D63E3577221C3FB113277436EF5844B648C91D6B1BB4E3CB96A0"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/rollback.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/rollback.stderr.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/rollback.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/rollback.stdout.log",
+      "size_bytes": 487,
+      "sha256": "501B3EF8FC1E789BE51DB03E7A468D63EAF5930D6054DD45B6AF3D9D97C4AC4F"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground.stderr.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground.stdout.log",
+      "size_bytes": 43946,
+      "sha256": "9B6D721347D6656EE2DD262C35400071766AC7DF7D5EEE8461CD89A7A7F1A2B7"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle.stderr.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle.stdout.log",
+      "size_bytes": 33743,
+      "sha256": "FA9C2A30DA517382B3C58F50515EE264EAC68313C05FB23ADF86191122C0FECE"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/summary.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/summary.json",
+      "size_bytes": 566101,
+      "sha256": "B520EFA9365231DE63751541CE40E5E63534A62AF10A679FCF946E9650CD7B86"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/timed_path_evaluation.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/timed_path_evaluation.json",
+      "size_bytes": 40840,
+      "sha256": "41BB886B78B70F15B4E661726123E1ED5BB6C01648D2AD9C1A4E40107AC5AAC2"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/jtag_preflight/summary.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/jtag_preflight/summary.json",
+      "size_bytes": 12274,
+      "sha256": "0BD3993B353ED1507D85495C0482C6EACD2E0A3F516B77971C274B31078E7056"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/active_jtag_preflight/vehicle/openocd-preflight.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/active_jtag_preflight/vehicle/openocd-preflight.log",
+      "size_bytes": 1257,
+      "sha256": "933F64AB1C92372C04C182722FFE8D43104D51C630171DEFF94961C14A289D0E"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/active_jtag_preflight/vehicle/openocd-preflight.log.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/active_jtag_preflight/vehicle/openocd-preflight.log.stderr.log",
+      "size_bytes": 1223,
+      "sha256": "B9FEB47A3AAAF0B649E9ADACB4642DF68ABF9740B778086EB69151968B0C8B79"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/active_jtag_preflight/vehicle/openocd-preflight.log.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/active_jtag_preflight/vehicle/openocd-preflight.log.stdout.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/active_jtag_preflight/vehicle/summary.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/active_jtag_preflight/vehicle/summary.json",
+      "size_bytes": 3079,
+      "sha256": "D68B21A05A2B90D529234ECD9DFFB7417447CCEB651EED9257672160C37D45BC"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/active_jtag_preflight/ground/openocd-preflight.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/active_jtag_preflight/ground/openocd-preflight.log",
+      "size_bytes": 1257,
+      "sha256": "22C8DFFF79DAAA8890903136F3CA7CD8FA1F2E84353419C007C3BBD9730AFFDC"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/active_jtag_preflight/ground/openocd-preflight.log.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/active_jtag_preflight/ground/openocd-preflight.log.stderr.log",
+      "size_bytes": 1223,
+      "sha256": "F25C5B318B8D8B75419A4A1BCBE67A3143CEBEC38417FEDB5170271D8A5CE385"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/active_jtag_preflight/ground/openocd-preflight.log.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/active_jtag_preflight/ground/openocd-preflight.log.stdout.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/active_jtag_preflight/ground/summary.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/active_jtag_preflight/ground/summary.json",
+      "size_bytes": 3075,
+      "sha256": "B127B388D76626FC59DF3DED5BF8889F0AEE04CC417D2D2E73D88AA9FD6D507C"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/capture/candidate_verify.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/capture/candidate_verify.log",
+      "size_bytes": 465,
+      "sha256": "C744B850333DB0F145B5C9D77B94D9CEEB58153F87DFC23DAC2DEE8EFBE282E9"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/capture/ground.raw.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/capture/ground.raw.bin",
+      "size_bytes": 3693,
+      "sha256": "A3B71958263BDC0820379D3E004F18950D02EBA4EDC0B2BC1F855F57EEB0D940"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/capture/summary.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/capture/summary.json",
+      "size_bytes": 634000,
+      "sha256": "0E5EC9774BEDA9DB53628CEEB97642D3B2CA5D1B42BCE25320A0EB078BEE4501"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/capture/vehicle.raw.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/capture/vehicle.raw.bin",
+      "size_bytes": 2646,
+      "sha256": "2A0A0C61EE4C36AD5627F41A168DF7374B1AF4894B536901FBCA89D40FA87873"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/aux_readiness_first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/aux_readiness_first.bin",
+      "size_bytes": 6144,
+      "sha256": "429A6555DE5C6041F7422BD80EFD8CC910E73872FEBC52AD62A6635AE3D8A612"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/aux_readiness_second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/aux_readiness_second.bin",
+      "size_bytes": 6144,
+      "sha256": "429A6555DE5C6041F7422BD80EFD8CC910E73872FEBC52AD62A6635AE3D8A612"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/aux-readiness-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/aux-readiness-attempt-1-first.bin",
+      "size_bytes": 6144,
+      "sha256": "429A6555DE5C6041F7422BD80EFD8CC910E73872FEBC52AD62A6635AE3D8A612"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/aux-readiness-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/aux-readiness-attempt-1-second.bin",
+      "size_bytes": 6144,
+      "sha256": "429A6555DE5C6041F7422BD80EFD8CC910E73872FEBC52AD62A6635AE3D8A612"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/endpoint-fifo-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/endpoint-fifo-attempt-1-first.bin",
+      "size_bytes": 112,
+      "sha256": "3E57A2609A7DF1C458D29728853B71C5CDBBE20EA4A67CCA09CE790D2BCD2E8C"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/endpoint-fifo-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/endpoint-fifo-attempt-1-second.bin",
+      "size_bytes": 112,
+      "sha256": "3E57A2609A7DF1C458D29728853B71C5CDBBE20EA4A67CCA09CE790D2BCD2E8C"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/endpoint-fifo-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/endpoint-fifo-first.bin",
+      "size_bytes": 112,
+      "sha256": "3E57A2609A7DF1C458D29728853B71C5CDBBE20EA4A67CCA09CE790D2BCD2E8C"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/endpoint-fifo-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/endpoint-fifo-second.bin",
+      "size_bytes": 112,
+      "sha256": "3E57A2609A7DF1C458D29728853B71C5CDBBE20EA4A67CCA09CE790D2BCD2E8C"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/first-usb-failure-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/first-usb-failure-attempt-1-first.bin",
+      "size_bytes": 384,
+      "sha256": "0E6F2EE9F3C62D0BC382E099FC955EE2C9014BBCED2F425486E640CE9DD37EF8"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/first-usb-failure-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/first-usb-failure-attempt-1-second.bin",
+      "size_bytes": 384,
+      "sha256": "0E6F2EE9F3C62D0BC382E099FC955EE2C9014BBCED2F425486E640CE9DD37EF8"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/first-usb-failure-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/first-usb-failure-first.bin",
+      "size_bytes": 384,
+      "sha256": "0E6F2EE9F3C62D0BC382E099FC955EE2C9014BBCED2F425486E640CE9DD37EF8"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/first-usb-failure-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/first-usb-failure-second.bin",
+      "size_bytes": 384,
+      "sha256": "0E6F2EE9F3C62D0BC382E099FC955EE2C9014BBCED2F425486E640CE9DD37EF8"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/ground-usb-commit-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/ground-usb-commit-attempt-1-first.bin",
+      "size_bytes": 128,
+      "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/ground-usb-commit-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/ground-usb-commit-attempt-1-second.bin",
+      "size_bytes": 128,
+      "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/ground-usb-commit-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/ground-usb-commit-first.bin",
+      "size_bytes": 128,
+      "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/ground-usb-commit-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/ground-usb-commit-second.bin",
+      "size_bytes": 128,
+      "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/hwcdc-restart-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/hwcdc-restart-attempt-1-first.bin",
+      "size_bytes": 128,
+      "sha256": "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/hwcdc-restart-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/hwcdc-restart-attempt-1-second.bin",
+      "size_bytes": 128,
+      "sha256": "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/hwcdc-restart-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/hwcdc-restart-first.bin",
+      "size_bytes": 128,
+      "sha256": "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/hwcdc-restart-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/hwcdc-restart-second.bin",
+      "size_bytes": 128,
+      "sha256": "327767937F2A4E2035341A27DA21161FE8E4D697F9ABDC699391518A2F57ED80"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/openocd-attempt-1-capture.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/openocd-attempt-1-capture.log",
+      "size_bytes": 2441,
+      "sha256": "96049D1715C2D57744A6EA23E3BF67964C967E1D44F4F7D89A001A4FF254E46B"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/openocd-attempt-1-capture.log.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/openocd-attempt-1-capture.log.stderr.log",
+      "size_bytes": 2407,
+      "sha256": "168C37DAA3C81ED2D83EF405D0A6132716A82FF680EACD9AFB88A5FB146AC027"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/openocd-attempt-1-capture.log.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/openocd-attempt-1-capture.log.stdout.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/openocd-attempt-1-cleanup.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/openocd-attempt-1-cleanup.log",
+      "size_bytes": 1134,
+      "sha256": "260E44920B71DC4A3F9873EFE94A78C8BDE97A45C71324509038E5709AD18FCF"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/openocd-attempt-1-cleanup.log.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/openocd-attempt-1-cleanup.log.stderr.log",
+      "size_bytes": 1100,
+      "sha256": "758F95381DD59C60C705021F88BC2B7BD83DADA2D1A546183897944E55416EAB"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/openocd-attempt-1-cleanup.log.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/openocd-attempt-1-cleanup.log.stdout.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/runtime-stage-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/runtime-stage-attempt-1-first.bin",
+      "size_bytes": 68,
+      "sha256": "D53835A90CDB89AE95E61E29EDD3B050024D8786A09B6E1570E6F2B8439062BA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/runtime-stage-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/runtime-stage-attempt-1-second.bin",
+      "size_bytes": 68,
+      "sha256": "D53835A90CDB89AE95E61E29EDD3B050024D8786A09B6E1570E6F2B8439062BA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/runtime-stage-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/runtime-stage-first.bin",
+      "size_bytes": 68,
+      "sha256": "D53835A90CDB89AE95E61E29EDD3B050024D8786A09B6E1570E6F2B8439062BA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/runtime-stage-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/runtime-stage-second.bin",
+      "size_bytes": 68,
+      "sha256": "D53835A90CDB89AE95E61E29EDD3B050024D8786A09B6E1570E6F2B8439062BA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/summary.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/summary.json",
+      "size_bytes": 136992,
+      "sha256": "B619FF0E4F8A8C374D78F0A09B8E82DDFD49C2971C423224783B678AE1ADA8D4"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/timed_path_first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/timed_path_first.bin",
+      "size_bytes": 512,
+      "sha256": "539C27C66EFEA0A8F31B3992B4E6B74721BFBC683BAB3133EC681D1121E4C9A0"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/timed_path_second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/timed_path_second.bin",
+      "size_bytes": 512,
+      "sha256": "539C27C66EFEA0A8F31B3992B4E6B74721BFBC683BAB3133EC681D1121E4C9A0"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/timed-path-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/timed-path-attempt-1-first.bin",
+      "size_bytes": 512,
+      "sha256": "539C27C66EFEA0A8F31B3992B4E6B74721BFBC683BAB3133EC681D1121E4C9A0"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_vehicle/timed-path-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_vehicle/timed-path-attempt-1-second.bin",
+      "size_bytes": 512,
+      "sha256": "539C27C66EFEA0A8F31B3992B4E6B74721BFBC683BAB3133EC681D1121E4C9A0"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/aux_readiness_first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/aux_readiness_first.bin",
+      "size_bytes": 6144,
+      "sha256": "C7C78B8C1F5E783F980D094D52721B4A001A635C4C1F88FFB78C70D207E01960"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/aux_readiness_second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/aux_readiness_second.bin",
+      "size_bytes": 6144,
+      "sha256": "C7C78B8C1F5E783F980D094D52721B4A001A635C4C1F88FFB78C70D207E01960"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/aux-readiness-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/aux-readiness-attempt-1-first.bin",
+      "size_bytes": 6144,
+      "sha256": "C7C78B8C1F5E783F980D094D52721B4A001A635C4C1F88FFB78C70D207E01960"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/aux-readiness-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/aux-readiness-attempt-1-second.bin",
+      "size_bytes": 6144,
+      "sha256": "C7C78B8C1F5E783F980D094D52721B4A001A635C4C1F88FFB78C70D207E01960"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/endpoint-fifo-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/endpoint-fifo-attempt-1-first.bin",
+      "size_bytes": 112,
+      "sha256": "A8D718726BEA368845B711EC5503B1729D2FD9C0996DADE40CB63CF8F894E59B"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/endpoint-fifo-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/endpoint-fifo-attempt-1-second.bin",
+      "size_bytes": 112,
+      "sha256": "A8D718726BEA368845B711EC5503B1729D2FD9C0996DADE40CB63CF8F894E59B"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/endpoint-fifo-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/endpoint-fifo-first.bin",
+      "size_bytes": 112,
+      "sha256": "A8D718726BEA368845B711EC5503B1729D2FD9C0996DADE40CB63CF8F894E59B"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/endpoint-fifo-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/endpoint-fifo-second.bin",
+      "size_bytes": 112,
+      "sha256": "A8D718726BEA368845B711EC5503B1729D2FD9C0996DADE40CB63CF8F894E59B"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/first-usb-failure-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/first-usb-failure-attempt-1-first.bin",
+      "size_bytes": 384,
+      "sha256": "9C8F141B2F7889561A8A090F5673F9242D5A8A5C90F561169365EC5A8BF8A9DA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/first-usb-failure-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/first-usb-failure-attempt-1-second.bin",
+      "size_bytes": 384,
+      "sha256": "9C8F141B2F7889561A8A090F5673F9242D5A8A5C90F561169365EC5A8BF8A9DA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/first-usb-failure-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/first-usb-failure-first.bin",
+      "size_bytes": 384,
+      "sha256": "9C8F141B2F7889561A8A090F5673F9242D5A8A5C90F561169365EC5A8BF8A9DA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/first-usb-failure-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/first-usb-failure-second.bin",
+      "size_bytes": 384,
+      "sha256": "9C8F141B2F7889561A8A090F5673F9242D5A8A5C90F561169365EC5A8BF8A9DA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/ground-usb-commit-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/ground-usb-commit-attempt-1-first.bin",
+      "size_bytes": 128,
+      "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/ground-usb-commit-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/ground-usb-commit-attempt-1-second.bin",
+      "size_bytes": 128,
+      "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/ground-usb-commit-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/ground-usb-commit-first.bin",
+      "size_bytes": 128,
+      "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/ground-usb-commit-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/ground-usb-commit-second.bin",
+      "size_bytes": 128,
+      "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/hwcdc-restart-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/hwcdc-restart-attempt-1-first.bin",
+      "size_bytes": 128,
+      "sha256": "485A0F4C0061B7A74B8637E649BC05BCC74F5FEEB243A20D05CB46278DF10E1A"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/hwcdc-restart-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/hwcdc-restart-attempt-1-second.bin",
+      "size_bytes": 128,
+      "sha256": "485A0F4C0061B7A74B8637E649BC05BCC74F5FEEB243A20D05CB46278DF10E1A"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/hwcdc-restart-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/hwcdc-restart-first.bin",
+      "size_bytes": 128,
+      "sha256": "485A0F4C0061B7A74B8637E649BC05BCC74F5FEEB243A20D05CB46278DF10E1A"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/hwcdc-restart-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/hwcdc-restart-second.bin",
+      "size_bytes": 128,
+      "sha256": "485A0F4C0061B7A74B8637E649BC05BCC74F5FEEB243A20D05CB46278DF10E1A"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/openocd-attempt-1-capture.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/openocd-attempt-1-capture.log",
+      "size_bytes": 2432,
+      "sha256": "18E8F057D5812FD17B96D48D299B897C1B306AE2D22D07CDD9FBA444F92F69BA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/openocd-attempt-1-capture.log.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/openocd-attempt-1-capture.log.stderr.log",
+      "size_bytes": 2398,
+      "sha256": "21C18A91E86179B1A055E3446E86D9A7D57CF449EB6360A8BFAE1DE8B503E8B2"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/openocd-attempt-1-capture.log.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/openocd-attempt-1-capture.log.stdout.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/openocd-attempt-1-cleanup.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/openocd-attempt-1-cleanup.log",
+      "size_bytes": 1134,
+      "sha256": "5CBAAEDE1D18CF50FE1C761DE75CA275D340FC635D7DAC7654520FA49A534EEC"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/openocd-attempt-1-cleanup.log.stderr.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/openocd-attempt-1-cleanup.log.stderr.log",
+      "size_bytes": 1100,
+      "sha256": "ADCA6E5D4622EFD37B915F0790ADE913B060A149CB53B0BB8BD664CA1CA5416C"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/openocd-attempt-1-cleanup.log.stdout.log",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/openocd-attempt-1-cleanup.log.stdout.log",
+      "size_bytes": 0,
+      "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/runtime-stage-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/runtime-stage-attempt-1-first.bin",
+      "size_bytes": 68,
+      "sha256": "939102F79A2A0EA6F9181CD31EE71371CE2C14F9B40CE10CB4770E45645269FB"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/runtime-stage-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/runtime-stage-attempt-1-second.bin",
+      "size_bytes": 68,
+      "sha256": "939102F79A2A0EA6F9181CD31EE71371CE2C14F9B40CE10CB4770E45645269FB"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/runtime-stage-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/runtime-stage-first.bin",
+      "size_bytes": 68,
+      "sha256": "939102F79A2A0EA6F9181CD31EE71371CE2C14F9B40CE10CB4770E45645269FB"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/runtime-stage-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/runtime-stage-second.bin",
+      "size_bytes": 68,
+      "sha256": "939102F79A2A0EA6F9181CD31EE71371CE2C14F9B40CE10CB4770E45645269FB"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/summary.json",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/summary.json",
+      "size_bytes": 220873,
+      "sha256": "97463BFE68E4D9855A4716F6F3A22457AA53E5BDEFA53D2CB3F5B2FBDA25B5AB"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/timed_path_first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/timed_path_first.bin",
+      "size_bytes": 512,
+      "sha256": "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/timed_path_second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/timed_path_second.bin",
+      "size_bytes": 512,
+      "sha256": "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/timed-path-attempt-1-first.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/timed-path-attempt-1-first.bin",
+      "size_bytes": 512,
+      "sha256": "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/live/stage_ground/timed-path-attempt-1-second.bin",
+      "original": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix/stage_ground/timed-path-attempt-1-second.bin",
+      "size_bytes": 512,
+      "sha256": "65BD6973C3C47FD87E416263FBC0EF7121AB8DC0F3B75CAF6B92A23612152509"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/sync_cause/changes.diff",
+      "original": "runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/changes.diff",
+      "size_bytes": 4952,
+      "sha256": "041BB460763107D72C5939090A6B2A4BDDCB9BDF9123EDDDCF173D589F19E646"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/sync_cause/compile_ground.log",
+      "original": "runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/compile_ground.log",
+      "size_bytes": 609,
+      "sha256": "56939CA3E13310BA8371884F381F9165AC24DF25EA050F51CD56E288B26DF9D6"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/sync_cause/compile_vehicle.log",
+      "original": "runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/compile_vehicle.log",
+      "size_bytes": 604,
+      "sha256": "036B8CE2CC18EA69DAAEBBBAC37F363C3E0D20408582A106581A49FF0B19D03F"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/sync_cause/diagnostic_usb_cause.json",
+      "original": "runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/diagnostic_usb_cause.json",
+      "size_bytes": 11491,
+      "sha256": "4615C679DC67CEC59FE063B99E6239D93C057FEEDABFF2BC60F7D0F89B8F3149"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/sync_cause/diagnostic_usb_cause.log",
+      "original": "runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/diagnostic_usb_cause.log",
+      "size_bytes": 2790,
+      "sha256": "B70B9C21A57B868BD8F9CC44BC5A037083242CE3241ABD0C429D9BF0C76D6435"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/sync_cause/pc_workflow_facts.json",
+      "original": "runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/pc_workflow_facts.json",
+      "size_bytes": 676,
+      "sha256": "4266F58BF401689D06F55356C7E317B27A6AA7A7E52D063006E268D41EEEE56D"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/sync_cause/repro_ground.log",
+      "original": "runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/repro_ground.log",
+      "size_bytes": 339,
+      "sha256": "0468DC7538191EABEB0D0DEEB8F7DADCAE6AE7B98F2EAFBEB7DCA3C035F1ACD2"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/sync_cause/repro_vehicle.log",
+      "original": "runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/repro_vehicle.log",
+      "size_bytes": 324,
+      "sha256": "23A44FFB934097AB5578C94AA097168A9A22D42EC70A011BBE250F4099E1D320"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/sync_cause/repro.cpp",
+      "original": "runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/repro.cpp",
+      "size_bytes": 4476,
+      "sha256": "68D7AE67EF48FF23B881165E30FF8A6F4CBC3EC1B37195E19FD512B3153DE9BA"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/sync_cause/runner_workflow_audit.json",
+      "original": "runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/runner_workflow_audit.json",
+      "size_bytes": 10697,
+      "sha256": "E1386F9EA017FB3202B1C128FA8C26521C9A3809285F768065878AC1D598E09E"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/sync_cause/summary.json",
+      "original": "runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/summary.json",
+      "size_bytes": 5629,
+      "sha256": "5D93F8A84AB851D53668BA1B2D9AFCB7006566FE1DE637E27BF67200526EF701"
+    },
+    {
+      "path": "lora moduel/publication/updates/2026-10-23/evidence/sync_cause/vehicle_sync_cause.json",
+      "original": "runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/vehicle_sync_cause.json",
+      "size_bytes": 10107,
+      "sha256": "C119FB9271FEA0F44A6AD46E3DF704D7B193C31C3B005DBADAB22584327F17D4"
+    }
+  ]
+}

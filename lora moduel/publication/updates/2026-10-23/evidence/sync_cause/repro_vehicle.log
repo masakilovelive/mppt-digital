@@ -1,0 +1,2 @@
+role=vehicle checks=9 failures=0 loops=600 elapsed_ms=6000 rx_remaining_before_manual_check=28 sync_count=0 private_clock_replies=0 crc_valid_diagnostic_frames=6 parser_bad_crc=0
+model=actual_staged_bridge_loop_with_host_fakes; AUX_ISR_instrumentation=off; physical_USB_RX_delivery_not_proven; production_source_unchanged

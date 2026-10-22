@@ -1,0 +1,4 @@
+FAIL pre-normal runtime-failed or not-ready guard still observes AUX
+IT-R19-GROUND-AUX-INDEPENDENCE-001 scenario=notready checks=10 failures=3
+FAIL observe-only guard preserves the 2-second LOW permanent safety stop
+FAIL later HIGH is observed but cannot clear a permanent AUX/runtime fault

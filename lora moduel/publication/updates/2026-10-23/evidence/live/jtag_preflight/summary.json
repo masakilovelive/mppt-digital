@@ -1,0 +1,196 @@
+{
+    "schema":  "vc-lora-r19-jtag-preflash-gate-v1",
+    "test_id":  "R19-JTAG-PREFLASH-GATE-001",
+    "started_utc":  "2026-10-22T14:56:39.1048408Z",
+    "finished_utc":  "2026-10-22T14:56:51.9090813Z",
+    "result":  "PASS",
+    "status":  "PASS_WINUSB_DRIVER_BINDING_PNP_ONLY",
+    "mode":  "LIVE_PNP_ONLY",
+    "hardware_interaction":  false,
+    "fail_closed":  true,
+    "failure":  "",
+    "safety":  {
+                   "com_opened":  false,
+                   "flash_written":  false,
+                   "target_config_loaded":  false,
+                   "target_halt_or_reset_issued":  false,
+                   "target_state_modified":  false,
+                   "device_opened":  false,
+                   "jtag_clocks_issued":  false,
+                   "tap_reset_issued":  false,
+                   "openocd_invoked":  false,
+                   "reader_preflight_invoked":  false,
+                   "active_jtag_proven":  false,
+                   "firmware_install_allowed":  false
+               },
+    "fixed_binding_policy":  {
+                                 "parent_key":  "DEVPKEY_Device_Parent",
+                                 "source_interface":  "VID_303A\u0026PID_1001\u0026MI_00",
+                                 "selected_interface":  "VID_303A\u0026PID_1001\u0026MI_02",
+                                 "driver_requirements":  "Status=OK, Service=WINUSB, ProblemCode=0, pinned provider/version/INF hash/matching ID/class GUID",
+                                 "interface_registration":  "Expected DeviceInterfaceGUID registry value AND enabled pnputil /enum-interfaces record",
+                                 "active_jtag":  "not attempted; separate authorization required"
+                             },
+    "toolchain":  {
+                      "policy":  "PNP_ONLY_OPENOCD_AND_READER_NOT_INVOKED",
+                      "legacy_parameters_accepted":  true,
+                      "openocd_invoked":  false,
+                      "reader_invoked":  false
+                  },
+    "roles":  [
+                  {
+                      "role":  "vehicle",
+                      "com":  "COM3",
+                      "serial":  "90:70:69:11:81:A4",
+                      "parent":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                      "mi00_instance_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                      "mi02_instance_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02\\7\u00267131F6A\u00260\u00260002",
+                      "mi02_status":  "OK",
+                      "service":  "WinUSB",
+                      "problem_code":  0,
+                      "driver_inf":  "oem227.inf",
+                      "driver_inf_sha256":  "0652254D989022A381EB91084C74A08BAF400E510CE6A2FE4C6EC834AE99EADA",
+                      "driver_provider":  "libwdi",
+                      "driver_version":  "6.1.7600.16386",
+                      "matching_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02",
+                      "device_class_guid":  "{88BAE032-5A81-49F0-BC3D-A4FF138216D6}",
+                      "location_paths":  [
+                                             "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USBMI(2)",
+                                             "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USBMI(2)"
+                                         ],
+                      "pnp_port_chain":  "4.2",
+                      "registry_interface_guids":  [
+                                                       "{80869ad8-c37f-476a-a6b4-ae241c30a473}"
+                                                   ],
+                      "pnputil_interfaces":  [
+                                                 "\\\\?\\USB#VID_303A\u0026PID_1001\u0026MI_02#7\u00267131f6a\u00260\u00260002#{dee824ef-729b-4a0e-9c14-b7117d33a817}",
+                                                 "\\\\?\\USB#VID_303A\u0026PID_1001\u0026MI_02#7\u00267131f6a\u00260\u00260002#{80869ad8-c37f-476a-a6b4-ae241c30a473}"
+                                             ],
+                      "driver_binding_proven":  true,
+                      "interface_registration_proven":  true,
+                      "openocd_usb_location":  "",
+                      "reader_preflight_proven":  false,
+                      "reader_summary_path":  "",
+                      "reader_summary_sha256":  ""
+                  },
+                  {
+                      "role":  "ground",
+                      "com":  "COM6",
+                      "serial":  "1C:DB:D4:5A:83:80",
+                      "parent":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                      "mi00_instance_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                      "mi02_instance_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02\\7\u00262159A644\u00260\u00260002",
+                      "mi02_status":  "OK",
+                      "service":  "WinUSB",
+                      "problem_code":  0,
+                      "driver_inf":  "oem227.inf",
+                      "driver_inf_sha256":  "0652254D989022A381EB91084C74A08BAF400E510CE6A2FE4C6EC834AE99EADA",
+                      "driver_provider":  "libwdi",
+                      "driver_version":  "6.1.7600.16386",
+                      "matching_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02",
+                      "device_class_guid":  "{88BAE032-5A81-49F0-BC3D-A4FF138216D6}",
+                      "location_paths":  [
+                                             "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(4)#USBMI(2)",
+                                             "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(4)#USBMI(2)"
+                                         ],
+                      "pnp_port_chain":  "4.4",
+                      "registry_interface_guids":  [
+                                                       "{80869ad8-c37f-476a-a6b4-ae241c30a473}"
+                                                   ],
+                      "pnputil_interfaces":  [
+                                                 "\\\\?\\USB#VID_303A\u0026PID_1001\u0026MI_02#7\u00262159a644\u00260\u00260002#{dee824ef-729b-4a0e-9c14-b7117d33a817}",
+                                                 "\\\\?\\USB#VID_303A\u0026PID_1001\u0026MI_02#7\u00262159a644\u00260\u00260002#{80869ad8-c37f-476a-a6b4-ae241c30a473}"
+                                             ],
+                      "driver_binding_proven":  true,
+                      "interface_registration_proven":  true,
+                      "openocd_usb_location":  "",
+                      "reader_preflight_proven":  false,
+                      "reader_summary_path":  "",
+                      "reader_summary_sha256":  ""
+                  }
+              ],
+    "openocd_list":  null,
+    "steps":  [
+                  {
+                      "name":  "pnp_inventory",
+                      "result":  "PASS",
+                      "hardware_interaction":  false,
+                      "evidence":  {
+                                       "role_count":  2,
+                                       "mapping":  "fixed COM MI_00 -\u003e exact parent MAC -\u003e same-parent MI_02"
+                                   }
+                  },
+                  {
+                      "name":  "topology_binding",
+                      "result":  "PASS",
+                      "hardware_interaction":  false,
+                      "evidence":  {
+                                       "policy":  "each role has one observed chain; Vehicle and Ground are distinct",
+                                       "roles":  [
+                                                     {
+                                                         "role":  "vehicle",
+                                                         "pnp_port_chain":  "4.2"
+                                                     },
+                                                     {
+                                                         "role":  "ground",
+                                                         "pnp_port_chain":  "4.4"
+                                                     }
+                                                 ]
+                                   }
+                  },
+                  {
+                      "name":  "driver_binding",
+                      "result":  "PASS",
+                      "hardware_interaction":  false,
+                      "evidence":  {
+                                       "roles":  [
+                                                     {
+                                                         "role":  "vehicle",
+                                                         "proven":  true,
+                                                         "service":  "WinUSB",
+                                                         "problem_code":  0,
+                                                         "driver_provider":  "libwdi",
+                                                         "driver_version":  "6.1.7600.16386",
+                                                         "driver_inf":  "oem227.inf",
+                                                         "driver_inf_sha256":  "0652254D989022A381EB91084C74A08BAF400E510CE6A2FE4C6EC834AE99EADA",
+                                                         "matching_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02",
+                                                         "device_class_guid":  "{88BAE032-5A81-49F0-BC3D-A4FF138216D6}"
+                                                     },
+                                                     {
+                                                         "role":  "ground",
+                                                         "proven":  true,
+                                                         "service":  "WinUSB",
+                                                         "problem_code":  0,
+                                                         "driver_provider":  "libwdi",
+                                                         "driver_version":  "6.1.7600.16386",
+                                                         "driver_inf":  "oem227.inf",
+                                                         "driver_inf_sha256":  "0652254D989022A381EB91084C74A08BAF400E510CE6A2FE4C6EC834AE99EADA",
+                                                         "matching_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_02",
+                                                         "device_class_guid":  "{88BAE032-5A81-49F0-BC3D-A4FF138216D6}"
+                                                     }
+                                                 ]
+                                   }
+                  },
+                  {
+                      "name":  "interface_registration",
+                      "result":  "PASS",
+                      "hardware_interaction":  false,
+                      "evidence":  {
+                                       "roles":  [
+                                                     {
+                                                         "role":  "vehicle",
+                                                         "registry_guid_count":  1,
+                                                         "pnputil_interface_count":  2,
+                                                         "proven":  true
+                                                     },
+                                                     {
+                                                         "role":  "ground",
+                                                         "registry_guid_count":  1,
+                                                         "pnputil_interface_count":  2,
+                                                         "proven":  true
+                                                     }
+                                                 ]
+                                   }
+                  }
+              ]
+}

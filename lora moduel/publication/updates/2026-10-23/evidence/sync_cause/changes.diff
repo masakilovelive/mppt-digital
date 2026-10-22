@@ -1,0 +1,106 @@
+diff --git a/runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/repro.cpp b/runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/repro.cpp
+new file mode 100644
+index 0000000..ef6b582
+--- /dev/null
++++ b/runs/validation/R19-DIAGNOSTIC-USB-VEHICLE-SYNC-CAUSE-OFFLINE-001/20261022T223013Z/repro.cpp
+@@ -0,0 +1,100 @@
++#include "fake_arduino_test_api.hpp"
++#ifdef REPRO_GROUND
++#define VC_LORA_PHASE6_GROUND 1
++#else
++#define VC_LORA_PHASE6_VEHICLE 1
++#endif
++#define VC_LORA_R19_HIGH_SPEED_CANDIDATE 1
++#define VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS 1
++#define VC_LORA_R19_TIMED_PATH_DIAGNOSTICS 1
++#define VC_LORA_R19_USB_READINESS_MODE 2
++// Host fakes have no GPIO ISR backend. This disables observation-only AUX
++// instrumentation, not the role selection or private clock handler guards.
++#define VC_LORA_R19_AUX_READINESS_DIAGNOSTICS 0
++#include "vc_lora_phase6_bridge.hpp"
++
++#include <array>
++#include <cstdint>
++#include <iostream>
++
++int main() {
++  using namespace vc_lora;
++  using namespace vc_lora::experimental;
++  using namespace vc_lora_phase6_firmware;
++  unsigned checks = 0U, failures = 0U;
++  const auto check = [&](bool ok, const char* name) {
++    ++checks;
++    if (!ok) { ++failures; std::cerr << "FAIL " << name << '\n'; }
++  };
++  // Exact 28-byte ClockRequest captured from the current live Vehicle write.
++  constexpr std::array<std::uint8_t, 28U> request{
++    0xFDU,0x10U,0x00U,0x00U,0x00U,0xF9U,0xC1U,0x6FU,0x00U,0x00U,
++    0x00U,0x00U,0x00U,0x00U,0x00U,0x00U,0x00U,0x00U,0xC7U,0xB1U,
++    0xA7U,0xFDU,0x99U,0x38U,0x19U,0x52U,0xDDU,0xA3U};
++  MavlinkFrame decoded{};
++  std::uint64_t nonce = 0U;
++  check(validate_mavlink_frame(request.data(), request.size(), decoded) ==
++      MavlinkParseStatus::FrameReady, "exact live request CRC is valid");
++  check(r19_decode_usb_clock_request(decoded, nonce) &&
++      nonce == 5915821819564634567ULL, "exact live nonce is canonical");
++
++  fake_arduino::reset_platform();
++  fake_arduino::set_pin_input_level(D8, HIGH);
++  Serial.set_plugged(true);
++  Serial.set_endpoint_ready(true);
++  setup_bridge();
++  check(bridge_ready && !runtime_fail_closed, "setup is ready");
++  loop_bridge();
++  loop_bridge();
++  Serial.inject_rx(request.data(), request.size());
++  check(Serial.available() == static_cast<int>(request.size()),
++      "all request bytes are already in modeled MCU USB RX queue");
++  const auto begin_ms = monotonic_now_ms();
++  for (unsigned n = 0U; n < 600U; ++n) {
++    fake_arduino::advance_time_ms(10U);
++    loop_bridge();
++  }
++  const auto elapsed_ms = monotonic_now_ms() - begin_ms;
++  const auto remaining = Serial.available();
++  R19FirstUsbFailureSnapshot first{};
++  check(vc_lora_r19_first_usb_failure_record.try_snapshot(first) &&
++      first.valid_header(), "first failure and clock-sync record is valid");
++  unsigned private_replies = 0U, diagnostic_frames = 0U, parser_failures = 0U;
++  MavlinkStreamParser parser{};
++  for (const auto byte : Serial.tx_bytes()) {
++    MavlinkFrame frame{};
++    const auto status = parser.push(byte, frame);
++    if (status == MavlinkParseStatus::BadCrc) ++parser_failures;
++    if (status == MavlinkParseStatus::FrameReady) {
++      if (frame.system_id == r19_clock_system_id &&
++          frame.component_id == r19_clock_response_component &&
++          frame.message_id == 111U) ++private_replies;
++      if (frame.size == 63U && frame.message_id == 253U) ++diagnostic_frames;
++    }
++  }
++  check(elapsed_ms >= 6000U, "model exceeds PC five-second reply deadline");
++  check(diagnostic_frames > 0U && parser_failures == 0U,
++      "same USB output path emits complete CRC-valid diagnostic frames");
++#ifdef REPRO_GROUND
++  check(remaining == 0 && first.sync_count == 1U && private_replies == 1U,
++      "Ground positive control consumes exact request and replies once");
++  const char* role = "ground_positive_control";
++#else
++  check(remaining == 28 && first.sync_count == 0U && private_replies == 0U,
++      "Vehicle actual loop never consumes USB RX or handles clock request");
++  bool unchanged = remaining == 28;
++  for (const auto expected : request) {
++    unchanged = (Serial.read() == expected) && unchanged;
++  }
++  check(unchanged, "all 28 bytes remain exact after 600 Vehicle loops");
++  const char* role = "vehicle";
++#endif
++  std::cout << "role=" << role << " checks=" << checks << " failures=" << failures
++      << " loops=600 elapsed_ms=" << elapsed_ms << " rx_remaining_before_manual_check="
++      << remaining << " sync_count=" << first.sync_count << " private_clock_replies="
++      << private_replies << " crc_valid_diagnostic_frames=" << diagnostic_frames
++      << " parser_bad_crc=" << parser_failures << '\n';
++  std::cout << "model=actual_staged_bridge_loop_with_host_fakes; AUX_ISR_instrumentation=off; "
++      "physical_USB_RX_delivery_not_proven; production_source_unchanged\n";
++  return failures == 0U ? 0 : 1;
++}

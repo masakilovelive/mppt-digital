@@ -1,0 +1,60 @@
+{
+  "schema": "r19_aux_independent_observation_review_v1",
+  "reviewer": "/root/aux_independent_review",
+  "scope": "read_only_firmware_and_test_diff_review",
+  "verdict": "NO_BLOCKING_FINDINGS",
+  "baseline": "before/firmware/phase6/vc_lora_phase6_bridge.hpp",
+  "reviewed_files": [
+    "firmware/phase6/vc_lora_phase6_bridge.hpp",
+    "tests/host/standalone/phase6_ground_aux_independence_tests.cpp",
+    "tests/hil/check_r19_aux_readiness_bridge.ps1"
+  ],
+  "observations": {
+    "new_helper": "r19_observe_ground_aux_without_completion",
+    "new_loop_call_sites": 3,
+    "helper_build_scope": "VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS && VC_LORA_PHASE6_GROUND",
+    "fresh_gpio_observation": true,
+    "permanent_aux_fault_propagated_to_runtime_latch": true,
+    "completion_consumption_added": false,
+    "radio_writer_or_lease_release_added": false,
+    "usb_or_rf_egress_added_by_helper": false,
+    "tdd_progress_added_by_helper": false,
+    "ordinary_aux_bypass_marker_redefined": false,
+    "existing_ready_private_wrapper_unchanged": true,
+    "alive_drain_interval_closes_before_supplemental_observation": true,
+    "pre_normal_early_return_families_covered": true,
+    "later_loop_early_returns_follow_existing_normal_aux_observation": true
+  },
+  "fixed_contracts_unchanged": {
+    "pins_and_uart": true,
+    "e220_profile": true,
+    "tdd_configuration": true,
+    "product_heartbeat_commit_ms": 106,
+    "private_reply_or_diagnostic_frame_ms": 500,
+    "diagnostic_recovery_ms": 120000,
+    "aux_low_timeout_ms": 2000,
+    "permanent_fault_not_cleared_by_later_high": true
+  },
+  "test_review": {
+    "new_tests_cover_10_8_second_held_diagnostic": true,
+    "new_tests_cover_success_expiry_alive_backpressure_and_stopped_guards": true,
+    "new_tests_cover_completion_and_writer_ownership_preservation": true,
+    "new_tests_cover_real_aux_low_safety_stop": true,
+    "existing_assertions_removed_or_weakened": false,
+    "execution_status": "execution_is_recorded_separately_by_test_runner"
+  },
+  "limitations": [
+    "Supplemental AUX observation occurs after existing bounded USB calls return, not continuously inside a blocking USB call.",
+    "Once-per-loop coverage does not establish a zero-gap physical waveform history; maximum observed GPIO interval still requires measurement.",
+    "This source review does not establish hardware acceptance, 932-parameter throughput, or Deployment authorization."
+  ],
+  "hardware": {
+    "operations_performed_by_reviewer": false,
+    "com_access": false,
+    "jtag_access": false,
+    "process_enumeration": false,
+    "hardware_test_performed_at_review_time": false,
+    "state_reported_by_parent": "POWER_OFF"
+  },
+  "candidate_or_protected_source_written_by_reviewer": false
+}

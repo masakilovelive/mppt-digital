@@ -1,0 +1,190 @@
+{
+  "schema": "r19_vehicle_usb_clock_sync_cause_offline_v1",
+  "reviewer": "/root/aux_independent_review",
+  "mode": "file_only_analysis_and_pure_host_fake_reproduction",
+  "result": "CONFIRMED_RUNNER_FIRMWARE_ROLE_CONTRACT_MISMATCH",
+  "cause": {
+    "summary": "The runner sends a USB-local ClockRequest to Vehicle, but the candidate implements private USB ClockRequest consumption, clock-sync recording, ClockResponse construction and reply service only for Ground.",
+    "runner_expectation": "Vehicle COM3 SyncOnly: one 28-byte ClockRequest must receive a matching ClockResponse within five seconds.",
+    "vehicle_implementation": "Vehicle normal local ingress reads Pixhawk UART, not USB Serial RX. Ground-only private-clock functions and USB Serial RX handling are compiled out for Vehicle.",
+    "sufficient_explanation": "Even if all 28 request bytes reach the MCU USB RX queue, the current Vehicle loop does not consume them, update the sync record, or produce a private ClockResponse.",
+    "is_new_aux_observation_fix_regression": false,
+    "is_mission_planner_or_rf_protocol_failure": false,
+    "physical_usb_out_delivery_independently_proven": false,
+    "hardware_fault_excluded": false
+  },
+  "current_candidate": {
+    "id": "20261022T144157999Z-de92540d",
+    "canonical_bridge_sha256": "B277B26972D6F945C64ECDF3CCBFB31ECFD0016DD04CBC55EA8FC7A250E84F4C",
+    "vehicle_staged_bridge_sha256": "B277B26972D6F945C64ECDF3CCBFB31ECFD0016DD04CBC55EA8FC7A250E84F4C",
+    "ground_staged_bridge_sha256": "B277B26972D6F945C64ECDF3CCBFB31ECFD0016DD04CBC55EA8FC7A250E84F4C",
+    "source_and_staged_copies_match": true
+  },
+  "source_boundaries": [
+    {
+      "path": "tools/run_r19_timed_path_capture.ps1",
+      "line": 196,
+      "fact": "Vehicle is assigned SyncOnly while Ground uses the requested run mode."
+    },
+    {
+      "path": "tools/run_r19_timed_path_capture.ps1",
+      "line": 197,
+      "fact": "Both role workflows get a five-second PC acquisition deadline."
+    },
+    {
+      "path": "tools/run_r19_timed_path_capture.ps1",
+      "line": 201,
+      "fact": "The canonical ClockRequest is written to each role's local USB port."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 532,
+      "fact": "Ground-only conditional begins around all private-clock RX parser/reply state and the handler."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 555,
+      "fact": "r19_intercept_usb_clock_request exists only inside the Ground conditional."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 623,
+      "fact": "The sole clock-sync record update is inside that Ground handler, after response construction."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 5598,
+      "fact": "Vehicle collect_local_ingress consumes pixhawk_serial RX, not USB Serial RX."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 5961,
+      "fact": "The separate Ground collect_local_ingress consumes USB Serial RX and invokes the private clock handler at line 5981."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 6375,
+      "fact": "The private ClockResponse/READY service block is explicitly runtime-diagnostic Ground only."
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "line": 6703,
+      "fact": "The loop's failed-runtime USB request collection and private service are also Ground-only."
+    },
+    {
+      "path": "tools/r19_host_readiness_workflow.ps1",
+      "line": 89,
+      "fact": "The PC workflow rejects an unanswered request as PcAcquisitionDeadlineExpired."
+    }
+  ],
+  "current_live_evidence": {
+    "run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T145610Z-aux-independent-observe-fix",
+    "capture_summary_sha256": "0E5EC9774BEDA9DB53628CEEB97642D3B2CA5D1B42BCE25320A0EB078BEE4501",
+    "vehicle_stage_summary_sha256": "B619FF0E4F8A8C374D78F0A09B8E82DDFD49C2971C423224783B678AE1ADA8D4",
+    "vehicle_raw_bytes": 2646,
+    "vehicle_raw_sha256": "2A0A0C61EE4C36AD5627F41A168DF7374B1AF4894B536901FBCA89D40FA87873",
+    "continuous_reader": true,
+    "reader_overflow": false,
+    "workflow_mode": "SyncOnly",
+    "workflow_result": "Rejected",
+    "workflow_failure": "PcAcquisitionDeadlineExpired",
+    "workflow_elapsed_ms": 5007.7109,
+    "pc_reader_started_ticks": "52460642",
+    "clock_request_write_started_ticks": "64881742",
+    "clock_request_write_returned_ticks": "65074927",
+    "pc_tick_frequency": "10000000",
+    "pc_reader_start_to_request_write_ms": 1242.11,
+    "clock_request_write_duration_ms": 19.3185,
+    "request_nonce": "5915821819564634567",
+    "request_sha256": "C99D5DD55DC7C8B498A5CC807AEB61561ECDAFC03B6D2BAE2D9742A60DAFE96D",
+    "request_bytes_reported_accepted_by_pc_write": 28,
+    "pc_write_success": true,
+    "private_observation_count": 0,
+    "clock_reply_read_validated": false,
+    "mcu_clock_sync_observed": false,
+    "mcu_clock_sync_count": 0,
+    "mcu_timed_path_initialized": true,
+    "mcu_timed_path_session_observed": false,
+    "mcu_timed_path_clock_request_us": "0",
+    "pc_to_mcu_clock_bounds": "UNKNOWN",
+    "vehicle_uart_and_loop_still_progressed": true,
+    "mcu_loop_counter": 1115341,
+    "e220_uart_call_counter": 90
+  },
+  "previous_live_evidence": {
+    "run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261022T133353Z-ready32-aux-observer-fix",
+    "candidate_id": "20261022T125857174Z-1a04b7ea",
+    "vehicle_staged_bridge_sha256": "DCEADD4CF80EF68F48A7498CA3BEDE46C87BF0E9312CC0899CBC9FC292E8E180",
+    "ground_only_handler_structure_already_present": true,
+    "vehicle_raw_bytes": 2646,
+    "vehicle_raw_sha256": "AAA173B14C771E64147A6AF3CD4B134C45D7C06E4FE28E95D8010C87208EEF5B",
+    "pc_write_success": true,
+    "request_bytes_reported_accepted_by_pc_write": 28,
+    "private_observation_count": 0,
+    "workflow_failure": "PcAcquisitionDeadlineExpired",
+    "mcu_clock_sync_observed": false,
+    "mcu_clock_sync_count": 0,
+    "continuous_reader": true,
+    "reader_overflow": false,
+    "same_failure_boundary_as_current_run": true
+  },
+  "offline_reproduction": {
+    "source": "repro.cpp",
+    "source_sha256": "68D7AE67EF48FF23B881165E30FF8A6F4CBC3EC1B37195E19FD512B3153DE9BA",
+    "method": "Compile the exact sealed staged bridge per role against existing host fakes and the existing vc_lora_core library; inject the current live request into modeled MCU USB RX; run the actual loop_bridge for 600 loops and 6000 ms.",
+    "request_crc_validated_by_core_parser": true,
+    "request_nonce_validated_by_private_codec": true,
+    "vehicle": {
+      "log": "repro_vehicle.log",
+      "log_sha256": "23A44FFB934097AB5578C94AA097168A9A22D42EC70A011BBE250F4099E1D320",
+      "checks": 9,
+      "failures": 0,
+      "loops": 600,
+      "elapsed_ms": 6000,
+      "usb_rx_bytes_remaining": 28,
+      "remaining_bytes_exactly_match_injected_request": true,
+      "clock_sync_count": 0,
+      "private_clock_replies": 0,
+      "crc_valid_diagnostic_frames": 6,
+      "parser_bad_crc": 0
+    },
+    "ground_positive_control": {
+      "log": "repro_ground.log",
+      "log_sha256": "0468DC7538191EABEB0D0DEEB8F7DADCAE6AE7B98F2EAFBEB7DCA3C035F1ACD2",
+      "checks": 8,
+      "failures": 0,
+      "loops": 600,
+      "elapsed_ms": 6000,
+      "usb_rx_bytes_remaining": 0,
+      "clock_sync_count": 1,
+      "private_clock_replies": 1,
+      "crc_valid_diagnostic_frames": 6,
+      "parser_bad_crc": 0
+    },
+    "fake_api_sha256": "044801AF2EDBC7B4221E2B82954113D3AC1B97229300326A072D3BA0FDC7278D",
+    "core_library_sha256": "CF2F1EC5CA1ECBAA6866B9DFCACAF4D1C56FFBD6DC4B7A33603410FEBDEC6CCE",
+    "aux_isr_instrumentation_enabled": false,
+    "role_and_timed_path_readiness_mode_match_candidate": true,
+    "compile_unused_parameter_warnings_per_role": 1
+  },
+  "separated_or_rejected_explanations": [
+    "A delayed PC reader is not needed to explain this failure: the reader had started 1242.11 ms before the PC write, while the missing Vehicle request handler remains sufficient even under perfect modeled delivery.",
+    "A malformed request is not needed: the exact captured request passes the core CRC parser and private nonce codec, and Ground responds to the same bytes in the positive control.",
+    "The failure cannot yet be called ClockResponse USB IN loss: no Vehicle ClockResponse is constructed by the current firmware path.",
+    "Clock-sync count zero is not standalone proof that USB OUT hardware lost the request, because Vehicle never consumes the USB RX queue.",
+    "The generic diagnostic FlushFailed/retry history is a separate USB TX issue; a working/recovered diagnostic TX path does not implement USB RX clock handling."
+  ],
+  "next_design_decision_not_implemented": "Either declare Vehicle USB capture TX-only and do not request a clock exchange, or implement a diagnostic-only Vehicle clock-request consumer and exclusive bounded reply path, then verify it test-first. Ground private ARM must remain Ground-only and no private clock/diagnostic bytes may leak to Pixhawk or E220.",
+  "limitations": [
+    "The host model assumes that bytes have already reached the MCU RX queue; it does not prove that the physical live USB OUT transaction delivered them.",
+    "AUX ISR/readiness observation instrumentation is disabled only in the host reproduction because the existing host fakes have no GPIO ISR backend. Ground-only handler preprocessing and the actual bridge logic remain unchanged.",
+    "The reproduction establishes a sufficient software integration cause, not the absence of additional USB driver or hardware faults.",
+    "No product throughput, RF delivery, 932-parameter completeness, acceptance, or Deployment claim follows from this diagnosis."
+  ],
+  "production_firmware_modified": false,
+  "runner_modified": false,
+  "hardware_or_com_or_jtag_access_performed": false,
+  "pnp_or_process_enumeration_performed": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

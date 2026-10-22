@@ -1,0 +1,304 @@
+{
+  "schema": "vc-lora-r19-ready32-live-observations-v1",
+  "capture_seconds_actual": 40.0036348,
+  "ground_raw_bytes": 3689,
+  "vehicle_raw_bytes": 2646,
+  "both_readers_continuous": true,
+  "both_reader_overflow_clear": true,
+  "ground_ready_validated": true,
+  "ground_arm_write_accepted": true,
+  "ground_mcu_arm_accepted": true,
+  "first_heartbeat_record": {
+    "schema": "vc-lora-r19-timed-path-record-v1",
+    "schema_version": 1,
+    "size_bytes": 512,
+    "sequence": 14,
+    "role": "ground",
+    "mode": "ExplicitHostArm",
+    "mode_value": 2,
+    "build_id": [
+      1378957636,
+      1398032177,
+      842019382,
+      825241651
+    ],
+    "boot_id": [
+      1497424447,
+      2124601444,
+      1924214184,
+      1060263042
+    ],
+    "flags": 127,
+    "usb_epoch": 1,
+    "observed_epoch": 1,
+    "reader_session": "3212158581759649382",
+    "nonce": "5915986330789695296",
+    "token": 1,
+    "frame_bytes": 21,
+    "accepted_bytes": 21,
+    "failure_reason": 0,
+    "product_budget_ms": 106,
+    "initialized": true,
+    "session_observed": true,
+    "arm_accepted": true,
+    "identity_mismatch": false,
+    "clock_regressed": false,
+    "frame_enqueued": true,
+    "hwcdc_accepted_observed": true,
+    "sdk_snapshot_observed": true,
+    "usb_completed": true,
+    "usb_failed": false,
+    "timestamps": {
+      "arm_us": "11541085",
+      "enqueue_us": "11826371",
+      "accepted_us": "11826858",
+      "sdk_snapshot_us": "11826858",
+      "terminal_us": "11826858",
+      "failure_started_us": "0",
+      "failure_returned_us": "0",
+      "deadline_us": "11932000",
+      "clock_request_us": "11330962"
+    },
+    "raw_frame_base64": "/QkAAO8BAQAAAAQAAAALAwEFA1Mf",
+    "frame_sha256": "ADBD448FB84801A5E907630957EBD8CEB081DA9482067A094F65614EAE6A7B79",
+    "sdk": {
+      "publish_generation": 12,
+      "pickup_generation": 12,
+      "ring_bytes": 0,
+      "stash_bytes": 0,
+      "validity": 127,
+      "state": 14,
+      "terminal": 1,
+      "blocker_mask": 0,
+      "attempt": 1,
+      "terminal_sample_valid": true
+    },
+    "root_cause_proven": false,
+    "acceptance_authorized": false,
+    "deployment_authorized": false,
+    "limitations": [
+      "Stable committed MCU record only; not a continuous physical FIFO or PC consumption proof.",
+      "MAVLink CRC and PC/MCU bounded time correlation require independent evaluator input."
+    ]
+  },
+  "ground_heartbeat_crc_valid_frames": 39,
+  "ground_heartbeat_intervals": [
+    {
+      "from_offset": 157,
+      "to_offset": 304,
+      "gap_ms": 2099.8295
+    },
+    {
+      "from_offset": 304,
+      "to_offset": 451,
+      "gap_ms": 1092.3385
+    },
+    {
+      "from_offset": 451,
+      "to_offset": 472,
+      "gap_ms": 550.5753
+    },
+    {
+      "from_offset": 472,
+      "to_offset": 656,
+      "gap_ms": 1650.3841
+    },
+    {
+      "from_offset": 656,
+      "to_offset": 677,
+      "gap_ms": 549.8117
+    },
+    {
+      "from_offset": 677,
+      "to_offset": 824,
+      "gap_ms": 2013.9012
+    },
+    {
+      "from_offset": 824,
+      "to_offset": 908,
+      "gap_ms": 549.2208
+    },
+    {
+      "from_offset": 908,
+      "to_offset": 929,
+      "gap_ms": 549.8172
+    },
+    {
+      "from_offset": 929,
+      "to_offset": 1030,
+      "gap_ms": 1101.9214
+    },
+    {
+      "from_offset": 1030,
+      "to_offset": 1114,
+      "gap_ms": 549.1734
+    },
+    {
+      "from_offset": 1114,
+      "to_offset": 1198,
+      "gap_ms": 972.0184
+    },
+    {
+      "from_offset": 1198,
+      "to_offset": 1345,
+      "gap_ms": 2014.8147
+    },
+    {
+      "from_offset": 1345,
+      "to_offset": 1429,
+      "gap_ms": 550.7144
+    },
+    {
+      "from_offset": 1429,
+      "to_offset": 1450,
+      "gap_ms": 549.358
+    },
+    {
+      "from_offset": 1450,
+      "to_offset": 1551,
+      "gap_ms": 1099.5271
+    },
+    {
+      "from_offset": 1551,
+      "to_offset": 1652,
+      "gap_ms": 1100.7963
+    },
+    {
+      "from_offset": 1652,
+      "to_offset": 1799,
+      "gap_ms": 2014.4821
+    },
+    {
+      "from_offset": 1799,
+      "to_offset": 1883,
+      "gap_ms": 549.5437
+    },
+    {
+      "from_offset": 1883,
+      "to_offset": 1904,
+      "gap_ms": 549.9955
+    },
+    {
+      "from_offset": 1904,
+      "to_offset": 2068,
+      "gap_ms": 1100.0488
+    },
+    {
+      "from_offset": 2068,
+      "to_offset": 2089,
+      "gap_ms": 550.1784
+    },
+    {
+      "from_offset": 2089,
+      "to_offset": 2173,
+      "gap_ms": 919.7664
+    },
+    {
+      "from_offset": 2173,
+      "to_offset": 2320,
+      "gap_ms": 2014.2589
+    },
+    {
+      "from_offset": 2320,
+      "to_offset": 2404,
+      "gap_ms": 549.8194
+    },
+    {
+      "from_offset": 2404,
+      "to_offset": 2425,
+      "gap_ms": 549.5857
+    },
+    {
+      "from_offset": 2425,
+      "to_offset": 2609,
+      "gap_ms": 1650.465
+    },
+    {
+      "from_offset": 2609,
+      "to_offset": 2630,
+      "gap_ms": 549.9151
+    },
+    {
+      "from_offset": 2630,
+      "to_offset": 2777,
+      "gap_ms": 2014.0074
+    },
+    {
+      "from_offset": 2777,
+      "to_offset": 2861,
+      "gap_ms": 548.7214
+    },
+    {
+      "from_offset": 2861,
+      "to_offset": 2882,
+      "gap_ms": 552.1101
+    },
+    {
+      "from_offset": 2882,
+      "to_offset": 3046,
+      "gap_ms": 1099.0507
+    },
+    {
+      "from_offset": 3046,
+      "to_offset": 3067,
+      "gap_ms": 548.8373
+    },
+    {
+      "from_offset": 3067,
+      "to_offset": 3151,
+      "gap_ms": 924.0949
+    },
+    {
+      "from_offset": 3151,
+      "to_offset": 3298,
+      "gap_ms": 2012.6655
+    },
+    {
+      "from_offset": 3298,
+      "to_offset": 3382,
+      "gap_ms": 550.8263
+    },
+    {
+      "from_offset": 3382,
+      "to_offset": 3403,
+      "gap_ms": 549.0876
+    },
+    {
+      "from_offset": 3403,
+      "to_offset": 3504,
+      "gap_ms": 1101.131
+    },
+    {
+      "from_offset": 3504,
+      "to_offset": 3605,
+      "gap_ms": 1099.8413
+    }
+  ],
+  "maximum_heartbeat_interval_ms": 2099.8295,
+  "average_heartbeat_interval_ms": 1026.121960526316,
+  "last_heartbeat_age_at_capture_end_ms": 238.1377,
+  "matching_first_heartbeat_wire_images": [
+    {
+      "raw_offset": 157,
+      "frame_bytes": 21,
+      "frame_sha256": "ADBD448FB84801A5E907630957EBD8CEB081DA9482067A094F65614EAE6A7B79",
+      "read_completed_ticks": "70039737",
+      "validation_ticks": "70378719",
+      "clock_domain_id": "c340ee4b3108490cbe3cb0d3296de58e",
+      "frequency": "10000000"
+    },
+    {
+      "raw_offset": 929,
+      "frame_bytes": 21,
+      "frame_sha256": "ADBD448FB84801A5E907630957EBD8CEB081DA9482067A094F65614EAE6A7B79",
+      "read_completed_ticks": "160598520",
+      "validation_ticks": "160729623",
+      "clock_domain_id": "c340ee4b3108490cbe3cb0d3296de58e",
+      "frequency": "10000000"
+    }
+  ],
+  "vehicle_sync_workflow_status": "Rejected",
+  "vehicle_sync_workflow_failure": "PcAcquisitionDeadlineExpired",
+  "product_parameters_test": "NOT_EVALUATED",
+  "physical_rf_status": "NOT_EVALUATED"
+}
