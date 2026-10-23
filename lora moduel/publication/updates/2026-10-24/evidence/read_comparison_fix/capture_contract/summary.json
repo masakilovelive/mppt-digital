@@ -1,0 +1,67 @@
+{
+  "schema": "vc-lora-r19-read-comparison-test-first-development-v1",
+  "status": "PASS_TARGETED_OFFLINE_ONLY",
+  "owned_source": "tests/hil/check_r19_read_comparison_capture_contract.ps1",
+  "owned_source_sha256": "C903A7A1BC0FD6F9B7FE535C010AA3846816FEAF7D432E77EC144181B79F3027",
+  "production_source_modified_by_test_author": false,
+  "cmake_modified_by_test_author": false,
+  "hardware_interaction": false,
+  "child_execute_or_native_process_device_inspection": false,
+  "test_first_red": {"path":"red_final/summary.json","checks":43,"passed":3,"failed":40,"exit_code":1},
+  "critical_interop_and_plan_shape_red": {"path":"mapping_and_shape_red/summary.json","checks":53,"passed":49,"failed":4,"exit_code":1},
+  "critical_red_causes": [
+    "A missing plan mode threw outside the catch instead of returning INVALID_COMPARISON",
+    "A forged Vehicle plan role was not rejected",
+    "Forged true or missing no-authority plan flags were not rejected",
+    "Real ContinuousSnapshot.DiagnosticPauseMilliseconds was not projected into pause.duration_ms"
+  ],
+  "initial_green_powershell_51": {"path":"green_ps51/summary.json","checks":53,"passed":53,"failed":0,"exit_code":0},
+  "initial_green_powershell_7": {"path":"green_ps7/summary.json","checks":53,"passed":53,"failed":0,"exit_code":0},
+  "actual_outer_integration_red": {"path":"actual_outer_binding_red/summary.json","checks":57,"passed":55,"failed":2,"exit_code":1},
+  "actual_outer_red_note":"The real outer initially rejected paused Ground=false before stage acquisition, while accepting the inconsistent requested-pause Ground=true case. The earlier actual_outer_red directory was an excluded fixture-construction failure (PowerShell enumerated a byte[] returned from an if expression); valid causal RED uses explicitly assigned byte arrays in actual_outer_binding_red.",
+  "green_powershell_51": {"path":"final_outer_ps51/summary.json","checks":57,"passed":57,"failed":0,"exit_code":0},
+  "green_powershell_7": {"path":"final_outer_ps7/summary.json","checks":57,"passed":57,"failed":0,"exit_code":0},
+  "existing_53_case_preservation":{"before_test_path":"before_real_outer_case/check_r19_read_comparison_capture_contract.ps1","before_sha256":"E7ECFB4FED116EC38B3884AB8634F360AB67BC4056A992EB923B9ED766D15E40","old_check_command_count":21,"old_check_commands_changed_or_removed":0,"new_check_commands":4},
+  "actual_outer_integration_proof":{
+    "source":"Actual Get-CaptureDisposition, Read-JsonIfPresent, Get-Sha256 and Assert-Condition AST definitions; not a mocked disposition helper",
+    "raw_roundtrip":"Both nonempty raw streams are saved through production persistence: Vehicle3 bytes/Ground4 bytes, complete block coverage, SHA256/base64/length and consumed permit marker retained",
+    "synthetic_hardware_flag":"Fixture summaries declare hardware_interaction=true solely to exercise the outer input contract. No hardware operation or native inspection occurs.",
+    "paused_ground_false_vehicle_true_accepted":true,
+    "None_both_continuous_accepted":true,
+    "missing_pause_end_still_admitted_for_stage_acquisition":true,
+    "None_ground_false_or_paused_ground_true_or_vehicle_false_rejected":true,
+    "corrupt_raw_sha_or_byte_coverage_rejected":true,
+    "nested_owner_continuity_clock_frequency_measurement_bounds_mismatch_rejected":true
+  },
+  "final_reviewed_production_hashes": {
+    "tools/run_r19_timed_path_capture.ps1":"9CDE505D40B7940E3F4AD223B99F9D36F61C6E46F9C19AB95676B271D0E8A47D",
+    "tools/r19_timed_path_acquisition.ps1":"34F920D480291758AD39F72AEA026BA8C338B64B2A232683E187591D031EC731",
+    "tools/r19_timed_path_outer.ps1":"E195592798CEA455C56C8361DE3EB4E48EFD416024E5F2A361EC5AD06191DEBE",
+    "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1":"F1A6FF732F1D415D9BA2F9768B2872970940FF5A7BE8D0E9FAE52253AECE25E5",
+    "tools/r19_continuous_reader.cs":"B9C22B9E74F32E09C1210F976363CF4513C66F3131780B96972BEC48B1F907EF"
+  },
+  "red_note": "The capture implementation was still missing the pure Plan/Evaluation APIs. The three existing/partially integrated successes were legacy persistence and pure prepared-pin option checks. Missing helper commands cannot count as correct negative-case rejection.",
+  "api_contract": {
+    "plan":"Get-R19ReadComparisonPlan -ReadComparisonMode None|GroundPauseResume -Mode SyncOnly|ExplicitHostArm -CaptureSeconds 40 -AuxReadinessDiagnostics bool -DiagnosticUsbFailureDiagnostics bool",
+    "evaluation":"Get-R19ReadComparisonEvaluation -Plan object -Evidence nestedObject",
+    "persistence":"Save-R19TimedPathCaptureEvidence accepts additive Context.read_comparison={plan,evidence,evaluation}; absent legacy property does not activate comparison"
+  },
+  "coverage": [
+    "None default requires no comparison ledger and does not grant authority",
+    "One fixed40s capture, Ground-only2s application-read pause requested after20s",
+    "Missing explicit prerequisites, wrong mode and altered duration reject",
+    "Nested per-role pause and Stop/Close ledger timing, exact integer clock evidence and read-call equality during pause",
+    "Missing pause begin/end/resumedRead invalidates comparison without fabricated timestamps",
+    "Vehicle remains unpaused; Ground is not labelled continuously reading",
+    "Prepared pin and fresh execution permit bind comparison option",
+    "Comparison-only invalidity preserves a valid raw capture result",
+    "Close failure remains in durable ledger while both raw streams are preserved",
+    "Application pause never claims physical USB IN suppression, product acceptance or causal proof",
+    "The actual outer child-scope ImportOnly/evaluation invocation preserves Execute, output, mode and safety/rollback flags",
+    "Real C# snapshot metadata-only interoperability covers lifecycle, pause milliseconds/call counts/resumed ticks and unobserved null timestamps"
+  ],
+  "new_test_patch":"new_test.patch",
+  "new_test_patch_sha256":"0DA6472D5ECCF1A2149EC0273D5B6A94B5DDABA75E629FA633A8A911E26F13A2",
+  "source_editing_frozen": true,
+  "scope_limitations":"This agent created only the new contract test and evidence artifacts. The root agent owns production changes, full-suite execution, candidate/prepared-pin verification and any separately authorized hardware measurement. Targeted synthetic PASS does not prove physical USB IN suppression, RF performance, 932-parameter acquisition or product acceptance."
+}

@@ -1,0 +1,8 @@
+Test-R19TimedPathExecutionPermit : A parameter cannot be found that matches parameter name 'ReadComparisonMode'.
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_read_comparison_permit.ps1:16 char:66
++ ... thExecutionPermit -Permit $cp @argsPermit -ReadComparisonMode GroundP ...
++                                               ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Test-R19TimedPathExecutionPermit], ParentContainsErrorRecordExcept 
+   ion
+    + FullyQualifiedErrorId : NamedParameterNotFound,Test-R19TimedPathExecutionPermit
+ 

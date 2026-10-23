@@ -1,0 +1,123 @@
+{
+  "schema": "vc-lora-r19-read-comparison-live-outcome-v1",
+  "result": "COMPLETED_APPLICATION_READ_COMPARISON_PRODUCT_CAUSAL_TEST_CONFOUNDED",
+  "review_date_local": "2026-10-24",
+  "timezone": "Asia/Tokyo",
+  "one_run_authorization_consumed": true,
+  "additional_hardware_operations_authorized": false,
+  "accepted_r18_restored_both_roles": true,
+  "sources": {
+    "outer": "../summary.json",
+    "capture": "../capture/summary.json",
+    "ground_internal_records": "../stage_ground/summary.json",
+    "vehicle_internal_records": "../stage_vehicle/summary.json",
+    "independent_offline_audit": "independent_review/summary.json"
+  },
+  "application_read_comparison": {
+    "capture_duration_seconds": 40.0123527,
+    "ground_pause_duration_ms": 2005.6241,
+    "pause_request_to_ack_ms": 0.5164,
+    "read_calls_at_pause_begin": 726,
+    "read_calls_at_pause_end": 726,
+    "first_resumed_read_after_pause_end_us": 1.4,
+    "first_resumed_read_bytes": 126,
+    "same_connection_and_reader_owner": true,
+    "vehicle_continued_reading": true,
+    "physical_usb_in_suppression_proven": false,
+    "limitation": "Application Read pause does not suppress Windows/driver USB prefetch or establish physical IN-token/ACK behavior."
+  },
+  "raw_capture_integrity": {
+    "vehicle": {"bytes": 2674, "crc_valid_frames": 43, "diagnostic_frames": 42, "clock_frames": 1},
+    "ground": {"bytes": 2677, "crc_valid_frames": 43, "diagnostic_frames": 41, "clock_frames": 1, "ready_frames": 1},
+    "crc_errors": 0,
+    "noise_bytes": 0,
+    "trailing_partial_bytes": 0,
+    "read_errors": 0,
+    "overflow": false,
+    "diagnostic_sequence_gaps_observed": 0,
+    "internal_raw_records_verified": 32,
+    "internal_snapshot_pairs_verified": 16
+  },
+  "ground_preexisting_aux_fault": {
+    "fault_code": 5,
+    "fault_name": "AuxDidNotReturnHigh",
+    "first_fault_device_us": "11744069",
+    "first_uart_write_accepted_device_us": "9744297",
+    "requested_uart_bytes": 32,
+    "accepted_uart_bytes": 32,
+    "transaction_low_observed_device_us": "9744416",
+    "transaction_first_high_device_us": "9744313",
+    "first_high_is_before_low_not_return_high": true,
+    "fault_last_polled_level": 0,
+    "maximum_poll_gap_at_first_fault_us": "100561",
+    "first_fault_frame_pc_read_ticks": "65082344",
+    "ground_pause_begin_pc_ticks": "263537566",
+    "same_pc_tick_frequency": "10000000",
+    "fault_report_precedes_pause_seconds": 19.8455222,
+    "fault_report_precedes_clock_request_ms": 132.2127,
+    "fault_predates_deliberate_pause_proven_on_same_pc_clock": true,
+    "source_condition": "core/src/runtime_contract.cpp: AwaitingAuxHigh waits for stable HIGH and the service floor; a 2000 ms transition timeout latches AuxDidNotReturnHigh. firmware/phase6/vc_lora_phase6_bridge.hpp: observe_radio_completion then latches runtime fail-closed.",
+    "physical_e220_busy_or_hardware_failure_proven": false,
+    "observation_delay_root_cause_proven": false,
+    "irq_history_events": 124,
+    "irq_history_retained": 120,
+    "irq_history_overflow": 4,
+    "limitation": "Digital polling/ISR observations do not independently prove continuous physical waveform coverage or RF airtime. The fault already existed before the intervention, so it is a confounder, not a pause outcome."
+  },
+  "immutable_diagnostic_usb_failures": {
+    "vehicle": {
+      "observed_device_us": "2584885",
+      "action": "Alive",
+      "pending_ring_bytes": 31,
+      "phase": "Before current PC clock synchronization and application-reader startup"
+    },
+    "ground": {
+      "observed_device_us": "52278894",
+      "action": "FailRepeat",
+      "pending_ring_bytes": 50,
+      "phase": "Nominal own-clock mapping places this after capture/COM close, not in the pause interval",
+      "nominal_seconds_after_tracked_close_range": [0.675274, 0.676656],
+      "guaranteed_drift_bound_available": false
+    },
+    "both_sdk_outcome": "LoopTimeout",
+    "both_epoch_expected_and_observed": 1,
+    "both_publish_minus_pickup_generation": 1,
+    "both_raw_irq": "0x102",
+    "both_enabled_irq": "0x20c",
+    "in_empty_enabled_but_not_raw_asserted_at_failure": true,
+    "root_cause_proven": false,
+    "limitations": [
+      "A pending-ring count is aggregate software state, not proof of a particular frame's missing tail.",
+      "A first-failure latch predating the intervention cannot measure the intervention outcome.",
+      "Nominal PC/MCU correspondence without a guaranteed drift bound does not prove a close-caused USB failure."
+    ]
+  },
+  "product_evaluation": {
+    "both_role_clock_replies": "VALIDATED",
+    "ground_ready_received": true,
+    "ground_arm_observed_in_internal_record": true,
+    "ground_product_heartbeat_frames": 0,
+    "param_value_frames": 0,
+    "first_product_heartbeat_enqueued": false,
+    "product_usb_budget_ms": 106,
+    "product_usb_106ms": "NOT_EVALUATED",
+    "heartbeat_maximum_2500ms": "NOT_EVALUATED",
+    "parameters_932_within_30_seconds": "NOT_EVALUATED",
+    "previous_run_product_measurements_reused": false
+  },
+  "cleanup": {
+    "stop_worker_close_order_verified_both_roles": true,
+    "close_completed_both_roles": true,
+    "child_termination_and_active_jtag_cleanup_proven": true,
+    "accepted_r18_restored_both_roles": true
+  },
+  "conclusion": {
+    "measurement_tool_execution_verified": true,
+    "communication_issue_resolved": false,
+    "physical_pc_vs_mcu_usb_cause": "INDETERMINATE",
+    "next_scoped_work": "Separate the pre-intervention Ground AUX failure and distinguish startup/measurement/shutdown diagnostic failures before another physical-cause comparison; retain 106 ms and all safety/rollback gates.",
+    "acceptance_eligible": false,
+    "acceptance_authorized": false,
+    "deployment_authorized": false
+  }
+}

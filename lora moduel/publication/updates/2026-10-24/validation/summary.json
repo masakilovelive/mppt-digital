@@ -1,0 +1,46 @@
+{
+  "schema": "vc-lora-github-publication-checks-v1",
+  "result": "PASS_OFFLINE_PUBLICATION_CHECKS_NOT_PRODUCT_ACCEPTANCE",
+  "publication_date_jst": "2026-10-24",
+  "scope": "New date-specific archive and root README only; original product sources and prior publications preserved",
+  "original_files_byte_identical": 109,
+  "original_bytes": 2761957,
+  "inventory_sha256": "E1E38B68F7205747A39A1B3F7C19030F10B3EC50893E93DA07557B84F3CECF09",
+  "independent_read_only_review": "PASS after all core dependency additions and README corrections",
+  "credential_pattern_findings": 0,
+  "forbidden_files": 0,
+  "json_parse": "PASS",
+  "local_markdown_links": "PASS",
+  "published_snapshot_tests": {
+    "shell": "Windows PowerShell 5.1; each test in an isolated child shell with checked process exit code",
+    "continuous_reader_contract": {"passed": 27, "failed": 0, "exit_code": 0},
+    "continuous_reader_integration": {"passed": 10, "failed": 0, "exit_code": 0},
+    "read_comparison_permit": {"passed": 20, "failed": 0, "exit_code": 0},
+    "read_comparison_capture_contract": {"passed": 57, "failed": 0, "exit_code": 0},
+    "log_location_in_original_workspace": "runs/validation/GITHUB-LORA-RESULTS-UPDATE-001/2026-10-24",
+    "all_398_host_tests_rerun_for_publication": false,
+    "arduino_compile_rerun_for_publication": false
+  },
+  "preparation_failures_retained_in_original_workspace": [
+    "The publication validator correctly rejected the absent inventory before packaging.",
+    "A wrapper initially treated a stale LASTEXITCODE as a failure after a passing reader contract; final checks use isolated process exit codes.",
+    "The first selected-snapshot integration test rejected missing core/src/mavlink_frame.cpp; all core C++ sources and headers were then included and the final integration test passed."
+  ],
+  "original_workspace_test_scope": {
+    "host_suite_initial_passed": 395,
+    "host_suite_initial_failed": 3,
+    "failed_tests_repaired_rerun_passed": 3,
+    "final_affected_regression_passed": 8,
+    "single_final_clean_398_run_claimed": false,
+    "vehicle_and_ground_normal_compiles": "PASS in original workspace; not rerun for publication"
+  },
+  "hardware_interaction": false,
+  "new_live_test_authorization_used": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "limitations": [
+    "Secret checks cover selected filename and credential patterns, not a proof that arbitrary secrets cannot exist.",
+    "The source snapshot is selected and not a complete build or flash package.",
+    "Passing publication tests does not prove physical USB IN suppression, AUX waveform behavior, 932 parameters within 30 seconds or product acceptance."
+  ]
+}

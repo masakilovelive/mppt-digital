@@ -1,0 +1,579 @@
+diff --git a/runs/validation/R19-VEHICLE-CLOCK-DIAGNOSTIC-FIRST-FAIL-FIX-001/20261023T113004Z/before/tools/r19_timed_path_outer.ps1 b/tools/r19_timed_path_outer.ps1
+index e5ca11b..57d1a85 100644
+--- a/runs/validation/R19-VEHICLE-CLOCK-DIAGNOSTIC-FIRST-FAIL-FIX-001/20261023T113004Z/before/tools/r19_timed_path_outer.ps1
++++ b/tools/r19_timed_path_outer.ps1
+@@ -1,6 +1,8 @@
+ # Pure contracts for the opt-in timed-path orchestration. No device access on import.
+ function Get-R19TimedPathOuterToolPaths {
+-  param([bool]$AuxReadinessDiagnostics=$false)
++  param([bool]$AuxReadinessDiagnostics=$false,
++    [bool]$DiagnosticUsbFailureDiagnostics=$false)
++  if($DiagnosticUsbFailureDiagnostics-and-not$AuxReadinessDiagnostics){throw 'Diagnostic USB failure mode requires AUX diagnostics'}
+   $paths=@('tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1',
+     'tools/invoke_r19_candidate_app_flash_hil.ps1',
+     'tools/read_r19_runtime_stage_jtag.ps1','tools/invoke_r19_jtag_preflash_gate.ps1',
+@@ -12,12 +14,14 @@ function Get-R19TimedPathOuterToolPaths {
+     'tools/r19_continuous_reader.cs','tools/r19_candidate_artifact_common.ps1',
+     'tools/verify_r19_candidate_artifact.ps1')
+   if($AuxReadinessDiagnostics){$paths+=,'tools/read_r19_aux_readiness_record.ps1'}
++  if($DiagnosticUsbFailureDiagnostics){$paths+=@('tools/read_r19_diagnostic_usb_failure_record.ps1','tools/r19_usb_role_contract.ps1')}
+   $paths
+ }
+ 
+ function Assert-R19TimedPathPreparedContract {
+   param([object]$Pin,[ValidateSet('SyncOnly','ExplicitHostArm')][string]$Mode,
+-    [bool]$AuxReadinessDiagnostics=$false)
++    [bool]$AuxReadinessDiagnostics=$false,
++    [bool]$DiagnosticUsbFailureDiagnostics=$false)
+   function NeedPin($Value,$Message){if(-not$Value){throw $Message}}
+   NeedPin ($null-ne$Pin) 'Prepared pin is missing'
+   foreach($name in @('schema','mode','candidate_id','latest_sha256','latest_path',
+@@ -31,11 +35,40 @@ function Assert-R19TimedPathPreparedContract {
+   NeedPin ($Pin.candidate_id-is[string]-and$Pin.candidate_id-cmatch'^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$') 'Unsafe candidate id'
+   NeedPin ($Pin.latest_sha256-is[string]-and$Pin.latest_sha256-cmatch'^[0-9A-F]{64}$') 'Invalid latest digest'
+   $leaf=if($Mode-ceq'SyncOnly'){'SYNC-ONLY'}else{'EXPLICIT-HOST-ARM'}
++  if($DiagnosticUsbFailureDiagnostics){
++    NeedPin ($AuxReadinessDiagnostics-and$Mode-ceq'ExplicitHostArm'-and
++      $null-ne$Pin.PSObject.Properties['diagnostic_usb_failure_diagnostics']-and
++      $Pin.diagnostic_usb_failure_diagnostics-is[bool]-and$Pin.diagnostic_usb_failure_diagnostics) 'Prepared diagnostic USB failure mode requires AUX and ExplicitHostArm opt-in'
++    NeedPin ($null-ne$Pin.PSObject.Properties['usb_role_capabilities']) 'Prepared USB role capabilities are missing'
++    $cap=$Pin.usb_role_capabilities
++    NeedPin ($cap.schema-ceq'vc-lora-r19-usb-role-capabilities-v1'-and$cap.mode-ceq$Mode-and
++      $cap.implementation_bound-is[bool]-and$cap.implementation_bound) 'Prepared USB role capability contract invalid'
++    NeedPin (@($cap.roles).Count-eq2) 'Prepared USB role count differs'
++    foreach($spec in @(@('vehicle','SyncOnly',$false),@('ground','ExplicitHostArm',$true))){
++      $matches=@($cap.roles|Where-Object{$_.role-ceq$spec[0]})
++      NeedPin ($matches.Count-eq1) 'Prepared USB role is absent or duplicated'
++      $role=$matches[0]
++      NeedPin ($role.clock_request_reply-is[bool]-and$role.clock_request_reply-and$role.effective_mode-ceq$spec[1]-and
++        $role.ready-is[bool]-and$role.ready-eq$spec[2]-and$role.arm-is[bool]-and$role.arm-eq$spec[2]) 'Prepared USB role feature escalation or missing clock handler'
++    }
++    $canonical=@('firmware/phase6/vc_lora_phase6_bridge.hpp','firmware/high_speed/r19_diagnostic_usb_failure_record.hpp','tools/r19_usb_role_contract.ps1')
++    NeedPin (@($cap.canonical_sources).Count-eq3) 'Prepared role source bindings differ'
++    foreach($relative in $canonical){
++      $binding=@($cap.canonical_sources|Where-Object{$_.path-ceq$relative})
++      NeedPin ($binding.Count-eq1-and$binding[0].sha256-cmatch'^[0-9A-F]{64}$') 'Prepared role source digest missing or malformed'
++    }
++    $expectedLatest='runs/candidates/R19-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/latest.json'
++  }elseif($null-ne$Pin.PSObject.Properties['diagnostic_usb_failure_diagnostics']-and
++      ($Pin.diagnostic_usb_failure_diagnostics-isnot[bool]-or$Pin.diagnostic_usb_failure_diagnostics)){
++    throw 'Prepared diagnostic USB failure metadata requires explicit opt-in'
++  }elseif($null-ne$Pin.PSObject.Properties['usb_role_capabilities']){
++    throw 'Prepared role capability contract requires diagnostic USB failure mode'
++  }
+   if($AuxReadinessDiagnostics){
+     NeedPin ($Mode-ceq'ExplicitHostArm'-and
+       $null-ne$Pin.PSObject.Properties['aux_readiness_diagnostics']-and
+       $Pin.aux_readiness_diagnostics-is[bool]-and$Pin.aux_readiness_diagnostics) 'Prepared AUX diagnostics require explicit opt-in and ExplicitHostArm'
+-    $expectedLatest='runs/candidates/R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001/latest.json'
++    if(-not$DiagnosticUsbFailureDiagnostics){$expectedLatest='runs/candidates/R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001/latest.json'}
+   }else{
+     NeedPin ($null-eq$Pin.PSObject.Properties['aux_readiness_diagnostics']-or
+       ($Pin.aux_readiness_diagnostics-is[bool]-and-not$Pin.aux_readiness_diagnostics)) 'AUX prepared pin requires explicit mode'
+@@ -55,7 +88,7 @@ function Assert-R19TimedPathPreparedContract {
+     $addresses+=,$address
+   }
+   NeedPin ($addresses[0]-ne$addresses[1]) 'Prepared stage addresses must differ'
+-  $expected=@(Get-R19TimedPathOuterToolPaths -AuxReadinessDiagnostics $AuxReadinessDiagnostics)
++  $expected=@(Get-R19TimedPathOuterToolPaths -AuxReadinessDiagnostics $AuxReadinessDiagnostics -DiagnosticUsbFailureDiagnostics $DiagnosticUsbFailureDiagnostics)
+   NeedPin ($Pin.tools-is[array]-and$Pin.tools.Count-eq$expected.Count) 'Prepared tool count differs'
+   foreach($path in $expected){
+     $matches=@($Pin.tools|Where-Object{$_.path-ceq$path})
+
+diff --git a/runs/validation/R19-VEHICLE-CLOCK-DIAGNOSTIC-FIRST-FAIL-FIX-001/20261023T113004Z/before/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1 b/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1
+index 1a0ce85..a91ca45 100644
+--- a/runs/validation/R19-VEHICLE-CLOCK-DIAGNOSTIC-FIRST-FAIL-FIX-001/20261023T113004Z/before/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1
++++ b/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1
+@@ -8,6 +8,7 @@ param(
+   [ValidateSet('Disabled','SyncOnly','ExplicitHostArm')]
+   [string]$TimedPathMode = 'Disabled',
+   [switch]$AuxReadinessDiagnostics,
++  [switch]$DiagnosticUsbFailureDiagnostics,
+   [string]$TimedPathPreparedPinPath = '',
+   [string]$TimedPathPreparedPinSha256 = '',
+   [ValidateSet('success','capture_no_beacon','capture_failure',
+@@ -70,11 +71,11 @@ $expectedTargetConfigSha256 =
+ $expectedOpenOcdScriptsTreeSha256 =
+     '3FB3130F7D4B17FE870EA6532B3F8EB5B0F27F506F1953A1A4EC9E1369D7BB84'
+ $expectedStageReaderSha256 =
+-    'E3601EA0F59E2EE9F0422A9D5BAC051453592B82A74F1F6EE32850369654ED7E'
++    '60504BC7832BD1FDB8318280F3F72543A8D22D405ECC7A7F791DAC1CD5209F84'
+ $expectedJtagPreflightGateSha256 =
+     '853A404C816D8C9C92B609FD697763977AEDE1849E87A494AEB70FBAA38F4210'
+ $expectedFlashToolSha256 =
+-    '2691247E2CAB4D20C38C8C93D0416B6FBA96851347AE12DFBF102D2F99EBF884'
++    'BA042F6F7136514E18B9DDDA97BE5926E6A16B12E6D2C9E72307C62760AAF920'
+ $expectedCaptureToolSha256 =
+     '01C62A598FD9AEE52020F4FE72991FAB0502E3AD62DDA2957A6D282CC118966C'
+ $expectedCandidateArtifactId = '20261020T123447347Z-b414028b'
+@@ -91,6 +92,9 @@ $timedPathEnabled=$TimedPathMode-cne'Disabled'
+ if($AuxReadinessDiagnostics-and$TimedPathMode-cne'ExplicitHostArm'){
+   throw 'AUX/readiness diagnostics require ExplicitHostArm timed-path mode'
+ }
++if($DiagnosticUsbFailureDiagnostics-and(-not$AuxReadinessDiagnostics-or$TimedPathMode-cne'ExplicitHostArm')){
++  throw 'Diagnostic USB failure diagnostics require AUX/readiness and ExplicitHostArm mode'
++}
+ $timedPathEvaluation=$null
+ $script:timedPathToolLocks=[Collections.Generic.List[IO.FileStream]]::new()
+ $timedPathPreparedPin=$null
+@@ -110,7 +114,7 @@ if($timedPathEnabled){
+   $script:timedPathToolLocks.Add($helperLock)
+   if($helperBinding.Count-ne1-or(Get-FileHash -LiteralPath $helperPath -Algorithm SHA256).Hash-cne$helperBinding[0].sha256){throw 'Prepared outer helper digest differs'}
+   . $helperPath
+-  $null=Assert-R19TimedPathPreparedContract $timedPathPreparedPin $TimedPathMode ([bool]$AuxReadinessDiagnostics)
++  $null=Assert-R19TimedPathPreparedContract $timedPathPreparedPin $TimedPathMode ([bool]$AuxReadinessDiagnostics) ([bool]$DiagnosticUsbFailureDiagnostics)
+   foreach($entry in $timedPathPreparedPin.tools){
+     $path=Join-Path $repo $entry.path
+     $lock=[IO.FileStream]::new($path,[IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::Read)
+@@ -118,6 +122,7 @@ if($timedPathEnabled){
+     if((Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash-cne$entry.sha256){throw "Prepared tool digest differs: $($entry.path)"}
+   }
+   . (Join-Path $repo 'tools/r19_candidate_artifact_common.ps1')
++  if($DiagnosticUsbFailureDiagnostics){Assert-R19UsbRoleCapabilities -Contract $timedPathPreparedPin.usb_role_capabilities -RepoRoot $repo -Mode $TimedPathMode}
+   $expectedStageReaderSha256=[string](@($timedPathPreparedPin.tools|Where-Object{$_.path-ceq'tools/read_r19_runtime_stage_jtag.ps1'})[0].sha256)
+   $expectedFlashToolSha256=[string](@($timedPathPreparedPin.tools|Where-Object{$_.path-ceq'tools/invoke_r19_candidate_app_flash_hil.ps1'})[0].sha256)
+   $expectedCaptureToolSha256=[string](@($timedPathPreparedPin.tools|Where-Object{$_.path-ceq'tools/run_r19_timed_path_capture.ps1'})[0].sha256)
+@@ -186,6 +191,17 @@ function Assert-CandidateDiagnosticAbiContract {
+   )
+   $timedPathRequested=[bool](Get-Variable -Name timedPathEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $auxRequested=[bool](Get-Variable -Name AuxReadinessDiagnostics -ValueOnly -ErrorAction SilentlyContinue)
++  $diagnosticUsbRequested=[bool](Get-Variable -Name DiagnosticUsbFailureDiagnostics -ValueOnly -ErrorAction SilentlyContinue)
++  if($diagnosticUsbRequested){
++    Assert-Condition ($timedPathRequested-and$auxRequested-and$TimedPathMode-ceq'ExplicitHostArm') "$Label diagnostic USB mode dependency mismatch"
++    Assert-Condition ($null-ne$Document.PSObject.Properties['diagnostic_usb_failure_diagnostics']-and
++      $null-ne$Document.PSObject.Properties['usb_role_capabilities']) "$Label lacks diagnostic USB or role contract"
++    Assert-RawProjection $Document.diagnostic_usb_failure_diagnostics (Get-R19DiagnosticUsbFailureCandidateContract $repo $true) "$Label diagnostic USB contract"
++    Assert-R19UsbRoleCapabilities -Contract $Document.usb_role_capabilities -RepoRoot $repo -Mode $TimedPathMode
++  }else{
++    Assert-Condition ($null-eq$Document.PSObject.Properties['diagnostic_usb_failure_diagnostics']-and
++      $null-eq$Document.PSObject.Properties['usb_role_capabilities']) "$Label diagnostic USB candidate requires explicit mode"
++  }
+   if($timedPathRequested){
+     Assert-Condition ($null-ne$Document.PSObject.Properties['timed_path_diagnostics']) "$Label lacks timed-path diagnostic contract"
+     Assert-RawProjection $Document.timed_path_diagnostics `
+@@ -220,8 +236,10 @@ function Assert-CandidateDiagnosticAbiContract {
+         'vc-lora-r19-runtime-stage-jtag-read-v3',
+         'vc-lora-r19-runtime-stage-jtag-read-v4',
+         'vc-lora-r19-runtime-stage-jtag-read-v5',
+-        'vc-lora-r19-runtime-stage-jtag-read-v7')) `
++        'vc-lora-r19-runtime-stage-jtag-read-v7',
++        'vc-lora-r19-runtime-stage-jtag-read-v8')) `
+       "$Label has invalid diagnostic ABI field: reader_schema"
++  Assert-Condition (([string]$readerProperty.Value-ceq'vc-lora-r19-runtime-stage-jtag-read-v8')-eq$diagnosticUsbRequested) "$Label diagnostic USB reader generation mismatch"
+   $extensionProperty=$Document.PSObject.Properties['usb_extended_diagnostics']
+   $firstDecoderProperty=$Document.PSObject.Properties['first_usb_failure_decoder']
+   if([string]$readerProperty.Value-ceq'vc-lora-r19-runtime-stage-jtag-read-v3'){
+@@ -232,7 +250,7 @@ function Assert-CandidateDiagnosticAbiContract {
+   Assert-Condition ($null-ne$extensionProperty-and
+       $null-ne$extensionProperty.Value) "$Label lacks extended diagnostics"
+   $extension=$extensionProperty.Value
+-  $isFirstFailure=([string]$readerProperty.Value-cin@('vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v7'))
++  $isFirstFailure=([string]$readerProperty.Value-cin@('vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8'))
+   $extensionSchema=if($isFirstFailure){'vc-lora-r19-usb-extended-diagnostics-v2'}else{'vc-lora-r19-usb-extended-diagnostics-v1'}
+   $recordCount=if($isFirstFailure){3}else{2}
+   Assert-Condition ([string]$extension.schema-ceq
+@@ -724,6 +742,12 @@ function Assert-InstallProof([object]$Step, [string]$RecordPath) {
+       [string]$record.candidate.handoff_sha256 -ceq
+         [string]$candidate.handoff_sha256) `
+       'Candidate install evidence is absent or invalid'
++  if([bool](Get-Variable -Name DiagnosticUsbFailureDiagnostics -ValueOnly -ErrorAction SilentlyContinue)){
++    $manifest=Read-JsonIfPresent $candidate.candidate_manifest_path
++    Assert-Condition ($record.reader_schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v8') 'Install reader generation differs'
++    Assert-RawProjection $record.diagnostic_usb_failure_diagnostics $manifest.diagnostic_usb_failure_diagnostics 'install diagnostic USB binding'
++    Assert-RawProjection $record.usb_role_capabilities $manifest.usb_role_capabilities 'install USB role binding'
++  }
+ }
+ 
+ function Test-RollbackProof([object]$Step, [string]$RecordPath) {
+@@ -1126,13 +1150,16 @@ function Get-ExtendedStageRawReplay([object]$Summary,[string]$Role,
+     [string]$EvidenceDirectory){
+   # Independent byte-to-word replay: never invoke the reader or trust its
+   # decoded JSON as a substitute for any immutable raw file.
+-  $hasAuxReadiness=([string]$Summary.schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v7')
++  $hasDiagnosticUsbFailure=([string]$Summary.schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v8')
++  $diagnosticUsbRequested=[bool](Get-Variable -Name DiagnosticUsbFailureDiagnostics -ValueOnly -ErrorAction SilentlyContinue)
++  Assert-Condition ($hasDiagnosticUsbFailure-eq$diagnosticUsbRequested) 'Diagnostic USB failure reader generation differs from requested mode'
++  $hasAuxReadiness=([string]$Summary.schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8'))
+   $auxRequested=[bool](Get-Variable -Name AuxReadinessDiagnostics -ValueOnly -ErrorAction SilentlyContinue)
+   Assert-Condition ($hasAuxReadiness-eq$auxRequested) 'AUX/readiness reader generation differs from requested mode'
+-  $hasTimedPath=([string]$Summary.schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v6','vc-lora-r19-runtime-stage-jtag-read-v7'))
++  $hasTimedPath=([string]$Summary.schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v6','vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8'))
+   $timedPathRequested=[bool](Get-Variable -Name timedPathEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   Assert-Condition ($hasTimedPath-eq$timedPathRequested) 'Timed-path reader generation differs from requested mode'
+-  $hasFirstFailure=([string]$Summary.schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v6','vc-lora-r19-runtime-stage-jtag-read-v7'))
++  $hasFirstFailure=([string]$Summary.schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v6','vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8'))
+   $sizes=[ordered]@{runtime_stage=68;endpoint_fifo=112
+     hwcdc_restart=128;ground_usb_commit=128}
+   $names=[ordered]@{runtime_stage='vc_lora_r19_runtime_stage_record'
+@@ -1144,7 +1171,7 @@ function Get-ExtendedStageRawReplay([object]$Summary,[string]$Role,
+   if($hasFirstFailure){$sizes['first_usb_failure']=384
+     $names['first_usb_failure']='vc_lora_r19_first_usb_failure_record'
+     $leaves['first_usb_failure']='first-usb-failure'}
+-  $symbolCount=$sizes.Count+$(if($hasTimedPath){1}else{0})+$(if($hasAuxReadiness){1}else{0});$rawCount=2*$symbolCount
++  $symbolCount=$sizes.Count+$(if($hasTimedPath){1}else{0})+$(if($hasAuxReadiness){1}else{0})+$(if($hasDiagnosticUsbFailure){1}else{0});$rawCount=2*$symbolCount
+   foreach($field in @('com_opened','flash_written','target_restart_issued',
+       'halted_for_reads','two_identical_reads','resume_shutdown_cleanup_attempted',
+       'resume_shutdown_cleanup_proven','capture_process_termination_proven',
+@@ -1179,7 +1206,7 @@ function Get-ExtendedStageRawReplay([object]$Summary,[string]$Role,
+       [string]$candidate.candidate_manifest_sha256) 'v4 manifest changed'
+   $manifest=Read-JsonIfPresent $manifestPath
+   Assert-CandidateDiagnosticAbiContract $manifest 'v4 replay manifest'
+-  $expectedReader=if($hasAuxReadiness){[string]$manifest.aux_readiness_diagnostics.reader_schema}elseif($hasTimedPath){[string]$manifest.timed_path_diagnostics.reader_schema}else{[string]$manifest.reader_schema}
++  $expectedReader=if($hasDiagnosticUsbFailure){[string]$manifest.diagnostic_usb_failure_diagnostics.reader_schema}elseif($hasAuxReadiness){[string]$manifest.aux_readiness_diagnostics.reader_schema}elseif($hasTimedPath){[string]$manifest.timed_path_diagnostics.reader_schema}else{[string]$manifest.reader_schema}
+   Assert-Condition ([string]$Summary.schema-ceq$expectedReader-and
+       [string]$manifest.reader_schema-ceq[string]$candidate.reader_schema) 'extended reader/candidate schema downgrade or mixture'
+   if($hasFirstFailure){
+@@ -1262,6 +1289,12 @@ function Get-ExtendedStageRawReplay([object]$Summary,[string]$Role,
+   $flashRoles=@($flash.roles|Where-Object{[string]$_.role-ceq$Role})
+   Assert-Condition ($flashRoles.Count-eq1) 'v4 flash role is not unique'
+   $flashRole=$flashRoles[0]
++  if($hasDiagnosticUsbFailure){
++    Assert-Condition ($flash.reader_schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v8') 'v8 flash reader generation differs'
++    Assert-RawProjection $flash.diagnostic_usb_failure_diagnostics $manifest.diagnostic_usb_failure_diagnostics 'v8 flash diagnostic USB binding'
++    Assert-RawProjection $flash.usb_role_capabilities $manifest.usb_role_capabilities 'v8 flash USB role binding'
++    Assert-Condition ($Summary.binding.artifact.diagnostic_usb_failure_enabled-is[bool]-and$Summary.binding.artifact.diagnostic_usb_failure_enabled) 'v8 artifact diagnostic USB feature not enabled'
++  }
+   $expectedPort=if($Role-ceq'vehicle'){'COM3'}else{'COM6'}
+   Assert-Condition ([string]$Summary.binding.flash.role-ceq$Role-and
+       [string]$Summary.binding.flash.port-ceq$expectedPort-and
+@@ -1508,7 +1541,9 @@ function Get-ExtendedStageRawReplay([object]$Summary,[string]$Role,
+     Assert-Condition ((Get-Sha256 $decoderPath)-ceq$descriptor.sha256-and
+       (Get-Sha256 $sealedDecoder)-ceq$descriptor.sha256) 'Timed-path decoder binding differs'
+     . $decoderPath
+-    $timedRecord=ConvertFrom-R19TimedPathRecord -First $timedRaw[0] -Second $timedRaw[1] -ExpectedRole $Role -ExpectedMode $TimedPathMode
++    $effectiveTimedMode=$TimedPathMode
++    if($hasDiagnosticUsbFailure){$effectiveTimedMode=Get-R19UsbRoleEffectiveMode -Contract $manifest.usb_role_capabilities -Role $Role -RequestedMode $TimedPathMode}
++    $timedRecord=ConvertFrom-R19TimedPathRecord -First $timedRaw[0] -Second $timedRaw[1] -ExpectedRole $Role -ExpectedMode $effectiveTimedMode
+     Assert-RawProjection $Summary.decoded.timed_path $timedRecord 'timed-path raw projection'
+     for($i=0;$i-lt4;$i++){Assert-Condition ($timedRecord.build_id[$i]-eq$s[5+$i]-and
+       $timedRecord.boot_id[$i]-eq$firstUsbFailure.boot_instance[$i]) 'Timed-path build or boot differs from first failure record'}
+@@ -1550,6 +1585,41 @@ function Get-ExtendedStageRawReplay([object]$Summary,[string]$Role,
+     for($i=0;$i-lt4;$i++){Assert-Condition ($auxReadinessRecord.build_fingerprint[$i]-eq$s[5+$i]-and
+       $auxReadinessRecord.boot_instance[$i]-eq$firstUsbFailure.boot_instance[$i]) 'AUX/readiness build or boot differs from first failure record'}
+   }
++  if($hasDiagnosticUsbFailure){
++    Assert-Condition ($Summary.diagnostic_usb_failure_required-is[bool]-and$Summary.diagnostic_usb_failure_required) 'Diagnostic USB required record declaration missing'
++    foreach($node in @($Summary.binding,$Summary.binding.artifact)){
++      Assert-RawProjection $node.diagnostic_usb_failure_diagnostics $manifest.diagnostic_usb_failure_diagnostics 'diagnostic USB JTAG metadata binding'
++      Assert-RawProjection $node.usb_role_capabilities $manifest.usb_role_capabilities 'USB role JTAG metadata binding'
++    }
++    $diagnosticSymbol=$sealed.symbols.diagnostic_usb_failure
++    Assert-RawProjection $Summary.binding.artifact.symbols.diagnostic_usb_failure $diagnosticSymbol 'diagnostic USB redundant symbol binding'
++    Assert-Condition ($diagnosticSymbol.name-ceq'vc_lora_r19_diagnostic_usb_failure_record'-and
++      $diagnosticSymbol.size_bytes-eq256-and$diagnosticSymbol.aligned_32_bit-is[bool]-and
++      $diagnosticSymbol.aligned_32_bit-and$Summary.binding.diagnostic_usb_failure_address-ceq$diagnosticSymbol.address) 'Diagnostic USB symbol binding differs'
++    [uint64]$diagnosticStart=[Convert]::ToUInt32($diagnosticSymbol.address.Substring(2),16)
++    foreach($range in $ranges){Assert-Condition ($diagnosticStart+256-le$range.start-or$diagnosticStart-ge$range.end) 'Diagnostic USB record overlaps an existing record'}
++    Assert-Condition ($diagnosticStart+256-le$timedStart-or$diagnosticStart-ge$timedStart+512) 'Diagnostic USB record overlaps timed-path record'
++    Assert-Condition ($diagnosticStart+256-le$auxStart-or$diagnosticStart-ge$auxStart+6144) 'Diagnostic USB record overlaps AUX record'
++    $diagnosticRaw=@()
++    foreach($sample in 1,2){
++      $read=$reads[14+$sample-1]
++      $expectedLeaf=if($sample-eq1){'diagnostic_usb_failure_first.bin'}else{'diagnostic_usb_failure_second.bin'}
++      $path=(Resolve-Path -LiteralPath ([string]$read.path)).Path
++      Assert-Condition ($read.record-ceq'diagnostic_usb_failure'-and$read.sample-eq$sample-and
++        $read.size_bytes-eq256-and(Split-Path -Parent $path)-ieq$EvidenceDirectory-and
++        (Split-Path -Leaf $path)-ceq$expectedLeaf-and(Get-Item -LiteralPath $path).Length-eq256-and
++        $read.sha256-ceq(Get-Sha256 $path)) 'Diagnostic USB raw read binding differs'
++      $diagnosticRaw+=,([IO.File]::ReadAllBytes($path))
++    }
++    $descriptor=$manifest.diagnostic_usb_failure_diagnostics.decoder
++    $decoderPath=Join-Path $repo $descriptor.path
++    $sealedDecoder=Join-Path $candidate.artifact_root ('evidence/'+$descriptor.path)
++    Assert-Condition ((Get-Sha256 $decoderPath)-ceq$descriptor.sha256-and
++      (Get-Sha256 $sealedDecoder)-ceq$descriptor.sha256) 'Diagnostic USB decoder binding differs'
++    . $decoderPath -ImportOnly
++    $diagnosticRecord=ConvertFrom-R19DiagnosticUsbFailureRecord -First $diagnosticRaw[0] -Second $diagnosticRaw[1] -ExpectedRole $Role -ExpectedFingerprint ([uint32[]]@($s[5],$s[6],$s[7],$s[8])) -ExpectedBoot ([uint32[]]$firstUsbFailure.boot_instance)
++    Assert-RawProjection $Summary.decoded.diagnostic_usb_failure $diagnosticRecord 'diagnostic USB raw projection'
++  }
+   [pscustomobject][ordered]@{proven=$true;raw_read_count=$rawCount
+     usb_boundary_classification=[string]$rawFifoBoundary.classification
+     usb_boundary_completion_proven=[bool]$rawFifoBoundary.complete
+@@ -1568,6 +1638,7 @@ function Get-ExtendedStageRawReplay([object]$Summary,[string]$Role,
+     first_usb_failure=$firstUsbFailure
+     timed_path_record=$timedRecord
+     aux_readiness_record=$auxReadinessRecord
++    diagnostic_usb_failure_record=if($hasDiagnosticUsbFailure){$diagnosticRecord}else{$null}
+     first_usb_failure_pc_time_relation=[pscustomobject]@{classification='UNKNOWN'
+       reason='No matched same-boot nonce exchange, uninterrupted clock continuity and guaranteed error bound supplied.'
+       inferred_from_utc_or_elapsed_time=$false
+@@ -1689,12 +1760,12 @@ function Get-StageProof([object]$Step, [string]$Role, [string]$Address,
+         [string]$reads[0].sha256 -ceq [string]$reads[2].sha256 -and
+         [string]$reads[1].sha256 -ceq [string]$reads[3].sha256)
+       $isExtended=([string]$summary.schema-cin@(
+-          'vc-lora-r19-runtime-stage-jtag-read-v4','vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v6','vc-lora-r19-runtime-stage-jtag-read-v7'))
++          'vc-lora-r19-runtime-stage-jtag-read-v4','vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v6','vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8'))
+       $candidateHasExtension=($null-ne$candidate.PSObject.Properties['reader_schema']-and
+-        [string]$candidate.reader_schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v4','vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v7'))
++        [string]$candidate.reader_schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v4','vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8'))
+       Assert-Condition ($isExtended-eq$candidateHasExtension) `
+           'Reader generation does not match the pinned candidate'
+-      if($isExtended){$expectedReader=if($AuxReadinessDiagnostics){'vc-lora-r19-runtime-stage-jtag-read-v7'}elseif($timedPathEnabled){'vc-lora-r19-runtime-stage-jtag-read-v6'}else{[string]$candidate.reader_schema};Assert-Condition ([string]$summary.schema-ceq$expectedReader) 'Reader generation downgrade does not match the pinned candidate'}
++      if($isExtended){$diagnosticUsbRequested=[bool](Get-Variable -Name DiagnosticUsbFailureDiagnostics -ValueOnly -ErrorAction SilentlyContinue);$expectedReader=if($diagnosticUsbRequested){'vc-lora-r19-runtime-stage-jtag-read-v8'}elseif($AuxReadinessDiagnostics){'vc-lora-r19-runtime-stage-jtag-read-v7'}elseif($timedPathEnabled){'vc-lora-r19-runtime-stage-jtag-read-v6'}else{[string]$candidate.reader_schema};Assert-Condition ([string]$summary.schema-ceq$expectedReader) 'Reader generation downgrade does not match the pinned candidate'}
+       if($isExtended){
+         Assert-Condition ($Step.timed_out-is[bool]-and
+             $Step.termination_proven-is[bool]-and
+@@ -1980,7 +2051,7 @@ function Get-StageProof([object]$Step, [string]$Role, [string]$Address,
+ 
+       $proven = ([int]$Step.exit_code-eq0 -and
+         [string]$summary.schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v3',
+-          'vc-lora-r19-runtime-stage-jtag-read-v4','vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v6','vc-lora-r19-runtime-stage-jtag-read-v7') -and
++          'vc-lora-r19-runtime-stage-jtag-read-v4','vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v6','vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8') -and
+         [string]$summary.result-ceq'PASS' -and
+         [string]$summary.mode-ceq'live-jtag' -and
+         [bool]$summary.hardware_interaction -and
+@@ -2050,6 +2121,7 @@ function Get-StageProof([object]$Step, [string]$Role, [string]$Address,
+ 
+ function Get-CanonicalCandidate {
+   $AuxReadinessDiagnostics=[bool](Get-Variable -Name AuxReadinessDiagnostics -ValueOnly -ErrorAction SilentlyContinue)
++  $DiagnosticUsbFailureDiagnostics=[bool](Get-Variable -Name DiagnosticUsbFailureDiagnostics -ValueOnly -ErrorAction SilentlyContinue)
+   $timedPathEnabled=[bool](Get-Variable -Name timedPathEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   Assert-Condition (Test-Path -LiteralPath $latestPath -PathType Leaf) `
+       'Canonical diagnostic candidate latest.json is missing'
+@@ -2097,10 +2169,17 @@ function Get-CanonicalCandidate {
+       -not[bool]$handoffDocument.deployment_authorized) `
+       'Candidate handoff identity or diagnostic-only policy is invalid'
+   Assert-CandidateDiagnosticAbiContract $handoffDocument 'candidate handoff'
++  if($DiagnosticUsbFailureDiagnostics){
++    foreach($document in @($latest,$handoffDocument)){
++      Assert-RawProjection $document.diagnostic_usb_failure_diagnostics $candidateManifestDocument.diagnostic_usb_failure_diagnostics 'candidate diagnostic USB contract'
++      Assert-RawProjection $document.usb_role_capabilities $candidateManifestDocument.usb_role_capabilities 'candidate USB role contract'
++    }
++    Assert-RawProjection $timedPathPreparedPin.usb_role_capabilities $candidateManifestDocument.usb_role_capabilities 'prepared USB role contract'
++  }
+   Assert-Condition ([string]$handoffDocument.reader_schema-ceq
+       [string]$candidateManifestDocument.reader_schema) 'Candidate reader schemas differ'
+   if([string]$candidateManifestDocument.reader_schema-cin@(
+-      'vc-lora-r19-runtime-stage-jtag-read-v4','vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v7')){
++      'vc-lora-r19-runtime-stage-jtag-read-v4','vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8')){
+     $finalSealPath=Resolve-RepoPath ([string]$latest.final_seal.path) 'candidate final seal'
+     Assert-Condition ((Get-Sha256 $finalSealPath)-ceq
+         [string]$latest.final_seal.sha256) 'Candidate final seal SHA differs'
+@@ -2125,9 +2204,13 @@ function Get-CanonicalCandidate {
+       Assert-RawProjection $finalSeal.aux_readiness_diagnostics $candidateManifestDocument.aux_readiness_diagnostics 'seal AUX/readiness contract'
+       Assert-RawProjection $handoffDocument.aux_readiness_diagnostics $candidateManifestDocument.aux_readiness_diagnostics 'handoff AUX/readiness contract'
+     }
++    if($DiagnosticUsbFailureDiagnostics){
++      Assert-RawProjection $finalSeal.diagnostic_usb_failure_diagnostics $candidateManifestDocument.diagnostic_usb_failure_diagnostics 'seal diagnostic USB contract'
++      Assert-RawProjection $finalSeal.usb_role_capabilities $candidateManifestDocument.usb_role_capabilities 'seal USB role contract'
++    }
+     Assert-CandidateDiagnosticAbiContract $finalSeal 'candidate final seal'
+     Assert-Condition ([string]$finalSeal.reader_schema-ceq[string]$candidateManifestDocument.reader_schema) 'Candidate final seal reader schema differs'
+-    if([string]$candidateManifestDocument.reader_schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v7')){
++    if([string]$candidateManifestDocument.reader_schema-cin@('vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8')){
+       Assert-RawProjection $finalSeal.first_usb_failure_decoder $candidateManifestDocument.first_usb_failure_decoder 'seal first decoder'
+       Assert-RawProjection $handoffDocument.first_usb_failure_decoder $candidateManifestDocument.first_usb_failure_decoder 'handoff first decoder'
+     }
+@@ -3330,6 +3413,7 @@ try {
+       '-HilAuthorization',$hilToken,'-OperatorSafetyAttestation',$safetyToken)}
+     if($timedPathEnabled){$installArguments+=@('-TimedPathMode',$TimedPathMode)}
+     if($AuxReadinessDiagnostics){$installArguments+=@('-AuxReadinessDiagnostics')}
++    if($PSBoundParameters['DiagnosticUsbFailureDiagnostics']){$installArguments+=@('-DiagnosticUsbFailureDiagnostics')}
+     $installStep = Invoke-ExperimentStep 'install' $flashTool `
+         $installArguments $expectedFlashToolSha256
+     if ($OfflineContractTest.IsPresent) {
+@@ -3366,6 +3450,7 @@ try {
+         safety_confirmed=$true;one_time=$true;restore_required=$true;capture_seconds=40;ports=$permitPorts})
+       $captureArguments+=@('-Mode',$TimedPathMode,'-ExecutionPermitPath',$permitPath)
+       if($AuxReadinessDiagnostics){$captureArguments+=,'-AuxReadinessDiagnostics'}
++      if($PSBoundParameters['DiagnosticUsbFailureDiagnostics']){$captureArguments+=,'-DiagnosticUsbFailureDiagnostics'}
+     }
+     $captureStep = Invoke-ExperimentStep 'capture' $captureTool `
+         $captureArguments $expectedCaptureToolSha256
+@@ -3426,6 +3511,7 @@ try {
+         '-EvidenceDirectory',$rollbackDirectory)}
+       if($timedPathEnabled){$rollbackArguments+=@('-TimedPathMode',$TimedPathMode)}
+       if($AuxReadinessDiagnostics){$rollbackArguments+=@('-AuxReadinessDiagnostics')}
++      if($PSBoundParameters['DiagnosticUsbFailureDiagnostics']){$rollbackArguments+=@('-DiagnosticUsbFailureDiagnostics')}
+       $rollbackStep = Invoke-ExperimentStep 'rollback' $flashTool `
+           $rollbackArguments $expectedFlashToolSha256
+       $rollbackProven = Test-RollbackProof $rollbackStep `
+@@ -3521,6 +3607,7 @@ $summary = [pscustomobject][ordered]@{
+     $OfflineScenario}else{''};failure=$primaryFailure
+   timed_path_mode=$TimedPathMode;timed_path_evaluation=$timedPathEvaluation
+   aux_readiness_diagnostics=[bool]$AuxReadinessDiagnostics
++  diagnostic_usb_failure_diagnostics=[bool]$DiagnosticUsbFailureDiagnostics
+   authorization=[pscustomobject][ordered]@{
+     hil_token=if($Execute){$HilAuthorization}else{''}
+     safety_attestation=if($Execute){$OperatorSafetyAttestation}else{''}
+
+diff --git a/runs/validation/R19-VEHICLE-CLOCK-DIAGNOSTIC-FIRST-FAIL-FIX-001/20261023T113004Z/before/tools/invoke_r19_candidate_app_flash_hil.ps1 b/tools/invoke_r19_candidate_app_flash_hil.ps1
+index 30f6d22..f90adde 100644
+--- a/runs/validation/R19-VEHICLE-CLOCK-DIAGNOSTIC-FIRST-FAIL-FIX-001/20261023T113004Z/before/tools/invoke_r19_candidate_app_flash_hil.ps1
++++ b/tools/invoke_r19_candidate_app_flash_hil.ps1
+@@ -13,6 +13,7 @@ param(
+   [ValidateSet('Disabled','SyncOnly','ExplicitHostArm')]
+   [string]$TimedPathMode = 'Disabled',
+   [switch]$AuxReadinessDiagnostics,
++  [switch]$DiagnosticUsbFailureDiagnostics,
+   [switch]$RollbackOnly,
+   [ValidateSet('', 'RESTORE_ACCEPTED_R18_AFTER_R19_HIL')]
+   [string]$RollbackAuthorization = '',
+@@ -36,8 +37,10 @@ $testId = 'R19-CANDIDATE-APP-FLASH-HIL-001'
+ $runtimeFailDiagnosticsEnabled = $RuntimeFailDiagnostics.IsPresent
+ $timedPathEnabled=$TimedPathMode-cne'Disabled'
+ $auxReadinessEnabled=$AuxReadinessDiagnostics.IsPresent
++$diagnosticUsbFailureEnabled=$DiagnosticUsbFailureDiagnostics.IsPresent
+ if($timedPathEnabled-and-not$runtimeFailDiagnosticsEnabled){throw 'Timed-path mode requires diagnostic-only scope'}
+ if($auxReadinessEnabled-and(-not$runtimeFailDiagnosticsEnabled-or$TimedPathMode-cne'ExplicitHostArm')){throw 'AUX readiness requires RuntimeFailDiagnostics and ExplicitHostArm'}
++if($diagnosticUsbFailureEnabled-and(-not$runtimeFailDiagnosticsEnabled-or-not$auxReadinessEnabled-or$TimedPathMode-cne'ExplicitHostArm')){throw 'Diagnostic USB failure mode requires RuntimeFailDiagnostics, AUX readiness and ExplicitHostArm'}
+ $acceptanceEligible = -not $runtimeFailDiagnosticsEnabled
+ $flashEvidenceSchema = 'vc-lora-r19-candidate-flash-evidence-v1'
+ $candidateSchema = 'vc-lora-r19-candidate-artifact-manifest-v1'
+@@ -47,9 +50,13 @@ $candidateSealSchema = 'vc-lora-r19-candidate-final-seal-v1'
+ $expectedEspToolVersion = '5.3.1'
+ $expectedEspToolSha256 =
+     'A939E28FE2FBB53E65E46F0246A4D71B9FD6C052EF0E046182DF4A4FE8BEC946'
+-if($auxReadinessEnabled){
+-  $expectedCandidateVerifierSha256='3E79F96F2891923ADE132E3128962CAB3340F4246375E25F65EE7BD5749704CA'
+-  $expectedCandidateCommonSha256='37A87C94E3DB89B3EA73C67E129FCA457347A8349B3B9AF51AF5B240062AFABE'
++if($diagnosticUsbFailureEnabled){
++  # Exact reviewed current versions; never discover or accept a mutable hash.
++  $expectedCandidateVerifierSha256='DC23B935E3AE7D236360C2EC74B452D877D18FAF8DEFA4B0ABDFB8937D5E764F'
++  $expectedCandidateCommonSha256='1E4B7349606E739A45B971C3E697F375A9C2159E8E8F00B293949F0254727D61'
++}elseif($auxReadinessEnabled){
++  $expectedCandidateVerifierSha256='DC23B935E3AE7D236360C2EC74B452D877D18FAF8DEFA4B0ABDFB8937D5E764F'
++  $expectedCandidateCommonSha256='1E4B7349606E739A45B971C3E697F375A9C2159E8E8F00B293949F0254727D61'
+ }else{
+   $expectedCandidateVerifierSha256 =
+     '66DFCFC5B7E59D4B51B704F098ED5A1912312188A2785E1ED2DD59A3B55DE2F2'
+@@ -64,6 +71,7 @@ if($timedPathEnabled){
+   $candidateBaseRelative="runs/candidates/R19-TIMED-PATH-$modeLeaf-DIAGNOSTIC-CANDIDATE-BUILD-001"
+ }
+ if($auxReadinessEnabled){$candidateBaseRelative='runs/candidates/R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001'}
++if($diagnosticUsbFailureEnabled){$candidateBaseRelative='runs/candidates/R19-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001'}
+ $evidenceBaseRelative = if ($runtimeFailDiagnosticsEnabled) {
+     'runs\validation\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001'
+   } else {'runs\validation\R19-CANDIDATE-APP-FLASH-HIL-001'}
+@@ -106,6 +114,37 @@ function Assert-Condition([bool]$Condition, [string]$Message) {
+ 
+ function Assert-CandidateModeRecord([object]$Record,
+                                     [string]$Description) {
++  $diagnosticUsbFailureEnabled=[bool](Get-Variable -Name diagnosticUsbFailureEnabled -ValueOnly -ErrorAction SilentlyContinue)
++  if($diagnosticUsbFailureEnabled){
++    Assert-Condition ($Record.PSObject.Properties['diagnostic_usb_failure_diagnostics']-and
++      $Record.PSObject.Properties['usb_role_capabilities']-and
++      $Record.diagnostic_usb_failure_diagnostics.enabled-is[bool]-and$Record.diagnostic_usb_failure_diagnostics.enabled-and
++      $Record.diagnostic_usb_failure_diagnostics.schema-ceq'vc-lora-r19-diagnostic-usb-failure-candidate-v1'-and
++      $Record.diagnostic_usb_failure_diagnostics.reader_schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v8'-and
++      $Record.diagnostic_usb_failure_diagnostics.macro-ceq'VC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD'-and
++      $Record.diagnostic_usb_failure_diagnostics.record.symbol-ceq'vc_lora_r19_diagnostic_usb_failure_record'-and
++      $Record.diagnostic_usb_failure_diagnostics.record.size_bytes-eq256-and
++      $Record.diagnostic_usb_failure_diagnostics.record.schema_version-eq1-and
++      $Record.diagnostic_usb_failure_diagnostics.decoder.path-ceq'tools/read_r19_diagnostic_usb_failure_record.ps1'-and
++      $Record.diagnostic_usb_failure_diagnostics.decoder.sha256-ceq(Get-Sha256 (Join-Path $repo 'tools/read_r19_diagnostic_usb_failure_record.ps1'))) "$Description diagnostic USB contract absent or mismatched"
++    $cap=$Record.usb_role_capabilities
++    Assert-Condition ($cap.schema-ceq'vc-lora-r19-usb-role-capabilities-v1'-and$cap.mode-ceq$TimedPathMode-and
++      $cap.implementation_bound-is[bool]-and$cap.implementation_bound-and@($cap.roles).Count-eq2) "$Description USB role contract absent or mismatched"
++    foreach($spec in @(@('vehicle','SyncOnly',$false),@('ground','ExplicitHostArm',$true))){
++      $rows=@($cap.roles|Where-Object{$_.role-ceq$spec[0]})
++      Assert-Condition ($rows.Count-eq1) "$Description USB role absent or duplicated"
++      $r=$rows[0]
++      Assert-Condition ($r.clock_request_reply-is[bool]-and$r.clock_request_reply-and$r.effective_mode-ceq$spec[1]-and
++        $r.arm-is[bool]-and$r.arm-eq$spec[2]-and$r.ready-is[bool]-and$r.ready-eq$spec[2]) "$Description USB role escalation or unsupported clock handling"
++    }
++    $sources=@('firmware/phase6/vc_lora_phase6_bridge.hpp','firmware/high_speed/r19_diagnostic_usb_failure_record.hpp','tools/r19_usb_role_contract.ps1')
++    Assert-Condition (@($cap.canonical_sources).Count-eq3) "$Description USB role source count differs"
++    foreach($relative in $sources){
++      $binding=@($cap.canonical_sources|Where-Object{$_.path-ceq$relative})
++      Assert-Condition ($binding.Count-eq1-and$binding[0].sha256-cmatch'^[0-9A-F]{64}$'-and
++        (Get-Sha256 (Join-Path $repo $relative))-ceq$binding[0].sha256) "$Description USB role source fingerprint differs"
++    }
++  }else{Assert-Condition ($null-eq$Record.PSObject.Properties['diagnostic_usb_failure_diagnostics']-and$null-eq$Record.PSObject.Properties['usb_role_capabilities']) "$Description requires explicit diagnostic USB mode"}
+   if($auxReadinessEnabled){
+     Assert-Condition ($Record.PSObject.Properties['aux_readiness_diagnostics']-and
+       $Record.aux_readiness_diagnostics.enabled-is[bool]-and$Record.aux_readiness_diagnostics.enabled-and
+@@ -585,6 +624,7 @@ function Resolve-CandidateBundle {
+ }
+ 
+ function Invoke-CandidateVerifier([object]$Bundle, [string]$Checkpoint) {
++  $diagnosticUsbFailureEnabled=[bool](Get-Variable -Name diagnosticUsbFailureEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $verifier = Join-Path $repo 'tools\verify_r19_candidate_artifact.ps1'
+   $common = Join-Path $repo 'tools\r19_candidate_artifact_common.ps1'
+   Assert-Condition (Test-Path -LiteralPath $verifier -PathType Leaf) `
+@@ -602,8 +642,10 @@ function Invoke-CandidateVerifier([object]$Bundle, [string]$Checkpoint) {
+   $failure = $null
+   $sourceVerifier = $null
+   $sourceCommon = $null
++  $sourceRoleContract = $null
+   $stagedVerifierLock = $null
+   $stagedCommonLock = $null
++  $stagedRoleContractLock = $null
+   try {
+     $sourceVerifier = Read-PinnedFileUnderLock $verifier `
+         $expectedCandidateVerifierSha256 'R19 candidate artifact verifier'
+@@ -613,24 +655,37 @@ function Invoke-CandidateVerifier([object]$Bundle, [string]$Checkpoint) {
+     New-Item -ItemType Directory -Path $stageDirectory | Out-Null
+     Write-DurableBytes $stagedVerifierPath $sourceVerifier.bytes
+     Write-DurableBytes $stagedCommonPath $sourceCommon.bytes
++    if($diagnosticUsbFailureEnabled){
++      $handoff=Get-Content -LiteralPath $Bundle.handoff_path -Raw|ConvertFrom-Json
++      $roleBinding=@($handoff.usb_role_capabilities.canonical_sources|Where-Object{$_.path-ceq'tools/r19_usb_role_contract.ps1'})
++      Assert-Condition ($roleBinding.Count-eq1) 'Role contract source is not uniquely pinned'
++      $roleContractSha=[string]$roleBinding[0].sha256
++      $sourceRoleContract=Read-PinnedFileUnderLock (Join-Path $repo 'tools/r19_usb_role_contract.ps1') $roleContractSha 'USB role contract'
++      $stagedRoleContractPath=Join-Path $stageDirectory 'r19_usb_role_contract.ps1'
++      Write-DurableBytes $stagedRoleContractPath $sourceRoleContract.bytes
++      $stagedRoleContractLock=Open-PinnedReadLock $stagedRoleContractPath $roleContractSha 'staged USB role contract'
++    }
+     $stagedVerifierLock = Open-PinnedReadLock $stagedVerifierPath `
+         $expectedCandidateVerifierSha256 'staged R19 candidate verifier'
+     $stagedCommonLock = Open-PinnedReadLock $stagedCommonPath `
+         $expectedCandidateCommonSha256 `
+         'staged R19 candidate verifier common dependency'
+-    Write-DurableJson (Join-Path $stageDirectory 'integrity.json') ([ordered]@{
++    $integrityRecord=[ordered]@{
+       schema='vc-lora-r19-candidate-verifier-integrity-v1'
+       checkpoint=$Checkpoint
+       verifier_sha256=$expectedCandidateVerifierSha256
+       common_sha256=$expectedCandidateCommonSha256
+       source_and_stage_read_locked_during_execution=$true
+-    })
++    }
++    if($diagnosticUsbFailureEnabled){$integrityRecord['role_contract_sha256']=$roleContractSha}
++    Write-DurableJson (Join-Path $stageDirectory 'integrity.json') $integrityRecord
+     $modeArguments = @{}
+     if ($runtimeFailDiagnosticsEnabled) {
+       $modeArguments.RuntimeFailDiagnostics = $true
+     }
+     if($timedPathEnabled){$modeArguments.TimedPathMode=$TimedPathMode}
+     if($auxReadinessEnabled){$modeArguments.AuxReadinessDiagnostics=$true}
++    if($diagnosticUsbFailureEnabled){$modeArguments.DiagnosticUsbFailureDiagnostics=$true}
+     $output = @(& $stagedVerifierPath -RepoRoot $repo @modeArguments `
+         -LatestPath $Bundle.latest_path `
+         -ExpectedLatestSha256 $Bundle.latest_sha256 2>&1)
+@@ -638,9 +693,11 @@ function Invoke-CandidateVerifier([object]$Bundle, [string]$Checkpoint) {
+     $failure = $_.Exception.Message
+     $output += "ERROR: $failure"
+   } finally {
++    if ($null -ne $stagedRoleContractLock) { $stagedRoleContractLock.Dispose() }
+     if ($null -ne $stagedCommonLock) { $stagedCommonLock.Dispose() }
+     if ($null -ne $stagedVerifierLock) { $stagedVerifierLock.Dispose() }
+     if ($null -ne $sourceCommon) { $sourceCommon.lock.Dispose() }
++    if ($null -ne $sourceRoleContract) { $sourceRoleContract.lock.Dispose() }
+     if ($null -ne $sourceVerifier) { $sourceVerifier.lock.Dispose() }
+   }
+   Write-DurableText $logPath (($output | Out-String).TrimEnd() + $newline)
+@@ -1188,6 +1245,7 @@ function Write-SealedEvidence([string]$Result, [string]$Status,
+     [string]$Failure, [object]$Bundle, [object[]]$Roles,
+     [object]$RollbackResult, [bool]$OneRunAuthorized,
+     [string]$SimulatedTerminalStatus = '') {
++  $diagnosticUsbFailureEnabled=[bool](Get-Variable -Name diagnosticUsbFailureEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $terminalPath = Join-Path $evidence 'terminal_status.json'
+   Write-DurableJson $terminalPath ([ordered]@{
+     schema_version=1;test_id=$testId;finished_utc=[DateTime]::UtcNow.ToString('o')
+@@ -1306,6 +1364,13 @@ function Write-SealedEvidence([string]$Result, [string]$Status,
+     $record.authorization_scope='one immediate private USB AUX/readiness timed-path diagnostic capture only; no flight arming or parameter commands'
+     $record.next_required_action='Run exactly one mode-bound timed-path capture, acquire all seven diagnostic records twice, then mandatory accepted R18 rollback'
+   }
++  if($diagnosticUsbFailureEnabled-and$null-ne$Bundle){
++    $record['diagnostic_usb_failure_diagnostics']=$modeHandoff.diagnostic_usb_failure_diagnostics
++    $record['usb_role_capabilities']=$modeHandoff.usb_role_capabilities
++    $record['reader_schema']='vc-lora-r19-runtime-stage-jtag-read-v8'
++    $record.authorization_scope='one immediate versioned-role diagnostic USB cause capture only; no flight arming or parameter commands'
++    $record.next_required_action='Run exactly one bound capture, acquire all eight diagnostic records twice, then mandatory accepted R18 rollback'
++  }
+   Write-DurableJson $recordPath $record
+ 
+   $excluded = @('artifact_manifest.json','SHA256SUMS.txt','final_seal.json',
+

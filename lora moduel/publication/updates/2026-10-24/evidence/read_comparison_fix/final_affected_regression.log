@@ -1,0 +1,27 @@
+Internal ctest changing into directory: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+Test project E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+    Start 38: check_r19_runtime_stage_cause_experiment_orchestrator_contract
+1/8 Test #38: check_r19_runtime_stage_cause_experiment_orchestrator_contract ...   Passed   96.66 sec
+    Start 23: R19-timed_path_outer_raw-OFFLINE-001
+    Start 13: R19-continuous_reader_integration-OFFLINE-001
+    Start 18: R19-timed_path_acquisition-OFFLINE-001
+    Start 19: R19-timed_path_capture_entrypoint-OFFLINE-001
+2/8 Test #19: R19-timed_path_capture_entrypoint-OFFLINE-001 ....................   Passed    3.85 sec
+    Start 12: R19-continuous_reader_contract-OFFLINE-001
+3/8 Test #18: R19-timed_path_acquisition-OFFLINE-001 ...........................   Passed    4.22 sec
+    Start 25: R19-read_comparison_permit-OFFLINE-001
+4/8 Test #25: R19-read_comparison_permit-OFFLINE-001 ...........................   Passed    1.52 sec
+    Start 22: R19-timed_path_outer-OFFLINE-001
+5/8 Test #12: R19-continuous_reader_contract-OFFLINE-001 .......................   Passed    2.83 sec
+6/8 Test #22: R19-timed_path_outer-OFFLINE-001 .................................   Passed    1.37 sec
+7/8 Test #13: R19-continuous_reader_integration-OFFLINE-001 ....................   Passed   10.24 sec
+8/8 Test #23: R19-timed_path_outer_raw-OFFLINE-001 .............................   Passed   17.82 sec
+
+100% tests passed, 0 tests failed out of 8
+
+Label Time Summary:
+contract    =  96.66 sec*proc (1 test)
+offline     =  96.66 sec*proc (1 test)
+r19         =  96.66 sec*proc (1 test)
+
+Total Test time (real) = 114.54 sec

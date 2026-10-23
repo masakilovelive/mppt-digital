@@ -1,0 +1,64 @@
+{
+  "schema": "vc-lora-r19-reader-lifecycle-diagnostic-pause-validation-v1",
+  "result": "PASS",
+  "hardware_interaction": false,
+  "source_scope": [
+    "tools/r19_continuous_reader.cs",
+    "tests/hil/check_r19_continuous_reader_contract.ps1",
+    "tests/hil/check_r19_continuous_reader_integration.ps1"
+  ],
+  "red": {
+    "log": "red.log",
+    "expected_failure": "Current helper does not expose DiagnosticPauseActive required by the new deterministic native-source fixture."
+  },
+  "contract": { "passed": 27, "failed": 0, "repeated_passes": 2, "logs": ["green.log", "green_repeat.log"] },
+  "integration": {
+    "passed": 10,
+    "failed": 0,
+    "log": "integration_green.log",
+    "dependency_pin_refreshed_by": "root agent",
+    "pre_pin_failure_preserved": "integration_pre_pin.log"
+  },
+  "api": {
+    "normal_close": "bool CloseSourceAfterStop()",
+    "fallback_close": "Existing bool CloseAndStop(int milliseconds), internally routed to the same tracked close implementation",
+    "pause_request": "bool RequestDiagnosticReadPause(int milliseconds)",
+    "pause_range_ms": [1, 2000],
+    "pause_one_shot": true,
+    "pause_request_nonblocking": true,
+    "pause_end_reasons": ["Deadline", "Stop", "WorkerFailure"],
+    "unobserved_timestamp_or_call_count": -1
+  },
+  "proofs": [
+    "First explicit Stop request, worker finish sample, first Close start and terminal Close end timestamps are immutable and use the injected running monotonic PC clock.",
+    "Normal Close cannot run while Read ownership remains active; repeated Close calls do not re-close the source.",
+    "CloseAttempted and CloseCompleted are separate. An exception preserves CloseFailure and CleanupFailure and records its actual terminal CloseEndTicks without claiming completion.",
+    "Legacy Closed retains its prior fallback-close-attempt meaning; a true legacy Closed value alone is not proof of successful Close.",
+    "Pause acknowledgement waits for the pending Read to finish and preserves all returned bytes before pausing.",
+    "No Source.Read occurs between pause acknowledgement and its recorded end: BeginCalls equals EndCalls and the deterministic native-source fixture independently detects zero ReadsDuringPause.",
+    "A completed pause auto-resumes without Close, Purge, owner replacement or payload replay; ResumedReadTicks is the first subsequent BeginRead instrumentation sample.",
+    "Stop interrupts a 2000 ms pause within the 500 ms bounded join test. A pause cancelled before acknowledgement keeps BeginTicks unobserved.",
+    "Existing startup/live/tail ownership and raw retention tests remain intact; integrated exact frames survive the pause and normal tracked cleanup."
+  ],
+  "source_hashes_sha256": {
+    "tools/r19_continuous_reader.cs": "B9C22B9E74F32E09C1210F976363CF4513C66F3131780B96972BEC48B1F907EF",
+    "tests/hil/check_r19_continuous_reader_contract.ps1": "4F0F3A209C7A3EED2EB721B7122623519922B497F2CADA7D509457A1D20DA227",
+    "tests/hil/check_r19_continuous_reader_integration.ps1": "B4B10203FB03B7C0AE90F1A02C56F5404E08F6E0F10B445CB71248181DA4AF2E"
+  },
+  "before_hashes_sha256": {
+    "tools/r19_continuous_reader.cs": "8DF5929114802926708BD42430CDCD7AF499B15B92EB7B7503BEF11C635B44F9",
+    "tests/hil/check_r19_continuous_reader_contract.ps1": "35F7BA97BBE7D3E3B066A77294168699EDE468CEAE413F8ABFCF7F2402C32732",
+    "tests/hil/check_r19_continuous_reader_integration.ps1": "3563790930DF7D264193DD3928D34A27C7EDA18B39A0F8C486F4F34609146DBE"
+  },
+  "diffs": [
+    "r19_continuous_reader.cs.diff",
+    "check_r19_continuous_reader_contract.ps1.diff",
+    "check_r19_continuous_reader_integration.ps1.diff"
+  ],
+  "limitations": [
+    "The injected pause controls application-level Read invocation only. It does not prove suppression of USB host IN tokens, ACKs, driver buffering or physical reception.",
+    "WorkerStoppedTicks and ResumedReadTicks are precise application instrumentation samples, not operating-system thread-exit, kernel-pending-I/O or physical USB timestamps.",
+    "No COM, PnP, OpenOCD, Arduino build, firmware write or live hardware comparison was performed by this subtask.",
+    "No RF, 106 ms product deadline, MCU firmware or CMake source was changed by this subtask."
+  ]
+}

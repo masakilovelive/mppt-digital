@@ -1,0 +1,179 @@
+{
+  "schema": "vc-lora-r19-pc-lifecycle-read-comparison-fix-validation-v1",
+  "status": "OFFLINE_VALIDATED_SINGLE_LIVE_COMPARISON_COMPLETED_R18_RESTORED_CAUSE_INDETERMINATE",
+  "live_outcome": {
+    "directory": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261023T155139Z-read-pause-lifecycle",
+    "analysis": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261023T155139Z-read-pause-lifecycle/analysis/summary.json",
+    "one_run_authorization_consumed": true,
+    "accepted_r18_restored_both_roles": true,
+    "ground_pause_duration_ms": 2005.6241,
+    "ground_aux_fault_precedes_pause_seconds": 19.8455222,
+    "product_heartbeat_frames": 0,
+    "product_106ms_and_932_parameter_acceptance": "NOT_EVALUATED",
+    "root_cause_proven": false
+  },
+  "review_date_local": "2026-10-24",
+  "timezone": "Asia/Tokyo",
+  "source_changes": [
+    {
+      "path": "tools/r19_continuous_reader.cs",
+      "sha256": "B9C22B9E74F32E09C1210F976363CF4513C66F3131780B96972BEC48B1F907EF"
+    },
+    {
+      "path": "tools/run_r19_timed_path_capture.ps1",
+      "sha256": "9CDE505D40B7940E3F4AD223B99F9D36F61C6E46F9C19AB95676B271D0E8A47D"
+    },
+    {
+      "path": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "sha256": "F1A6FF732F1D415D9BA2F9768B2872970940FF5A7BE8D0E9FAE52253AECE25E5"
+    },
+    {
+      "path": "tools/r19_timed_path_outer.ps1",
+      "sha256": "E195592798CEA455C56C8361DE3EB4E48EFD416024E5F2A361EC5AD06191DEBE"
+    },
+    {
+      "path": "tools/r19_timed_path_acquisition.ps1",
+      "sha256": "34F920D480291758AD39F72AEA026BA8C338B64B2A232683E187591D031EC731"
+    },
+    {
+      "path": "tools/run_r19_runtime_fail_diagnostic_hil.ps1",
+      "sha256": "4811B2F746BD6C117BDBA4ADFF8943C2684E68F52714F7BD7AE1E77D54AB91B4"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "34C3B2C5EE229B9F983EDE989D4094FB67B417E8D8C74E6DC6EEDC229EF49F32"
+    },
+    {
+      "path": "tests/hil/check_r19_continuous_reader_contract.ps1",
+      "sha256": "4F0F3A209C7A3EED2EB721B7122623519922B497F2CADA7D509457A1D20DA227"
+    },
+    {
+      "path": "tests/hil/check_r19_continuous_reader_integration.ps1",
+      "sha256": "B4B10203FB03B7C0AE90F1A02C56F5404E08F6E0F10B445CB71248181DA4AF2E"
+    },
+    {
+      "path": "tests/hil/check_r19_timed_path_capture_persistence.ps1",
+      "sha256": "C12F0491D7579C944DABB555CF177445C1C25EE154E115DA56D96402CA9F1671"
+    },
+    {
+      "path": "tests/hil/check_r19_aux_readiness_capture_routing.ps1",
+      "sha256": "A489A2629DF5DF47297DEB31B4C95A7B28F0E687D2FE93028961A173F010D528"
+    },
+    {
+      "path": "tests/hil/check_r19_read_comparison_capture_contract.ps1",
+      "sha256": "C903A7A1BC0FD6F9B7FE535C010AA3846816FEAF7D432E77EC144181B79F3027"
+    },
+    {
+      "path": "tests/hil/check_r19_read_comparison_permit.ps1",
+      "sha256": "25619EF754F6C8D06A3E68A4B9BEFBFDE9827FEB799D1383FE8259524A0F4D5F"
+    }
+  ],
+  "firmware_changed": false,
+  "sdk_changed": false,
+  "rf_or_uart_or_tdd_changed": false,
+  "product_usb_budget_ms": 106,
+  "candidate_id": "20261023T120117864Z-c22a4e7c",
+  "new_candidate_built": false,
+  "hardware_com_flash_jtag_operations_performed_during_offline_validation": false,
+  "os_pnp_inspection_performed": true,
+  "tests": {
+    "test_first_red_retained": true,
+    "continuous_reader": {
+      "contract": 27,
+      "integration": 10,
+      "failures": 0,
+      "evidence": "reader/summary.json"
+    },
+    "comparison_contract": {
+      "ps51_passed": 57,
+      "ps7_passed": 57,
+      "failures": 0,
+      "evidence": "capture_contract/summary.json"
+    },
+    "comparison_permit": {
+      "passed": 20,
+      "failures": 0,
+      "evidence": "permit_green.log"
+    },
+    "full_host_suite": {
+      "total": 398,
+      "passed_initial": 395,
+      "failed_initial": 3,
+      "exit_code_initial": 8,
+      "log": "full_host_tests.log",
+      "interpretation": "Initial run overlapped the final test-first outer-disposition repair. One new comparison regression and two legacy inert-fixture compatibility failures are retained, not omitted."
+    },
+    "failed_tests_after_repair": {
+      "passed": 3,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "failed_tests_repaired.log"
+    },
+    "final_affected_regression": {
+      "passed": 8,
+      "failed": 0,
+      "exit_code": 0,
+      "log": "final_affected_regression.log"
+    },
+    "legacy_fixture_compatibility": {
+      "persistence_checks_each_shell": 307,
+      "routing_checks_each_shell": 18,
+      "ps51": "PASS",
+      "ps7": "PASS",
+      "safety_allowlists_not_widened": true,
+      "evidence": "compatibility/summary.json"
+    }
+  },
+  "arduino_compile": {
+    "sequence": [
+      "vehicle",
+      "ground"
+    ],
+    "vehicle": "PASS",
+    "ground": "PASS",
+    "output_scope": "Fresh validation-only output directories; accepted R18 artifacts not replaced",
+    "logs": [
+      "arduino_vehicle.log",
+      "arduino_ground.log"
+    ]
+  },
+  "independent_review": {
+    "code_repair": "preflight_review/final_code_repair_verification.json",
+    "fresh_pin": "preflight_review/fresh_pin_verification.json",
+    "tools_matched": 20,
+    "candidate_sha_entries_matched": 159,
+    "protected_unchanged": 9
+  },
+  "prepared_pin": {
+    "path": "prepared_run.json",
+    "sha256": "C3C747474BA9881A644E7FB5AD1F92D5016697481D3575CCD6E120AD51A5CFA9"
+  },
+  "diffs": [
+    "source_changes.diff",
+    "reader/",
+    "compatibility/"
+  ],
+  "integrity": "after_integrity.json",
+  "comparison": {
+    "mode": "GroundPauseResume",
+    "capture_seconds": 40,
+    "ground_pause_requested_after_seconds": 20,
+    "pause_ms": 2000,
+    "vehicle": "Continuous application Read",
+    "port_reopen_during_intervention": false,
+    "purge": false,
+    "normalizer_for_continuous_reader_not_weakened": true,
+    "ground_reader_continuous": false,
+    "causal_disposition": "INDETERMINATE",
+    "physical_host_in_suppression_proven": false
+  },
+  "operator_preparation": "operator_preparation.json",
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "limitations": [
+    "Application Read pause does not suppress or prove absence of physical USB IN traffic; OS and SerialPort buffering can continue.",
+    "No mid-comparison MCU snapshot or additional clock request is introduced. Pre-intervention immutable failures are not intervention outcomes.",
+    "A valid comparison proves execution and retained observations, not physical root cause or 932/932 within 30 seconds.",
+    "The prior full-suite failure log remains evidence; validation relies on the repaired failed-test rerun and final affected regression, not a claimed single clean 398-test run after the final patch."
+  ]
+}

@@ -1,0 +1,7 @@
+In file included from E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\vc_lora_ground_xiao_esp32s3\vc_lora_ground_xiao_esp32s3.ino:7:
+E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\vc_lora_ground_xiao_esp32s3\vc_lora_phase6_bridge.hpp: In function 'void vc_lora_phase6_firmware::deliver_radio_bytes(uint64_t)':
+E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\vc_lora_ground_xiao_esp32s3\vc_lora_phase6_bridge.hpp:5308:34: warning: unused variable 'disposition' [-Wunused-variable]
+ 5308 |         const ControlDisposition disposition =
+      |                                  ^~~~~~~~~~~
+Sketch uses 360849 bytes (10%) of program storage space. Maximum is 3342336 bytes.
+Global variables use 65512 bytes (19%) of dynamic memory, leaving 262168 bytes for local variables. Maximum is 327680 bytes.

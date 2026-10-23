@@ -1,0 +1,170 @@
+{
+  "schema": "vc-lora-r19-vehicle-clock-diagnostic-first-fail-offline-v1",
+  "status": "OFFLINE_IMPLEMENTATION_BUILD_AND_PREPARATION_COMPLETE_AWAITING_FRESH_ONE_RUN_HIL_AUTHORIZATION",
+  "hardware_interaction": false,
+  "com_opened": false,
+  "jtag_used": false,
+  "firmware_flashed": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "live_authorization_granted": false,
+  "steps": {
+    "vehicle_clock_and_role_contract": {
+      "status": "OFFLINE_PASS",
+      "vehicle": "USB-local SyncOnly, exact 28-byte request/reply, no READY or ARM",
+      "ground": "ClockResponse, READY and diagnostic HostArm; not flight arming",
+      "capability_validation": "Source-bound per-role declarations verified before COM open or private write",
+      "vehicle_test_scenarios": 10
+    },
+    "diagnostic_first_failure": {
+      "status": "OFFLINE_PASS",
+      "record_bytes": 256,
+      "sdk_call_local_bytes": 96,
+      "product_first_failure_record_bytes": 384,
+      "product_abi_unchanged": true,
+      "semantics": "Immutable first terminal diagnostic-publisher failure, not each retriable 100ms false flush",
+      "fields": [
+        "boot/build/role",
+        "wire sequence and attempt",
+        "expected and observed loss epoch",
+        "FIFO state and publish/pickup generations",
+        "SDK terminal reason and blocker mask",
+        "caller start/finish/deadline microseconds",
+        "accepted frame bytes"
+      ],
+      "unknown_evidence": "Pre-API or missing/nonmatching SDK state is not treated as healthy FIFO",
+      "bridge_cases_both_roles": 10,
+      "bridge_checks": 140,
+      "record_unit_checks": 37,
+      "decoder_and_v8_reader_checks": 98
+    },
+    "hardware_clock_ready_arm": {
+      "status": "NOT_RUN",
+      "required": "Fresh one-run authorization and six safety conditions; write diagnostic candidate, capture 40 seconds, read paired records on both roles, restore accepted R18"
+    },
+    "same_run_product_acceptance": {
+      "status": "NOT_RUN",
+      "parameters_required": 932,
+      "parameter_seconds_max": 30,
+      "heartbeat_max_gap_ms": 2500,
+      "all_errors_required": 0,
+      "all_conditions_required_in_same_hardware_run": true
+    }
+  },
+  "fixed_conditions_unchanged": {
+    "product_usb_deadline_ms": 106,
+    "diagnostic_frame_deadline_ms": 500,
+    "diagnostic_flush_slice_ms": 100,
+    "diagnostic_recovery_budget_ms": 120000,
+    "pins_uart_e220_tdd": true,
+    "sdk_hwcdc_source": true,
+    "standard_sketch_copies": true,
+    "accepted_r18_binaries": true,
+    "previous_aux_latest": true
+  },
+  "validation": {
+    "initial_full_suite": {
+      "total": 396,
+      "passed": 392,
+      "failed": 4,
+      "runner": "Windows PowerShell 5.1",
+      "ctest_script_interpreter": "cached bundled PowerShell 7",
+      "log": "full_host_tests_windows_ps51.log",
+      "failures_repaired": [
+        "strict child-tool digest pins refreshed",
+        "legacy AST fixture imports real new helper; old checks retained",
+        "startup fault fixture waits for natural fault completion rather than cancelling after 80ms",
+        "source contract verifies exact delegated wrapper and caller invariants"
+      ]
+    },
+    "explicit_windows_ps51_full_suite": {
+      "total": 396,
+      "passed": 395,
+      "failed": 1,
+      "seconds": 482.7,
+      "log": "full_host_tests_final_explicit_windows_ps51.log",
+      "remaining_failure": "Pre-existing equal-QPC-tick unstable Sort-Object export order; 28/28 raw bytes and CRC normal"
+    },
+    "final_affected_regression": {
+      "passed": 6,
+      "failed": 0,
+      "seconds": 158.21,
+      "log": "final_post_exporter_regression_windows_ps51_parent.log",
+      "interpreter": "Windows PowerShell 5.1 with its module path",
+      "covers": [
+        "PC lifecycle exporter and equal-time order",
+        "startup reader",
+        "runtime-fail runner",
+        "first-failure outer verifier",
+        "v8 16-raw outer verifier",
+        "full install/capture/read/restore orchestrator"
+      ]
+    },
+    "final_assessment": "All 396 test identities covered by the full suite and relevant successful repair reruns; no single clean 396-case run after the final exporter-only change is claimed.",
+    "exporter_fix": {
+      "scope": "Post-cleanup serialization only; USB read/write/event path unchanged",
+      "behavior": "Sort by original QPC ticks then insertion ordinal; do not invent distinct times or infer physical ordering across equal-time owners",
+      "independent_review": "PS5.1 and PS7 each 7/7; 24 equal-time and mixed-time records retain original timestamps and stable insertion order"
+    },
+    "evidence_exclusions": [
+      "bootstrap_epoch_red.log and bootstrap_epoch_green.log are obsolete incomplete-driver attempts; actual RED and final CTest results are authoritative",
+      "final_post_exporter_regression.log ran with an incompatible inherited PSModulePath; missing Get-FileHash is an invalid test environment, not a product failure"
+    ]
+  },
+  "additional_regressions_repaired": [
+    {
+      "issue": "Bootstrap retry counted 126 bytes across discarded and new USB stream epochs, suppressing failure latch",
+      "red": "bootstrap_epoch_actual_red.log: 16 checks / 8 failures",
+      "fix": "Reset only scratch context and current-epoch accepted-byte count on successful restart; preserve immutable first record and global attempt id",
+      "green": "Both roles bootstrap_epoch: 16 checks / 0 failures; accepted=63"
+    },
+    {
+      "issue": "Contradictory redundant diagnostic-symbol summary projection",
+      "fix": "Independently compare redundant projection as well as strict raw decoding",
+      "green": "v8 raw verifier 27/27"
+    }
+  ],
+  "candidate": {
+    "artifact_id": "20261023T120117864Z-c22a4e7c",
+    "artifact_root": "runs/candidates/R19-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261023T120117864Z-c22a4e7c",
+    "build_order": [
+      "vehicle",
+      "ground"
+    ],
+    "build_result": "PASS",
+    "independent_verifier": "PASS",
+    "native_nm_and_pure_elf_reader_binding_both_roles": "PASS",
+    "latest_sha256": "02FD030AA60C92585B56E4900462DBFCA9EE08317E2C0F368854645DED469817",
+    "manifest_sha256": "5B710F68370021B3E4CD534AF2DBCB1A42C1EA93F7C9AF9FFDB21473F9945B3A",
+    "handoff_sha256": "CA32AE58C0DE1B7A565B423CC9D66E949CEA724F613AFC9454E11531B4177039",
+    "seal_sha256": "F826524AD5BB90BC78DC105D24BDEC30BD3B7DDCE1991AB73523929E15EDF5F6",
+    "vehicle_application_sha256": "AAE59041DCCA36BCB991A9025516D3B8AAEF1556A14CE9E85A44A922876E6937",
+    "ground_application_sha256": "4B73283C658D5EEF12386684C892B933FFF4A34EF98B9CECB5B4DED71CA001AE",
+    "diagnostic_record_address": {
+      "vehicle": "0x3fcad4f0",
+      "ground": "0x3fca4868"
+    },
+    "symbols_per_role": 8,
+    "product_acceptance": false,
+    "deployment_authorized": false
+  },
+  "prepared_run": {
+    "path": "prepared_run.json",
+    "sha256": "CB50C49DF267BEF68F48BC7928AC56EA73D1DE3D1B775AD8DEA8194257C5A20E",
+    "pinned_tools": 20,
+    "live_authorization_granted": false
+  },
+  "integrity": {
+    "path": "after_integrity.json",
+    "source_files": 27,
+    "protected_files": 9,
+    "all_protected_unchanged": true,
+    "diff": "changes.diff",
+    "diff_sha256": "F7A1950EEE7E8502A967ED29D237646509E6FBD163E699021295CF7726F501AE"
+  },
+  "remaining": [
+    "Fresh one-run permission and six safety confirmations, then power-OFF/reconnection preparation",
+    "40-second dual-COM clock/READY/diagnostic-ARM test, paired JTAG records and accepted R18 restoration",
+    "Only after diagnostic proof: final same-run 932/932 <=30s, Heartbeat <=2500ms, all errors 0 acceptance"
+  ]
+}

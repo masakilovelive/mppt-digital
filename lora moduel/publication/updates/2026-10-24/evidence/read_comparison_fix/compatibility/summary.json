@@ -1,0 +1,37 @@
+{
+  "schema": "vc-lora-r19-read-comparison-existing-fixture-compatibility-v1",
+  "result": "PASS",
+  "hardware_interaction": false,
+  "production_source_edited": false,
+  "cmake_edited": false,
+  "red_evidence": "../full_host_tests.log",
+  "red_cases": [
+    "timed_path_capture_persistence imported unrelated new pure comparison definitions and rejected Get-R19ClockInteger, outside its unchanged persistence AST allowlist",
+    "aux_readiness_capture_routing had six inert outer/whole-route fixtures without the newly declared ReadComparisonMode default"
+  ],
+  "repairs": [
+    "Persistence imports only five exact, unique required persistence function definitions. Its command/member/type allowlists were not expanded; comparison and live-identity functions are explicitly excluded.",
+    "The actual CLI persistence assignment is still exercised; its inert legacy fixture now explicitly sets readComparison=null.",
+    "The legacy inert routing slice explicitly initializes ReadComparisonMode=None, matching the real entrypoint default.",
+    "All three existing legacy outer routes additionally require a None comparison permit and no intervention argument. All existing unsafe-guard, fixed-native-engine, incompatible-mode and AUX promotion/removal negative cases remain intact."
+  ],
+  "results": [
+    { "engine": "Windows PowerShell5.1", "test": "check_r19_timed_path_capture_persistence.ps1", "passed": 307, "failed": 0, "log": "persistence_ps51.log", "result_file": "persistence_ps51/test_result.json" },
+    { "engine": "Windows PowerShell5.1", "test": "check_r19_aux_readiness_capture_routing.ps1", "passed": 18, "failed": 0, "log": "routing_ps51.log", "result_file": "routing_ps51/summary.json" },
+    { "engine": "PowerShell7", "test": "check_r19_timed_path_capture_persistence.ps1", "passed": 307, "failed": 0, "log": "persistence_ps7.log", "result_file": "persistence_ps7/test_result.json" },
+    { "engine": "PowerShell7", "test": "check_r19_aux_readiness_capture_routing.ps1", "passed": 18, "failed": 0, "log": "routing_ps7.log", "result_file": "routing_ps7/summary.json" }
+  ],
+  "before_hashes_sha256": {
+    "tests/hil/check_r19_timed_path_capture_persistence.ps1": "E13EC3592D5DDB86140B64192B19ADED7D07213FF653678072EF9EDB7C513C79",
+    "tests/hil/check_r19_aux_readiness_capture_routing.ps1": "1EFCD6262F69CA351CACFB53AD7151962CD5365F2978CB983CF6FCBCCC9AA30C"
+  },
+  "after_hashes_sha256": {
+    "tests/hil/check_r19_timed_path_capture_persistence.ps1": "C12F0491D7579C944DABB555CF177445C1C25EE154E115DA56D96402CA9F1671",
+    "tests/hil/check_r19_aux_readiness_capture_routing.ps1": "A489A2629DF5DF47297DEB31B4C95A7B28F0E687D2FE93028961A173F010D528"
+  },
+  "diffs": ["check_r19_timed_path_capture_persistence.ps1.diff", "check_r19_aux_readiness_capture_routing.ps1.diff"],
+  "limitations": [
+    "This is a fixture compatibility repair, not a change to measurement behavior, firmware or safety authorization.",
+    "No live Execute entrypoint, COM, PnP, device/process inventory, native verifier process or one-time permit was used or consumed."
+  ]
+}

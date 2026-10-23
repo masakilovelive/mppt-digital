@@ -1,0 +1,660 @@
+{
+  "schema": "vc-lora-publication-source-inventory-v1",
+  "scope": "Selected byte-identical code and small evidence copies; no hardware interaction",
+  "files": [
+    {
+      "source": "runs/validation/R19-VEHICLE-CLOCK-DIAGNOSTIC-FIRST-FAIL-FIX-001/20261023T113004Z/changes.diff",
+      "destination": "evidence/clock_fix/changes.diff",
+      "sha256": "F7A1950EEE7E8502A967ED29D237646509E6FBD163E699021295CF7726F501AE",
+      "bytes": 296547
+    },
+    {
+      "source": "runs/validation/R19-VEHICLE-CLOCK-DIAGNOSTIC-FIRST-FAIL-FIX-001/20261023T113004Z/outer_tools_final.diff",
+      "destination": "evidence/clock_fix/outer_tools_final.diff",
+      "sha256": "A1F99CA6689D7C410BC0502A80C7DB34ECAC0BACD08651AB9A657AEB44566A4E",
+      "bytes": 46298
+    },
+    {
+      "source": "runs/validation/R19-VEHICLE-CLOCK-DIAGNOSTIC-FIRST-FAIL-FIX-001/20261023T113004Z/summary.json",
+      "destination": "evidence/clock_fix/summary.json",
+      "sha256": "A203CC7D46A202945920A19FD471F0D58D73CA1A2D66158EB09A231A20589457",
+      "bytes": 7672
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261023T155139Z-read-pause-lifecycle/analysis/summary.json",
+      "destination": "evidence/current/comparison_outcome.json",
+      "sha256": "8384B428016BB22F655325DA3582CEF4D43C2AD375E27DF4675AEC5399318645",
+      "bytes": 5754
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261023T155139Z-read-pause-lifecycle/analysis/independent_review/summary.json",
+      "destination": "evidence/current/independent_review.json",
+      "sha256": "44CE02F48AC854164A46C896CB7F61CA8A62A9C49FB9543FEED5CA9EB8E9DCF5",
+      "bytes": 11251
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261023T134700Z-vehicle-clock-first-fail/analysis/independent_review/summary.json",
+      "destination": "evidence/previous/independent_review.json",
+      "sha256": "9F714541CBE8AFBFEB22C38554AA77CD00DEA288A21B0C100774F96BF454B3C6",
+      "bytes": 8058
+    },
+    {
+      "source": "runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/arduino_ground.log",
+      "destination": "evidence/read_comparison_fix/arduino_ground.log",
+      "sha256": "FCD9009EDEAD9BCD924D5299E9D3A34486BAE5D288F57F4106C380803F7C2431",
+      "bytes": 816
+    },
+    {
+      "source": "runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/arduino_vehicle.log",
+      "destination": "evidence/read_comparison_fix/arduino_vehicle.log",
+      "sha256": "047C76AFAC83D3AC1A252B0738E1BED7522B1754DCACE363B3AC10C8704077C0",
+      "bytes": 211
+    },
+    {
+      "source": "runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/capture_contract/summary.json",
+      "destination": "evidence/read_comparison_fix/capture_contract/summary.json",
+      "sha256": "A59BD10016C8BD68ED431273C21A9415250372295DD2380C73AB89D4CCA592AD",
+      "bytes": 6404
+    },
+    {
+      "source": "runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/compatibility/summary.json",
+      "destination": "evidence/read_comparison_fix/compatibility/summary.json",
+      "sha256": "94B4533EAF549779E42A36823421D0BEF0F52FF160F57AD96E5621725ECAB0DD",
+      "bytes": 3077
+    },
+    {
+      "source": "runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/failed_tests_repaired.log",
+      "destination": "evidence/read_comparison_fix/failed_tests_repaired.log",
+      "sha256": "C61824A5465116ED6303BE889B51A5C28362DBDB0A315CC4AEDDC730C8F82F83",
+      "bytes": 720
+    },
+    {
+      "source": "runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/final_affected_regression.log",
+      "destination": "evidence/read_comparison_fix/final_affected_regression.log",
+      "sha256": "996E174E79F7A0D10551777A642F68F3E90C7EBEDFD77BFCBD3C410C3D624631",
+      "bytes": 1699
+    },
+    {
+      "source": "runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/full_host_tests.log",
+      "destination": "evidence/read_comparison_fix/full_host_tests.log",
+      "sha256": "E8791421461D75AE9A0188CC7D1FCEA132B8A1FE61AC255A5E2AE445F495A2C5",
+      "bytes": 106491
+    },
+    {
+      "source": "runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/permit_green.log",
+      "destination": "evidence/read_comparison_fix/permit_green.log",
+      "sha256": "0FA24207C25068CB92CF4D6DED697B1F209E26FA02A97CD5C5DF585235DCD91B",
+      "bytes": 43
+    },
+    {
+      "source": "runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/permit_red.log",
+      "destination": "evidence/read_comparison_fix/permit_red.log",
+      "sha256": "83D242926AE72716A0F7ADD0CD207FDC14302A2D601DC31CE184F9DE429FA3C2",
+      "bytes": 597
+    },
+    {
+      "source": "runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/reader/summary.json",
+      "destination": "evidence/read_comparison_fix/reader/summary.json",
+      "sha256": "235A594E70C752BBEFE9BC58DC8F936A5093068DD13250D5EA3540DCC425D3A1",
+      "bytes": 4231
+    },
+    {
+      "source": "runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/source_changes.diff",
+      "destination": "evidence/read_comparison_fix/source_changes.diff",
+      "sha256": "E21F5BE4B300E37D5DE05655375D9C99DE597305A35BD55CF29CC62C150C5C8A",
+      "bytes": 83202
+    },
+    {
+      "source": "runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/summary.json",
+      "destination": "evidence/read_comparison_fix/summary.json",
+      "sha256": "205BC496120F9A742F19B92CC5E56EC9E27820DC594E21F33CBD2AA0324A6AD0",
+      "bytes": 6770
+    },
+    {
+      "source": "runs/validation/R19-HOST-VS-PICKUP-CAUSE-VERIFICATION-001/20261023T150909Z/summary.json",
+      "destination": "evidence/usb_cause/summary.json",
+      "sha256": "11F730B2311E34044ACF90D75BD1B7DDE23EFB71E6B795AC76338666366C9BF7",
+      "bytes": 6273
+    },
+    {
+      "source": "AGENTS.md",
+      "destination": "source_snapshot/AGENTS.md",
+      "sha256": "54C72FA6ADFF8B430098801D7EEEF0A78D82FA6F8E8920D5229EC8319F4F2906",
+      "bytes": 1879
+    },
+    {
+      "source": "CMakeLists.txt",
+      "destination": "source_snapshot/CMakeLists.txt",
+      "sha256": "34C3B2C5EE229B9F983EDE989D4094FB67B417E8D8C74E6DC6EEDC229EF49F32",
+      "bytes": 9925
+    },
+    {
+      "source": "core/include/vc_lora/bulk_data_codec.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/bulk_data_codec.hpp",
+      "sha256": "0ABF929F5119D6DCB18D8BCC88A6089369BA3FAEFB3B66811336BBEA2063958C",
+      "bytes": 7972
+    },
+    {
+      "source": "core/include/vc_lora/bulk_heartbeat_sla.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/bulk_heartbeat_sla.hpp",
+      "sha256": "D61F0D2096EDF6013F4DAE73F1952DC55A94E3B28382A1FC2C2D9066489FCB1A",
+      "bytes": 3919
+    },
+    {
+      "source": "core/include/vc_lora/bulk_negotiation_codec.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/bulk_negotiation_codec.hpp",
+      "sha256": "2E910D835A07254CEC5DE944A0AEADC941E2598F9225EB91E72BBECB085A1A5C",
+      "bytes": 5241
+    },
+    {
+      "source": "core/include/vc_lora/bulk_session_controller.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/bulk_session_controller.hpp",
+      "sha256": "6A92DC55EF2EBCEA5ACFE062A94C31D345CA268116E7FEF79AFA3A9EF22633F4",
+      "bytes": 17733
+    },
+    {
+      "source": "core/include/vc_lora/bulk_transcript.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/bulk_transcript.hpp",
+      "sha256": "CF5FC5D9AEDF05DD537C760E4992DFEB40B1BB53368732B47D07F6CC16335AFF",
+      "bytes": 5274
+    },
+    {
+      "source": "core/include/vc_lora/bulk_tx_lease.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/bulk_tx_lease.hpp",
+      "sha256": "DA6D9FF0101E0E463F813D84CCE0545C1820B80D610270CBA4AA5EA865DE69BF",
+      "bytes": 4918
+    },
+    {
+      "source": "core/include/vc_lora/byte_ring_buffer.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/byte_ring_buffer.hpp",
+      "sha256": "57D3F2411EA2837B14A98161A8D65CE0B3B6EBDAD21890AB92B1D9D07ACAA674",
+      "bytes": 3467
+    },
+    {
+      "source": "core/include/vc_lora/embedded_io_adapter.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/embedded_io_adapter.hpp",
+      "sha256": "63F3687F1E7F3146D4EFA1C9BDE4AAEF6CBAAC4881F338B1900A0B4981CB4B3F",
+      "bytes": 23878
+    },
+    {
+      "source": "core/include/vc_lora/ground_parameter_download_proxy.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/ground_parameter_download_proxy.hpp",
+      "sha256": "E5ACB41E2D36028DBDDF20C7F3194D4AEE0F35AD608C442EEB9156DEB6CA3131",
+      "bytes": 14086
+    },
+    {
+      "source": "core/include/vc_lora/ground_usb_heartbeat_pacer.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/ground_usb_heartbeat_pacer.hpp",
+      "sha256": "052EB8588AE150C8E53233AB6F8367663EDCC5138A162AAFCD1225848DD55E81",
+      "bytes": 9269
+    },
+    {
+      "source": "core/include/vc_lora/ground_usb_host_presence_filter.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/ground_usb_host_presence_filter.hpp",
+      "sha256": "A125ECF770B72CD779714292A25F2CA343AEB9272EE089A7D98E6A709D47298E",
+      "bytes": 4237
+    },
+    {
+      "source": "core/include/vc_lora/ground_usb_ordered_frame_backlog.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/ground_usb_ordered_frame_backlog.hpp",
+      "sha256": "1D3BB7D5CBA1C3826096424628F9CD2D424E33C14CD312E698E1BC52DB5BA422",
+      "bytes": 8885
+    },
+    {
+      "source": "core/include/vc_lora/high_speed_tdd_coordinator.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/high_speed_tdd_coordinator.hpp",
+      "sha256": "B877FA20BEF05574BBE5C9AE8255782CAF7BE78B973F79CB17390443B6C48AAE",
+      "bytes": 14131
+    },
+    {
+      "source": "core/include/vc_lora/late_uplink_recovery.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/late_uplink_recovery.hpp",
+      "sha256": "607CBE9CD32D886DA0AEA975D9C047B4203261F3B3FE4F262FE301DEA677304B",
+      "bytes": 2279
+    },
+    {
+      "source": "core/include/vc_lora/legacy_silence_gate.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/legacy_silence_gate.hpp",
+      "sha256": "2825DF10FB5F15CA8D8E6D51ABFEB08884318BC1911C6850AF8DBD4409A35402",
+      "bytes": 1174
+    },
+    {
+      "source": "core/include/vc_lora/link_data_codec.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/link_data_codec.hpp",
+      "sha256": "25384B3468CCD5F091A4076696451A4CD938C530DC1EBC6CD57D7BDCE9AD7D2C",
+      "bytes": 1297
+    },
+    {
+      "source": "core/include/vc_lora/link_diagnostics.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/link_diagnostics.hpp",
+      "sha256": "DC353B681960DFD38481919F6B1FC2188DA94F8E6E781FD7DB497605E70A936D",
+      "bytes": 3184
+    },
+    {
+      "source": "core/include/vc_lora/mavlink_frame.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/mavlink_frame.hpp",
+      "sha256": "C3E740599350B19F8EAD5C8DF7E12FB9D1F35E43C10CEA621AA832BB26856D57",
+      "bytes": 3898
+    },
+    {
+      "source": "core/include/vc_lora/mavlink_scheduler.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/mavlink_scheduler.hpp",
+      "sha256": "5D607A54A7B522772DEFC6A9D529123512B17B046A14E6B6FD222A98F2D7DCD2",
+      "bytes": 16870
+    },
+    {
+      "source": "core/include/vc_lora/runtime_contract.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/runtime_contract.hpp",
+      "sha256": "4C1E05D03E72A40660971CFDE65EDC6901B5589C1990295A99F208B03D1CA2CF",
+      "bytes": 13903
+    },
+    {
+      "source": "core/include/vc_lora/tdd_control_codec.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/tdd_control_codec.hpp",
+      "sha256": "608689BE3549D874A19A51725EA36879DDAD19F0476F43B0B7FED9357F8D0C76",
+      "bytes": 1310
+    },
+    {
+      "source": "core/include/vc_lora/tdd_ground.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/tdd_ground.hpp",
+      "sha256": "CAE5E17E0936D772CE29BC6F9C457295E0DDB493BCA3DFE9C85DBA7F238FAE32",
+      "bytes": 3740
+    },
+    {
+      "source": "core/include/vc_lora/tdd_link_demux.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/tdd_link_demux.hpp",
+      "sha256": "7A255DF5D16AFBD93655CB85645E73DBDA1EBA57C74B6DBC647B2A326CD1F511",
+      "bytes": 3751
+    },
+    {
+      "source": "core/include/vc_lora/tdd_types.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/tdd_types.hpp",
+      "sha256": "BD428D8153726964DDE609AFF12ECB8FF3D5D4171092C274125938746C4EBE95",
+      "bytes": 5535
+    },
+    {
+      "source": "core/include/vc_lora/tdd_vehicle.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/tdd_vehicle.hpp",
+      "sha256": "5A26F9FD46FB8808330EF982E7BB0B2D4D1744FD8EE4888864D229D1587A014A",
+      "bytes": 3629
+    },
+    {
+      "source": "core/include/vc_lora/tx_gate.hpp",
+      "destination": "source_snapshot/core/include/vc_lora/tx_gate.hpp",
+      "sha256": "34EFA4672519FA0ADC6A9CA5F014A66DDF5741FE80D51A52120B171FB2194055",
+      "bytes": 853
+    },
+    {
+      "source": "core/src/bulk_data_codec.cpp",
+      "destination": "source_snapshot/core/src/bulk_data_codec.cpp",
+      "sha256": "6BC7BF9C22D49E1122888ACA27F9322BF4E36B5DC3C8E68BBE99E4FDAEEF9691",
+      "bytes": 15068
+    },
+    {
+      "source": "core/src/bulk_heartbeat_sla.cpp",
+      "destination": "source_snapshot/core/src/bulk_heartbeat_sla.cpp",
+      "sha256": "7B4F741855ED9350258B39C8A488E7751145BB891042A59FAADE9ACFEB40D124",
+      "bytes": 6654
+    },
+    {
+      "source": "core/src/bulk_negotiation_codec.cpp",
+      "destination": "source_snapshot/core/src/bulk_negotiation_codec.cpp",
+      "sha256": "AFCCD13D3B4EC550DF5BE3208CC19DE5477CE108B150683EE68BCBDAC29D258B",
+      "bytes": 16283
+    },
+    {
+      "source": "core/src/bulk_session_controller.cpp",
+      "destination": "source_snapshot/core/src/bulk_session_controller.cpp",
+      "sha256": "2ECBB529D1588A4F45CBDF00CADFB4E153AF5C447AF6C6447C6483188A7FDA40",
+      "bytes": 36418
+    },
+    {
+      "source": "core/src/bulk_transcript.cpp",
+      "destination": "source_snapshot/core/src/bulk_transcript.cpp",
+      "sha256": "83CD7FC38B4F9A5AF86319A6D9E48FC3368C150A3DE7A0638E8D165421D3F8DA",
+      "bytes": 15834
+    },
+    {
+      "source": "core/src/bulk_tx_lease.cpp",
+      "destination": "source_snapshot/core/src/bulk_tx_lease.cpp",
+      "sha256": "4EF6B0D642F04143C9F0AB367906256D4BA022F9A10969978542B6417D8B82E1",
+      "bytes": 6824
+    },
+    {
+      "source": "core/src/ground_parameter_download_proxy.cpp",
+      "destination": "source_snapshot/core/src/ground_parameter_download_proxy.cpp",
+      "sha256": "58F2AB0B77F0ABD8C3949649C172BEB43CB75C48DE7C1C6D78FFD9C15C208FE8",
+      "bytes": 46311
+    },
+    {
+      "source": "core/src/ground_usb_heartbeat_pacer.cpp",
+      "destination": "source_snapshot/core/src/ground_usb_heartbeat_pacer.cpp",
+      "sha256": "5FDE2D6885A691D8B1F20FA5A2609199455823405094A26B1A0F8639A31DF762",
+      "bytes": 12279
+    },
+    {
+      "source": "core/src/high_speed_tdd_coordinator.cpp",
+      "destination": "source_snapshot/core/src/high_speed_tdd_coordinator.cpp",
+      "sha256": "E5C62F4C46BC25AE1FD6E9A4137333DC8916BEACE352336A35752DDEA8C833A7",
+      "bytes": 45658
+    },
+    {
+      "source": "core/src/late_uplink_recovery.cpp",
+      "destination": "source_snapshot/core/src/late_uplink_recovery.cpp",
+      "sha256": "2E107949D842805DA811007D1D97366D556570EDD9E87D8C300431C94B46F094",
+      "bytes": 4360
+    },
+    {
+      "source": "core/src/link_data_codec.cpp",
+      "destination": "source_snapshot/core/src/link_data_codec.cpp",
+      "sha256": "B00D07F92AFA42B6790F0C8B533F29A3DF7E5750ECA5AA82EF12872C0102C211",
+      "bytes": 1552
+    },
+    {
+      "source": "core/src/link_diagnostics.cpp",
+      "destination": "source_snapshot/core/src/link_diagnostics.cpp",
+      "sha256": "3E4D18315752DA14612300CC3DE5693FB22394C99663F3B84EA23F5A9D33047A",
+      "bytes": 687
+    },
+    {
+      "source": "core/src/mavlink_frame.cpp",
+      "destination": "source_snapshot/core/src/mavlink_frame.cpp",
+      "sha256": "BD2890D8973C5A694D53AB2866A6B3DBF319FAE40B3CC308AE2DAE91B634F3A8",
+      "bytes": 16510
+    },
+    {
+      "source": "core/src/mavlink_scheduler.cpp",
+      "destination": "source_snapshot/core/src/mavlink_scheduler.cpp",
+      "sha256": "128F9AEEB6B624244DF3146BF24F5FE5D46F04628A83E67FE20CCA0CA789605F",
+      "bytes": 44421
+    },
+    {
+      "source": "core/src/runtime_contract.cpp",
+      "destination": "source_snapshot/core/src/runtime_contract.cpp",
+      "sha256": "1DDA0464CFFAEABF68F3782593C607965144AC2BF5DD774C77888847DEA668B5",
+      "bytes": 7792
+    },
+    {
+      "source": "core/src/tdd_control_codec.cpp",
+      "destination": "source_snapshot/core/src/tdd_control_codec.cpp",
+      "sha256": "91DF9C17ACC4D4DDCE1B6456EB3865A8BD374885CAFFB4FC0C32B63923260155",
+      "bytes": 5773
+    },
+    {
+      "source": "core/src/tdd_ground.cpp",
+      "destination": "source_snapshot/core/src/tdd_ground.cpp",
+      "sha256": "6021D0799274A92A5F7AF7EC28AF7D7883DFB0CA6AD688D1D4162F042FD67EDF",
+      "bytes": 20278
+    },
+    {
+      "source": "core/src/tdd_link_demux.cpp",
+      "destination": "source_snapshot/core/src/tdd_link_demux.cpp",
+      "sha256": "861235A0DF5254FE0D7DB2386956E512B7F02C0B90EA099DF323F85BAF594A6C",
+      "bytes": 7022
+    },
+    {
+      "source": "core/src/tdd_vehicle.cpp",
+      "destination": "source_snapshot/core/src/tdd_vehicle.cpp",
+      "sha256": "B64C9E253E52109C0B47BE6C4A64E3A7A42CC10458F54D3080EF6710D54325A8",
+      "bytes": 16282
+    },
+    {
+      "source": "core/src/tx_gate.cpp",
+      "destination": "source_snapshot/core/src/tx_gate.cpp",
+      "sha256": "BE9E894ED9DD59023FCFF763E7AE575DCC80E1A295CF50D127A7FD48275F75BC",
+      "bytes": 1570
+    },
+    {
+      "source": "firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+      "destination": "source_snapshot/firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+      "sha256": "47CE684BB11CD3807CA15605982BD98B66C7CB4258BE63DEA229E10E1793A258",
+      "bytes": 9293
+    },
+    {
+      "source": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "destination": "source_snapshot/firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "sha256": "691C00CD527348828FDAA3FA339E68425A0F247AF6C20720A9FB5E54D831E8F6",
+      "bytes": 282051
+    },
+    {
+      "source": "tests/hil/check_r19_aux_readiness_artifact.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_aux_readiness_artifact.ps1",
+      "sha256": "E0B2875BDBBFAA509F102FB789F0FB257BA19FC5A288A98DCBEEFD947BA135C8",
+      "bytes": 19359
+    },
+    {
+      "source": "tests/hil/check_r19_aux_readiness_capture_routing.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_aux_readiness_capture_routing.ps1",
+      "sha256": "A489A2629DF5DF47297DEB31B4C95A7B28F0E687D2FE93028961A173F010D528",
+      "bytes": 18606
+    },
+    {
+      "source": "tests/hil/check_r19_continuous_reader_contract.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_continuous_reader_contract.ps1",
+      "sha256": "4F0F3A209C7A3EED2EB721B7122623519922B497F2CADA7D509457A1D20DA227",
+      "bytes": 25241
+    },
+    {
+      "source": "tests/hil/check_r19_continuous_reader_integration.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_continuous_reader_integration.ps1",
+      "sha256": "B4B10203FB03B7C0AE90F1A02C56F5404E08F6E0F10B445CB71248181DA4AF2E",
+      "bytes": 14858
+    },
+    {
+      "source": "tests/hil/check_r19_diagnostic_usb_failure_record.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_diagnostic_usb_failure_record.ps1",
+      "sha256": "33899007B31E35BA4F458575D5F82A3A0FD8F83079587910D68D9BA305A55DEE",
+      "bytes": 23943
+    },
+    {
+      "source": "tests/hil/check_r19_diagnostic_usb_outer_contract.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_diagnostic_usb_outer_contract.ps1",
+      "sha256": "4B393E1A315D9639F060208D5B668EE4B665AD4E8AD81F06179F976C6B1940BA",
+      "bytes": 5419
+    },
+    {
+      "source": "tests/hil/check_r19_diagnostic_usb_outer_raw.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_diagnostic_usb_outer_raw.ps1",
+      "sha256": "BA4850AC0423FB745DAB34B2249ADECC10D5BD132FB9679080F3B6AF59EFB82F",
+      "bytes": 9680
+    },
+    {
+      "source": "tests/hil/check_r19_pc_lifecycle_trace_contract.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_pc_lifecycle_trace_contract.ps1",
+      "sha256": "46C13F40A659B00869AF3E86A4F5E3A5255343E9E7962C9874D144A886376B46",
+      "bytes": 8409
+    },
+    {
+      "source": "tests/hil/check_r19_read_comparison_capture_contract.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_read_comparison_capture_contract.ps1",
+      "sha256": "C903A7A1BC0FD6F9B7FE535C010AA3846816FEAF7D432E77EC144181B79F3027",
+      "bytes": 32283
+    },
+    {
+      "source": "tests/hil/check_r19_read_comparison_permit.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_read_comparison_permit.ps1",
+      "sha256": "25619EF754F6C8D06A3E68A4B9BEFBFDE9827FEB799D1383FE8259524A0F4D5F",
+      "bytes": 6225
+    },
+    {
+      "source": "tests/hil/check_r19_startup_reader_contract.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_startup_reader_contract.ps1",
+      "sha256": "A5479C54C5F8E1E049B1B55FF70121B6DC26056A32636EFDA1E57DCECD916E34",
+      "bytes": 11416
+    },
+    {
+      "source": "tests/hil/check_r19_timed_path_capture_persistence.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_timed_path_capture_persistence.ps1",
+      "sha256": "C12F0491D7579C944DABB555CF177445C1C25EE154E115DA56D96402CA9F1671",
+      "bytes": 27331
+    },
+    {
+      "source": "tests/hil/check_r19_usb_role_contract.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_usb_role_contract.ps1",
+      "sha256": "7DA72F49BC0EA687598A3DFC3297E6D2A80539B10D1150C5B7A2D480F97B7AA9",
+      "bytes": 13511
+    },
+    {
+      "source": "tests/host/CMakeLists.txt",
+      "destination": "source_snapshot/tests/host/CMakeLists.txt",
+      "sha256": "3F5D29D14675D57CA8586BA912D07DA8F159B2300331F439AB4D0A84809EF24E",
+      "bytes": 41687
+    },
+    {
+      "source": "tests/host/standalone/phase6_diagnostic_usb_failure_tests.cpp",
+      "destination": "source_snapshot/tests/host/standalone/phase6_diagnostic_usb_failure_tests.cpp",
+      "sha256": "A63D7FEAE9E8F7BD3F6CDDCF036A68A3DBE8978874A236BA73C351416FCADCBB",
+      "bytes": 8548
+    },
+    {
+      "source": "tests/host/standalone/phase6_vehicle_usb_clock_tests.cpp",
+      "destination": "source_snapshot/tests/host/standalone/phase6_vehicle_usb_clock_tests.cpp",
+      "sha256": "80F2EFC19349D31F635C523CC6B2C51C25DAF106CA1944833A59ADC471C2492B",
+      "bytes": 8852
+    },
+    {
+      "source": "tests/host/standalone/r19_diagnostic_usb_failure_record_tests.cpp",
+      "destination": "source_snapshot/tests/host/standalone/r19_diagnostic_usb_failure_record_tests.cpp",
+      "sha256": "036DF5F426FB61B4467BD7F86E781FFC41273DF9588495AF83D09609F092CBBD",
+      "bytes": 7645
+    },
+    {
+      "source": "tests/host/standalone/r19_runtime_fail_product_source_contract_tests.cpp",
+      "destination": "source_snapshot/tests/host/standalone/r19_runtime_fail_product_source_contract_tests.cpp",
+      "sha256": "0532F223FA70766BF814D900B0F147F84C87FFAE984180E9D8668831B4312340",
+      "bytes": 63879
+    },
+    {
+      "source": "tools/build_r19_candidate_artifacts.ps1",
+      "destination": "source_snapshot/tools/build_r19_candidate_artifacts.ps1",
+      "sha256": "A277EFD34139AB615299ECC579EC102F4B9219EC1FC278E8FF0B49FBC6A75051",
+      "bytes": 43072
+    },
+    {
+      "source": "tools/invoke_r19_candidate_app_flash_hil.ps1",
+      "destination": "source_snapshot/tools/invoke_r19_candidate_app_flash_hil.ps1",
+      "sha256": "BA042F6F7136514E18B9DDDA97BE5926E6A16B12E6D2C9E72307C62760AAF920",
+      "bytes": 80509
+    },
+    {
+      "source": "tools/invoke_r19_jtag_preflash_gate.ps1",
+      "destination": "source_snapshot/tools/invoke_r19_jtag_preflash_gate.ps1",
+      "sha256": "853A404C816D8C9C92B609FD697763977AEDE1849E87A494AEB70FBAA38F4210",
+      "bytes": 32779
+    },
+    {
+      "source": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "destination": "source_snapshot/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "sha256": "F1A6FF732F1D415D9BA2F9768B2872970940FF5A7BE8D0E9FAE52253AECE25E5",
+      "bytes": 205539
+    },
+    {
+      "source": "tools/r19_candidate_artifact_common.ps1",
+      "destination": "source_snapshot/tools/r19_candidate_artifact_common.ps1",
+      "sha256": "1E4B7349606E739A45B971C3E697F375A9C2159E8E8F00B293949F0254727D61",
+      "bytes": 34226
+    },
+    {
+      "source": "tools/r19_continuous_reader.cs",
+      "destination": "source_snapshot/tools/r19_continuous_reader.cs",
+      "sha256": "B9C22B9E74F32E09C1210F976363CF4513C66F3131780B96972BEC48B1F907EF",
+      "bytes": 23809
+    },
+    {
+      "source": "tools/r19_host_readiness_wire.ps1",
+      "destination": "source_snapshot/tools/r19_host_readiness_wire.ps1",
+      "sha256": "91CEEF26F4CFF3E8DED4C6132CD274BDC325051592715D70CBAF08CDF71BCBE4",
+      "bytes": 7713
+    },
+    {
+      "source": "tools/r19_host_readiness_workflow.ps1",
+      "destination": "source_snapshot/tools/r19_host_readiness_workflow.ps1",
+      "sha256": "1B0740C84FE8B54C8F573846E6EBCDCDA7DF330565833500F1EE557CF11BD099",
+      "bytes": 12934
+    },
+    {
+      "source": "tools/r19_startup_reader.cs",
+      "destination": "source_snapshot/tools/r19_startup_reader.cs",
+      "sha256": "939EF6C3333B1BC67782CFB02AEBFBC067EE6AAC7C789FB171F06C2B9F8A8C2E",
+      "bytes": 7610
+    },
+    {
+      "source": "tools/r19_timed_path_acquisition.ps1",
+      "destination": "source_snapshot/tools/r19_timed_path_acquisition.ps1",
+      "sha256": "34F920D480291758AD39F72AEA026BA8C338B64B2A232683E187591D031EC731",
+      "bytes": 32193
+    },
+    {
+      "source": "tools/r19_timed_path_outer.ps1",
+      "destination": "source_snapshot/tools/r19_timed_path_outer.ps1",
+      "sha256": "E195592798CEA455C56C8361DE3EB4E48EFD416024E5F2A361EC5AD06191DEBE",
+      "bytes": 11851
+    },
+    {
+      "source": "tools/r19_timed_path_trace.ps1",
+      "destination": "source_snapshot/tools/r19_timed_path_trace.ps1",
+      "sha256": "09786F523F0A5DDBC7B84B377E620886A574D552CABBF5EA5CEE5B4F2890660A",
+      "bytes": 22932
+    },
+    {
+      "source": "tools/r19_usb_clock_correlation.ps1",
+      "destination": "source_snapshot/tools/r19_usb_clock_correlation.ps1",
+      "sha256": "B6759C777FCC4C3F2BB3F8D8DA7A890EF54043CA5ECC4A3DC1EB2937FB8DD1D1",
+      "bytes": 12420
+    },
+    {
+      "source": "tools/r19_usb_role_contract.ps1",
+      "destination": "source_snapshot/tools/r19_usb_role_contract.ps1",
+      "sha256": "10787A8D4064FC7370F40AE81BA3034E8D59F063E4D207E81B3E4F37FD020238",
+      "bytes": 4870
+    },
+    {
+      "source": "tools/read_r19_aux_readiness_record.ps1",
+      "destination": "source_snapshot/tools/read_r19_aux_readiness_record.ps1",
+      "sha256": "C011580259EA94F3092B1B3CCAF34DB30C4D9CA1158D2A51D2DC96EA76D880DF",
+      "bytes": 22317
+    },
+    {
+      "source": "tools/read_r19_diagnostic_usb_failure_record.ps1",
+      "destination": "source_snapshot/tools/read_r19_diagnostic_usb_failure_record.ps1",
+      "sha256": "26E15CAC70F9414F2EE3A43FBF44A820BC1F7B8DC41672EC81733A9B1CD54451",
+      "bytes": 8407
+    },
+    {
+      "source": "tools/read_r19_first_usb_failure_record.ps1",
+      "destination": "source_snapshot/tools/read_r19_first_usb_failure_record.ps1",
+      "sha256": "E11CDBF18EFA90F22BC9E69ADF357FD795396725EC0D2B091C759A69A929E47D",
+      "bytes": 8232
+    },
+    {
+      "source": "tools/read_r19_runtime_stage_jtag.ps1",
+      "destination": "source_snapshot/tools/read_r19_runtime_stage_jtag.ps1",
+      "sha256": "60504BC7832BD1FDB8318280F3F72543A8D22D405ECC7A7F791DAC1CD5209F84",
+      "bytes": 158373
+    },
+    {
+      "source": "tools/read_r19_timed_path_record.ps1",
+      "destination": "source_snapshot/tools/read_r19_timed_path_record.ps1",
+      "sha256": "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C",
+      "bytes": 5949
+    },
+    {
+      "source": "tools/run_r19_runtime_fail_diagnostic_hil.ps1",
+      "destination": "source_snapshot/tools/run_r19_runtime_fail_diagnostic_hil.ps1",
+      "sha256": "4811B2F746BD6C117BDBA4ADFF8943C2684E68F52714F7BD7AE1E77D54AB91B4",
+      "bytes": 186249
+    },
+    {
+      "source": "tools/run_r19_timed_path_capture.ps1",
+      "destination": "source_snapshot/tools/run_r19_timed_path_capture.ps1",
+      "sha256": "9CDE505D40B7940E3F4AD223B99F9D36F61C6E46F9C19AB95676B271D0E8A47D",
+      "bytes": 35891
+    },
+    {
+      "source": "tools/verify_r19_candidate_artifact.ps1",
+      "destination": "source_snapshot/tools/verify_r19_candidate_artifact.ps1",
+      "sha256": "DC23B935E3AE7D236360C2EC74B452D877D18FAF8DEFA4B0ABDFB8937D5E764F",
+      "bytes": 45919
+    }
+  ]
+}

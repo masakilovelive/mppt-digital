@@ -1,0 +1,118 @@
+{
+  "schema": "vc-lora-r19-host-versus-pickup-cause-offline-verification-v1",
+  "review_date_local": "2026-10-24",
+  "timezone": "Asia/Tokyo",
+  "result": "OBSERVED_BOUNDARY_NARROWED_PHYSICAL_TRIGGER_NOT_PROVEN",
+  "hardware_interaction": false,
+  "firmware_or_sdk_modified": false,
+  "source_changes": [],
+  "new_hardware_test_authorization_used": false,
+  "source_run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261023T134700Z-vehicle-clock-first-fail",
+  "sources": [
+    {
+      "path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp",
+      "sha256": "D1B890A6C37587BF7775E4F9DDB7791C91085F9C2BC4D95CB9EC3C5809B24DCA"
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "sha256": "691C00CD527348828FDAA3FA339E68425A0F247AF6C20720A9FB5E54D831E8F6"
+    },
+    {
+      "path": "tools/r19_continuous_reader.cs",
+      "sha256": "8DF5929114802926708BD42430CDCD7AF499B15B92EB7B7503BEF11C635B44F9"
+    },
+    {
+      "path": "tools/run_r19_timed_path_capture.ps1",
+      "sha256": "7A0E9C873608ABD41AEB97CA04BB9777452E2D4F7D055658A86A4411885594AF"
+    }
+  ],
+  "first_failure_common_observation": {
+    "expected_frame_bytes": 63,
+    "software_accepted_frame_bytes": 63,
+    "ring_pending_bytes": 31,
+    "stash_pending_bytes": 0,
+    "sdk_terminal_reason": "LoopTimeout",
+    "sdk_lock_wait_ms": 0,
+    "expected_and_observed_epoch": 1,
+    "payload_in_flight": true,
+    "fifo_writable": false,
+    "publication_minus_pickup_generation": 1,
+    "raw_interrupt_status": "0x00000102",
+    "interrupt_enable_mask": "0x0000020C",
+    "esp32_s3_in_empty_mask": "0x00000008",
+    "in_empty_raw_asserted_at_terminal_sample": false,
+    "in_empty_enabled_at_terminal_sample": true,
+    "flush_blocker_mask": "0x0000001C",
+    "blockers": ["SoftwarePending", "FifoNotWritable", "PayloadPickupPending"],
+    "vehicle_publication_pickup": [3, 2],
+    "ground_publication_pickup": [154, 153],
+    "measurement_is_a_terminal_observation_not_continuous_bus_coverage": true
+  },
+  "findings": [
+    {
+      "id": "PC_READER_FUNCTIONAL",
+      "status": "PROVEN_WITHIN_SAVED_CAPTURE",
+      "vehicle_bytes": 2674,
+      "ground_bytes": 3672,
+      "read_errors_each_role": 0,
+      "raw_crc_errors_each_role": 0,
+      "limitation": "Later valid reception does not prove an active reader or physical IN polling at either first-failure instant."
+    },
+    {
+      "id": "NOT_THE_PREVIOUS_SIMPLE_IDLE_DISABLED_INTERRUPT_STATE",
+      "status": "DIFFERENT_AT_TERMINAL_SNAPSHOT",
+      "reason": "The earlier clean-idle lost-wake model requires writable FIFO, no payload in flight and equal generations. The current snapshot has the opposite values and IN_EMPTY enabled.",
+      "limitation": "Does not exclude earlier missed/misqualified events or all possible MCU/controller faults."
+    },
+    {
+      "id": "CONNECTED_IS_NOT_CURRENT_HOST_IN_PROOF",
+      "status": "SOURCE_CONFIRMED",
+      "source_lines": "HWCDC.cpp:1028-1043,1075-1084,2379",
+      "reason": "The OUT_RECV ISR also sets connected=true. The diagnostic isCDC_Connected branch trusts this cache, and flush host_present is connected || isPlugged().",
+      "comment_contract_mismatch": "The nearby comment claiming only IN_EMPTY sets connected is inconsistent with the OUT_RECV assignment.",
+      "limitation": "The source mismatch identifies insufficient readiness evidence; it does not prove that OUT_RECV caused either captured timeout."
+    },
+    {
+      "id": "HOST_VERSUS_CONTROLLER_TRIGGER_NOT_IDENTIFIABLE",
+      "status": "UNRESOLVED",
+      "reason": "Current records do not distinguish absence of current host consumption from an unobserved/misqualified USB completion path. IN_EMPTY was not raw-asserted at the sample, but no continuous bus/event coverage was captured."
+    },
+    {
+      "id": "PC_STOP_AND_CLOSE_BOUNDARIES_MISSING",
+      "status": "SOURCE_CONFIRMED",
+      "reason": "Capture stops the reader, snapshots/drains it, then calls SerialPort.Close. Exact Stop-request, worker-stopped, Close-start and Close-complete QPC values are not persisted. Closed=false in the pre-Close snapshot is not a failure-time or final-port-state witness.",
+      "clock_mapping": "UNKNOWN_NO_GUARANTEED_RATE_BOUND_OR_CONTINUITY_PROOF"
+    }
+  ],
+  "root_owned_checks": [
+    {
+      "name": "actual_sdk_flush_call_evidence",
+      "method": "Current SDK method bodies extracted verbatim with deterministic OS/LL shims; no USB hardware",
+      "cases": 16,
+      "checks": 177,
+      "failures": 0,
+      "evidence": "actual_sdk/summary.json"
+    },
+    {
+      "name": "diagnostic_usb_failure_record_and_offline_v8_reader",
+      "script": "tests/hil/check_r19_diagnostic_usb_failure_record.ps1",
+      "checks": 98,
+      "exit_code": 0,
+      "stdout": "DIAGNOSTIC_USB_FAILURE_RECORD PASS 98 checks",
+      "fixture_only": true
+    }
+  ],
+  "required_next_measurement_not_implemented": [
+    "Persist Stop-request, reader-stopped, port-Close-start and port-Close-complete timestamps separately and bind them to the reader session.",
+    "Compare the same diagnostic transaction with verified continuous PC reading versus a deliberately ended reading phase; retain immutable same-boot MCU first-failure and per-publication interrupt observations.",
+    "Preserve uncertainty in PC/MCU ordering. Read invocation or connected=true alone must not be relabeled as physical host IN-token/ACK evidence; physical controller/host discrimination may require a USB transfer trace."
+  ],
+  "limitations": [
+    "No additional live run, COM open, flash, JTAG read, power operation or driver change was performed.",
+    "The prior single-run permission was consumed by the source HIL run; this verification does not extend it.",
+    "Software model checks do not reproduce or prove the physical trigger of the captured hardware failure.",
+    "A latched SOF or IN-token raw flag has no per-packet freshness timestamp and cannot prove a current PC read or matching packet acknowledgement.",
+    "Vehicle failure precedes its own matched MCU clock request; Ground failure nominally follows capture end. Exact host lifecycle causation remains unproven.",
+    "No product acceptance, 932/932 within 30 seconds, all-errors-zero or E220 physical fault is established."
+  ]
+}

@@ -1,0 +1,878 @@
+diff --git a/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/before/run_r19_timed_path_capture.ps1 b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tools/run_r19_timed_path_capture.ps1
+index 4360850..f2cee9d 100644
+--- a/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/before/run_r19_timed_path_capture.ps1
++++ b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tools/run_r19_timed_path_capture.ps1
+@@ -3,6 +3,7 @@ param([switch]$ImportOnly,[switch]$Execute,[string]$RepoRoot='', [string]$Output
+   [string]$CandidateHandoffPath='', [string]$CandidateFlashEvidencePath='', [string]$ExecutionPermitPath='',
+   [switch]$AuxReadinessDiagnostics,
+   [switch]$DiagnosticUsbFailureDiagnostics,
++  [ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None',
+   [ValidateSet('SyncOnly','ExplicitHostArm')][string]$Mode='SyncOnly',[ValidateRange(40,40)][int]$CaptureSeconds=40)
+ Set-StrictMode -Version Latest
+ $ErrorActionPreference='Stop'
+@@ -26,6 +27,98 @@ function Assert-R19TimedPathLiveIdentity([object]$Spec,[string]$Checkpoint){
+ function Assert-R19DiagnosticUsbFailureCaptureSelection([bool]$AuxEnabled,[string]$RequestedMode){
+   if(-not$AuxEnabled-or$RequestedMode-cne'ExplicitHostArm'){throw 'Diagnostic USB failure diagnostics require AUX/readiness ExplicitHostArm mode'}
+ }
++function Get-R19ReadComparisonPlan {
++  param([ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None',
++    [ValidateSet('SyncOnly','ExplicitHostArm')][string]$Mode='SyncOnly',
++    [int]$CaptureSeconds=40,[bool]$AuxReadinessDiagnostics=$false,[bool]$DiagnosticUsbFailureDiagnostics=$false)
++  if($CaptureSeconds-ne40){throw 'Read comparison requires one fixed 40-second capture'}
++  $enabled=$ReadComparisonMode-ceq'GroundPauseResume'
++  if($enabled-and($Mode-cne'ExplicitHostArm'-or-not$AuxReadinessDiagnostics-or-not$DiagnosticUsbFailureDiagnostics)){
++    throw 'Ground read comparison requires ExplicitHostArm, AUX and diagnostic USB failure records'
++  }
++  [pscustomobject][ordered]@{schema='vc-lora-r19-read-comparison-plan-v1';mode=$ReadComparisonMode
++    enabled=$enabled;role='ground';pause_after_seconds=20;pause_ms=2000;capture_seconds=40
++    semantics='APPLICATION_READ_PAUSE_NOT_USB_IN_SUPPRESSION';acceptance_eligible=$false;deployment_authorized=$false;root_cause_proven=$false}
++}
++function Get-R19ReadComparisonEvaluation {
++  param([object]$Plan,[object]$Evidence)
++  $reasons=[Collections.Generic.List[string]]::new();$requested=$false;$observedMode=''
++  try{
++    if($null-ne$Plan-and$null-ne$Plan.PSObject.Properties['mode']-and$Plan.mode-is[string]){$observedMode=$Plan.mode}
++    if($null-eq$Plan-or$Plan.schema-cne'vc-lora-r19-read-comparison-plan-v1'-or$Plan.enabled-isnot[bool]){throw 'Unknown comparison plan'}
++    if($Plan.role-cne'ground'){throw 'Comparison role must be Ground'}
++    foreach($flag in @('acceptance_eligible','deployment_authorized','root_cause_proven')){if($Plan.$flag-isnot[bool]-or$Plan.$flag){throw 'Comparison plan cannot claim authority or a proven cause'}}
++    $requested=$Plan.enabled
++    if($requested){
++      if($Plan.mode-cne'GroundPauseResume'-or$Plan.semantics-cne'APPLICATION_READ_PAUSE_NOT_USB_IN_SUPPRESSION'-or$Plan.pause_after_seconds-ne20-or$Plan.pause_ms-ne2000-or$Plan.capture_seconds-ne40){throw 'Comparison policy changed'}
++      if([string]::IsNullOrWhiteSpace($Evidence.clock_domain_id)){throw 'Comparison clock identity missing'}
++      $frequency=Get-R19ClockInteger $Evidence.frequency 'comparison frequency'
++      $start=Get-R19ClockInteger $Evidence.measurement_start_ticks 'measurement start'
++      $end=Get-R19ClockInteger $Evidence.measurement_end_ticks 'measurement end'
++      if($frequency-le0-or$end-lt$start+40*$frequency){throw 'Comparison duration or frequency invalid'}
++      if(@($Evidence.roles).Count-ne2){throw 'Comparison must contain both role owners'}
++      foreach($role in @('vehicle','ground')){
++        $rows=@($Evidence.roles|Where-Object{$_.role-ceq$role})
++        if($rows.Count-ne1){throw 'Comparison role missing or duplicated'}
++        $r=$rows[0];$l=$r.lifecycle;$p=$r.pause
++        if([string]::IsNullOrWhiteSpace($r.reader_id)){throw 'Comparison reader identity missing'}
++        foreach($flag in @('close_attempted','close_completed')){if($l.$flag-isnot[bool]-or-not$l.$flag){throw 'Port close not proven'}}
++        if($l.close_failure-isnot[string]-or$l.close_failure.Length-ne0){throw 'Port close failed'}
++        $stop=Get-R19ClockInteger $l.stop_requested_ticks 'stop requested'
++        $stopped=Get-R19ClockInteger $l.worker_stopped_ticks 'worker stopped'
++        $closeStart=Get-R19ClockInteger $l.close_start_ticks 'close start'
++        $closeEnd=Get-R19ClockInteger $l.close_end_ticks 'close end'
++        if($stop-lt$end-or$stopped-lt$stop-or$closeStart-lt$stopped-or$closeEnd-lt$closeStart){throw 'Stop and port close boundaries out of order'}
++        if($p.requested-isnot[bool]){throw 'Pause request observation missing'}
++        if($role-ceq'vehicle'){
++          if($p.requested-or$r.reader_continuous-isnot[bool]-or-not$r.reader_continuous){throw 'Vehicle reader must remain continuous'}
++        }else{
++          if(-not$p.requested-or$r.reader_continuous-isnot[bool]-or$r.reader_continuous){throw 'Ground pause must not be labelled continuous'}
++          $request=Get-R19ClockInteger $p.requested_ticks 'pause request'
++          $begin=Get-R19ClockInteger $p.begin_ticks 'pause acknowledged'
++          $finish=Get-R19ClockInteger $p.end_ticks 'pause ended'
++          $resumed=Get-R19ClockInteger $p.resumed_read_ticks 'first resumed Read'
++          $beginCalls=Get-R19ClockInteger ([string]$p.begin_calls) 'pause begin calls'
++          $endCalls=Get-R19ClockInteger ([string]$p.end_calls) 'pause end calls'
++          if($p.duration_ms-ne2000-or$p.end_reason-cne'Deadline'-or$beginCalls-ne$endCalls){throw 'Pause duration, termination or no-Read witness invalid'}
++          if($request-lt$start+20*$frequency-or$begin-lt$request-or$finish-lt$begin+2*$frequency-or
++              ($finish-$begin)*2-gt5*$frequency-or$resumed-lt$finish-or$resumed-ge$end){throw 'Pause and resume time boundaries invalid'}
++        }
++      }
++      if($Evidence.roles[0].reader_id-ceq$Evidence.roles[1].reader_id){throw 'Roles cannot share a reader owner'}
++    }elseif($Plan.mode-cne'None'){throw 'Inactive comparison plan has unexpected mode'}
++  }catch{$reasons.Add($_.Exception.Message)}
++  $valid=$requested-and$reasons.Count-eq0
++  [pscustomobject][ordered]@{schema='vc-lora-r19-read-comparison-evaluation-v1';mode=$observedMode
++    result=$(if($valid){'VALID_COMPARISON'}elseif($requested-or$reasons.Count){'INVALID_COMPARISON'}else{'NOT_REQUESTED'})
++    valid=$valid;reasons=$reasons.ToArray();causal_disposition='INDETERMINATE'
++    physical_host_in_suppression_proven=$false;root_cause_proven=$false;acceptance_eligible=$false;deployment_authorized=$false
++    limitations=@('Application Read pause does not prove physical USB IN suppression; Windows may prefetch.',
++      'No comparison-period MCU snapshot is acquired. A first failure latched before intervention is not an intervention outcome.',
++      'Read, USB pickup, RF delivery and product acceptance remain distinct. PC/MCU physical cause requires bounded event/USB-transfer evidence.')}
++}
++function Get-R19ReadComparisonSnapshotValue([object]$Snapshot,[string]$Name){
++  if($null-eq$Snapshot-or$null-eq$Snapshot.PSObject.Properties[$Name]){return $null}
++  $value=$Snapshot.$Name
++  if($Name.EndsWith('Ticks')){if($null-eq$value-or[long]$value-lt0){return $null};return [string]$value}
++  return $value
++}
++function Get-R19ReadComparisonEvidence([object[]]$States,[object]$Context){
++  $roles=@(foreach($s in $States){
++    $n=$s.snapshot;$requested=Get-R19ReadComparisonSnapshotValue $n 'DiagnosticPauseRequestedTicks'
++    [pscustomobject]@{role=$s.spec.role;reader_id=$s.reader_id
++      reader_continuous=($s.opened-and$s.joined-and-not$s.cleanup_close_fallback-and$null-eq$requested-and$null-ne$n-and-not$n.Overflow-and[string]::IsNullOrEmpty($n.Failure))
++      lifecycle=[pscustomobject]@{stop_requested_ticks=(Get-R19ReadComparisonSnapshotValue $n 'StopRequestedTicks');worker_stopped_ticks=(Get-R19ReadComparisonSnapshotValue $n 'WorkerStoppedTicks')
++        close_start_ticks=(Get-R19ReadComparisonSnapshotValue $n 'CloseStartTicks');close_end_ticks=(Get-R19ReadComparisonSnapshotValue $n 'CloseEndTicks')
++        close_attempted=(Get-R19ReadComparisonSnapshotValue $n 'CloseAttempted');close_completed=(Get-R19ReadComparisonSnapshotValue $n 'CloseCompleted');close_failure=(Get-R19ReadComparisonSnapshotValue $n 'CloseFailure')}
++      pause=[pscustomobject]@{requested=($null-ne$requested);requested_ticks=$requested
++        begin_ticks=(Get-R19ReadComparisonSnapshotValue $n 'DiagnosticPauseBeginTicks');end_ticks=(Get-R19ReadComparisonSnapshotValue $n 'DiagnosticPauseEndTicks')
++        resumed_read_ticks=(Get-R19ReadComparisonSnapshotValue $n 'DiagnosticPauseResumedReadTicks')
++        begin_calls=(Get-R19ReadComparisonSnapshotValue $n 'DiagnosticPauseBeginCalls');end_calls=(Get-R19ReadComparisonSnapshotValue $n 'DiagnosticPauseEndCalls')
++        duration_ms=(Get-R19ReadComparisonSnapshotValue $n 'DiagnosticPauseMilliseconds');end_reason=(Get-R19ReadComparisonSnapshotValue $n 'DiagnosticPauseEndReason')}}
++  })
++  [pscustomobject]@{clock_domain_id=$Context.clock_domain_id;frequency=$Context.frequency;measurement_start_ticks=$Context.measurement_start_ticks;measurement_end_ticks=$Context.measurement_end_ticks;roles=$roles}
++}
+ function Write-R19TimedPathJson([string]$Path,[object]$Value){
+   $json=$Value|ConvertTo-Json -Depth 70 -WarningAction Stop -ErrorAction Stop
+   [byte[]]$jsonBytes=[Text.UTF8Encoding]::new($false).GetBytes($json)
+@@ -55,10 +148,11 @@ function Get-R19TimedPathRoleMetadata([object]$State,[object]$RawEvidence,[objec
+     $expectedOffset+=$blockCount
+   }
+   if($expectedOffset-ne$RawEvidence.raw_bytes){throw 'Reader block metadata does not cover all captured bytes'}
++  $plannedPause=$null-ne$Context.PSObject.Properties['read_comparison']-and$null-ne$Context.read_comparison-and$Context.read_comparison.plan.enabled-and$RawEvidence.role-ceq'ground'
+   [pscustomobject][ordered]@{role=$RawEvidence.role;port=$State.spec.port;baud=$State.spec.baud;reader_id=$State.reader_id
+     clock_domain_id=$Context.clock_domain_id;frequency=$Context.frequency;nonce=$State.nonce
+     open_before_ticks=$State.open_before_ticks;open_after_ticks=$State.open_after_ticks;read_started_ticks=$State.read_started_ticks
+-    reader_continuous=($State.opened-and$State.joined-and-not$State.cleanup_close_fallback-and-not$State.snapshot.Overflow-and[string]::IsNullOrEmpty($State.snapshot.Failure))
++    reader_continuous=($State.opened-and$State.joined-and-not$State.cleanup_close_fallback-and-not$plannedPause-and-not$State.snapshot.Overflow-and[string]::IsNullOrEmpty($State.snapshot.Failure))
+     overflow=[bool]$State.snapshot.Overflow;raw_available=$true;raw_saved=$RawEvidence.raw_saved
+     raw_bytes=$RawEvidence.raw_bytes;raw_sha256=$RawEvidence.raw_sha256;raw_base64=$RawEvidence.raw_base64
+     blocks=$blockResults.ToArray();workflow=$State.workflow;workflow_failure=$State.workflow_failure
+@@ -111,6 +205,7 @@ function Save-R19TimedPathCaptureEvidence([object[]]$States,[string]$OutputDirec
+     handoff_sha256=$Context.handoff_sha256;flash_evidence_sha256=$Context.flash_evidence_sha256
+     acceptance_eligible=$false;deployment_authorized=$false;root_cause_proven=$false
+     limitations=@('Missing reply, READY or ARM is a diagnostic observation failure, not automatic invalidation of raw capture.','A successful private ARM write proves PC-local acceptance only; MCU ARM acceptance comes from JTAG.','No parameter, flight-command, RF-rate or product timeout changes are performed.','The safe outer must perform JTAG acquisition and mandatory accepted R18 restoration.')}
++  if($null-ne$Context.PSObject.Properties['read_comparison']){Add-Member -InputObject $summary -NotePropertyName read_comparison -NotePropertyValue $Context.read_comparison}
+   if($States.Count-gt0-and$null-ne$States[0].PSObject.Properties['diagnostic_usb_failure_diagnostics']-and$null-ne$States[0].diagnostic_usb_failure_diagnostics){
+     Add-Member -InputObject $summary -NotePropertyName diagnostic_usb_failure_diagnostics -NotePropertyValue $States[0].diagnostic_usb_failure_diagnostics
+     Add-Member -InputObject $summary -NotePropertyName usb_role_capabilities -NotePropertyValue $States[0].usb_role_capabilities
+@@ -135,6 +230,7 @@ if($AuxReadinessDiagnostics-and$Mode-cne'ExplicitHostArm'){
+   throw 'AUX/readiness diagnostics require ExplicitHostArm timed-path mode'
+ }
+ if($DiagnosticUsbFailureDiagnostics){Assert-R19DiagnosticUsbFailureCaptureSelection -AuxEnabled $AuxReadinessDiagnostics.IsPresent -RequestedMode $Mode}
++$readComparisonPlan=Get-R19ReadComparisonPlan -ReadComparisonMode $ReadComparisonMode -Mode $Mode -CaptureSeconds $CaptureSeconds -AuxReadinessDiagnostics ([bool]$AuxReadinessDiagnostics) -DiagnosticUsbFailureDiagnostics ([bool]$DiagnosticUsbFailureDiagnostics)
+ if($ImportOnly){if($Execute){throw 'ImportOnly cannot execute'};return}
+ if(-not$Execute){throw 'This diagnostic runner requires Execute and a fresh one-time outer permit. No hardware was opened.'}
+ if($PSVersionTable.PSEdition-ceq'Core'-and-not$IsWindows){throw 'Windows diagnostic host required'}
+@@ -150,7 +246,7 @@ $flash=Get-Content -LiteralPath $flashPath -Raw|ConvertFrom-Json
+ $permit=Get-Content -LiteralPath $permitPath -Raw|ConvertFrom-Json
+ $handoffSha=(Get-FileHash -LiteralPath $handoffPath -Algorithm SHA256).Hash
+ $flashSha=(Get-FileHash -LiteralPath $flashPath -Algorithm SHA256).Hash
+-$plan=Get-R19TimedPathCapturePlan -Handoff $handoff -FlashEvidence $flash -Permit $permit -Mode $Mode -HandoffSha256 $handoffSha -FlashEvidenceSha256 $flashSha -NowUtc ([DateTime]::UtcNow) -DiagnosticUsbFailureDiagnostics $DiagnosticUsbFailureDiagnostics.IsPresent -RepoRoot $repo
++$plan=Get-R19TimedPathCapturePlan -Handoff $handoff -FlashEvidence $flash -Permit $permit -Mode $Mode -HandoffSha256 $handoffSha -FlashEvidenceSha256 $flashSha -NowUtc ([DateTime]::UtcNow) -DiagnosticUsbFailureDiagnostics $DiagnosticUsbFailureDiagnostics.IsPresent -RepoRoot $repo -ReadComparisonMode $ReadComparisonMode
+ if($DiagnosticUsbFailureDiagnostics){
+   Assert-R19UsbRoleCapabilities -Contract $handoff.usb_role_capabilities -RepoRoot $repo -Mode $Mode
+   foreach($role in @('vehicle','ground')){[void](Get-R19UsbRoleEffectiveMode -Contract $handoff.usb_role_capabilities -Role $role -RequestedMode $Mode)}
+@@ -163,7 +259,7 @@ try{[byte[]]$permitClaimBytes=[Text.Encoding]::UTF8.GetBytes($plan.candidate_id+
+ $started=[DateTime]::UtcNow.ToString('o');$failure='';$cleanupProven=$true;$hardware=$false;$serialWrites=0
+ $states=[Collections.Generic.List[object]]::new();$identityEvidence=[Collections.Generic.List[object]]::new()
+ $clock=[Diagnostics.Stopwatch]::StartNew();$domain=[Guid]::NewGuid().ToString('N');$frequency=[string][Diagnostics.Stopwatch]::Frequency
+-$measurementStart='';$measurementEnd='';$pinInputs=[Collections.Generic.List[object]]::new()
++$measurementStart='';$measurementEnd='';$pinInputs=[Collections.Generic.List[object]]::new();$readComparisonRequested=$false
+ try{
+   # Independently verify the full sealed candidate before any port is opened.
+   $verifier=Join-Path $repo 'tools/verify_r19_candidate_artifact.ps1'
+@@ -194,7 +290,7 @@ try{
+     $states.Add([pscustomobject]@{spec=$spec;port=$port;reader=$reader;reader_id=[Guid]::NewGuid().ToString('N');nonce=$nonce;parser=(New-R19TimedPathPrivateParser $nonce);product_parser=(New-R19TimedPathHeartbeatParser);product_observations=[Collections.Generic.List[object]]::new();workflow=$null;workflow_failure='';observations=[Collections.Generic.List[object]]::new();writes=[Collections.Generic.List[object]]::new();opened=$false;open_before_ticks='';open_after_ticks='';read_started_ticks='';snapshot=$null;raw=$null;joined=$false;cleanup_close_fallback=$false;diagnostic_usb_failure_diagnostics=$(if($DiagnosticUsbFailureDiagnostics){$handoff.diagnostic_usb_failure_diagnostics}else{$null});usb_role_capabilities=$(if($DiagnosticUsbFailureDiagnostics){$handoff.usb_role_capabilities}else{$null});usb_role_contract_version=$(if($DiagnosticUsbFailureDiagnostics){'v1-source-bound'}else{'legacy-v0-role-name-workflow-not-a-support-assertion'})})
+   }
+   foreach($s in $states){Assert-R19Acquisition ($s.reader.WaitReady(1000)) 'Native read owner preparation timeout';[void]$s.reader.GetStatus();[void]$s.reader.PollBytes(1)}
+-  [void](Test-R19TimedPathExecutionPermit -Permit $permit -Mode $Mode -CandidateId $plan.candidate_id -HandoffSha256 $handoffSha -FlashEvidenceSha256 $flashSha -NowUtc ([DateTime]::UtcNow))
++  [void](Test-R19TimedPathExecutionPermit -Permit $permit -Mode $Mode -CandidateId $plan.candidate_id -HandoffSha256 $handoffSha -FlashEvidenceSha256 $flashSha -NowUtc ([DateTime]::UtcNow) -ReadComparisonMode $ReadComparisonMode)
+   Assert-R19Acquisition ((Get-FileHash -LiteralPath $handoffPath -Algorithm SHA256).Hash-ceq$handoffSha-and(Get-FileHash -LiteralPath $flashPath -Algorithm SHA256).Hash-ceq$flashSha) 'Provenance changed before Open'
+   foreach($s in $states){
+     $s.open_before_ticks=[string]$clock.ElapsedTicks;$hardware=$true
+@@ -206,6 +302,12 @@ try{
+   $measurementStart=[string]$clock.ElapsedTicks
+   $deadline=[Numerics.BigInteger]::Parse($measurementStart)+[Numerics.BigInteger]::Parse($frequency)*40
+   while([Numerics.BigInteger]$clock.ElapsedTicks-lt$deadline){
++    if($readComparisonPlan.enabled-and-not$readComparisonRequested-and[long]$clock.ElapsedTicks-ge([long]$measurementStart+20*[long]$frequency)){
++      $groundOwner=@($states|Where-Object{$_.spec.role-ceq'ground'})
++      Assert-R19Acquisition ($groundOwner.Count-eq1) 'Comparison Ground owner missing'
++      $readComparisonRequested=$true
++      Assert-R19Acquisition ($groundOwner[0].reader.RequestDiagnosticReadPause(2000)) 'Comparison pause request rejected'
++    }
+     foreach($s in $states){
+       $status=$s.reader.GetStatus()
+       Assert-R19Acquisition (-not$status.Stopped-and-not$status.Overflow-and[string]::IsNullOrEmpty($status.Failure)) ('Read owner failed: '+$s.spec.role+' '+$status.Failure)
+@@ -258,13 +360,23 @@ finally{
+       $s.snapshot=$s.reader.GetSnapshot();$s.raw=$s.reader.ReadSlice(0,$s.snapshot.ByteCount)
+       if(-not$s.joined-or$s.cleanup_close_fallback-or$s.snapshot.Overflow-or-not[string]::IsNullOrEmpty($s.snapshot.Failure)-or-not[string]::IsNullOrEmpty($s.snapshot.CleanupFailure)){$cleanupProven=$false}
+     }catch{$cleanupProven=$false;if(-not$failure){$failure='Reader cleanup: '+$_.Exception.Message}}
+-    try{if($s.port.IsOpen){$s.port.Close()};$s.port.Dispose()}catch{$cleanupProven=$false}
++    try{
++      if($s.joined){Assert-R19Acquisition ($s.reader.CloseSourceAfterStop()) 'Tracked port close failed'}
++      elseif($s.port.IsOpen){$s.port.Close()}
++    }catch{$cleanupProven=$false;if(-not$failure){$failure='Port close: '+$_.Exception.Message}}
++    finally{
++      try{$s.snapshot=$s.reader.GetSnapshot()}catch{$cleanupProven=$false}
++      try{$s.port.Dispose()}catch{$cleanupProven=$false}
++    }
+   }
+ }
++$readComparisonContext=[pscustomobject]@{clock_domain_id=$domain;frequency=$frequency;measurement_start_ticks=$measurementStart;measurement_end_ticks=$measurementEnd}
++$readComparisonEvidence=Get-R19ReadComparisonEvidence -States $states.ToArray() -Context $readComparisonContext
++$readComparison=[pscustomobject]@{plan=$readComparisonPlan;evidence=$readComparisonEvidence;evaluation=(Get-R19ReadComparisonEvaluation -Plan $readComparisonPlan -Evidence $readComparisonEvidence)}
+ $summary=Save-R19TimedPathCaptureEvidence -States $states.ToArray() -OutputDirectory $OutputDirectory -Context ([pscustomobject]@{
+   candidate_id=$plan.candidate_id;mode=$Mode;capture_seconds=$CaptureSeconds;started_utc=$started;clock_domain_id=$domain;frequency=$frequency
+   measurement_start_ticks=$measurementStart;measurement_end_ticks=$measurementEnd;cleanup_proven=$cleanupProven;hardware_interaction=$hardware
+   serial_write_calls=$serialWrites;failure=$failure;identity_evidence=$identityEvidence.ToArray();pinned_inputs=$pinInputs.ToArray()
+-  handoff_sha256=$handoffSha;flash_evidence_sha256=$flashSha;repo_root=$repo})
++  handoff_sha256=$handoffSha;flash_evidence_sha256=$flashSha;repo_root=$repo;read_comparison=$readComparison})
+ Write-Output ($summary.result+' candidate='+$plan.candidate_id+' mode='+$Mode)
+ if($summary.result-ceq'INVALID_CAPTURE'){exit 1}
+
+diff --git a/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/before/r19_timed_path_outer.ps1 b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tools/r19_timed_path_outer.ps1
+index 57d1a85..ab23733 100644
+--- a/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/before/r19_timed_path_outer.ps1
++++ b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tools/r19_timed_path_outer.ps1
+@@ -21,7 +21,8 @@ function Get-R19TimedPathOuterToolPaths {
+ function Assert-R19TimedPathPreparedContract {
+   param([object]$Pin,[ValidateSet('SyncOnly','ExplicitHostArm')][string]$Mode,
+     [bool]$AuxReadinessDiagnostics=$false,
+-    [bool]$DiagnosticUsbFailureDiagnostics=$false)
++    [bool]$DiagnosticUsbFailureDiagnostics=$false,
++    [ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None')
+   function NeedPin($Value,$Message){if(-not$Value){throw $Message}}
+   NeedPin ($null-ne$Pin) 'Prepared pin is missing'
+   foreach($name in @('schema','mode','candidate_id','latest_sha256','latest_path',
+@@ -32,6 +33,13 @@ function Assert-R19TimedPathPreparedContract {
+   }
+   NeedPin ($Pin.schema-ceq'vc-lora-r19-timed-path-prepared-run-v1'-and
+     $Pin.mode-ceq$Mode) 'Prepared pin schema or mode differs'
++  $preparedComparison='None'
++  if($null-ne$Pin.PSObject.Properties['read_comparison_mode']){
++    NeedPin ($Pin.read_comparison_mode-is[string]-and$Pin.read_comparison_mode-cin@('None','GroundPauseResume')) 'Prepared read comparison mode is invalid'
++    $preparedComparison=$Pin.read_comparison_mode
++  }
++  NeedPin ($preparedComparison-ceq$ReadComparisonMode) 'Prepared read comparison mode differs'
++  NeedPin ($ReadComparisonMode-ceq'None'-or($Mode-ceq'ExplicitHostArm'-and$AuxReadinessDiagnostics-and$DiagnosticUsbFailureDiagnostics)) 'Read comparison requires explicit AUX/diagnostic mode'
+   NeedPin ($Pin.candidate_id-is[string]-and$Pin.candidate_id-cmatch'^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$') 'Unsafe candidate id'
+   NeedPin ($Pin.latest_sha256-is[string]-and$Pin.latest_sha256-cmatch'^[0-9A-F]{64}$') 'Invalid latest digest'
+   $leaf=if($Mode-ceq'SyncOnly'){'SYNC-ONLY'}else{'EXPLICIT-HOST-ARM'}
+@@ -99,7 +107,8 @@ function Assert-R19TimedPathPreparedContract {
+ }
+ 
+ function Get-R19TimedPathOuterCaptureDisposition {
+-  param([object]$Summary,[object]$Step,[string]$CandidateId,[string]$Mode)
++  param([object]$Summary,[object]$Step,[string]$CandidateId,[string]$Mode,
++    [ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None')
+   $accepted=$false;$reasons=@()
+   try{
+     foreach($field in @('cleanup_proven','hardware_interaction','acceptance_eligible','deployment_authorized')){
+@@ -116,6 +125,9 @@ function Get-R19TimedPathOuterCaptureDisposition {
+       $Summary.deployment_authorized-or$Step.exit_code-ne0-or
+       $Step.timed_out-or-not$Step.termination_proven-or
+       -not$Step.process_tree_termination_proven){throw 'Timed-path capture acquisition contract failed'}
++    if($ReadComparisonMode-cne'None'){
++      if($null-eq$Summary.PSObject.Properties['read_comparison']-or$Summary.read_comparison.plan.mode-cne$ReadComparisonMode){throw 'Capture comparison mode mismatch'}
++    }elseif($null-ne$Summary.PSObject.Properties['read_comparison']-and$Summary.read_comparison.plan.enabled){throw 'Unexpected read comparison intervention'}
+     $accepted=$true
+   }catch{$reasons+= $_.Exception.Message}
+   [pscustomobject][ordered]@{acceptable=$accepted;evidence_contract_proven=$accepted
+@@ -129,7 +141,25 @@ function Get-R19TimedPathOuterCaptureDisposition {
+ }
+ 
+ function Get-R19TimedPathOuterOutcome {
+-  param([object]$Evaluation,[string]$Failure,[bool]$Saved)
++  param([object]$Evaluation,[string]$Failure,[bool]$Saved,
++    [ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None',
++    [object]$ComparisonEvaluation=$null)
++  if($ReadComparisonMode-cne'None'){
++    $valid=$false
++    try{
++      $valid=$Saved-and[string]::IsNullOrEmpty($Failure)-and
++        $ComparisonEvaluation.schema-ceq'vc-lora-r19-read-comparison-evaluation-v1'-and
++        $ComparisonEvaluation.mode-ceq$ReadComparisonMode-and$ComparisonEvaluation.result-ceq'VALID_COMPARISON'-and
++        $ComparisonEvaluation.valid-is[bool]-and$ComparisonEvaluation.valid-and
++        $ComparisonEvaluation.causal_disposition-ceq'INDETERMINATE'
++      foreach($field in @('physical_host_in_suppression_proven','root_cause_proven','acceptance_eligible','deployment_authorized')){
++        if($ComparisonEvaluation.$field-isnot[bool]-or$ComparisonEvaluation.$field){$valid=$false}
++      }
++    }catch{$valid=$false}
++    return [pscustomobject]@{result=$(if($valid){'PASS'}else{'FAIL'})
++      status=$(if($valid){'PASS_READ_COMPARISON_EVIDENCE_CAPTURED_R18_RESTORED_NOT_ACCEPTANCE'}else{'FAIL_READ_COMPARISON_EVIDENCE_R18_RESTORED'})
++      acceptance_eligible=$false;deployment_authorized=$false}
++  }
+   $valid=$null-ne$Evaluation-and[bool]$Evaluation.PSObject.Properties['schema']-and
+     $Evaluation.schema-ceq'vc-lora-r19-timed-path-normalization-v1'-and
+     [string]::IsNullOrEmpty($Failure)-and$Saved
+
+diff --git a/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/before/invoke_r19_runtime_stage_cause_experiment_hil.ps1 b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1
+index ce90313..c26bfb4 100644
+--- a/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/before/invoke_r19_runtime_stage_cause_experiment_hil.ps1
++++ b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1
+@@ -9,6 +9,7 @@ param(
+   [string]$TimedPathMode = 'Disabled',
+   [switch]$AuxReadinessDiagnostics,
+   [switch]$DiagnosticUsbFailureDiagnostics,
++  [ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None',
+   [string]$TimedPathPreparedPinPath = '',
+   [string]$TimedPathPreparedPinSha256 = '',
+   [ValidateSet('success','capture_no_beacon','capture_failure',
+@@ -77,7 +78,7 @@ $expectedJtagPreflightGateSha256 =
+ $expectedFlashToolSha256 =
+     'BA042F6F7136514E18B9DDDA97BE5926E6A16B12E6D2C9E72307C62760AAF920'
+ $expectedCaptureToolSha256 =
+-    '18B6785A602B673274F6F718DE8F7C0BB306DDE1080C55114FADD4A08E38D2F5'
++    '4811B2F746BD6C117BDBA4ADFF8943C2684E68F52714F7BD7AE1E77D54AB91B4'
+ $expectedCandidateArtifactId = '20261020T123447347Z-b414028b'
+ $expectedCandidateLatestSha256 =
+     '7B9E24D307963177D3489627AB305023B8A31744B5008FD36210590D60F4DA41'
+@@ -95,7 +96,11 @@ if($AuxReadinessDiagnostics-and$TimedPathMode-cne'ExplicitHostArm'){
+ if($DiagnosticUsbFailureDiagnostics-and(-not$AuxReadinessDiagnostics-or$TimedPathMode-cne'ExplicitHostArm')){
+   throw 'Diagnostic USB failure diagnostics require AUX/readiness and ExplicitHostArm mode'
+ }
++if($ReadComparisonMode-cne'None'-and(-not$DiagnosticUsbFailureDiagnostics-or-not$AuxReadinessDiagnostics-or$TimedPathMode-cne'ExplicitHostArm')){
++  throw 'Read comparison requires ExplicitHostArm AUX/diagnostic timed-path mode'
++}
+ $timedPathEvaluation=$null
++$readComparisonEvaluation=$null
+ $script:timedPathToolLocks=[Collections.Generic.List[IO.FileStream]]::new()
+ $timedPathPreparedPin=$null
+ if($timedPathEnabled){
+@@ -114,7 +119,7 @@ if($timedPathEnabled){
+   $script:timedPathToolLocks.Add($helperLock)
+   if($helperBinding.Count-ne1-or(Get-FileHash -LiteralPath $helperPath -Algorithm SHA256).Hash-cne$helperBinding[0].sha256){throw 'Prepared outer helper digest differs'}
+   . $helperPath
+-  $null=Assert-R19TimedPathPreparedContract $timedPathPreparedPin $TimedPathMode ([bool]$AuxReadinessDiagnostics) ([bool]$DiagnosticUsbFailureDiagnostics)
++  $null=Assert-R19TimedPathPreparedContract $timedPathPreparedPin $TimedPathMode ([bool]$AuxReadinessDiagnostics) ([bool]$DiagnosticUsbFailureDiagnostics) $ReadComparisonMode
+   foreach($entry in $timedPathPreparedPin.tools){
+     $path=Join-Path $repo $entry.path
+     $lock=[IO.FileStream]::new($path,[IO.FileMode]::Open,[IO.FileAccess]::Read,[IO.FileShare]::Read)
+@@ -2801,10 +2806,12 @@ function Test-R19FailureBoundaryPartialEvidence([object]$Summary,
+ 
+ function Get-CaptureDisposition([object]$Step) {
+   $timedPathEnabled=[bool](Get-Variable -Name timedPathEnabled -ValueOnly -ErrorAction SilentlyContinue)
++  $comparisonSelection=[string](Get-Variable -Name ReadComparisonMode -ValueOnly -ErrorAction SilentlyContinue)
++  if(-not$comparisonSelection){$comparisonSelection='None'}
+   if($timedPathEnabled){
+     $summaryPath=Join-Path $captureDirectory 'summary.json'
+     $summary=Read-JsonIfPresent $summaryPath
+-    $disposition=Get-R19TimedPathOuterCaptureDisposition $summary $Step $candidate.artifact_id $TimedPathMode
++    $disposition=Get-R19TimedPathOuterCaptureDisposition $summary $Step $candidate.artifact_id $TimedPathMode -ReadComparisonMode $comparisonSelection
+     if($disposition.acceptable){
+       try{
+         Assert-Condition ($summary.handoff_sha256-ceq$candidate.handoff_sha256-and
+@@ -2814,13 +2821,28 @@ function Get-CaptureDisposition([object]$Step) {
+           $rows=@($summary.roles|Where-Object{$_.role-ceq$roleName})
+           Assert-Condition ($rows.Count-eq1) 'Timed-path capture role is not unique'
+           $row=$rows[0];$rawPath=Join-Path $captureDirectory ($roleName+'.raw.bin')
++          $expectedContinuous=-not($comparisonSelection-ceq'GroundPauseResume'-and$roleName-ceq'ground')
+           Assert-Condition ((Get-Item -LiteralPath $rawPath).Length-eq$row.raw_bytes-and
+             (Get-Sha256 $rawPath)-ceq$row.raw_sha256-and
+             [Convert]::ToBase64String([IO.File]::ReadAllBytes($rawPath))-ceq$row.raw_base64-and
+-            $row.reader_continuous-is[bool]-and$row.reader_continuous-and
++            $row.reader_continuous-is[bool]-and$row.reader_continuous-eq$expectedContinuous-and
+             $row.overflow-is[bool]-and-not$row.overflow-and
+             $row.clock_domain_id-ceq$summary.clock_domain_id-and
+             $row.frequency-ceq$summary.frequency) 'Timed-path raw capture or reader binding differs'
++          if($comparisonSelection-ceq'GroundPauseResume'){
++            $comparisonEvidence=$summary.read_comparison.evidence
++            Assert-Condition (@($comparisonEvidence.roles).Count-eq2) 'Comparison owner count differs'
++            $comparisonRows=@($comparisonEvidence.roles|Where-Object{$_.role-ceq$roleName})
++            Assert-Condition ($comparisonRows.Count-eq1) 'Comparison role is not unique'
++            $comparisonRow=$comparisonRows[0]
++            Assert-Condition (-not[string]::IsNullOrWhiteSpace([string]$row.reader_id)-and
++              $comparisonRow.reader_id-ceq$row.reader_id-and$comparisonRow.reader_continuous-is[bool]-and
++              $comparisonRow.reader_continuous-eq$row.reader_continuous) 'Comparison owner identity or continuity differs from raw capture'
++            foreach($field in @('clock_domain_id','frequency','measurement_start_ticks','measurement_end_ticks')){
++              Assert-Condition ($comparisonEvidence.$field-is[string]-and$summary.$field-is[string]-and
++                $comparisonEvidence.$field-ceq$summary.$field) 'Comparison clock or measurement boundary differs from raw capture'
++            }
++          }
+         }
+         Assert-Condition (Test-Path -LiteralPath (Join-Path $OutputDirectory 'execution-permit.json.consumed') -PathType Leaf) 'Timed-path one-time permit was not consumed'
+       }catch{$disposition.acceptable=$false;$disposition.evidence_contract_proven=$false;$disposition.rejection_reasons+= $_.Exception.Message}
+@@ -3447,8 +3469,9 @@ try {
+         candidate_id=$candidate.artifact_id;mode=$TimedPathMode
+         handoff_sha256=$candidate.handoff_sha256;flash_evidence_sha256=Get-Sha256 $flashRecordPath
+         issued_utc=$issued.ToString('o');expires_utc=$issued.AddSeconds(120).ToString('o')
+-        safety_confirmed=$true;one_time=$true;restore_required=$true;capture_seconds=40;ports=$permitPorts})
++        safety_confirmed=$true;one_time=$true;restore_required=$true;capture_seconds=40;ports=$permitPorts;read_comparison_mode=$ReadComparisonMode})
+       $captureArguments+=@('-Mode',$TimedPathMode,'-ExecutionPermitPath',$permitPath)
++      if($ReadComparisonMode-cne'None'){$captureArguments+=@('-ReadComparisonMode',$ReadComparisonMode)}
+       if($AuxReadinessDiagnostics){$captureArguments+=,'-AuxReadinessDiagnostics'}
+       if($PSBoundParameters['DiagnosticUsbFailureDiagnostics']){$captureArguments+=,'-DiagnosticUsbFailureDiagnostics'}
+     }
+@@ -3496,11 +3519,25 @@ try {
+     if($timedPathEnabled-and$stageGroundProven){
+       . (Join-Path $repo 'tools/r19_timed_path_acquisition.ps1') -ImportOnly
+       $captureDocument=Read-JsonIfPresent (Join-Path $captureDirectory 'summary.json')
+-      $record=$stageGroundEvidence.extended_raw_replay.timed_path_record
+-      $recordPath=Join-Path $stageDirectories.ground 'timed_path_first.bin'
+-      $timedPathEvaluation=ConvertTo-R19TimedPathEvidence -Capture $captureDocument `
+-        -DeviceRecord $record -CandidateId $candidate.artifact_id -DeviceRecordSha256 (Get-Sha256 $recordPath)
+-      Write-DurableJson (Join-Path $OutputDirectory 'timed_path_evaluation.json') $timedPathEvaluation
++      if($ReadComparisonMode-ceq'None'){
++        $record=$stageGroundEvidence.extended_raw_replay.timed_path_record
++        $recordPath=Join-Path $stageDirectories.ground 'timed_path_first.bin'
++        $timedPathEvaluation=ConvertTo-R19TimedPathEvidence -Capture $captureDocument `
++          -DeviceRecord $record -CandidateId $candidate.artifact_id -DeviceRecordSha256 (Get-Sha256 $recordPath)
++        Write-DurableJson (Join-Path $OutputDirectory 'timed_path_evaluation.json') $timedPathEvaluation
++      }else{
++        # Deliberately paused acquisition must never enter the continuous-reader
++        # normalizer or inherit its timing/physical-order proof. Recompute the
++        # separate comparison from retained lifecycle observations after JTAG.
++        $readComparisonEvaluation=& {
++          param($comparisonRepo,$capturedComparison)
++          # Definitions-only script parameters are isolated from the outer's
++          # Execute/rollback/output/mode variables by this child scope.
++          . (Join-Path $comparisonRepo 'tools/run_r19_timed_path_capture.ps1') -ImportOnly
++          Get-R19ReadComparisonEvaluation -Plan $capturedComparison.plan -Evidence $capturedComparison.evidence
++        } $repo $captureDocument.read_comparison
++        Write-DurableJson (Join-Path $OutputDirectory 'read_comparison_evaluation.json') $readComparisonEvaluation
++      }
+     }
+   } finally {
+     if ($experimentStarted -and -not $childTerminationUnproven) {
+@@ -3559,8 +3596,10 @@ if ($childTerminationUnproven) {
+   $terminalStatus = 'FAIL_STAGE_READ_R18_RESTORED'
+   $exitCode = 1
+ } elseif ($timedPathEnabled) {
++  $evaluationFile=if($ReadComparisonMode-ceq'None'){'timed_path_evaluation.json'}else{'read_comparison_evaluation.json'}
+   $outcome=Get-R19TimedPathOuterOutcome -Evaluation $timedPathEvaluation -Failure $primaryFailure `
+-    -Saved (Test-Path -LiteralPath (Join-Path $OutputDirectory 'timed_path_evaluation.json') -PathType Leaf)
++    -Saved (Test-Path -LiteralPath (Join-Path $OutputDirectory $evaluationFile) -PathType Leaf) `
++    -ReadComparisonMode $ReadComparisonMode -ComparisonEvaluation $readComparisonEvaluation
+   $terminalStatus=$outcome.status
+   $exitCode=if($outcome.result-ceq'PASS'){0}else{1}
+ } elseif (-not[bool]$stageVehicleEvidence.usb_tx_boundary_completion_proven-or
+@@ -3606,6 +3645,7 @@ $summary = [pscustomobject][ordered]@{
+   capture_seconds=$CaptureSeconds;offline_scenario=if($OfflineContractTest){
+     $OfflineScenario}else{''};failure=$primaryFailure
+   timed_path_mode=$TimedPathMode;timed_path_evaluation=$timedPathEvaluation
++  read_comparison_mode=$ReadComparisonMode;read_comparison_evaluation=$readComparisonEvaluation
+   aux_readiness_diagnostics=[bool]$AuxReadinessDiagnostics
+   diagnostic_usb_failure_diagnostics=[bool]$DiagnosticUsbFailureDiagnostics
+   authorization=[pscustomobject][ordered]@{
+
+diff --git a/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/before/r19_timed_path_acquisition.ps1 b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tools/r19_timed_path_acquisition.ps1
+index d8bc288..558ef66 100644
+--- a/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/before/r19_timed_path_acquisition.ps1
++++ b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tools/r19_timed_path_acquisition.ps1
+@@ -23,10 +23,18 @@ function Test-R19AcquisitionSha([string]$Value){$Value-cmatch'^[A-Fa-f0-9]{64}$'
+ function Test-R19TimedPathExecutionPermit {
+   param([Parameter(Mandatory)][object]$Permit,[Parameter(Mandatory)][ValidateSet('SyncOnly','ExplicitHostArm')][string]$Mode,
+     [Parameter(Mandatory)][string]$CandidateId,[Parameter(Mandatory)][string]$HandoffSha256,
+-    [Parameter(Mandatory)][string]$FlashEvidenceSha256,[Parameter(Mandatory)][DateTime]$NowUtc)
++    [Parameter(Mandatory)][string]$FlashEvidenceSha256,[Parameter(Mandatory)][DateTime]$NowUtc,
++    [ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None')
+   Set-StrictMode -Version Latest
+   Assert-R19Acquisition ($Permit.schema-ceq'vc-lora-r19-timed-path-execution-permit-v1'-and$Permit.status-ceq'AUTHORIZED_SINGLE_CAPTURE') 'Unknown execution permit'
+   Assert-R19Acquisition ($Permit.candidate_id-ceq$CandidateId-and$Permit.mode-ceq$Mode) 'Permit candidate/mode mismatch'
++  $permitComparison='None'
++  if($null-ne$Permit.PSObject.Properties['read_comparison_mode']){
++    Assert-R19Acquisition ($Permit.read_comparison_mode-is[string]-and$Permit.read_comparison_mode-cin@('None','GroundPauseResume')) 'Permit comparison mode is invalid'
++    $permitComparison=$Permit.read_comparison_mode
++  }
++  Assert-R19Acquisition ($permitComparison-ceq$ReadComparisonMode) 'Permit read comparison mode mismatch'
++  Assert-R19Acquisition ($ReadComparisonMode-ceq'None'-or$Mode-ceq'ExplicitHostArm') 'Read comparison requires ExplicitHostArm'
+   foreach($field in @('safety_confirmed','one_time','restore_required')){Assert-R19Acquisition ($Permit.$field-is[bool]-and$Permit.$field) "Permit $field is not explicit true"}
+   Assert-R19Acquisition ((Test-R19AcquisitionSha $HandoffSha256)-and(Test-R19AcquisitionSha $FlashEvidenceSha256)-and$Permit.handoff_sha256-ceq$HandoffSha256-and$Permit.flash_evidence_sha256-ceq$FlashEvidenceSha256) 'Permit provenance mismatch'
+   $issued=[DateTime]::Parse($Permit.issued_utc,[Globalization.CultureInfo]::InvariantCulture,[Globalization.DateTimeStyles]::RoundtripKind)
+@@ -47,8 +55,10 @@ function Get-R19TimedPathCapturePlan {
+   param([Parameter(Mandatory)][object]$Handoff,[Parameter(Mandatory)][object]$FlashEvidence,[Parameter(Mandatory)][object]$Permit,
+     [Parameter(Mandatory)][ValidateSet('SyncOnly','ExplicitHostArm')][string]$Mode,[Parameter(Mandatory)][string]$HandoffSha256,
+     [Parameter(Mandatory)][string]$FlashEvidenceSha256,[Parameter(Mandatory)][DateTime]$NowUtc,
+-    [bool]$DiagnosticUsbFailureDiagnostics=$false,[string]$RepoRoot='')
++    [bool]$DiagnosticUsbFailureDiagnostics=$false,[string]$RepoRoot='',
++    [ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None')
+   Set-StrictMode -Version Latest
++  Assert-R19Acquisition ($ReadComparisonMode-ceq'None'-or($Mode-ceq'ExplicitHostArm'-and$DiagnosticUsbFailureDiagnostics)) 'Read comparison requires explicit diagnostic role capabilities'
+   Assert-R19Acquisition ($Handoff.schema-ceq'vc-lora-r19-candidate-artifact-handoff-v1'-and$Handoff.result-ceq'PASS') 'Candidate handoff is not accepted diagnostic artifact evidence'
+   Assert-R19Acquisition ($Handoff.runtime_fail_diagnostics_enabled-is[bool]-and$Handoff.runtime_fail_diagnostics_enabled) 'Candidate diagnostics are disabled'
+   $d=$Handoff.timed_path_diagnostics
+@@ -79,7 +89,7 @@ function Get-R19TimedPathCapturePlan {
+     $portRows=@($Permit.ports|Where-Object{$_.role-ceq$r});Assert-R19Acquisition ($portRows.Count-eq1) 'Permit role is not unique'
+     Assert-R19Acquisition ($rows[0].port-ceq$portRows[0].port-and$rows[0].pnp_device_id-ceq$portRows[0].pnp_instance_id-and$rows[0].parent_device_id-ceq$portRows[0].usb_parent_instance_id) 'Permit must bind the exact freshly flashed USB devices'
+   }
+-  Test-R19TimedPathExecutionPermit -Permit $Permit -Mode $Mode -CandidateId $Handoff.artifact_id -HandoffSha256 $HandoffSha256 -FlashEvidenceSha256 $FlashEvidenceSha256 -NowUtc $NowUtc
++  Test-R19TimedPathExecutionPermit -Permit $Permit -Mode $Mode -CandidateId $Handoff.artifact_id -HandoffSha256 $HandoffSha256 -FlashEvidenceSha256 $FlashEvidenceSha256 -NowUtc $NowUtc -ReadComparisonMode $ReadComparisonMode
+ }
+ 
+ function New-R19TimedPathPrivateParser {
+
+diff --git a/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/before/CMakeLists.txt b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/CMakeLists.txt
+index a4d85d6..5d1ce17 100644
+--- a/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/before/CMakeLists.txt
++++ b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/CMakeLists.txt
+@@ -138,7 +138,7 @@ if(VC_LORA_BUILD_TESTS)
+         host_readiness_wire host_readiness_workflow startup_boundary_evaluation
+         timed_path_trace timed_path_acquisition timed_path_capture_entrypoint timed_path_capture_persistence
+         timed_path_artifact_contract timed_path_outer
+-        timed_path_outer_raw aux_readiness_record aux_readiness_artifact
++        timed_path_outer_raw read_comparison_capture_contract read_comparison_permit aux_readiness_record aux_readiness_artifact
+         aux_readiness_bridge aux_readiness_outer aux_readiness_capture_routing)
+       add_test(NAME R19-${r19_contract}-OFFLINE-001
+         COMMAND "${VC_LORA_POWERSHELL_EXECUTABLE}"
+
+diff --git a/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/hil/check_r19_read_comparison_permit.ps1 b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/hil/check_r19_read_comparison_permit.ps1
+new file mode 100644
+index 0000000..7ccf494
+--- /dev/null
++++ b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/hil/check_r19_read_comparison_permit.ps1
+@@ -0,0 +1,42 @@
++param([string]$RepoRoot=(Split-Path -Parent (Split-Path -Parent $PSScriptRoot)))
++$ErrorActionPreference='Stop'
++Set-StrictMode -Version Latest
++. (Join-Path $RepoRoot 'tools/r19_timed_path_outer.ps1')
++. (Join-Path $RepoRoot 'tools/r19_timed_path_acquisition.ps1') -ImportOnly
++$script:checks=0
++function Check([bool]$Value,[string]$Name){if(-not$Value){throw "FAIL $Name"};$script:checks++}
++function Reject([scriptblock]$Code,[string]$Name){$bad=$false;try{& $Code|Out-Null}catch{$bad=$true};Check $bad $Name}
++function CopyFixture($Value){$Value|ConvertTo-Json -Depth 30|ConvertFrom-Json}
++$now=[DateTime]::UtcNow
++$permit=[pscustomobject]@{schema='vc-lora-r19-timed-path-execution-permit-v1';status='AUTHORIZED_SINGLE_CAPTURE';candidate_id='comparison-test';mode='ExplicitHostArm';handoff_sha256=('A'*64);flash_evidence_sha256=('B'*64);issued_utc=$now.AddSeconds(-1).ToString('o');expires_utc=$now.AddSeconds(60).ToString('o');safety_confirmed=$true;one_time=$true;restore_required=$true;capture_seconds=40;ports=@([pscustomobject]@{role='vehicle';port='COM3';baud=115200;pnp_instance_id='USB\VEHICLE';usb_parent_instance_id='USB\PARENT_V'},[pscustomobject]@{role='ground';port='COM6';baud=57600;pnp_instance_id='USB\GROUND';usb_parent_instance_id='USB\PARENT_G'})}
++$argsPermit=@{Mode='ExplicitHostArm';CandidateId='comparison-test';HandoffSha256=('A'*64);FlashEvidenceSha256=('B'*64);NowUtc=$now}
++Check ((Test-R19TimedPathExecutionPermit -Permit $permit @argsPermit).valid) 'legacy default remains permitted'
++Reject {Test-R19TimedPathExecutionPermit -Permit $permit @argsPermit -ReadComparisonMode GroundPauseResume} 'comparison requires explicit permit field'
++$cp=CopyFixture $permit;Add-Member -InputObject $cp -NotePropertyName read_comparison_mode -NotePropertyValue GroundPauseResume
++Check ((Test-R19TimedPathExecutionPermit -Permit $cp @argsPermit -ReadComparisonMode GroundPauseResume).valid) 'exact comparison permission'
++Reject {Test-R19TimedPathExecutionPermit -Permit $cp @argsPermit} 'comparison permit cannot be consumed by legacy capture'
++$cp.read_comparison_mode='None'
++Reject {Test-R19TimedPathExecutionPermit -Permit $cp @argsPermit -ReadComparisonMode GroundPauseResume} 'permit mismatch blocks comparison'
++$cp.read_comparison_mode=$true
++Reject {Test-R19TimedPathExecutionPermit -Permit $cp @argsPermit} 'permit enum must be string'
++$pin=[pscustomobject]@{schema='vc-lora-r19-timed-path-prepared-run-v1';mode='ExplicitHostArm';candidate_id='comparison-test';latest_sha256=('C'*64);latest_path='runs/candidates/R19-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/latest.json';capture_seconds=40;product_budget_ms=106;acceptance_authorized=$false;deployment_authorized=$false;live_authorization_granted=$false;vehicle_runtime_stage_address='0x3fcad7f0';ground_runtime_stage_address='0x3fca4b68';aux_readiness_diagnostics=$true;diagnostic_usb_failure_diagnostics=$true;tools=@(Get-R19TimedPathOuterToolPaths -AuxReadinessDiagnostics $true -DiagnosticUsbFailureDiagnostics $true|ForEach-Object{[pscustomobject]@{path=$_;sha256=('D'*64)}});usb_role_capabilities=[pscustomobject]@{schema='vc-lora-r19-usb-role-capabilities-v1';mode='ExplicitHostArm';implementation_bound=$true;roles=@([pscustomobject]@{role='vehicle';effective_mode='SyncOnly';clock_request_reply=$true;ready=$false;arm=$false},[pscustomobject]@{role='ground';effective_mode='ExplicitHostArm';clock_request_reply=$true;ready=$true;arm=$true});canonical_sources=@('firmware/phase6/vc_lora_phase6_bridge.hpp','firmware/high_speed/r19_diagnostic_usb_failure_record.hpp','tools/r19_usb_role_contract.ps1'|ForEach-Object{[pscustomobject]@{path=$_;sha256=('E'*64)}})}}
++$argsPin=@{Mode='ExplicitHostArm';AuxReadinessDiagnostics=$true;DiagnosticUsbFailureDiagnostics=$true}
++Check ($null-ne(Assert-R19TimedPathPreparedContract -Pin $pin @argsPin)) 'legacy diagnostic pin remains accepted'
++Reject {Assert-R19TimedPathPreparedContract -Pin $pin @argsPin -ReadComparisonMode GroundPauseResume} 'old prepared pin cannot authorize read comparison'
++$pp=CopyFixture $pin;Add-Member -InputObject $pp -NotePropertyName read_comparison_mode -NotePropertyValue GroundPauseResume
++Check ($null-ne(Assert-R19TimedPathPreparedContract -Pin $pp @argsPin -ReadComparisonMode GroundPauseResume)) 'new prepared pin binds comparison'
++Reject {Assert-R19TimedPathPreparedContract -Pin $pp @argsPin} 'new prepared pin cannot be downgraded to default'
++$pp.read_comparison_mode='None'
++Reject {Assert-R19TimedPathPreparedContract -Pin $pp @argsPin -ReadComparisonMode GroundPauseResume} 'prepared pin mismatch rejected'
++$pp.read_comparison_mode=$false
++Reject {Assert-R19TimedPathPreparedContract -Pin $pp @argsPin} 'prepared comparison field is typed'
++$ev=[pscustomobject]@{schema='vc-lora-r19-read-comparison-evaluation-v1';mode='GroundPauseResume';result='VALID_COMPARISON';valid=$true;causal_disposition='INDETERMINATE';physical_host_in_suppression_proven=$false;acceptance_eligible=$false;deployment_authorized=$false;root_cause_proven=$false}
++$result=Get-R19TimedPathOuterOutcome -Evaluation $null -Failure '' -Saved $true -ReadComparisonMode GroundPauseResume -ComparisonEvaluation $ev
++Check ($result.result-ceq'PASS'-and$result.status-ceq'PASS_READ_COMPARISON_EVIDENCE_CAPTURED_R18_RESTORED_NOT_ACCEPTANCE'-and-not$result.acceptance_eligible) 'comparison outcome does not impersonate continuous trace'
++foreach($field in @('valid','root_cause_proven','physical_host_in_suppression_proven','acceptance_eligible','deployment_authorized')){
++  $bad=CopyFixture $ev;$bad.$field=-not[bool]$bad.$field
++  Check ((Get-R19TimedPathOuterOutcome -Evaluation $null -Failure '' -Saved $true -ReadComparisonMode GroundPauseResume -ComparisonEvaluation $bad).result-ceq'FAIL') ('reject comparison outcome '+$field)
++}
++Check ((Get-R19TimedPathOuterOutcome -Evaluation $null -Failure '' -Saved $false -ReadComparisonMode GroundPauseResume -ComparisonEvaluation $ev).result-ceq'FAIL') 'unsaved comparison fails'
++Check ((Get-R19TimedPathOuterOutcome -Evaluation $null -Failure 'capture failed' -Saved $true -ReadComparisonMode GroundPauseResume -ComparisonEvaluation $ev).result-ceq'FAIL') 'failure stays failure'
++Write-Output "R19_READ_COMPARISON_PERMIT PASS $script:checks checks"
+
+diff --git a/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/hil/check_r19_read_comparison_capture_contract.ps1 b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/hil/check_r19_read_comparison_capture_contract.ps1
+new file mode 100644
+index 0000000..6c77533
+--- /dev/null
++++ b/E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/tests/hil/check_r19_read_comparison_capture_contract.ps1
+@@ -0,0 +1,322 @@
++[CmdletBinding()]
++param([string]$RepoRoot=(Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),[string]$OutputDirectory='')
++$ErrorActionPreference='Stop'
++Set-StrictMode -Version Latest
++if(-not$OutputDirectory){$OutputDirectory=Join-Path $RepoRoot ('runs/validation/R19-PC-LIFECYCLE-READ-COMPARISON-FIX-001/20261023T152500Z/capture_contract/'+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffffffZ')+'-'+[Guid]::NewGuid().ToString('N'))}
++[void][IO.Directory]::CreateDirectory($OutputDirectory)
++$results=[Collections.Generic.List[object]]::new()
++function Check([string]$Name,[scriptblock]$Body){try{& $Body;$results.Add([pscustomobject]@{name=$Name;passed=$true;error=''})}catch{$results.Add([pscustomobject]@{name=$Name;passed=$false;error=$_.Exception.Message})}}
++function Require([bool]$Value,[string]$Message){if(-not$Value){throw $Message}}
++function Reject([scriptblock]$Action){Require ($null-ne(Get-Command Get-R19ReadComparisonPlan -ErrorAction SilentlyContinue)) 'Missing plan API cannot count as rejection';$rejected=$false;try{&$Action|Out-Null}catch{$rejected=$true};Require $rejected 'Unsafe selection was not rejected'}
++function Clone($Value){$Value|ConvertTo-Json -Depth 40|ConvertFrom-Json}
++foreach($forbidden in @('Get-CimInstance','Get-PnpDeviceProperty','Get-PnpDevice','Get-Process','Start-Process','Invoke-Expression','Invoke-Command')){Set-Item -Path ('function:script:'+$forbidden) -Value {throw 'FORBIDDEN comparison contract hardware/process call'}}
++$capturePath=Join-Path $RepoRoot 'tools/run_r19_timed_path_capture.ps1'
++$outerPath=Join-Path $RepoRoot 'tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1'
++$captureSource=[IO.File]::ReadAllText($capturePath)
++$outerSource=[IO.File]::ReadAllText($outerPath)
++$captureAst=[Management.Automation.Language.Parser]::ParseInput($captureSource,[ref]$null,[ref]$null)
++$outerAst=[Management.Automation.Language.Parser]::ParseInput($outerSource,[ref]$null,[ref]$null)
++$comparisonFixtureRepoRoot=$RepoRoot;$comparisonFixtureOutputDirectory=$OutputDirectory
++try{. $capturePath -ImportOnly}finally{$RepoRoot=$comparisonFixtureRepoRoot;$OutputDirectory=$comparisonFixtureOutputDirectory}
++function New-ComparisonPlan {Get-R19ReadComparisonPlan -ReadComparisonMode GroundPauseResume -Mode ExplicitHostArm -CaptureSeconds 40 -AuxReadinessDiagnostics $true -DiagnosticUsbFailureDiagnostics $true}
++function New-Lifecycle {
++  [pscustomobject]@{stop_requested_ticks='410000010';worker_stopped_ticks='410000020';close_start_ticks='410000030';close_end_ticks='410000040';close_attempted=$true;close_completed=$true;close_failure=''}
++}
++function New-Observation {
++  [pscustomobject]@{clock_domain_id='fixture-shared-qpc';frequency='10000000';measurement_start_ticks='10000000';measurement_end_ticks='410000000'
++    roles=@(
++      [pscustomobject]@{role='vehicle';reader_id='fixture-vehicle-owner';reader_continuous=$true;lifecycle=(New-Lifecycle);pause=[pscustomobject]@{requested=$false;requested_ticks=$null;begin_ticks=$null;end_ticks=$null;resumed_read_ticks=$null;begin_calls=0;end_calls=0;duration_ms=0;end_reason=''}},
++      [pscustomobject]@{role='ground';reader_id='fixture-ground-owner';reader_continuous=$false;lifecycle=(New-Lifecycle);pause=[pscustomobject]@{requested=$true;requested_ticks='210000000';begin_ticks='210000100';end_ticks='230000100';resumed_read_ticks='230000200';begin_calls=17;end_calls=17;duration_ms=2000;end_reason='Deadline'}})}
++}
++function Get-Evaluation($Observation){Get-R19ReadComparisonEvaluation -Plan (New-ComparisonPlan) -Evidence $Observation}
++function Require-Invalid($Observation){$r=Get-Evaluation $Observation;Require ($r.result-ceq'INVALID_COMPARISON'-and$r.valid-is[bool]-and-not$r.valid-and@($r.reasons).Count-gt0) 'Missing/invalid observations must explicitly invalidate comparison'}
++Check 'definitions-only-import-is-not-an-execution-grant' {
++  Require ($null-ne(Get-Command Get-R19ReadComparisonPlan -ErrorAction SilentlyContinue)-and$null-ne(Get-Command Get-R19ReadComparisonEvaluation -ErrorAction SilentlyContinue)) 'Missing pure comparison APIs'
++}
++Check 'None-default-retains-legacy-without-new-ledger' {
++  $plan=Get-R19ReadComparisonPlan
++  Require ($plan.mode-ceq'None'-and$plan.enabled-is[bool]-and-not$plan.enabled) 'Default must remain no intervention'
++  $r=Get-R19ReadComparisonEvaluation -Plan $plan -Evidence $null
++  Require ($r.result-ceq'NOT_REQUESTED'-and-not$r.valid) 'Legacy None must not require invented ledger or claim comparison'
++}
++Check 'active-plan-is-single-ground-pause-in-one-fixed-capture' {
++  $plan=New-ComparisonPlan
++  Require ($plan.mode-ceq'GroundPauseResume'-and$plan.enabled-and$plan.capture_seconds-eq40-and$plan.pause_after_seconds-eq20-and$plan.pause_ms-eq2000) 'Pause policy is not the fixed single40s/20s/2s plan'
++  Require ($plan.semantics-ceq'APPLICATION_READ_PAUSE_NOT_USB_IN_SUPPRESSION') 'Application pause cannot be represented as physical USB IN suppression'
++}
++foreach($selection in @(
++  @{name='unknown-mode';mode='AnythingElse';captureMode='ExplicitHostArm';seconds=40;aux=$true;diag=$true},
++  @{name='SyncOnly';mode='GroundPauseResume';captureMode='SyncOnly';seconds=40;aux=$true;diag=$true},
++  @{name='missing-AUX';mode='GroundPauseResume';captureMode='ExplicitHostArm';seconds=40;aux=$false;diag=$true},
++  @{name='missing-diagnostic-ABI';mode='GroundPauseResume';captureMode='ExplicitHostArm';seconds=40;aux=$true;diag=$false},
++  @{name='shorter-capture';mode='GroundPauseResume';captureMode='ExplicitHostArm';seconds=39;aux=$true;diag=$true},
++  @{name='longer-capture';mode='GroundPauseResume';captureMode='ExplicitHostArm';seconds=41;aux=$true;diag=$true})){
++  Check ('selection-rejects-'+$selection.name) {Reject {Get-R19ReadComparisonPlan -ReadComparisonMode $selection.mode -Mode $selection.captureMode -CaptureSeconds $selection.seconds -AuxReadinessDiagnostics $selection.aux -DiagnosticUsbFailureDiagnostics $selection.diag}}
++}
++Check 'complete-memory-observation-validates-without-claiming-root-cause' {
++  $r=Get-Evaluation (New-Observation)
++  Require ($r.result-ceq'VALID_COMPARISON'-and$r.valid-is[bool]-and$r.valid-and@($r.reasons).Count-eq0) 'Complete nested observation did not validate'
++  Require ($r.causal_disposition-ceq'INDETERMINATE'-and-not$r.physical_host_in_suppression_proven-and-not$r.root_cause_proven-and-not$r.acceptance_eligible-and-not$r.deployment_authorized) 'Comparison must not grant acceptance or infer host-poll/root-cause proof'
++}
++function Require-InvalidPlan($Plan){$r=Get-R19ReadComparisonEvaluation -Plan $Plan -Evidence (New-Observation);Require ($r.result-ceq'INVALID_COMPARISON'-and-not$r.valid-and-not$r.acceptance_eligible-and-not$r.root_cause_proven) 'Malformed plan must return invalid, not throw or grant authority'}
++Check 'evaluation-rejects-null-or-missing-mode-plan-without-throwing' {
++  Require-InvalidPlan $null
++  $plan=New-ComparisonPlan;$plan.PSObject.Properties.Remove('mode');Require-InvalidPlan $plan
++}
++Check 'evaluation-rejects-forged-plan-role' {
++  $plan=New-ComparisonPlan;$plan.role='vehicle';Require-InvalidPlan $plan
++}
++Check 'evaluation-rejects-forged-or-missing-plan-authority-flags' {
++  foreach($field in @('acceptance_eligible','root_cause_proven')){
++    $plan=New-ComparisonPlan;$plan.$field=$true;Require-InvalidPlan $plan
++    $plan=New-ComparisonPlan;$plan.PSObject.Properties.Remove($field);Require-InvalidPlan $plan
++  }
++}
++foreach($mutation in @('missing-begin','missing-end','missing-resumed-read','early-request','begin-before-request','too-short','too-long','resume-before-end','resume-after-measurement','read-call-during-pause','not-deadline','vehicle-paused','ground-claimed-continuous','missing-role','duplicate-role','missing-clock-domain','zero-frequency','noninteger-tick','stop-before-measurement-end','worker-stop-before-request','close-before-worker-stop','close-end-before-start','close-not-attempted','close-not-completed','close-error','vehicle-stop-before-measurement-end','vehicle-close-error')){
++  Check ('observation-rejects-'+$mutation) {
++    $e=New-Observation;$g=$e.roles[1];$v=$e.roles[0]
++    switch($mutation){
++      'missing-begin'{$g.pause.begin_ticks=$null}
++      'missing-end'{$g.pause.end_ticks=$null}
++      'missing-resumed-read'{$g.pause.resumed_read_ticks=$null}
++      'early-request'{$g.pause.requested_ticks='209999999'}
++      'begin-before-request'{$g.pause.begin_ticks='209999999'}
++      'too-short'{$g.pause.end_ticks='229999999'}
++      'too-long'{$g.pause.end_ticks='235000101';$g.pause.resumed_read_ticks='235000102'}
++      'resume-before-end'{$g.pause.resumed_read_ticks='230000099'}
++      'resume-after-measurement'{$g.pause.resumed_read_ticks='410000001'}
++      'read-call-during-pause'{$g.pause.end_calls=18}
++      'not-deadline'{$g.pause.end_reason='Stop'}
++      'vehicle-paused'{$v.pause.requested=$true}
++      'ground-claimed-continuous'{$g.reader_continuous=$true}
++      'missing-role'{$e.roles=@($g)}
++      'duplicate-role'{$e.roles=@($g,(Clone $g))}
++      'missing-clock-domain'{$e.clock_domain_id=''}
++      'zero-frequency'{$e.frequency='0'}
++      'noninteger-tick'{$g.pause.end_ticks='2.3e8'}
++      'stop-before-measurement-end'{$g.lifecycle.stop_requested_ticks='409999999'}
++      'worker-stop-before-request'{$g.lifecycle.worker_stopped_ticks='410000009'}
++      'close-before-worker-stop'{$g.lifecycle.close_start_ticks='410000019'}
++      'close-end-before-start'{$g.lifecycle.close_end_ticks='410000029'}
++      'close-not-attempted'{$g.lifecycle.close_attempted=$false}
++      'close-not-completed'{$g.lifecycle.close_completed=$false}
++      'close-error'{$g.lifecycle.close_failure='FIXTURE_CLOSE_FAILURE'}
++      'vehicle-stop-before-measurement-end'{$v.lifecycle.stop_requested_ticks='409999999'}
++      'vehicle-close-error'{$v.lifecycle.close_failure='FIXTURE_VEHICLE_CLOSE_FAILURE'}
++    }
++    Require-Invalid $e
++  }
++}
++Check 'evaluation-does-not-rewrite-close-failure-or-missing-end-evidence' {
++  $e=New-Observation;$e.roles[1].pause.end_ticks=$null;$e.roles[1].lifecycle.close_completed=$false;$e.roles[1].lifecycle.close_failure='FIXTURE_CLOSE_FAILURE'
++  $before=$e|ConvertTo-Json -Depth 30 -Compress
++  Require-Invalid $e
++  Require (($e|ConvertTo-Json -Depth 30 -Compress)-ceq$before) 'Evaluation changed an unknown time or discarded close failure'
++}
++Check 'CLI-mode-defaults-and-outer-forwarding-are-explicit' {
++  foreach($ast in @($captureAst,$outerAst)){
++    $parameters=@($ast.ParamBlock.Parameters|Where-Object{$_.Name.VariablePath.UserPath-ceq'ReadComparisonMode'})
++    Require ($parameters.Count-eq1-and$parameters[0].DefaultValue.Extent.Text-ceq"'None'") 'CLI needs an additive None-default mode'
++  }
++  Require ($outerSource-match"(?s)captureArguments[^\r\n]*ReadComparisonMode|ReadComparisonMode[^\r\n]*captureArguments") 'Outer does not forward explicit comparison selection to capture'
++  Require ($outerSource.Contains('read_comparison_mode')) 'Fresh permit must bind comparison selection'
++  $helper=[IO.File]::ReadAllText((Join-Path $RepoRoot 'tools/r19_timed_path_outer.ps1'))
++  Require ($helper.Contains('ReadComparisonMode')-and$helper.Contains('read_comparison_mode')) 'Prepared pin must bind exact comparison selection'
++}
++Check 'capture-keeps-one-owner-uses-pause-not-Close-or-Purge-as-intervention' {
++  Require ($captureSource.Contains('RequestDiagnosticReadPause')-and$captureSource.Contains('read_comparison')) 'Native owner pause and additive evidence must be integrated'
++  Require ($captureSource.Contains('APPLICATION_READ_PAUSE_NOT_USB_IN_SUPPRESSION')) 'Physical-poll limitation missing'
++  Require ($captureSource-notmatch'DiscardInBuffer|DiscardOutBuffer|PurgeComm') 'Comparison cannot purge serial data'
++}
++Check 'outer-childscope-evaluation-cannot-clobber-live-safety-or-output-options' {
++  $calls=@($outerAst.FindAll({param($n)$n-is[Management.Automation.Language.CommandAst]-and$n.CommandElements.Count-ge1-and$n.CommandElements[0]-is[Management.Automation.Language.ScriptBlockExpressionAst]-and$n.Extent.Text.Contains('param($comparisonRepo,$capturedComparison)')-and$n.Extent.Text.Contains('Get-R19ReadComparisonEvaluation')},$true))
++  Require ($calls.Count-eq1) 'Outer must use exactly one isolated definitions-only evaluation call'
++  $actualCall=[scriptblock]::Create($calls[0].Extent.Text)
++  & {
++    param($Invocation,$FixtureRepo)
++    $repo=$FixtureRepo;$Execute=[switch]$true;$OutputDirectory='FIXTURE_OUTER_OUTPUT_MUST_SURVIVE';$Mode='ExplicitHostArm';$ReadComparisonMode='GroundPauseResume'
++    $AuxReadinessDiagnostics=[switch]$true;$DiagnosticUsbFailureDiagnostics=[switch]$true
++    $HilAuthorization='R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT'
++    $OperatorSafetyAttestation='PIXHAWK_DISARMED_PROPULSION_ISOLATED_ANTENNAS_CONNECTED_GND_3V3_CHECKED_PARAM_BACKUP_SAVED'
++    $RollbackAuthorization='RESTORE_ACCEPTED_R18_AFTER_R19_HIL'
++    $captureDocument=[pscustomobject]@{read_comparison=[pscustomobject]@{plan=(New-ComparisonPlan);evidence=(New-Observation)}}
++    $r=. $Invocation
++    Require ($r.valid-and$Execute.IsPresent-and$OutputDirectory-ceq'FIXTURE_OUTER_OUTPUT_MUST_SURVIVE'-and$Mode-ceq'ExplicitHostArm'-and$ReadComparisonMode-ceq'GroundPauseResume'-and$AuxReadinessDiagnostics.IsPresent-and$DiagnosticUsbFailureDiagnostics.IsPresent) 'Definitions import leaked capture defaults into outer execution scope'
++    Require ($HilAuthorization-ceq'R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT'-and$RollbackAuthorization-ceq'RESTORE_ACCEPTED_R18_AFTER_R19_HIL'-and$OperatorSafetyAttestation-ceq'PIXHAWK_DISARMED_PROPULSION_ISOLATED_ANTENNAS_CONNECTED_GND_3V3_CHECKED_PARAM_BACKUP_SAVED') 'Comparison import changed live safety/rollback tokens'
++  } $actualCall $RepoRoot
++}
++. (Join-Path $RepoRoot 'tools/r19_timed_path_outer.ps1')
++function New-MemoryPreparedPin {
++  [pscustomobject]@{schema='vc-lora-r19-timed-path-prepared-run-v1';mode='ExplicitHostArm';candidate_id='fixture-read-comparison';latest_sha256=('A'*64);latest_path='runs/candidates/R19-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/latest.json';capture_seconds=40;product_budget_ms=106;acceptance_authorized=$false;deployment_authorized=$false;live_authorization_granted=$false;aux_readiness_diagnostics=$true;diagnostic_usb_failure_diagnostics=$true;vehicle_runtime_stage_address='0x3fcad390';ground_runtime_stage_address='0x3fca49a8';usb_role_capabilities=(Get-R19UsbRoleCapabilities -RepoRoot $RepoRoot -Mode ExplicitHostArm -Enabled $true);tools=@(Get-R19TimedPathOuterToolPaths -AuxReadinessDiagnostics $true -DiagnosticUsbFailureDiagnostics $true|ForEach-Object{[pscustomobject]@{path=$_;sha256=('B'*64)}})}
++}
++Check 'prepared-pin-missing-comparison-option-retains-None-only' {
++  $pin=New-MemoryPreparedPin
++  $null=Assert-R19TimedPathPreparedContract -Pin $pin -Mode ExplicitHostArm -AuxReadinessDiagnostics $true -DiagnosticUsbFailureDiagnostics $true
++  $rejected=$false;try{$null=Assert-R19TimedPathPreparedContract -Pin $pin -Mode ExplicitHostArm -AuxReadinessDiagnostics $true -DiagnosticUsbFailureDiagnostics $true -ReadComparisonMode GroundPauseResume}catch{$rejected=$true}
++  Require $rejected 'An old prepared pin must not authorize a new intervention'
++}
++Check 'prepared-pin-explicit-comparison-binding-and-no-authority-widening' {
++  $pin=New-MemoryPreparedPin;$pin|Add-Member NoteProperty read_comparison_mode GroundPauseResume
++  $null=Assert-R19TimedPathPreparedContract -Pin $pin -Mode ExplicitHostArm -AuxReadinessDiagnostics $true -DiagnosticUsbFailureDiagnostics $true -ReadComparisonMode GroundPauseResume
++  foreach($bad in @('None-mode','unknown-mode','authority')){
++    $mutated=Clone $pin;$selected='GroundPauseResume'
++    if($bad-ceq'None-mode'){$selected='None'}elseif($bad-ceq'unknown-mode'){$mutated.read_comparison_mode='AnythingElse'}else{$mutated.live_authorization_granted=$true}
++    $rejected=$false;try{$null=Assert-R19TimedPathPreparedContract -Pin $mutated -Mode ExplicitHostArm -AuxReadinessDiagnostics $true -DiagnosticUsbFailureDiagnostics $true -ReadComparisonMode $selected}catch{$rejected=$true}
++    Require $rejected ('Prepared option/authority mismatch not rejected: '+$bad)
++  }
++}
++function New-MemoryPermit {
++  [pscustomobject]@{schema='vc-lora-r19-timed-path-execution-permit-v1';status='AUTHORIZED_SINGLE_CAPTURE';candidate_id='fixture-read-comparison';mode='ExplicitHostArm';safety_confirmed=$true;one_time=$true;restore_required=$true;handoff_sha256=('A'*64);flash_evidence_sha256=('B'*64);issued_utc='2026-10-23T00:00:00Z';expires_utc='2026-10-23T00:01:00Z';capture_seconds=40;ports=@(
++    [pscustomobject]@{role='vehicle';port='COM3';baud=115200;pnp_instance_id='FIXTURE-VEHICLE';usb_parent_instance_id='FIXTURE-PARENT-VEHICLE'},
++    [pscustomobject]@{role='ground';port='COM6';baud=57600;pnp_instance_id='FIXTURE-GROUND';usb_parent_instance_id='FIXTURE-PARENT-GROUND'})}
++}
++function Invoke-MemoryPermitCheck($Permit,[string]$Selection='None') {
++  Test-R19TimedPathExecutionPermit -Permit $Permit -Mode ExplicitHostArm -CandidateId fixture-read-comparison -HandoffSha256 ('A'*64) -FlashEvidenceSha256 ('B'*64) -NowUtc ([DateTime]::Parse('2026-10-23T00:00:30Z').ToUniversalTime()) -ReadComparisonMode $Selection
++}
++Check 'execution-permit-legacy-None-does-not-authorize-pause' {
++  $permit=New-MemoryPermit;$null=Invoke-MemoryPermitCheck $permit None
++  $rejected=$false;try{$null=Invoke-MemoryPermitCheck $permit GroundPauseResume}catch{$rejected=$true}
++  Require $rejected 'An old permit authorized a new pause intervention'
++}
++Check 'execution-permit-exact-new-mode-binding-is-required' {
++  $permit=New-MemoryPermit;$permit|Add-Member NoteProperty read_comparison_mode GroundPauseResume
++  $null=Invoke-MemoryPermitCheck $permit GroundPauseResume
++  $rejected=$false;try{$null=Invoke-MemoryPermitCheck $permit None}catch{$rejected=$true};Require $rejected 'New-mode permit reused for different capture option'
++  $permit.read_comparison_mode='AnythingElse';$rejected=$false;try{$null=Invoke-MemoryPermitCheck $permit GroundPauseResume}catch{$rejected=$true};Require $rejected 'Malformed permit mode accepted'
++}
++Check 'execution-permit-pause-never-relaxes-freshness-or-rollback' {
++  foreach($mutation in @('expired','restore-false')){
++    $permit=New-MemoryPermit;$permit|Add-Member NoteProperty read_comparison_mode GroundPauseResume
++    if($mutation-ceq'expired'){$permit.expires_utc='2026-10-23T00:00:20Z'}else{$permit.restore_required=$false}
++    $rejected=$false;try{$null=Invoke-MemoryPermitCheck $permit GroundPauseResume}catch{$rejected=$true};Require $rejected ('Mode widened authority: '+$mutation)
++  }
++}
++function New-MemoryCaptureState([string]$Role){
++  [pscustomobject]@{spec=[pscustomobject]@{role=$Role;port=$(if($Role-ceq'ground'){'COM6'}else{'COM3'});baud=$(if($Role-ceq'ground'){57600}else{115200})};reader_id=('fixture-'+$Role+'-owner');nonce='123';open_before_ticks='1';open_after_ticks='2';read_started_ticks='3';opened=$true;joined=$true;cleanup_close_fallback=$false
++    snapshot=[pscustomobject]@{ByteCount=0;Overflow=$false;Failure='';CleanupFailure='';Blocks=@()};raw=[byte[]]@();workflow=$null;workflow_failure='';writes=[Collections.Generic.List[object]]::new();observations=[Collections.Generic.List[object]]::new();product_observations=[Collections.Generic.List[object]]::new()}
++}
++function New-MemoryCaptureContext {
++  [pscustomobject]@{candidate_id='fixture-candidate';mode='ExplicitHostArm';capture_seconds=40;started_utc='2026-10-23T00:00:00Z';clock_domain_id='fixture-shared-qpc';frequency='10000000';measurement_start_ticks='10000000';measurement_end_ticks='410000000';cleanup_proven=$true;hardware_interaction=$false;serial_write_calls=0;failure='';identity_evidence=@();pinned_inputs=@();handoff_sha256=('A'*64);flash_evidence_sha256=('B'*64);repo_root=$RepoRoot}
++}
++Check 'real-snapshot-metadata-maps-lifecycle-pause-duration-and-unobserved-null' {
++  $nativeSource=[IO.File]::ReadAllText((Join-Path $RepoRoot 'tools/r19_continuous_reader.cs'))
++  $begin=$nativeSource.IndexOf('namespace VcLora.R19 {',[StringComparison]::Ordinal)
++  $end=$nativeSource.IndexOf('    public sealed class ContinuousReader {',[StringComparison]::Ordinal)
++  Require ($begin-ge0-and$end-gt$begin) 'Real immutable snapshot metadata not found'
++  $metadata=$nativeSource.Substring($begin,$end-$begin)+[Environment]::NewLine+'}'
++  Require ($metadata-notmatch'SerialPort|Thread|DllImport|Process|IStartupReadSource') 'Only inert C# metadata may be compiled'
++  Microsoft.PowerShell.Utility\Add-Type -TypeDefinition $metadata
++  $states=@(foreach($role in @('vehicle','ground')){
++    $s=New-MemoryCaptureState $role;$n=[VcLora.R19.ContinuousSnapshot]::new();$n.Failure='';$n.CleanupFailure='';$n.CloseAttempted=$true;$n.CloseCompleted=$true;$n.CloseFailure=''
++    $n.StopRequestedTicks=410000010;$n.WorkerStoppedTicks=410000020;$n.CloseStartTicks=410000030;$n.CloseEndTicks=410000040
++    $n.DiagnosticPauseRequestedTicks=-1;$n.DiagnosticPauseBeginTicks=-1;$n.DiagnosticPauseEndTicks=-1;$n.DiagnosticPauseResumedReadTicks=-1
++    $n.DiagnosticPauseBeginCalls=-1;$n.DiagnosticPauseEndCalls=-1;$n.DiagnosticPauseEndReason=''
++    if($role-ceq'ground'){$n.DiagnosticPauseRequestedTicks=210000000;$n.DiagnosticPauseBeginTicks=210000100;$n.DiagnosticPauseEndTicks=230000100;$n.DiagnosticPauseResumedReadTicks=230000200;$n.DiagnosticPauseBeginCalls=17;$n.DiagnosticPauseEndCalls=17;$n.DiagnosticPauseMilliseconds=2000;$n.DiagnosticPauseEndReason='Deadline'}
++    $s.snapshot=$n;$s
++  })
++  $e=Get-R19ReadComparisonEvidence -States $states -Context (New-MemoryCaptureContext);$g=$e.roles[1];$v=$e.roles[0]
++  Require ($g.pause.duration_ms-eq2000-and$g.pause.begin_calls-eq17-and$g.pause.end_calls-eq17-and$g.pause.resumed_read_ticks-ceq'230000200'-and$g.pause.end_reason-ceq'Deadline') 'Actual native DiagnosticPauseMilliseconds or pause witness was dropped during projection'
++  Require ($g.lifecycle.stop_requested_ticks-ceq'410000010'-and$g.lifecycle.worker_stopped_ticks-ceq'410000020'-and$g.lifecycle.close_start_ticks-ceq'410000030'-and$g.lifecycle.close_end_ticks-ceq'410000040'-and$g.lifecycle.close_attempted-and$g.lifecycle.close_completed-and$g.lifecycle.close_failure-ceq'') 'Actual native lifecycle ledger mapping changed'
++  Require ($null-eq$v.pause.requested_ticks-and$null-eq$v.pause.begin_ticks-and$null-eq$v.pause.end_ticks-and$null-eq$v.pause.resumed_read_ticks-and-not$v.pause.requested-and$v.reader_continuous-and-not$g.reader_continuous) 'Unobserved native ticks fabricated a timestamp or changed role continuity'
++  Require ((Get-Evaluation $e).valid) 'Real metadata projection cannot be validated'
++}
++Check 'legacy-persistence-without-comparison-ledger-stays-compatible' {
++  $directory=Join-Path $OutputDirectory 'persist-legacy';[void][IO.Directory]::CreateDirectory($directory)
++  $s=Save-R19TimedPathCaptureEvidence -States @((New-MemoryCaptureState vehicle),(New-MemoryCaptureState ground)) -OutputDirectory $directory -Context (New-MemoryCaptureContext)
++  Require ($s.result-ceq'CAPTURE_COMPLETE_OBSERVATIONS_ONLY'-and-not$s.acceptance_eligible-and-not$s.deployment_authorized-and-not$s.root_cause_proven) 'Legacy metadata became required or authority widened'
++}
++foreach($persistenceKind in @('missing-pause-end','close-failure')){
++  Check ('persistence-retains-'+$persistenceKind+'-without-losing-raw') {
++    $context=New-MemoryCaptureContext;$e=New-Observation
++    if($persistenceKind-ceq'missing-pause-end'){$e.roles[1].pause.end_ticks=$null}else{
++      $e.roles[1].lifecycle.close_completed=$false;$e.roles[1].lifecycle.close_failure='FIXTURE_CLOSE_FAILURE';$context.cleanup_proven=$false;$context.failure='FIXTURE_CLOSE_FAILURE'
++    }
++    $evaluation=Get-Evaluation $e
++    $context|Add-Member NoteProperty read_comparison ([pscustomobject]@{plan=(New-ComparisonPlan);evidence=$e;evaluation=$evaluation})
++    $directory=Join-Path $OutputDirectory ('persist-'+$persistenceKind);[void][IO.Directory]::CreateDirectory($directory)
++    $s=Save-R19TimedPathCaptureEvidence -States @((New-MemoryCaptureState vehicle),(New-MemoryCaptureState ground)) -OutputDirectory $directory -Context $context
++    $saved=[IO.File]::ReadAllText((Join-Path $directory 'summary.json'))|ConvertFrom-Json
++    Require ($saved.read_comparison.evaluation.result-ceq'INVALID_COMPARISON'-and-not$saved.read_comparison.evaluation.valid) 'Invalid comparison was lost or converted into success'
++    Require ([IO.File]::Exists((Join-Path $directory 'vehicle.raw.bin'))-and[IO.File]::Exists((Join-Path $directory 'ground.raw.bin'))) 'Comparison failure hid a raw role stream'
++    Require (-not(@($saved.roles|Where-Object{$_.role-ceq'ground'})[0].reader_continuous)) 'Paused Ground owner was mislabelled continuous'
++    Require (-not$saved.acceptance_eligible-and-not$saved.deployment_authorized-and-not$saved.root_cause_proven) 'Persistence widened authority'
++    if($persistenceKind-ceq'missing-pause-end'){
++      Require ($saved.result-ceq'CAPTURE_COMPLETE_OBSERVATIONS_ONLY'-and$null-eq$saved.read_comparison.evidence.roles[1].pause.end_ticks) 'Comparison-only invalidity corrupted raw capture or fabricated an end time'
++    }else{
++      Require ($saved.read_comparison.evidence.roles[1].lifecycle.close_failure-ceq'FIXTURE_CLOSE_FAILURE'-and-not$saved.cleanup_proven) 'Close failure ledger was discarded'
++    }
++  }
++}
++foreach($functionName in @('Assert-Condition','Get-Sha256','Read-JsonIfPresent','Get-CaptureDisposition')){
++  $definitions=@($outerAst.FindAll({param($n)$n-is[Management.Automation.Language.FunctionDefinitionAst]-and$n.Name-ceq$functionName},$true))
++  if($definitions.Count-ne1){throw 'Missing actual outer replay function: '+$functionName}
++  . ([scriptblock]::Create($definitions[0].Extent.Text))
++}
++function Invoke-ActualOuterDispositionFixture([string]$Name,[string]$Selection='GroundPauseResume',[bool]$GroundContinuous=$false,[bool]$VehicleContinuous=$true,[string]$Mutation=''){
++  # Only inert files/memory feed the REAL outer Get-CaptureDisposition AST.
++  # The fixture's hardware_interaction=true is declared input, never device IO.
++  $OutputDirectory=Join-Path $comparisonFixtureOutputDirectory ('actual-outer-'+$Name);[void][IO.Directory]::CreateDirectory($OutputDirectory)
++  $captureDirectory=Join-Path $OutputDirectory 'capture';[void][IO.Directory]::CreateDirectory($captureDirectory)
++  $utf8=[Text.UTF8Encoding]::new($false);$flashRecordPath=Join-Path $OutputDirectory 'flash.json';[IO.File]::WriteAllText($flashRecordPath,'{"synthetic_flash_evidence":true}',$utf8)
++  [IO.File]::WriteAllText((Join-Path $OutputDirectory 'execution-permit.json.consumed'),'SYNTHETIC_CONSUMED_MARKER',$utf8)
++  $candidate=[pscustomobject]@{artifact_id='fixture-candidate';handoff_sha256=('A'*64)}
++  $timedPathEnabled=$true;$TimedPathMode='ExplicitHostArm';$ReadComparisonMode=$Selection
++  $context=New-MemoryCaptureContext;$context.hardware_interaction=$true;$context.flash_evidence_sha256=Get-Sha256 $flashRecordPath
++  $plan=if($Selection-ceq'GroundPauseResume'){New-ComparisonPlan}else{Get-R19ReadComparisonPlan}
++  $observation=if($Selection-ceq'GroundPauseResume'){New-Observation}else{$null}
++  $context|Add-Member NoteProperty read_comparison ([pscustomobject]@{plan=$plan;evidence=$observation;evaluation=(Get-R19ReadComparisonEvaluation -Plan $plan -Evidence $observation)})
++  $states=@(foreach($role in @('vehicle','ground')){
++    $s=New-MemoryCaptureState $role;if($role-ceq'vehicle'){$s.raw=[byte[]]@(10,11,12)}else{$s.raw=[byte[]]@(253,1,2,3)}
++    $s.snapshot.ByteCount=$s.raw.Length;$s.snapshot.Blocks=@([pscustomobject]@{Offset=0;Count=$s.raw.Length;BeginTicks=100;EndTicks=110});$s
++  })
++  $summary=Save-R19TimedPathCaptureEvidence -States $states -OutputDirectory $captureDirectory -Context $context
++  Require ($summary.result-ceq'CAPTURE_COMPLETE_OBSERVATIONS_ONLY') 'Synthetic raw roundtrip did not pass production persistence'
++  @($summary.roles|Where-Object{$_.role-ceq'ground'})[0].reader_continuous=$GroundContinuous
++  @($summary.roles|Where-Object{$_.role-ceq'vehicle'})[0].reader_continuous=$VehicleContinuous
++  switch($Mutation){
++    'raw-sha'{[IO.File]::WriteAllBytes((Join-Path $captureDirectory 'ground.raw.bin'),[byte[]]@(253,1,2,4))}
++    'raw-byte-coverage'{@($summary.roles|Where-Object{$_.role-ceq'ground'})[0].raw_bytes=5}
++    'comparison-mode'{$summary.read_comparison.plan.mode='None'}
++    'nested-reader-id'{$summary.read_comparison.evidence.roles[1].reader_id='DIFFERENT_READER_OWNER'}
++    'nested-continuity'{$summary.read_comparison.evidence.roles[1].reader_continuous=$true}
++    'nested-clock-domain'{$summary.read_comparison.evidence.clock_domain_id='DIFFERENT_CLOCK_DOMAIN'}
++    'nested-frequency'{$summary.read_comparison.evidence.frequency='10000001'}
++    'nested-measurement-start'{$summary.read_comparison.evidence.measurement_start_ticks='10000001'}
++    'nested-measurement-end'{$summary.read_comparison.evidence.measurement_end_ticks='410000001'}
++    'missing-pause-end'{$summary.read_comparison.evidence.roles[1].pause.end_ticks=$null;$summary.read_comparison.evaluation=Get-R19ReadComparisonEvaluation -Plan $summary.read_comparison.plan -Evidence $summary.read_comparison.evidence}
++  }
++  [IO.File]::WriteAllText((Join-Path $captureDirectory 'summary.json'),($summary|ConvertTo-Json -Depth 50),$utf8)
++  $step=[pscustomobject]@{exit_code=0;timed_out=$false;termination_proven=$true;process_tree_termination_proven=$true}
++  $disposition=Get-CaptureDisposition $step
++  [IO.File]::WriteAllText((Join-Path $OutputDirectory 'disposition.json'),($disposition|ConvertTo-Json -Depth 30),$utf8)
++  $disposition
++}
++Check 'actual-outer-disposition-admits-requested-paused-Ground-with-exact-raw-roundtrip' {
++  $r=Invoke-ActualOuterDispositionFixture 'paused-ground'
++  Require ($r.acceptable-and$r.evidence_contract_proven) ('Actual outer blocked paused Ground before stage acquisition: '+($r.rejection_reasons-join';'))
++  $incomplete=Invoke-ActualOuterDispositionFixture 'incomplete-pause-still-acquires-stage' GroundPauseResume $false $true 'missing-pause-end'
++  Require ($incomplete.acceptable-and$incomplete.evidence_contract_proven) 'Comparison-only invalidity blocked stage acquisition despite intact raw/owner/clock evidence'
++}
++Check 'actual-outer-disposition-preserves-None-continuous-baseline' {
++  $r=Invoke-ActualOuterDispositionFixture 'none-continuous' None $true $true
++  Require ($r.acceptable-and$r.evidence_contract_proven) ('Actual outer legacy baseline rejected: '+($r.rejection_reasons-join';'))
++}
++Check 'actual-outer-disposition-rejects-wrong-reader-flags-or-corrupt-raw-coverage' {
++  foreach($case in @('Vehicle-false','None-Ground-false','Pause-Ground-true','raw-sha','raw-byte-coverage','comparison-mode')){
++    $selection='GroundPauseResume';$groundContinuous=$false;$vehicleContinuous=$true;$mutation=''
++    switch($case){'Vehicle-false'{$vehicleContinuous=$false};'None-Ground-false'{$selection='None'};'Pause-Ground-true'{$groundContinuous=$true};default{$mutation=$case}}
++    $r=Invoke-ActualOuterDispositionFixture ('reject-'+$case) $selection $groundContinuous $vehicleContinuous $mutation
++    Require (-not$r.acceptable-and-not$r.evidence_contract_proven-and@($r.rejection_reasons).Count-gt0) ('Actual outer admitted unsafe reader/raw binding: '+$case)
++  }
++}
++Check 'actual-outer-disposition-binds-nested-owner-and-clock-to-actual-capture' {
++  foreach($mutation in @('nested-reader-id','nested-continuity','nested-clock-domain','nested-frequency','nested-measurement-start','nested-measurement-end')){
++    $r=Invoke-ActualOuterDispositionFixture ('reject-'+$mutation) GroundPauseResume $false $true $mutation
++    Require (-not$r.acceptable-and-not$r.evidence_contract_proven-and@($r.rejection_reasons).Count-gt0) ('Actual outer admitted mismatched comparison/capture binding: '+$mutation)
++  }
++}
++$failed=@($results|Where-Object{-not$_.passed})
++$summary=[ordered]@{schema='vc-lora-r19-read-comparison-capture-contract-v1';result=$(if($failed.Count){'FAIL'}else{'PASS'});checks=$results.ToArray();passed_count=$results.Count-$failed.Count;failed_count=$failed.Count;hardware_interaction=$false;child_execute_calls=0;native_process_or_device_inspection=$false;capture_source_sha256=(Get-FileHash -LiteralPath $capturePath).Hash}
++[IO.File]::WriteAllText((Join-Path $OutputDirectory 'summary.json'),($summary|ConvertTo-Json -Depth 30),[Text.UTF8Encoding]::new($false))
++$summary|ConvertTo-Json -Depth 30
++if($failed.Count){exit 1}
+
+diff --git a/tools/run_r19_runtime_fail_diagnostic_hil.ps1 b/tools/run_r19_runtime_fail_diagnostic_hil.ps1
+--- a/tools/run_r19_runtime_fail_diagnostic_hil.ps1
++++ b/tools/run_r19_runtime_fail_diagnostic_hil.ps1
+@@ -28,2 +28,2 @@
+ $ExpectedContinuousReaderSha256 =
+-    '8DF5929114802926708BD42430CDCD7AF499B15B92EB7B7503BEF11C635B44F9'
++    'B9C22B9E74F32E09C1210F976363CF4513C66F3131780B96972BEC48B1F907EF'
+

@@ -1,0 +1,2418 @@
+-- Configuring done
+-- Generating done
+-- Build files have been written to: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+ninja: no work to do.
+Internal ctest changing into directory: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+Test project E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+        Start  38: check_r19_runtime_stage_cause_experiment_orchestrator_contract
+  1/398 Test  #38: check_r19_runtime_stage_cause_experiment_orchestrator_contract ...   Passed   97.27 sec
+        Start  32: R19-USB-EXTENDED-RECORDS-OFFLINE-CONTRACT-001
+  2/398 Test  #32: R19-USB-EXTENDED-RECORDS-OFFLINE-CONTRACT-001 ....................   Passed  114.40 sec
+        Start   1: R19-diagnostic_usb_failure_record-CONTRACT-001
+        Start  35: check_r19_first_usb_failure_record_contract
+        Start  29: R19-aux_readiness_outer-OFFLINE-001
+        Start   4: R19-diagnostic_usb_outer_raw-CONTRACT-001
+  3/398 Test  #35: check_r19_first_usb_failure_record_contract ......................   Passed   80.18 sec
+        Start  23: R19-timed_path_outer_raw-OFFLINE-001
+  4/398 Test   #1: R19-diagnostic_usb_failure_record-CONTRACT-001 ...................   Passed   81.84 sec
+        Start  27: R19-aux_readiness_artifact-OFFLINE-001
+  5/398 Test   #4: R19-diagnostic_usb_outer_raw-CONTRACT-001 ........................   Passed   94.26 sec
+        Start  39: check_r19_usb_clock_correlation_contract
+  6/398 Test  #29: R19-aux_readiness_outer-OFFLINE-001 ..............................   Passed  108.10 sec
+        Start  37: check_r19_first_usb_failure_outer_contract
+  7/398 Test  #27: R19-aux_readiness_artifact-OFFLINE-001 ...........................   Passed   32.62 sec
+        Start  17: R19-timed_path_trace-OFFLINE-001
+  8/398 Test  #23: R19-timed_path_outer_raw-OFFLINE-001 .............................   Passed   37.07 sec
+        Start  11: R19-STARTUP-READER-OFFLINE-INTEGRATION-001
+  9/398 Test  #11: R19-STARTUP-READER-OFFLINE-INTEGRATION-001 .......................   Passed   17.14 sec
+        Start  26: R19-aux_readiness_record-OFFLINE-001
+ 10/398 Test  #37: check_r19_first_usb_failure_outer_contract .......................   Passed   27.33 sec
+        Start  13: R19-continuous_reader_integration-OFFLINE-001
+ 11/398 Test  #17: R19-timed_path_trace-OFFLINE-001 .................................   Passed   28.71 sec
+        Start  21: R19-timed_path_artifact_contract-OFFLINE-001
+ 12/398 Test  #26: R19-aux_readiness_record-OFFLINE-001 .............................   Passed   10.25 sec
+        Start  15: R19-host_readiness_workflow-OFFLINE-001
+ 13/398 Test  #13: R19-continuous_reader_integration-OFFLINE-001 ....................   Passed   13.61 sec
+        Start  34: UT-R19-HWCDC-FLUSH-CALL-EVIDENCE-001
+ 14/398 Test  #39: check_r19_usb_clock_correlation_contract .........................   Passed   56.17 sec
+        Start  10: R19-STARTUP-READER-OFFLINE-CONTRACT-001
+ 15/398 Test  #21: R19-timed_path_artifact_contract-OFFLINE-001 .....................   Passed    7.56 sec
+        Start 368: ST-MAV-001
+ 16/398 Test  #34: UT-R19-HWCDC-FLUSH-CALL-EVIDENCE-001 .............................   Passed    3.55 sec
+        Start  20: R19-timed_path_capture_persistence-OFFLINE-001
+ 17/398 Test  #15: R19-host_readiness_workflow-OFFLINE-001 ..........................   Passed    8.29 sec
+        Start  18: R19-timed_path_acquisition-OFFLINE-001
+ 18/398 Test  #20: R19-timed_path_capture_persistence-OFFLINE-001 ...................***Failed    2.62 sec
+FAIL definition allow-listed command Get-R19ClockInteger
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_timed_path_capture_persistence.ps1:5 char:67
++ ... ondition,[string]$Name){if(-not$Condition){throw "FAIL $Name"};$scrip ...
++                                                ~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (FAIL definition...R19ClockInteger:String) [], RuntimeException
+    + FullyQualifiedErrorId : FAIL definition allow-listed command Get-R19ClockInteger
+ 
+
+        Start  40: check_r19_pc_lifecycle_trace_contract
+ 19/398 Test  #10: R19-STARTUP-READER-OFFLINE-CONTRACT-001 ..........................   Passed    5.66 sec
+        Start  19: R19-timed_path_capture_entrypoint-OFFLINE-001
+ 20/398 Test  #18: R19-timed_path_acquisition-OFFLINE-001 ...........................   Passed    6.01 sec
+        Start   2: R19-usb_role_contract-CONTRACT-001
+ 21/398 Test  #40: check_r19_pc_lifecycle_trace_contract ............................   Passed    6.05 sec
+        Start  12: R19-continuous_reader_contract-OFFLINE-001
+ 22/398 Test  #19: R19-timed_path_capture_entrypoint-OFFLINE-001 ....................   Passed    5.27 sec
+        Start  30: R19-aux_readiness_capture_routing-OFFLINE-001
+ 23/398 Test   #2: R19-usb_role_contract-CONTRACT-001 ...............................   Passed    3.93 sec
+        Start  16: R19-startup_boundary_evaluation-OFFLINE-001
+ 24/398 Test  #12: R19-continuous_reader_contract-OFFLINE-001 .......................   Passed    3.83 sec
+        Start 369: ST-MAV-PHASE-001
+ 25/398 Test  #30: R19-aux_readiness_capture_routing-OFFLINE-001 ....................***Failed    5.32 sec
+{
+    "schema":  "vc-lora-r19-aux-readiness-capture-routing-offline-v1",
+    "result":  "FAIL",
+    "powershell":  "5.1.26100.9711",
+    "hardware_interaction":  false,
+    "com_open_attempts":  0,
+    "native_process_calls":  0,
+    "permit_consumed":  false,
+    "passed_count":  12,
+    "failed_count":  6,
+    "checks":  [
+                   {
+                       "name":  "offline-safety-rejects-guard-command-before-execution",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "offline-safety-rejects-guard-native-member-before-execution",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "offline-safety-rejects-fixed-native-engine-before-execution",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "offline-safety-rejects-engine-reassignment-before-execution",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "runner-declares-explicit-switch",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "runner-rejects-incompatible-mode-before-live-io",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "outer-actual-argv-SyncOnly-aux-False",
+                       "passed":  false,
+                       "error":  "The variable \u0027$ReadComparisonMode\u0027 cannot be retrieved because it has not been set."
+                   },
+                   {
+                       "name":  "capture-actual-verifier-argv-SyncOnly-aux-False",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "whole-actual-argv-route-SyncOnly-aux-False",
+                       "passed":  false,
+                       "error":  "The variable \u0027$ReadComparisonMode\u0027 cannot be retrieved because it has not been set."
+                   },
+                   {
+                       "name":  "outer-actual-argv-ExplicitHostArm-aux-False",
+                       "passed":  false,
+                       "error":  "The variable \u0027$ReadComparisonMode\u0027 cannot be retrieved because it has not been set."
+                   },
+                   {
+                       "name":  "capture-actual-verifier-argv-ExplicitHostArm-aux-False",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "whole-actual-argv-route-ExplicitHostArm-aux-False",
+                       "passed":  false,
+                       "error":  "The variable \u0027$ReadComparisonMode\u0027 cannot be retrieved because it has not been set."
+                   },
+                   {
+                       "name":  "outer-actual-argv-ExplicitHostArm-aux-True",
+                       "passed":  false,
+                       "error":  "The variable \u0027$ReadComparisonMode\u0027 cannot be retrieved because it has not been set."
+                   },
+                   {
+                       "name":  "capture-actual-verifier-argv-ExplicitHostArm-aux-True",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "whole-actual-argv-route-ExplicitHostArm-aux-True",
+                       "passed":  false,
+                       "error":  "The variable \u0027$ReadComparisonMode\u0027 cannot be retrieved because it has not been set."
+                   },
+                   {
+                       "name":  "real-verifier-rejects-aux-flag-removal",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "real-verifier-rejects-silent-aux-promotion",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "offline-slices-did-not-create-live-output-or-permit",
+                       "passed":  true,
+                       "error":  ""
+                   }
+               ],
+    "observations":  [
+                         {
+                             "boundary":  "capture-to-verifier",
+                             "mode":  "SyncOnly",
+                             "aux":  false,
+                             "argv":  [
+                                          "-NoProfile",
+                                          "-NonInteractive",
+                                          "-ExecutionPolicy",
+                                          "Bypass",
+                                          "-File",
+                                          "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tools\\verify_r19_candidate_artifact.ps1",
+                                          "-RepoRoot",
+                                          "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge",
+                                          "-HandoffPath",
+                                          "offline-route-handoff.json",
+                                          "-RuntimeFailDiagnostics",
+                                          "-TimedPathMode",
+                                          "SyncOnly"
+                                      ]
+                         },
+                         {
+                             "boundary":  "capture-to-verifier",
+                             "mode":  "ExplicitHostArm",
+                             "aux":  false,
+                             "argv":  [
+                                          "-NoProfile",
+                                          "-NonInteractive",
+                                          "-ExecutionPolicy",
+                                          "Bypass",
+                                          "-File",
+                                          "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tools\\verify_r19_candidate_artifact.ps1",
+                                          "-RepoRoot",
+                                          "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge",
+                                          "-HandoffPath",
+                                          "offline-route-handoff.json",
+                                          "-RuntimeFailDiagnostics",
+                                          "-TimedPathMode",
+                                          "ExplicitHostArm"
+                                      ]
+                         },
+                         {
+                             "boundary":  "capture-to-verifier",
+                             "mode":  "ExplicitHostArm",
+                             "aux":  true,
+                             "argv":  [
+                                          "-NoProfile",
+                                          "-NonInteractive",
+                                          "-ExecutionPolicy",
+                                          "Bypass",
+                                          "-File",
+                                          "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tools\\verify_r19_candidate_artifact.ps1",
+                                          "-RepoRoot",
+                                          "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge",
+                                          "-HandoffPath",
+                                          "offline-route-handoff.json",
+                                          "-RuntimeFailDiagnostics",
+                                          "-TimedPathMode",
+                                          "ExplicitHostArm",
+                                          "-AuxReadinessDiagnostics"
+                                      ]
+                         }
+                     ],
+    "scope":  "Actual AST-extracted argument construction and verifier mode assertion; does not claim a full sealed candidate or live communication acceptance."
+}
+
+        Start  14: R19-host_readiness_wire-OFFLINE-001
+ 26/398 Test  #16: R19-startup_boundary_evaluation-OFFLINE-001 ......................   Passed    4.13 sec
+        Start  28: R19-aux_readiness_bridge-OFFLINE-001
+ 27/398 Test  #28: R19-aux_readiness_bridge-OFFLINE-001 .............................   Passed    1.35 sec
+        Start   3: R19-diagnostic_usb_outer_contract-CONTRACT-001
+ 28/398 Test  #14: R19-host_readiness_wire-OFFLINE-001 ..............................   Passed    2.35 sec
+        Start  22: R19-timed_path_outer-OFFLINE-001
+ 29/398 Test   #3: R19-diagnostic_usb_outer_contract-CONTRACT-001 ...................   Passed    2.11 sec
+        Start 392: ST-001
+ 30/398 Test  #22: R19-timed_path_outer-OFFLINE-001 .................................   Passed    2.12 sec
+        Start  36: check_r19_first_failure_packaging_contract
+ 31/398 Test  #36: check_r19_first_failure_packaging_contract .......................   Passed    1.31 sec
+        Start  41: R19-AUX-READINESS-RECORD-UNIT-001
+ 32/398 Test  #41: R19-AUX-READINESS-RECORD-UNIT-001 ................................   Passed    0.29 sec
+        Start 393: ST-002
+ 33/398 Test #393: ST-002 ...........................................................   Passed    2.31 sec
+        Start 394: ST-003
+ 34/398 Test #368: ST-MAV-001 .......................................................   Passed   26.41 sec
+        Start 120: IT-R19-GROUND-PRODUCT-LOOP-COLD-BOOT-001
+ 35/398 Test #120: IT-R19-GROUND-PRODUCT-LOOP-COLD-BOOT-001 .........................   Passed    0.86 sec
+        Start 115: IT-R19-VEHICLE-RUNTIME-FAIL-RECOVERY-EPOCH-001
+ 36/398 Test #394: ST-003 ...........................................................   Passed    3.34 sec
+        Start 118: IT-R19-GROUND-RUNTIME-FAIL-RECOVERY-TARGET-001
+ 37/398 Test #115: IT-R19-VEHICLE-RUNTIME-FAIL-RECOVERY-EPOCH-001 ...................   Passed    0.89 sec
+        Start  94: IT-R19-GROUND-USB-COMMIT-LATCH-endpoint-001
+ 38/398 Test #118: IT-R19-GROUND-RUNTIME-FAIL-RECOVERY-TARGET-001 ...................   Passed    0.85 sec
+        Start 103: IT-R19-GROUND-RUNTIME-ALIVE-STARVATION-001
+ 39/398 Test  #94: IT-R19-GROUND-USB-COMMIT-LATCH-endpoint-001 ......................   Passed    0.91 sec
+        Start 121: IT-R19-VEHICLE-PRODUCT-LOOP-COLD-BOOT-001
+ 40/398 Test #103: IT-R19-GROUND-RUNTIME-ALIVE-STARVATION-001 .......................   Passed    0.95 sec
+        Start 391: IT-BUF-006
+ 41/398 Test #121: IT-R19-VEHICLE-PRODUCT-LOOP-COLD-BOOT-001 ........................   Passed    0.50 sec
+        Start 111: IT-R19-VEHICLE-RUNTIME-FAIL-STAGED-ZERO-001
+ 42/398 Test #111: IT-R19-VEHICLE-RUNTIME-FAIL-STAGED-ZERO-001 ......................   Passed    0.46 sec
+        Start 396: ST-005
+ 43/398 Test #391: IT-BUF-006 .......................................................   Passed    2.14 sec
+        Start 395: ST-004
+ 44/398 Test #396: ST-005 ...........................................................   Passed    1.77 sec
+        Start  31: R19-HOST-READINESS-INTEGRATION-OFFLINE-001
+ 45/398 Test #395: ST-004 ...........................................................   Passed    2.23 sec
+        Start 112: IT-R19-VEHICLE-RUNTIME-FAIL-STAGED-PARTIAL-001
+ 46/398 Test #369: ST-MAV-PHASE-001 .................................................   Passed   20.24 sec
+        Start 102: IT-R19-GROUND-RUNTIME-ALIVE-DIAGNOSTIC-001
+ 47/398 Test #112: IT-R19-VEHICLE-RUNTIME-FAIL-STAGED-PARTIAL-001 ...................   Passed    0.98 sec
+        Start  60: UT-R19-GROUND-USB-COMMIT-SOURCE-001
+ 48/398 Test #102: IT-R19-GROUND-RUNTIME-ALIVE-DIAGNOSTIC-001 .......................   Passed    0.71 sec
+        Start 130: FW-E220-STARTUP-001
+ 49/398 Test #392: ST-001 ...........................................................   Passed   15.57 sec
+        Start 110: IT-R19-GROUND-RUNTIME-FAIL-PENDING-ALIVE-001
+ 50/398 Test  #60: UT-R19-GROUND-USB-COMMIT-SOURCE-001 ..............................   Passed    0.76 sec
+        Start  72: IT-R19-ground-DIAGNOSTIC-USB-FAILURE-deadline-001
+ 51/398 Test #110: IT-R19-GROUND-RUNTIME-FAIL-PENDING-ALIVE-001 .....................   Passed    0.90 sec
+        Start 305: IT-E220-BUFFERED-VEHICLE-PARAM-PRIORITY-001
+ 52/398 Test  #31: R19-HOST-READINESS-INTEGRATION-OFFLINE-001 .......................   Passed    4.38 sec
+        Start  43: UT-R19-TIMED-PATH-RECORD-001
+ 53/398 Test  #72: IT-R19-ground-DIAGNOSTIC-USB-FAILURE-deadline-001 ................   Passed    0.83 sec
+        Start 390: IT-BUF-005
+ 54/398 Test #130: FW-E220-STARTUP-001 ..............................................   Passed    1.40 sec
+        Start 398: UT-E220-CONTINUOUS-AUX-CREDIT-001
+ 55/398 Test  #43: UT-R19-TIMED-PATH-RECORD-001 .....................................   Passed    0.66 sec
+        Start 105: IT-R19-VEHICLE-RUNTIME-ALIVE-DIAGNOSTIC-001
+ 56/398 Test #398: UT-E220-CONTINUOUS-AUX-CREDIT-001 ................................   Passed    0.37 sec
+        Start 108: IT-R19-GROUND-RUNTIME-FAIL-BOUNDARY-LOSS-001
+ 57/398 Test #305: IT-E220-BUFFERED-VEHICLE-PARAM-PRIORITY-001 ......................   Passed    1.26 sec
+        Start 233: UT-HS-TDD-COORD-007
+ 58/398 Test #105: IT-R19-VEHICLE-RUNTIME-ALIVE-DIAGNOSTIC-001 ......................   Passed    0.56 sec
+        Start 106: IT-R19-VEHICLE-RUNTIME-ALIVE-READ-ONLY-BOOTSTRAP-001
+ 59/398 Test #108: IT-R19-GROUND-RUNTIME-FAIL-BOUNDARY-LOSS-001 .....................   Passed    0.56 sec
+        Start  54: UT-R19-RUNTIME-FAIL-DIAGNOSTIC-001
+ 60/398 Test #233: UT-HS-TDD-COORD-007 ..............................................   Passed    0.23 sec
+        Start  58: UT-R19-RUNTIME-STAGE-RECORD-001
+ 61/398 Test #106: IT-R19-VEHICLE-RUNTIME-ALIVE-READ-ONLY-BOOTSTRAP-001 .............   Passed    0.43 sec
+        Start 100: IT-R19-GROUND-RUNTIME-FAIL-DIAGNOSTIC-001
+ 62/398 Test #390: IT-BUF-005 .......................................................   Passed    1.79 sec
+        Start 261: IT-HS-ROUTE-E2E-001
+ 63/398 Test  #54: UT-R19-RUNTIME-FAIL-DIAGNOSTIC-001 ...............................   Passed    0.80 sec
+        Start 257: UT-HS-BULK-RX-TAIL-LEDGER-001
+ 64/398 Test  #58: UT-R19-RUNTIME-STAGE-RECORD-001 ..................................   Passed    0.74 sec
+        Start 101: IT-R19-VEHICLE-RUNTIME-FAIL-DIAGNOSTIC-001
+ 65/398 Test #100: IT-R19-GROUND-RUNTIME-FAIL-DIAGNOSTIC-001 ........................   Passed    0.61 sec
+        Start  86: IT-R19-GROUND-AUX-INDEPENDENCE-notready-001
+ 66/398 Test #261: IT-HS-ROUTE-E2E-001 ..............................................   Passed    0.27 sec
+        Start 370: IT-TDD-001
+ 67/398 Test #101: IT-R19-VEHICLE-RUNTIME-FAIL-DIAGNOSTIC-001 .......................   Passed    0.21 sec
+        Start  57: UT-R19-HWCDC-TASK-PRIME-001
+ 68/398 Test #257: UT-HS-BULK-RX-TAIL-LEDGER-001 ....................................   Passed    0.31 sec
+        Start 109: IT-R19-GROUND-RUNTIME-FAIL-DEADLINE-001
+ 69/398 Test  #86: IT-R19-GROUND-AUX-INDEPENDENCE-notready-001 ......................   Passed    0.56 sec
+        Start  83: IT-R19-GROUND-AUX-INDEPENDENCE-expiry-001
+ 70/398 Test  #57: UT-R19-HWCDC-TASK-PRIME-001 ......................................   Passed    0.47 sec
+        Start  59: UT-R19-GROUND-USB-COMMIT-RECORD-001
+ 71/398 Test  #83: IT-R19-GROUND-AUX-INDEPENDENCE-expiry-001 ........................   Passed    0.12 sec
+        Start 231: UT-HS-TDD-COORD-005
+ 72/398 Test #109: IT-R19-GROUND-RUNTIME-FAIL-DEADLINE-001 ..........................   Passed    0.57 sec
+        Start 185: IT-BULK-RX-REARM-001
+ 73/398 Test  #59: UT-R19-GROUND-USB-COMMIT-RECORD-001 ..............................   Passed    0.17 sec
+        Start 116: IT-R19-VEHICLE-RUNTIME-FAIL-RECOVERY-EXPIRY-001
+ 74/398 Test #116: IT-R19-VEHICLE-RUNTIME-FAIL-RECOVERY-EXPIRY-001 ..................   Passed    0.04 sec
+        Start 113: IT-R19-VEHICLE-RUNTIME-FAIL-PARTIAL-DEADLINE-001
+ 75/398 Test #370: IT-TDD-001 .......................................................   Passed    1.12 sec
+        Start  85: IT-R19-GROUND-AUX-INDEPENDENCE-runtime-001
+ 76/398 Test #231: UT-HS-TDD-COORD-005 ..............................................   Passed    0.53 sec
+        Start  53: UT-R19-DIAGNOSTIC-USB-FAILURE-RECORD-001
+ 77/398 Test #185: IT-BULK-RX-REARM-001 .............................................   Passed    0.52 sec
+        Start 260: UT-HS-PRODUCT-ROUTE-SOURCE-001
+ 78/398 Test #113: IT-R19-VEHICLE-RUNTIME-FAIL-PARTIAL-DEADLINE-001 .................   Passed    0.46 sec
+        Start 114: IT-R19-VEHICLE-RUNTIME-FAIL-FLUSH-DEADLINE-001
+ 79/398 Test  #85: IT-R19-GROUND-AUX-INDEPENDENCE-runtime-001 .......................   Passed    0.45 sec
+        Start 186: IT-BULK-DEMUX-DECODER-001
+ 80/398 Test  #53: UT-R19-DIAGNOSTIC-USB-FAILURE-RECORD-001 .........................   Passed    0.45 sec
+        Start 397: ST-006
+ 81/398 Test #260: UT-HS-PRODUCT-ROUTE-SOURCE-001 ...................................   Passed    0.45 sec
+        Start  47: IT-R19-TIMED-PATH-MODE-2-timeout-001
+ 82/398 Test #114: IT-R19-VEHICLE-RUNTIME-FAIL-FLUSH-DEADLINE-001 ...................   Passed    0.80 sec
+        Start  62: IT-R19-VEHICLE-USB-CLOCK-basic-001
+ 83/398 Test #186: IT-BULK-DEMUX-DECODER-001 ........................................   Passed    0.81 sec
+        Start  68: IT-R19-VEHICLE-USB-CLOCK-runtime_failed-001
+ 84/398 Test  #47: IT-R19-TIMED-PATH-MODE-2-timeout-001 .............................   Passed    0.77 sec
+        Start  61: UT-R19-HWCDC-FIFO-DIAGNOSTIC-RECORD-001
+ 85/398 Test #397: ST-006 ...........................................................   Passed    0.85 sec
+        Start  98: IT-R19-GROUND-USB-COMMIT-LATCH-postflush_retired-001
+ 86/398 Test  #68: IT-R19-VEHICLE-USB-CLOCK-runtime_failed-001 ......................   Passed    0.10 sec
+        Start  99: IT-R19-GROUND-USB-COMMIT-LATCH-success-001
+ 87/398 Test  #62: IT-R19-VEHICLE-USB-CLOCK-basic-001 ...............................   Passed    0.52 sec
+        Start 107: IT-R19-GROUND-RUNTIME-ALIVE-READ-ONLY-BOOTSTRAP-001
+ 88/398 Test  #61: UT-R19-HWCDC-FIFO-DIAGNOSTIC-RECORD-001 ..........................   Passed    0.54 sec
+        Start 235: UT-HS-PHASE6-ADAPTER-001
+ 89/398 Test  #98: IT-R19-GROUND-USB-COMMIT-LATCH-postflush_retired-001 .............   Passed    0.54 sec
+        Start 211: UT-BULK-TRANSCRIPT-003
+ 90/398 Test  #99: IT-R19-GROUND-USB-COMMIT-LATCH-success-001 .......................   Passed    0.53 sec
+        Start 259: UT-HS-PRODUCT-WRITER-SOURCE-001
+ 91/398 Test #107: IT-R19-GROUND-RUNTIME-ALIVE-READ-ONLY-BOOTSTRAP-001 ..............   Passed    0.51 sec
+        Start 238: UT-HS-PHASE6-ADAPTER-004
+ 92/398 Test #235: UT-HS-PHASE6-ADAPTER-001 .........................................   Passed    0.14 sec
+        Start 255: UT-HS-VCRC-AUX-NOT-PROOF-001
+ 93/398 Test #211: UT-BULK-TRANSCRIPT-003 ...........................................   Passed    0.14 sec
+        Start 104: IT-R19-GROUND-RUNTIME-ALIVE-BACKPRESSURE-001
+ 94/398 Test #259: UT-HS-PRODUCT-WRITER-SOURCE-001 ..................................   Passed    0.50 sec
+        Start 239: UT-HS-PHASE6-ADAPTER-005
+ 95/398 Test #255: UT-HS-VCRC-AUX-NOT-PROOF-001 .....................................   Passed    0.45 sec
+        Start  81: IT-R19-vehicle-DIAGNOSTIC-USB-FAILURE-bootstrap_epoch-001
+ 96/398 Test #238: UT-HS-PHASE6-ADAPTER-004 .........................................   Passed    0.58 sec
+        Start 242: UT-HS-RADIO-WRITER-001
+ 97/398 Test #104: IT-R19-GROUND-RUNTIME-ALIVE-BACKPRESSURE-001 .....................   Passed    0.53 sec
+        Start 209: UT-BULK-TRANSCRIPT-001
+ 98/398 Test #239: UT-HS-PHASE6-ADAPTER-005 .........................................   Passed    0.18 sec
+        Start 210: UT-BULK-TRANSCRIPT-002
+ 99/398 Test  #81: IT-R19-vehicle-DIAGNOSTIC-USB-FAILURE-bootstrap_epoch-001 ........   Passed    0.17 sec
+        Start 248: UT-HS-RADIO-SESSION-003
+100/398 Test #242: UT-HS-RADIO-WRITER-001 ...........................................   Passed    0.13 sec
+        Start  44: IT-R19-TIMED-PATH-MODE-1-timeout-001
+101/398 Test #209: UT-BULK-TRANSCRIPT-001 ...........................................   Passed    0.45 sec
+        Start 117: IT-R19-GROUND-RUNTIME-FAIL-RECOVERY-EPOCH-001
+102/398 Test #210: UT-BULK-TRANSCRIPT-002 ...........................................   Passed    0.45 sec
+        Start 152: UT-CONTROL-V2-VCRC-DEMUX-001
+103/398 Test #248: UT-HS-RADIO-SESSION-003 ..........................................   Passed    0.45 sec
+        Start  93: IT-R19-GROUND-USB-COMMIT-LATCH-transport-001
+104/398 Test  #44: IT-R19-TIMED-PATH-MODE-1-timeout-001 .............................   Passed    0.45 sec
+        Start 245: UT-HS-RADIO-WRITER-004
+105/398 Test #117: IT-R19-GROUND-RUNTIME-FAIL-RECOVERY-EPOCH-001 ....................   Passed    0.13 sec
+        Start 177: UT-BULK-WIRE-002
+106/398 Test #152: UT-CONTROL-V2-VCRC-DEMUX-001 .....................................   Passed    0.13 sec
+        Start 230: UT-HS-TDD-COORD-004
+107/398 Test  #93: IT-R19-GROUND-USB-COMMIT-LATCH-transport-001 .....................   Passed    0.13 sec
+        Start 187: IT-BULK-WIRE-PARAM-932-001
+108/398 Test #245: UT-HS-RADIO-WRITER-004 ...........................................   Passed    0.13 sec
+        Start 249: UT-PEER-COMPLETION-WIRE-001
+109/398 Test #177: UT-BULK-WIRE-002 .................................................   Passed    0.13 sec
+        Start 226: UT-BULK-SESSION-005
+110/398 Test #230: UT-HS-TDD-COORD-004 ..............................................   Passed    0.13 sec
+        Start  82: IT-R19-GROUND-AUX-INDEPENDENCE-hold-001
+111/398 Test #249: UT-PEER-COMPLETION-WIRE-001 ......................................   Passed    0.09 sec
+        Start  97: IT-R19-GROUND-USB-COMMIT-LATCH-retired-001
+112/398 Test #187: IT-BULK-WIRE-PARAM-932-001 .......................................   Passed    0.17 sec
+        Start  76: IT-R19-ground-DIAGNOSTIC-USB-FAILURE-bootstrap_epoch-001
+113/398 Test #226: UT-BULK-SESSION-005 ..............................................   Passed    0.12 sec
+        Start 119: IT-R19-GROUND-RUNTIME-FAIL-RECOVERY-EXPIRY-001
+114/398 Test  #82: IT-R19-GROUND-AUX-INDEPENDENCE-hold-001 ..........................   Passed    0.12 sec
+        Start 251: UT-PEER-COMPLETION-LEDGER-001
+115/398 Test  #97: IT-R19-GROUND-USB-COMMIT-LATCH-retired-001 .......................   Passed    0.11 sec
+        Start 246: UT-HS-RADIO-SESSION-001
+116/398 Test  #76: IT-R19-ground-DIAGNOSTIC-USB-FAILURE-bootstrap_epoch-001 .........   Passed    0.12 sec
+        Start 236: UT-HS-PHASE6-ADAPTER-002
+117/398 Test #119: IT-R19-GROUND-RUNTIME-FAIL-RECOVERY-EXPIRY-001 ...................   Passed    0.12 sec
+        Start 205: UT-BULK-HB-SLA-002
+118/398 Test #251: UT-PEER-COMPLETION-LEDGER-001 ....................................   Passed    0.12 sec
+        Start  80: IT-R19-vehicle-DIAGNOSTIC-USB-FAILURE-unknown_sdk-001
+119/398 Test #246: UT-HS-RADIO-SESSION-001 ..........................................   Passed    0.13 sec
+        Start 252: UT-PEER-COMPLETION-LEDGER-002
+120/398 Test #236: UT-HS-PHASE6-ADAPTER-002 .........................................   Passed    0.13 sec
+        Start 212: UT-BULK-TRANSCRIPT-004
+121/398 Test #205: UT-BULK-HB-SLA-002 ...............................................   Passed    0.13 sec
+        Start 204: UT-BULK-HB-SLA-001
+122/398 Test  #80: IT-R19-vehicle-DIAGNOSTIC-USB-FAILURE-unknown_sdk-001 ............   Passed    0.14 sec
+        Start  74: IT-R19-ground-DIAGNOSTIC-USB-FAILURE-epoch-001
+123/398 Test #252: UT-PEER-COMPLETION-LEDGER-002 ....................................   Passed    0.14 sec
+        Start 208: UT-BULK-HB-SLA-005
+124/398 Test #212: UT-BULK-TRANSCRIPT-004 ...........................................   Passed    0.14 sec
+        Start 214: UT-BULK-TRANSCRIPT-006
+125/398 Test #204: UT-BULK-HB-SLA-001 ...............................................   Passed    0.13 sec
+        Start  75: IT-R19-ground-DIAGNOSTIC-USB-FAILURE-unknown_sdk-001
+126/398 Test  #74: IT-R19-ground-DIAGNOSTIC-USB-FAILURE-epoch-001 ...................   Passed    0.13 sec
+        Start 203: UT-BULK-HB-POLICY-006
+127/398 Test #208: UT-BULK-HB-SLA-005 ...............................................   Passed    0.12 sec
+        Start  96: IT-R19-GROUND-USB-COMMIT-LATCH-deadline-001
+128/398 Test  #75: IT-R19-ground-DIAGNOSTIC-USB-FAILURE-unknown_sdk-001 .............   Passed    0.09 sec
+        Start  77: IT-R19-vehicle-DIAGNOSTIC-USB-FAILURE-deadline-001
+129/398 Test #214: UT-BULK-TRANSCRIPT-006 ...........................................   Passed    0.16 sec
+        Start 247: UT-HS-RADIO-SESSION-002
+130/398 Test #203: UT-BULK-HB-POLICY-006 ............................................   Passed    0.12 sec
+        Start  56: UT-R19-HWCDC-LL-BOOTSTRAP-001
+131/398 Test  #96: IT-R19-GROUND-USB-COMMIT-LATCH-deadline-001 ......................   Passed    0.12 sec
+        Start 227: UT-HS-TDD-COORD-001
+132/398 Test  #77: IT-R19-vehicle-DIAGNOSTIC-USB-FAILURE-deadline-001 ...............   Passed    0.12 sec
+        Start 217: UT-BULK-NEG-WIRE-001
+133/398 Test #247: UT-HS-RADIO-SESSION-002 ..........................................   Passed    0.12 sec
+        Start 216: UT-BULK-TRANSCRIPT-008
+134/398 Test  #56: UT-R19-HWCDC-LL-BOOTSTRAP-001 ....................................   Passed    0.12 sec
+        Start 202: UT-BULK-HB-POLICY-005
+135/398 Test #227: UT-HS-TDD-COORD-001 ..............................................   Passed    0.12 sec
+        Start 151: UT-CONTROL-V2-VCBN-DEMUX-001
+136/398 Test #217: UT-BULK-NEG-WIRE-001 .............................................   Passed    0.13 sec
+        Start 223: UT-BULK-SESSION-002
+137/398 Test #216: UT-BULK-TRANSCRIPT-008 ...........................................   Passed    0.12 sec
+        Start 320: IT-GROUND-USB-HB-PHASE6-FLUSH-ISOLATION-001
+138/398 Test #202: UT-BULK-HB-POLICY-005 ............................................   Passed    0.13 sec
+        Start 228: UT-HS-TDD-COORD-002
+139/398 Test #151: UT-CONTROL-V2-VCBN-DEMUX-001 .....................................   Passed    0.13 sec
+        Start 265: UT-BULK-TX-LEASE-012
+140/398 Test #223: UT-BULK-SESSION-002 ..............................................   Passed    0.13 sec
+        Start 229: UT-HS-TDD-COORD-003
+141/398 Test #228: UT-HS-TDD-COORD-002 ..............................................   Passed    0.09 sec
+        Start 232: UT-HS-TDD-COORD-006
+142/398 Test #320: IT-GROUND-USB-HB-PHASE6-FLUSH-ISOLATION-001 ......................   Passed    0.16 sec
+        Start  79: IT-R19-vehicle-DIAGNOSTIC-USB-FAILURE-epoch-001
+143/398 Test #265: UT-BULK-TX-LEASE-012 .............................................   Passed    0.12 sec
+        Start 219: UT-BULK-NEG-WIRE-003
+144/398 Test #229: UT-HS-TDD-COORD-003 ..............................................   Passed    0.12 sec
+        Start 199: UT-BULK-HB-POLICY-002
+145/398 Test #232: UT-HS-TDD-COORD-006 ..............................................   Passed    0.12 sec
+        Start 263: UT-BULK-TX-LEASE-010
+146/398 Test  #79: IT-R19-vehicle-DIAGNOSTIC-USB-FAILURE-epoch-001 ..................   Passed    0.12 sec
+        Start 256: UT-HS-VCRC-MISSING-TIMEOUT-001
+147/398 Test #219: UT-BULK-NEG-WIRE-003 .............................................   Passed    0.12 sec
+        Start 225: UT-BULK-SESSION-004
+148/398 Test #199: UT-BULK-HB-POLICY-002 ............................................   Passed    0.12 sec
+        Start 215: UT-BULK-TRANSCRIPT-007
+149/398 Test #263: UT-BULK-TX-LEASE-010 .............................................   Passed    0.13 sec
+        Start 254: UT-HS-PEER-COMPLETION-001
+150/398 Test #256: UT-HS-VCRC-MISSING-TIMEOUT-001 ...................................   Passed    0.13 sec
+        Start 213: UT-BULK-TRANSCRIPT-005
+151/398 Test #225: UT-BULK-SESSION-004 ..............................................   Passed    0.13 sec
+        Start 262: IT-HS-CANDIDATE-STANDARD-001
+152/398 Test #215: UT-BULK-TRANSCRIPT-007 ...........................................   Passed    0.13 sec
+        Start 258: UT-HS-ROLE-CONFIG-001
+153/398 Test #254: UT-HS-PEER-COMPLETION-001 ........................................   Passed    0.13 sec
+        Start 237: UT-HS-PHASE6-ADAPTER-003
+154/398 Test #213: UT-BULK-TRANSCRIPT-005 ...........................................   Passed    0.12 sec
+        Start 362: E2E-MAV-005
+155/398 Test #262: IT-HS-CANDIDATE-STANDARD-001 .....................................   Passed    0.12 sec
+        Start 220: UT-BULK-NEG-WIRE-004
+156/398 Test #258: UT-HS-ROLE-CONFIG-001 ............................................   Passed    0.12 sec
+        Start 234: UT-HS-TDD-COORD-008
+157/398 Test #237: UT-HS-PHASE6-ADAPTER-003 .........................................   Passed    0.12 sec
+        Start 207: UT-BULK-HB-SLA-004
+158/398 Test #220: UT-BULK-NEG-WIRE-004 .............................................   Passed    0.09 sec
+        Start 179: UT-BULK-WIRE-004
+159/398 Test #234: UT-HS-TDD-COORD-008 ..............................................   Passed    0.09 sec
+        Start 178: UT-BULK-WIRE-003
+160/398 Test #207: UT-BULK-HB-SLA-004 ...............................................   Passed    0.09 sec
+        Start 253: UT-PEER-COMPLETION-DEADLINE-001
+161/398 Test #179: UT-BULK-WIRE-004 .................................................   Passed    0.09 sec
+        Start 328: UT-PARAM-PROXY-MATCH-001
+162/398 Test #178: UT-BULK-WIRE-003 .................................................   Passed    0.10 sec
+        Start 188: IT-BULK-BUDGET-001
+163/398 Test #362: E2E-MAV-005 ......................................................   Passed    0.31 sec
+        Start 250: UT-PEER-COMPLETION-WIRE-002
+164/398 Test #253: UT-PEER-COMPLETION-DEADLINE-001 ..................................   Passed    0.13 sec
+        Start 180: UT-BULK-WIRE-005
+165/398 Test #188: IT-BULK-BUDGET-001 ...............................................   Passed    0.09 sec
+        Start 194: UT-BULK-TX-LEASE-006
+166/398 Test #250: UT-PEER-COMPLETION-WIRE-002 ......................................   Passed    0.09 sec
+        Start 150: UT-CONTROL-V2-VCB1-DEMUX-001
+167/398 Test #328: UT-PARAM-PROXY-MATCH-001 .........................................   Passed    0.20 sec
+        Start 206: UT-BULK-HB-SLA-003
+168/398 Test #180: UT-BULK-WIRE-005 .................................................   Passed    0.13 sec
+        Start 200: UT-BULK-HB-POLICY-003
+169/398 Test #194: UT-BULK-TX-LEASE-006 .............................................   Passed    0.13 sec
+        Start 241: UT-HS-PHASE6-ADAPTER-007
+170/398 Test #150: UT-CONTROL-V2-VCB1-DEMUX-001 .....................................   Passed    0.13 sec
+        Start 244: UT-HS-RADIO-WRITER-003
+171/398 Test #206: UT-BULK-HB-SLA-003 ...............................................   Passed    0.12 sec
+        Start 221: UT-BULK-NEG-WIRE-005
+172/398 Test #200: UT-BULK-HB-POLICY-003 ............................................   Passed    0.12 sec
+        Start 222: UT-BULK-SESSION-001
+173/398 Test #241: UT-HS-PHASE6-ADAPTER-007 .........................................   Passed    0.12 sec
+        Start 218: UT-BULK-NEG-WIRE-002
+174/398 Test #244: UT-HS-RADIO-WRITER-003 ...........................................   Passed    0.12 sec
+        Start 184: UT-BULK-WIRE-009
+175/398 Test #221: UT-BULK-NEG-WIRE-005 .............................................   Passed    0.13 sec
+        Start 201: UT-BULK-HB-POLICY-004
+176/398 Test #222: UT-BULK-SESSION-001 ..............................................   Passed    0.13 sec
+        Start  84: IT-R19-GROUND-AUX-INDEPENDENCE-alive-001
+177/398 Test #218: UT-BULK-NEG-WIRE-002 .............................................   Passed    0.14 sec
+        Start 240: UT-HS-PHASE6-ADAPTER-006
+178/398 Test #184: UT-BULK-WIRE-009 .................................................   Passed    0.13 sec
+        Start 183: UT-BULK-WIRE-008
+179/398 Test #201: UT-BULK-HB-POLICY-004 ............................................   Passed    0.12 sec
+        Start 243: UT-HS-RADIO-WRITER-002
+180/398 Test  #84: IT-R19-GROUND-AUX-INDEPENDENCE-alive-001 .........................   Passed    0.12 sec
+        Start 224: UT-BULK-SESSION-003
+181/398 Test #240: UT-HS-PHASE6-ADAPTER-006 .........................................   Passed    0.12 sec
+        Start 266: UT-BULK-TX-LEASE-013
+182/398 Test #183: UT-BULK-WIRE-008 .................................................   Passed    0.12 sec
+        Start 264: UT-BULK-TX-LEASE-011
+183/398 Test #243: UT-HS-RADIO-WRITER-002 ...........................................   Passed    0.13 sec
+        Start 198: UT-BULK-HB-POLICY-001
+184/398 Test #224: UT-BULK-SESSION-003 ..............................................   Passed    0.13 sec
+        Start 193: UT-BULK-TX-LEASE-005
+185/398 Test #266: UT-BULK-TX-LEASE-013 .............................................   Passed    0.12 sec
+        Start  51: UT-R19-USB-CLOCK-SYNC-001
+186/398 Test #264: UT-BULK-TX-LEASE-011 .............................................   Passed    0.17 sec
+        Start 190: UT-BULK-TX-LEASE-002
+187/398 Test #198: UT-BULK-HB-POLICY-001 ............................................   Passed    0.17 sec
+        Start 192: UT-BULK-TX-LEASE-004
+188/398 Test #193: UT-BULK-TX-LEASE-005 .............................................   Passed    0.18 sec
+        Start 149: UT-CONTROL-V2-VCTA-DEMUX-001
+189/398 Test  #51: UT-R19-USB-CLOCK-SYNC-001 ........................................   Passed    0.18 sec
+        Start 306: IT-E220-BUFFERED-R2-HB-DEADLINE-001
+190/398 Test #190: UT-BULK-TX-LEASE-002 .............................................   Passed    0.12 sec
+        Start 189: UT-BULK-TX-LEASE-001
+191/398 Test #192: UT-BULK-TX-LEASE-004 .............................................   Passed    0.13 sec
+        Start 176: UT-BULK-WIRE-001
+192/398 Test #149: UT-CONTROL-V2-VCTA-DEMUX-001 .....................................   Passed    0.12 sec
+        Start 129: FW-USB-EPOCH-RECOVERY-001
+193/398 Test #306: IT-E220-BUFFERED-R2-HB-DEADLINE-001 ..............................   Passed    0.13 sec
+        Start 191: UT-BULK-TX-LEASE-003
+194/398 Test #189: UT-BULK-TX-LEASE-001 .............................................   Passed    0.13 sec
+        Start 195: UT-BULK-TX-LEASE-007
+195/398 Test #176: UT-BULK-WIRE-001 .................................................   Passed    0.12 sec
+        Start 182: UT-BULK-WIRE-007
+196/398 Test #129: FW-USB-EPOCH-RECOVERY-001 ........................................   Passed    0.12 sec
+        Start 196: UT-BULK-TX-LEASE-008
+197/398 Test #191: UT-BULK-TX-LEASE-003 .............................................   Passed    0.12 sec
+        Start 181: UT-BULK-WIRE-006
+198/398 Test #195: UT-BULK-TX-LEASE-007 .............................................   Passed    0.13 sec
+        Start 197: UT-BULK-TX-LEASE-009
+199/398 Test #182: UT-BULK-WIRE-007 .................................................   Passed    0.13 sec
+        Start 323: IT-GROUND-USB-HB-PHASE6-SOURCE-001
+200/398 Test #196: UT-BULK-TX-LEASE-008 .............................................   Passed    0.13 sec
+        Start 361: E2E-MAV-004
+201/398 Test #181: UT-BULK-WIRE-006 .................................................   Passed    0.13 sec
+        Start  73: IT-R19-ground-DIAGNOSTIC-USB-FAILURE-no_api-001
+202/398 Test #197: UT-BULK-TX-LEASE-009 .............................................   Passed    0.13 sec
+        Start 360: E2E-MAV-003
+203/398 Test  #73: IT-R19-ground-DIAGNOSTIC-USB-FAILURE-no_api-001 ..................   Passed    0.06 sec
+        Start 304: IT-E220-BUFFERED-RF-HB-RED-001
+204/398 Test #323: IT-GROUND-USB-HB-PHASE6-SOURCE-001 ...............................   Passed    0.17 sec
+        Start 314: IT-GROUND-USB-HB-PHASE6-ENDPOINT-DIP-001
+205/398 Test #361: E2E-MAV-004 ......................................................   Passed    0.23 sec
+        Start  95: IT-R19-GROUND-USB-COMMIT-LATCH-late-001
+206/398 Test #304: IT-E220-BUFFERED-RF-HB-RED-001 ...................................   Passed    0.16 sec
+        Start 318: IT-GROUND-USB-HB-PHASE6-PREGRANT-RESERVE-001
+207/398 Test  #95: IT-R19-GROUND-USB-COMMIT-LATCH-late-001 ..........................   Passed    0.05 sec
+        Start  49: IT-R19-TIMED-PATH-MODE-2-before_deadline-001
+208/398 Test #314: IT-GROUND-USB-HB-PHASE6-ENDPOINT-DIP-001 .........................   Passed    0.19 sec
+        Start 366: E2E-MAV-009
+209/398 Test #360: E2E-MAV-003 ......................................................   Passed    0.32 sec
+        Start 365: E2E-MAV-008
+210/398 Test #318: IT-GROUND-USB-HB-PHASE6-PREGRANT-RESERVE-001 .....................   Passed    0.13 sec
+        Start 357: UT-VEHICLE-PARAM-PRIORITY-PHASE6-001
+211/398 Test  #49: IT-R19-TIMED-PATH-MODE-2-before_deadline-001 .....................   Passed    0.13 sec
+        Start 358: E2E-MAV-001
+212/398 Test #365: E2E-MAV-008 ......................................................   Passed    0.20 sec
+        Start 321: IT-GROUND-USB-HB-PHASE6-STALE-001
+213/398 Test #357: UT-VEHICLE-PARAM-PRIORITY-PHASE6-001 .............................   Passed    0.20 sec
+        Start 335: IT-PARAM-PROXY-R15-PERIODIC-BOUND-001
+214/398 Test #366: E2E-MAV-009 ......................................................   Passed    0.32 sec
+        Start  46: IT-R19-TIMED-PATH-MODE-1-before_deadline-001
+215/398 Test #358: E2E-MAV-001 ......................................................   Passed    0.25 sec
+        Start 351: UT-MAV-013
+216/398 Test  #46: IT-R19-TIMED-PATH-MODE-1-before_deadline-001 .....................   Passed    0.06 sec
+        Start 337: IT-PARAM-PROXY-MP-STARTUP-BACKLOG-001
+217/398 Test #335: IT-PARAM-PROXY-R15-PERIODIC-BOUND-001 ............................   Passed    0.14 sec
+        Start  50: IT-R19-TIMED-PATH-EPOCH-ABORT-001
+218/398 Test #321: IT-GROUND-USB-HB-PHASE6-STALE-001 ................................   Passed    0.22 sec
+        Start  71: IT-R19-VEHICLE-USB-CLOCK-flush_retry-001
+219/398 Test #351: UT-MAV-013 .......................................................   Passed    0.14 sec
+        Start  70: IT-R19-VEHICLE-USB-CLOCK-cold_bootstrap-001
+220/398 Test #337: IT-PARAM-PROXY-MP-STARTUP-BACKLOG-001 ............................   Passed    0.14 sec
+        Start 312: IT-GROUND-USB-HB-PHASE6-ORDER-001
+221/398 Test  #50: IT-R19-TIMED-PATH-EPOCH-ABORT-001 ................................   Passed    0.13 sec
+        Start 319: IT-GROUND-USB-HB-PHASE6-HOST-DRAIN-001
+222/398 Test  #71: IT-R19-VEHICLE-USB-CLOCK-flush_retry-001 .........................   Passed    0.13 sec
+        Start 334: IT-PARAM-PROXY-HEARTBEAT-001
+223/398 Test  #70: IT-R19-VEHICLE-USB-CLOCK-cold_bootstrap-001 ......................   Passed    0.13 sec
+        Start 303: IT-E220-BUFFERED-UPLINK-001
+224/398 Test #319: IT-GROUND-USB-HB-PHASE6-HOST-DRAIN-001 ...........................   Passed    0.10 sec
+        Start  67: IT-R19-VEHICLE-USB-CLOCK-pending_diag-001
+225/398 Test #312: IT-GROUND-USB-HB-PHASE6-ORDER-001 ................................   Passed    0.18 sec
+        Start  87: IT-R19-GROUND-HOST-READINESS-001
+226/398 Test  #67: IT-R19-VEHICLE-USB-CLOCK-pending_diag-001 ........................   Passed    0.39 sec
+        Start  65: IT-R19-VEHICLE-USB-CLOCK-epoch-001
+227/398 Test #334: IT-PARAM-PROXY-HEARTBEAT-001 .....................................   Passed    0.51 sec
+        Start  64: IT-R19-VEHICLE-USB-CLOCK-zero-001
+228/398 Test #303: IT-E220-BUFFERED-UPLINK-001 ......................................   Passed    0.50 sec
+        Start  78: IT-R19-vehicle-DIAGNOSTIC-USB-FAILURE-no_api-001
+229/398 Test  #87: IT-R19-GROUND-HOST-READINESS-001 .................................   Passed    0.46 sec
+        Start 338: IT-PARAM-PROXY-TDD-V2-001
+230/398 Test  #65: IT-R19-VEHICLE-USB-CLOCK-epoch-001 ...............................   Passed    0.13 sec
+        Start  69: IT-R19-VEHICLE-USB-CLOCK-cold-001
+231/398 Test  #64: IT-R19-VEHICLE-USB-CLOCK-zero-001 ................................   Passed    0.12 sec
+        Start 324: UT-PARAM-PROXY-MP-V2-TRUNCATION-001
+232/398 Test  #78: IT-R19-vehicle-DIAGNOSTIC-USB-FAILURE-no_api-001 .................   Passed    0.12 sec
+        Start  66: IT-R19-VEHICLE-USB-CLOCK-deadline-001
+233/398 Test  #69: IT-R19-VEHICLE-USB-CLOCK-cold-001 ................................   Passed    0.09 sec
+        Start 356: UT-VEHICLE-PARAM-PRIORITY-NATIVE-FENCE-001
+234/398 Test #338: IT-PARAM-PROXY-TDD-V2-001 ........................................   Passed    0.16 sec
+        Start 327: UT-PARAM-PROXY-NATIVE-RECOVERY-EXHAUSTION-001
+235/398 Test #324: UT-PARAM-PROXY-MP-V2-TRUNCATION-001 ..............................   Passed    0.13 sec
+        Start 326: UT-PARAM-PROXY-NATIVE-STREAM-001
+236/398 Test  #66: IT-R19-VEHICLE-USB-CLOCK-deadline-001 ............................   Passed    0.12 sec
+        Start  63: IT-R19-VEHICLE-USB-CLOCK-partial-001
+237/398 Test #356: UT-VEHICLE-PARAM-PRIORITY-NATIVE-FENCE-001 .......................   Passed    0.12 sec
+        Start 313: IT-GROUND-USB-HB-PHASE6-HOST-FILTER-001
+238/398 Test #327: UT-PARAM-PROXY-NATIVE-RECOVERY-EXHAUSTION-001 ....................   Passed    0.13 sec
+        Start 308: IT-GROUND-USB-HB-PACER-TIMING-001
+239/398 Test #326: UT-PARAM-PROXY-NATIVE-STREAM-001 .................................   Passed    0.13 sec
+        Start 352: UT-VEHICLE-PARAM-PRIORITY-BACKLOG-001
+240/398 Test  #63: IT-R19-VEHICLE-USB-CLOCK-partial-001 .............................   Passed    0.13 sec
+        Start 359: E2E-MAV-002
+241/398 Test #313: IT-GROUND-USB-HB-PHASE6-HOST-FILTER-001 ..........................   Passed    0.13 sec
+        Start 310: UT-GROUND-USB-HB-PACER-BOUNDARY-001
+242/398 Test #308: IT-GROUND-USB-HB-PACER-TIMING-001 ................................   Passed    0.13 sec
+        Start 322: UT-GROUND-USB-HB-BACKLOG-CAPACITY-001
+243/398 Test #352: UT-VEHICLE-PARAM-PRIORITY-BACKLOG-001 ............................   Passed    0.13 sec
+        Start 332: UT-PARAM-PROXY-RESET-001
+244/398 Test #310: UT-GROUND-USB-HB-PACER-BOUNDARY-001 ..............................   Passed    0.09 sec
+        Start 354: UT-VEHICLE-PARAM-PRIORITY-MATCH-001
+245/398 Test #359: E2E-MAV-002 ......................................................   Passed    0.17 sec
+        Start 311: UT-GROUND-USB-HB-PACER-SUPPLY-001
+246/398 Test #322: UT-GROUND-USB-HB-BACKLOG-CAPACITY-001 ............................   Passed    0.14 sec
+        Start 333: UT-PARAM-PROXY-REGRESSION-001
+247/398 Test #332: UT-PARAM-PROXY-RESET-001 .........................................   Passed    0.13 sec
+        Start 316: IT-GROUND-USB-HB-PHASE6-DUE-001
+248/398 Test #354: UT-VEHICLE-PARAM-PRIORITY-MATCH-001 ..............................   Passed    0.14 sec
+        Start 336: IT-PARAM-PROXY-ADMISSION-WATCHDOG-001
+249/398 Test #311: UT-GROUND-USB-HB-PACER-SUPPLY-001 ................................   Passed    0.12 sec
+        Start 280: UT-UPLINK-GUARD-EPOCH-001
+250/398 Test #333: UT-PARAM-PROXY-REGRESSION-001 ....................................   Passed    0.13 sec
+        Start 386: IT-BUF-001
+251/398 Test #316: IT-GROUND-USB-HB-PHASE6-DUE-001 ..................................   Passed    0.13 sec
+        Start 383: IT-TDD-014
+252/398 Test #336: IT-PARAM-PROXY-ADMISSION-WATCHDOG-001 ............................   Passed    0.13 sec
+        Start 286: FW-UPLINK-RESIDUAL-CONTRACT-001
+253/398 Test #280: UT-UPLINK-GUARD-EPOCH-001 ........................................   Passed    0.13 sec
+        Start 325: UT-PARAM-PROXY-LIST-001
+254/398 Test #386: IT-BUF-001 .......................................................   Passed    0.13 sec
+        Start  42: UT-R19-HOST-READINESS-001
+255/398 Test #383: IT-TDD-014 .......................................................   Passed    0.30 sec
+        Start 353: UT-VEHICLE-PARAM-PRIORITY-RETRY-001
+256/398 Test #325: UT-PARAM-PROXY-LIST-001 ..........................................   Passed    0.26 sec
+        Start 165: UT-GATE-007
+257/398 Test #286: FW-UPLINK-RESIDUAL-CONTRACT-001 ..................................   Passed    0.34 sec
+        Start 309: UT-GROUND-USB-HB-PACER-DISCONNECT-001
+258/398 Test  #42: UT-R19-HOST-READINESS-001 ........................................   Passed    0.29 sec
+        Start 307: UT-GROUND-USB-HB-PACER-INTEGRITY-001
+259/398 Test #353: UT-VEHICLE-PARAM-PRIORITY-RETRY-001 ..............................   Passed    0.12 sec
+        Start 317: IT-GROUND-USB-HB-PHASE6-BURST-001
+260/398 Test #165: UT-GATE-007 ......................................................   Passed    0.13 sec
+        Start 315: IT-GROUND-USB-HB-PHASE6-FAILSAFE-001
+261/398 Test #309: UT-GROUND-USB-HB-PACER-DISCONNECT-001 ............................   Passed    0.14 sec
+        Start 166: UT-GROUND-BOUNDED-CONTINUATION-001
+262/398 Test #307: UT-GROUND-USB-HB-PACER-INTEGRITY-001 .............................   Passed    0.14 sec
+        Start  48: IT-R19-TIMED-PATH-MODE-2-success-001
+263/398 Test #317: IT-GROUND-USB-HB-PHASE6-BURST-001 ................................   Passed    0.14 sec
+        Start 355: UT-VEHICLE-PARAM-PRIORITY-BOUNDARY-001
+264/398 Test #315: IT-GROUND-USB-HB-PHASE6-FAILSAFE-001 .............................   Passed    0.13 sec
+        Start 329: UT-PARAM-PROXY-RETRY-001
+265/398 Test #166: UT-GROUND-BOUNDED-CONTINUATION-001 ...............................   Passed    0.13 sec
+        Start 281: UT-UPLINK-IDENTITY-001
+266/398 Test  #48: IT-R19-TIMED-PATH-MODE-2-success-001 .............................   Passed    0.13 sec
+        Start  45: IT-R19-TIMED-PATH-MODE-1-success-001
+267/398 Test #355: UT-VEHICLE-PARAM-PRIORITY-BOUNDARY-001 ...........................   Passed    0.13 sec
+        Start 302: IT-CONTROL-SUBPACKET-HB-SLOT-001
+268/398 Test #329: UT-PARAM-PROXY-RETRY-001 .........................................   Passed    0.13 sec
+        Start 350: UT-MAV-012
+269/398 Test #281: UT-UPLINK-IDENTITY-001 ...........................................   Passed    0.13 sec
+        Start 331: UT-PARAM-PROXY-BOUNDS-001
+270/398 Test  #45: IT-R19-TIMED-PATH-MODE-1-success-001 .............................   Passed    0.13 sec
+        Start 330: UT-PARAM-PROXY-DUPLICATE-001
+271/398 Test #302: IT-CONTROL-SUBPACKET-HB-SLOT-001 .................................   Passed    0.13 sec
+        Start 349: UT-MAV-011
+272/398 Test #350: UT-MAV-012 .......................................................   Passed    0.12 sec
+        Start 148: UT-CONTROL-V2-DEMUX-001
+273/398 Test #331: UT-PARAM-PROXY-BOUNDS-001 ........................................   Passed    0.12 sec
+        Start 145: UT-CONTROL-V2-WIRE-001
+274/398 Test #330: UT-PARAM-PROXY-DUPLICATE-001 .....................................   Passed    0.13 sec
+        Start 301: IT-CONTROL-SUBPACKET-MSG20-001
+275/398 Test #349: UT-MAV-011 .......................................................   Passed    0.13 sec
+        Start 292: UT-UPLINK-LATE-OVERFLOW-001
+276/398 Test #148: UT-CONTROL-V2-DEMUX-001 ..........................................   Passed    0.13 sec
+        Start 131: FW-MAV-001
+277/398 Test #145: UT-CONTROL-V2-WIRE-001 ...........................................   Passed    0.12 sec
+        Start 128: FW-CONTRACT-001
+278/398 Test #301: IT-CONTROL-SUBPACKET-MSG20-001 ...................................   Passed    0.12 sec
+        Start 146: UT-CONTROL-V2-CORRUPTION-001
+279/398 Test #292: UT-UPLINK-LATE-OVERFLOW-001 ......................................   Passed    0.13 sec
+        Start 147: UT-CONTROL-V2-STREAM-001
+280/398 Test #131: FW-MAV-001 .......................................................   Passed    0.13 sec
+        Start 283: UT-UPLINK-RESIDUAL-CONTROL-001
+281/398 Test #128: FW-CONTRACT-001 ..................................................   Passed    0.13 sec
+        Start 293: UT-UPLINK-LATE-ISOLATION-001
+282/398 Test #146: UT-CONTROL-V2-CORRUPTION-001 .....................................   Passed    0.13 sec
+        Start 134: FW-CONTROL-WIRE-001
+283/398 Test #147: UT-CONTROL-V2-STREAM-001 .........................................   Passed    0.13 sec
+        Start 124: FW-USB-DISCONNECT-001
+284/398 Test #283: UT-UPLINK-RESIDUAL-CONTROL-001 ...................................   Passed    0.13 sec
+        Start 295: UT-UPLINK-LATE-TIMING-001
+285/398 Test #293: UT-UPLINK-LATE-ISOLATION-001 .....................................   Passed    0.13 sec
+        Start 275: UT-UPLINK-GUARD-DATA-001
+286/398 Test #134: FW-CONTROL-WIRE-001 ..............................................   Passed    0.13 sec
+        Start 289: UT-UPLINK-LATE-IDENTITY-001
+287/398 Test #124: FW-USB-DISCONNECT-001 ............................................   Passed    0.12 sec
+        Start 135: PHASE1-LEGACY-COLLISION
+288/398 Test #295: UT-UPLINK-LATE-TIMING-001 ........................................   Passed    0.12 sec
+        Start 288: UT-UPLINK-LATE-IDLE-001
+289/398 Test #275: UT-UPLINK-GUARD-DATA-001 .........................................   Passed    0.12 sec
+        Start 153: UT-CONTROL-V2-MIXED-001
+290/398 Test #289: UT-UPLINK-LATE-IDENTITY-001 ......................................   Passed    0.13 sec
+        Start 161: UT-GATE-003
+291/398 Test #135: PHASE1-LEGACY-COLLISION ..........................................   Passed    0.13 sec
+        Start 299: IT-UPLINK-GUARD-001
+292/398 Test #288: UT-UPLINK-LATE-IDLE-001 ..........................................   Passed    0.13 sec
+        Start 285: UT-UPLINK-RESIDUAL-TIMEOUT-001
+293/398 Test #153: UT-CONTROL-V2-MIXED-001 ..........................................   Passed    0.13 sec
+        Start 290: UT-UPLINK-LATE-TERMINAL-001
+294/398 Test #161: UT-GATE-003 ......................................................   Passed    0.12 sec
+        Start 300: IT-CONTROL-SUBPACKET-TIMING-001
+295/398 Test #299: IT-UPLINK-GUARD-001 ..............................................   Passed    0.12 sec
+        Start 297: IT-UPLINK-LATE-ESCAPE-001
+296/398 Test #285: UT-UPLINK-RESIDUAL-TIMEOUT-001 ...................................   Passed    0.13 sec
+        Start 122: FW-BUF-001
+297/398 Test #290: UT-UPLINK-LATE-TERMINAL-001 ......................................   Passed    0.13 sec
+        Start  88: IT-R19-FIRST-USB-FAILURE-transport-001
+298/398 Test #300: IT-CONTROL-SUBPACKET-TIMING-001 ..................................   Passed    0.44 sec
+        Start 284: UT-UPLINK-RESIDUAL-DONE-001
+299/398 Test #297: IT-UPLINK-LATE-ESCAPE-001 ........................................   Passed    0.44 sec
+        Start 125: FW-SESSION-001
+300/398 Test #122: FW-BUF-001 .......................................................   Passed    0.44 sec
+        Start 276: UT-UPLINK-GUARD-DATA-002
+301/398 Test  #88: IT-R19-FIRST-USB-FAILURE-transport-001 ...........................   Passed    0.44 sec
+        Start 272: UT-MAV-BOUNDARY-006
+302/398 Test #284: UT-UPLINK-RESIDUAL-DONE-001 ......................................   Passed    0.13 sec
+        Start 291: UT-UPLINK-LATE-INTEGRITY-001
+303/398 Test #125: FW-SESSION-001 ...................................................   Passed    0.13 sec
+        Start 127: FW-AUX-001
+304/398 Test #276: UT-UPLINK-GUARD-DATA-002 .........................................   Passed    0.13 sec
+        Start 296: UT-UPLINK-LATE-NORMAL-001
+305/398 Test #272: UT-MAV-BOUNDARY-006 ..............................................   Passed    0.14 sec
+        Start 172: UT-LINK-006
+306/398 Test #291: UT-UPLINK-LATE-INTEGRITY-001 .....................................   Passed    0.14 sec
+        Start 287: UT-UPLINK-LATE-COMMIT-001
+307/398 Test #127: FW-AUX-001 .......................................................   Passed    0.14 sec
+        Start 277: UT-UPLINK-GUARD-CONTROL-001
+308/398 Test #296: UT-UPLINK-LATE-NORMAL-001 ........................................   Passed    0.14 sec
+        Start 298: IT-UPLINK-LATE-HIL-001
+309/398 Test #172: UT-LINK-006 ......................................................   Passed    0.13 sec
+        Start 294: UT-UPLINK-LATE-64B-001
+310/398 Test #287: UT-UPLINK-LATE-COMMIT-001 ........................................   Passed    0.13 sec
+        Start 163: UT-GATE-005
+311/398 Test #277: UT-UPLINK-GUARD-CONTROL-001 ......................................   Passed    0.13 sec
+        Start 345: UT-MAV-007
+312/398 Test #298: IT-UPLINK-LATE-HIL-001 ...........................................   Passed    0.13 sec
+        Start 132: FW-MAV-002
+313/398 Test #294: UT-UPLINK-LATE-64B-001 ...........................................   Passed    0.13 sec
+        Start 155: UT-BUF-002
+314/398 Test #163: UT-GATE-005 ......................................................   Passed    0.13 sec
+        Start 387: IT-BUF-002
+315/398 Test #345: UT-MAV-007 .......................................................   Passed    0.14 sec
+        Start 274: UT-MAV-BOUNDARY-008
+316/398 Test #132: FW-MAV-002 .......................................................   Passed    0.13 sec
+        Start 270: UT-MAV-BOUNDARY-004
+317/398 Test #155: UT-BUF-002 .......................................................   Passed    0.13 sec
+        Start 282: UT-UPLINK-RESIDUAL-ESCAPE-001
+318/398 Test #387: IT-BUF-002 .......................................................   Passed    0.14 sec
+        Start 157: UT-BUF-004
+319/398 Test #274: UT-MAV-BOUNDARY-008 ..............................................   Passed    0.14 sec
+        Start 341: UT-MAV-003
+320/398 Test #270: UT-MAV-BOUNDARY-004 ..............................................   Passed    0.14 sec
+        Start 384: IT-TDD-015
+321/398 Test #282: UT-UPLINK-RESIDUAL-ESCAPE-001 ....................................   Passed    0.14 sec
+        Start 343: UT-MAV-005
+322/398 Test #157: UT-BUF-004 .......................................................   Passed    0.17 sec
+        Start 273: UT-MAV-BOUNDARY-007
+323/398 Test #341: UT-MAV-003 .......................................................   Passed    0.17 sec
+        Start 363: E2E-MAV-006
+324/398 Test #384: IT-TDD-015 .......................................................   Passed    0.18 sec
+        Start 123: FW-UART-001
+325/398 Test #343: UT-MAV-005 .......................................................   Passed    0.16 sec
+        Start 279: UT-UPLINK-GRANT-DRAIN-001
+326/398 Test #273: UT-MAV-BOUNDARY-007 ..............................................   Passed    0.20 sec
+        Start 371: IT-TDD-002
+327/398 Test #363: E2E-MAV-006 ......................................................   Passed    0.20 sec
+        Start 133: FW-SCHED-001
+328/398 Test #123: FW-UART-001 ......................................................   Passed    0.22 sec
+        Start 342: UT-MAV-004
+329/398 Test #279: UT-UPLINK-GRANT-DRAIN-001 ........................................   Passed    0.21 sec
+        Start 367: E2E-MAV-010
+330/398 Test #371: IT-TDD-002 .......................................................   Passed    0.23 sec
+        Start 380: IT-TDD-011
+331/398 Test #133: FW-SCHED-001 .....................................................   Passed    0.21 sec
+        Start 143: UT-CODEC-007
+332/398 Test #342: UT-MAV-004 .......................................................   Passed    0.20 sec
+        Start 339: UT-MAV-001
+333/398 Test #367: E2E-MAV-010 ......................................................   Passed    0.18 sec
+        Start 168: UT-LINK-002
+334/398 Test #380: IT-TDD-011 .......................................................   Passed    0.17 sec
+        Start 140: UT-CODEC-004
+335/398 Test #143: UT-CODEC-007 .....................................................   Passed    0.15 sec
+        Start 278: UT-UPLINK-GUARD-CONTROL-002
+336/398 Test #339: UT-MAV-001 .......................................................   Passed    0.15 sec
+        Start 162: UT-GATE-004
+337/398 Test #168: UT-LINK-002 ......................................................   Passed    0.15 sec
+        Start 141: UT-CODEC-005
+338/398 Test #140: UT-CODEC-004 .....................................................   Passed    0.15 sec
+        Start 142: UT-CODEC-006
+339/398 Test #278: UT-UPLINK-GUARD-CONTROL-002 ......................................   Passed    0.17 sec
+        Start 271: UT-MAV-BOUNDARY-005
+340/398 Test #162: UT-GATE-004 ......................................................   Passed    0.17 sec
+        Start 136: PHASE1-LEGACY-INVARIANT
+341/398 Test #141: UT-CODEC-005 .....................................................   Passed    0.20 sec
+        Start 156: UT-BUF-003
+342/398 Test #142: UT-CODEC-006 .....................................................   Passed    0.18 sec
+        Start 340: UT-MAV-002
+343/398 Test #271: UT-MAV-BOUNDARY-005 ..............................................   Passed    0.18 sec
+        Start 347: UT-MAV-009
+344/398 Test #136: PHASE1-LEGACY-INVARIANT ..........................................   Passed    0.17 sec
+        Start 389: IT-BUF-004
+345/398 Test #156: UT-BUF-003 .......................................................   Passed    0.17 sec
+        Start 174: UT-LINK-ACCOUNT-002
+346/398 Test #347: UT-MAV-009 .......................................................   Passed    0.13 sec
+        Start 126: FW-TIME-001
+347/398 Test #340: UT-MAV-002 .......................................................   Passed    0.21 sec
+        Start 382: IT-TDD-013
+348/398 Test #389: IT-BUF-004 .......................................................   Passed    0.15 sec
+        Start 378: IT-TDD-009
+349/398 Test #174: UT-LINK-ACCOUNT-002 ..............................................   Passed    0.14 sec
+        Start 375: IT-TDD-006
+350/398 Test #126: FW-TIME-001 ......................................................   Passed    0.14 sec
+        Start 167: UT-LINK-001
+351/398 Test #382: IT-TDD-013 .......................................................   Passed    0.14 sec
+        Start 170: UT-LINK-004
+352/398 Test #378: IT-TDD-009 .......................................................   Passed    0.15 sec
+        Start 269: UT-MAV-BOUNDARY-003
+353/398 Test #375: IT-TDD-006 .......................................................   Passed    0.16 sec
+        Start 374: IT-TDD-005
+354/398 Test #167: UT-LINK-001 ......................................................   Passed    0.15 sec
+        Start 154: UT-BUF-001
+355/398 Test #170: UT-LINK-004 ......................................................   Passed    0.14 sec
+        Start 377: IT-TDD-008
+356/398 Test #269: UT-MAV-BOUNDARY-003 ..............................................   Passed    0.14 sec
+        Start 268: UT-MAV-BOUNDARY-002
+357/398 Test #374: IT-TDD-005 .......................................................   Passed    0.14 sec
+        Start 171: UT-LINK-005
+358/398 Test #154: UT-BUF-001 .......................................................   Passed    0.14 sec
+        Start 376: IT-TDD-007
+359/398 Test #377: IT-TDD-008 .......................................................   Passed    0.14 sec
+        Start 158: UT-BUF-005
+360/398 Test #268: UT-MAV-BOUNDARY-002 ..............................................   Passed    0.14 sec
+        Start 159: UT-GATE-001
+361/398 Test #171: UT-LINK-005 ......................................................   Passed    0.14 sec
+        Start 138: UT-CODEC-002
+362/398 Test #376: IT-TDD-007 .......................................................   Passed    0.14 sec
+        Start 388: IT-BUF-003
+363/398 Test #158: UT-BUF-005 .......................................................   Passed    0.14 sec
+        Start 173: UT-LINK-ACCOUNT-001
+364/398 Test #159: UT-GATE-001 ......................................................   Passed    0.13 sec
+        Start 160: UT-GATE-002
+365/398 Test #138: UT-CODEC-002 .....................................................   Passed    0.14 sec
+        Start 346: UT-MAV-008
+366/398 Test #388: IT-BUF-003 .......................................................   Passed    0.14 sec
+        Start 169: UT-LINK-003
+367/398 Test #173: UT-LINK-ACCOUNT-001 ..............................................   Passed    0.14 sec
+        Start 137: UT-CODEC-001
+368/398 Test #160: UT-GATE-002 ......................................................   Passed    0.16 sec
+        Start 364: E2E-MAV-007
+369/398 Test #346: UT-MAV-008 .......................................................   Passed    0.18 sec
+        Start 144: UT-DEMUX-001
+370/398 Test #169: UT-LINK-003 ......................................................   Passed    0.18 sec
+        Start 344: UT-MAV-006
+371/398 Test #137: UT-CODEC-001 .....................................................   Passed    0.17 sec
+        Start 139: UT-CODEC-003
+372/398 Test #364: E2E-MAV-007 ......................................................   Passed    0.16 sec
+        Start 373: IT-TDD-004
+373/398 Test #144: UT-DEMUX-001 .....................................................   Passed    0.17 sec
+        Start 175: UT-LINK-ACCOUNT-003
+374/398 Test #344: UT-MAV-006 .......................................................   Passed    0.18 sec
+        Start 164: UT-GATE-006
+375/398 Test #139: UT-CODEC-003 .....................................................   Passed    0.17 sec
+        Start 372: IT-TDD-003
+376/398 Test #373: IT-TDD-004 .......................................................   Passed    0.18 sec
+        Start 385: IT-RF-HDX-001
+377/398 Test #175: UT-LINK-ACCOUNT-003 ..............................................   Passed    0.18 sec
+        Start 381: IT-TDD-012
+378/398 Test #164: UT-GATE-006 ......................................................   Passed    0.18 sec
+        Start 267: UT-MAV-BOUNDARY-001
+379/398 Test #372: IT-TDD-003 .......................................................   Passed    0.18 sec
+        Start 348: UT-MAV-010
+380/398 Test #385: IT-RF-HDX-001 ....................................................   Passed    0.17 sec
+        Start 379: IT-TDD-010
+381/398 Test #381: IT-TDD-012 .......................................................   Passed    0.18 sec
+        Start  52: UT-R19-FIRST-USB-FAILURE-RECORD-001
+382/398 Test #267: UT-MAV-BOUNDARY-001 ..............................................   Passed    0.23 sec
+        Start  90: IT-R19-FIRST-USB-FAILURE-endpoint-001
+383/398 Test #348: UT-MAV-010 .......................................................   Passed    0.21 sec
+        Start  89: IT-R19-FIRST-USB-FAILURE-before_deadline-001
+384/398 Test #379: IT-TDD-010 .......................................................   Passed    0.20 sec
+        Start  92: IT-R19-FIRST-USB-FAILURE-sync_partial-001
+385/398 Test  #52: UT-R19-FIRST-USB-FAILURE-RECORD-001 ..............................   Passed    0.20 sec
+        Start  91: IT-R19-FIRST-USB-FAILURE-wrapper_late-001
+386/398 Test  #90: IT-R19-FIRST-USB-FAILURE-endpoint-001 ............................   Passed    0.13 sec
+        Start  55: UT-R19-RUNTIME-FAIL-PRODUCT-SOURCE-001
+387/398 Test  #89: IT-R19-FIRST-USB-FAILURE-before_deadline-001 .....................   Passed    0.30 sec
+        Start  24: R19-read_comparison_capture_contract-OFFLINE-001
+388/398 Test  #92: IT-R19-FIRST-USB-FAILURE-sync_partial-001 ........................   Passed    0.32 sec
+        Start  25: R19-read_comparison_permit-OFFLINE-001
+389/398 Test  #91: IT-R19-FIRST-USB-FAILURE-wrapper_late-001 ........................   Passed    0.33 sec
+390/398 Test  #55: UT-R19-RUNTIME-FAIL-PRODUCT-SOURCE-001 ...........................   Passed    0.32 sec
+391/398 Test  #25: R19-read_comparison_permit-OFFLINE-001 ...........................   Passed    3.41 sec
+392/398 Test  #24: R19-read_comparison_capture_contract-OFFLINE-001 .................***Failed   11.32 sec
+{
+    "schema":  "vc-lora-r19-read-comparison-capture-contract-v1",
+    "result":  "FAIL",
+    "checks":  [
+                   {
+                       "name":  "definitions-only-import-is-not-an-execution-grant",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "None-default-retains-legacy-without-new-ledger",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "active-plan-is-single-ground-pause-in-one-fixed-capture",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "selection-rejects-unknown-mode",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "selection-rejects-SyncOnly",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "selection-rejects-missing-AUX",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "selection-rejects-missing-diagnostic-ABI",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "selection-rejects-shorter-capture",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "selection-rejects-longer-capture",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "complete-memory-observation-validates-without-claiming-root-cause",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "evaluation-rejects-null-or-missing-mode-plan-without-throwing",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "evaluation-rejects-forged-plan-role",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "evaluation-rejects-forged-or-missing-plan-authority-flags",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-missing-begin",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-missing-end",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-missing-resumed-read",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-early-request",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-begin-before-request",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-too-short",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-too-long",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-resume-before-end",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-resume-after-measurement",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-read-call-during-pause",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-not-deadline",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-vehicle-paused",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-ground-claimed-continuous",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-missing-role",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-duplicate-role",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-missing-clock-domain",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-zero-frequency",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-noninteger-tick",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-stop-before-measurement-end",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-worker-stop-before-request",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-close-before-worker-stop",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-close-end-before-start",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-close-not-attempted",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-close-not-completed",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-close-error",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-vehicle-stop-before-measurement-end",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "observation-rejects-vehicle-close-error",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "evaluation-does-not-rewrite-close-failure-or-missing-end-evidence",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "CLI-mode-defaults-and-outer-forwarding-are-explicit",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "capture-keeps-one-owner-uses-pause-not-Close-or-Purge-as-intervention",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "outer-childscope-evaluation-cannot-clobber-live-safety-or-output-options",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "prepared-pin-missing-comparison-option-retains-None-only",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "prepared-pin-explicit-comparison-binding-and-no-authority-widening",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "execution-permit-legacy-None-does-not-authorize-pause",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "execution-permit-exact-new-mode-binding-is-required",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "execution-permit-pause-never-relaxes-freshness-or-rollback",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "real-snapshot-metadata-maps-lifecycle-pause-duration-and-unobserved-null",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "legacy-persistence-without-comparison-ledger-stays-compatible",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "persistence-retains-missing-pause-end-without-losing-raw",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "persistence-retains-close-failure-without-losing-raw",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "actual-outer-disposition-admits-requested-paused-Ground-with-exact-raw-roundtrip",
+                       "passed":  false,
+                       "error":  "Actual outer blocked paused Ground before stage acquisition: Timed-path raw capture or reader binding differs"
+                   },
+                   {
+                       "name":  "actual-outer-disposition-preserves-None-continuous-baseline",
+                       "passed":  true,
+                       "error":  ""
+                   },
+                   {
+                       "name":  "actual-outer-disposition-rejects-wrong-reader-flags-or-corrupt-raw-coverage",
+                       "passed":  false,
+                       "error":  "Actual outer admitted unsafe reader/raw binding: Pause-Ground-true"
+                   },
+                   {
+                       "name":  "actual-outer-disposition-binds-nested-owner-and-clock-to-actual-capture",
+                       "passed":  true,
+                       "error":  ""
+                   }
+               ],
+    "passed_count":  55,
+    "failed_count":  2,
+    "hardware_interaction":  false,
+    "child_execute_calls":  0,
+    "native_process_or_device_inspection":  false,
+    "capture_source_sha256":  "9CDE505D40B7940E3F4AD223B99F9D36F61C6E46F9C19AB95676B271D0E8A47D"
+}
+
+        Start  33: R19-USB-EXTENDED-LIVE-READER-CONTRACT-001
+393/398 Test  #33: R19-USB-EXTENDED-LIVE-READER-CONTRACT-001 ........................   Passed   67.11 sec
+        Start   5: FW-R19-CANDIDATE-ARTIFACT-BUILDER-001
+394/398 Test   #5: FW-R19-CANDIDATE-ARTIFACT-BUILDER-001 ............................   Passed  119.38 sec
+        Start   8: R19-PIXHAWK-PARAM-LIST-E2E-RUNNER-CONTRACT-001
+395/398 Test   #8: R19-PIXHAWK-PARAM-LIST-E2E-RUNNER-CONTRACT-001 ...................   Passed   58.28 sec
+        Start   9: R19-RUNTIME-FAIL-DIAGNOSTIC-RUNNER-CONTRACT-001
+396/398 Test   #9: R19-RUNTIME-FAIL-DIAGNOSTIC-RUNNER-CONTRACT-001 ..................   Passed   49.96 sec
+        Start   7: R19-CANDIDATE-APP-FLASH-ORCHESTRATOR-CONTRACT-001
+397/398 Test   #7: R19-CANDIDATE-APP-FLASH-ORCHESTRATOR-CONTRACT-001 ................   Passed    4.62 sec
+        Start   6: FW-HWCDC-INSTALLER-CONTRACT-001
+398/398 Test   #6: FW-HWCDC-INSTALLER-CONTRACT-001 ..................................   Passed    2.48 sec
+
+99% tests passed, 3 tests failed out of 398
+
+Label Time Summary:
+contract        = 688.08 sec*proc (14 tests)
+diagnostic      =  26.19 sec*proc (71 tests)
+offline         = 715.47 sec*proc (86 tests)
+phase1          =   0.30 sec*proc (2 tests)
+phase2          =   3.78 sec*proc (16 tests)
+phase3          =   5.23 sec*proc (11 tests)
+phase4          =  36.50 sec*proc (209 tests)
+phase5          =  72.73 sec*proc (8 tests)
+phase6          =   5.13 sec*proc (16 tests)
+product-loop    =  15.05 sec*proc (29 tests)
+r19             = 715.47 sec*proc (86 tests)
+
+Total Test time (real) = 731.85 sec
+
+The following tests FAILED:
+	 20 - R19-timed_path_capture_persistence-OFFLINE-001 (Failed)
+	 24 - R19-read_comparison_capture_contract-OFFLINE-001 (Failed)
+	 30 - R19-aux_readiness_capture_routing-OFFLINE-001 (Failed)
+Errors while running CTest
+{
+  "total": 277,
+  "passed": 275,
+  "xfailed": 2,
+  "failed": 0,
+  "seed": [
+    20260817
+  ],
+  "tests": [
+    {
+      "test": "E2E-MAV-001",
+      "result": "PASS"
+    },
+    {
+      "test": "E2E-MAV-002",
+      "result": "PASS"
+    },
+    {
+      "test": "E2E-MAV-003",
+      "result": "PASS"
+    },
+    {
+      "test": "E2E-MAV-004",
+      "result": "PASS"
+    },
+    {
+      "test": "E2E-MAV-005",
+      "result": "PASS"
+    },
+    {
+      "test": "E2E-MAV-006",
+      "result": "PASS"
+    },
+    {
+      "test": "E2E-MAV-007",
+      "result": "PASS"
+    },
+    {
+      "test": "E2E-MAV-008",
+      "result": "PASS"
+    },
+    {
+      "test": "E2E-MAV-009",
+      "result": "PASS"
+    },
+    {
+      "test": "E2E-MAV-010",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-AUX-001",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-BUF-001",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-CONTRACT-001",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-CONTROL-WIRE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-E220-STARTUP-001",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-MAV-001",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-MAV-002",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-SCHED-001",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-SESSION-001",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-TIME-001",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-UART-001",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-UPLINK-RESIDUAL-CONTRACT-001",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-USB-DISCONNECT-001",
+      "result": "PASS"
+    },
+    {
+      "test": "FW-USB-EPOCH-RECOVERY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-BUF-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-BUF-002",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-BUF-003",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-BUF-004",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-BUF-005",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-BUF-006",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-BULK-BUDGET-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-BULK-DEMUX-DECODER-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-BULK-RX-REARM-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-BULK-WIRE-PARAM-932-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-CONTROL-SUBPACKET-HB-SLOT-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-CONTROL-SUBPACKET-MSG20-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-CONTROL-SUBPACKET-TIMING-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-E220-BUFFERED-R2-HB-DEADLINE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-E220-BUFFERED-RF-HB-RED-001",
+      "result": "XFAIL"
+    },
+    {
+      "test": "IT-E220-BUFFERED-UPLINK-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-E220-BUFFERED-VEHICLE-PARAM-PRIORITY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-GROUND-USB-HB-PACER-TIMING-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-GROUND-USB-HB-PHASE6-BURST-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-GROUND-USB-HB-PHASE6-DUE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-GROUND-USB-HB-PHASE6-ENDPOINT-DIP-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-GROUND-USB-HB-PHASE6-FAILSAFE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-GROUND-USB-HB-PHASE6-FLUSH-ISOLATION-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-GROUND-USB-HB-PHASE6-HOST-DRAIN-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-GROUND-USB-HB-PHASE6-HOST-FILTER-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-GROUND-USB-HB-PHASE6-ORDER-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-GROUND-USB-HB-PHASE6-PREGRANT-RESERVE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-GROUND-USB-HB-PHASE6-SOURCE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-GROUND-USB-HB-PHASE6-STALE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-HS-CANDIDATE-STANDARD-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-HS-ROUTE-E2E-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-PARAM-PROXY-ADMISSION-WATCHDOG-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-PARAM-PROXY-HEARTBEAT-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-PARAM-PROXY-MP-STARTUP-BACKLOG-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-PARAM-PROXY-R15-PERIODIC-BOUND-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-PARAM-PROXY-TDD-V2-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-PARAM-PROXY-TDD-V3-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-RF-HDX-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-002",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-003",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-004",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-005",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-006",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-007",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-008",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-009",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-010",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-011",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-012",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-013",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-014",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-TDD-015",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-UPLINK-GUARD-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-UPLINK-LATE-ESCAPE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "IT-UPLINK-LATE-HIL-001",
+      "result": "PASS"
+    },
+    {
+      "test": "PHASE1-LEGACY-COLLISION",
+      "result": "PASS"
+    },
+    {
+      "test": "PHASE1-LEGACY-INVARIANT",
+      "result": "XFAIL"
+    },
+    {
+      "test": "ST-001",
+      "result": "PASS"
+    },
+    {
+      "test": "ST-002",
+      "result": "PASS"
+    },
+    {
+      "test": "ST-003",
+      "result": "PASS"
+    },
+    {
+      "test": "ST-004",
+      "result": "PASS"
+    },
+    {
+      "test": "ST-005",
+      "result": "PASS"
+    },
+    {
+      "test": "ST-006",
+      "result": "PASS"
+    },
+    {
+      "test": "ST-MAV-001",
+      "result": "PASS"
+    },
+    {
+      "test": "ST-MAV-PHASE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BUF-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BUF-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BUF-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BUF-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BUF-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-HB-POLICY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-HB-POLICY-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-HB-POLICY-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-HB-POLICY-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-HB-POLICY-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-HB-POLICY-006",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-HB-SLA-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-HB-SLA-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-HB-SLA-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-HB-SLA-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-HB-SLA-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-NEG-WIRE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-NEG-WIRE-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-NEG-WIRE-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-NEG-WIRE-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-NEG-WIRE-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-SESSION-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-SESSION-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-SESSION-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-SESSION-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-SESSION-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TRANSCRIPT-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TRANSCRIPT-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TRANSCRIPT-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TRANSCRIPT-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TRANSCRIPT-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TRANSCRIPT-006",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TRANSCRIPT-007",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TRANSCRIPT-008",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-006",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-007",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-008",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-009",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-010",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-011",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-012",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-TX-LEASE-013",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-WIRE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-WIRE-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-WIRE-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-WIRE-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-WIRE-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-WIRE-006",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-WIRE-007",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-WIRE-008",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-BULK-WIRE-009",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CODEC-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CODEC-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CODEC-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CODEC-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CODEC-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CODEC-006",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CODEC-007",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CONTROL-V2-CORRUPTION-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CONTROL-V2-DEMUX-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CONTROL-V2-MIXED-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CONTROL-V2-STREAM-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CONTROL-V2-VCB1-DEMUX-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CONTROL-V2-VCBN-DEMUX-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CONTROL-V2-VCRC-DEMUX-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CONTROL-V2-VCTA-DEMUX-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-CONTROL-V2-WIRE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-DEMUX-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GATE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GATE-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GATE-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GATE-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GATE-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GATE-006",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GATE-007",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GROUND-BOUNDED-CONTINUATION-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GROUND-USB-HB-BACKLOG-CAPACITY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GROUND-USB-HB-PACER-BOUNDARY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GROUND-USB-HB-PACER-DISCONNECT-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GROUND-USB-HB-PACER-INTEGRITY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-GROUND-USB-HB-PACER-SUPPLY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-BULK-RX-TAIL-LEDGER-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-PEER-COMPLETION-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-PHASE6-ADAPTER-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-PHASE6-ADAPTER-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-PHASE6-ADAPTER-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-PHASE6-ADAPTER-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-PHASE6-ADAPTER-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-PHASE6-ADAPTER-006",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-PHASE6-ADAPTER-007",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-PRODUCT-ROUTE-SOURCE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-PRODUCT-WRITER-SOURCE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-RADIO-SESSION-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-RADIO-SESSION-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-RADIO-SESSION-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-RADIO-WRITER-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-RADIO-WRITER-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-RADIO-WRITER-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-RADIO-WRITER-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-ROLE-CONFIG-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-TDD-COORD-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-TDD-COORD-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-TDD-COORD-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-TDD-COORD-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-TDD-COORD-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-TDD-COORD-006",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-TDD-COORD-007",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-TDD-COORD-008",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-VCRC-AUX-NOT-PROOF-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-HS-VCRC-MISSING-TIMEOUT-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-LINK-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-LINK-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-LINK-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-LINK-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-LINK-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-LINK-006",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-LINK-ACCOUNT-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-LINK-ACCOUNT-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-LINK-ACCOUNT-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-006",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-007",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-008",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-009",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-010",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-011",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-012",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-013",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-BOUNDARY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-BOUNDARY-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-BOUNDARY-003",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-BOUNDARY-004",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-BOUNDARY-005",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-BOUNDARY-006",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-BOUNDARY-007",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-MAV-BOUNDARY-008",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PARAM-PROXY-BOUNDS-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PARAM-PROXY-DUPLICATE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PARAM-PROXY-LIST-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PARAM-PROXY-MATCH-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PARAM-PROXY-MP-V2-TRUNCATION-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PARAM-PROXY-NATIVE-RECOVERY-EXHAUSTION-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PARAM-PROXY-NATIVE-STREAM-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PARAM-PROXY-REGRESSION-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PARAM-PROXY-RESET-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PARAM-PROXY-RETRY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PEER-COMPLETION-DEADLINE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PEER-COMPLETION-LEDGER-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PEER-COMPLETION-LEDGER-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PEER-COMPLETION-WIRE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-PEER-COMPLETION-WIRE-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-GRANT-DRAIN-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-GUARD-CONTROL-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-GUARD-CONTROL-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-GUARD-DATA-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-GUARD-DATA-002",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-GUARD-EPOCH-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-IDENTITY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-LATE-64B-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-LATE-COMMIT-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-LATE-IDENTITY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-LATE-IDLE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-LATE-INTEGRITY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-LATE-ISOLATION-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-LATE-NORMAL-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-LATE-OVERFLOW-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-LATE-TERMINAL-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-LATE-TIMING-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-RESIDUAL-CONTROL-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-RESIDUAL-DONE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-RESIDUAL-ESCAPE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-UPLINK-RESIDUAL-TIMEOUT-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-VEHICLE-PARAM-PRIORITY-BACKLOG-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-VEHICLE-PARAM-PRIORITY-BOUNDARY-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-VEHICLE-PARAM-PRIORITY-MATCH-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-VEHICLE-PARAM-PRIORITY-NATIVE-FENCE-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-VEHICLE-PARAM-PRIORITY-PHASE6-001",
+      "result": "PASS"
+    },
+    {
+      "test": "UT-VEHICLE-PARAM-PRIORITY-RETRY-001",
+      "result": "PASS"
+    }
+  ]
+}
