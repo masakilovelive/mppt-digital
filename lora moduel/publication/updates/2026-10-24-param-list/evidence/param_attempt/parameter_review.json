@@ -1,0 +1,209 @@
+{
+  "schema": "vc-lora-r19-parameter-independent-review-v1",
+  "result": "ZERO_PARAM_VALUE_CONFIRMED_IN_COMPLETE_SAVED_RAW_NOT_LEDGER_LOSS",
+  "run": "20261024T040509Z-param-list-once-retry",
+  "review_scope": "FILE_ONLY_NATIVE_RAW_REPLAY_NO_LIVE_OPERATIONS",
+  "candidate_id": "20261023T120117864Z-c22a4e7c",
+  "capture_duration_seconds": 40.0025686,
+  "clock_domain_id": "a0ad5a25fe074d6d9a97eefcd4674d69",
+  "frequency": "10000000",
+  "request": {
+    "attempts": 1,
+    "accepted_bytes": 14,
+    "frame_hex": "FD02000063FFBE1500000101D507",
+    "frame_sha256": "FC3A47A83D35D44E96E044A216FDBF082805F9FACCDD5E4B9252E0C7026D4A75",
+    "crc_valid": true,
+    "canonical_frame_matches_summary": true,
+    "message_id": 21,
+    "target_system": 1,
+    "target_component": 1,
+    "write_started_ticks": "79701272",
+    "write_returned_ticks": "79953612",
+    "local_API_duration_ms": 25.234,
+    "deadline_ticks": "379701272",
+    "request_raw_offset": 241,
+    "serial_write_calls": 4,
+    "role_private_write_calls": 3,
+    "PC_local_acceptance_only": true,
+    "RF_or_Pixhawk_delivery_proven": false
+  },
+  "replay": {
+    "result": "INCOMPLETE_PARAMETERS",
+    "unique_30s": 0,
+    "unique_final": 0,
+    "missing_count": 932,
+    "missing_exact_0_through931": true,
+    "errors": {
+      "bad_crc": 0,
+      "bad_length": 0,
+      "unsupported_flags": 0,
+      "unsupported_signed": 0,
+      "invalid_source": 0,
+      "invalid_count": 0,
+      "invalid_index": 0,
+      "invalid_id": 0,
+      "invalid_type": 0,
+      "duplicate_index": 0,
+      "duplicate_id": 0,
+      "noise_bytes": 0,
+      "partial_frame": 0,
+      "total": 0
+    },
+    "sentinel_count": 0,
+    "late_predeadline_data": false,
+    "capacity_exceeded": false,
+    "sealed": true,
+    "window_observation_complete": true,
+    "pending_frame_bytes": 0,
+    "raw_ingested_bytes": 2698,
+    "raw_frames_parsed": 44,
+    "capture_summary_counts_match_replay": true
+  },
+  "checkpoint": {
+    "saved_sealed": true,
+    "saved_complete": true,
+    "saved_raw_prefix_bytes": 2131,
+    "last_prefix_data_read_end_ticks": "375102545",
+    "next_raw_block_begin_ticks": "384937764",
+    "next_raw_block_end_ticks": "385101113",
+    "deadline_ticks": "379701272",
+    "terminal_native_read_watermark_ticks": "473724210",
+    "pending_native_bytes": 0,
+    "checkpoint_exact_wall_or_MCU_time_persisted": false,
+    "final_preserves_sealed_snapshot_no_late_predeadline": true
+  },
+  "evidence": [
+    {
+      "sha256": "D3DAFECA5EEE0042D54ABA96EA70983B5F1490C358EDE38EF46A2403E97568C2",
+      "path": "capture/summary.json"
+    },
+    {
+      "sha256": "8A25F85B754157A4F5475240C52EBDF64010EF0624D920F6AC25C673E9A854BF",
+      "path": "capture/param_list_30s.json"
+    },
+    {
+      "sha256": "87111812DE5674B38F54C05D2A1771FDFC7B00CCE757F4C167CD74D594104E5B",
+      "path": "tools/r19_param_list_diagnostics.ps1"
+    }
+  ],
+  "roles": [
+    {
+      "role": "vehicle",
+      "raw_bytes": 2674,
+      "raw_sha256": "B1EFB3DC23BFFF61975E5C4726F214BEE932A5901079E207989C5C65E8E1AF76",
+      "saved_sha_match": true,
+      "base64_match": true,
+      "native_blocks": 164,
+      "native_coverage_valid": true,
+      "frames": 43,
+      "message_counts": {
+        "111": 1,
+        "253": 42
+      },
+      "CRC_checked_frames": 43,
+      "CRC_bad": 0,
+      "CRC_unknown_extra": 0,
+      "noise_bytes": 0,
+      "partial_bytes": 0,
+      "R19F_texts": {},
+      "heartbeat_frames": [],
+      "first_postrequest_frame": [],
+      "last_frame": [
+        {
+          "offset": 2611,
+          "bytes": 63,
+          "id": 253,
+          "crc_valid": true,
+          "read_end_ticks": "472730590",
+          "sha256": "C6E1ED251E491CDA5E18AC2EA260AB7BBD1D9E86C67929D463C1FBAE6CB607E1",
+          "text": "R19A:V:L:0000002F:0000000000010511:000300020000"
+        }
+      ]
+    },
+    {
+      "role": "ground",
+      "raw_bytes": 2698,
+      "raw_sha256": "11AF96D4747D1EF97F7C376B53B8E4FA946593E2D4DB7B1FB9B0B8F8A562E77C",
+      "saved_sha_match": true,
+      "base64_match": true,
+      "native_blocks": 115,
+      "native_coverage_valid": true,
+      "frames": 44,
+      "message_counts": {
+        "0": 1,
+        "111": 1,
+        "253": 42
+      },
+      "CRC_checked_frames": 44,
+      "CRC_bad": 0,
+      "CRC_unknown_extra": 0,
+      "noise_bytes": 0,
+      "partial_bytes": 0,
+      "R19F_texts": {
+        "R19F:G:08FB:000000000000384C:000100040080:00000001": 39
+      },
+      "heartbeat_frames": [
+        {
+          "offset": 220,
+          "bytes": 21,
+          "id": 0,
+          "crc_valid": true,
+          "read_end_ticks": "79027854",
+          "sha256": "998AB5B24014F70B2523591EDBB155DC44D01D7B7F31732FD81AC7C1E39F432A",
+          "text": ""
+        }
+      ],
+      "first_postrequest_frame": [
+        {
+          "offset": 241,
+          "bytes": 63,
+          "id": 253,
+          "crc_valid": true,
+          "read_end_ticks": "84970998",
+          "sha256": "1973BA8216FAA6D3829B2F28F459FCC555080F4851E04A30AF8711511EAC19E4",
+          "text": "R19F:G:08FB:000000000000384C:000100040080:00000001"
+        }
+      ],
+      "last_frame": [
+        {
+          "offset": 2635,
+          "bytes": 63,
+          "id": 253,
+          "crc_valid": true,
+          "read_end_ticks": "465170736",
+          "sha256": "0218D36DD7A4CC30A0D5619883137134BACF3030A7E2BB044265F8B6FADB204A",
+          "text": "R19F:G:08FB:000000000000384C:000100040080:00000001"
+        }
+      ]
+    }
+  ],
+  "findings": {
+    "no_PARAM_VALUE_message22_in_either_raw_stream": true,
+    "received_unique_parameters_in30s": 0,
+    "received_unique_parameters_in_full_capture": 0,
+    "missing_indexes_exactly": "0..931 (932 indexes)",
+    "Ground_product_Heartbeat_count": 1,
+    "Ground_postrequest_R19F_diagnostic_frames": 39,
+    "parameter_error_counter_zero_not_all_communication_errors_zero": true,
+    "checkpoint_count_and_final_count_match_independent_replay": true,
+    "parameter_acquisition_succeeded": false
+  },
+  "method": {
+    "raw_stream_parse": "Independent frame-boundary and MAVLink v1/v2 CRC parser; observed extra values #0=50,#111=34,#253=83. No unknown extra; all87 frames CRC checked.",
+    "native_replay": "Existing pure PARAM helper imported without CLI, no SerialPort or hardware API. Replayed every Ground native block in contiguous offset order; Begin/Commit exact request at saved cursor241; terminal native watermark permitted independent30s freeze.",
+    "request_CRC_verification": "Canonical14-byte PARAM_REQUEST_LIST#21 to1/1 CRC extra159 validates and its SHA matches capture request record.",
+    "checkpoint_qualification": "Saved30s checkpoint rawprefix2131 ends375102545 ticks, next data read begins384937764 after379701272 deadline. Full raw replay yields samezero parameter count and no partial/noise/CRC issue. Exact original checkpoint creation native/wall/MCU timestamp is not persisted; independent replay sealing is at terminal native watermark, not claimed as exact original freeze instant.",
+    "immutable_originals": "Original raw, capture summary, checkpoint, source and device evidence not modified.",
+    "additional_live_operations": 0,
+    "source_edits": 0
+  },
+  "limitations": [
+    "One local API-accepted14-byte request record is not RF transmission or Pixhawk delivery proof; no public request echo is expected in receive raw.",
+    "Zero PARAM_VALUE is a direct observation in complete saved PC raw, not proof that Pixhawk sent nothing or where delivery failed.",
+    "PARAM ledger errors0 is vacuous for missing responses and is not all-error0: Ground emitted39 CRC-valid R19F diagnostics and only1 productHeartbeat.",
+    "No physical AUX/RF/E220 hardware cause or causal attribution is inferred by this review.",
+    "40-second limit preserved. Further live testing is not authorized by this review."
+  ],
+  "acceptance_eligible": false,
+  "deployment_authorized": false
+}

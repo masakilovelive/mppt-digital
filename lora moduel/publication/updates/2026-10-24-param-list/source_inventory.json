@@ -1,0 +1,342 @@
+{
+  "schema": "vc-lora-param-progress-source-inventory-v1",
+  "scope": "Allowlisted byte-identical evidence and selected tested sources; no executable, live permit, PnP records, parent raw log or hardware interaction",
+  "candidate_id": "20261023T120117864Z-c22a4e7c",
+  "live_tool_count": 21,
+  "omitted_identity_bound_tools": [
+    "tools/invoke_r19_candidate_app_flash_hil.ps1",
+    "tools/invoke_r19_jtag_preflash_gate.ps1",
+    "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1"
+  ],
+  "files": [
+    {
+      "source": "runs/validation/R19-AUX-USB-CAUSE-INVESTIGATION-001/20261024T010000Z/aux_review.json",
+      "destination": "evidence/aux_usb_cause/aux_review.json",
+      "sha256": "562A9FD5506D206C33EF49DA1C626D36EA20A2E45581E79493DD699C7A93F9C2",
+      "bytes": 12817,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-AUX-USB-CAUSE-INVESTIGATION-001/20261024T010000Z/comparison_review.json",
+      "destination": "evidence/aux_usb_cause/comparison_review.json",
+      "sha256": "00DE09627876328EF2CEAD00408FAB31576743BF5A2C149E4056D3721278B189",
+      "bytes": 15669,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-AUX-USB-CAUSE-INVESTIGATION-001/20261024T010000Z/summary.json",
+      "destination": "evidence/aux_usb_cause/summary.json",
+      "sha256": "CBEFEB5123899BFB883B925F36C74B98E5CB1D696A92E3752BA443286E5F8162",
+      "bytes": 10662,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-AUX-USB-CAUSE-INVESTIGATION-001/20261024T010000Z/usb_review.json",
+      "destination": "evidence/aux_usb_cause/usb_review.json",
+      "sha256": "F2A195611EAA1879E7DAA564E0C167055B7A1818BF50CBFB74EDBF5371D0EB2A",
+      "bytes": 14682,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T013752Z-aux-usb-recurrence/analysis/capture_review.json",
+      "destination": "evidence/heartbeat_only/capture_review.json",
+      "sha256": "B6A162FAFCFA4189AF201F2D83D3BF8124F1C6E46B51DF7F9890DD148C011531",
+      "bytes": 12176,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T013752Z-aux-usb-recurrence/analysis/summary.json",
+      "destination": "evidence/heartbeat_only/summary.json",
+      "sha256": "C93745FA3A059ED2BFA8282462BE484A3920D7B62EF08E1CB785E07F112E7D26",
+      "bytes": 8975,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-PARAM-LIST-DIAGNOSTICS-OFFLINE-001/20261024T090000JST/arduino_ground.log",
+      "destination": "evidence/offline_param_instrumentation/arduino_ground.log",
+      "sha256": "4DF2829050534380791A50BD888A02334B60E52E394BE74108A726AE3E4D7C4C",
+      "bytes": 210,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-PARAM-LIST-DIAGNOSTICS-OFFLINE-001/20261024T090000JST/arduino_vehicle.log",
+      "destination": "evidence/offline_param_instrumentation/arduino_vehicle.log",
+      "sha256": "047C76AFAC83D3AC1A252B0738E1BED7522B1754DCACE363B3AC10C8704077C0",
+      "bytes": 211,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-PARAM-LIST-DIAGNOSTICS-OFFLINE-001/20261024T090000JST/capture/summary.json",
+      "destination": "evidence/offline_param_instrumentation/capture/summary.json",
+      "sha256": "5F714D1FD0F85CB9E06192AC70D00D51B5E8A3C80558ACD9526B1524C486CCA6",
+      "bytes": 4551,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-PARAM-LIST-DIAGNOSTICS-OFFLINE-001/20261024T090000JST/changes_final.patch",
+      "destination": "evidence/offline_param_instrumentation/changes_final.patch",
+      "sha256": "BE3D32E46AE6D6026D27440A05BF266A64F3CE5BA2AAD4539B6442E10021437F",
+      "bytes": 142024,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-PARAM-LIST-DIAGNOSTICS-OFFLINE-001/20261024T090000JST/host_final.log",
+      "destination": "evidence/offline_param_instrumentation/host_final.log",
+      "sha256": "E09F36001DC3296A5A9B4A80440B086574AB902D1590AC0FF0BF4FB40F1E36D9",
+      "bytes": 85275,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-PARAM-LIST-DIAGNOSTICS-OFFLINE-001/20261024T090000JST/ledger/summary.json",
+      "destination": "evidence/offline_param_instrumentation/ledger/summary.json",
+      "sha256": "D997060944DBA1707B30B2CA2B50CCB541FD5158E3536C50C6F512F484B4C037",
+      "bytes": 4233,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-PARAM-LIST-DIAGNOSTICS-OFFLINE-001/20261024T090000JST/outer/summary.json",
+      "destination": "evidence/offline_param_instrumentation/outer/summary.json",
+      "sha256": "65806EB71A10FD73268C032F11DF02690FA8C60756ACAC461A6577767D436BE4",
+      "bytes": 8490,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-PARAM-LIST-DIAGNOSTICS-OFFLINE-001/20261024T090000JST/summary.json",
+      "destination": "evidence/offline_param_instrumentation/summary.json",
+      "sha256": "411E3E8263E49270FE0DE4E09FB194127E4012C9F6C27C4A650B49523812E6ED",
+      "bytes": 10386,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T040509Z-param-list-once-retry/analysis/device_review.json",
+      "destination": "evidence/param_attempt/device_review.json",
+      "sha256": "EC065A40007F94D05B6783EA7198828D57334D1CB2351093EFA70F8AF1F061D6",
+      "bytes": 8273,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T040509Z-param-list-once-retry/capture/param_list_30s.json",
+      "destination": "evidence/param_attempt/param_list_30s.json",
+      "sha256": "8A25F85B754157A4F5475240C52EBDF64010EF0624D920F6AC25C673E9A854BF",
+      "bytes": 135245,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T040509Z-param-list-once-retry/analysis/parameter_review.json",
+      "destination": "evidence/param_attempt/parameter_review.json",
+      "sha256": "FE6540B1AF9DF4C645FDD3319ADCD1E526BEFF61C5788AAE4AFBD8AFE1996AD9",
+      "bytes": 7894,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T040509Z-param-list-once-retry/analysis/summary.json",
+      "destination": "evidence/param_attempt/summary.json",
+      "sha256": "F0BA3B7760B57920F52E51739CFD49E844EBB0D7B1A6D9B13F1AEA41FBE9D225",
+      "bytes": 7674,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T004000Z-param-list-once/analysis/summary.json",
+      "destination": "evidence/pre_arm_aux/summary.json",
+      "sha256": "4FDC9CDDE987A72E964DE6176EC1E459EF41E556580F6ED404D89A77BFA1EB49",
+      "bytes": 7403,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "AGENTS.md",
+      "destination": "source_snapshot/AGENTS.md",
+      "sha256": "54C72FA6ADFF8B430098801D7EEEF0A78D82FA6F8E8920D5229EC8319F4F2906",
+      "bytes": 1879,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "CMakeLists.txt",
+      "destination": "source_snapshot/CMakeLists.txt",
+      "sha256": "D72774D62AF023BB4D0E5281B6B20F5FF3991B9EFD013A6D3EBE862193F0C7B4",
+      "bytes": 10010,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/bulk_session_controller.cpp",
+      "destination": "source_snapshot/core/src/bulk_session_controller.cpp",
+      "sha256": "2ECBB529D1588A4F45CBDF00CADFB4E153AF5C447AF6C6447C6483188A7FDA40",
+      "bytes": 36418,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/high_speed_tdd_coordinator.cpp",
+      "destination": "source_snapshot/core/src/high_speed_tdd_coordinator.cpp",
+      "sha256": "E5C62F4C46BC25AE1FD6E9A4137333DC8916BEACE352336A35752DDEA8C833A7",
+      "bytes": 45658,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/high_speed_phase6_adapter.hpp",
+      "destination": "source_snapshot/firmware/high_speed/high_speed_phase6_adapter.hpp",
+      "sha256": "E27EC99BC2B105D79104C47077063D807ED0789BEB69E6AC9DB55CB1F3AF4C9C",
+      "bytes": 52112,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+      "destination": "source_snapshot/firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+      "sha256": "47CE684BB11CD3807CA15605982BD98B66C7CB4258BE63DEA229E10E1793A258",
+      "bytes": 9293,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "destination": "source_snapshot/firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "sha256": "691C00CD527348828FDAA3FA339E68425A0F247AF6C20720A9FB5E54D831E8F6",
+      "bytes": 282051,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_param_list_capture_contract.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_param_list_capture_contract.ps1",
+      "sha256": "EF138BE42D26A4119FB3FC5B9FE14258B2609B177A5D823E67126C6DBBC80050",
+      "bytes": 46686,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_param_list_diagnostics.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_param_list_diagnostics.ps1",
+      "sha256": "E9B728E754D9A076B604C5723A95F71072447C13112F8E4428873494F883E36D",
+      "bytes": 17677,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_param_list_outer_contract.ps1",
+      "destination": "source_snapshot/tests/hil/check_r19_param_list_outer_contract.ps1",
+      "sha256": "CE37876C243077EF949054AED4A28E9D6D25A7685B25F4282BFFE7DE2E49F7F9",
+      "bytes": 14461,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_candidate_artifact_common.ps1",
+      "destination": "source_snapshot/tools/r19_candidate_artifact_common.ps1",
+      "sha256": "1E4B7349606E739A45B971C3E697F375A9C2159E8E8F00B293949F0254727D61",
+      "bytes": 34226,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_continuous_reader.cs",
+      "destination": "source_snapshot/tools/r19_continuous_reader.cs",
+      "sha256": "B9C22B9E74F32E09C1210F976363CF4513C66F3131780B96972BEC48B1F907EF",
+      "bytes": 23809,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_host_readiness_wire.ps1",
+      "destination": "source_snapshot/tools/r19_host_readiness_wire.ps1",
+      "sha256": "91CEEF26F4CFF3E8DED4C6132CD274BDC325051592715D70CBAF08CDF71BCBE4",
+      "bytes": 7713,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_host_readiness_workflow.ps1",
+      "destination": "source_snapshot/tools/r19_host_readiness_workflow.ps1",
+      "sha256": "1B0740C84FE8B54C8F573846E6EBCDCDA7DF330565833500F1EE557CF11BD099",
+      "bytes": 12934,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_param_list_diagnostics.ps1",
+      "destination": "source_snapshot/tools/r19_param_list_diagnostics.ps1",
+      "sha256": "87111812DE5674B38F54C05D2A1771FDFC7B00CCE757F4C167CD74D594104E5B",
+      "bytes": 18822,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_startup_reader.cs",
+      "destination": "source_snapshot/tools/r19_startup_reader.cs",
+      "sha256": "939EF6C3333B1BC67782CFB02AEBFBC067EE6AAC7C789FB171F06C2B9F8A8C2E",
+      "bytes": 7610,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_timed_path_acquisition.ps1",
+      "destination": "source_snapshot/tools/r19_timed_path_acquisition.ps1",
+      "sha256": "2F3E555879E9F3267EF8CC75E3DD0B66C44D8C0F920E6E8224A220EBB69C79F8",
+      "bytes": 33191,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_timed_path_outer.ps1",
+      "destination": "source_snapshot/tools/r19_timed_path_outer.ps1",
+      "sha256": "3520AB16FB0CEB1D9C1B22D308D058ED47E1F409C75C7BAFEB742A9E36623ED6",
+      "bytes": 18992,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_timed_path_trace.ps1",
+      "destination": "source_snapshot/tools/r19_timed_path_trace.ps1",
+      "sha256": "09786F523F0A5DDBC7B84B377E620886A574D552CABBF5EA5CEE5B4F2890660A",
+      "bytes": 22932,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_usb_clock_correlation.ps1",
+      "destination": "source_snapshot/tools/r19_usb_clock_correlation.ps1",
+      "sha256": "B6759C777FCC4C3F2BB3F8D8DA7A890EF54043CA5ECC4A3DC1EB2937FB8DD1D1",
+      "bytes": 12420,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_usb_role_contract.ps1",
+      "destination": "source_snapshot/tools/r19_usb_role_contract.ps1",
+      "sha256": "10787A8D4064FC7370F40AE81BA3034E8D59F063E4D207E81B3E4F37FD020238",
+      "bytes": 4870,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/read_r19_aux_readiness_record.ps1",
+      "destination": "source_snapshot/tools/read_r19_aux_readiness_record.ps1",
+      "sha256": "C011580259EA94F3092B1B3CCAF34DB30C4D9CA1158D2A51D2DC96EA76D880DF",
+      "bytes": 22317,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/read_r19_diagnostic_usb_failure_record.ps1",
+      "destination": "source_snapshot/tools/read_r19_diagnostic_usb_failure_record.ps1",
+      "sha256": "26E15CAC70F9414F2EE3A43FBF44A820BC1F7B8DC41672EC81733A9B1CD54451",
+      "bytes": 8407,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/read_r19_first_usb_failure_record.ps1",
+      "destination": "source_snapshot/tools/read_r19_first_usb_failure_record.ps1",
+      "sha256": "E11CDBF18EFA90F22BC9E69ADF357FD795396725EC0D2B091C759A69A929E47D",
+      "bytes": 8232,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/read_r19_runtime_stage_jtag.ps1",
+      "destination": "source_snapshot/tools/read_r19_runtime_stage_jtag.ps1",
+      "sha256": "60504BC7832BD1FDB8318280F3F72543A8D22D405ECC7A7F791DAC1CD5209F84",
+      "bytes": 158373,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/read_r19_timed_path_record.ps1",
+      "destination": "source_snapshot/tools/read_r19_timed_path_record.ps1",
+      "sha256": "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C",
+      "bytes": 5949,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/run_r19_timed_path_capture.ps1",
+      "destination": "source_snapshot/tools/run_r19_timed_path_capture.ps1",
+      "sha256": "DC2FD9815DC60C19584845AD806A7C5E12F37073AB94B9564C1F615C54464DEA",
+      "bytes": 42914,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/verify_r19_candidate_artifact.ps1",
+      "destination": "source_snapshot/tools/verify_r19_candidate_artifact.ps1",
+      "sha256": "DC23B935E3AE7D236360C2EC74B452D877D18FAF8DEFA4B0ABDFB8937D5E764F",
+      "bytes": 45919,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    }
+  ]
+}

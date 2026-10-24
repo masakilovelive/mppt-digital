@@ -1,0 +1,111 @@
+{
+  "schema": "vc-lora-r19-usb-root-cause-offline-review-v1",
+  "result": "FAILURE_LOCALIZED_TO_PENDING_IN_PUBLICATION_NOT_PROVEN_PHYSICAL_USB_FAULT",
+  "candidate_id": "20261023T120117864Z-c22a4e7c",
+  "run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T004000Z-param-list-once",
+  "comparison_run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261023T233030Z-same-candidate-continuous-recheck",
+  "read_only_investigation": true,
+  "hardware_operations": 0,
+  "source_edits": 0,
+  "additional_live_authorization_used": false,
+  "frozen_source_binding": {
+    "candidate_semantic_evidence": "runs/candidates/R19-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261023T120117864Z-c22a4e7c/evidence/hwcdc_semantic_contract/summary.json",
+    "canonical_current_hashes_match_saved_candidate_build_contract": true,
+    "sources": [
+      {"path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp", "sha256": "D1B890A6C37587BF7775E4F9DDB7791C91085F9C2BC4D95CB9EC3C5809B24DCA"},
+      {"path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.h", "sha256": "9F59B955C83FF567012B470D33361CDC81AEF30DE68C7B2F8C224BACE9A16B39"},
+      {"path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDCR19Diagnostic.h", "sha256": "786E36D9178F1976AC1A185E994ACAF00C8FCA75486A172BB22993A9B6B546EE"},
+      {"path": "firmware/phase6/vc_lora_phase6_bridge.hpp", "sha256": "691C00CD527348828FDAA3FA339E68425A0F247AF6C20720A9FB5E54D831E8F6"}
+    ],
+    "installed_primary_register_definitions": [
+      {"path": "C:/Users/user/AppData/Local/Arduino15/packages/esp32/tools/esp32s3-libs/3.3.11/include/hal/esp32s3/include/hal/usb_serial_jtag_ll.h", "sha256": "53497C2B5A580E80173859D0FAB6DFAF96BD7FD93186D46D8F58079421A5E984"},
+      {"path": "C:/Users/user/AppData/Local/Arduino15/packages/esp32/tools/esp32s3-libs/3.3.11/include/soc/esp32s3/register/soc/usb_serial_jtag_reg.h", "sha256": "8F74C579C7A0DC78FB516326140645C1120DD2F8AD11CEDF21EF095F7DC53D16"}
+    ]
+  },
+  "terminal_records": [
+    {"role": "vehicle", "scope": "diagnostic Alive sequence1, not product Heartbeat", "record_sha256": "FCFEF4AD368FC8EA4A3FFAF043EE629218AEDD41B37F32132A2FA9DB7AB4A1B1", "observed_mcu_us": "2618884", "started_mcu_us": "2523307", "finished_mcu_us": "2618868", "budget_ms": 95, "attempt_id": 6, "terminal_reason": "LoopTimeout", "lock_wait_ms": 0, "expected_epoch": 1, "observed_epoch": 1, "expected_frame_bytes": 63, "accepted_frame_bytes": 63, "ring_pending_bytes": 31, "stash_pending_bytes": 0, "publish_generation": 3, "pickup_generation": 2, "state_flags": 22, "raw_interrupt_status": 256, "interrupt_enable_mask": 524, "flush_blocker_mask": 28},
+    {"role": "ground", "scope": "diagnostic Alive sequence1, not product Heartbeat", "record_sha256": "BA8379B07364D52FAA418038A7FF307134B79E19C6FE18ECDBF918449633CA22", "observed_mcu_us": "10767894", "started_mcu_us": "10667928", "finished_mcu_us": "10767882", "budget_ms": 100, "attempt_id": 6, "terminal_reason": "LoopTimeout", "lock_wait_ms": 0, "expected_epoch": 1, "observed_epoch": 1, "expected_frame_bytes": 63, "accepted_frame_bytes": 63, "ring_pending_bytes": 31, "stash_pending_bytes": 0, "publish_generation": 3, "pickup_generation": 2, "state_flags": 22, "raw_interrupt_status": 258, "interrupt_enable_mask": 524, "flush_blocker_mask": 28}
+  ],
+  "decoded_terminal_boundary": {
+    "blocker_28": ["SoftwarePending=4", "FifoNotWritable=8", "PayloadPickupPending=16"],
+    "state_22": ["ObservationActive=2", "Connected=4", "PayloadInFlight=16"],
+    "not_set": ["FifoWritable=8", "FifoQuarantined=32", "ResetPending=64", "BootstrapFence=128", "BootstrapAborted=256", "DebugWriterActive=512"],
+    "enable_524_hex": "0x0000020C",
+    "enabled_interrupts": ["SERIAL_OUT_RECV_PKT bit2", "SERIAL_IN_EMPTY bit3", "BUS_RESET bit9"],
+    "raw_vehicle_256_hex": "0x00000100",
+    "raw_ground_258_hex": "0x00000102",
+    "raw_vehicle_bits": ["IN_TOKEN_REC_IN_EP1 bit8"],
+    "raw_ground_bits": ["IN_TOKEN_REC_IN_EP1 bit8", "SOF bit1"],
+    "raw_in_empty_pending_at_terminal_sample": false,
+    "raw_bus_reset_pending_at_terminal_sample": false,
+    "raw_error_bits_4_to_7_at_terminal_sample": false,
+    "interpretation": "The local software queue still contains31 bytes while an already-published packet has no matching pickup witness and hardware reports not-writable. The current packet was not locally completed by the deadline. The terminal sample is NOT the signature of an idle writable FIFO with an unarmed pending software tail.",
+    "important_limit": "Connected is historical permitted pickup evidence, not proof of a current Windows kernel-pending Read or current host IN service. The raw IN-token and SOF bits are sticky observations without generation/timestamp binding. They cannot prove a host token after this particular payload publication. FifoNotWritable is a one-bit room indication, not an exact FIFO byte count or proof of damaged FIFO hardware."
+  },
+  "source_execution_path": [
+    {"path": "firmware/phase6/vc_lora_phase6_bridge.hpp", "line": 327, "claim": "Diagnostic flush slices are100ms and the diagnostic frame deadline is500ms, separately from product106ms."},
+    {"path": "firmware/phase6/vc_lora_phase6_bridge.hpp", "line": 5097, "claim": "Diagnostic write uses exact63-byte bootstrap while disconnected, otherwise bounded32-byte checked writes. Local acceptance is not USB completion."},
+    {"path": "firmware/phase6/vc_lora_phase6_bridge.hpp", "line": 5139, "claim": "Bootstrap waits without starting a frame/flush deadline until cached endpoint-ready; that cache only proves some earlier pickup, not a currently pending host Read."},
+    {"path": "firmware/phase6/vc_lora_phase6_bridge.hpp", "line": 5210, "claim": "Same-epoch incomplete flush is retried until the original frame deadline; attempt6 terminal failure does not mean first95/100ms wait immediately became permanent failure."},
+    {"path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp", "line": 1914, "claim": "Bootstrap publishes one <=32-byte packet and deliberately retains remaining31 bytes in software pending permitted host pickup."},
+    {"path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp", "line": 1975, "claim": "Publication increments generation, arms in-flight, clears stale IN_EMPTY, executes WR_DONE/flush, then enables interrupt."},
+    {"path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp", "line": 721, "claim": "IN_EMPTY ISR rechecks pending status under shared mux, validates current payload witness, records pickup generation and clears in-flight before draining next software chunk."},
+    {"path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp", "line": 1650, "claim": "Prior busy-entry/pickup-before-enqueue idle wakeup repair already exists and task-primes only exact writable idle boundary."},
+    {"path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp", "line": 2360, "claim": "Timeout samples software state, raw status and enable mask under same mux at this call's terminal decision."},
+    {"path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp", "line": 2401, "claim": "Flush records missed idle-pending opportunity only when FIFO writable and pickup complete. Current blocker28 does not meet it."},
+    {"path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp", "line": 2409, "claim": "Completion requires host present, matching epoch, software empty, writable FIFO and matching pickup. Current diagnostic short packets deliberately require no terminal ZLP."},
+    {"path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp", "line": 2446, "claim": "Incomplete flush rearms IN_EMPTY and yields1ms. It does not force refilling/overwriting a nonwritable in-flight FIFO."},
+    {"path": "C:/Users/user/AppData/Local/Arduino15/packages/esp32/tools/esp32s3-libs/3.3.11/include/hal/esp32s3/include/hal/usb_serial_jtag_ll.h", "line": 157, "claim": "txfifo_writable is hardware serial_in_ep_data_free room bit, not installation flag or byte count."},
+    {"path": "C:/Users/user/AppData/Local/Arduino15/packages/esp32/tools/esp32s3-libs/3.3.11/include/soc/esp32s3/register/soc/usb_serial_jtag_reg.h", "line": 69, "claim": "Raw IN-token bit8 is latched receipt indication; raw IN_EMPTY bit3 indicates endpoint empty."}
+  ],
+  "relationship_to_aux": {
+    "ground_aux_irq_low_mcu_us": "9918385",
+    "ground_failing_diagnostic_flush_start_mcu_us": "10667928",
+    "aux_low_precedes_failing_flush_us": "749543",
+    "ground_diagnostic_flush_elapsed_us": "99954",
+    "ground_diagnostic_failure_to_aux_fault_us": "1150144",
+    "ground_aux_fault_mcu_us": "11918038",
+    "ground_aux_first_fault_maximum_poll_gap_us": "100533",
+    "ground_aux_irq_high_mcu_us": "14963633",
+    "conclusion": "The failing USB wait cannot initiate an AUX LOW transition that already preceded it. It can delay task polling by about100ms, but saved first-fault maximum poll gap is not a2s observation outage. Digital LOW plus laterHIGH evidence and pre-ARM fail-closed are separate from USB local timeout. Physical E220 busy cause and any contribution from earlier/unlatched USB waits remain unproven.",
+    "usb_failure_implies_aux_fault": false,
+    "comparison_counterexample": "The same frozen candidate's prior run had identical Vehicle initial63/31 generation3:2 blocker28 timeout but Ground AUXfault0 and37 received product Heartbeats. Diagnostic timeout alone is not sufficient to imply radio fail-closed."
+  },
+  "recovery_and_comparison": {
+    "initial_31_bytes_persisted_for_40_seconds": false,
+    "recovery_source": {"path": "firmware/phase6/vc_lora_phase6_bridge.hpp", "line": 4801, "claim": "Same-epoch FrameFlush recovery retries only physical completion without replaying bytes. On success it commits cadence and clears staged/flush_pending/bootstrap_pending/transport_failed at4861-4871; the immutable first-failure record remains latched."},
+    "later_ground_endpoint_committed_snapshot": {"state_semantics": "last-committed diagnostic event, not live continuous hardware state", "epoch": 1, "publish_generation": 104, "pickup_generation": 103, "fifo_write_bytes": 2898, "flush_successes": 46, "zlp_flushes": 0, "ring_pending_bytes": 31, "last_flush_outcome": "Active", "last_fifo_write_size": 32},
+    "later_snapshot_interpretation": "Initial timeout is generation3:2; later snapshot is104:103 in unchanged epoch1 and contains46 flush-success commits. It cannot be the same initial packet continuously stuck. A later diagnostic packet is pending at acquisition; without bounded PC close-to-device timing it must not be classified as a measurement-period recurrence or used to erase the earlier failure.",
+    "current_raw_replay": {"vehicle_crc_valid_frames": 43, "ground_crc_valid_frames": 44, "crc_failures": 0, "terminal_partial_bytes": 0, "vehicle_clock_reply": true, "ground_clock_reply": true, "ground_ready": true, "product_heartbeats": 0},
+    "interpretation": "Complete later diagnostic/private USB reception disproves a permanently dead CDC byte path. It does not erase an earlier local deadline failure or prove when that old packet was picked up.",
+    "previous_vehicle_initial_failure": {"observed_mcu_us": "2626883", "budget_ms": 83, "ring_pending_bytes": 31, "publish_generation": 3, "pickup_generation": 2, "blocker_mask": 28},
+    "previous_ground": {"aux_fault": 0, "received_product_heartbeats": 37, "first_product_completion_elapsed_us": "505", "later_product_timeout_ring_bytes": 0, "later_product_timeout_blocker_mask": 24},
+    "comparison_limit": "Prior later product timeout occurred with ring0 and budget106ms, unlike current startup diagnostic31B condition. Keep lifecycle and frame ownership distinct."
+  },
+  "proved_and_not_proved": {
+    "proved": [
+      "31 bytes were retained in MCU software ring at the failed diagnostic terminal call, not shown to be missing CRC bytes over LoRa.",
+      "An earlier <=32-byte USB packet remained locally in-flight with one publication/pickup generation gap and no FIFO writable indication.",
+      "The source's earlier idle-restart repair is present; raw IN_EMPTY is enabled but not pending at this sample. A disabled pending interrupt is not the observed immediate blocker.",
+      "Epoch loss/quarantine and lock acquisition timeout do not explain this terminal failure snapshot.",
+      "Current run never enqueued product Heartbeat, so its product106ms publication deadline is not evaluated. Ground AUX safety stop is the recorded pre-ARM blocker."
+    ],
+    "not_proved": [
+      "Whether Windows had a physical USB IN request pending after generation3 publication, versus no host demand at that startup instant.",
+      "Whether hardware sent/ACKed that particular packet but failed to expose IN_EMPTY, versus never completing host pickup.",
+      "Whether the FIFO had exactly32 resident bytes; software remaining31 and hardware not-writable are not direct hardware occupancy measurement.",
+      "Whether an earlier transient ISR status loss occurred before the terminal sample. The current snapshot narrows but does not reconstruct the whole event history.",
+      "Physical E220 electrical/RF fault, continuous analog AUX waveform, or USB-to-AUX causal root cause."
+    ]
+  },
+  "next_discriminants_without_weakening_106ms": [
+    "Bind a diagnostic publication and pickup event to generation/token/MCU timestamp and preserve raw IN-token/IN_EMPTY before/after publication; a sticky latest bit is insufficient.",
+    "Record PC kernel-pending Read start/stop and USB request/completion evidence separately from application parser timestamps. If physical USB capture is unavailable, classify host-IN-service proof as partial.",
+    "Use same-boot nonce exchange with guaranteed clock-continuity and error bounds before classifying startup/mid-run/shutdown failures. Existing successful sync reply alone has UNKNOWN_NO_OFFSET_BOUNDS.",
+    "Do not reprime or overwrite current nonwritable in-flight FIFO merely because a flush timed out. Preserve frame/epoch ownership and separate startup waiting from product acceptance.",
+    "Investigate pre-ARM AUX fault independently before rerunning a932-parameter load: a zero productHeartbeat readiness gate correctly prevents that request."
+  ],
+  "source_fix_recommended_now": "No unconditional transport change is justified by this snapshot alone; retain106ms product condition, current frame ownership and fail-closed safety. Candidate evidence permits narrower instrumentation or lifecycle-gate design review, not a proven physical repair.",
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

@@ -1,0 +1,270 @@
+{
+  "schema": "vc-lora-r19-param-list-instrumentation-offline-change-v1",
+  "status": "OFFLINE_VERIFIED_NO_HARDWARE",
+  "date_jst": "2026-10-24",
+  "workspace": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge",
+  "request": "取得要求1回・932件の取得台帳・30秒時点の進捗保存",
+  "implementation": {
+    "mode": "ParamListDiagnostics, explicit opt-in; legacy default false",
+    "request": {
+      "mavlink_message_id": 21,
+      "request_attempts_maximum": 1,
+      "local_write_attempt_latched_before_callback": true,
+      "retry_on_exception_or_partial_acceptance": false,
+      "exact_request_hex": "FD02000063FFBE1500000101D507",
+      "wire_bytes": 14,
+      "source_system": 255,
+      "source_component": 190,
+      "target_system": 1,
+      "target_component": 1,
+      "gates": [
+        "Ground role only",
+        "Diagnostic ARM accepted by the local PC API; actual MCU ARM remains separately proven by internal records",
+        "At least one CRC-valid product Heartbeat",
+        "Native reader pending bytes zero",
+        "At least31seconds remain in the fixed40second capture"
+      ]
+    },
+    "ledger": {
+      "target_count": 932,
+      "index_range": [
+        0,
+        931
+      ],
+      "source_system": 1,
+      "source_component": 1,
+      "fields": [
+        "index",
+        "param_id",
+        "param_type",
+        "param_value_bits_hex",
+        "mavlink_sequence",
+        "raw_offset",
+        "frame_sha256",
+        "native_read_completed_ticks",
+        "classification"
+      ],
+      "counts": [
+        "unique indexes",
+        "exact missing indexes",
+        "duplicate indexes",
+        "duplicate IDs",
+        "out-of-order",
+        "bad CRC and framing",
+        "invalid source/count/index/ID/type",
+        "exact STAT_RUNTIME sentinel separately"
+      ],
+      "errors_scope": "PARAM_VALUE_LEDGER_AND_STREAM_FRAMING_ONLY",
+      "not_proof_of_all_other_message_integrity": true
+    },
+    "checkpoint": {
+      "relative_to": "PC request write start, not first response or parser time",
+      "deadline_us": "30000000",
+      "inclusive_native_read_completion_deadline": true,
+      "seal_condition": "Native LastReadEndTicks strictly greater than deadline AND PendingByteCount==0",
+      "output_leaf": "param_list_30s.json",
+      "create_new_only": true,
+      "postdeadline_reception_continues_until": "fixed40second capture ends",
+      "late_predeadline_data": "Invalidates completeness in final ledger without rewriting prior checkpoint",
+      "zero_attempt_or_unproven_window": "NOT_ATTEMPTED or INCOMPLETE_EVIDENCE; no fabricated checkpoint"
+    },
+    "orchestration": {
+      "opt_in_tool_count": 21,
+      "typed_pin_and_fresh_execution_permit_required": true,
+      "private_write_ledger_not_relaxed": true,
+      "no_automatic_acceptance_or_deployment": true,
+      "incomplete_load_and_diagnostic_errors_preserved": true,
+      "internal_records_and_required_r18_restore_not_skipped_for_missing_parameters": true,
+      "legacy_diagnostic_mode_tool_count": 20
+    },
+    "hardware_interaction": false,
+    "com_open_attempts": 0,
+    "device_flashes": 0,
+    "jtag_operations": 0,
+    "live_authorization_consumed_by_this_change": false,
+    "new_candidate_created": false,
+    "new_prepared_pin_created": false,
+    "firmware_sources_changed": false,
+    "sdk_changed": false,
+    "uart_or_rf_settings_changed": false,
+    "tdd_changed": false,
+    "product_usb_budget_ms": 106
+  },
+  "verification": {
+    "test_first_evidence": [
+      "ledger/summary.json",
+      "capture/summary.json",
+      "outer/summary.json"
+    ],
+    "new_checks": {
+      "helper": 47,
+      "capture_integration": 65,
+      "outer_contract": 49,
+      "unique_total": 161,
+      "windows_powershell_51": "161/161 PASS",
+      "powershell_7": "161/161 PASS"
+    },
+    "initial_complete_ctest": {
+      "exit_code": 8,
+      "total": 401,
+      "passed": 399,
+      "failed": 2,
+      "real_seconds": 512.11,
+      "failed_tests": [
+        "R19-timed_path_capture_persistence-OFFLINE-001",
+        "R19-aux_readiness_capture_routing-OFFLINE-001"
+      ]
+    },
+    "compatibility_repairs": {
+      "existing_tests_modified": false,
+      "details": [
+        "Restored self-contained inert inline CLI persistence context; optional locals are only read for explicitly bound opt-in",
+        "Kept the single existing AUX/mode guard, nesting the new parameter option comparisons separately",
+        "Parent opt-in argv/permit binding uses the existing PSBoundParameters convention, so omitted flags remain false"
+      ],
+      "targeted_retest": "Both original failed tests passed after production repair",
+      "harness_environment_caveat": "A first targeted rerun omitted the Windows PowerShell module path, causing Get-FileHash command resolution failure; re-executed with the same module path as the full suite. This environmental failed run was retained in ctest_repaired_failures.log."
+    },
+    "arduino": {
+      "fqbn": "esp32:esp32:XIAO_ESP32S3",
+      "esp32_core": "3.3.11",
+      "order": [
+        "vehicle",
+        "ground"
+      ],
+      "build_only": true,
+      "upload": false,
+      "vehicle": {
+        "exit_code": 0,
+        "flash_bytes": 390613,
+        "ram_bytes": 101920,
+        "log": "arduino_vehicle.log",
+        "binary_sha256": "EB8BCBB3AE3154B42D533A06323985A884EA18D4A5245ECE698E21A406516287"
+      },
+      "ground": {
+        "exit_code": 0,
+        "flash_bytes": 360849,
+        "ram_bytes": 65512,
+        "log": "arduino_ground.log",
+        "binary_sha256": "AE005B967CB0B4215DBE83BB35BFCD64C216CF19DA9FAC948EBF2C1500756568"
+      },
+      "new_build_binaries_not_accepted_r18_artifacts": true
+    },
+    "protected_sources_unchanged": [
+      {
+        "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+        "sha256": "691C00CD527348828FDAA3FA339E68425A0F247AF6C20720A9FB5E54D831E8F6"
+      },
+      {
+        "path": "firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+        "sha256": "47CE684BB11CD3807CA15605982BD98B66C7CB4258BE63DEA229E10E1793A258"
+      },
+      {
+        "path": "tools/r19_continuous_reader.cs",
+        "sha256": "B9C22B9E74F32E09C1210F976363CF4513C66F3131780B96972BEC48B1F907EF"
+      },
+      {
+        "path": "tools/r19_startup_reader.cs",
+        "sha256": "939EF6C3333B1BC67782CFB02AEBFBC067EE6AAC7C789FB171F06C2B9F8A8C2E"
+      },
+      {
+        "path": "tools/run_r19_pixhawk_param_list_e2e_hil.ps1",
+        "sha256": "32FEFF40F5CA4325C6154AEC9A944256F704C9F574F31C277EC6A309B7CBEA13"
+      },
+      {
+        "path": "vc_lora_vehicle_xiao_esp32s3/vc_lora_vehicle_xiao_esp32s3.ino",
+        "sha256": "B48C2E5197A7BF6F5C8B0896BACC7517997567FFDDBC835651C1FE56A88003B7"
+      },
+      {
+        "path": "vc_lora_ground_xiao_esp32s3/vc_lora_ground_xiao_esp32s3.ino",
+        "sha256": "33723E560F44D4D528C10425B62F8D36CCBF790D0B3ADFAB6615D01B575DE040"
+      }
+    ],
+    "sources": [
+      {
+        "path": "CMakeLists.txt",
+        "sha256": "D72774D62AF023BB4D0E5281B6B20F5FF3991B9EFD013A6D3EBE862193F0C7B4"
+      },
+      {
+        "path": "tools/run_r19_timed_path_capture.ps1",
+        "sha256": "DC2FD9815DC60C19584845AD806A7C5E12F37073AB94B9564C1F615C54464DEA"
+      },
+      {
+        "path": "tools/r19_timed_path_acquisition.ps1",
+        "sha256": "2F3E555879E9F3267EF8CC75E3DD0B66C44D8C0F920E6E8224A220EBB69C79F8"
+      },
+      {
+        "path": "tools/r19_timed_path_outer.ps1",
+        "sha256": "3520AB16FB0CEB1D9C1B22D308D058ED47E1F409C75C7BAFEB742A9E36623ED6"
+      },
+      {
+        "path": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+        "sha256": "A37F266DBA0A2435B7D3B7E39C4510FD782E1907B8D55B49F4108C0B682B4461"
+      },
+      {
+        "path": "tools/r19_param_list_diagnostics.ps1",
+        "sha256": "87111812DE5674B38F54C05D2A1771FDFC7B00CCE757F4C167CD74D594104E5B"
+      },
+      {
+        "path": "tests/hil/check_r19_param_list_diagnostics.ps1",
+        "sha256": "E9B728E754D9A076B604C5723A95F71072447C13112F8E4428873494F883E36D"
+      },
+      {
+        "path": "tests/hil/check_r19_param_list_capture_contract.ps1",
+        "sha256": "EF138BE42D26A4119FB3FC5B9FE14258B2609B177A5D823E67126C6DBBC80050"
+      },
+      {
+        "path": "tests/hil/check_r19_param_list_outer_contract.ps1",
+        "sha256": "CE37876C243077EF949054AED4A28E9D6D25A7685B25F4282BFFE7DE2E49F7F9"
+      }
+    ],
+    "final_complete_ctest": {
+      "exit_code": 0,
+      "total": 401,
+      "passed": 401,
+      "failed": 0,
+      "real_seconds": 674.9,
+      "source_digests_unchanged_during_run": true,
+      "log": "host_final.log",
+      "detail": "ctest_final.log",
+      "ordinary_host_summary": {
+        "total": 277,
+        "passed": 275,
+        "expected_failures": 2,
+        "failed": 0
+      }
+    },
+    "final_powershell7_outer_contract": {
+      "exit_code": 0,
+      "checks": 49,
+      "log": "outer_final_ps7.log"
+    },
+    "legacy_diagnostic_runner": {
+      "legacy_diagnostic_runner_unchanged": true,
+      "sha256": "4811B2F746BD6C117BDBA4ADFF8943C2684E68F52714F7BD7AE1E77D54AB91B4"
+    }
+  },
+  "artifacts": {
+    "diff": "changes_final.patch",
+    "initial_ctest_log": "host_full.log",
+    "initial_ctest_detail": "ctest_initial.log",
+    "final_ctest_log": "host_final.log",
+    "ledger_tests": "ledger/summary.json",
+    "capture_tests": "capture/summary.json",
+    "outer_tests": "outer/summary.json",
+    "final_ctest_detail": "ctest_final.log",
+    "note": "Text diffs are for review; the final source SHA256 digests identify the exact tested files."
+  },
+  "limitations": [
+    "Only offline implementation and synthetic fixtures were evaluated in this change.",
+    "No hardware932/932 completion,30second completion, simultaneous Heartbeat maximum2500ms, or all-device-errors-zero claim is made.",
+    "PC write acceptance is distinct from Ground/Pixhawk/RF delivery.",
+    "The ledger CRC scope is PARAM_VALUE; skipped messages are not certified.",
+    "A new21tool source-bound prepared pin and a new one-shot safety-confirmed hardware authorization are still needed before live execution.",
+    "Previously accepted R18 device restoration was not altered; no device operation was performed in this change."
+  ],
+  "acceptance_eligible": false,
+  "deployment_authorized": false,
+  "saved_utc": "2026-10-24 00:35:13 UTC",
+  "source_frozen": true
+}

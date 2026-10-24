@@ -1,0 +1,153 @@
+{
+  "schema": "vc-lora-r19-param-list-outer-offline-fix-v1",
+  "result": "PASS_SCOPED_OFFLINE_CONTRACTS_FULL_INTEGRATION_PENDING",
+  "hardware_interaction": false,
+  "source_frozen": true,
+  "owned_files": [
+    {
+      "path": "tools/r19_timed_path_acquisition.ps1",
+      "sha256": "2F3E555879E9F3267EF8CC75E3DD0B66C44D8C0F920E6E8224A220EBB69C79F8",
+      "bytes": 33191,
+      "parse_errors": []
+    },
+    {
+      "path": "tools/r19_timed_path_outer.ps1",
+      "sha256": "3520AB16FB0CEB1D9C1B22D308D058ED47E1F409C75C7BAFEB742A9E36623ED6",
+      "bytes": 18992,
+      "parse_errors": []
+    },
+    {
+      "path": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "sha256": "FC0DC506214D72FE87535D2E06D5565DB095890A2AE4F7B27D09DCB910039571",
+      "bytes": 206723,
+      "parse_errors": []
+    },
+    {
+      "path": "tests/hil/check_r19_param_list_outer_contract.ps1",
+      "sha256": "CE37876C243077EF949054AED4A28E9D6D25A7685B25F4282BFFE7DE2E49F7F9",
+      "bytes": 14461,
+      "parse_errors": []
+    }
+  ],
+  "changes": [
+    "Added opt-in ParamListDiagnostics CLI/plan/permit/prepared-pin binding. Missing legacy JSON flag means false; present flag must be typed boolean. True/false downgrade and mixed read-comparison mode are rejected.",
+    "Legacy tool list is20 with AUX+diagnosticUSB flags; load opt-in adds exact canonical helper as21st source hash binding. Does not generate or modify firmware candidates.",
+    "Parent forwards the flag to capture, emits typed one-run permit flag, validates additive capture ledger, saves param_list_diagnostics.json and records a diagnostics-only terminal status.",
+    "Capture ledger binds target932, relative deadline30000000us, canonical14-byte request SHA256, at most1attempt, samePCclock, measurement-start bound and sum(private-write-ledger)+request-attempt count.",
+    "Accepted local partial byte counts0..14, request exceptions and missing-readiness0attempt remain diagnostic observations. Target-not-met alone does not invalidate raw capture or skip internal records/mandatory acceptedR18 restoration.",
+    "Current R19 acceptance runner and its diagnostic-build rejection are unchanged; no acceptance/deployment authorization is granted."
+  ],
+  "test_first": {
+    "initial_red": {
+      "chunk_id": "47082a",
+      "wall_time_seconds": 0.9168468,
+      "exit_code": 1,
+      "original_token_count": 88,
+      "output": "Exception: E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tests\\hil\\check_r19_param_list_outer_contract.ps1:7\r\nLine |\r\n   7 |  … [bool]$Value,[string]$Name){if(-not$Value){throw \"FAIL $Name\"};$scrip …\r\n     |                                               ~~~~~~~~~~~~~~~~~~\r\n     | FAIL opt-in pins twenty-one tools including exact helper\r\n"
+    },
+    "ledger_red": {
+      "chunk_id": "938b8d",
+      "wall_time_seconds": 1.6556541999999999,
+      "exit_code": 1,
+      "original_token_count": 127,
+      "output": "FAIL enabled capture requires additive ledger\r\nAt E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tests\\hil\\check_r19_param_list_outer_contract.ps1:7 char:59\r\n+ ... [bool]$Value,[string]$Name){if(-not$Value){throw \"FAIL $Name\"};$scrip ...\r\n+                                                ~~~~~~~~~~~~~~~~~~\r\n    + CategoryInfo          : OperationStopped: (FAIL enabled ca...additive ledger:String) [], RuntimeException\r\n    + FullyQualifiedErrorId : FAIL enabled capture requires additive ledger\r\n \r\n"
+    },
+    "outcome_red": {
+      "chunk_id": "11d1d0",
+      "wall_time_seconds": 1.728357,
+      "exit_code": 1,
+      "original_token_count": 136,
+      "output": "FAIL target miss is acquired diagnostics not product acceptance\r\nAt E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tests\\hil\\check_r19_param_list_outer_contract.ps1:7 char:59\r\n+ ... [bool]$Value,[string]$Name){if(-not$Value){throw \"FAIL $Name\"};$scrip ...\r\n+                                                ~~~~~~~~~~~~~~~~~~\r\n    + CategoryInfo          : OperationStopped: (FAIL target mis...duct acceptance:String) [], RuntimeException\r\n    + FullyQualifiedErrorId : FAIL target miss is acquired diagnostics not product acceptance\r\n \r\n"
+    },
+    "write_count_red": {
+      "chunk_id": "2177db",
+      "wall_time_seconds": 1.8502286,
+      "exit_code": 1,
+      "original_token_count": 134,
+      "output": "FAIL request attempt binds actual serial write ledger count\r\nAt E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tests\\hil\\check_r19_param_list_outer_contract.ps1:7 char:59\r\n+ ... [bool]$Value,[string]$Name){if(-not$Value){throw \"FAIL $Name\"};$scrip ...\r\n+                                                ~~~~~~~~~~~~~~~~~~\r\n    + CategoryInfo          : OperationStopped: (FAIL request at...te ledger count:String) [], RuntimeException\r\n    + FullyQualifiedErrorId : FAIL request attempt binds actual serial write ledger count\r\n \r\n"
+    },
+    "exact_wire_red": {
+      "chunk_id": "8f92a3",
+      "wall_time_seconds": 1.9866507,
+      "exit_code": 1,
+      "original_token_count": 125,
+      "output": "FAIL request must bind frozen exact bytes\r\nAt E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\tests\\hil\\check_r19_param_list_outer_contract.ps1:7 char:59\r\n+ ... [bool]$Value,[string]$Name){if(-not$Value){throw \"FAIL $Name\"};$scrip ...\r\n+                                                ~~~~~~~~~~~~~~~~~~\r\n    + CategoryInfo          : OperationStopped: (FAIL request mu...zen exact bytes:String) [], RuntimeException\r\n    + FullyQualifiedErrorId : FAIL request must bind frozen exact bytes\r\n \r\n"
+    },
+    "final_new_contract": {
+      "windows_powershell_5_1": {
+        "exit_code": 0,
+        "passed_checks": 49
+      },
+      "powershell_7": {
+        "exit_code": 0,
+        "passed_checks": 49
+      },
+      "actual_parent_disposition_invocations": 3
+    }
+  },
+  "legacy_regression": {
+    "final_reruns": [
+      {
+        "test": "check_r19_timed_path_outer.ps1",
+        "exit_code": 0,
+        "output": "TIMED_PATH_OUTER PASS 40 checks\r\n"
+      },
+      {
+        "test": "check_r19_read_comparison_permit.ps1",
+        "exit_code": 0,
+        "output": "R19_READ_COMPARISON_PERMIT PASS 20 checks\r\n"
+      },
+      {
+        "test": "check_r19_timed_path_acquisition.ps1",
+        "exit_code": 0,
+        "output": "PASS: 61 checks\r\n"
+      },
+      {
+        "test": "check_r19_timed_path_artifact_contract.ps1",
+        "exit_code": 0,
+        "output": "check_r19_timed_path_artifact_contract PASS checks=36 hardware_interaction=false\r\n"
+      }
+    ],
+    "raw_outer": {
+      "test": "tests/hil/check_r19_timed_path_outer_raw.ps1",
+      "exit_code": 0,
+      "passed_checks": 36,
+      "failed_checks": 0
+    },
+    "read_comparison_capture": {
+      "test": "tests/hil/check_r19_read_comparison_capture_contract.ps1",
+      "explicit_repo_root": true,
+      "exit_code": 0,
+      "passed_checks": 57,
+      "failed_checks": 0,
+      "first_invocation_without_explicit_repo_root": "Harness default path error; repeated with explicit RepoRoot and all57passed."
+    }
+  },
+  "fixed_contract": {
+    "param_list_ledger_schema": "vc-lora-r19-param-list-diagnostics-v1",
+    "target_count": 932,
+    "deadline_us": "30000000",
+    "request_bytes": 14,
+    "request_sha256": "FC3A47A83D35D44E96E044A216FDBF082805F9FACCDD5E4B9252E0C7026D4A75",
+    "read_comparison_mode": "None",
+    "mode": "ExplicitHostArm",
+    "aux_required": true,
+    "diagnostic_usb_failure_required": true,
+    "acceptance_eligible": false,
+    "deployment_authorized": false
+  },
+  "diff": {
+    "path": "diff.patch",
+    "baseline": "Read-only publication/source_snapshot files for3modifiedtools (2026-10-24 before this change); new test added from/dev/null."
+  },
+  "pending": [
+    "Root to cross-test actual helper snapshots after helper timestamp fields finalize.",
+    "Root to run complete host/CMake suite and proportionate normalArduino build verification.",
+    "Fresh prepared21-tool pin and future one-shot live authorization are separate and were not created or consumed here."
+  ],
+  "limitations": [
+    "Offline validators prove supplied contract consistency, not physical USB/RF delivery or 932/30s feasibility.",
+    "A request-attempt entry and local serial.Write acceptance do not prove Ground MCU/Pixhawk/RF reception.",
+    "No hardware, COM, PnP, process inventory, OpenOCD/probe or candidate creation was performed."
+  ]
+}

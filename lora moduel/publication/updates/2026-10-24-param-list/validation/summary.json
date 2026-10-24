@@ -1,0 +1,23 @@
+{
+  "schema": "vc-lora-param-progress-publication-validation-v1",
+  "result": "PASS",
+  "checks": 594,
+  "inventoried_files": 47,
+  "secret_pattern_findings": 0,
+  "forbidden_files": 0,
+  "local_links": "PASS",
+  "json_parse": "PASS",
+  "powershell_syntax": "PASS",
+  "hardware_interaction": false,
+  "product_acceptance": false,
+  "scope": "Publication-only integrity/privacy and copied pure ledger fixtures; no new firmware implementation or hardware trial",
+  "copied_ledger_tests": {
+    "powershell7": "47/47 PASS",
+    "windows_powershell51": "47/47 PASS",
+    "hardware_operations": 0
+  },
+  "original_workspace_final_ctest": "401/401 PASS retained historical evidence; not rerun in this publication",
+  "independent_claim_review": "PASS",
+  "root_readme_links": "PASS",
+  "saved_utc": "2026-10-24T04:40:07.2247007Z"
+}

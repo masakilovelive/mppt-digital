@@ -1,0 +1,67 @@
+{
+  "schema": "vc-lora-r19-param-list-capture-integration-change-v1",
+  "result": "PASS_OFFLINE_ONLY",
+  "source_frozen": true,
+  "owned_source_files": [
+    "tests/hil/check_r19_param_list_capture_contract.ps1"
+  ],
+  "existing_source_files_changed_by_this_subtask": [],
+  "test_sha256": "EF138BE42D26A4119FB3FC5B9FE14258B2609B177A5D823E67126C6DBBC80050",
+  "tested_capture_sha256": "DC2FD9815DC60C19584845AD806A7C5E12F37073AB94B9564C1F615C54464DEA",
+  "tested_parent_entry_sha256": "A37F266DBA0A2435B7D3B7E39C4510FD782E1907B8D55B49F4108C0B682B4461",
+  "tested_helper_sha256": "87111812DE5674B38F54C05D2A1771FDFC7B00CCE757F4C167CD74D594104E5B",
+  "tested_outer_sha256": "3520AB16FB0CEB1D9C1B22D308D058ED47E1F409C75C7BAFEB742A9E36623ED6",
+  "red": {
+    "summary_path": "red/summary.json",
+    "log_path": "red.log",
+    "passed": 2,
+    "failed": 1,
+    "failure": "Missing explicit ParamListDiagnostics switch",
+    "capture_sha256": "9CDE505D40B7940E3F4AD223B99F9D36F61C6E46F9C19AB95676B271D0E8A47D"
+  },
+  "green": [
+    {
+      "edition": "Windows PowerShell 5.1",
+      "exit_code": 0,
+      "passed": 65,
+      "failed": 0,
+      "summary_path": "compatibility-ps51-final/summary.json",
+      "log_path": "compatibility-ps51-final.log"
+    },
+    {
+      "edition": "PowerShell 7",
+      "exit_code": 0,
+      "passed": 65,
+      "failed": 0,
+      "summary_path": "compatibility-ps7-final/summary.json",
+      "log_path": "compatibility-ps7-final.log"
+    }
+  ],
+  "coverage": [
+    "Default ImportOnly remains hardware-, process-, and permit-free; optional helper import is guarded by the explicit opt-in switch.",
+    "Actual request function and extracted production Ground branch require accepted diagnostic ARM, CRC-validated product Heartbeat, zero pending reader bytes, and at least 31 seconds remaining.",
+    "Attempt is fixed before writer invocation. Partial, zero, throwing, void, repeated, and reentrant writes never authorize retry.",
+    "Actual CRC product loop rejects corrupt Heartbeat before allowing one canonical 14-byte PARAM_REQUEST_LIST.",
+    "Checkpoint requires native LastReadEndTicks strictly greater than deadline with pending byte count zero. Deadline equality is not a sealing watermark.",
+    "Actual live ingestion and stopped tail preserve native completion timestamps and contiguous raw offsets.",
+    "932 CRC-valid unique values completing exactly at deadline produce a clean diagnostic checkpoint; a last CRC completed one tick late leaves index 931 missing in the 30-second view while final view contains 932.",
+    "CreateNew checkpoint persistence never overwrites existing evidence. Optional serialization failure occurs only after both raw streams are preserved.",
+    "Actual outer contract accepts real helper zero-request, partial-write, and full-932 snapshots and rejects clock, count, type, delivery-claim, and measurement-boundary corruption.",
+    "The actual inline CLI Save assignment, the complete definitions-only capture prefix, and the actual parent flag-forwarding AST each distinguish omitted, explicitly false, and true switch binding. Legacy/false summaries omit optional parameter fields; enabled summaries retain real helper snapshots; both raw file hashes are preserved."
+  ],
+  "fixture_refinements": [
+    "A source spelling assertion was replaced by actual AST product-loop inspection and executable CRC-gate dataflow verification.",
+    "JSON depth overflow differs by PowerShell edition. The raw-first serialization-failure fixture instead uses an integer-key dictionary rejected deterministically by both editions; failure and both raw streams remain mandatory.",
+    "An extracted scriptblock without a param block has an empty automatic PSBoundParameters dictionary. The inline Save and parent argv fixtures reuse the respective real switch parameter AST as a binding header, then pass the same omitted/false/true selection. Expectations and production AST bodies are unchanged."
+  ],
+  "hardware_interaction": false,
+  "com_open_attempts": 0,
+  "native_process_calls_from_test": 0,
+  "permit_consumed": false,
+  "acceptance_eligible": false,
+  "deployment_authorized": false,
+  "limitations": [
+    "Synthetic protocol and persistence tests do not prove RF delivery, Pixhawk request acceptance, physical USB behavior, 932 real parameter acquisition, or product timing acceptance.",
+    "The parent task owns production edits, CMake registration, complete host verification, firmware compilation, any separately authorized live test, and accepted R18 restoration."
+  ]
+}

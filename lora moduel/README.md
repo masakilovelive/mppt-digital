@@ -1,7 +1,7 @@
 # VC LoRa Bridge — 検証実験アーカイブ
 
 2026-10-24 JST更新。LoRa通信検証・R19診断開発を、指定フォルダ `lora moduel` にまとめた公開アーカイブです。
-最新は[時刻応答修正と通信停止の切分け](publication/updates/2026-10-24/README.md)です。今回の公開操作自体では、ファームウェア変更・実機操作・通信条件変更を行っていません。
+最新は[パラメータ取得要求と高速転送停止の評価](publication/updates/2026-10-24-param-list/README.md)です。今回の公開操作自体では、ファームウェア変更・実機操作・通信条件変更を行っていません。
 直下のソースは既存の公開スナップショットを保持し、各更新の関連ソースは日付別の `source_snapshot/` へ分離しています。最新更新も選別コピーであり、直下のソース全体を現行版へ同期したものではありません。
 
 ## 現在の結論
@@ -9,20 +9,21 @@
 - R18低速経路には、Mission Plannerで932/932パラメータを取得した過去の受入実績があります。取得時間6,045.839秒、同区間のHeartbeat最大間隔2,206.203 msです。
 - R19の目標は「932件を30秒以内、Heartbeat最大2,500 ms以下、全error 0」の同時達成ですが、**未達・受入未完了・Deployment未許可**です。
 - VehicleのUSBローカル時計応答未実装を修正し、直近2回の実機試験では両機の時刻応答が成立しています。
-- 最新の実機試験全体は2026年10月24日0時53分25秒から0時56分16秒JST。40.0123527秒測定、Ground読取り2,005.6241 ms休止・再開、内部記録取得、両機accepted R18復旧を完了しました。
-- 最新試験のGroundは意図的な読取り休止より19.8455222秒前にAUXのHIGH復帰待ち安全停止を報告しました。製品Heartbeatは0件で、106 ms条件・Heartbeat最大2,500 ms・932件30秒取得は未評価です。
-- 一つ前の同候補試験ではHeartbeat 39件、最大読取り間隔2,099.9918 ms、初回製品USB完了462 µsを確認しています。この結果を最新試験へ転用しません。
-- AUX観測停止とUSB再開漏れへの既存対策は実装済みですが、今回の記録はその特定条件と異なります。AUXの物理LOW継続と観測・判定の問題、USB診断失敗とPC起動・終了の因果は未確定です。
-- 最新の手順PASSは比較実行・記録取得・R18復旧の証明であり、製品受入ではありません。追加実機操作には新しい許可が必要です。
+- 最新の実機試験は2026年10月24日13時09分06秒から13時12分18秒JST。取得要求を1回送信し14 byteのPC側API受付を確認しましたが、要求起点30秒・40秒の保存生データとも0／932件でした。要求の無線・Pixhawk到達は未証明です。
+- 最新試験では初回HeartbeatのUSB完了450 µs・AUX fault 0を確認した後、Ground高速転送adapterの周期処理直後で停止しました。500 msのGrant待ち期限は有力仮説ですが、詳細原因は未確定です。
+- 同日10時40分開始のHeartbeat単独試験は保存生データ39件・最大間隔2,066.3112 ms・AUX fault 0でした。速報台帳38件との差は末尾集計漏れで、修正は未実装です。この合格値をパラメータ取得中へ転用しません。
+- 同日09時40分開始の試験は診断ARM前のAUX停止で取得要求0回でした。こちらは取得未実施であり、最新の要求後停止とは別の段階です。診断USBの初回31 byte待機記録も残り、因果関係は未確定です。
+- 全試験後に両機のaccepted R18復旧を確認済みです。手順PASSは記録取得・復旧の完了であり、製品受入ではありません。追加実機操作には新しい許可が必要です。
 
-最新結果は[2026年10月24日の更新](publication/updates/2026-10-24/README.md)、過去の段階は[2026年10月23日の更新](publication/updates/2026-10-23/README.md)と[保存修正とAUX判定の切分け](publication/updates/2026-10-22/README.md)を参照してください。
+最新結果は[取得要求と高速転送停止の評価](publication/updates/2026-10-24-param-list/README.md)、前回段階は[時刻応答修正と読取り比較](publication/updates/2026-10-24/README.md)、過去の段階は[2026年10月23日の更新](publication/updates/2026-10-23/README.md)と[保存修正とAUX判定の切分け](publication/updates/2026-10-22/README.md)を参照してください。
 [作業場所と仕様の統合資料](CURRENT_WORKSPACE_AND_SPEC_R19.md)には古い準備段階の記述も残るため、現在の進捗判定は最新の日付別更新を優先し、対象runとソースhashを照合してください。
 
 ## 読む順番
 
 | ファイル／ディレクトリ | 内容 |
 |---|---|
-| [publication/updates/2026-10-24/](publication/updates/2026-10-24/) | 最新の時刻応答修正、読取り比較、AUXとUSBの残課題、関連ソースと検証記録 |
+| [publication/updates/2026-10-24-param-list/](publication/updates/2026-10-24-param-list/) | 最新の取得要求1回・0／932件、高速adapter停止、Heartbeat単独試験、台帳追加と検証 |
+| [publication/updates/2026-10-24/](publication/updates/2026-10-24/) | 前回の時刻応答修正、読取り比較、AUXとUSBの残課題 |
 | [publication/updates/2026-10-23/](publication/updates/2026-10-23/) | 過去のAUX修正とVehicle時刻同期の原因調査 |
 | [publication/updates/2026-10-22/](publication/updates/2026-10-22/) | 一つ前の公開段階。保存修正とAUX切分け |
 | [CURRENT_WORKSPACE_AND_SPEC_R19.md](CURRENT_WORKSPACE_AND_SPEC_R19.md) | 作業場所、固定仕様、受入実績、未解決事項、履歴 |
@@ -87,9 +88,9 @@ Windows PowerShell 5.1またはPowerShell 7で、このディレクトリへ移�
 ```
 
 C++ホスト試験にはCMake 3.20以上、Ninja、C++17対応コンパイラが必要です。
-初回公開時の全host 345/345 PASSと、10月23日公開段階の元ワークスペース371/371 PASSは過去の結果です。最新段階は初回395/398合格、その後に失敗3件と影響範囲8件を再試験して合格しています。最終変更後の全398件一括合格とは区別します。
+初回公開時の全host 345/345 PASSと、10月23日公開段階の371/371 PASSは過去の結果です。最新の取得台帳追加段階では、初回399/401合格の後に互換性修正を行い、最終一括試験401/401 PASSを元ワークスペースで確認しています。
 **選別コピーによる全試験のclean-clone再現は保証しません。** 一部の試験は省略した過去run・sealed candidateを参照します。欠測で失敗したテストを削除・緩和して合格としないでください。
-今回の追加物で実行した項目は[10月24日公開時検証記録](publication/updates/2026-10-24/validation/summary.json)、初回公開コピーの検査は[初回公開時検証記録](publication/VALIDATION.md)で区別します。
+今回の追加物に対する確認は[取得台帳更新の公開時検証](publication/updates/2026-10-24-param-list/validation/summary.json)、前回段階は[時刻応答更新の公開時検証](publication/updates/2026-10-24/validation/summary.json)、初回公開コピーの検査は[初回公開時検証記録](publication/VALIDATION.md)で区別します。
 
 通常版Arduino buildにはXIAO ESP32-S3環境と所定の変更済みESP32 Core 3.3.11が必要です。
 SDKへのインストール・COM操作・書込みを行うツールは純オフライン確認ではありません。
@@ -97,9 +98,9 @@ SDKへのインストール・COM操作・書込みを行うツールは純オ�
 
 ## 今後の残作業
 
-1. Groundの先行AUX停止を、物理LOW継続とHIGH復帰の観測・状態判定に分ける。観測永久停止への対策は実装済みだが、今回のfault 5の根因は未確定。
-2. 実装済みの初回USB固定記録とPCの読取り・終了時刻を用い、起動・通常測定・終了を区別する。特定の再開漏れ対策で全timeoutが解消したとは扱わず、106 ms条件を維持する。
-3. 別の実機許可と安全確認後に切分け結果を検証し、その後に製品経路で932件／30秒／Heartbeat／全error 0を同時評価する。Vehicle時計応答と役割契約検証は修正・実機確認済み。
+1. 最新の要求後停止を、高速転送切替・Grant引継ぎ・adapter内部状態で切り分ける。500 ms期限超過と断定せず、状態とlast_errorを記録して失敗試験へつなぐ。
+2. AUXの約5秒LOW観測・診断USBの起動／終了失敗・Heartbeat末尾集計漏れを別件として扱う。今回はAUXを再現しなかっただけで、根因解消とはしない。106 ms条件を維持する。
+3. 修正後、別の実機許可と安全確認を経て、製品経路で932件／30秒／Heartbeat／全error 0を同一runで評価する。
 
 PowerShellは現時点ではPC側の開発・試験・証拠保存・復旧用です。
 通常製品通信はMission PlannerがGroundのCOM6を直接使用し、PowerShellやJevを通信の中継には使用しません。
@@ -110,7 +111,7 @@ Jevは任意のPC側Shadow助言機能であり、製品の判定・実機操作
 - 元ワークスペース全体ではありません。巨大なbuild tree、全run履歴、Arduino compiler生成物、driver配布ZIP、APIキー、履歴・画面画像等は除外しました。
 - raw診断の小さな`.bin`と、一部の過去R18 run内に保存されたaccepted application imageは、そのrunの証拠整合のため保持しています。
 - R19のsealed candidate一式、復旧用baselineの完全な依存関係、ローカルtoolchainは同梱していません。**このcloneをそのまま実機書込み可能な認証済みパッケージとして扱わないでください。**
-- 選別したvalidationのmanifestやsealは省略ファイルも参照し得ます。初回公開分は`publication/source_inventory.json`、日付別の追加原本は各更新の`source_inventory.json`で区別します。最新は`publication/updates/2026-10-24/source_inventory.json`です。初回公開の検証結果を、今回の追加物すべての再検証結果へ読み替えないでください。
+- 選別したvalidationのmanifestやsealは省略ファイルも参照し得ます。初回公開分は`publication/source_inventory.json`、日付別の追加原本は各更新の`source_inventory.json`で区別します。最新は`publication/updates/2026-10-24-param-list/source_inventory.json`です。初回公開の検証結果を、今回の追加物すべての再検証結果へ読み替えないでください。
 - 変更済みEspressifファイルのライセンス・帰属は[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)を参照。プロジェクト全体への新しいライセンス付与は行っていません。
 - GitHubへの公開・記載された過去の許可文言は、将来の実機操作・再試験の許可にはなりません。
 

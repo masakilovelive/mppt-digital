@@ -1,0 +1,245 @@
+﻿{
+    "schema":  "r19-param-list-diagnostics-offline-tests-v1",
+    "tests":  47,
+    "passed":  47,
+    "failed":  0,
+    "hardware_operations":  0,
+    "production_sources_changed":  false,
+    "results":  [
+                    {
+                        "name":  "pure-helper-import-and-fixed-frame",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "one-attempt-is-latched-before-partial-write-result",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "exception-never-authorizes-second-write",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "CRC-valid-v2-ledger-provenance",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "MAVLink1-fragmented-ledger",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "MAVLink2-each-byte-fragmented",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "unknown-frame-payload-magic-is-not-resynchronized",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "bad-CRC-is-not-admitted-to-value-ledger",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "signed-frame-is-not-claimed-authenticated",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "reject-wrong-count",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "reject-wrong-system",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "reject-wrong-component",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "reject-out-of-range",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "STAT_RUNTIME-sentinel-is-separate-not-parameter",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "STAT_RUNTIME-name-does-not-exempt-wrong-tuple",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "out-of-order-is-observed-not-lost",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "duplicate-index-is-not-unique-and-is-error",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "exact-deadline-is-inclusive",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "postdeadline-read-is-excluded-despite-early-analysis",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "boundary-partial-is-not-acquired",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "pre-request-partial-is-not-owned-by-request",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "delayed-analysis-of-predeadline-read-is-included-before-seal",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "postseal-predeadline-data-invalidates-not-rewrites-snapshot",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "postseal-postdeadline-data-does-not-invalidate-window",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "pending-tail-is-reported-without-claiming-completion",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "932-completion-and-clean-result-are-distinct-from-acceptance",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "932-plus-error-is-not-clean",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "freeze-default-cannot-fabricate-reader-watermark",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "missing-indexes-are-exact",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "raw-offset-gap-is-refused",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "native-time-reversal-is-refused",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "bounded-memory-cap-invalidates-evidence",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "bounded-frame-cap-invalidates-evidence",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "unstarted-snapshot-is-not-a-result",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "request-wire-clock-and-return-provenance",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "postdeadline-only-partial-does-not-dirty-30s-prefix",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "historical-snapshot-excludes-later-error-and-data",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "historical-snapshot-retains-earlier-parser-error",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "wrong-write-cursor-is-refused-before-attempt",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "return-time-before-write-is-refused",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "zero-attempt-schema-is-explicit",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "value-bits-and-wire-sequence-are-preserved",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "completion-time-is-native-time-not-processing-time",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "932-out-of-order-is-not-clean",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "final-is-only-ingested-prefix-not-fabricated-complete-observation",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "actual-private-wire-codecs-interoperate-with-fragmented-parameter-ledger",
+                        "passed":  true,
+                        "error":  ""
+                    },
+                    {
+                        "name":  "source-is-pure-and-has-no-live-authority",
+                        "passed":  true,
+                        "error":  ""
+                    }
+                ]
+}

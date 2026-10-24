@@ -1,0 +1,330 @@
+{
+  "schema": "vc-lora-r19-same-candidate-aux-usb-cause-comparison-v1",
+  "result": "COUNTEREXAMPLES_TO_SINGLE_USB_31_BYTE_CAUSE_IDENTIFIED_PHYSICAL_CAUSE_UNPROVEN",
+  "mode": "READ_ONLY_OFFLINE_EVIDENCE_COMPARISON",
+  "hardware_interaction": false,
+  "source_changes": false,
+  "candidate_id": "20261023T120117864Z-c22a4e7c",
+  "candidate_manifest_sha256": "5B710F68370021B3E4CD534AF2DBCB1A42C1EA93F7C9AF9FFDB21473F9945B3A",
+  "same_candidate_manifest_in_all_three_runs": true,
+  "clock_rules": [
+    "All elapsed times below are derived within one role and one boot using its recorded MCU microsecond clock.",
+    "No absolute MCU timestamp is subtracted between different runs or different roles.",
+    "A successful nonce-bound USB clock reply is not an independently guaranteed PC-to-MCU offset or drift bound.",
+    "The first-failure latch is per boot and per diagnostic/product class, not an independent first-failure latch for every PC lifecycle phase."
+  ],
+  "runs": [
+    {
+      "id": "20261024T004000Z-param-list-once",
+      "started_utc": "2026-10-24T00:40:54.8444914Z",
+      "measurement_seconds": 40.0122829,
+      "read_comparison_mode": "None",
+      "param_list_request_attempts": 0,
+      "ground_product_heartbeat_observations": 0,
+      "ground_timed_product_enqueued": false,
+      "ground_timed_product_usb_completed": false,
+      "ground_product_first_failure_latched": false,
+      "both_clock_replies_validated": true,
+      "ground_ready_validated_by_pc": true,
+      "ground_arm_write_accepted": true,
+      "ground_arm_accepted_in_mcu_record": true,
+      "ground_boot_id": [745434318, 2576197769, 940063546, 3712003490],
+      "ground_clock_reply_mcu_us": "12356268",
+      "ground_arm_mcu_us": "12610702",
+      "ground_aux": {
+        "fault_code": 5,
+        "first_fault_mcu_us": "11918038",
+        "uart_write_calls": 1,
+        "transaction_accepted_bytes": 32,
+        "transaction_accepted_mcu_us": "9918301",
+        "irq_low_sequence": 27,
+        "irq_low_mcu_us": "9918385",
+        "next_irq_high_sequence": 28,
+        "next_irq_high_mcu_us": "14963633",
+        "observed_irq_low_to_high_us": 5045248,
+        "fault_after_uart_acceptance_us": 1999737,
+        "fault_before_arm_us": 692664,
+        "fault_last_polled_level": 0,
+        "maximum_poll_gap_at_first_fault_us": 100533,
+        "first_fault_window_irq_events_retained": true,
+        "irq_history_overflow_total": 10,
+        "continuous_physical_low_proven": false
+      },
+      "vehicle_initial_diagnostic_usb_failure": {
+        "boot_id": [2554106933, 3154414301, 4094456950, 1347013940],
+        "failure_latched": true,
+        "action": 2,
+        "sequence": 1,
+        "source_line": 5227,
+        "reason": 16,
+        "failure_observed_mcu_us": "2618884",
+        "clock_reply_mcu_us": "25412609",
+        "expected_bytes": 63,
+        "accepted_bytes": 63,
+        "ring_pending_bytes": 31,
+        "publish_generation": 3,
+        "pickup_generation": 2,
+        "expected_epoch": 1,
+        "observed_epoch": 1,
+        "budget_ms": 95,
+        "terminal_name": "LoopTimeout"
+      },
+      "ground_first_diagnostic_usb_failure": {
+        "failure_latched": true,
+        "action": 2,
+        "sequence": 1,
+        "source_line": 5227,
+        "reason": 16,
+        "failure_observed_mcu_us": "10767894",
+        "expected_bytes": 63,
+        "accepted_bytes": 63,
+        "ring_pending_bytes": 31,
+        "publish_generation": 3,
+        "pickup_generation": 2,
+        "expected_epoch": 1,
+        "observed_epoch": 1,
+        "budget_ms": 100,
+        "terminal_name": "LoopTimeout",
+        "failure_after_irq_low_us": 849509,
+        "failure_before_aux_fault_us": 1150144,
+        "caused_aux_fault_proven": false
+      },
+      "raw_record_sha256": {
+        "ground_aux": "915DEDC4FA6F37480EA2814FA1178F468E992D3EF5DFF46FBA62D65B946087D0",
+        "vehicle_diagnostic_usb": "FCFEF4AD368FC8EA4A3FFAF043EE629218AEDD41B37F32132A2FA9DB7AB4A1B1",
+        "ground_diagnostic_usb": "BA8379B07364D52FAA418038A7FF307134B79E19C6FE18ECDBF918449633CA22"
+      }
+    },
+    {
+      "id": "20261023T233030Z-same-candidate-continuous-recheck",
+      "started_utc": "2026-10-23T23:32:06.1629607Z",
+      "measurement_seconds": 40.0076144,
+      "read_comparison_mode": "None",
+      "ground_product_heartbeat_observations": 37,
+      "ground_timed_product_enqueued": true,
+      "ground_timed_product_usb_completed": true,
+      "ground_first_product_local_completion_elapsed_us": 505,
+      "ground_product_first_failure_latched": true,
+      "ground_later_product_first_failure": {
+        "source_line": 3918,
+        "token": 38,
+        "expected_bytes": 21,
+        "accepted_bytes": 21,
+        "ring_pending_bytes": 0,
+        "failure_observed_mcu_us": "52339927",
+        "budget_ms": 106,
+        "strict_pc_lifecycle_phase": "UNKNOWN_WITHOUT_GUARANTEED_CLOCK_BOUNDS"
+      },
+      "both_clock_replies_validated": true,
+      "ground_ready_validated_by_pc": true,
+      "ground_arm_write_accepted": true,
+      "ground_arm_accepted_in_mcu_record": true,
+      "ground_boot_id": [2995041390, 1861940489, 2121926743, 1318847991],
+      "ground_clock_reply_mcu_us": "12238675",
+      "ground_arm_mcu_us": "12411090",
+      "ground_aux": {
+        "fault_code": 0,
+        "first_fault_mcu_us": null,
+        "uart_write_calls": 7,
+        "first_uart_accepted_mcu_us": "9994285",
+        "first_uart_corresponding_irq_low_sequence": 27,
+        "first_uart_corresponding_irq_low_mcu_us": "9994369",
+        "first_uart_corresponding_irq_high_sequence": 28,
+        "first_uart_corresponding_irq_high_mcu_us": "10523990",
+        "first_uart_observed_irq_low_to_high_us": 529621,
+        "maximum_observed_low_to_high_us_in_retained_prefix": 535131,
+        "maximum_poll_gap_whole_record_us": 208058,
+        "irq_history_overflow_total": 62,
+        "safety_fault_not_reproduced_this_run": true,
+        "recurrence_prevention_proven": false
+      },
+      "vehicle_initial_diagnostic_usb_failure": {
+        "boot_id": [146701900, 336516030, 2772395213, 102316475],
+        "failure_latched": true,
+        "action": 2,
+        "sequence": 1,
+        "source_line": 5227,
+        "reason": 16,
+        "failure_observed_mcu_us": "2626883",
+        "clock_reply_mcu_us": "25403262",
+        "expected_bytes": 63,
+        "accepted_bytes": 63,
+        "ring_pending_bytes": 31,
+        "publish_generation": 3,
+        "pickup_generation": 2,
+        "expected_epoch": 1,
+        "observed_epoch": 1,
+        "budget_ms": 83,
+        "terminal_name": "LoopTimeout"
+      },
+      "ground_first_diagnostic_usb_failure": {
+        "failure_latched": true,
+        "action": 0,
+        "sequence": 43,
+        "source_line": 4286,
+        "reason": 28,
+        "failure_observed_mcu_us": "52841901",
+        "expected_bytes": 0,
+        "accepted_bytes": 0,
+        "ring_pending_bytes": 0,
+        "publish_generation": 148,
+        "pickup_generation": 147,
+        "expected_epoch": 1,
+        "observed_epoch": 1,
+        "budget_ms": 100,
+        "not_the_initial_63_byte_31_byte_tail_pattern": true
+      },
+      "raw_record_sha256": {
+        "ground_aux": "6CAB238B6D781F3838CFAE554F6FC121CE97C4B78291130B3531C8FC9E934798",
+        "vehicle_diagnostic_usb": "78F713E095F6C4B73ACF1592015D4FBC2DE5DEBBB1391716D13AF6A3784E9677",
+        "ground_diagnostic_usb": "37CEF5AF9366E72ABC97A3FBFD8A59D2AB2AAFD4C6193E1DB643FA52EE50AF98"
+      }
+    },
+    {
+      "id": "20261023T155139Z-read-pause-lifecycle",
+      "started_utc": "2026-10-23T15:53:25.354019Z",
+      "measurement_seconds": 40.0123527,
+      "read_comparison_mode": "GroundPauseResume",
+      "ground_product_heartbeat_observations": 0,
+      "ground_timed_product_enqueued": false,
+      "ground_timed_product_usb_completed": false,
+      "ground_product_first_failure_latched": false,
+      "both_clock_replies_validated": true,
+      "ground_ready_validated_by_pc": true,
+      "ground_arm_write_accepted": true,
+      "ground_arm_accepted_in_mcu_record": true,
+      "ground_boot_id": [4201132766, 1830290617, 3700950819, 639216116],
+      "ground_clock_reply_mcu_us": "11878011",
+      "ground_arm_mcu_us": "12051688",
+      "ground_aux": {
+        "fault_code": 5,
+        "first_fault_mcu_us": "11744069",
+        "uart_write_calls": 1,
+        "transaction_accepted_bytes": 32,
+        "transaction_accepted_mcu_us": "9744297",
+        "irq_low_sequence": 25,
+        "irq_low_mcu_us": "9744381",
+        "next_irq_high_sequence": 26,
+        "next_irq_high_mcu_us": "14801879",
+        "observed_irq_low_to_high_us": 5057498,
+        "fault_after_uart_acceptance_us": 1999772,
+        "fault_before_arm_us": 307619,
+        "fault_last_polled_level": 0,
+        "maximum_poll_gap_at_first_fault_us": 100561,
+        "first_fault_window_irq_events_retained": true,
+        "irq_history_overflow_total": 4,
+        "continuous_physical_low_proven": false
+      },
+      "vehicle_initial_diagnostic_usb_failure": {
+        "boot_id": [2090557589, 2587628137, 326307569, 3281138463],
+        "failure_latched": true,
+        "action": 2,
+        "sequence": 1,
+        "source_line": 5227,
+        "reason": 16,
+        "failure_observed_mcu_us": "2584885",
+        "clock_reply_mcu_us": "24982425",
+        "expected_bytes": 63,
+        "accepted_bytes": 63,
+        "ring_pending_bytes": 31,
+        "publish_generation": 3,
+        "pickup_generation": 2,
+        "expected_epoch": 1,
+        "observed_epoch": 1,
+        "budget_ms": 84,
+        "terminal_name": "LoopTimeout"
+      },
+      "ground_first_diagnostic_usb_failure": {
+        "failure_latched": true,
+        "action": 3,
+        "sequence": 43,
+        "source_line": 5227,
+        "reason": 16,
+        "failure_observed_mcu_us": "52278894",
+        "expected_bytes": 63,
+        "accepted_bytes": 63,
+        "ring_pending_bytes": 50,
+        "publish_generation": 101,
+        "pickup_generation": 100,
+        "expected_epoch": 1,
+        "observed_epoch": 1,
+        "budget_ms": 100,
+        "terminal_name": "LoopTimeout",
+        "first_diagnostic_failure_after_aux_fault_us": 40534825
+      },
+      "raw_record_sha256": {
+        "ground_aux": "347876E2DACF979E0730EC5AF1E96257FDFF233EDDB26A733BA3CD4AE385FFFB",
+        "vehicle_diagnostic_usb": "669FED566BC413BD375D6E124A967FEF5996F2B17D596BECA12EF66FF20A6537",
+        "ground_diagnostic_usb": "3BC1E5C3FA41857A2DEC846F5E77809D144F239152554D386ECC5F45AF3518B9"
+      }
+    }
+  ],
+  "causal_findings": [
+    {
+      "claim": "Vehicle initial diagnostic USB 31-byte pending failure necessarily stops all product Heartbeat or causes Ground AUX fault",
+      "verdict": "FALSIFIED_BY_OBSERVED_COUNTEREXAMPLE",
+      "evidence": "The same immutable Vehicle pattern (63 accepted, 31 pending, publish 3 / pickup 2, source 5227, same candidate) occurs in all three boots. The 233030 boot nevertheless records Ground AUX fault 0 and 37 product Heartbeats, with first product local USB completion in 505 us.",
+      "scope_limit": "This does not exonerate every USB timing interaction; it rejects only a necessary, unconditional consequence of the observed Vehicle failure."
+    },
+    {
+      "claim": "A Ground diagnostic USB failure is a necessary earlier trigger of the Ground AUX safety fault",
+      "verdict": "FALSIFIED_FOR_THE_RECORDED_FIRST_FAILURE",
+      "evidence": "In 155139 the AUX fault precedes Ground first diagnostic failure by 40,534,825 us. The later diagnostic failure has ring 50 rather than the initial 31-byte pattern. In the latest run, the initial AUX IRQ LOW also precedes Ground USB failure by 849,509 us.",
+      "scope_limit": "Unrecorded successful or nonterminal USB activity may affect scheduling. A failed USB call can coincide with AUX observation delay; this comparison does not exclude that narrower mechanism."
+    },
+    {
+      "claim": "Current failure is produced by the new PARAM_REQUEST_LIST load",
+      "verdict": "NOT_SUPPORTED_REQUEST_NOT_SENT",
+      "evidence": "Latest request_attempts is 0, product enqueue is false, and the same AUX fault/approximately 5-second observed LOW existed in 155139 before the new request diagnostic."
+    },
+    {
+      "claim": "Clock/READY/ARM implementation is absent in the failing runs",
+      "verdict": "NOT_SUPPORTED_BY_CURRENT_RECORDS",
+      "evidence": "Both role clock replies validate and Ground READY/ARM occur in all three runs. In the two AUX-fault boots, fault is earlier than ARM by 692,664 us and 307,619 us respectively. ARM success does not reset an already latched backend fault."
+    },
+    {
+      "claim": "The same firmware can exhibit different AUX transaction durations",
+      "verdict": "OBSERVED",
+      "evidence": "For the first Ground UART transaction, the two failure boots retain LOW-to-HIGH intervals 5,045,248 us and 5,057,498 us; the no-AUX-fault boot retains 529,621 us. These are per-boot durations, not cross-boot absolute-time differences.",
+      "scope_limit": "Only observed GPIO transitions are established. E220 RF airtime, physical LOW continuity, missed interrupts, power integrity and the external cause are not proved by these records."
+    }
+  ],
+  "sources": [
+    {
+      "path": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T004000Z-param-list-once/summary.json",
+      "sha256": "929C8C3A7C8C01281D32F21201E2809867145BCE01BEC846A24080D0B0CAE7C7"
+    },
+    {
+      "path": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T004000Z-param-list-once/capture/summary.json",
+      "sha256": "342CA5766A1F01E5C6B62769569E28D2BFD6BA7FC147A6C61849915AEBE08EAD"
+    },
+    {
+      "path": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261023T233030Z-same-candidate-continuous-recheck/summary.json",
+      "sha256": "2059FAF9DD736578832FFE8AEA3558EE9170A88487416392FD67E5F6A6975018"
+    },
+    {
+      "path": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261023T233030Z-same-candidate-continuous-recheck/capture/summary.json",
+      "sha256": "AAA481F81BD2C25D8FBBD3EBEEB85F3A7113074D3C37A0C887CFA252821174A4"
+    },
+    {
+      "path": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261023T155139Z-read-pause-lifecycle/summary.json",
+      "sha256": "2441DCD97B89D07A84CDEE2A9D167132909F1C4EFE218A492BEB62C38054D015"
+    },
+    {
+      "path": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261023T155139Z-read-pause-lifecycle/capture/summary.json",
+      "sha256": "B9D908C599D5992EA11215E9F84896D8529527E308A04784248DAD022954C870"
+    }
+  ],
+  "physical_root_cause_proven": false,
+  "product_acceptance_proven": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "limitations": [
+    "This comparison reads saved records only and performs no new physical acquisition.",
+    "Same firmware does not mean identical boot history, RF peer timing, analog signal, host scheduling, or external conditions. It is not a randomized controlled intervention.",
+    "The IRQ histories retain the fault windows but have later overflow. Retained edges and poll samples are not independent proof of uninterrupted physical signal or interrupt coverage.",
+    "The 2-second fault uses runtime millisecond deadlines; acceptance-to-fault intervals slightly below 2,000,000 us are not, by themselves, evidence of a premature timeout.",
+    "Pending ring bytes, publish/pickup generations, API acceptance and PC reception are different layers; counter gaps are not missing-byte accounting or direct proof of a hardware FIFO fault.",
+    "The no-AUX-fault boot has a later product failure and is not an all-errors-zero acceptance result."
+  ]
+}

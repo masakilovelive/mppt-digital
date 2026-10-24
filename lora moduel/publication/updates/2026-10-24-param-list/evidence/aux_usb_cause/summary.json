@@ -1,0 +1,162 @@
+{
+  "schema": "vc-lora-r19-aux-usb-cause-investigation-v1",
+  "result": "IMMEDIATE_PRODUCT_STOP_EXPLAINED_AUX_ANOMALY_AND_USB_PENDING_PUBLICATION_SEPARATED_PHYSICAL_ROOT_CAUSES_UNPROVEN",
+  "candidate_id": "20261023T120117864Z-c22a4e7c",
+  "scope": {
+    "offline_investigation_only": true,
+    "additional_hardware_operations": 0,
+    "COM_JTAG_PnP_process_operations": 0,
+    "production_firmware_SDK_runner_edits": 0,
+    "original_evidence_edits": 0,
+    "new_live_authority_used": false,
+    "last_proven_device_image": "accepted R18, restored in prior authorized run",
+    "product_USB_budget_ms_unchanged": 106,
+    "AUX_timeout_ms_unchanged": 2000,
+    "acceptance_authorized": false,
+    "deployment_authorized": false
+  },
+  "compared_runs": [
+    {
+      "run": "20261024T004000Z-param-list-once",
+      "Ground_product_Heartbeat_count": 0,
+      "Ground_AUX_fault": 5,
+      "Ground_first_UART_bytes_accepted": 32,
+      "UART_acceptance_to_first_IRQ_LOW_us": 84,
+      "first_IRQ_LOW_to_HIGH_us": 5045248,
+      "Vehicle_initial_diagnostic_software_ring_bytes": 31
+    },
+    {
+      "run": "20261023T233030Z-same-candidate-continuous-recheck",
+      "Ground_product_Heartbeat_count": 37,
+      "Ground_AUX_fault": 0,
+      "Ground_first_UART_bytes_accepted": 32,
+      "UART_acceptance_to_first_IRQ_LOW_us": 84,
+      "first_IRQ_LOW_to_HIGH_us": 529621,
+      "Vehicle_initial_diagnostic_software_ring_bytes": 31,
+      "not_a_full_acceptance_pass": "A later product USB completion failure remains in this comparison run; Heartbeat37 is not all-errors-zero acceptance."
+    },
+    {
+      "run": "20261023T155139Z-read-pause-lifecycle",
+      "Ground_product_Heartbeat_count": 0,
+      "Ground_AUX_fault": 5,
+      "Ground_first_UART_bytes_accepted": 32,
+      "UART_acceptance_to_first_IRQ_LOW_us": 84,
+      "first_IRQ_LOW_to_HIGH_us": 5057498,
+      "Vehicle_initial_diagnostic_software_ring_bytes": 31
+    }
+  ],
+  "latest_Ground_same_clock_timeline_us": {
+    "UART_32_bytes_locally_accepted": 9918301,
+    "IRQ_LOW": 9918385,
+    "diagnostic_USB_flush_started": 10667928,
+    "diagnostic_USB_flush_returned_false": 10767882,
+    "diagnostic_USB_first_failure_saved": 10767894,
+    "AUX_fault_5_latched": 11918038,
+    "ClockRequest_received": 12356268,
+    "READY_USB_publication_completed": 12358492,
+    "diagnostic_ARM_accepted": 12610702,
+    "IRQ_HIGH": 14963633,
+    "maximum_AUX_poll_gap_at_fault": 100533
+  },
+  "immediate_causal_path": [
+    "The first locally accepted Ground32-byte radio write is followed by an observed AUX LOW interval much longer than in the same-candidate communicating comparison.",
+    "At the2-second LOW-wait condition, E220WriteContract latches AuxDidNotReturnHigh/FailClosed.",
+    "observe_radio_completion propagates that state to persistent runtime_fail_closed before diagnostic ARM.",
+    "Later AUX HIGH and diagnostic ARM do not clear the latched stop. Normal product egress is not serviced.",
+    "No product Heartbeat enqueue or PC reception is recorded, so the one-shot parameter request gate remains closed and request_attempts stays0."
+  ],
+  "USB31_byte_finding": {
+    "location": "MCU software TX ring, behind an already published packet",
+    "scope": "Initial63-byte diagnostic Alive, not product Heartbeat or PARAM_VALUE",
+    "initial_expected_accepted_bytes": 63,
+    "initial_ring_pending_bytes": 31,
+    "initial_publish_generation": 3,
+    "initial_pickup_generation": 2,
+    "blocker28": ["SoftwarePending", "FifoNotWritable", "PayloadPickupPending"],
+    "IN_EMPTY_enabled": true,
+    "IN_EMPTY_raw_pending_at_failure": false,
+    "reset_quarantine_lock_timeout_or_ZLP_cause_observed": false,
+    "different_from_previous_fix_signature": "This is not an idle/writable FIFO with a software tail and missing rearm. The published packet still lacks its local pickup/completion witness.",
+    "initial31_bytes_proven_stuck_for40_seconds": false,
+    "subsequent_progress": "Same epoch1 later records publish104/pickup103 and46 successful flush commits. Later diagnostic/private frames are CRC complete; bounded same-epoch flush-only recovery made progress without replaying the frame.",
+    "terminal_later_pending_record": "Generation104 ring31 is a different transaction. Its strict relationship to PC reader shutdown remains unproven; do not merge it with initial generation3.",
+    "unresolved_boundary": "For the initial publication, no generation-bound timestamped proof distinguishes missing host IN service from an MCU completion-event observation failure. Sticky IN-token/Connected bits alone do not prove a pending Windows Read.",
+    "physical_FIFO_byte_count_proven": false,
+    "31_bytes_lost_over_RF_or_bad_CRC_proven": false
+  },
+  "causal_hypothesis_assessment": [
+    {
+      "hypothesis": "This failing USB flush initiated AUX LOW",
+      "status": "CONTRADICTED_BY_ORDER_FOR_THIS_CALL",
+      "evidence": "AUX LOW precedes that USB flush start by749543us. This does not exclude every earlier USB activity or a shared/indirect cause."
+    },
+    {
+      "hypothesis": "USB blocked the main AUX observer for the full2-second timeout",
+      "status": "INCONSISTENT_WITH_SAVED_POLLING",
+      "evidence": "Maximum polling gap at first fault is100533us; the failing flush is99954us. Short missed HIGH pulses or interrupt-coverage gaps are not thereby excluded."
+    },
+    {
+      "hypothesis": "Vehicle initial31-byte diagnostic failure necessarily causes Ground AUX/product stop",
+      "status": "COUNTEREXAMPLE_EXISTS",
+      "evidence": "All3 runs have the Vehicle initial31-byte snapshot, including the run with Ground AUXfault0 and37 product Heartbeats."
+    },
+    {
+      "hypothesis": "Ground initial diagnostic failure is the common prerequisite for both AUX failures",
+      "status": "COUNTEREXAMPLE_EXISTS",
+      "evidence": "In the older AUX-failure run, the first recorded Ground diagnostic failure occurs40534825us after the AUX fault, not before it."
+    },
+    {
+      "hypothesis": "The932-parameter load caused the latest AUX stop",
+      "status": "NOT_A_CAUSE_IN_THIS_RUN",
+      "evidence": "PARAM_REQUEST_LIST attempts0. The stop predates diagnostic ARM."
+    },
+    {
+      "hypothesis": "AUX signal was physically uninterrupted LOW for5.05seconds or the E220 is defective",
+      "status": "NOT_PROVEN",
+      "evidence": "Consecutive retained digital IRQ edges and a LOW fault poll support a long LOW observation, but independent physical waveform/interrupt coverage and module internal state are absent."
+    }
+  ],
+  "READY_ARM_semantics": {
+    "meaning": "USB-only diagnostic session/readiness binding, not flight arming and not radio-health certification",
+    "why_they_can_succeed_after_AUX_fault": "The failure diagnostic loop intentionally continues private clock/READY/ARM handling. The readiness gate checks boot/epoch/session/nonce and USB publication, not E220/runtime health.",
+    "pre_ARM_radio_activity": "Normal TDD/RF processing continues while initial Ground product USB admission waits for HostArm.",
+    "first32_byte_identity": "TDD DoneDrain status and the only accepted32-byte Ground write are consistent with a normal UL_IDLE response. Exact writer/action/payload is not stored, so this identity remains an inference.",
+    "frozen_bridge_sha256": "691C00CD527348828FDAA3FA339E68425A0F247AF6C20720A9FB5E54D831E8F6",
+    "frozen_readiness_gate_sha256": "AB2407134125CE8E64F8CF44B08A265DF7A1BA1D9A0BF3C89C74B740527F8D56",
+    "source_lines": {
+      "USB_only_scope_comment": 31,
+      "ARM_acceptance": 593,
+      "failed_runtime_private_request_service": 664,
+      "AUX_fault_to_runtime_stop": 6353,
+      "READY_generation_after_clock": 6684,
+      "normal_path_stop_gate": 7051,
+      "readiness_gate_no_radio_health_input": 225
+    }
+  },
+  "offline_replay": {
+    "result": "PASS",
+    "checks": 25,
+    "failures": 0,
+    "implementation": "Exact frozen candidate E220WriteContract; no implementation change",
+    "what_is_proven": "Given the saved boundary times, the2-second failure and permanent latch reproduce. The normal0.53-second observation completes after the existing stable-HIGH/service-floor requirements.",
+    "what_is_not_proven": "Electrical/RF initiating cause, exact live polling schedule, complete product test or full regression acceptance"
+  },
+  "remaining_minimal_discriminants_not_implemented": [
+    "Preserve the first Ground UART writer owner, action type, token, exact32-byte payload, and matching incoming Grant/control identity on the same MCU clock.",
+    "Capture the first-fault-local AUX edges/polls with interrupt coverage/latency evidence; correlate with module RX/TX and M0/M1 actual state. Physical AUX capture is needed to distinguish missed transitions from a genuinely long LOW waveform.",
+    "For USB, bind IN-token/IN_EMPTY/pickup observations to the failing publish generation and lifecycle. Independently correlate host USB IN service before/after publication; COM Read call history alone is not a bus-level proof.",
+    "Keep USB-ready, radio-healthy and product-Heartbeat-ready verdicts distinct. Do not lengthen106ms/2seconds, auto-clear the safety latch, or force-replay accepted bytes without evidence and separate implementation authorization."
+  ],
+  "manufacturer_background_only": {
+    "source": "https://www.ebyte.com/Uploadfiles/Files/2021-7-6/202176188184448.pdf",
+    "sections": "5.6 and5.6.4",
+    "summary": "The manufacturer describes AUX as a combined send/receive-buffer and self-check indicator; LOW alone does not identify one internal activity or prove hardware failure.",
+    "applicability_limit": "E220-900T22D reference manual only. The physical variant is not established by this investigation; this document is not used to attribute the5-second interval to a particular mode or hardware defect."
+  },
+  "evidence": [
+    {"path": "aux_review.json", "sha256": "562A9FD5506D206C33EF49DA1C626D36EA20A2E45581E79493DD699C7A93F9C2"},
+    {"path": "usb_review.json", "sha256": "F2A195611EAA1879E7DAA564E0C167055B7A1818BF50CBFB74EDBF5371D0EB2A"},
+    {"path": "comparison_review.json", "sha256": "00DE09627876328EF2CEAD00408FAB31576743BF5A2C149E4056D3721278B189"}
+  ],
+  "conclusion_ja": "直接の停止経路はAUXの2秒制限による永続停止で特定できた。通信できた比較回ではAUX LOW→HIGH観測が約0.53秒、停止2回では約5.05秒。なぜ約5秒の間隔になったかは未確定。診断USBの初回31byteはソフトウェア待ちで、後続送信は進行しており40秒間永久滞留の証明ではない。USB失敗をAUX停止の単一共通原因とする説明は記録と合わない。"
+}

@@ -1,0 +1,125 @@
+{
+  "schema": "r19-param-list-diagnostics-offline-implementation-v1",
+  "result": "OFFLINE_PASS_NO_HARDWARE",
+  "source_frozen": true,
+  "new_files": [
+    {
+      "path": "tools/r19_param_list_diagnostics.ps1",
+      "sha256": "87111812DE5674B38F54C05D2A1771FDFC7B00CCE757F4C167CD74D594104E5B"
+    },
+    {
+      "path": "tests/hil/check_r19_param_list_diagnostics.ps1",
+      "sha256": "E9B728E754D9A076B604C5723A95F71072447C13112F8E4428873494F883E36D"
+    }
+  ],
+  "hardware_operations": 0,
+  "firmware_changes": 0,
+  "sdk_changes": 0,
+  "existing_source_changes": 0,
+  "cmake_changes": 0,
+  "tests": [
+    {
+      "phase": "initial_missing_implementation_RED",
+      "shell": "Windows PowerShell 5.1",
+      "total": 33,
+      "passed": 0,
+      "failed": 33,
+      "evidence": "red/summary.json"
+    },
+    {
+      "phase": "boundary_and_provenance_RED",
+      "shell": "Windows PowerShell 5.1",
+      "total": 42,
+      "passed": 39,
+      "failed": 3,
+      "evidence": "red-boundary/summary.json"
+    },
+    {
+      "phase": "boundary_GREEN",
+      "shell": "Windows PowerShell 5.1",
+      "total": 42,
+      "passed": 42,
+      "failed": 0,
+      "evidence": "green02/summary.json"
+    },
+    {
+      "phase": "value_sequence_completion_order_RED",
+      "shell": "Windows PowerShell 5.1",
+      "total": 45,
+      "passed": 42,
+      "failed": 3,
+      "evidence": "red-provenance/summary.json"
+    },
+    {
+      "phase": "final_prefix_coverage_RED",
+      "shell": "Windows PowerShell 5.1",
+      "total": 47,
+      "passed": 46,
+      "failed": 1,
+      "evidence": "red-final-coverage/summary.json"
+    },
+    {
+      "phase": "final_GREEN",
+      "shell": "Windows PowerShell 5.1",
+      "total": 47,
+      "passed": 47,
+      "failed": 0,
+      "evidence": "final-ps51/summary.json",
+      "stdout": "final_ps51.log"
+    },
+    {
+      "phase": "final_GREEN",
+      "shell": "PowerShell 7",
+      "total": 47,
+      "passed": 47,
+      "failed": 0,
+      "evidence": "final-ps7/summary.json",
+      "stdout": "final_ps7.log"
+    }
+  ],
+  "contracts": {
+    "schema": "vc-lora-r19-param-list-diagnostics-v1",
+    "deadline_us": "30000000",
+    "target_count": 932,
+    "canonical_request_hex": "FD02000063FFBE1500000101D507",
+    "request_sha256": "FC3A47A83D35D44E96E044A216FDBF082805F9FACCDD5E4B9252E0C7026D4A75",
+    "write_attempts_maximum": 1,
+    "local_write_acceptance_is_delivery_proof": false,
+    "default_raw_byte_cap": 4194304,
+    "default_frame_cap": 8192,
+    "incremental_buffer_maximum": 280,
+    "completed_native_read_end_defines_window": true,
+    "deadline_inclusive": true,
+    "pre_request_raw_cursor_quarantined": true,
+    "freeze_requires_explicit_observation_complete": true,
+    "late_predeadline_ingest_invalidates_sealed_evidence": true,
+    "errors_scope": "PARAM_VALUE_LEDGER_AND_STREAM_FRAMING_ONLY",
+    "unknown_messages_length_skipped": true,
+    "signed_param_values_not_authenticated": true,
+    "stat_runtime_sentinel": {
+      "system": 1,
+      "component": 1,
+      "count": 932,
+      "index": 65535,
+      "id": "STAT_RUNTIME",
+      "type": 6
+    },
+    "final_coverage": "INGESTED_RAW_PREFIX_ONLY",
+    "acceptance_eligible": false,
+    "deployment_authorized": false
+  },
+  "interoperable_private_framing": {
+    "ClockResponse": "MAVLink2 #111 length28; existing pure clock wire decoder validates fixture",
+    "Ready": "MAVLink2 #253 length66; existing pure readiness wire codec validates fixture",
+    "Alive": "MAVLink2 #253 length63; canonical wire shape and CRC83",
+    "Fail": "MAVLink2 #253 length63; canonical wire shape and CRC83",
+    "result": "All four skipped by complete declared lengths, with fragmented PARAM_VALUE between them; no noise or false parameter admission"
+  },
+  "diff": "changes.patch",
+  "limitations": [
+    "No live trial or Arduino builds performed by this subtask; parent coordinates full host/firmware validation.",
+    "Caller must establish native-reader watermark and total raw-prefix ingestion before Freeze ObservationComplete=true.",
+    "Skipped non-PARAM_VALUE CRCs are not certified by this helper.",
+    "No physical RF response causal proof, MCU clock bound, product acceptance, or deployment permission is granted."
+  ]
+}

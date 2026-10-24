@@ -1,0 +1,130 @@
+{
+  "schema": "vc-lora-r19-aux-cause-offline-review-v1",
+  "result": "PRE_ARM_TDD_RADIO_AUX_LOW_TIMEOUT_IS_IMMEDIATE_PRODUCT_BLOCKER_PHYSICAL_CAUSE_UNPROVEN",
+  "candidate": "20261023T120117864Z-c22a4e7c",
+  "scope": {"file_reads_only": true, "hardware_operations": 0, "source_edits": 0, "existing_evidence_modified": false},
+  "frozen_source_root": "runs/candidates/R19-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261023T120117864Z-c22a4e7c/package/vc_lora_ground_xiao_esp32s3",
+  "frozen_sources": [
+    {"path": "vc_lora_phase6_bridge.hpp", "sha256": "691C00CD527348828FDAA3FA339E68425A0F247AF6C20720A9FB5E54D831E8F6"},
+    {"path": "src/runtime_contract.cpp", "sha256": "1DDA0464CFFAEABF68F3782593C607965144AC2BF5DD774C77888847DEA668B5"},
+    {"path": "src/tdd_ground.cpp", "sha256": "6021D0799274A92A5F7AF7EC28AF7D7883DFB0CA6AD688D1D4162F042FD67EDF"},
+    {"path": "vc_lora/runtime_contract.hpp", "sha256": "4C1E05D03E72A40660971CFDE65EDC6901B5589C1990295A99F208B03D1CA2CF"}
+  ],
+  "latest_run": {
+    "path": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T004000Z-param-list-once",
+    "summary_sha256": "929C8C3A7C8C01281D32F21201E2809867145BCE01BEC846A24080D0B0CAE7C7",
+    "ground_same_mcu_timeline_us": {
+      "uart_32_bytes_accepted": "9918301", "aux_irq_low": "9918385", "first_low_poll": "9918424",
+      "diagnostic_usb_first_failure": "10767894", "aux_fault": "11918038", "clock_request": "12356268",
+      "ready_usb_publication": "12358492", "arm_accepted": "12610702", "aux_irq_high": "14963633"
+    },
+    "aux_low_irq_interval_us": "5045248",
+    "uart_accept_to_irq_low_us": "84",
+    "uart_accept_to_fault_us": "1999737",
+    "fault_before_arm_us": "692664",
+    "fault_poll": {"level": 0, "begin_us": "11918032", "end_us": "11918033", "maximum_prior_poll_gap_us": "100533", "poll_count": 307052},
+    "irq_attach_status": [0, 0, 0, 0],
+    "relevant_irq_sequences": [27, 28],
+    "irq_overflow_count": 10,
+    "uart_calls": 1,
+    "first_runtime_failure_source_line": 6356,
+    "first_runtime_failure_tdd_state": 5,
+    "first_runtime_failure_tdd_name": "DoneDrain",
+    "fault_code": 5,
+    "fault_name": "AuxDidNotReturnHigh",
+    "product_enqueue_observed": false,
+    "product_heartbeat_count": 0,
+    "param_request_attempts": 0
+  },
+  "same_candidate_comparison": [
+    {
+      "run": "20261023T233030Z-same-candidate-continuous-recheck",
+      "summary_sha256": "2059FAF9DD736578832FFE8AEA3558EE9170A88487416392FD67E5F6A6975018",
+      "candidate_id_matches": true,
+      "first_uart_accepted_us": "9994285", "first_irq_low_us": "9994369", "first_irq_high_us": "10523990",
+      "uart_to_low_us": "84", "first_low_interval_us": "529621",
+      "other_retained_long_low_intervals_us": ["534628", "534750", "535131", "535126"],
+      "aux_fault": 0, "uart_calls": 7, "product_heartbeat_count": 37,
+      "first_product_enqueue_us": "15130911", "first_product_complete_us": "15131416",
+      "vehicle_initial_diagnostic_usb_failure_observed_us": "2626883",
+      "interpretation": "A diagnostic USB startup failure can coexist with AUX success and later product Heartbeat delivery; diagnostic 31-byte failure is not by itself a sufficient cause of Ground AUX fail-closed."
+    },
+    {
+      "run": "20261023T155139Z-read-pause-lifecycle",
+      "summary_sha256": "2441DCD97B89D07A84CDEE2A9D167132909F1C4EFE218A492BEB62C38054D015",
+      "candidate_id_matches": true,
+      "first_uart_accepted_us": "9744297", "first_irq_low_us": "9744381", "first_irq_high_us": "14801879",
+      "uart_to_low_us": "84", "first_low_interval_us": "5057498",
+      "aux_fault_us": "11744069", "fault_maximum_poll_gap_us": "100561", "aux_fault": 5,
+      "uart_calls": 1, "product_heartbeat_count": 0,
+      "interpretation": "The latest approximately 5.05-second observed LOW recurs from an older same-candidate run, rather than being a new parameter-load failure."
+    }
+  ],
+  "causal_chain": [
+    {"certainty": "SOURCE_AND_RECORD_SUPPORTED", "claim": "A 32-byte Ground radio write was locally accepted before diagnostic ARM. HostArm gates Ground product USB publication, not all pre-ARM TDD radio activity."},
+    {"certainty": "SOURCE_AND_RECORD_SUPPORTED", "claim": "The runtime failure diagnostic reports Ground TDD DoneDrain. Frozen tdd_ground.cpp enters DoneDrain only after accepting SendDone. Empty Ground queues produce SendDone carrying UL_IDLE. The likely first write was therefore the standard v2 empty-uplink response, not PARAM_REQUEST_LIST or bulk parameter traffic."},
+    {"certainty": "INFERENCE_WITH_LIMITATION", "claim": "Exact bytes/action identity were not latched. UL_IDLE identification is a source/status inference, not a wire-payload readback."},
+    {"certainty": "RECORDED_DIGITAL_OBSERVATION", "claim": "AUX LOW was observed 84 us after acceptance and the next retained IRQ HIGH was about 5.045 s later, while the fault poll still read LOW at about 2 s."},
+    {"certainty": "SOURCE_AND_RECORD_SUPPORTED", "claim": "The fixed 2000 ms AUX timeout correctly caused persistent E220WriteContract FailClosed; runtime latch set runtime_fail_closed=true and bridge_ready=false. Millisecond rounding explains the 1999737 us acceptance-to-fault interval; it is not evidence of a premature 2-second timeout."},
+    {"certainty": "SOURCE_AND_RECORD_SUPPORTED", "claim": "Main product processing returns when runtime_fail_closed. Later AUX HIGH does not clear the permanent E220WriteContract fault. Clock/READY/ARM diagnostic handling can still run, so ARM acceptance does not mean radio or product egress was healthy."},
+    {"certainty": "RECORDED_RESULT", "claim": "No product frame enqueue or product Heartbeat follows. PARAM_LIST gating stays closed and no parameter request is sent. This run never tests product USB 106 ms or 932 parameters in 30 seconds."}
+  ],
+  "hypotheses": [
+    {"hypothesis": "Two-second total MCU polling blackout caused a false timeout", "assessment": "CONTRADICTED_BY_FAULT_SNAPSHOT", "reason": "307052 polls and maximum100533us prior poll gap; fault poll is LOW. The independent IRQ pair also records a roughly5s interval."},
+    {"hypothesis": "Short HIGH was missed between100ms polling gaps", "assessment": "NOT_ABSOLUTELY_EXCLUDED_BUT_NOT_SUPPORTED", "reason": "Consecutive relevant IRQ LOW/HIGH sequence supports no recorded intermediate HIGH; interrupt/waveform continuous coverage is not independently guaranteed and later history overflow is preserved."},
+    {"hypothesis": "USB diagnostic operation directly caused E220's electrical AUX LOW", "assessment": "NOT_PROVEN", "reason": "Diagnostic USB failure occurs after AUX LOW onset by849509us. It cannot explain that earlier onset by simple forward ordering. USB could influence later scheduling or duration, but no causal mechanism is recorded."},
+    {"hypothesis": "AUX fault is caused by new 932-parameter load", "assessment": "EXCLUDED_FOR_THIS_RUN", "reason": "No parameter request was attempted and fault precedes ARM."},
+    {"hypothesis": "Long digital AUX LOW during first standard Ground radio write", "assessment": "STRONGLY_SUPPORTED_IMMEDIATE_BOUNDARY", "reason": "Repeated same-candidate approximately5.05s intervals contrast with approximately0.53s in the successful run."},
+    {"hypothesis": "E220 electrical defect, RF contention, RF busy, mode transition, UART content/routing, interrupt latency or wiring cause", "assessment": "PHYSICAL_ROOT_CAUSE_UNPROVEN", "reason": "No exact failing UART payload, RF trace, synchronized two-ended RF schedule, continuous physical AUX waveform, supply waveform or module-internal status is retained."}
+  ],
+  "frozen_source_evidence": [
+    {"path": "vc_lora_phase6_bridge.hpp", "line": 30, "claim": "ExplicitHostArm holds initial Ground product USB admission, not all RF startup."},
+    {"path": "vc_lora_phase6_bridge.hpp", "line": 2449, "claim": "ISR samples GPIO and timestamps handler execution rather than certified electrical edge time."},
+    {"path": "vc_lora_phase6_bridge.hpp", "line": 2459, "claim": "Independent IRAM ISR install/any-edge/add/enable statuses are recorded."},
+    {"path": "vc_lora_phase6_bridge.hpp", "line": 2501, "claim": "UART acceptance diagnostic records requested/written counts, not payload or TDD action identity."},
+    {"path": "vc_lora_phase6_bridge.hpp", "line": 2575, "claim": "Runtime latch disables bridge after failure."},
+    {"path": "vc_lora_phase6_bridge.hpp", "line": 6312, "claim": "Standard radio write records acceptance and reports result to AUX contract."},
+    {"path": "vc_lora_phase6_bridge.hpp", "line": 6344, "claim": "Full UART acceptance commits action to TDD and sets radio_busy."},
+    {"path": "vc_lora_phase6_bridge.hpp", "line": 6353, "claim": "Observed source6356 latches AUX fail-closed in normal radio completion service."},
+    {"path": "vc_lora_phase6_bridge.hpp", "line": 6716, "claim": "AUX-only observation continues even while diagnostic USB owns boundary."},
+    {"path": "vc_lora_phase6_bridge.hpp", "line": 7051, "claim": "Persistent runtime fail-closed returns before normal ingress/egress/TDD processing."},
+    {"path": "src/runtime_contract.cpp", "line": 102, "claim": "Later AUX HIGH cannot automatically recover FailClosed."},
+    {"path": "src/runtime_contract.cpp", "line": 142, "claim": "AwaitingAuxHigh requires stable HIGH/floor or latches fault after2000ms."},
+    {"path": "vc_lora/runtime_contract.hpp", "line": 53, "claim": "Fixed timeout is2000ms."},
+    {"path": "src/tdd_ground.cpp", "line": 273, "claim": "Empty queue completion response is UL_IDLE."},
+    {"path": "src/tdd_ground.cpp", "line": 333, "claim": "Empty Ground queue after grant selects idle response."},
+    {"path": "src/tdd_ground.cpp", "line": 536, "claim": "Accepted SendDone is the only transition into DoneDrain."}
+  ],
+  "frozen_contract_boundary_replay": {
+    "result": "PASS", "checks": 25, "failures": 0, "compile_exit_code": 0, "execution_exit_code": 0,
+    "source_under_test": "Exact frozen candidate src/runtime_contract.cpp and vc_lora/runtime_contract.hpp; no implementation changes.",
+    "method": "Seed the prior stable HIGH state and32-byte acceptance, then replay saved LOW/fault/laterHIGH boundary times after the same integer microseconds-to-milliseconds conversion as the firmware. The optional one-ms-before-fault probe and normal completion probe are synthetic assertions, not new live observations.",
+    "outcomes": [
+      {"run": "20261024T004000Z-param-list-once", "fault_ms": 11918, "state": 5, "fault": 5, "late_high_recovers": false},
+      {"run": "20261023T155139Z-read-pause-lifecycle", "fault_ms": 11744, "state": 5, "fault": 5, "late_high_recovers": false},
+      {"run": "20261023T233030Z-same-candidate-continuous-recheck", "state": 1, "fault": 0, "completion_observed": true}
+    ],
+    "artifacts": [
+      {"path": "aux_contract_replay.cpp", "sha256": "3810F51047BBD9A60D6F217D9EC5D5821344E2339E27ED8C5CA528445C0F7B7F"},
+      {"path": "aux_contract_replay.exe", "sha256": "EFE567BBD1D913BE63BC437248A8C1C168BF0CD827A3A543C6AF3081C06F32BB"},
+      {"path": "aux_contract_compile.log", "sha256": "798EA5E0AC91070039192082A67675C532BAE2DED2DD5902F5B740FB4AC341D6"},
+      {"path": "aux_contract_replay.log", "sha256": "B1D99E57F1C34C8DB0515A1C7F7FCD56764274764738FBEEC18C183885C87C4D"}
+    ],
+    "limitations": "Boundary state-machine replay proves contract behavior given these samples, not the initiating electrical/RF cause or the complete runtime schedule. It is not a new full host-regression run."
+  },
+  "minimal_next_discriminator_not_implemented": [
+    "Latch failing UART writer owner, action/control kind, token, exact32-byte payload and same-MCU acceptance time; trace matching received grant/terminal bytes.",
+    "Retain first-fault-local AUX edge/poll window, not only later rolling state; preserve ISR coverage/latency flags.",
+    "Compare physical AUX waveform and exact hardware variant/configuration against normal0.53s vs abnormal5.05s observations before changing the2s safety condition.",
+    "Maintain one-writer exclusion and keep diagnostic USB startup/measurement/shutdown evidence separate from product106ms evaluation."
+  ],
+  "limitations": [
+    "No extra live experiment was authorized or executed by this investigation.",
+    "A retained IRQ interval is digital software evidence, not an oscilloscope-certified continuous physical LOW waveform.",
+    "No PC/MCU or cross-MCU absolute clock alignment is assumed for these comparisons.",
+    "The approximately5-second pattern alone cannot name an E220 internal feature or establish RF airtime.",
+    "Permanent fail-closed behavior is intentional protection; removing or extending it would not identify the physical initiating cause."
+  ],
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}
