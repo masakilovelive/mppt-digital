@@ -1,0 +1,414 @@
+{
+  "schema": "vc-lora-pregrant-fallback-publication-independent-review-v1",
+  "review_scope": "READ_ONLY_SAVED_FILES_PUBLICATION_CLAIMS_LINKS_SOURCE_AND_EVIDENCE_INTEGRITY",
+  "publication_root": "E:/VESC/_codex_build/mppt-lora-aux-20261022/lora moduel/publication/updates/2026-10-24-pregrant-fallback",
+  "original_root": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge",
+  "result": "PASS_REVIEWED_CLAIMS_AND_BYTES_ROOT_VALIDATION_FINALIZATION_STILL_REQUIRED",
+  "hardware_network_git_or_process_queries": false,
+  "publication_source_or_evidence_edits_by_reviewer": false,
+  "build_or_test_execution_by_reviewer": false,
+  "inventory": {
+    "manifest_sha256": "60F52DCF1B4BA15E69AE367F9B1ABE22D9F49A37165CC79FE1986A40CE965FC1",
+    "original_files": 337,
+    "bytes": 8214883,
+    "unique_destinations": 337,
+    "both_original_and_publication_sha_and_size_verified": true,
+    "original_and_publication_hash_comparisons": 674,
+    "mismatches": [],
+    "candidate_canonical_source_count": 76,
+    "candidate_tree_sha256": "D1C5FD58F0DEF08A683EA226BBA7AB2C314FB98BCDF528BA9323E8BEC36BD55F",
+    "all76_sealed_canonical_manifest_entries_bound": true,
+    "bridge_sha256": "896D1014C6BB75686F5A4EA0D5F5DA4A98E7DE83541E0288E3D6ED6226E9168E",
+    "host_test_files": 129,
+    "tool_files": 21,
+    "original_pinned_tool_count": 22,
+    "note": "19 of the22 trial-pinned tools are included, with2 additional related source tools (21 files total). The3 identity-bound live dispatch tools are omitted.",
+    "initial_inventory": {
+      "original_files": 336,
+      "bytes": 8161910,
+      "sha256": "165A00EC3AB0F48180E465164FE212BF93B6F775C91B20ABC0744E6A1BD63FF4",
+      "archived_relative_path": "validation/source_inventory_attempt1.json"
+    },
+    "additional_original_header": {
+      "source": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDCR19Diagnostic.h",
+      "destination": "source_snapshot/third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDCR19Diagnostic.h",
+      "sha256": "786E36D9178F1976AC1A185E994ACAF00C8FCA75486A172BB22993A9B6B546EE",
+      "bytes": 52973,
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    "initial_336_inventory_rows_retained_unchanged": true,
+    "additional_header_scope": "Byte-identical SDK diagnostic declaration header needed by selected host test fake includes;not a firmware logic change or a rebuilt/sealed candidate change. The canonical candidate source count remains76."
+  },
+  "claims_review": [
+    {
+      "claim": "Implemented safe one-shot pre-negotiation fallback, not a completed high-speed-start fix",
+      "status": "SUPPORTED",
+      "evidence": [
+        "evidence/fallback_fix/summary.json",
+        "source_snapshot/firmware/phase6/vc_lora_phase6_bridge.hpp",
+        "evidence/fallback_fix/bridge_implementation.diff"
+      ]
+    },
+    {
+      "claim": "Latest trial request1;4/932 at30s;6/932 at end;not932/30s",
+      "status": "SUPPORTED",
+      "evidence": [
+        "evidence/fallback_fix/usb_aux_product_trial_analysis.json",
+        "evidence/trial/capture/summary.json",
+        "evidence/trial/capture/ground.raw.bin"
+      ]
+    },
+    {
+      "claim": "37 PC Heartbeats,max2099.9267ms;PC timing not equivalent to fresh RF arrivals",
+      "status": "SUPPORTED_WITH_EXPLICIT_LIMITATION",
+      "evidence": [
+        "evidence/fallback_fix/usb_aux_product_trial_analysis.json",
+        "README.md"
+      ]
+    },
+    {
+      "claim": "First product USB completed487us;106ms condition unchanged",
+      "status": "SUPPORTED_FIRST_FRAME_ONLY",
+      "evidence": [
+        "evidence/trial/stage_ground/summary.json",
+        "evidence/fallback_fix/usb_aux_product_trial_analysis.json"
+      ]
+    },
+    {
+      "claim": "Local501ms Grant error remains but whole product route continues",
+      "status": "SUPPORTED_WITH_NO_DIRECT_FALLBACK_COUNTER_CLAIM",
+      "evidence": [
+        "evidence/fallback_fix/grant_fallback_trial_analysis.json",
+        "evidence/fallback_fix/usb_aux_product_trial_analysis.json"
+      ]
+    },
+    {
+      "claim": "Diagnostic USB31-byte Vehicle and59-byte Ground pending remain unresolved;not RF lost-byte counts",
+      "status": "SUPPORTED",
+      "evidence": [
+        "evidence/trial/stage_vehicle/summary.json",
+        "evidence/trial/stage_ground/summary.json",
+        "README.md"
+      ]
+    },
+    {
+      "claim": "No AUX timeout this trial does not prove continuous physical waveform;edge overflow84 remains",
+      "status": "SUPPORTED_GROUND_MAXIMUM_EXPLICITLY_QUALIFIED",
+      "evidence": [
+        "evidence/fallback_fix/usb_aux_product_trial_analysis.json",
+        "README.md"
+      ]
+    },
+    {
+      "claim": "Future two500ms-window high-speed alignment is a proposal,not implemented",
+      "status": "CORRECTLY_SEPARATED",
+      "evidence": [
+        "evidence/grant_alignment/contract_review.json",
+        "README.md"
+      ]
+    },
+    {
+      "claim": "Original workspace430/430 andVehicle-then-Ground builds are historical modification-validation evidence,not publication re-execution",
+      "status": "SUPPORTED_AND_CORRECTLY_SCOPED",
+      "evidence": [
+        "evidence/fallback_fix/host_suite_final_windows_ps51.log",
+        "evidence/fallback_fix/candidate_build.log",
+        "evidence/fallback_fix/summary.json",
+        "README.md"
+      ]
+    },
+    {
+      "claim": "This selected archive is not flashable or a complete sealed release",
+      "status": "EXPLICIT_AND_CONSISTENT_WITH_OMITTED_DEPENDENCIES",
+      "evidence": [
+        "README.md",
+        "source_inventory.json"
+      ]
+    },
+    {
+      "claim": "Publication does not authorize another live trial,acceptance or Deployment",
+      "status": "EXPLICIT",
+      "evidence": [
+        "README.md",
+        "../../../README.md"
+      ]
+    }
+  ],
+  "links": {
+    "local_links_reviewed": 41,
+    "resolved_at_initial_review": 39,
+    "unresolved_unexpected": [],
+    "expected_root_owned_pending": [],
+    "pending_target": "validation/summary.json",
+    "limitation": "All41 README links now resolve, including root's explicitly pending validation placeholder. That placeholder is NOT a publication PASS. Root must finish selected-check validation and replace it with final truthful results before commit.",
+    "resolved_at_final_review": 41,
+    "validation_summary_present": true,
+    "validation_summary_current_result": "VALIDATION_PENDING_NOT_FOR_PUBLICATION"
+  },
+  "package_safety": {
+    "forbidden_executable_application_artifacts": 0,
+    "included_bin_files": 38,
+    "capture_raw_bin_files": 2,
+    "fixed_diagnostic_record_bin_files": 36,
+    "bins_are_evidence_only": true,
+    "bin_file_sizes": [
+      {
+        "path": "evidence/trial/capture/ground.raw.bin",
+        "bytes": 3710
+      },
+      {
+        "path": "evidence/trial/capture/vehicle.raw.bin",
+        "bytes": 2674
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/aux_readiness_first.bin",
+        "bytes": 6144
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/aux_readiness_second.bin",
+        "bytes": 6144
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/diagnostic_usb_failure_first.bin",
+        "bytes": 256
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/diagnostic_usb_failure_second.bin",
+        "bytes": 256
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/endpoint-fifo-first.bin",
+        "bytes": 112
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/endpoint-fifo-second.bin",
+        "bytes": 112
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/first-usb-failure-first.bin",
+        "bytes": 384
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/first-usb-failure-second.bin",
+        "bytes": 384
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/grant_diagnostic_first.bin",
+        "bytes": 1024
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/grant_diagnostic_second.bin",
+        "bytes": 1024
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/ground-usb-commit-first.bin",
+        "bytes": 128
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/ground-usb-commit-second.bin",
+        "bytes": 128
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/hwcdc-restart-first.bin",
+        "bytes": 128
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/hwcdc-restart-second.bin",
+        "bytes": 128
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/runtime-stage-first.bin",
+        "bytes": 68
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/runtime-stage-second.bin",
+        "bytes": 68
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/timed_path_first.bin",
+        "bytes": 512
+      },
+      {
+        "path": "evidence/trial/stage_vehicle/timed_path_second.bin",
+        "bytes": 512
+      },
+      {
+        "path": "evidence/trial/stage_ground/aux_readiness_first.bin",
+        "bytes": 6144
+      },
+      {
+        "path": "evidence/trial/stage_ground/aux_readiness_second.bin",
+        "bytes": 6144
+      },
+      {
+        "path": "evidence/trial/stage_ground/diagnostic_usb_failure_first.bin",
+        "bytes": 256
+      },
+      {
+        "path": "evidence/trial/stage_ground/diagnostic_usb_failure_second.bin",
+        "bytes": 256
+      },
+      {
+        "path": "evidence/trial/stage_ground/endpoint-fifo-first.bin",
+        "bytes": 112
+      },
+      {
+        "path": "evidence/trial/stage_ground/endpoint-fifo-second.bin",
+        "bytes": 112
+      },
+      {
+        "path": "evidence/trial/stage_ground/first-usb-failure-first.bin",
+        "bytes": 384
+      },
+      {
+        "path": "evidence/trial/stage_ground/first-usb-failure-second.bin",
+        "bytes": 384
+      },
+      {
+        "path": "evidence/trial/stage_ground/grant_diagnostic_first.bin",
+        "bytes": 1024
+      },
+      {
+        "path": "evidence/trial/stage_ground/grant_diagnostic_second.bin",
+        "bytes": 1024
+      },
+      {
+        "path": "evidence/trial/stage_ground/ground-usb-commit-first.bin",
+        "bytes": 128
+      },
+      {
+        "path": "evidence/trial/stage_ground/ground-usb-commit-second.bin",
+        "bytes": 128
+      },
+      {
+        "path": "evidence/trial/stage_ground/hwcdc-restart-first.bin",
+        "bytes": 128
+      },
+      {
+        "path": "evidence/trial/stage_ground/hwcdc-restart-second.bin",
+        "bytes": 128
+      },
+      {
+        "path": "evidence/trial/stage_ground/runtime-stage-first.bin",
+        "bytes": 68
+      },
+      {
+        "path": "evidence/trial/stage_ground/runtime-stage-second.bin",
+        "bytes": 68
+      },
+      {
+        "path": "evidence/trial/stage_ground/timed_path_first.bin",
+        "bytes": 512
+      },
+      {
+        "path": "evidence/trial/stage_ground/timed_path_second.bin",
+        "bytes": 512
+      }
+    ],
+    "omitted_live_tools": [
+      {
+        "path": "tools/invoke_r19_candidate_app_flash_hil.ps1",
+        "absent": true
+      },
+      {
+        "path": "tools/invoke_r19_jtag_preflash_gate.ps1",
+        "absent": true
+      },
+      {
+        "path": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+        "absent": true
+      }
+    ],
+    "missing_external_dependencies_disclosed": true,
+    "historical_absolute_paths_and_USB_identity_disclosed_as_provenance": true,
+    "untouched_old_publication_directories_independently_proven": false,
+    "old_content_limit": "This reviewer compared the new archive against originals only; repository write scope/history preservation is root's Git audit responsibility.",
+    "source_and_metadata_hash_checks_do_not_authorize_live_dispatch": true
+  },
+  "findings": [
+    {
+      "severity": "LOW_DOCUMENTATION_PRECISION",
+      "file": "README.md",
+      "line": 39,
+      "issue": "100.591ms is Ground's maximum AUX polling gap,not a both-role global maximum;Vehicle is111.005ms.",
+      "recommended_resolution": "Explicitly qualify Ground or provide both values.",
+      "status": "RESOLVED_BY_ROOT_GROUND_QUALIFIER_VERIFIED",
+      "verified_wording": "Groundの最大観測間隔100.591 ms"
+    },
+    {
+      "severity": "EXPECTED_FINALIZATION",
+      "file": "validation/summary.json",
+      "issue": "Root-owned validation/summary.json now exists with result VALIDATION_PENDING_NOT_FOR_PUBLICATION. It is not yet evidence of final selected publication tests.",
+      "recommended_resolution": "Generate publication-selected validation results before commit;do not label them full430 or fresh Arduino reruns.",
+      "status": "EXPECTED_ROOT_FINALIZATION_PENDING_NOT_A_SOURCE_DEFECT"
+    }
+  ],
+  "review_limits": [
+    "No hardware/COM/JTAG/PnP/process/network/Git or build operation was performed.",
+    "No live-runtime acceptance,physical RF freshness,physical AUX waveform or clean-clone full430 reproduction is inferred.",
+    "Raw parsing and18 paired-record integrity from the saved trial are preserved in the byte-identical copied analysis;this publication review checks their copy integrity,not a new live acquisition.",
+    "Publication metadata intentionally references omitted images/historical dependencies;the README discloses that it is not a complete independently flashable sealed package."
+  ],
+  "file_fingerprints_at_initial_review": {
+    "new_README": "59065A89557FFBA1CC8D69E4098A131BC7EFE071B9A939D82169716CC3C2DEB0",
+    "root_README": "3947F6D55CC920FA894E4AC0ECA2C34527295FC7E64B154D1CDC7DC0DB307809",
+    "source_inventory": "165A00EC3AB0F48180E465164FE212BF93B6F775C91B20ABC0744E6A1BD63FF4"
+  },
+  "file_fingerprints_at_final_review": {
+    "new_README": "3DAAAA0821B988F18E611B59F4CF569D8DA2078E6AAEDE627DAF02EC3755B48A",
+    "root_README": "3947F6D55CC920FA894E4AC0ECA2C34527295FC7E64B154D1CDC7DC0DB307809",
+    "source_inventory": "60F52DCF1B4BA15E69AE367F9B1ABE22D9F49A37165CC79FE1986A40CE965FC1"
+  },
+  "check_groups": [
+    {
+      "name": "all337_original_and_destination_sha_and_sizes",
+      "pass": true
+    },
+    {
+      "name": "337_unique_destination_paths",
+      "pass": true
+    },
+    {
+      "name": "76_canonical_candidate_entries_size_sha_tree",
+      "pass": true
+    },
+    {
+      "name": "fixed_candidate_bridge896D_source_bound",
+      "pass": true
+    },
+    {
+      "name": "original336_inventory_rows_preserved_after_header_addition",
+      "pass": true
+    },
+    {
+      "name": "one_required_sdk_header_added_byte_identical",
+      "pass": true
+    },
+    {
+      "name": "three_identity_bound_live_tools_omitted",
+      "pass": true
+    },
+    {
+      "name": "41_document_links_resolve",
+      "pass": true
+    },
+    {
+      "name": "no_new_executable_application_or_ELF_MAP_archive",
+      "pass": true
+    },
+    {
+      "name": "38_small_binary_evidence_files_only",
+      "pass": true
+    },
+    {
+      "name": "claims_separate_fallback_proposal_and_fast_acceptance",
+      "pass": true
+    },
+    {
+      "name": "Ground_AUX_maximum_precision_note_resolved",
+      "pass": true
+    }
+  ],
+  "check_group_passed": 12,
+  "check_group_failed": 0
+}

@@ -1,0 +1,213 @@
+diff --git a/tests/host/fakes/fake_arduino_test_api.hpp b/tests/host/fakes/fake_arduino_test_api.hpp
+--- a/tests/host/fakes/fake_arduino_test_api.hpp
++++ b/tests/host/fakes/fake_arduino_test_api.hpp
+@@ -339,94 +339,115 @@
+-  std::uint32_t txLossEpoch() const noexcept { return loss_epoch_; }
+-
+-  bool flushTxCompleteDiagnostic(std::uint32_t timeout_ms,
+-      std::uint32_t expected_epoch,
+-      vc_lora::experimental::R19HwcdcFlushCallEvidence& evidence) noexcept {
+-    const auto token = evidence.transaction_token;
+-    const auto attempt = evidence.attempt_id;
+-    evidence = {};
+-    evidence.schema = 1U; evidence.transaction_token = token; evidence.attempt_id = attempt;
+-    evidence.validity_flags = 0x1FU | (endpoint_ready_ ? 0x20U : 0U);
+-    evidence.timeout_ms = timeout_ms; evidence.expected_loss_epoch = expected_epoch;
+-    evidence.started_ms = static_cast<std::uint32_t>(fake_arduino::now_us / 1000U);
+-    const bool result = flushTxComplete(timeout_ms, expected_epoch);
+-    evidence.finished_ms = static_cast<std::uint32_t>(fake_arduino::now_us / 1000U);
+-    evidence.elapsed_ms = evidence.finished_ms - evidence.started_ms;
+-    evidence.terminal_reason = result ? 1U : (expected_epoch != loss_epoch_ ? 6U : 5U);
+-    evidence.raw_return = result ? 1U : 0U;
+-    evidence.observed_loss_epoch = loss_epoch_;
+-    evidence.snapshot_started_ms = evidence.finished_ms;
+-    evidence.snapshot_finished_ms = evidence.finished_ms;
+-    evidence.state_flags = result ? 0xFU : 0x17U;
+-    evidence.flush_blocker_mask = result ? 0U : 0x18U;
+-    return result;
+-  }
+-
+-  void simulate_tx_loss() noexcept {
+-    ++loss_epoch_;
+-    bootstrap_pending_bytes_.clear();
+-  }
+-
+-  void set_plugged(bool plugged) noexcept { plugged_ = plugged; }
+-  void set_endpoint_ready(bool ready) noexcept { endpoint_ready_ = ready; }
+-  void set_tx_checked_accept_limit(std::size_t limit) noexcept {
+-    tx_checked_accept_limit_ = limit;
+-  }
+-  void set_available_for_write(int bytes) noexcept {
+-    available_for_write_script_.clear();
+-    available_for_write_ = std::max(0, bytes);
+-  }
+-  void set_available_for_write_sequence(int first, int second) noexcept {
+-    available_for_write_script_.clear();
+-    available_for_write_script_.push_back(std::max(0, first));
+-    available_for_write_script_.push_back(std::max(0, second));
+-  }
+-  void set_flush_consumes_timeout(bool enabled) noexcept {
+-    flush_consumes_timeout_ = enabled;
+-  }
+-  void set_flush_failures(std::size_t count) noexcept {
+-    flush_failures_remaining_ = count;
+-  }
+-
+-  void inject_rx(const std::uint8_t* bytes, std::size_t size) {
+-    if (bytes != nullptr) {
+-      rx_bytes_.insert(rx_bytes_.end(), bytes, bytes + size);
+-    }
+-  }
+-
+-  const std::vector<std::uint8_t>& tx_bytes() const noexcept {
+-    return tx_bytes_;
+-  }
+-  const std::vector<std::size_t>& tx_write_sizes() const noexcept {
+-    return tx_write_sizes_;
+-  }
+-  std::size_t flush_count() const noexcept { return flush_count_; }
+-  std::uint32_t last_flush_timeout_ms() const noexcept {
+-    return last_flush_timeout_ms_;
+-  }
+-  std::uint32_t baud_rate() const noexcept { return baud_; }
+-
+-  void reset_test_state() noexcept {
+-    begun_ = false;
+-    plugged_ = false;
+-    endpoint_ready_ = false;
+-    baud_ = 0U;
+-    loss_epoch_ = 0U;
+-    rx_bytes_.clear();
+-    tx_bytes_.clear();
+-    bootstrap_pending_bytes_.clear();
+-    tx_write_sizes_.clear();
+-    flush_count_ = 0U;
+-    tx_checked_accept_limit_ = std::numeric_limits<std::size_t>::max();
+-    available_for_write_ = 256;
+-    available_for_write_script_.clear();
+-    flush_consumes_timeout_ = false;
+-    flush_failures_remaining_ = 0U;
+-    last_flush_timeout_ms_ = 0U;
+-  }
+-
+- private:
+-  bool begun_{false};
+-  bool plugged_{false};
+-  bool endpoint_ready_{false};
+-  std::uint32_t baud_{0U};
+-  std::uint32_t loss_epoch_{0U};
++  std::uint32_t txLossEpoch() const noexcept {
++    const std::uint32_t sampled = loss_epoch_;
++    // Opt-in host-test race: return a valid sample, then model an ISR reset
++    // before the caller's next operation. Default/reset leaves this disabled.
++    if (epoch_samples_until_loss_ != 0U && --epoch_samples_until_loss_ == 0U) {
++      const_cast<FakeUsbSerial*>(this)->simulate_tx_loss();
++      epoch_sample_loss_triggered_ = true;
++    }
++    return sampled;
++  }
++
++  void simulate_tx_loss_after_epoch_sample(std::size_t samples) noexcept {
++    epoch_samples_until_loss_ = samples;
++    epoch_sample_loss_triggered_ = false;
++  }
++  bool epoch_sample_loss_triggered() const noexcept {
++    return epoch_sample_loss_triggered_;
++  }
++
++  bool flushTxCompleteDiagnostic(std::uint32_t timeout_ms,
++      std::uint32_t expected_epoch,
++      vc_lora::experimental::R19HwcdcFlushCallEvidence& evidence) noexcept {
++    const auto token = evidence.transaction_token;
++    const auto attempt = evidence.attempt_id;
++    evidence = {};
++    evidence.schema = 1U; evidence.transaction_token = token; evidence.attempt_id = attempt;
++    evidence.validity_flags = 0x1FU | (endpoint_ready_ ? 0x20U : 0U);
++    evidence.timeout_ms = timeout_ms; evidence.expected_loss_epoch = expected_epoch;
++    evidence.started_ms = static_cast<std::uint32_t>(fake_arduino::now_us / 1000U);
++    const bool result = flushTxComplete(timeout_ms, expected_epoch);
++    evidence.finished_ms = static_cast<std::uint32_t>(fake_arduino::now_us / 1000U);
++    evidence.elapsed_ms = evidence.finished_ms - evidence.started_ms;
++    evidence.terminal_reason = result ? 1U : (expected_epoch != loss_epoch_ ? 6U : 5U);
++    evidence.raw_return = result ? 1U : 0U;
++    evidence.observed_loss_epoch = loss_epoch_;
++    evidence.snapshot_started_ms = evidence.finished_ms;
++    evidence.snapshot_finished_ms = evidence.finished_ms;
++    evidence.state_flags = result ? 0xFU : 0x17U;
++    evidence.flush_blocker_mask = result ? 0U : 0x18U;
++    return result;
++  }
++
++  void simulate_tx_loss() noexcept {
++    ++loss_epoch_;
++    bootstrap_pending_bytes_.clear();
++  }
++
++  void set_plugged(bool plugged) noexcept { plugged_ = plugged; }
++  void set_endpoint_ready(bool ready) noexcept { endpoint_ready_ = ready; }
++  void set_tx_checked_accept_limit(std::size_t limit) noexcept {
++    tx_checked_accept_limit_ = limit;
++  }
++  void set_available_for_write(int bytes) noexcept {
++    available_for_write_script_.clear();
++    available_for_write_ = std::max(0, bytes);
++  }
++  void set_available_for_write_sequence(int first, int second) noexcept {
++    available_for_write_script_.clear();
++    available_for_write_script_.push_back(std::max(0, first));
++    available_for_write_script_.push_back(std::max(0, second));
++  }
++  void set_flush_consumes_timeout(bool enabled) noexcept {
++    flush_consumes_timeout_ = enabled;
++  }
++  void set_flush_failures(std::size_t count) noexcept {
++    flush_failures_remaining_ = count;
++  }
++
++  void inject_rx(const std::uint8_t* bytes, std::size_t size) {
++    if (bytes != nullptr) {
++      rx_bytes_.insert(rx_bytes_.end(), bytes, bytes + size);
++    }
++  }
++
++  const std::vector<std::uint8_t>& tx_bytes() const noexcept {
++    return tx_bytes_;
++  }
++  const std::vector<std::size_t>& tx_write_sizes() const noexcept {
++    return tx_write_sizes_;
++  }
++  std::size_t flush_count() const noexcept { return flush_count_; }
++  std::uint32_t last_flush_timeout_ms() const noexcept {
++    return last_flush_timeout_ms_;
++  }
++  std::uint32_t baud_rate() const noexcept { return baud_; }
++
++  void reset_test_state() noexcept {
++    begun_ = false;
++    plugged_ = false;
++    endpoint_ready_ = false;
++    baud_ = 0U;
++    loss_epoch_ = 0U;
++    epoch_samples_until_loss_ = 0U;
++    epoch_sample_loss_triggered_ = false;
++    rx_bytes_.clear();
++    tx_bytes_.clear();
++    bootstrap_pending_bytes_.clear();
++    tx_write_sizes_.clear();
++    flush_count_ = 0U;
++    tx_checked_accept_limit_ = std::numeric_limits<std::size_t>::max();
++    available_for_write_ = 256;
++    available_for_write_script_.clear();
++    flush_consumes_timeout_ = false;
++    flush_failures_remaining_ = 0U;
++    last_flush_timeout_ms_ = 0U;
++  }
++
++ private:
++  bool begun_{false};
++  bool plugged_{false};
++  bool endpoint_ready_{false};
++  std::uint32_t baud_{0U};
++  std::uint32_t loss_epoch_{0U};
++  mutable std::size_t epoch_samples_until_loss_{0U};
++  mutable bool epoch_sample_loss_triggered_{false};

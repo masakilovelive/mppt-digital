@@ -1,0 +1,403 @@
+// PC-only bounded read owner. This helper never opens, writes, purges or changes a
+// source. Arm immediately after Open; Stop only at final cleanup, not at identity.
+// The caller must configure the existing 20 ms SerialPort ReadTimeout before Open.
+// IStartupReadSource remains in the unchanged r19_startup_reader.cs compatibility source.
+namespace VcLora.R19 {
+    public sealed class ContinuousReadBlock {
+        public readonly int Offset, Count, RequestedCount, InitialByteCount;
+        public readonly int BeginPhaseIndex, EndPhaseIndex;
+        public readonly long Batch, BeginTicks, EndTicks;
+        public readonly string BeginPhase, EndPhase;
+        // Poll results have their own data copy. Snapshot metadata has Data == null.
+        public readonly byte[] Data;
+        internal ContinuousReadBlock(int offset, int count, int requested, int initial,
+            long batch, long begin, long end, int beginPhase, int endPhase,
+            string beginName, string endName, byte[] data) {
+            Offset = offset; Count = count; RequestedCount = requested; InitialByteCount = initial;
+            Batch = batch; BeginTicks = begin; EndTicks = end;
+            BeginPhaseIndex = beginPhase; EndPhaseIndex = endPhase;
+            BeginPhase = beginName; EndPhase = endName; Data = data;
+        }
+    }
+
+    public sealed class ContinuousPhase {
+        public readonly int Index, ByteCount;
+        public readonly long Ticks, Calls;
+        public readonly string Name;
+        public readonly bool PendingRead;
+        internal ContinuousPhase(int index, string name, long ticks, int bytes, long calls, bool pending) {
+            Index = index; Name = name; Ticks = ticks; ByteCount = bytes; Calls = calls; PendingRead = pending;
+        }
+    }
+
+    public sealed class ContinuousSnapshot {
+        public bool Armed, Stopped, StopRequested, Closed, PendingRead, Overflow;
+        public int ByteCount, ConsumedByteCount, PendingByteCount, InitialBytes, FirstReadRequestedCount;
+        public long OpenReturnTicks, ArmTicks, FirstReadBeginTicks, FirstReadEndTicks;
+        public long LastReadBeginTicks, LastReadEndTicks, MaximumServiceGapTicks, MaximumReadDurationTicks;
+        public long MaximumGapStartTicks, MaximumGapEndTicks;
+        public long Calls, Timeouts, ZeroReads, ReadErrors, CleanupReadInterruptions;
+        public long StopRequestedTicks, WorkerStoppedTicks, CloseStartTicks, CloseEndTicks;
+        public bool CloseAttempted, CloseCompleted;
+        public string CloseFailure;
+        public long DiagnosticPauseRequestedTicks, DiagnosticPauseBeginTicks, DiagnosticPauseEndTicks;
+        public long DiagnosticPauseBeginCalls, DiagnosticPauseEndCalls, DiagnosticPauseResumedReadTicks;
+        public bool DiagnosticPausePending, DiagnosticPauseActive;
+        public int DiagnosticPauseMilliseconds;
+        public string DiagnosticPauseEndReason;
+        public string Failure, CleanupFailure;
+        public ContinuousReadBlock[] Blocks;
+        public ContinuousPhase[] Phases;
+    }
+
+    public sealed class ContinuousReader {
+        sealed class BlockRecord {
+            internal int Offset, Count, RequestedCount, BeginPhaseIndex, EndPhaseIndex;
+            internal long Batch, BeginTicks, EndTicks;
+        }
+        readonly object gate = new object(), pollGate = new object();
+        readonly IStartupReadSource source;
+        readonly System.Diagnostics.Stopwatch clock;
+        readonly byte[] raw, buffer = new byte[8192];
+        readonly BlockRecord[] blocks;
+        readonly ContinuousPhase[] phases;
+        readonly System.Threading.ManualResetEvent ready = new System.Threading.ManualResetEvent(false);
+        readonly System.Threading.ManualResetEvent armed = new System.Threading.ManualResetEvent(false);
+        readonly System.Threading.ManualResetEvent pauseWake = new System.Threading.ManualResetEvent(false);
+        readonly System.Threading.Thread worker;
+        volatile bool stop;
+        bool wasArmed, finished, closed, pendingRead, overflow;
+        int used, blockCount, consumed, consumedBlock, consumedBlockOffset, phaseCount;
+        int initialBytes = -1, firstRequested;
+        long openReturn = -1, armTicks = -1, firstBegin = -1, firstEnd = -1, lastBegin = -1, lastEnd = -1;
+        long calls, timeouts, zeroReads, readErrors, cleanupReadInterruptions, maxGap, maxDuration;
+        long maximumGapStart = -1, maximumGapEnd = -1;
+        long stopRequestedTicks = -1, workerStoppedTicks = -1, closeStartTicks = -1, closeEndTicks = -1;
+        bool closeAttempted, closeCompleted, diagnosticPauseRequested, diagnosticPausePending, diagnosticPauseActive;
+        long diagnosticPauseRequestedTicks = -1, diagnosticPauseBeginTicks = -1, diagnosticPauseEndTicks = -1;
+        long diagnosticPauseBeginCalls = -1, diagnosticPauseEndCalls = -1, diagnosticPauseResumedReadTicks = -1;
+        int diagnosticPauseMilliseconds;
+        string closeFailure = "", diagnosticPauseEndReason = "";
+        static readonly ContinuousReadBlock[] noBlocks = new ContinuousReadBlock[0];
+        static readonly ContinuousPhase[] noPhases = new ContinuousPhase[0];
+        string failure = "", cleanupFailure = "";
+
+        public ContinuousReader(IStartupReadSource source, System.Diagnostics.Stopwatch clock,
+            int capacity, int blockCapacity) : this(source, clock, capacity, blockCapacity, 128) { }
+
+        public ContinuousReader(IStartupReadSource source, System.Diagnostics.Stopwatch clock,
+            int capacity, int blockCapacity, int phaseCapacity) {
+            if (source == null || clock == null || !clock.IsRunning || capacity < 1 || blockCapacity < 1 || phaseCapacity < 1)
+                throw new System.ArgumentException("Invalid continuous reader configuration.");
+            this.source = source; this.clock = clock;
+            raw = new byte[capacity]; blocks = new BlockRecord[blockCapacity]; phases = new ContinuousPhase[phaseCapacity];
+            for (int i = 0; i < blocks.Length; i++) blocks[i] = new BlockRecord();
+            // JIT the hot source-independent methods before any COM Open. Source
+            // Read itself must never be invoked as warm-up against an unopened port.
+            string[] methods = new string[] { "Run", "BeginRead", "EndRead", "SetFailure" };
+            for (int i = 0; i < methods.Length; i++) {
+                var method = typeof(ContinuousReader).GetMethod(methods[i],
+                    System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+                System.Runtime.CompilerServices.RuntimeHelpers.PrepareMethod(method.MethodHandle);
+            }
+            worker = new System.Threading.Thread(Run); worker.IsBackground = true;
+            worker.Name = "R19 continuous read-only owner"; worker.Start();
+        }
+
+        public bool WaitReady(int milliseconds) { return ready.WaitOne(milliseconds); }
+        public void Arm() { Arm(clock.ElapsedTicks); }
+        public void Arm(long openReturnTicks) {
+            lock (gate) {
+                if (!ready.WaitOne(0) || wasArmed || stop || finished)
+                    throw new System.InvalidOperationException("Reader not ready to arm.");
+                if (openReturnTicks < 0 || openReturnTicks > clock.ElapsedTicks)
+                    throw new System.ArgumentException("Open-return QPC must belong to this running clock.");
+                openReturn = openReturnTicks; armTicks = clock.ElapsedTicks; wasArmed = true;
+                phases[0] = new ContinuousPhase(0, "STARTUP", armTicks, used, calls, pendingRead); phaseCount = 1;
+                armed.Set();
+            }
+        }
+
+        // A phase is an observation, not a read-ownership handover. A native Read
+        // may span a phase marker, so both its beginning and ending phase are kept.
+        public ContinuousPhase MarkPhase(string name) {
+            if (string.IsNullOrEmpty(name) || name.Length > 128)
+                throw new System.ArgumentException("Invalid continuous reader phase name.");
+            lock (gate) {
+                if (!wasArmed || finished || stop)
+                    throw new System.InvalidOperationException("Cannot mark an inactive reader.");
+                if (phaseCount == phases.Length) {
+                    SetFailure("CONTINUOUS_PHASE_CAPACITY", true); stop = true;
+                    throw new System.InvalidOperationException(failure);
+                }
+                var phase = new ContinuousPhase(phaseCount, name, clock.ElapsedTicks, used, calls, pendingRead);
+                phases[phaseCount++] = phase; return phase;
+            }
+        }
+
+        // The same owner covers startup, LIVE and final TAIL. Stop is only for
+        // final cleanup. A false return means ownership has NOT been released.
+        public bool Stop(int milliseconds) {
+            if (milliseconds < 0) throw new System.ArgumentOutOfRangeException("milliseconds");
+            RequestStop(); return worker.Join(milliseconds);
+        }
+
+        void RequestStop() {
+            lock (gate) {
+                if (stopRequestedTicks < 0) stopRequestedTicks = clock.ElapsedTicks;
+                stop = true;
+            }
+            armed.Set(); pauseWake.Set();
+        }
+
+        // Normal cleanup is explicit and permitted only after Read ownership has
+        // ended. Closed retains its historical fallback-close-attempt meaning.
+        public bool CloseSourceAfterStop() {
+            lock (gate) {
+                if (!finished || worker.IsAlive)
+                    throw new System.InvalidOperationException("Read owner must stop before normal Close.");
+            }
+            return CloseSourceTracked();
+        }
+
+        bool CloseSourceTracked() {
+            lock (gate) {
+                if (closeAttempted) return closeCompleted;
+                closeAttempted = true; closeStartTicks = clock.ElapsedTicks;
+            }
+            bool completed = false; string failureText = "";
+            try { source.Close(); completed = true; }
+            catch (System.Exception error) { failureText = error.GetType().Name + ": " + error.Message; }
+            finally {
+                lock (gate) {
+                    closeEndTicks = clock.ElapsedTicks; closeCompleted = completed;
+                    closeFailure = failureText;
+                    if (failureText.Length != 0 && cleanupFailure.Length == 0) cleanupFailure = failureText;
+                }
+            }
+            lock (gate) return closeCompleted;
+        }
+
+        // Diagnostic comparison only: do not Close/Purge, replace the owner or
+        // interrupt an in-flight native Read. Acknowledgement occurs in Run.
+        public bool RequestDiagnosticReadPause(int milliseconds) {
+            if (milliseconds < 1 || milliseconds > 2000)
+                throw new System.ArgumentOutOfRangeException("milliseconds");
+            lock (gate) {
+                if (!wasArmed || stop || finished || diagnosticPauseRequested) return false;
+                diagnosticPauseRequested = true; diagnosticPausePending = true;
+                diagnosticPauseMilliseconds = milliseconds;
+                diagnosticPauseRequestedTicks = clock.ElapsedTicks;
+                return true;
+            }
+        }
+
+        bool ServiceDiagnosticPause() {
+            long deadline;
+            lock (gate) {
+                if (stop) return false;
+                if (!diagnosticPausePending) return true;
+                diagnosticPausePending = false; diagnosticPauseActive = true;
+                diagnosticPauseBeginTicks = clock.ElapsedTicks;
+                diagnosticPauseBeginCalls = calls;
+                long frequency = System.Diagnostics.Stopwatch.Frequency;
+                long duration = frequency / 1000 * diagnosticPauseMilliseconds +
+                    (frequency % 1000 * diagnosticPauseMilliseconds + 999) / 1000;
+                deadline = diagnosticPauseBeginTicks + duration;
+            }
+            while (!stop) {
+                long remaining = deadline - clock.ElapsedTicks;
+                if (remaining <= 0) break;
+                int wait = (int)System.Math.Max(1, System.Math.Ceiling(
+                    (decimal)remaining * 1000 / System.Diagnostics.Stopwatch.Frequency));
+                pauseWake.WaitOne(wait);
+            }
+            lock (gate) {
+                diagnosticPauseEndTicks = clock.ElapsedTicks;
+                diagnosticPauseEndCalls = calls;
+                diagnosticPauseActive = false;
+                diagnosticPauseEndReason = stop ? "Stop" : "Deadline";
+            }
+            return !stop;
+        }
+
+        // Explicit cleanup-only fallback for a source that failed its configured
+        // read timeout. Never used at identity/LIVE transition and never implicit.
+        public bool CloseAndStop(int milliseconds) {
+            if (milliseconds < 0) throw new System.ArgumentOutOfRangeException("milliseconds");
+            RequestStop();
+            bool shouldClose;
+            lock (gate) { shouldClose = worker.IsAlive && !closed; if (shouldClose) closed = true; }
+            if (shouldClose) CloseSourceTracked();
+            return worker.Join(milliseconds);
+        }
+
+        void SetFailure(string message, bool capacity) {
+            // Called with gate held. Preserve the first reason and all prefix bytes.
+            if (failure.Length == 0) failure = message;
+            overflow |= capacity;
+        }
+
+        long BeginRead(int count) {
+            long begin = clock.ElapsedTicks;
+            if (diagnosticPauseEndReason == "Deadline" && diagnosticPauseResumedReadTicks < 0)
+                diagnosticPauseResumedReadTicks = begin;
+            if (lastBegin >= 0 && begin - lastBegin > maxGap) {
+                maxGap = begin - lastBegin; maximumGapStart = lastBegin; maximumGapEnd = begin;
+            }
+            if (firstBegin < 0) { firstBegin = begin; firstRequested = count; }
+            lastBegin = begin; calls++; pendingRead = true; return begin;
+        }
+        void EndRead(long begin, long end) {
+            lastEnd = end; if (firstEnd < 0) firstEnd = end;
+            maxDuration = System.Math.Max(maxDuration, end - begin); pendingRead = false;
+        }
+
+        void Run() {
+            // Warm clock, copy, lock and exception catch paths before ready.
+            byte[] warm = new byte[1]; System.Buffer.BlockCopy(warm, 0, buffer, 0, 1);
+            long unused = clock.ElapsedTicks; lock (gate) { unused += used; }
+            try { throw new System.TimeoutException("pre-open warmup"); } catch (System.TimeoutException) { }
+            ready.Set(); armed.WaitOne();
+            try {
+                if (stop) return;
+                int initial = source.BytesToRead;
+                if (initial < 0) throw new System.InvalidOperationException("Negative initial byte count.");
+                lock (gate) initialBytes = initial;
+                while (!stop) {
+                    if (!ServiceDiagnosticPause()) break;
+                    int offset, count, index, beginPhase; long begin, batch;
+                    lock (gate) {
+                        if (stop) break;
+                        if (used == raw.Length) { SetFailure("CONTINUOUS_BYTE_CAPACITY", true); stop = true; break; }
+                        if (blockCount == blocks.Length) { SetFailure("CONTINUOUS_BLOCK_CAPACITY", true); stop = true; break; }
+                        offset = used; index = blockCount; count = System.Math.Min(buffer.Length, raw.Length - used);
+                        beginPhase = phaseCount - 1; begin = BeginRead(count); batch = calls;
+                    }
+                    int n;
+                    try { n = source.Read(buffer, 0, count); }
+                    catch (System.TimeoutException) {
+                        long end = clock.ElapsedTicks;
+                        lock (gate) { EndRead(begin, end); timeouts++; }
+                        continue;
+                    }
+                    long ended = clock.ElapsedTicks;
+                    if (n < 0 || n > count) throw new System.InvalidOperationException("Invalid read count.");
+                    // Append into unpublished space outside the shared lock. No
+                    // reader sees these bytes until used/blockCount are published.
+                    if (n > 0) System.Buffer.BlockCopy(buffer, 0, raw, offset, n);
+                    lock (gate) {
+                        EndRead(begin, ended);
+                        if (n == 0) zeroReads++;
+                        else {
+                            BlockRecord block = blocks[index];
+                            block.Offset = offset; block.Count = n; block.RequestedCount = count; block.Batch = batch;
+                            block.BeginTicks = begin; block.EndTicks = ended;
+                            block.BeginPhaseIndex = beginPhase; block.EndPhaseIndex = phaseCount - 1;
+                            used += n; blockCount++;
+                        }
+                    }
+                    if (n == 0) System.Threading.Thread.Sleep(1);
+                }
+            } catch (System.Exception error) {
+                lock (gate) {
+                    if (pendingRead) EndRead(lastBegin, clock.ElapsedTicks);
+                    if (stop && closed) cleanupReadInterruptions++;
+                    else { readErrors++; SetFailure(error.GetType().Name + ": " + error.Message, false); }
+                }
+            } finally {
+                lock (gate) {
+                    if (diagnosticPauseRequested && diagnosticPauseEndTicks < 0) {
+                        diagnosticPausePending = false; diagnosticPauseActive = false;
+                        diagnosticPauseEndTicks = clock.ElapsedTicks;
+                        diagnosticPauseEndCalls = calls;
+                        diagnosticPauseEndReason = stop ? "Stop" : "WorkerFailure";
+                    }
+                    workerStoppedTicks = clock.ElapsedTicks;
+                    finished = true; pendingRead = false;
+                }
+            }
+        }
+
+        ContinuousReadBlock CopyBlock(BlockRecord b, int offset, int count, bool includeBytes, int initial) {
+            byte[] data = null;
+            if (includeBytes) { data = new byte[count]; System.Buffer.BlockCopy(raw, offset, data, 0, count); }
+            int initialCount = System.Math.Max(0, System.Math.Min(count, initial - offset));
+            return new ContinuousReadBlock(offset, count, b.RequestedCount, initialCount,
+                b.Batch, b.BeginTicks, b.EndTicks, b.BeginPhaseIndex, b.EndPhaseIndex,
+                phases[b.BeginPhaseIndex].Name, phases[b.EndPhaseIndex].Name, data);
+        }
+
+        // Bounded parser delivery, distinct from raw retention. The delivery cursor
+        // advances only after copies succeed. Source Read never waits on pollGate.
+        public ContinuousReadBlock[] PollBytes(int maxBytes) { return Poll(maxBytes, int.MaxValue); }
+        public ContinuousReadBlock[] PollBlocks(int maxBlocks) { return Poll(int.MaxValue, maxBlocks); }
+        ContinuousReadBlock[] Poll(int maxBytes, int maxBlocks) {
+            if (maxBytes < 1 || maxBlocks < 1) throw new System.ArgumentOutOfRangeException("poll budget");
+            lock (pollGate) {
+                int first, inBlock, available, initial, cursor;
+                lock (gate) { first = consumedBlock; inBlock = consumedBlockOffset; available = blockCount; initial = initialBytes; cursor = consumed; }
+                var result = new System.Collections.Generic.List<ContinuousReadBlock>();
+                int remaining = maxBytes;
+                while (first < available && result.Count < maxBlocks && remaining > 0) {
+                    BlockRecord b = blocks[first]; int n = System.Math.Min(remaining, b.Count - inBlock);
+                    result.Add(CopyBlock(b, b.Offset + inBlock, n, true, initial));
+                    remaining -= n; cursor += n; inBlock += n;
+                    if (inBlock == b.Count) { first++; inBlock = 0; }
+                }
+                var output = result.ToArray();
+                lock (gate) { consumedBlock = first; consumedBlockOffset = inBlock; consumed = cursor; }
+                return output;
+            }
+        }
+
+        // Evidence is append-only. Capture a published extent under a short lock,
+        // then copy outside it so long snapshot/export work cannot suspend Read.
+        public byte[] GetBytes() {
+            int count; lock (gate) count = used;
+            byte[] output = new byte[count]; System.Buffer.BlockCopy(raw, 0, output, 0, count); return output;
+        }
+        public byte[] ReadSlice(int offset, int count) {
+            lock (gate) {
+                if (offset < 0 || count < 0 || offset > used || count > used - offset)
+                    throw new System.ArgumentOutOfRangeException("evidence slice");
+            }
+            byte[] output = new byte[count]; System.Buffer.BlockCopy(raw, offset, output, 0, count); return output;
+        }
+        ContinuousSnapshot CopyStatus() {
+            return new ContinuousSnapshot { Armed = wasArmed, Stopped = finished, StopRequested = stop,
+                Closed = closed, PendingRead = pendingRead, Overflow = overflow,
+                ByteCount = used, ConsumedByteCount = consumed, PendingByteCount = used - consumed,
+                InitialBytes = initialBytes, FirstReadRequestedCount = firstRequested,
+                OpenReturnTicks = openReturn, ArmTicks = armTicks, FirstReadBeginTicks = firstBegin,
+                FirstReadEndTicks = firstEnd, LastReadBeginTicks = lastBegin, LastReadEndTicks = lastEnd,
+                MaximumServiceGapTicks = maxGap, MaximumReadDurationTicks = maxDuration,
+                MaximumGapStartTicks = maximumGapStart, MaximumGapEndTicks = maximumGapEnd,
+                Calls = calls, Timeouts = timeouts, ZeroReads = zeroReads, ReadErrors = readErrors,
+                CleanupReadInterruptions = cleanupReadInterruptions, Failure = failure, CleanupFailure = cleanupFailure,
+                StopRequestedTicks = stopRequestedTicks, WorkerStoppedTicks = workerStoppedTicks,
+                CloseStartTicks = closeStartTicks, CloseEndTicks = closeEndTicks,
+                CloseAttempted = closeAttempted, CloseCompleted = closeCompleted, CloseFailure = closeFailure,
+                DiagnosticPauseRequestedTicks = diagnosticPauseRequestedTicks,
+                DiagnosticPauseBeginTicks = diagnosticPauseBeginTicks, DiagnosticPauseEndTicks = diagnosticPauseEndTicks,
+                DiagnosticPauseBeginCalls = diagnosticPauseBeginCalls, DiagnosticPauseEndCalls = diagnosticPauseEndCalls,
+                DiagnosticPauseResumedReadTicks = diagnosticPauseResumedReadTicks,
+                DiagnosticPausePending = diagnosticPausePending, DiagnosticPauseActive = diagnosticPauseActive,
+                DiagnosticPauseMilliseconds = diagnosticPauseMilliseconds, DiagnosticPauseEndReason = diagnosticPauseEndReason,
+                Blocks = noBlocks, Phases = noPhases };
+        }
+        // Constant work regardless of retained history; use this in the service loop.
+        public ContinuousSnapshot GetStatus() { lock (gate) return CopyStatus(); }
+        public ContinuousSnapshot GetSnapshot() {
+            ContinuousSnapshot s; int count, phaseRecords, initial;
+            lock (gate) {
+                count = blockCount; phaseRecords = phaseCount; initial = initialBytes;
+                s = CopyStatus();
+            }
+            s.Blocks = new ContinuousReadBlock[count]; s.Phases = new ContinuousPhase[phaseRecords];
+            for (int i = 0; i < count; i++) { BlockRecord b = blocks[i]; s.Blocks[i] = CopyBlock(b, b.Offset, b.Count, false, initial); }
+            for (int i = 0; i < phaseRecords; i++) s.Phases[i] = phases[i];
+            return s;
+        }
+    }
+}

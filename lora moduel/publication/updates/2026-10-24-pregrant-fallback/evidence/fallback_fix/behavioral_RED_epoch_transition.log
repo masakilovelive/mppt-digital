@@ -1,0 +1,2 @@
+R19_PRENEGOTIATION_FALLBACK scenario=epoch-during-admission checks=16 failures=1 runtime_fail_closed=0 native_leases=1 queued_frames=1
+FAIL epoch change during fallback admission cannot be committed as success

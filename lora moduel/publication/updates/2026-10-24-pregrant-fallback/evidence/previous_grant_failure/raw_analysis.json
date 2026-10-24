@@ -1,0 +1,997 @@
+{
+  "schema": "vc-lora-r19-saved-raw-evaluation-v1",
+  "hardware_operations_performed": false,
+  "run": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261024T122935Z-grant-cause-param-once-retry",
+  "parent_status": "PASS_PARAM_LIST_DIAGNOSTICS_CAPTURED_R18_RESTORED_NOT_ACCEPTANCE",
+  "diagnostic_procedure_pass_is_not_product_acceptance": true,
+  "parent_summary_sha256": "B58B7C66BFAB1C681A700CCE452E4FB1473256DE46B10BE130F936E3195F061B",
+  "capture_summary_sha256": "6F2D20AC69C477FE4BE4D56C6458BA07FEF763CCC1736E97E4814C34ED3CBB77",
+  "measurement_seconds": 40.0323136,
+  "request_attempts": 1,
+  "request_local_api_accepted_bytes": 14,
+  "request_remote_delivery_proven": false,
+  "parameters_30s": 0,
+  "parameters_full_native_raw": 0,
+  "missing_30s_count": 932,
+  "missing_30s_exact_range": "0..931",
+  "sealed_30s_complete": true,
+  "param_ledger_errors_30s": {
+    "bad_crc": 0,
+    "bad_length": 0,
+    "unsupported_flags": 0,
+    "unsupported_signed": 0,
+    "invalid_source": 0,
+    "invalid_count": 0,
+    "invalid_index": 0,
+    "invalid_id": 0,
+    "invalid_type": 0,
+    "duplicate_index": 0,
+    "duplicate_id": 0,
+    "noise_bytes": 0,
+    "partial_frame": 0,
+    "total": 0
+  },
+  "full_raw_param_parser": {
+    "pending_bytes": 1,
+    "unknown_frames": 44,
+    "parsed_frames": 44,
+    "total_raw_bytes": 2699
+  },
+  "full_raw_param_errors": {
+    "bad_crc": 0,
+    "bad_length": 0,
+    "unsupported_flags": 0,
+    "unsupported_signed": 0,
+    "invalid_source": 0,
+    "invalid_count": 0,
+    "invalid_index": 0,
+    "invalid_id": 0,
+    "invalid_type": 0,
+    "duplicate_index": 0,
+    "duplicate_id": 0,
+    "noise_bytes": 0,
+    "partial_frame": 1,
+    "total": 1
+  },
+  "product_heartbeats": 1,
+  "heartbeat_frames": [
+    {
+      "offset": 157,
+      "bytes": 21,
+      "message_id": 0,
+      "payload_bytes": 9,
+      "sequence": 63,
+      "read_completed_ticks": "69370311",
+      "crc_valid": true,
+      "text": ""
+    }
+  ],
+  "heartbeat_interarrival_max_ms": null,
+  "heartbeat_interarrival_reason": "Only one complete product Heartbeat; no adjacent pair",
+  "seconds_after_last_product_heartbeat_until_measurement_end": 39.528662,
+  "ground_failure_notifications": 39,
+  "distinct_ground_failure_snapshots": [
+    "R19F:G:092D:0000000000003234:000100040080:00000001"
+  ],
+  "first_failure_notification": {
+    "offset": 241,
+    "bytes": 63,
+    "message_id": 253,
+    "payload_bytes": 51,
+    "sequence": 4,
+    "read_completed_ticks": "75236647",
+    "crc_valid": true,
+    "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+  },
+  "pc_request_return_to_first_failure_read_ms": 501.4465,
+  "pc_request_start_to_first_failure_read_ms": 524.957,
+  "trailing_partial_classification": "One trailing byte is incomplete evidence, not a certified frame; do not call global errors zero",
+  "roles": [
+    {
+      "role": "vehicle",
+      "raw_sha256": "B949BF805E00FB784A1165FD179A7E56F15E588F794851BAA1BBAE6AA461F1EE",
+      "raw_bytes": 2674,
+      "native_blocks": 123,
+      "raw_and_embedded_and_native_coverage_proven": true,
+      "crc_valid_complete_frames": 43,
+      "noise_bytes": 0,
+      "trailing_partial_bytes": 0,
+      "trailing_partial_offset": null,
+      "trailing_partial_hex": "",
+      "frames": [
+        {
+          "offset": 0,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 5,
+          "read_completed_ticks": "53273164",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000005:0000000000005B96:000100040006"
+        },
+        {
+          "offset": 63,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 6,
+          "read_completed_ticks": "63175570",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000006:0000000000006125:000300020000"
+        },
+        {
+          "offset": 126,
+          "bytes": 28,
+          "message_id": 111,
+          "payload_bytes": 16,
+          "sequence": 0,
+          "read_completed_ticks": "65992163",
+          "crc_valid": true,
+          "text": ""
+        },
+        {
+          "offset": 154,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 7,
+          "read_completed_ticks": "73186061",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000007:000000000000650E:000300020000"
+        },
+        {
+          "offset": 217,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 8,
+          "read_completed_ticks": "83195998",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000008:00000000000068F7:000300020000"
+        },
+        {
+          "offset": 280,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 9,
+          "read_completed_ticks": "93195228",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000009:0000000000006CDF:000300020001"
+        },
+        {
+          "offset": 343,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 10,
+          "read_completed_ticks": "103195232",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000000A:00000000000070C7:000300020001"
+        },
+        {
+          "offset": 406,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 11,
+          "read_completed_ticks": "113196559",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000000B:00000000000074AF:000300020003"
+        },
+        {
+          "offset": 469,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 12,
+          "read_completed_ticks": "123204422",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000000C:0000000000007898:000100040005"
+        },
+        {
+          "offset": 532,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 13,
+          "read_completed_ticks": "133203936",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000000D:0000000000007C80:000100040005"
+        },
+        {
+          "offset": 595,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 14,
+          "read_completed_ticks": "143205370",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000000E:0000000000008068:000100040006"
+        },
+        {
+          "offset": 658,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 15,
+          "read_completed_ticks": "153213886",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000000F:0000000000008451:000300020000"
+        },
+        {
+          "offset": 721,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 16,
+          "read_completed_ticks": "163223560",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000010:000000000000883A:000300020000"
+        },
+        {
+          "offset": 784,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 17,
+          "read_completed_ticks": "173235980",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000011:0000000000008C23:000300020000"
+        },
+        {
+          "offset": 847,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 18,
+          "read_completed_ticks": "183243627",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000012:000000000000900C:000300020000"
+        },
+        {
+          "offset": 910,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 19,
+          "read_completed_ticks": "193243295",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000013:00000000000093F4:000300020001"
+        },
+        {
+          "offset": 973,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 20,
+          "read_completed_ticks": "203253839",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000014:00000000000097DD:000300020001"
+        },
+        {
+          "offset": 1036,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 21,
+          "read_completed_ticks": "213264273",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000015:0000000000009BC6:000300020003"
+        },
+        {
+          "offset": 1099,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 22,
+          "read_completed_ticks": "223272291",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000016:0000000000009FAF:000100040005"
+        },
+        {
+          "offset": 1162,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 23,
+          "read_completed_ticks": "233288189",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000017:000000000000A398:000100040005"
+        },
+        {
+          "offset": 1225,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 24,
+          "read_completed_ticks": "243291930",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000018:000000000000A781:000100040006"
+        },
+        {
+          "offset": 1288,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 25,
+          "read_completed_ticks": "253293277",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000019:000000000000AB69:000300020000"
+        },
+        {
+          "offset": 1351,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 26,
+          "read_completed_ticks": "263292370",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000001A:000000000000AF51:000300020000"
+        },
+        {
+          "offset": 1414,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 27,
+          "read_completed_ticks": "273290382",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000001B:000000000000B339:000300020000"
+        },
+        {
+          "offset": 1477,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 28,
+          "read_completed_ticks": "283293778",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000001C:000000000000B721:000300020000"
+        },
+        {
+          "offset": 1540,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 29,
+          "read_completed_ticks": "293300441",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000001D:000000000000BB0A:000300020001"
+        },
+        {
+          "offset": 1603,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 30,
+          "read_completed_ticks": "303299771",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000001E:000000000000BEF2:000300020001"
+        },
+        {
+          "offset": 1666,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 31,
+          "read_completed_ticks": "313299760",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000001F:000000000000C2DA:000300020003"
+        },
+        {
+          "offset": 1729,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 32,
+          "read_completed_ticks": "323300278",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000020:000000000000C6C2:000100040005"
+        },
+        {
+          "offset": 1792,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 33,
+          "read_completed_ticks": "333300623",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000021:000000000000CAAA:000100040005"
+        },
+        {
+          "offset": 1855,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 34,
+          "read_completed_ticks": "343308657",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000022:000000000000CE93:000100040006"
+        },
+        {
+          "offset": 1918,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 35,
+          "read_completed_ticks": "353319742",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000023:000000000000D27C:000300020000"
+        },
+        {
+          "offset": 1981,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 36,
+          "read_completed_ticks": "363333026",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000024:000000000000D665:000300020000"
+        },
+        {
+          "offset": 2044,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 37,
+          "read_completed_ticks": "373341079",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000025:000000000000DA4E:000300020000"
+        },
+        {
+          "offset": 2107,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 38,
+          "read_completed_ticks": "383347212",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000026:000000000000DE37:000300020000"
+        },
+        {
+          "offset": 2170,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 39,
+          "read_completed_ticks": "393348233",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000027:000000000000E21F:000300020001"
+        },
+        {
+          "offset": 2233,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 40,
+          "read_completed_ticks": "403353630",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000028:000000000000E607:000300020001"
+        },
+        {
+          "offset": 2296,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 41,
+          "read_completed_ticks": "413356479",
+          "crc_valid": true,
+          "text": "R19A:V:L:00000029:000000000000E9F0:000300020003"
+        },
+        {
+          "offset": 2359,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 42,
+          "read_completed_ticks": "423358472",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000002A:000000000000EDD8:000100040005"
+        },
+        {
+          "offset": 2422,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 43,
+          "read_completed_ticks": "433355743",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000002B:000000000000F1C0:000100040005"
+        },
+        {
+          "offset": 2485,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 44,
+          "read_completed_ticks": "443357223",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000002C:000000000000F5A8:000100040006"
+        },
+        {
+          "offset": 2548,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 45,
+          "read_completed_ticks": "453356389",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000002D:000000000000F990:000300020000"
+        },
+        {
+          "offset": 2611,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 46,
+          "read_completed_ticks": "463355321",
+          "crc_valid": true,
+          "text": "R19A:V:L:0000002E:000000000000FD78:000300020000"
+        }
+      ],
+      "reader_continuous": true,
+      "overflow": false,
+      "workflow_failure": ""
+    },
+    {
+      "role": "ground",
+      "raw_sha256": "349E3C1C9FA82885E2C25F4F5225FE137BE7D2C53379BD8895FF396150B6875D",
+      "raw_bytes": 2699,
+      "native_blocks": 102,
+      "raw_and_embedded_and_native_coverage_proven": true,
+      "crc_valid_complete_frames": 44,
+      "noise_bytes": 0,
+      "trailing_partial_bytes": 1,
+      "trailing_partial_offset": 2698,
+      "trailing_partial_hex": "FD",
+      "frames": [
+        {
+          "offset": 0,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 2,
+          "read_completed_ticks": "63331090",
+          "crc_valid": true,
+          "text": "R19A:G:L:00000002:0000000000002D8E:000100040000"
+        },
+        {
+          "offset": 63,
+          "bytes": 28,
+          "message_id": 111,
+          "payload_bytes": 16,
+          "sequence": 0,
+          "read_completed_ticks": "67323009",
+          "crc_valid": true,
+          "text": ""
+        },
+        {
+          "offset": 91,
+          "bytes": 66,
+          "message_id": 253,
+          "payload_bytes": 54,
+          "sequence": 1,
+          "read_completed_ticks": "67327194",
+          "crc_valid": true,
+          "text": "19A\u0001\u0002\u0001\u0000?,?%?<5??}+\u000e<?\u0019R?h?`?\u0005\u0004?\u0001\u0000\u0000\u0000~\n?"
+        },
+        {
+          "offset": 157,
+          "bytes": 21,
+          "message_id": 0,
+          "payload_bytes": 9,
+          "sequence": 63,
+          "read_completed_ticks": "69370311",
+          "crc_valid": true,
+          "text": ""
+        },
+        {
+          "offset": 178,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 3,
+          "read_completed_ticks": "73334105",
+          "crc_valid": true,
+          "text": "R19A:G:L:00000003:0000000000003176:000100040000"
+        },
+        {
+          "offset": 241,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 4,
+          "read_completed_ticks": "75236647",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 304,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 5,
+          "read_completed_ticks": "85241640",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 367,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 6,
+          "read_completed_ticks": "95248748",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 430,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 7,
+          "read_completed_ticks": "105248285",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 493,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 8,
+          "read_completed_ticks": "115263046",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 556,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 9,
+          "read_completed_ticks": "125266065",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 619,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 10,
+          "read_completed_ticks": "135267166",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 682,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 11,
+          "read_completed_ticks": "145279601",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 745,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 12,
+          "read_completed_ticks": "155290897",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 808,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 13,
+          "read_completed_ticks": "165299448",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 871,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 14,
+          "read_completed_ticks": "175306885",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 934,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 15,
+          "read_completed_ticks": "185314774",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 997,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 16,
+          "read_completed_ticks": "195316207",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1060,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 17,
+          "read_completed_ticks": "205328382",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1123,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 18,
+          "read_completed_ticks": "215335683",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1186,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 19,
+          "read_completed_ticks": "225344581",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1249,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 20,
+          "read_completed_ticks": "235354127",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1312,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 21,
+          "read_completed_ticks": "245362313",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1375,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 22,
+          "read_completed_ticks": "255379798",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1438,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 23,
+          "read_completed_ticks": "265390590",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1501,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 24,
+          "read_completed_ticks": "275396354",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1564,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 25,
+          "read_completed_ticks": "285409747",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1627,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 26,
+          "read_completed_ticks": "295417873",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1690,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 27,
+          "read_completed_ticks": "305425578",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1753,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 28,
+          "read_completed_ticks": "315431203",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1816,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 29,
+          "read_completed_ticks": "325444544",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1879,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 30,
+          "read_completed_ticks": "335454871",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 1942,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 31,
+          "read_completed_ticks": "345459464",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 2005,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 32,
+          "read_completed_ticks": "355459359",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 2068,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 33,
+          "read_completed_ticks": "365459951",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 2131,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 34,
+          "read_completed_ticks": "375472519",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 2194,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 35,
+          "read_completed_ticks": "385481217",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 2257,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 36,
+          "read_completed_ticks": "395491780",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 2320,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 37,
+          "read_completed_ticks": "405502667",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 2383,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 38,
+          "read_completed_ticks": "415509860",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 2446,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 39,
+          "read_completed_ticks": "425521707",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 2509,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 40,
+          "read_completed_ticks": "435526023",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 2572,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 41,
+          "read_completed_ticks": "445536079",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        },
+        {
+          "offset": 2635,
+          "bytes": 63,
+          "message_id": 253,
+          "payload_bytes": 51,
+          "sequence": 42,
+          "read_completed_ticks": "455548536",
+          "crc_valid": true,
+          "text": "R19F:G:092D:0000000000003234:000100040080:00000001"
+        }
+      ],
+      "reader_continuous": true,
+      "overflow": false,
+      "workflow_failure": ""
+    }
+  ],
+  "authorization_consumed": true,
+  "extra_trial_performed": false
+}

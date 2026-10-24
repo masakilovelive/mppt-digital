@@ -1,0 +1,160 @@
+{
+  "schema": "vc-lora-r19-offline-alignment-invariance-v1",
+  "saved_utc": "2026-10-24T13:09:32.8916858Z",
+  "result": "PASS_FILE_INVARIANCE",
+  "hardware_interaction": false,
+  "production_sources": [
+    {
+      "path": "core/include/vc_lora/bulk_session_controller.hpp",
+      "sha256": "6A92DC55EF2EBCEA5ACFE062A94C31D345CA268116E7FEF79AFA3A9EF22633F4",
+      "unchanged": true
+    },
+    {
+      "path": "core/src/bulk_session_controller.cpp",
+      "sha256": "2ECBB529D1588A4F45CBDF00CADFB4E153AF5C447AF6C6447C6483188A7FDA40",
+      "unchanged": true
+    },
+    {
+      "path": "core/include/vc_lora/high_speed_tdd_coordinator.hpp",
+      "sha256": "B877FA20BEF05574BBE5C9AE8255782CAF7BE78B973F79CB17390443B6C48AAE",
+      "unchanged": true
+    },
+    {
+      "path": "core/src/high_speed_tdd_coordinator.cpp",
+      "sha256": "E5C62F4C46BC25AE1FD6E9A4137333DC8916BEACE352336A35752DDEA8C833A7",
+      "unchanged": true
+    },
+    {
+      "path": "core/include/vc_lora/tdd_types.hpp",
+      "sha256": "BD428D8153726964DDE609AFF12ECB8FF3D5D4171092C274125938746C4EBE95",
+      "unchanged": true
+    },
+    {
+      "path": "core/include/vc_lora/tdd_vehicle.hpp",
+      "sha256": "5A26F9FD46FB8808330EF982E7BB0B2D4D1744FD8EE4888864D229D1587A014A",
+      "unchanged": true
+    },
+    {
+      "path": "core/src/tdd_vehicle.cpp",
+      "sha256": "B64C9E253E52109C0B47BE6C4A64E3A7A42CC10458F54D3080EF6710D54325A8",
+      "unchanged": true
+    },
+    {
+      "path": "core/src/tdd_ground.cpp",
+      "sha256": "6021D0799274A92A5F7AF7EC28AF7D7883DFB0CA6AD688D1D4162F042FD67EDF",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/high_speed/high_speed_phase6_adapter.hpp",
+      "sha256": "44922450926350EFE085D0E1E073182C63BEF1803664954AE0E41749D63CE665",
+      "unchanged": true
+    },
+    {
+      "path": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "sha256": "3E48D852E7620F0951126D30C8A3CF00F6D8F02939305D6A13546B5690E4E2A8",
+      "unchanged": true
+    }
+  ],
+  "accepted_r18_files": [
+    {
+      "role": "vehicle",
+      "sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+      "unchanged": true
+    },
+    {
+      "role": "ground",
+      "sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+      "unchanged": true
+    }
+  ],
+  "historical_candidate_latest_unchanged": true,
+  "historical_preparation_pin_unchanged": true,
+  "evidence": [
+    {
+      "path": "summary.json",
+      "sha256": "5FA4430BC99CD674BC2E435B7341B904F7CEA46999FD4E805D96DB56CDA516E2",
+      "bytes": 5752
+    },
+    {
+      "path": "baseline.json",
+      "sha256": "A3DC4ED5F9067FD34B7AAA060BE2C059675D34EC4399AC1B87C5DFDDEF5EF5E8",
+      "bytes": 1903
+    },
+    {
+      "path": "contract_review.json",
+      "sha256": "E106C8704B52E2B39C9072C6F455504E5C56574B265B1A764FB7F47CA525393F",
+      "bytes": 11771
+    },
+    {
+      "path": "independent_test_review.json",
+      "sha256": "1140E8F388D442D1B9C8B8455A4FEAE12F02C2D2F10D62736496560E60063DAA",
+      "bytes": 5992
+    },
+    {
+      "path": "adapter_test_plan.json",
+      "sha256": "C314964FF096E7D58AC3A08DB78A070048E47B38631BD50DCEC83BCE420177D2",
+      "bytes": 2631
+    },
+    {
+      "path": "standard_phase_summary.json",
+      "sha256": "4278C7A7182663D9C8B78E6B35BC983589DCA7C676B9B78B10BC7A6CE215439C",
+      "bytes": 8789
+    },
+    {
+      "path": "admission_characterization.log",
+      "sha256": "97151F44AC91428B074B8B98AA932F4F642B08CB17ECE610EF897B08F358934F",
+      "bytes": 868
+    },
+    {
+      "path": "standard_phase_characterization.log",
+      "sha256": "CF7F94E0203C990BDDF66C7AB588FFE939DD14522D349F77359DCBF6E6C12ED0",
+      "bytes": 2985
+    },
+    {
+      "path": "admission_requirement_RED.log",
+      "sha256": "C51A7A88EA8F67C677A8343B1DFE3F5EA0B35334D6E3FFFEAA4EACD914A8F5F6",
+      "bytes": 1234
+    },
+    {
+      "path": "standard_phase_requirement_RED.log",
+      "sha256": "A9FC01026CC175383E6BD5341A9C400C58368CB614AEC5896CB11B5F205430D3",
+      "bytes": 3344
+    },
+    {
+      "path": "host_test_registration.patch",
+      "sha256": "995CB73E08B256F0B61D6A43A8D34A8B4D52539F605DDEDE8624A0A35357773E",
+      "bytes": 1160
+    },
+    {
+      "path": "adapter_test_new_file.patch",
+      "sha256": "749B206E60CCD7E37276099FFC161291EFD0501888CD376DD4BFD545E271B3D8",
+      "bytes": 20343
+    },
+    {
+      "path": "standard_phase_test_new_file.patch",
+      "sha256": "FDF1834F1AFA584706C55F185E45A69A5B2D6BFCE741AF522B17BF9FD0C68961",
+      "bytes": 18274
+    },
+    {
+      "path": "host_suite.log",
+      "sha256": "0788FD6CD84334A24C81E71E0303ECCBBBA6456E5751BB22D26CF3AC2D6DA557",
+      "bytes": 87986
+    },
+    {
+      "path": "arduino_vehicle.log",
+      "sha256": "047C76AFAC83D3AC1A252B0738E1BED7522B1754DCACE363B3AC10C8704077C0",
+      "bytes": 211
+    },
+    {
+      "path": "arduino_ground.log",
+      "sha256": "FCD9009EDEAD9BCD924D5299E9D3A34486BAE5D288F57F4106C380803F7C2431",
+      "bytes": 816
+    },
+    {
+      "path": "usb_extended_records_windows_ps51.log",
+      "sha256": "53CF9585D6AA43B4850F2210B3DC59300C1BF3EFE0DDB6A09EE7C915599CD688",
+      "bytes": 13908
+    }
+  ],
+  "scope": "File hashes only, not a fresh R18 device or communication acceptance check"
+}

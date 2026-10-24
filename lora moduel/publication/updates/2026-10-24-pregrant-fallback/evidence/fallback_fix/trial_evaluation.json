@@ -1,0 +1,119 @@
+{
+  "schema": "vc-lora-r19-pregrant-fallback-trial-evaluation-v1",
+  "result": "PARTIAL_IMPROVEMENT_REQUEST_NO_LONGER_STOPS_LINK_PARAMETERS_INCOMPLETE_NOT_HIGH_SPEED_ACCEPTANCE",
+  "candidate_id": "20261024T134821302Z-9e36e182",
+  "bridge_sha256": "896D1014C6BB75686F5A4EA0D5F5DA4A98E7DE83541E0288E3D6ED6226E9168E",
+  "trial_relative": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once",
+  "started_utc": "2026-10-24T14:08:12.0105584Z",
+  "finished_utc": "2026-10-24T14:11:08.4121296Z",
+  "user_facing_timezone": "Asia/Tokyo",
+  "user_facing_trial_time": "2026-10-24 23:08-23:11 JST",
+  "one_time_authorization_consumed": true,
+  "automatic_retry_performed": false,
+  "orchestration": {
+    "exit_code": 0,
+    "status": "PASS_PARAM_LIST_DIAGNOSTICS_CAPTURED_R18_RESTORED_NOT_ACCEPTANCE",
+    "meaning": "Installation, bounded observation, internal-record acquisition and restoration completed. This does not certify the communication/performance target.",
+    "summary_sha256": "0D354207D9D7A86083DC4899AE2649399BF0C9B90F1FE42CB67C14B5AEAE5322"
+  },
+  "measurement": {
+    "elapsed_seconds": 40.0018022,
+    "pc_param_request_attempts": 1,
+    "pc_param_request_api_accepted_bytes": 14,
+    "local_api_acceptance_alone_proves_remote_delivery": false,
+    "unique_param_values_at_30_seconds": 4,
+    "unique_param_values_at_measurement_end": 6,
+    "received_indexes": [0,1,2,3,4,5],
+    "target_count": 932,
+    "parameter_result": "INCOMPLETE_PARAMETERS",
+    "parameter_ledger_errors_at_30_seconds": 0,
+    "parameter_ledger_errors_at_end": 0,
+    "pc_observed_product_heartbeats": 37,
+    "maximum_inter_heartbeat_gap_ms": 2099.9267,
+    "heartbeat_gap_scope": "CRC-valid PC product observations within this bounded run. Ground pacing/cache can repeat prior RF telemetry; this is not a per-frame freshness or continuous RF-arrival guarantee.",
+    "capture_summary_sha256": "79673B52BB01434B9F86D1BB2303AC8057D63F507E8EF8AC42E2D9E3A8337E14",
+    "ground_raw_sha256": "91F84005CCB6D7475ECDDEC00BA333FB9BAA23471A22338637F42E7794BCAEB0",
+    "vehicle_raw_sha256": "79539C60EFCE5D1436C66E42C34E5A2E55BA9F1310F01520ACE320DC6E41474B"
+  },
+  "raw_replay_validation": {
+    "total_bytes": 6384,
+    "crc_valid_frames": 131,
+    "ground_frames": 88,
+    "vehicle_frames": 43,
+    "ground_frame_types": {"heartbeat":37,"param_value":6,"mission_current":2,"private_or_diagnostic":43},
+    "skipped_or_truncated_bytes": 0,
+    "observed_bad_crc": 0,
+    "scope": "This applies to the saved bounded raw streams, not to all possible transmitted frames, startup/end USB transactions or a zero-error acceptance claim."
+  },
+  "grant_and_fallback": {
+    "original_ground_request_origin_ms": 12770,
+    "first_adapter_failure_ms": 13271,
+    "elapsed_ms": 501,
+    "owner_error": "GrantDeadlineExceeded",
+    "coordinator_error": "GrantDeadlineExceeded",
+    "fresh_or_staged_grant_before_failure": false,
+    "grant_timeout_was_extended": false,
+    "subsequent_bridge_ready_status_and_product_traffic_observed": true,
+    "interpretation": "The known pre-negotiation expiry remains, but it no longer caused the previous whole-link stop in this trial. Continued ready status, normal UART activity and valid subsequent parameter responses, joined to the frozen bridge source, strongly support successful one-shot R18-route fallback.",
+    "direct_fallback_RAM_counter_acquired": false,
+    "exact_enqueue_once_hardware_counter_claim": false,
+    "exact_once_local_behavior_basis": "The real bridge offline success and negative tests; do not mislabel this as a JTAG read of the new RAM fields.",
+    "analysis_report": "grant_fallback_trial_analysis.json"
+  },
+  "other_boundaries": {
+    "first_product_heartbeat_local_usb_elapsed_us": 487,
+    "product_usb_budget_ms_unchanged": 106,
+    "product_usb_failure_record_latched": false,
+    "aux_faults_observed_vehicle": 0,
+    "aux_faults_observed_ground": 0,
+    "aux_timeout_ms_unchanged": 2000,
+    "physical_aux_waveform_measured": false,
+    "ground_aux_maximum_poll_gap_us": 100591,
+    "ground_aux_edge_history_overflow": 84,
+    "continuous_aux_physical_coverage_proven": false,
+    "diagnostic_usb_wait_issue_remains_separate": true,
+    "diagnostic_usb_pending_bytes_at_failure_snapshot": {"vehicle":31,"ground":59},
+    "pending_bytes_interpretation": "Point-in-time diagnostic USB software-ring state, not missing RF bytes or a direct physical FIFO-fault location.",
+    "all_link_errors_zero_claim": false,
+    "pc_mcu_guaranteed_clock_mapping": "NOT_PROVEN",
+    "analysis_report": "usb_aux_product_trial_analysis.json"
+  },
+  "restoration": {
+    "accepted_R18_restore_proven_by_parent": true,
+    "power_off_required": false,
+    "child_termination_proven": true,
+    "active_jtag_cleanup_proven": true,
+    "independent_saved_evidence_audit": "trial_safety_evidence_audit.json",
+    "independent_saved_evidence_audit_sha256": "B48553F308B06690E7B14E81827266B054A970C6182AA406B59D864AE2D510F5",
+    "audit_checks_passed": 1022,
+    "restore_attempts_per_role": 1,
+    "accepted_images": {
+      "vehicle":{"bytes":389280,"sha256":"9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52"},
+      "ground":{"bytes":360208,"sha256":"30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5"}
+    }
+  },
+  "comparison": {
+    "prior_candidate": "20261024T071533391Z-c8216c13",
+    "prior_trial": "20261024T122935Z-grant-cause-param-once-retry",
+    "prior_observations": {"post_request_parameters":0,"product_heartbeats":1,"grant_expiry_caused_global_stop":true},
+    "current_observations": {"end_parameters":6,"product_heartbeats":37,"traffic_continues_after_grant_expiry":true},
+    "claim_limit": "One successful containment trial, not a randomized timing/reliability study or proof for every queue/USB state."
+  },
+  "target_assessment": {
+    "request_induced_whole_link_stop_avoided_this_run": true,
+    "932_of_932_within_30_seconds": false,
+    "R19_high_speed_negotiation_succeeded": false,
+    "all_errors_zero": false,
+    "full_acceptance": false
+  },
+  "supporting_report_bindings": [
+    {"path":"grant_fallback_trial_analysis.json","sha256":"1409B1FE1CF0A6F6CA1BF13AB733F8254A24583293C7C9E2F2C959E9FD1A21FA"},
+    {"path":"usb_aux_product_trial_analysis.json","sha256":"010EEFB54DBC0C1C8E6AEF286DCA15AD75999F44D321C8B2495042C578E090B0"},
+    {"path":"trial_safety_evidence_audit.json","sha256":"B48553F308B06690E7B14E81827266B054A970C6182AA406B59D864AE2D510F5"}
+  ],
+  "review_complete": true,
+  "further_hardware_operations_performed": false,
+  "current_device_firmware": "Both roles restored to accepted R18; the R19 diagnostic candidate is not deployed.",
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

@@ -1,0 +1,307 @@
+{
+    "schema":  "vc-lora-r19-candidate-flash-artifact-inventory-v1",
+    "result":  "PASS",
+    "file_count":  60,
+    "files":  [
+                  {
+                      "path":  "00_esptool_version.exit.txt",
+                      "size_bytes":  3,
+                      "sha256":  "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354"
+                  },
+                  {
+                      "path":  "00_esptool_version.stderr.log",
+                      "size_bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "00_esptool_version.stdout.log",
+                      "size_bytes":  48,
+                      "sha256":  "5A50D446456A765AB1BC914CC4202CAD5745F056999EEBE6EA4A1344E222D3A1"
+                  },
+                  {
+                      "path":  "candidate_verifier_after_staging/integrity.json",
+                      "size_bytes":  448,
+                      "sha256":  "812F97A7A01D992DE654DFEC38C8A4E29E3DAE14B589FF35C988895A678735C5"
+                  },
+                  {
+                      "path":  "candidate_verifier_after_staging/r19_candidate_artifact_common.ps1",
+                      "size_bytes":  36333,
+                      "sha256":  "6EF245F7CBD3E121C0C24E27B6ABFE10AB3721630546DE2176C5D49D4383E9F0"
+                  },
+                  {
+                      "path":  "candidate_verifier_after_staging/r19_usb_role_contract.ps1",
+                      "size_bytes":  4870,
+                      "sha256":  "10787A8D4064FC7370F40AE81BA3034E8D59F063E4D207E81B3E4F37FD020238"
+                  },
+                  {
+                      "path":  "candidate_verifier_after_staging/verify_r19_candidate_artifact.ps1",
+                      "size_bytes":  48493,
+                      "sha256":  "4C4DC9312621B3547C70B2A749744E241AFE32234AD30869EE8F7C98CC71A86C"
+                  },
+                  {
+                      "path":  "candidate_verifier_initial_preflight/integrity.json",
+                      "size_bytes":  452,
+                      "sha256":  "5FE55B4BD77EEF6AD8E38C32B7E002FF5814E2DBF42296EB8FB0785947981DB5"
+                  },
+                  {
+                      "path":  "candidate_verifier_initial_preflight/r19_candidate_artifact_common.ps1",
+                      "size_bytes":  36333,
+                      "sha256":  "6EF245F7CBD3E121C0C24E27B6ABFE10AB3721630546DE2176C5D49D4383E9F0"
+                  },
+                  {
+                      "path":  "candidate_verifier_initial_preflight/r19_usb_role_contract.ps1",
+                      "size_bytes":  4870,
+                      "sha256":  "10787A8D4064FC7370F40AE81BA3034E8D59F063E4D207E81B3E4F37FD020238"
+                  },
+                  {
+                      "path":  "candidate_verifier_initial_preflight/verify_r19_candidate_artifact.ps1",
+                      "size_bytes":  48493,
+                      "sha256":  "4C4DC9312621B3547C70B2A749744E241AFE32234AD30869EE8F7C98CC71A86C"
+                  },
+                  {
+                      "path":  "candidate_verify_after_staging.log",
+                      "size_bytes":  465,
+                      "sha256":  "5C603C9975F0E095A044E29E81A0AAC518EE301388FC78452864CBEA4365170D"
+                  },
+                  {
+                      "path":  "candidate_verify_initial_preflight.log",
+                      "size_bytes":  465,
+                      "sha256":  "5C603C9975F0E095A044E29E81A0AAC518EE301388FC78452864CBEA4365170D"
+                  },
+                  {
+                      "path":  "flash_record.json",
+                      "size_bytes":  44814,
+                      "sha256":  "409FB9FE3EE483BF7E911314AC227BEC642AAEA6874CC439885EC9E60C9655C8"
+                  },
+                  {
+                      "path":  "input_candidate_final_seal.json",
+                      "size_bytes":  25105,
+                      "sha256":  "9CF678EA89AF3794E3105AAF5FA65828218E849CD437DA2B26881458B633F6FD"
+                  },
+                  {
+                      "path":  "input_candidate_manifest.json",
+                      "size_bytes":  183566,
+                      "sha256":  "2951578811105BCBBDF46F77FF04417F39678EBBCEB2C16C6A5B6881B3378243"
+                  },
+                  {
+                      "path":  "input_handoff.json",
+                      "size_bytes":  27328,
+                      "sha256":  "E9E9786C68502086027C0FD7BB17F73F9B5ABA78CD2AC660B80B630ABD7E341A"
+                  },
+                  {
+                      "path":  "input_latest.json",
+                      "size_bytes":  8783,
+                      "sha256":  "8E7DF00854B46725628E077B050C97060F35B5119BAC332C3BD9144F1FA3C592"
+                  },
+                  {
+                      "path":  "live_preflight.json",
+                      "size_bytes":  5859,
+                      "sha256":  "037324F34276ECBF3B2AB8FD1340D5DB5ADD3A9962228C9DB5167D3F4BD1AA6F"
+                  },
+                  {
+                      "path":  "preflight.json",
+                      "size_bytes":  1419,
+                      "sha256":  "61A655896BE99F08E636D82416ECDF2E6485661BF5EA599C66D052AC784B9A1A"
+                  },
+                  {
+                      "path":  "rollback_01_vehicle_r18_read_mac_attempt_1.argv.json",
+                      "size_bytes":  185,
+                      "sha256":  "2D5A21B19191B8C57965BDF367A261178F52495C57A0E634D393E122CB8E2632"
+                  },
+                  {
+                      "path":  "rollback_01_vehicle_r18_read_mac_attempt_1.exit.txt",
+                      "size_bytes":  3,
+                      "sha256":  "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354"
+                  },
+                  {
+                      "path":  "rollback_01_vehicle_r18_read_mac_attempt_1.record.json",
+                      "size_bytes":  1687,
+                      "sha256":  "68CDF913022B6BB32B4CDE7256A7F50AE0396CC7CC2D3A041F95E5FE33D0B4C0"
+                  },
+                  {
+                      "path":  "rollback_01_vehicle_r18_read_mac_attempt_1.stderr.log",
+                      "size_bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "rollback_01_vehicle_r18_read_mac_attempt_1.stdout.log",
+                      "size_bytes":  1064,
+                      "sha256":  "4AF2B1C268771ACE551590252010A9C47A4AAD18010871A885619AA95AAE15EA"
+                  },
+                  {
+                      "path":  "rollback_02_vehicle_r18_write_attempt_1.argv.json",
+                      "size_bytes":  531,
+                      "sha256":  "6E363C2EC2FA5BF0880C365ECCC9492F370428E6D4A23830739BB0E8BE7F14C2"
+                  },
+                  {
+                      "path":  "rollback_02_vehicle_r18_write_attempt_1.exit.txt",
+                      "size_bytes":  3,
+                      "sha256":  "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354"
+                  },
+                  {
+                      "path":  "rollback_02_vehicle_r18_write_attempt_1.intent.json",
+                      "size_bytes":  381,
+                      "sha256":  "C786D998B45C8B10730AFDD126BF9D6DE0BBBCD36208D3C9EB9A7C040775D360"
+                  },
+                  {
+                      "path":  "rollback_02_vehicle_r18_write_attempt_1.record.json",
+                      "size_bytes":  4184,
+                      "sha256":  "2915C6C9D1C2A4F95781A1B13F3BFBC0D09D551E9A2CEF6DFC02DCA6C4F6BDDF"
+                  },
+                  {
+                      "path":  "rollback_02_vehicle_r18_write_attempt_1.stderr.log",
+                      "size_bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "rollback_02_vehicle_r18_write_attempt_1.stdout.log",
+                      "size_bytes":  3788,
+                      "sha256":  "320550059319EEFEE7CB0DA0D5A12A25364C7168C18FECF304E4E3767C4FB79D"
+                  },
+                  {
+                      "path":  "rollback_03_vehicle_r18_verify_attempt_1.argv.json",
+                      "size_bytes":  419,
+                      "sha256":  "70E9C1CA2043436784684E21D4A9532EA63DD44F327AF85923C8923FB740E53C"
+                  },
+                  {
+                      "path":  "rollback_03_vehicle_r18_verify_attempt_1.exit.txt",
+                      "size_bytes":  3,
+                      "sha256":  "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354"
+                  },
+                  {
+                      "path":  "rollback_03_vehicle_r18_verify_attempt_1.record.json",
+                      "size_bytes":  1724,
+                      "sha256":  "186A3FA1B7969275ABD549C17E298CA1AF91B29D22A798A3DB2ABB38CE9D0E34"
+                  },
+                  {
+                      "path":  "rollback_03_vehicle_r18_verify_attempt_1.stderr.log",
+                      "size_bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "rollback_03_vehicle_r18_verify_attempt_1.stdout.log",
+                      "size_bytes":  1654,
+                      "sha256":  "DBBDA6A6DF5916E246E1E2DCED3A525620EBAC5452BDB679709F75791398ECFF"
+                  },
+                  {
+                      "path":  "rollback_04_vehicle_r18_reenumeration_attempt_1.record.json",
+                      "size_bytes":  1249,
+                      "sha256":  "FBA872D6B3BB92F1977E0F3141401C1A459EAC81884C155E7ABEAC8E23590A5B"
+                  },
+                  {
+                      "path":  "rollback_05_ground_r18_read_mac_attempt_1.argv.json",
+                      "size_bytes":  185,
+                      "sha256":  "347EE75082F58BC0EC6BF9BA3259C6057FF7DDCCE55D7270C450F19833156562"
+                  },
+                  {
+                      "path":  "rollback_05_ground_r18_read_mac_attempt_1.exit.txt",
+                      "size_bytes":  3,
+                      "sha256":  "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354"
+                  },
+                  {
+                      "path":  "rollback_05_ground_r18_read_mac_attempt_1.record.json",
+                      "size_bytes":  1683,
+                      "sha256":  "C8B201297CABFA80FD8D2709F8BA13A5F21121402D9533F8A45A208502BABDD4"
+                  },
+                  {
+                      "path":  "rollback_05_ground_r18_read_mac_attempt_1.stderr.log",
+                      "size_bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "rollback_05_ground_r18_read_mac_attempt_1.stdout.log",
+                      "size_bytes":  1060,
+                      "sha256":  "1375312B7601B4FD1CC2F1CE23F7E1FA5D61BAE1CA81F51E451B4C45EB76EB6E"
+                  },
+                  {
+                      "path":  "rollback_06_ground_r18_write_attempt_1.argv.json",
+                      "size_bytes":  530,
+                      "sha256":  "97EAEBDB9D64F92E8C9C04968E3F4CEEB061814D5400AEE91602F08EC89287A4"
+                  },
+                  {
+                      "path":  "rollback_06_ground_r18_write_attempt_1.exit.txt",
+                      "size_bytes":  3,
+                      "sha256":  "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354"
+                  },
+                  {
+                      "path":  "rollback_06_ground_r18_write_attempt_1.intent.json",
+                      "size_bytes":  379,
+                      "sha256":  "720A3A2F702040FDA269C4A539AD833034E509911F3259574E8C8FFE15F77036"
+                  },
+                  {
+                      "path":  "rollback_06_ground_r18_write_attempt_1.record.json",
+                      "size_bytes":  4180,
+                      "sha256":  "47E5B11310B35B3836873A99B4C6C3458D5977F2A973DF7C827AF23B4A971D21"
+                  },
+                  {
+                      "path":  "rollback_06_ground_r18_write_attempt_1.stderr.log",
+                      "size_bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "rollback_06_ground_r18_write_attempt_1.stdout.log",
+                      "size_bytes":  3788,
+                      "sha256":  "BD3DE484C21B1314F0A981DFC59F5A05B3DC77AAAFB9D103CA2FE9E14B9BE278"
+                  },
+                  {
+                      "path":  "rollback_07_ground_r18_verify_attempt_1.argv.json",
+                      "size_bytes":  418,
+                      "sha256":  "43320C12A9A88714EC2659667E3DBA5C9A17B7DDB162EC23855CD2BC46F9912A"
+                  },
+                  {
+                      "path":  "rollback_07_ground_r18_verify_attempt_1.exit.txt",
+                      "size_bytes":  3,
+                      "sha256":  "13BF7B3039C63BF5A50491FA3CFD8EB4E699D1BA1436315AEF9CBE5711530354"
+                  },
+                  {
+                      "path":  "rollback_07_ground_r18_verify_attempt_1.record.json",
+                      "size_bytes":  1720,
+                      "sha256":  "326D544B7864736740B5B60BE5221A9B5CA5EBBD3FCA73B099A0CAD975ED0375"
+                  },
+                  {
+                      "path":  "rollback_07_ground_r18_verify_attempt_1.stderr.log",
+                      "size_bytes":  0,
+                      "sha256":  "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855"
+                  },
+                  {
+                      "path":  "rollback_07_ground_r18_verify_attempt_1.stdout.log",
+                      "size_bytes":  1652,
+                      "sha256":  "820ACF0C185C53047AEE60C22012CB408C775EA6A394D0992295A94F80FCDEB7"
+                  },
+                  {
+                      "path":  "rollback_08_ground_r18_reenumeration_attempt_1.record.json",
+                      "size_bytes":  1248,
+                      "sha256":  "D1E39049D3F5D6125D5237AD8516AFE084F604F173EEA6BAA7D415D9B285F460"
+                  },
+                  {
+                      "path":  "staged/accepted_r18_ground.application.bin",
+                      "size_bytes":  360208,
+                      "sha256":  "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5"
+                  },
+                  {
+                      "path":  "staged/accepted_r18_vehicle.application.bin",
+                      "size_bytes":  389280,
+                      "sha256":  "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52"
+                  },
+                  {
+                      "path":  "staged/candidate_ground.application.bin",
+                      "size_bytes":  438512,
+                      "sha256":  "717B2C63DF6B44597F12F2542D1D0559506C1A025CF532144C40BE959F24D915"
+                  },
+                  {
+                      "path":  "staged/candidate_vehicle.application.bin",
+                      "size_bytes":  455216,
+                      "sha256":  "54963B3F349A3077E1B0FE73CA2B1812DDD9EAD86184727EA73D5FF753F292BF"
+                  },
+                  {
+                      "path":  "staged/esptool-5.3.1.exe",
+                      "size_bytes":  14323136,
+                      "sha256":  "A939E28FE2FBB53E65E46F0246A4D71B9FD6C052EF0E046182DF4A4FE8BEC946"
+                  },
+                  {
+                      "path":  "terminal_status.json",
+                      "size_bytes":  297,
+                      "sha256":  "FC1AA43EFF13EF439744BE29F67E2F93C8471E2DEC4A31AA92F7E87A2167AB3B"
+                  }
+              ]
+}

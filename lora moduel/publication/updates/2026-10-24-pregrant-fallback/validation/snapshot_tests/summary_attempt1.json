@@ -1,0 +1,72 @@
+{
+  "schema": "vc-lora-publication-snapshot-selected-tests-v1",
+  "attempt": 1,
+  "scope": "Publication-copy selected C++ verification only",
+  "result": "BUILD_FAILED_MISSING_PACKAGED_DEPENDENCY_NO_TESTS_EXECUTED",
+  "source_snapshot": "E:/VESC/_codex_build/mppt-lora-aux-20261022/lora moduel/publication/updates/2026-10-24-pregrant-fallback/source_snapshot",
+  "build_directory": "E:/VESC/_codex_build/lora-publication-checks-20261025-pregrant",
+  "new_build_directory_created": true,
+  "configure_exit_code": 0,
+  "selected_build_exit_code": 1,
+  "ctest_exit_code": null,
+  "intended_test_count": 18,
+  "executed_test_count": 0,
+  "passed_test_count": 0,
+  "failed_test_count": 0,
+  "zero_executed_is_not_pass": true,
+  "ctest_filter": "^IT-R19-(PRENEGOTIATION-FALLBACK-.*|GRANT-DIAGNOSTIC-BRIDGE)-001$",
+  "selected_build_targets": [
+    "vc_lora_r19_pre_negotiation_fallback_tests",
+    "vc_lora_phase6_grant_diagnostic_hooks_tests"
+  ],
+  "failure": {
+    "classification": "Missing dependency in publication source snapshot",
+    "including_file": "tests/host/fakes/fake_arduino_test_api.hpp:2",
+    "missing_path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDCR19Diagnostic.h",
+    "diagnostic": "fatal error: '../../../third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDCR19Diagnostic.h' file not found",
+    "affected_target_count": 2,
+    "core_library_built_before_failure": true,
+    "tests_not_deleted_or_weakened": true,
+    "dependency_not_substituted_or_fetched_by_this_agent": true
+  },
+  "toolchain": {
+    "cmake": "C:/Users/user/AppData/Local/Android/Sdk/cmake/3.22.1/bin/cmake.exe",
+    "ctest": "C:/Users/user/AppData/Local/Android/Sdk/cmake/3.22.1/bin/ctest.exe",
+    "ninja": "C:/Users/user/AppData/Local/Android/Sdk/cmake/3.22.1/bin/ninja.exe",
+    "compiler": "C:/Users/user/AppData/Local/Temp/vc_lora_host_tools/llvm-mingw-20260616-complete/unpacked/llvm-mingw-20260616-ucrt-x86_64/bin/clang++.exe",
+    "detected_compiler": "Clang 22.1.8",
+    "explicit_CMake_PowerShell_interpreter": "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "runner_interpreter": "Windows PowerShell 5.1",
+    "generator": "Ninja",
+    "configuration": "Debug",
+    "VC_LORA_BUILD_TESTS": true,
+    "compiler_and_cmake_directories_added_to_child_PATH": true
+  },
+  "unchanged_source_sha256_before_and_after": {
+    "firmware/phase6/vc_lora_phase6_bridge.hpp": "896D1014C6BB75686F5A4EA0D5F5DA4A98E7DE83541E0288E3D6ED6226E9168E",
+    "tests/host/standalone/r19_pre_negotiation_fallback_tests.cpp": "42B4A0CF43B266479D89C19C1939FAB2B8C8F898CDFE14D70BAB68CBAA0CAE25",
+    "tests/host/standalone/phase6_grant_diagnostic_hooks_tests.cpp": "6417041473660D30EF24CD2C59B2587401983827AF77F425672E7EF4AF593862",
+    "CMakeLists.txt": "F05D1870E1D0036E946357C75C7610C7A38D5FE8399714793534AC8E3E813F56",
+    "tests/host/CMakeLists.txt": "AA64CB47C3A19338A2EDF544A9646941B42B0B51189E96E752317DEE8694ACB0"
+  },
+  "immutable_first_attempt_files": {
+    "configure_attempt1.log": "40FC9FB437C2BD3E60EE771D1DC860D6940BAD29EF46B759ADE9AFFCF7CBA359",
+    "build_attempt1.log": "B97142034F289CD10F33ED16F5044E0FC4043234F36C9D6036E4D02DF03C6922",
+    "run_selected_snapshot_tests.ps1": "C4AEDFEBC861BBA6C6A886057EFE00C76FA42924B3ABA82DCB84FE6BA81B5073"
+  },
+  "historical_validation_scope": {
+    "original_workspace_full_suite_count": 430,
+    "original_full_suite_not_rerun_from_publication_copy": true,
+    "this_attempt_does_not_replace_original_validation_or_HIL_evidence": true,
+    "Arduino_compiles_not_rerun": true
+  },
+  "constraints": {
+    "source_or_test_edits": false,
+    "deadline_changes": false,
+    "hardware_or_COM_or_PnP_access": false,
+    "network_access": false,
+    "git_mutations": false,
+    "full_suite_run": false
+  },
+  "next_step": "Parent may restore the legitimate omitted diagnostic header into the publication package and authorize a separately named retry. Preserve this attempt and do not represent it as 18 tests passed."
+}

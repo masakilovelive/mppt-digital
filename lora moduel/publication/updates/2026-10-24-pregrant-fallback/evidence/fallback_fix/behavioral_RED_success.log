@@ -1,0 +1,8 @@
+R19_PRENEGOTIATION_FALLBACK scenario=success checks=27 failures=7 runtime_fail_closed=1 native_leases=0 queued_frames=0
+FAIL clean pre-negotiation deadline preserves product runtime
+FAIL safe one-shot fallback selects unchanged standard path
+FAIL the same normal proxy/ingress path owns exactly one native request
+FAIL fallback preserves byte-exact first PARAM frame, not regenerated duplicate
+FAIL repeated service cannot enqueue fallback twice
+FAIL later same-target duplicate uses normal proxy coalescing, not second send
+FAIL later Grant cannot reactivate failed accelerated adapter

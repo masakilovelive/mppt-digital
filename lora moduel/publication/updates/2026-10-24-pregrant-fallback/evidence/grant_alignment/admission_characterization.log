@@ -1,0 +1,10 @@
+CASE historical baseline_ms=9233 request_ms=12351 first_failure_ms=12852 owner=GrantDeadlineExceeded coordinator=GrantDeadlineExceeded negotiation_actions=0
+CASE fresh age_ms=499 order=tick-first outcome=admitted
+CASE fresh age_ms=499 order=arrival-first outcome=admitted
+CASE fresh age_ms=500 order=tick-first outcome=admitted
+CASE fresh age_ms=500 order=arrival-first outcome=admitted
+CASE fresh age_ms=501 order=tick-first outcome=fail-closed
+CASE fresh age_ms=501 order=arrival-first outcome=fail-closed
+CASE equal-timestamp request-first=admitted Grant-as-baseline-first=await-newer-then-deadline timestamp_ms=12351
+CONDITIONAL_PHASE_SWEEP period_ms=5000 integer_phases=5000 admitted=500 rejected=4500 source=synthetic-next-Grant-fixture-not-RF-measurement
+R19_GRANT_ADMISSION_CHARACTERIZATION PASS checks=45125 scenarios=10 phase_cases=5000 failures=0

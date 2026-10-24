@@ -1,0 +1,284 @@
+{
+    "schema":  "vc-lora-r19-candidate-flash-evidence-v1",
+    "test_id":  "R19-CANDIDATE-APP-FLASH-HIL-001",
+    "started_utc":  "2026-10-24T14:08:40.4972248Z",
+    "finished_utc":  "2026-10-24T14:09:23.4864202Z",
+    "result":  "PASS",
+    "status":  "PASS_R19_DIAGNOSTIC_INSTALLED_HIL_ONLY",
+    "mode":  "Execute",
+    "failure":  "",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "one_run_hil_authorized":  true,
+    "deployment_authorized":  false,
+    "hil_authorization_token":  "R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT",
+    "authorization_scope":  "one immediate Grant-state diagnostic capture only; no flight arming; parameter request only under the separate bound capture contract",
+    "authorization":  {
+                          "scope":  "one immediate R19 runtime-fail diagnostic capture only",
+                          "reusable":  false,
+                          "deployment_authorization":  false,
+                          "attestation_sha256":  "E083B2B3483B1698711C5E68706E1EB5F2E0EB00BFF475E7669C1E7A6749F832",
+                          "operator_safety_attestation_sha256":  "E80E5B41C124DD113EC0989D8E8D77F4257FA356C4B3419E5E731E5F01E526D4",
+                          "operator_safety_conditions":  [
+                                                             "Pixhawk DISARMED",
+                                                             "propulsion and actuator power isolated",
+                                                             "both E220 antennas connected",
+                                                             "common GND and 3.3 V logic checked",
+                                                             "Pixhawk parameter backup saved"
+                                                         ]
+                      },
+    "candidate":  {
+                      "runtime_fail_diagnostics_enabled":  true,
+                      "latest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\latest.json",
+                      "latest_sha256":  "8E7DF00854B46725628E077B050C97060F35B5119BAC332C3BD9144F1FA3C592",
+                      "handoff_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261024T134821302Z-9e36e182\\handoff.json",
+                      "handoff_sha256":  "E9E9786C68502086027C0FD7BB17F73F9B5ABA78CD2AC660B80B630ABD7E341A",
+                      "candidate_manifest_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261024T134821302Z-9e36e182\\candidate_manifest.json",
+                      "candidate_manifest_sha256":  "2951578811105BCBBDF46F77FF04417F39678EBBCEB2C16C6A5B6881B3378243",
+                      "candidate_final_seal_path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261024T134821302Z-9e36e182\\final_seal.json",
+                      "candidate_final_seal_sha256":  "9CF678EA89AF3794E3105AAF5FA65828218E849CD437DA2B26881458B633F6FD",
+                      "artifact_id":  "20261024T134821302Z-9e36e182"
+                  },
+    "flash_policy":  {
+                         "app_only":  true,
+                         "offset":  "0x10000",
+                         "erase_flash":  false,
+                         "write_bootloader":  false,
+                         "write_partition_table":  false,
+                         "write_merged_image":  false,
+                         "upload_order":  [
+                                              "vehicle",
+                                              "ground"
+                                          ]
+                     },
+    "roles":  [
+                  {
+                      "role":  "vehicle",
+                      "port":  "COM3",
+                      "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                      "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                      "mac":  "90:70:69:11:81:a4",
+                      "size_bytes":  455216,
+                      "sha256":  "54963B3F349A3077E1B0FE73CA2B1812DDD9EAD86184727EA73D5FF753F292BF",
+                      "write_pass":  true,
+                      "verify_pass":  true,
+                      "reenumeration_pass":  true,
+                      "rollback_sha256":  "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52"
+                  },
+                  {
+                      "role":  "ground",
+                      "port":  "COM6",
+                      "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00262159A644\u00260\u00260000",
+                      "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\1C:DB:D4:5A:83:80",
+                      "mac":  "1c:db:d4:5a:83:80",
+                      "size_bytes":  438512,
+                      "sha256":  "717B2C63DF6B44597F12F2542D1D0559506C1A025CF532144C40BE959F24D915",
+                      "write_pass":  true,
+                      "verify_pass":  true,
+                      "reenumeration_pass":  true,
+                      "rollback_sha256":  "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5"
+                  }
+              ],
+    "operations":  [
+                       {
+                           "label":  "vehicle_read_mac",
+                           "role":  "vehicle",
+                           "kind":  "read_mac",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "01_vehicle_read_mac.record.json",
+                           "record_sha256":  "408DB98F7C998DC6F5B6D2FABF38D23FDF252485EE310FD200F3E47019D66267"
+                       },
+                       {
+                           "label":  "vehicle_write",
+                           "role":  "vehicle",
+                           "kind":  "write",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "02_vehicle_write.record.json",
+                           "record_sha256":  "7CB7D2613F1D8736DA59F1615C8C48BAE1C363935A3D8FA17BEB80DE60970C68"
+                       },
+                       {
+                           "label":  "vehicle_verify",
+                           "role":  "vehicle",
+                           "kind":  "verify",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "03_vehicle_verify.record.json",
+                           "record_sha256":  "DBB29FC99E4C1FC8E41AD311E2817B710B0DECCE8CDCB8539D5BC1B5F9674DD9"
+                       },
+                       {
+                           "label":  "vehicle_reenumeration",
+                           "role":  "vehicle",
+                           "kind":  "reenumeration",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "04_vehicle_reenumeration.record.json",
+                           "record_sha256":  "75298C3FB01793CFE367CA722D59A05B680E4D10D4CB2B31765576FAD4F5E2B4"
+                       },
+                       {
+                           "label":  "ground_read_mac",
+                           "role":  "ground",
+                           "kind":  "read_mac",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "05_ground_read_mac.record.json",
+                           "record_sha256":  "DD722D76FD71D81AD19CC6C64EBE51E8B9B536F47659B4F7CDB047176BDC9CD5"
+                       },
+                       {
+                           "label":  "ground_write",
+                           "role":  "ground",
+                           "kind":  "write",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "06_ground_write.record.json",
+                           "record_sha256":  "711A3EB57F9457F1D102410BBE1A4BCA8B73E94D47E44AD40FC0BFCD69267071"
+                       },
+                       {
+                           "label":  "ground_verify",
+                           "role":  "ground",
+                           "kind":  "verify",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "07_ground_verify.record.json",
+                           "record_sha256":  "ACB7BBB17A40D501E14321F7FD2905D2BE7B8E0F5FEEE3B61067E5AA2F0121E7"
+                       },
+                       {
+                           "label":  "ground_reenumeration",
+                           "role":  "ground",
+                           "kind":  "reenumeration",
+                           "result":  "PASS",
+                           "exit_code":  0,
+                           "record_path":  "08_ground_reenumeration.record.json",
+                           "record_sha256":  "B434D2E1F0521D7DFC24F266F22624B1DCC0267588C05AFF23047B914001BE1B"
+                       }
+                   ],
+    "rollback":  {
+                     "required":  false,
+                     "result":  "NOT_REQUIRED",
+                     "roles":  [
+
+                               ],
+                     "operations":  [
+
+                                    ]
+                 },
+    "accepted_r18_rollback_root":  "runs/baselines/R18-PRODUCTION-R4-ACCEPTED/20260914T225054625Z/artifacts",
+    "max_rollback_attempts":  3,
+    "competing_client_gate_failures":  [
+
+                                       ],
+    "external_actions":  {
+                             "device_access_attempted":  true,
+                             "process_inventory_queried":  true,
+                             "esptool_executed":  true,
+                             "firmware_write_attempted":  true,
+                             "firmware_may_have_changed":  true,
+                             "device_power_changed":  false,
+                             "erase_performed":  false,
+                             "bootloader_written":  false,
+                             "partition_table_written":  false,
+                             "merged_image_written":  false
+                         },
+    "simulated_terminal_status":  "",
+    "next_required_action":  "Run exactly one bound capture, acquire all nine diagnostic records twice, then mandatory accepted R18 rollback",
+    "timed_path_diagnostics":  {
+                                   "schema":  "vc-lora-r19-timed-path-candidate-v1",
+                                   "enabled":  true,
+                                   "mode":  "ExplicitHostArm",
+                                   "mode_value":  2,
+                                   "macro":  "VC_LORA_R19_TIMED_PATH_DIAGNOSTICS",
+                                   "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v6",
+                                   "record":  {
+                                                  "symbol":  "vc_lora_r19_timed_path_record",
+                                                  "schema_version":  1,
+                                                  "size_bytes":  512
+                                              },
+                                   "decoder":  {
+                                                   "path":  "tools/read_r19_timed_path_record.ps1",
+                                                   "sha256":  "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C"
+                                               }
+                               },
+    "aux_readiness_diagnostics":  {
+                                      "schema":  "vc-lora-r19-aux-readiness-candidate-v1",
+                                      "enabled":  true,
+                                      "macro":  "VC_LORA_R19_AUX_READINESS_DIAGNOSTICS",
+                                      "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v7",
+                                      "record":  {
+                                                     "symbol":  "vc_lora_r19_aux_readiness_record",
+                                                     "schema_version":  1,
+                                                     "size_bytes":  6144
+                                                 },
+                                      "decoder":  {
+                                                      "path":  "tools/read_r19_aux_readiness_record.ps1",
+                                                      "sha256":  "C011580259EA94F3092B1B3CCAF34DB30C4D9CA1158D2A51D2DC96EA76D880DF"
+                                                  }
+                                  },
+    "diagnostic_usb_failure_diagnostics":  {
+                                               "schema":  "vc-lora-r19-diagnostic-usb-failure-candidate-v1",
+                                               "enabled":  true,
+                                               "macro":  "VC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD",
+                                               "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v8",
+                                               "record":  {
+                                                              "symbol":  "vc_lora_r19_diagnostic_usb_failure_record",
+                                                              "schema_version":  1,
+                                                              "size_bytes":  256
+                                                          },
+                                               "decoder":  {
+                                                               "path":  "tools/read_r19_diagnostic_usb_failure_record.ps1",
+                                                               "sha256":  "26E15CAC70F9414F2EE3A43FBF44A820BC1F7B8DC41672EC81733A9B1CD54451"
+                                                           }
+                                           },
+    "usb_role_capabilities":  {
+                                  "schema":  "vc-lora-r19-usb-role-capabilities-v1",
+                                  "mode":  "ExplicitHostArm",
+                                  "implementation_bound":  true,
+                                  "canonical_sources":  [
+                                                            {
+                                                                "path":  "firmware/phase6/vc_lora_phase6_bridge.hpp",
+                                                                "sha256":  "896D1014C6BB75686F5A4EA0D5F5DA4A98E7DE83541E0288E3D6ED6226E9168E"
+                                                            },
+                                                            {
+                                                                "path":  "firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+                                                                "sha256":  "47CE684BB11CD3807CA15605982BD98B66C7CB4258BE63DEA229E10E1793A258"
+                                                            },
+                                                            {
+                                                                "path":  "tools/r19_usb_role_contract.ps1",
+                                                                "sha256":  "10787A8D4064FC7370F40AE81BA3034E8D59F063E4D207E81B3E4F37FD020238"
+                                                            }
+                                                        ],
+                                  "roles":  [
+                                                {
+                                                    "role":  "vehicle",
+                                                    "clock_request_reply":  true,
+                                                    "effective_mode":  "SyncOnly",
+                                                    "ready":  false,
+                                                    "arm":  false
+                                                },
+                                                {
+                                                    "role":  "ground",
+                                                    "clock_request_reply":  true,
+                                                    "effective_mode":  "ExplicitHostArm",
+                                                    "ready":  true,
+                                                    "arm":  true
+                                                }
+                                            ]
+                              },
+    "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v9",
+    "grant_diagnostics":  {
+                              "schema":  "vc-lora-r19-grant-diagnostic-candidate-v1",
+                              "enabled":  true,
+                              "macro":  "VC_LORA_R19_GRANT_DIAGNOSTICS",
+                              "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v9",
+                              "record":  {
+                                             "symbol":  "vc_lora_r19_grant_diagnostic_record",
+                                             "schema_version":  1,
+                                             "size_bytes":  1024
+                                         },
+                              "decoder":  {
+                                              "path":  "tools/read_r19_grant_diagnostic_record.ps1",
+                                              "sha256":  "024B52920F2F91C0806988EE43968F0B90D189E82FC52F0D403C2025656EB4B0"
+                                          }
+                          }
+}

@@ -1,0 +1,307 @@
+{
+    "schema":  "vc-lora-r19-candidate-artifact-handoff-v1",
+    "artifact_id":  "20261024T134821302Z-9e36e182",
+    "result":  "PASS",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false,
+    "artifact_root":  "runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T134821302Z-9e36e182",
+    "candidate_manifest":  {
+                               "path":  "runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T134821302Z-9e36e182/candidate_manifest.json",
+                               "sha256":  "2951578811105BCBBDF46F77FF04417F39678EBBCEB2C16C6A5B6881B3378243"
+                           },
+    "final_seal":  {
+                       "path":  "runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T134821302Z-9e36e182/final_seal.json",
+                       "sha256":  "9CF678EA89AF3794E3105AAF5FA65828218E849CD437DA2B26881458B633F6FD"
+                   },
+    "roles":  [
+                  {
+                      "role":  "vehicle",
+                      "application":  {
+                                          "path":  "runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T134821302Z-9e36e182/firmware/vehicle.application.bin",
+                                          "size_bytes":  455216,
+                                          "sha256":  "54963B3F349A3077E1B0FE73CA2B1812DDD9EAD86184727EA73D5FF753F292BF"
+                                      },
+                      "runtime_diagnostic_symbols":  {
+                                                         "schema":  "vc-lora-r19-runtime-diagnostic-symbols-v1",
+                                                         "elf_sha256":  "5F86FA6E3DE6514E30E4E2269F1074CF84E952661B4EC868A6E407404A91FF82",
+                                                         "map_sha256":  "696934A83B96D0FC7014411E3523F012D2FAAC96DF86BFC494C5395E3801255B",
+                                                         "application_sha256":  "54963B3F349A3077E1B0FE73CA2B1812DDD9EAD86184727EA73D5FF753F292BF",
+                                                         "symbols":  {
+                                                                         "runtime_stage":  {
+                                                                                               "name":  "vc_lora_r19_runtime_stage_record",
+                                                                                               "address":  "0x3fcadbf0",
+                                                                                               "size_bytes":  68,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "endpoint_fifo":  {
+                                                                                               "name":  "vc_lora_r19_hwcdc_fifo_diagnostic_record",
+                                                                                               "address":  "0x3fcadfe4",
+                                                                                               "size_bytes":  112,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "hwcdc_restart":  {
+                                                                                               "name":  "vc_lora_r19_hwcdc_restart_diagnostic_record",
+                                                                                               "address":  "0x3fcadf64",
+                                                                                               "size_bytes":  128,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "ground_usb_commit":  {
+                                                                                                   "name":  "vc_lora_r19_ground_usb_commit_record",
+                                                                                                   "address":  "0x3fcadb70",
+                                                                                                   "size_bytes":  128,
+                                                                                                   "aligned_32_bit":  true
+                                                                                               },
+                                                                         "first_usb_failure":  {
+                                                                                                   "name":  "vc_lora_r19_first_usb_failure_record",
+                                                                                                   "address":  "0x3fcad9f0",
+                                                                                                   "size_bytes":  384,
+                                                                                                   "aligned_32_bit":  true
+                                                                                               },
+                                                                         "timed_path":  {
+                                                                                            "name":  "vc_lora_r19_timed_path_record",
+                                                                                            "address":  "0x3fcad2f0",
+                                                                                            "size_bytes":  512,
+                                                                                            "aligned_32_bit":  true
+                                                                                        },
+                                                                         "aux_readiness":  {
+                                                                                               "name":  "vc_lora_r19_aux_readiness_record",
+                                                                                               "address":  "0x3fcabaf0",
+                                                                                               "size_bytes":  6144,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "diagnostic_usb_failure":  {
+                                                                                                        "name":  "vc_lora_r19_diagnostic_usb_failure_record",
+                                                                                                        "address":  "0x3fcad8f0",
+                                                                                                        "size_bytes":  256,
+                                                                                                        "aligned_32_bit":  true
+                                                                                                    },
+                                                                         "grant_diagnostic":  {
+                                                                                                  "name":  "vc_lora_r19_grant_diagnostic_record",
+                                                                                                  "address":  "0x3fcad4f0",
+                                                                                                  "size_bytes":  1024,
+                                                                                                  "aligned_32_bit":  true
+                                                                                              }
+                                                                     }
+                                                     }
+                  },
+                  {
+                      "role":  "ground",
+                      "application":  {
+                                          "path":  "runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T134821302Z-9e36e182/firmware/ground.application.bin",
+                                          "size_bytes":  438512,
+                                          "sha256":  "717B2C63DF6B44597F12F2542D1D0559506C1A025CF532144C40BE959F24D915"
+                                      },
+                      "runtime_diagnostic_symbols":  {
+                                                         "schema":  "vc-lora-r19-runtime-diagnostic-symbols-v1",
+                                                         "elf_sha256":  "59EC67772623906E59D79C8DB7CB0C351CA7779FB3DCCFAF372F930C5BDD201A",
+                                                         "map_sha256":  "81055EE32EB8A5F2A579DD98E2216A42D62E2F1A5C170DFEB7FD79DAB706C043",
+                                                         "application_sha256":  "717B2C63DF6B44597F12F2542D1D0559506C1A025CF532144C40BE959F24D915",
+                                                         "symbols":  {
+                                                                         "runtime_stage":  {
+                                                                                               "name":  "vc_lora_r19_runtime_stage_record",
+                                                                                               "address":  "0x3fca5150",
+                                                                                               "size_bytes":  68,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "endpoint_fifo":  {
+                                                                                               "name":  "vc_lora_r19_hwcdc_fifo_diagnostic_record",
+                                                                                               "address":  "0x3fca54f8",
+                                                                                               "size_bytes":  112,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "hwcdc_restart":  {
+                                                                                               "name":  "vc_lora_r19_hwcdc_restart_diagnostic_record",
+                                                                                               "address":  "0x3fca5478",
+                                                                                               "size_bytes":  128,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "ground_usb_commit":  {
+                                                                                                   "name":  "vc_lora_r19_ground_usb_commit_record",
+                                                                                                   "address":  "0x3fca50d0",
+                                                                                                   "size_bytes":  128,
+                                                                                                   "aligned_32_bit":  true
+                                                                                               },
+                                                                         "first_usb_failure":  {
+                                                                                                   "name":  "vc_lora_r19_first_usb_failure_record",
+                                                                                                   "address":  "0x3fca4f50",
+                                                                                                   "size_bytes":  384,
+                                                                                                   "aligned_32_bit":  true
+                                                                                               },
+                                                                         "timed_path":  {
+                                                                                            "name":  "vc_lora_r19_timed_path_record",
+                                                                                            "address":  "0x3fca4850",
+                                                                                            "size_bytes":  512,
+                                                                                            "aligned_32_bit":  true
+                                                                                        },
+                                                                         "aux_readiness":  {
+                                                                                               "name":  "vc_lora_r19_aux_readiness_record",
+                                                                                               "address":  "0x3fca3050",
+                                                                                               "size_bytes":  6144,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "diagnostic_usb_failure":  {
+                                                                                                        "name":  "vc_lora_r19_diagnostic_usb_failure_record",
+                                                                                                        "address":  "0x3fca4e50",
+                                                                                                        "size_bytes":  256,
+                                                                                                        "aligned_32_bit":  true
+                                                                                                    },
+                                                                         "grant_diagnostic":  {
+                                                                                                  "name":  "vc_lora_r19_grant_diagnostic_record",
+                                                                                                  "address":  "0x3fca4a50",
+                                                                                                  "size_bytes":  1024,
+                                                                                                  "aligned_32_bit":  true
+                                                                                              }
+                                                                     }
+                                                     }
+                  }
+              ],
+    "flash_policy":  {
+                         "mode":  "app-only",
+                         "app_only":  true,
+                         "offset":  "0x10000",
+                         "upload_order":  [
+                                              "vehicle",
+                                              "ground"
+                                          ],
+                         "erase_flash":  false,
+                         "write_bootloader":  false,
+                         "write_partition_table":  false,
+                         "write_merged_image":  false
+                     },
+    "candidate_enable":  {
+                             "macro":  "VC_LORA_R19_HIGH_SPEED_CANDIDATE",
+                             "value":  1,
+                             "compile_flag":  "-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1",
+                             "property":  "compiler.cpp.extra_flags=-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1 -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1 -DVC_LORA_R19_TIMED_PATH_DIAGNOSTICS=1 -DVC_LORA_R19_USB_READINESS_MODE=2 -DVC_LORA_R19_AUX_READINESS_DIAGNOSTICS=1 -DVC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD=1 -DVC_LORA_R19_GRANT_DIAGNOSTICS=1",
+                             "bridge_default":  0,
+                             "mechanism":  "arduino-cli-build-property"
+                         },
+    "endpoint_fifo_schema":  2,
+    "endpoint_fifo_size_bytes":  112,
+    "runtime_stage_size_bytes":  68,
+    "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v9",
+    "usb_extended_diagnostics":  {
+                                     "schema":  "vc-lora-r19-usb-extended-diagnostics-v2",
+                                     "enabled":  true,
+                                     "records":  {
+                                                     "hwcdc_restart":  {
+                                                                           "symbol":  "vc_lora_r19_hwcdc_restart_diagnostic_record",
+                                                                           "schema_version":  1,
+                                                                           "size_bytes":  128
+                                                                       },
+                                                     "ground_usb_commit":  {
+                                                                               "symbol":  "vc_lora_r19_ground_usb_commit_record",
+                                                                               "schema_version":  1,
+                                                                               "size_bytes":  128
+                                                                           },
+                                                     "first_usb_failure":  {
+                                                                               "symbol":  "vc_lora_r19_first_usb_failure_record",
+                                                                               "schema_version":  1,
+                                                                               "size_bytes":  384
+                                                                           }
+                                                 }
+                                 },
+    "first_usb_failure_decoder":  {
+                                      "path":  "tools/read_r19_first_usb_failure_record.ps1",
+                                      "sha256":  "E11CDBF18EFA90F22BC9E69ADF357FD795396725EC0D2B091C759A69A929E47D"
+                                  },
+    "timed_path_diagnostics":  {
+                                   "schema":  "vc-lora-r19-timed-path-candidate-v1",
+                                   "enabled":  true,
+                                   "mode":  "ExplicitHostArm",
+                                   "mode_value":  2,
+                                   "macro":  "VC_LORA_R19_TIMED_PATH_DIAGNOSTICS",
+                                   "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v6",
+                                   "record":  {
+                                                  "symbol":  "vc_lora_r19_timed_path_record",
+                                                  "schema_version":  1,
+                                                  "size_bytes":  512
+                                              },
+                                   "decoder":  {
+                                                   "path":  "tools/read_r19_timed_path_record.ps1",
+                                                   "sha256":  "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C"
+                                               }
+                               },
+    "aux_readiness_diagnostics":  {
+                                      "schema":  "vc-lora-r19-aux-readiness-candidate-v1",
+                                      "enabled":  true,
+                                      "macro":  "VC_LORA_R19_AUX_READINESS_DIAGNOSTICS",
+                                      "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v7",
+                                      "record":  {
+                                                     "symbol":  "vc_lora_r19_aux_readiness_record",
+                                                     "schema_version":  1,
+                                                     "size_bytes":  6144
+                                                 },
+                                      "decoder":  {
+                                                      "path":  "tools/read_r19_aux_readiness_record.ps1",
+                                                      "sha256":  "C011580259EA94F3092B1B3CCAF34DB30C4D9CA1158D2A51D2DC96EA76D880DF"
+                                                  }
+                                  },
+    "grant_diagnostics":  {
+                              "schema":  "vc-lora-r19-grant-diagnostic-candidate-v1",
+                              "enabled":  true,
+                              "macro":  "VC_LORA_R19_GRANT_DIAGNOSTICS",
+                              "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v9",
+                              "record":  {
+                                             "symbol":  "vc_lora_r19_grant_diagnostic_record",
+                                             "schema_version":  1,
+                                             "size_bytes":  1024
+                                         },
+                              "decoder":  {
+                                              "path":  "tools/read_r19_grant_diagnostic_record.ps1",
+                                              "sha256":  "024B52920F2F91C0806988EE43968F0B90D189E82FC52F0D403C2025656EB4B0"
+                                          }
+                          },
+    "diagnostic_usb_failure_diagnostics":  {
+                                               "schema":  "vc-lora-r19-diagnostic-usb-failure-candidate-v1",
+                                               "enabled":  true,
+                                               "macro":  "VC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD",
+                                               "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v8",
+                                               "record":  {
+                                                              "symbol":  "vc_lora_r19_diagnostic_usb_failure_record",
+                                                              "schema_version":  1,
+                                                              "size_bytes":  256
+                                                          },
+                                               "decoder":  {
+                                                               "path":  "tools/read_r19_diagnostic_usb_failure_record.ps1",
+                                                               "sha256":  "26E15CAC70F9414F2EE3A43FBF44A820BC1F7B8DC41672EC81733A9B1CD54451"
+                                                           }
+                                           },
+    "usb_role_capabilities":  {
+                                  "schema":  "vc-lora-r19-usb-role-capabilities-v1",
+                                  "mode":  "ExplicitHostArm",
+                                  "implementation_bound":  true,
+                                  "canonical_sources":  [
+                                                            {
+                                                                "path":  "firmware/phase6/vc_lora_phase6_bridge.hpp",
+                                                                "sha256":  "896D1014C6BB75686F5A4EA0D5F5DA4A98E7DE83541E0288E3D6ED6226E9168E"
+                                                            },
+                                                            {
+                                                                "path":  "firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+                                                                "sha256":  "47CE684BB11CD3807CA15605982BD98B66C7CB4258BE63DEA229E10E1793A258"
+                                                            },
+                                                            {
+                                                                "path":  "tools/r19_usb_role_contract.ps1",
+                                                                "sha256":  "10787A8D4064FC7370F40AE81BA3034E8D59F063E4D207E81B3E4F37FD020238"
+                                                            }
+                                                        ],
+                                  "roles":  [
+                                                {
+                                                    "role":  "vehicle",
+                                                    "clock_request_reply":  true,
+                                                    "effective_mode":  "SyncOnly",
+                                                    "ready":  false,
+                                                    "arm":  false
+                                                },
+                                                {
+                                                    "role":  "ground",
+                                                    "clock_request_reply":  true,
+                                                    "effective_mode":  "ExplicitHostArm",
+                                                    "ready":  true,
+                                                    "arm":  true
+                                                }
+                                            ]
+                              }
+}

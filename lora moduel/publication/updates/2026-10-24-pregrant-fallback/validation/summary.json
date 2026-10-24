@@ -1,0 +1,31 @@
+{
+    "schema":  "vc-lora-pregrant-publication-validation-v1",
+    "result":  "PASS_PUBLICATION_CHECKS_NOT_PRODUCT_ACCEPTANCE",
+    "checks":  3624,
+    "original_files":  337,
+    "original_bytes":  8214883,
+    "inventory_sha256":  "60F52DCF1B4BA15E69AE367F9B1ABE22D9F49A37165CC79FE1986A40CE965FC1",
+    "json_files_parsed":  46,
+    "text_files_credential_scanned":  312,
+    "credential_pattern_findings":  0,
+    "local_markdown_links_checked":  30,
+    "forbidden_files":  0,
+    "original_workspace_host_tests":  430,
+    "original_workspace_host_test_failures":  0,
+    "original_workspace_vehicle_ground_diagnostic_builds":  "PASS",
+    "published_snapshot_tests_passed":  18,
+    "published_snapshot_tests_failed":  0,
+    "full_430_tests_rerun_for_publication":  false,
+    "arduino_compilation_rerun_for_publication":  false,
+    "hardware_interaction":  false,
+    "live_authorization_consumed":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false,
+    "source_scope":  "Selected sources including canonical candidate76 and host source129; identity-bound live tools and sealed binary/history dependencies omitted",
+    "limitations":  [
+                        "Credential pattern checks are scoped checks, not a proof that arbitrary secrets cannot exist.",
+                        "Candidate/restoration manifests refer to intentionally omitted binaries; this is not a flashable or complete sealed package.",
+                        "PC paths and device identifiers remain in byte-identical experimental evidence.",
+                        "The18 reproduced tests do not certify full430 clean-clone reproducibility or physical high-speed performance."
+                    ]
+}

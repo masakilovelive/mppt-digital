@@ -1,0 +1,84 @@
+{
+  "schema": "vc-lora-publication-snapshot-selected-tests-v1",
+  "result": "PASS_SELECTED_SNAPSHOT_CPP_TESTS_NOT_FULL_SUITE",
+  "successful_attempt": 2,
+  "source_snapshot": "E:/VESC/_codex_build/mppt-lora-aux-20261022/lora moduel/publication/updates/2026-10-24-pregrant-fallback/source_snapshot",
+  "build_directory": "E:/VESC/_codex_build/lora-publication-checks-20261025-pregrant",
+  "configure_exit_code": 0,
+  "build_exit_code": 0,
+  "ctest_exit_code": 0,
+  "tests_executed": 18,
+  "tests_passed": 18,
+  "tests_failed": 0,
+  "test_real_seconds": 0.86,
+  "ctest_filter": "^IT-R19-(PRENEGOTIATION-FALLBACK-.*|GRANT-DIAGNOSTIC-BRIDGE)-001$",
+  "build_targets": [
+    "vc_lora_r19_pre_negotiation_fallback_tests",
+    "vc_lora_phase6_grant_diagnostic_hooks_tests"
+  ],
+  "selected_coverage": {
+    "grant_diagnostic_bridge_tests": 1,
+    "pre_negotiation_fallback_tests": 17,
+    "fallback_cases": [
+      "success", "boundary500", "duplicate", "epoch", "epoch-during-admission",
+      "late-fresh", "staged", "writer", "standard-writer", "session", "frozen",
+      "partial-prefix", "occupied-proxy", "queue-full", "unknown-error", "nonparam",
+      "negotiation-success"
+    ]
+  },
+  "first_attempt_preserved": {
+    "result": "BUILD_FAILED_MISSING_PACKAGED_DEPENDENCY_NO_TESTS_EXECUTED",
+    "configure_exit_code": 0,
+    "build_exit_code": 1,
+    "tests_executed": 0,
+    "summary": "summary_attempt1.json",
+    "summary_sha256": "FEC9005643023D376D15264E19CC88A98AC21692A8E2C86E52E79F4AFFECEDED",
+    "configure_log": "configure_attempt1.log",
+    "configure_log_sha256": "40FC9FB437C2BD3E60EE771D1DC860D6940BAD29EF46B759ADE9AFFCF7CBA359",
+    "build_log": "build_attempt1.log",
+    "build_log_sha256": "B97142034F289CD10F33ED16F5044E0FC4043234F36C9D6036E4D02DF03C6922"
+  },
+  "retry_reason": {
+    "classification": "Root publication pack generator restored the legitimate omitted SDK diagnostic header, byte-identical to source; no test or production logic was changed for the retry.",
+    "restored_path": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDCR19Diagnostic.h",
+    "restored_sha256_verified_before_and_after": "786E36D9178F1976AC1A185E994ACAF00C8FCA75486A172BB22993A9B6B546EE",
+    "source_or_test_edits_by_verification_agent": false,
+    "deadline_changes": false,
+    "tests_deleted_or_weakened": false
+  },
+  "toolchain": {
+    "cmake": "C:/Users/user/AppData/Local/Android/Sdk/cmake/3.22.1/bin/cmake.exe",
+    "ctest": "C:/Users/user/AppData/Local/Android/Sdk/cmake/3.22.1/bin/ctest.exe",
+    "ninja": "C:/Users/user/AppData/Local/Android/Sdk/cmake/3.22.1/bin/ninja.exe",
+    "compiler": "C:/Users/user/AppData/Local/Temp/vc_lora_host_tools/llvm-mingw-20260616-complete/unpacked/llvm-mingw-20260616-ucrt-x86_64/bin/clang++.exe",
+    "detected_compiler": "Clang 22.1.8",
+    "explicit_CMake_PowerShell_interpreter": "C:/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+    "configure_runner": "Windows PowerShell 5.1",
+    "retry_wrapper_shell_version": "7.6.5",
+    "selected_tests_invoke_PowerShell": false,
+    "generator": "Ninja",
+    "configuration": "Debug",
+    "VC_LORA_BUILD_TESTS": true
+  },
+  "build_warnings": [
+    "Both selected translation units emitted the existing unused parameter now_ms warning in firmware/phase6/vc_lora_phase6_bridge.hpp:2235. No warning was suppressed and no source was changed."
+  ],
+  "evidence_sha256": {
+    "build_attempt2.log": "4930075867EC4605A6220A3DF120B812F30FCE1493E431C615DFEB6320D60FBF",
+    "ctest_attempt2.log": "648FB357B66E77740E723190E344A4BBDEAF0E97FF0747D40E03B9C7B538014D",
+    "snapshot_bridge": "896D1014C6BB75686F5A4EA0D5F5DA4A98E7DE83541E0288E3D6ED6226E9168E",
+    "fallback_executable": "FD0CCF0E693BB608BD06B4E9F7AFB1C954800015E14925B64B4700660CBF489A",
+    "grant_diagnostic_bridge_executable": "9235A2142FC39B3BC777281903AF196ED17C0E2F8C95B16416B45545E28B152D"
+  },
+  "scope_limits": {
+    "historical_original_workspace_full_suite_count": 430,
+    "historical_full_suite_not_rerun_from_publication_copy": true,
+    "this_selected_run_does_not_replace_original_full_suite_or_HIL_evidence": true,
+    "Arduino_compiles_not_rerun": true,
+    "hardware_access": false,
+    "COM_or_PnP_access": false,
+    "network_access": false,
+    "git_mutations": false,
+    "R19_high_speed_30_second_acceptance_proven_by_this_run": false
+  }
+}

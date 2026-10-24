@@ -1,0 +1,27 @@
+diff --git a/runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/host_CMakeLists.before.txt b/tests/host/CMakeLists.txt
+index 1cfd5bf..c3b9329 100644
+--- a/runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/host_CMakeLists.before.txt
++++ b/tests/host/CMakeLists.txt
+@@ -442,6 +442,14 @@ add_executable(vc_lora_phase6_ground_host_readiness_tests
+ add_executable(vc_lora_phase6_grant_diagnostic_hooks_tests
+   standalone/phase6_grant_diagnostic_hooks_tests.cpp)
+ add_test(NAME IT-R19-GRANT-DIAGNOSTIC-BRIDGE-001 COMMAND vc_lora_phase6_grant_diagnostic_hooks_tests)
++add_executable(vc_lora_r19_pre_negotiation_fallback_tests
++  standalone/r19_pre_negotiation_fallback_tests.cpp)
++foreach(fallback_case IN ITEMS success boundary500 duplicate epoch epoch-during-admission late-fresh staged writer standard-writer session frozen partial-prefix occupied-proxy queue-full unknown-error nonparam negotiation-success)
++  add_test(NAME IT-R19-PRENEGOTIATION-FALLBACK-${fallback_case}-001
++    COMMAND vc_lora_r19_pre_negotiation_fallback_tests ${fallback_case})
++  set_tests_properties(IT-R19-PRENEGOTIATION-FALLBACK-${fallback_case}-001 PROPERTIES
++    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} LABELS "r19;grant;fallback;offline" TIMEOUT 30)
++endforeach()
+ add_executable(vc_lora_phase6_ground_aux_independence_tests
+   standalone/phase6_ground_aux_independence_tests.cpp)
+ add_executable(vc_lora_phase6_vehicle_usb_clock_tests
+@@ -480,6 +488,7 @@ set_tests_properties(IT-R19-GROUND-HOST-READINESS-001 PROPERTIES
+   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} LABELS "r19;diagnostic;offline" TIMEOUT 30)
+ 
+ foreach(runtime_fail_bridge_target IN ITEMS
++    vc_lora_r19_pre_negotiation_fallback_tests
+     vc_lora_phase6_grant_diagnostic_hooks_tests
+     vc_lora_phase6_vehicle_usb_clock_tests
+     vc_lora_phase6_ground_diagnostic_usb_failure_tests

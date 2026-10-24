@@ -1,0 +1,51 @@
+{
+  "schema": "vc-lora-r19-pre-negotiation-fallback-change-v1",
+  "result": "COMPLETED_ONE_HIL_R18_RESTORED_PARTIAL_COMMUNICATION_IMPROVEMENT_NOT_HIGH_SPEED_ACCEPTANCE",
+  "operator_selected_option": 1,
+  "scope": "One-shot safe R18-route fallback after a proven pre-negotiation Grant deadline failure; not an arbitrary-phase high-speed-start fix",
+  "production_file": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+  "production_file_sha256": "896D1014C6BB75686F5A4EA0D5F5DA4A98E7DE83541E0288E3D6ED6226E9168E",
+  "test_first": {
+    "safe_fallback_behavioral_red": {"log":"behavioral_RED_success.log","exit_code":1,"checks":27,"failures":7},
+    "asynchronous_epoch_behavioral_red": {"log":"behavioral_RED_epoch_transition.log","exit_code":1,"checks":16,"failures":1},
+    "focused_final_green": {"log":"post_hardening_focused_green.log","tests_passed":19,"tests_failed":0},
+    "full_regression_final": {"log":"host_suite_final_windows_ps51.log","status":"PASS","tests_passed":430,"tests_failed":0,"elapsed_seconds":462.45,"exit_code":0},
+    "superseded_regression": {"log":"host_suite_windows_ps51.log","passed":401,"failed":28,"disposition":"27 missing Get-FileHash due to PS5.1 module-path launch environment; one source-order false-positive resolved without weakening the existing assertion. Final corrected full regression remains separate."}
+  },
+  "preserved_contracts": {
+    "original_request_t0": true,
+    "usb_loss_epoch": true,
+    "grant_ms": 500,
+    "aux_ms": 2000,
+    "product_usb_ms": 106,
+    "hard_lease_ms": 28000,
+    "global_completion_ms": 30000,
+    "pins_uart_rf_profile_unchanged": true,
+    "core_adapter_and_diagnostic_ABI_unchanged": true,
+    "failed_accelerator_never_rearmed": true,
+    "accepted_or_uncertain_negotiation_keeps_fail_closed": true
+  },
+  "implementation_notes": [
+    "Freeze the existing adapter/coordinator first failure; distinguish it from a global runtime stop.",
+    "Only a proven first Tick AwaitFreshGrant-to-FailClosed GrantDeadlineExceeded, with no observed/staged Grant or negotiation, can enter fallback.",
+    "Forward the exact immutable original #21 through the normal proxy/ingress path once, never write directly to UART.",
+    "Require empty normal ingress and coherent writer/proxy state; recheck USB epoch after queue admission before declaring fallback handled.",
+    "Retain the failed accelerator and consume the high-speed route for this request rather than resetting timers or manufacturing a protocol completion."
+  ],
+  "known_limits": [
+    "The conservative empty-ingress condition may refuse fallback under a normal-traffic backlog.",
+    "Fallback RAM counters were not added to the JTAG ABI; do not claim they were read during a hardware run.",
+    "USB diagnostic31-byte stalls and AUX physical waveform causality are separate unresolved questions.",
+    "No932/932-in30-seconds or R19 acceptance/deployment claim follows from this change."
+  ],
+  "independent_review": "independent_bridge_review.json",
+  "production_diff": "bridge_implementation.diff",
+  "arduino_builds": {"status":"PASS","exit_code":0,"log":"candidate_build.log","required_order":["vehicle","ground"],"candidate_id":"20261024T134821302Z-9e36e182","artifact_verification":"PASS","artifact_verification_log":"artifact_verification.log","latest_sha256":"8E7DF00854B46725628E077B050C97060F35B5119BAC332C3BD9144F1FA3C592"},
+  "preparation_pin": {"status":"PASS","path":"prepared_run_fixed_fallback.json","sha256":"F8B02E5FF52A702983638FD72151AA3DEDB66BFC45ABE4124795E63D9658A3D3","tools":22,"vehicle_stage_address":"0x3fcadbf0","ground_stage_address":"0x3fca5150","generator_log":"pin_preparation_after_path_fix.log","superseded_failed_log":"pin_preparation.log","path_fix_report":"role_path_fix_summary.json","path_fix_scope":"Only the new preparation generator was changed; strict exact paths, resolved same image, sizes, digests, actual files and symbols are all verified. No candidate/product/22-tool modifications."},
+  "file_only_trial_wrapper": {"status":"PASS","exit_code":0,"log":"wrapper_file_only.log","log_sha256":"5246972A796AE132F6D4C287C4A456CAF0FEBFEB907B7F669F530AE6B6BD3EA6","wrapper_sha256":"01545ACA8599F77631762775B45690BE278513086BCBB7BCAB678D195E2D6F48","dispatch_marker_absent_after_check":true,"hardware_interaction":false},
+  "hardware_trial": {"status":"COMPLETED","authorization_unconsumed":false,"authorized_maximum":1,"trials_dispatched":1,"capture_seconds":40,"measured_seconds":40.0018022,"param_request_maximum":1,"param_request_attempts":1,"mandatory_accepted_R18_restore":true,"accepted_R18_restore_proven":true,"automatic_retry_performed":false,"parent_exit_code":0,"output_relative":"runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once","evaluation":"trial_evaluation.json"},
+  "observed_outcome": {"traffic_continues_after_501_ms_grant_expiry":true,"product_heartbeats_at_pc":37,"maximum_pc_inter_heartbeat_gap_ms":2099.9267,"unique_parameters_at_30s":4,"unique_parameters_at_end":6,"target_parameters":932,"parameter_ledger_errors":0,"diagnostic_usb_wait_issue_remains":true,"high_speed_acceptance":false},
+  "completed_saved_evidence_reviews": {"grant_fallback":"grant_fallback_trial_analysis.json","usb_aux_and_raw":"usb_aux_product_trial_analysis.json","safety":"trial_safety_evidence_audit.json","safety_assertions_passed":1022,"raw_consistency_checks_passed":17,"all_reviewers_stopped":true,"additional_device_operations":false},
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

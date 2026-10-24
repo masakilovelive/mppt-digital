@@ -1,0 +1,76 @@
+{
+  "schema": "vc-lora-r19-grant-admission-independent-test-review-v1",
+  "result": "PASS_OFFLINE_CHARACTERIZATION_REVIEW_NOT_ALIGNMENT_FIXED",
+  "scope": "Independent read-only review of two new test sources, CMake registration and existing root-executed logs",
+  "reviewer_new_build_or_test_execution": false,
+  "production_edits": false,
+  "hardware_process_PnP_or_network_operations": false,
+  "reviewed_sources": [
+    {"path": "tests/host/standalone/r19_grant_admission_timing_tests.cpp", "sha256": "B75F5B8E1F4DA0C324EA3BBB68F3ADF70BE05B13C2938F009DE5D4A644F983B6"},
+    {"path": "tests/host/standalone/r19_standard_grant_phase_tests.cpp", "sha256": "71EF88B72008D71844A8F2ED18178B22218394A87C3DF324FF8CF1C0AB9B9F5A"},
+    {"path": "tests/host/CMakeLists.txt", "sha256": "A02A0EDB2FB367DBA283F1BD3BF8BA9C64B6659EF2927ADC71197E5E98EFDD94"}
+  ],
+  "log_evidence": [
+    {"path": "admission_characterization.log", "checks": 45125, "failures": 0, "sha256": "97151F44AC91428B074B8B98AA932F4F642B08CB17ECE610EF897B08F358934F"},
+    {"path": "standard_phase_characterization.log", "checks": 34381, "failures": 0, "sha256": "CF7F94E0203C990BDDF66C7AB588FFE939DD14522D349F77359DCBF6E6C12ED0"},
+    {"path": "admission_requirement_RED.log", "requirement_result": "FAIL_UNRESOLVED", "root_reported_exit_code": 1, "sha256": "C51A7A88EA8F67C677A8343B1DFE3F5EA0B35334D6E3FFFEAA4EACD914A8F5F6"},
+    {"path": "standard_phase_requirement_RED.log", "counterfactual_failures": 6, "root_reported_exit_code": 1, "sha256": "A9FC01026CC175383E6BD5341A9C400C58368CB614AEC5896CB11B5F205430D3"}
+  ],
+  "admission_test_findings": {
+    "uses_real_adapter_owner_and_coordinator": true,
+    "historical_timestamps_replayed": "baseline9233/request12351/tick12851NoAction/tick12852FailClosed",
+    "exact_owner_and_coordinator_error_checked": "GrantDeadlineExceeded",
+    "499_500_501_both_tick_arrival_orders_checked": true,
+    "501_arrival_first_correctly_distinguished_from_tick_first": true,
+    "equal_time_request_Grant_order_checked": true,
+    "request_origin_not_rebased_after_Grant": true,
+    "100ms_direction_guard_and32byte_VCBN_identity_checked": true,
+    "late_Grant_cannot_revive_or_overwrite_immutable_failure": true,
+    "conditional5000ms_phase_sweep": {"phases": 5000, "within_deadline": 500, "outside_deadline": 4500},
+    "phase_count_correctness": "Requests are after the already-observed baseline and strictly before the next Grant: waits5000..1ms yield500 inclusive allowable phases. Equal-time request-before-nextGrant is tested separately, not double-counted.",
+    "requirement_probe_is_explicitly_desired_future_behavior_not_current_contract": true
+  },
+  "standard_phase_test_findings": {
+    "uses_real_VehicleTddController_and_GroundTddController": true,
+    "fixed_configuration_from_FixedFirmwareContract": true,
+    "no_hardcoded5000ms_Grant_period": true,
+    "synthetic_service_and_remote_delivery_parameters_kept_separate": true,
+    "synthetic_AUX_HIGH20ms_before_tail_allows_real15ms_stability_check": true,
+    "1ms_tick_and_delivery_call_order_explicit": true,
+    "six_model_Grant_intervals_ms": [4303, 5403, 4663, 6503, 5952, 7502],
+    "exact_next_cycle_identity_checked": true,
+    "repeat_interval_stability_checked_within_stated_model": true,
+    "no_actual_probability_or_RF_latency_inference_in_source": true,
+    "standard_admission_vs_completion": {
+      "payload_start_ms": 4203,
+      "300ms_admission_deadline_ms": 4502,
+      "DONE_sender_tail_and_Vehicle_observation_ms": 5304,
+      "2000ms_started_transaction_deadline_ms": 6203,
+      "late_unstarted_frame_at_exact_admission_boundary_rejected_to_IDLE": true,
+      "started_transaction_allowed_to_complete_after_admission_closes": true
+    }
+  },
+  "CMake_review": {
+    "block_lines": [86, 105],
+    "other_preexisting_lines_identical_to_saved_baseline": true,
+    "links_existing_vc_lora_core": true,
+    "cxx_standard": 17,
+    "cxx_extensions_disabled": true,
+    "CTest_count_added": 2,
+    "CTest_labels": "r19;grant;offline;characterization",
+    "CTest_timeout_seconds_each": 30,
+    "only_default_characterization_registered": true,
+    "intentional_RED_probes_not_masqueraded_as_fixed_production_requirement": true
+  },
+  "remaining_gaps": [
+    "The standard-controller phase geometry and real high-speed adapter tests are complementary, not one coupled simulation. Active R19 hold_standard_uplink, writer freeze and one-shot routing can alter the standard terminal path; displayed intervals are conditional opportunities, not bounds for every R19 execution.",
+    "AUX edges, radio service, remote delivery, heartbeat availability and terminal loss are synthetic. Even mathematical_only=false models are illustrative, not validated physical models.",
+    "The standard harness does not parse complete radio/MAVLink bytes or reproduce demux/quarantine, E220 hardware queues, live USB readiness and operating-system timing.",
+    "The second Vehicle retained-Grant500ms age, combined request100ms guard and variable transport delay is not jointly swept by these new tests.",
+    "Hard lease28000 and target30000 constants are retained, but these new admission tests do not complete an actual932-value bulk session or prove all waiting remains accounted during a future admission redesign.",
+    "The standalone adapter test covers both equal-timestamp API orders, not execution of the actual firmware loop; timestamp sampling and buffered-but-not-yet-parsed UART bytes remain a further integration case.",
+    "No source-build or complete413-test-suite result is asserted by this reviewer. Characterization PASS documents existing mismatch; expected RED remains unresolved until a separately authorized test-first correction."
+  ],
+  "blocking_issues_found": [],
+  "conclusion": "Sources and logs support the stated timing-mismatch characterization. They do not support declaring admission alignment repaired, RF latency bounded,30s acquisition achieved or product deployment acceptable."
+}

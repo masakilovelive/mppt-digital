@@ -1,0 +1,94 @@
+{
+  "schema": "vc-lora-r19-pre-negotiation-offline-validation-audit-v1",
+  "result": "PASS_SAVED_OFFLINE_VALIDATION_AUDIT_NOT_HARDWARE_ACCEPTANCE",
+  "mode": "pure-saved-file-audit",
+  "hardware_interaction": false,
+  "production_edits": false,
+  "builds_or_tests_rerun_by_auditor": false,
+  "device_or_process_queries": false,
+  "live_trial_started_by_auditor": false,
+  "source_binding": {
+    "bridge": {"path": "firmware/phase6/vc_lora_phase6_bridge.hpp", "sha256": "896D1014C6BB75686F5A4EA0D5F5DA4A98E7DE83541E0288E3D6ED6226E9168E"},
+    "new_test": {"path": "tests/host/standalone/r19_pre_negotiation_fallback_tests.cpp", "sha256": "42B4A0CF43B266479D89C19C1939FAB2B8C8F898CDFE14D70BAB68CBAA0CAE25"},
+    "fake_header": {"path": "tests/host/fakes/fake_arduino_test_api.hpp", "sha256": "78FBB5C8A6F6EB639E656C0A52DB122B440C93E8CC257DB2480C5DBBDB8B344E"},
+    "old_negative_test": {"path": "tests/host/standalone/phase6_grant_diagnostic_hooks_tests.cpp", "sha256": "6417041473660D30EF24CD2C59B2587401983827AF77F425672E7EF4AF593862"},
+    "all_current_sources_equal_final_independent_review_pins": true,
+    "root_change_summary_matches_frozen_bridge_sha": true,
+    "root_change_summary_sha256_at_audit": "78247DDBA8D99227DD12E4B7F68D0A3012F7FD024A92F3BDAFB6C87AC657C1BB",
+    "independent_review_sha256": "89B259252F6FF7C3C2B0553DC7806B056D6B66DC3D9791F25F5121CC9A02354D",
+    "binding_scope": "Current file hashes, saved root test/change summary and saved compilation/test logs are mutually consistent. Logs do not themselves embed source hashes; this is not a new compiler execution or independent binary reproducibility claim."
+  },
+  "genuine_test_first_reds": [
+    {
+      "log": "behavioral_RED_success.log",
+      "sha256": "D4B3F6451761DEEAAA5AFF4847174F3F29628F0C14434C1C3B95D3CB12B80BB5",
+      "checks": 27,
+      "failures": 7,
+      "reported_exit_code": 1,
+      "observed_runtime_fail_closed": true,
+      "observed_native_leases": 0,
+      "meaning": "Existing bridge compiled and ran, then failed desired clean fallback behavior. Not a missing-symbol or compilation-only RED."
+    },
+    {
+      "log": "behavioral_RED_epoch_transition.log",
+      "sha256": "D0A3171CBAD3F925F21EE4228658E2D0B3273F78C5B84026E4BE08898D843FB0",
+      "checks": 16,
+      "failures": 1,
+      "reported_exit_code": 1,
+      "observed_runtime_fail_closed": false,
+      "observed_native_leases": 1,
+      "observed_queued_frames": 1,
+      "meaning": "The opt-in fake getter reproduced epoch loss immediately after helper entry sample; old transition wrongly committed fallback. Production post-admission recheck was added only after this behavioral RED."
+    }
+  ],
+  "focused_final_green": {
+    "log": "post_hardening_focused_green.log",
+    "sha256": "20DF6CBFD0F36FDBAFC47944791C4B5D23561DEAEF6153882B2DF7567AE372C1",
+    "tests_passed": 19,
+    "tests_failed": 0,
+    "includes": ["17 fallback scenarios", "existing unsafe-epoch Grant diagnostic bridge regression", "existing product USB flush isolation contract"],
+    "executed_by": "root"
+  },
+  "official_final_host_regression": {
+    "log": "host_suite_final_windows_ps51.log",
+    "sha256": "087F81998A0DE4FD24ACF55D70FCC590F09BB90B83026646046C49F8DEFC56DA",
+    "shell_reported": "Windows PowerShell5.1 with corrected module path",
+    "unique_started_test_names_counted_from_log": 430,
+    "passed_test_lines_counted_from_log": 430,
+    "failed_test_lines_counted_from_log": 0,
+    "summary_exactly_matches": "100% tests passed, 0 tests failed out of 430",
+    "elapsed_seconds": 462.45,
+    "reported_exit_code": 0,
+    "configuration_and_build_output_present": true,
+    "executed_by": "root",
+    "superseded_run": "host_suite_windows_ps51.log is retained separately; final log does not relabel or erase its27 PowerShell-module environment failures and1 source-isolation failure."
+  },
+  "test_preservation_audit": {
+    "prior_full_log_unique_test_names": 429,
+    "final_full_log_unique_test_names": 430,
+    "prior_test_names_removed": [],
+    "newly_registered_name": "IT-R19-PRENEGOTIATION-FALLBACK-epoch-during-admission-001",
+    "cmake_change_is_additions_only": true,
+    "cmake_diff_sha256": "388D0607F63DFF98DFA567759BC2A525861222E7E1D6319590A55EAAF7B5159C",
+    "cmake_diff_reconstructs_current_file_from_saved_before": true,
+    "legacy_negative_checks_before": 12,
+    "legacy_negative_checks_after": 12,
+    "legacy_negative_all_old_text_and_assertions_recovered_after_removing_only_new_epoch_fixture_lines": true,
+    "legacy_negative_fixture_change": "Only the three added comment/comment/Serial.simulate_tx_loss lines after Held define an explicit unsafe-epoch scenario. Every old assertion is unchanged; clean fallback behavior has separate new positive tests.",
+    "new_test_patch_reconstructs_current_file": true,
+    "fake_header_diff_reconstructs_current_file_from_saved_before": true,
+    "fake_hook_opt_in_and_reset_default_disabled": true,
+    "fake_before_exact_bytes_base64_decoded_sha256_verified": "044801AF2EDBC7B4221E2B82954113D3AC1B97229300326A072D3BA0FDC7278D",
+    "core_adapter_and_500ms_contract_unchanged": true,
+    "no_test_deletion_or_assertion_weakening_identified_within_this_change": true,
+    "scope": "Owned change set and registered suite comparison; not a claim about unrelated user edits or all historical repository files."
+  },
+  "limits_and_remaining_work": [
+    "Fresh candidate20261024T134821302Z-9e36e182 compilation/preparation is root-owned and not audited as complete here.",
+    "Offline success proves guarded one-shot fallback behavior, not successful R19 negotiation, physical RF delivery or932/932 parameters within30seconds.",
+    "A post-fallback primary Heartbeat test proves one complete USB publication, not the maximum Heartbeat gap of a live run.",
+    "Fallback refuses nonempty standard ingress conservatively; no universal-backlog availability claim follows.",
+    "New fallback count and held-request RAM were not added to JTAG ABI and must not be claimed read in subsequent hardware evidence.",
+    "No new one-time live authority is consumed by this pure file audit."
+  ]
+}

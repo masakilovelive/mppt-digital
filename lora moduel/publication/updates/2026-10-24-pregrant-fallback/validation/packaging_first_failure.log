@@ -1,0 +1,4 @@
+Packaging attempt 1 under Windows PowerShell 5.1 failed before any original file was copied.
+Exit code: 1.
+Split-Path could not bind an empty Path while evaluating the PublicationRoot parameter default from PSScriptRoot.
+Correction: defer the same PublicationRoot derivation until after parameter binding. No source, evidence or copy-integrity condition was changed.

@@ -1,0 +1,290 @@
+{
+  "schema": "vc-lora-r19-trial-safety-evidence-audit-v1",
+  "result": "PASS_SAVED_TRIAL_SAFETY_EVIDENCE_NOT_ACCEPTANCE",
+  "mode": "pure-saved-file-audit",
+  "hardware_interaction_by_auditor": false,
+  "device_process_queries": false,
+  "source_edits": false,
+  "build_test_pin_or_extra_trial_run": false,
+  "checks": 1022,
+  "run": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261024T140809428Z-fixed-pregrant-r18-fallback-param-once",
+  "parent_summary_sha256": "0D354207D9D7A86083DC4899AE2649399BF0C9B90F1FE42CB67C14B5AEAE5322",
+  "parent_status": "PASS_PARAM_LIST_DIAGNOSTICS_CAPTURED_R18_RESTORED_NOT_ACCEPTANCE",
+  "candidate_id": "20261024T134821302Z-9e36e182",
+  "candidate_manifest_sha256": "2951578811105BCBBDF46F77FF04417F39678EBBCEB2C16C6A5B6881B3378243",
+  "candidate_inventory": {
+    "inventory_files": 162,
+    "SUMS_entries": 162,
+    "exact_total_files": 168,
+    "closure_files": [
+      "artifact_manifest.json",
+      "final_seal.json",
+      "final_seal.sha256",
+      "handoff.json",
+      "handoff.sha256",
+      "SHA256SUMS.txt"
+    ],
+    "seal_sha256": "9CF678EA89AF3794E3105AAF5FA65828218E849CD437DA2B26881458B633F6FD",
+    "all_hashes_and_sizes_match": true
+  },
+  "flash_install_and_mandatory_R18_restore": [
+    {
+      "mode": "install",
+      "directory": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261024T140812604Z-1db5ddb9-install",
+      "status": "PASS_R19_DIAGNOSTIC_INSTALLED_HIL_ONLY",
+      "record_sha256": "27E7CDDC3513924A9F6126ADA65700C2D35A8791B0B54441962753BEB9E09DB5",
+      "inventory": {
+        "inventory_files": 70,
+        "SUMS_entries": 70,
+        "exact_total_files": 74,
+        "closure_files": [
+          "artifact_manifest.json",
+          "final_seal.json",
+          "final_seal.sha256",
+          "SHA256SUMS.txt"
+        ],
+        "seal_sha256": "FAA7E3F1031FA4F03477A8367CD42F95E7AEEBE0FA22F7D40516B1BEB92DA1FD",
+        "all_hashes_and_sizes_match": true
+      },
+      "roles": [
+        {
+          "role": "vehicle",
+          "sha256": "54963B3F349A3077E1B0FE73CA2B1812DDD9EAD86184727EA73D5FF753F292BF",
+          "bytes": 455216,
+          "actual_digest_matched": true,
+          "app_only_offset": "0x10000",
+          "write_count": 1,
+          "verify_count": 1
+        },
+        {
+          "role": "ground",
+          "sha256": "717B2C63DF6B44597F12F2542D1D0559506C1A025CF532144C40BE959F24D915",
+          "bytes": 438512,
+          "actual_digest_matched": true,
+          "app_only_offset": "0x10000",
+          "write_count": 1,
+          "verify_count": 1
+        }
+      ],
+      "operation_count": 8,
+      "actual_retries": 0
+    },
+    {
+      "mode": "rollback",
+      "directory": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001\\20261024T140812604Z-1db5ddb9-rollback",
+      "status": "PASS_R18_ROLLBACK_COMPLETE",
+      "record_sha256": "409FB9FE3EE483BF7E911314AC227BEC642AAEA6874CC439885EC9E60C9655C8",
+      "inventory": {
+        "inventory_files": 60,
+        "SUMS_entries": 60,
+        "exact_total_files": 64,
+        "closure_files": [
+          "artifact_manifest.json",
+          "final_seal.json",
+          "final_seal.sha256",
+          "SHA256SUMS.txt"
+        ],
+        "seal_sha256": "E4DA837CC8A8FC771DBCAD842A5EC1A718F81F573C538EE95DA664A8F7BBC3D4",
+        "all_hashes_and_sizes_match": true
+      },
+      "roles": [
+        {
+          "role": "vehicle",
+          "sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+          "bytes": 389280,
+          "actual_digest_matched": true,
+          "app_only_offset": "0x10000",
+          "write_count": 1,
+          "verify_count": 1
+        },
+        {
+          "role": "ground",
+          "sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+          "bytes": 360208,
+          "actual_digest_matched": true,
+          "app_only_offset": "0x10000",
+          "write_count": 1,
+          "verify_count": 1
+        }
+      ],
+      "operation_count": 8,
+      "actual_retries": 0
+    }
+  ],
+  "capture": {
+    "nominal_seconds": 40,
+    "measured_seconds": 40.0018022,
+    "request_attempts": 1,
+    "request_bytes": 14,
+    "request_is_local_acceptance_not_delivery": true,
+    "serial_writes_total": 4,
+    "clock_requests": 2,
+    "private_host_arm": 1,
+    "PARAM_REQUEST_LIST": 1,
+    "consumed_one_time_permit": true,
+    "comparison_mode": "None",
+    "cleanup_proven": true,
+    "source_integrity_proven": true,
+    "summary_sha256": "79673B52BB01434B9F86D1BB2303AC8057D63F507E8EF8AC42E2D9E3A8337E14",
+    "raw": [
+      {
+        "role": "vehicle",
+        "bytes": 2674,
+        "sha256": "79539C60EFCE5D1436C66E42C34E5A2E55BA9F1310F01520ACE320DC6E41474B",
+        "worker_stopped": true,
+        "close_completed": true
+      },
+      {
+        "role": "ground",
+        "bytes": 3710,
+        "sha256": "91F84005CCB6D7475ECDDEC00BA333FB9BAA23471A22338637F42E7794BCAEB0",
+        "worker_stopped": true,
+        "close_completed": true
+      }
+    ]
+  },
+  "stages": [
+    {
+      "role": "vehicle",
+      "summary_sha256": "B5471CF8A3F3CA0C69F9725A2B6AAC613013769474135BD16C269064C818D17E",
+      "stable_record_pairs": 9,
+      "raw_reads": 18,
+      "attempts": 1,
+      "records": [
+        {
+          "record": "diagnostic_usb_failure",
+          "bytes": 256,
+          "sha256": "F46AD269F2244C32B5D2F4E2435E14CA9017B26705607FBC69EBAC98379D6360"
+        },
+        {
+          "record": "hwcdc_restart",
+          "bytes": 128,
+          "sha256": "D0B26C75ED8E51CB06924B6C68E8467C1EBFCD9FB1A73C956B91C17565D4D4DF"
+        },
+        {
+          "record": "ground_usb_commit",
+          "bytes": 128,
+          "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+        },
+        {
+          "record": "aux_readiness",
+          "bytes": 6144,
+          "sha256": "501E79C61D157280B5CD83BFF5CDEB15580D49F4E6C5E2A05E582497FC34B15D"
+        },
+        {
+          "record": "timed_path",
+          "bytes": 512,
+          "sha256": "4C4EC1DB26FD74394127ABEDAEACD0069936DA944536EABF5F07DBA9B9F1212D"
+        },
+        {
+          "record": "first_usb_failure",
+          "bytes": 384,
+          "sha256": "FDCAE8FC246A2202348F54551B0C41E907473C4DDB22EB2AC79BE0D203DC3EB0"
+        },
+        {
+          "record": "runtime_stage",
+          "bytes": 68,
+          "sha256": "FA7E5D04CD550E597274C73C7511FD36A2C0BA20A69B6824EA472939F89A3831"
+        },
+        {
+          "record": "grant_diagnostic",
+          "bytes": 1024,
+          "sha256": "E8D45180C29F99CD75D382F5A69215A95897742D8B6B63063009491873F21845"
+        },
+        {
+          "record": "endpoint_fifo",
+          "bytes": 112,
+          "sha256": "3C1A4EE06DDEEDDB44FC36723E0385942CF23C363D53ABC66F6E4D372540ED82"
+        }
+      ],
+      "CPU0_running": true,
+      "CPU1_running": true,
+      "shutdown": true,
+      "native_termination": true
+    },
+    {
+      "role": "ground",
+      "summary_sha256": "74D4E7E2C440A9C1D37AD89A921FC0C1CBAF2632962CC79095F94366CC9B04F3",
+      "stable_record_pairs": 9,
+      "raw_reads": 18,
+      "attempts": 1,
+      "records": [
+        {
+          "record": "diagnostic_usb_failure",
+          "bytes": 256,
+          "sha256": "A639A4E5781616EEB419495D1D0F2DE0EF945C085DD9D31E7D147DEA579651ED"
+        },
+        {
+          "record": "hwcdc_restart",
+          "bytes": 128,
+          "sha256": "4A1B78B31B5BC4484AD34A072C51FEABEB37F66B9B473A4AA760A503FB9D1BB7"
+        },
+        {
+          "record": "ground_usb_commit",
+          "bytes": 128,
+          "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669"
+        },
+        {
+          "record": "aux_readiness",
+          "bytes": 6144,
+          "sha256": "49AF88B0F7935779F9E2A94DF7C645F5E8E0B2934B10B09A0B991143FCB797FD"
+        },
+        {
+          "record": "timed_path",
+          "bytes": 512,
+          "sha256": "4D1D54B7E5E204212AA8DA9795F2AD31F615ED0DDBFC41B7C7638C521115CEBA"
+        },
+        {
+          "record": "first_usb_failure",
+          "bytes": 384,
+          "sha256": "C57BD52D4B7719BF725CF4DA7C95B484DF9D6F96395C999A6936B3001D73A572"
+        },
+        {
+          "record": "runtime_stage",
+          "bytes": 68,
+          "sha256": "F9DDE6675526855795521FD1233CBAE35F856AEB1A8BE32A8613889DCD6054B1"
+        },
+        {
+          "record": "grant_diagnostic",
+          "bytes": 1024,
+          "sha256": "C4FD8ECF01EA6D9B38FB0709131A73FEE5F31197AF528CD1447429498DA5045A"
+        },
+        {
+          "record": "endpoint_fifo",
+          "bytes": 112,
+          "sha256": "B05ED16388BCE6481B33250513B64D7C689213F415AD7D484929D5FA4387761C"
+        }
+      ],
+      "CPU0_running": true,
+      "CPU1_running": true,
+      "shutdown": true,
+      "native_termination": true
+    }
+  ],
+  "cleanup": {
+    "all_parent_children_terminated": true,
+    "timed_out_children": 0,
+    "stage_CPU0_CPU1_running_both_roles": true,
+    "stage_shutdown_both_roles": true,
+    "parent_rollback_proven": true,
+    "actual_restore_attempts_per_role": 1
+  },
+  "no_extra_experiment_observed": {
+    "install": 1,
+    "capture": 1,
+    "rollback": 1,
+    "PARAM_request_attempts": 1,
+    "stage_attempts_per_role": 1,
+    "actual_restore_attempts_per_role": 1,
+    "configured_restore_recovery_maximum": 3,
+    "note": "Recovery policy permits bounded restore retries, but none occurred; one attempt per role is recorded."
+  },
+  "limitations": [
+    "This audit verifies saved records, raw hashes, manifests, seals, actual esptool digest-match logs and explicit CPU cleanup witnesses, not any new physical observation.",
+    "Cleanup logs contain initial not-halted resume warnings followed by explicit per-core running state and shutdown; final witnesses prove cleanup, not absence of generic warning labels.",
+    "The parent PASS envelope proves bounded diagnostic capture and accepted-R18 restoration, not 932-parameter/30-second acceptance, RF delivery or visibility of ordinary RAM fallback counters.",
+    "Traffic and diagnostic cause evaluation are root-owned; no outcome is reclassified here."
+  ],
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

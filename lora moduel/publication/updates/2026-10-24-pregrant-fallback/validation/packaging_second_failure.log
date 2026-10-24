@@ -1,0 +1,5 @@
+Packaging attempt 2 stopped at the explicit host-source extension allowlist.
+Exit code: 1.
+The existing tests/host/MANIFEST.md documentation was not in the initial extension list.
+After read-only inspection of host file types and that manifest, Markdown documentation was explicitly included. No forbidden binary type, overwrite or byte-integrity condition was allowed.
+Already copied files are retained and must match the same original SHA before the safe resume can continue.

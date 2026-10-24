@@ -1,0 +1,174 @@
+{
+  "schema": "vc-lora-r19-independent-grant-cause-analysis-v1",
+  "analysis_mode": "SAVED_EVIDENCE_ONLY_NO_HARDWARE",
+  "run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T122935Z-grant-cause-param-once-retry",
+  "candidate_id": "20261024T071533391Z-c8216c13",
+  "result": "LOCAL_GRANT_DEADLINE_STOP_PROVEN_UPSTREAM_GRANT_TIMING_NOT_FULLY_RESOLVED",
+  "parent_result": "PASS_PARAM_LIST_DIAGNOSTICS_CAPTURED_R18_RESTORED_NOT_ACCEPTANCE",
+  "R18_restore_proven_in_parent_summary": true,
+  "record_validation": {
+    "reader_schema_both_roles": "vc-lora-r19-runtime-stage-jtag-read-v9",
+    "record_size_bytes": 1024,
+    "record_schema": 1,
+    "decoder_sha256": "024B52920F2F91C0806988EE43968F0B90D189E82FC52F0D403C2025656EB4B0",
+    "independent_pure_decoder_pass_both_roles": true,
+    "build_bound_to_runtime_stage_both_roles": true,
+    "boot_bound_to_timed_path_both_roles": true,
+    "canonical_first_second_and_attempt1_first_second_identical_both_roles": true,
+    "redecoded_JSON_identical_to_stage_summary_both_roles": true,
+    "recorded_probe_identity_proven_before_halt_both_roles": true,
+    "ground": {
+      "raw_sha256": "8F9857A59196244445FD9E53285B1E1F90E586859A3C4D8B8BC1DEC51EB41129",
+      "sequence": 2538,
+      "build_fingerprint": [1378957636, 1398032177, 842019382, 825241651],
+      "boot_instance": [1624533199, 2936276359, 3392904004, 4141573045],
+      "failure_latched": true,
+      "observation_count": 1268,
+      "journal_count": 5,
+      "journal_dropped": 0,
+      "latest_equals_immutable_first_failure": true
+    },
+    "vehicle": {
+      "raw_sha256": "E194FE8FC2D124263DC064C3B8749C61FCB947BE70B2CE9D506B3B9AF2BA716B",
+      "sequence": 38,
+      "build_fingerprint": [1378957636, 1398032177, 842019382, 825241651],
+      "boot_instance": [1455161786, 1226745640, 1779324615, 1969191629],
+      "failure_latched": false,
+      "observation_count": 18,
+      "journal_count": 10,
+      "journal_dropped": 8,
+      "absence_of_intermediate_events_is_not_proof": true
+    }
+  },
+  "ground_same_MCU_causal_chain": {
+    "clock": "Ground MCU monotonic milliseconds; not Vehicle or PC time",
+    "baseline_grant": {
+      "raw_receive_ms": 9233,
+      "session": 640,
+      "cycle": 1,
+      "control_disposition": 0,
+      "control_disposition_name": "Accepted",
+      "owner_result": "GrantBaselineCaptured",
+      "owner_and_coordinator_remain_standard_idle": true
+    },
+    "parameter_request": {
+      "observed_ms": 12351,
+      "baseline_age_ms": 3118,
+      "owner_result": "ParameterRequestHeld",
+      "adapter_status": "Held",
+      "owner_transition": "Standard -> AwaitFreshGrant",
+      "coordinator_transition": "Idle -> AwaitFreshGrant",
+      "request_origin_ms": 12351,
+      "await_fresh_grant_started_ms": 12351
+    },
+    "immutable_first_failure": {
+      "observed_ms": 12852,
+      "elapsed_from_request_ms": 501,
+      "configured_wait_budget_ms": 500,
+      "deadline_comparison": "now_ms - t0_ms > 500",
+      "event": "Tick",
+      "owner_transition": "AwaitFreshGrant -> FailClosed",
+      "owner_result_code": 25,
+      "owner_last_error_code": 25,
+      "owner_last_error": "GrantDeadlineExceeded",
+      "coordinator_transition": "AwaitFreshGrant -> FailClosed",
+      "coordinator_result_code": 15,
+      "coordinator_last_error_code": 15,
+      "coordinator_last_error": "GrantDeadlineExceeded",
+      "adapter_status_code": 26,
+      "adapter_failure_reason_code": 26,
+      "adapter_status": "FailClosed",
+      "diagnostic_snapshot_source_line": 2346,
+      "bridge_latch_source_line": 2349,
+      "validity_flags": 31,
+      "fresh_grant_valid": false,
+      "coordinator_grant_staged_valid": false,
+      "fresh_grant_timestamp": null,
+      "coordinator_grant_staged_timestamp": null
+    },
+    "scope_of_absence": "Complete Ground meaningful-event journal and timestamp validity show no raw/fresh/staged Grant observed between request admission and frozen failure. The record freezes on failure; absence after failure is not established by it."
+  },
+  "vehicle_same_MCU_grant_chain": {
+    "clock": "Vehicle MCU monotonic milliseconds; do not subtract Ground timestamps",
+    "session": 640,
+    "retained_cycles": [
+      {"cycle": 0, "generated_ms": 5281, "uart_accepted_ms": 5282, "physical_tail_ms": 5896, "token": 8, "writer_generation": 8, "write_to_tail_ms": 614},
+      {"cycle": 1, "generated_ms": 19373, "uart_accepted_ms": 19376, "physical_tail_ms": 19994, "token": 23, "writer_generation": 23, "write_to_tail_ms": 618},
+      {"cycle": 4, "generated_ms": null, "uart_accepted_ms": null, "physical_tail_ms": 49920, "token": 56, "writer_generation": 56},
+      {"cycle": 5, "generated_ms": 59370, "uart_accepted_ms": 59370, "physical_tail_ms": 59920, "token": 67, "writer_generation": 67, "write_to_tail_ms": 550}
+    ],
+    "generated_cycle0_to_cycle1_ms": 14092,
+    "cycle4_tail_to_cycle5_generated_ms": 9450,
+    "identity_link": "Vehicle generated/written/drained session640 cycle1 matches the Ground-observed standard Grant identity. Identity equality does not bound RF transit time.",
+    "tail_meaning": "Recorded standard writer physical-tail completion contract, not independently observed final RF delivery or E220 internal state.",
+    "next_Grant_at_Ground_failure_schedule_proven": false,
+    "reason": "The next-cycle TDD state/deadline at the Ground failure instant is not captured; Vehicle cycles2/3 and cycle4 generation/write are outside retained journal. Nominal phase constants do not establish an exact next-arrival timestamp."
+  },
+  "request_reaches_Vehicle": {
+    "ground_aux_uart_call_count": 1,
+    "ground_only_uart_acceptance_us": "9883348",
+    "ground_parameter_request_origin_ms": 12351,
+    "post_parameter_request_ground_UART_write_observed": false,
+    "VCBN_request_built_before_fresh_Grant": false,
+    "determination": "This request was held locally and failed before negotiation request creation/staging/transmission. The fresh-Grant wait does not itself notify Vehicle to issue an accelerated Grant.",
+    "limitation": "This is the bound local control-flow and recorded UART-boundary conclusion; it is not a physical RF capture or an independent measurement of every Vehicle parser input."
+  },
+  "AUX_and_USB_separation": {
+    "ground_AUX_fault_code": 0,
+    "ground_first_AUX_fault_latched": false,
+    "vehicle_AUX_fault_code": 0,
+    "vehicle_first_AUX_fault_latched": false,
+    "ground_maximum_GPIO_poll_gap_us": "100686",
+    "vehicle_maximum_GPIO_poll_gap_us": "110014",
+    "physical_AUX_continuous_waveform_proven": false,
+    "continuous_interrupt_coverage_proven": false,
+    "ground_product_heartbeat": {
+      "frame_bytes": 21,
+      "enqueue_us": "12266247",
+      "local_USB_completed_us": "12266701",
+      "enqueue_to_local_completion_us": 454,
+      "product_budget_ms": 106,
+      "local_failure": false,
+      "PC_CRC_valid_frame_bound_in_timed_path_evaluation": true
+    },
+    "ground_diagnostic_USB_first_failure_us": "53387895",
+    "ground_diagnostic_failure_after_Grant_failure_ms_approx": 40535.895,
+    "ground_diagnostic_ring_pending_bytes": 31,
+    "vehicle_diagnostic_USB_first_failure_us": "2563880",
+    "vehicle_diagnostic_ring_pending_bytes": 31,
+    "conclusion": "The recorded product stop here is GrantDeadlineExceeded, not AuxDidNotReturnHigh or the 106ms product-USB timeout. Separate diagnostic31-byte failures remain; Ground's recorded diagnostic failure is much later on the same MCU clock. Vehicle's diagnostic failure precedes its retained Grant generation and does not by itself show radio shutdown."
+  },
+  "exact_frozen_source_evidence": {
+    "package_source_files_checked_against_manifest": 9,
+    "all_checked_hashes_match": true,
+    "bridge_sha256": "3E48D852E7620F0951126D30C8A3CF00F6D8F02939305D6A13546B5690E4E2A8",
+    "references": [
+      {"path": "package/vc_lora_ground_xiao_esp32s3/vc_lora/bulk_session_controller.hpp", "line": 25, "finding": "grant_wait_budget_ms=500"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/src/bulk_session_controller.cpp", "line": 190, "finding": "Validated PARAM_REQUEST_LIST retained; t0 starts immediately at local request admission; AwaitFreshGrant entered"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/src/bulk_session_controller.cpp", "line": 217, "finding": "Fresh Grant must arrive no later than500ms; VCBN request is constructed only after this check and freshness validation"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/src/bulk_session_controller.cpp", "line": 470, "finding": "AwaitFreshGrant tick expires strictly after500ms"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/src/high_speed_tdd_coordinator.cpp", "line": 158, "finding": "Coordinator independently latches GrantDeadlineExceeded strictly after500ms"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/src/high_speed_tdd_coordinator.cpp", "line": 223, "finding": "Coordinator t0 starts at begin_parameter_request, before any fresh Grant"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/src/high_speed_tdd_coordinator.cpp", "line": 252, "finding": "SendNegotiationRequest can be issued only after fresh Grant staging and direction guard"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/high_speed/high_speed_phase6_adapter.hpp", "line": 728, "finding": "Adapter samples owner/coordinator tick errors and returns FailClosed"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/vc_lora_phase6_bridge.hpp", "line": 1910, "finding": "PARAM request intercepted locally; Held is consumed rather than forwarded to the standard uplink queue"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/vc_lora_phase6_bridge.hpp", "line": 2295, "finding": "Accepted standard UlGrant is routed to on_fresh_grant only while adapter holds standard uplink"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/vc_lora_phase6_bridge.hpp", "line": 2349, "finding": "Non-NoAction adapter tick latches runtime_fail_closed"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/high_speed/high_speed_phase6_adapter.hpp", "line": 906, "finding": "Vehicle uses retained standard Grant after complete VCBN request; no new high-speed Grant is generated"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/src/tdd_vehicle.cpp", "line": 265, "finding": "Next standard Grant waits for downlink drain, physical completion, AUX, tx gap and optional heartbeat deferral"},
+      {"path": "package/vc_lora_ground_xiao_esp32s3/src/tdd_vehicle.cpp", "line": 290, "finding": "GrantDrain -> UplinkGuard -> UplinkReceive -> ReturnGuard -> next downlink; not a guaranteed fixed5s Grant-arrival timer"}
+    ]
+  },
+  "next_safe_offline_work": [
+    "Add a deterministic integration replay with standard Grant session640/cycle1 observed9233ms, local PARAM admission12351ms and no new Grant through12852ms; assert both exact last_error codes and absence of negotiation UART output.",
+    "Sweep PARAM arrival phase across real standard-TDD drain/guard/receive/heartbeat-deferral transitions; assert whether the adapter is admitted only when its next fresh Grant can satisfy the unchanged500ms contract.",
+    "Separate pre-admission pending PARAM retention from active500ms negotiation only after reviewing the t0/lease contract; alternatively design an explicitly safe scheduled admission handshake. Do not silently reuse the old Grant as fresh or merely extend500ms/2000ms/106ms.",
+    "Record the next standard-TDD state/deadline and retain the Grant immediately following the pending request if further upstream timing proof is required; current bounded cross-clock mapping is unavailable."
+  ],
+  "limitations": [
+    "The decoder deliberately keeps its generic grant_deadline_exceeded_proven flag false. This analysis independently concludes the local deadline reason from bound immutable error codes, state transitions, same-MCU501ms delta and exact frozen source; it does not infer the upstream RF/scheduler root cause from a decoder success flag.",
+    "Both role clock replies validated, but workflow clock_relation is UNKNOWN_NO_OFFSET_BOUNDS and timed-path clock_bounds_valid=false. No Ground-to-Vehicle clock subtraction or precise request-to-next-Vehicle-Grant latency is asserted.",
+    "No source changes, hardware/device queries, process queries or network operations were performed by this analysis.",
+    "A successful diagnostic workflow and R18 restoration are not R19 acceptance; 932/932 within30s, continuing Heartbeat max2500ms and all errors0 are not established."
+  ]
+}

@@ -1,0 +1,51 @@
+Internal ctest changing into directory: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+Test project E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+      Start  76: IT-R19-GRANT-DIAGNOSTIC-BRIDGE-001
+ 1/19 Test  #76: IT-R19-GRANT-DIAGNOSTIC-BRIDGE-001 ..........................   Passed    0.16 sec
+      Start  77: IT-R19-PRENEGOTIATION-FALLBACK-success-001
+ 2/19 Test  #77: IT-R19-PRENEGOTIATION-FALLBACK-success-001 ..................   Passed    0.14 sec
+      Start  78: IT-R19-PRENEGOTIATION-FALLBACK-boundary500-001
+ 3/19 Test  #78: IT-R19-PRENEGOTIATION-FALLBACK-boundary500-001 ..............   Passed    0.01 sec
+      Start  79: IT-R19-PRENEGOTIATION-FALLBACK-duplicate-001
+ 4/19 Test  #79: IT-R19-PRENEGOTIATION-FALLBACK-duplicate-001 ................   Passed    0.01 sec
+      Start  80: IT-R19-PRENEGOTIATION-FALLBACK-epoch-001
+ 5/19 Test  #80: IT-R19-PRENEGOTIATION-FALLBACK-epoch-001 ....................   Passed    0.01 sec
+      Start  81: IT-R19-PRENEGOTIATION-FALLBACK-epoch-during-admission-001
+ 6/19 Test  #81: IT-R19-PRENEGOTIATION-FALLBACK-epoch-during-admission-001 ...   Passed    0.01 sec
+      Start  82: IT-R19-PRENEGOTIATION-FALLBACK-late-fresh-001
+ 7/19 Test  #82: IT-R19-PRENEGOTIATION-FALLBACK-late-fresh-001 ...............   Passed    0.01 sec
+      Start  83: IT-R19-PRENEGOTIATION-FALLBACK-staged-001
+ 8/19 Test  #83: IT-R19-PRENEGOTIATION-FALLBACK-staged-001 ...................   Passed    0.01 sec
+      Start  84: IT-R19-PRENEGOTIATION-FALLBACK-writer-001
+ 9/19 Test  #84: IT-R19-PRENEGOTIATION-FALLBACK-writer-001 ...................   Passed    0.01 sec
+      Start  85: IT-R19-PRENEGOTIATION-FALLBACK-standard-writer-001
+10/19 Test  #85: IT-R19-PRENEGOTIATION-FALLBACK-standard-writer-001 ..........   Passed    0.01 sec
+      Start  86: IT-R19-PRENEGOTIATION-FALLBACK-session-001
+11/19 Test  #86: IT-R19-PRENEGOTIATION-FALLBACK-session-001 ..................   Passed    0.01 sec
+      Start  87: IT-R19-PRENEGOTIATION-FALLBACK-frozen-001
+12/19 Test  #87: IT-R19-PRENEGOTIATION-FALLBACK-frozen-001 ...................   Passed    0.01 sec
+      Start  88: IT-R19-PRENEGOTIATION-FALLBACK-partial-prefix-001
+13/19 Test  #88: IT-R19-PRENEGOTIATION-FALLBACK-partial-prefix-001 ...........   Passed    0.01 sec
+      Start  89: IT-R19-PRENEGOTIATION-FALLBACK-occupied-proxy-001
+14/19 Test  #89: IT-R19-PRENEGOTIATION-FALLBACK-occupied-proxy-001 ...........   Passed    0.01 sec
+      Start  90: IT-R19-PRENEGOTIATION-FALLBACK-queue-full-001
+15/19 Test  #90: IT-R19-PRENEGOTIATION-FALLBACK-queue-full-001 ...............   Passed    0.01 sec
+      Start  91: IT-R19-PRENEGOTIATION-FALLBACK-unknown-error-001
+16/19 Test  #91: IT-R19-PRENEGOTIATION-FALLBACK-unknown-error-001 ............   Passed    0.01 sec
+      Start  92: IT-R19-PRENEGOTIATION-FALLBACK-nonparam-001
+17/19 Test  #92: IT-R19-PRENEGOTIATION-FALLBACK-nonparam-001 .................   Passed    0.01 sec
+      Start  93: IT-R19-PRENEGOTIATION-FALLBACK-negotiation-success-001
+18/19 Test  #93: IT-R19-PRENEGOTIATION-FALLBACK-negotiation-success-001 ......   Passed    0.01 sec
+      Start 352: IT-GROUND-USB-HB-PHASE6-FLUSH-ISOLATION-001
+19/19 Test #352: IT-GROUND-USB-HB-PHASE6-FLUSH-ISOLATION-001 .................   Passed    0.05 sec
+
+100% tests passed, 0 tests failed out of 19
+
+Label Time Summary:
+fallback    =   0.32 sec*proc (17 tests)
+grant       =   0.32 sec*proc (17 tests)
+offline     =   0.32 sec*proc (17 tests)
+phase4      =   0.05 sec*proc (1 test)
+r19         =   0.32 sec*proc (17 tests)
+
+Total Test time (real) =   0.69 sec

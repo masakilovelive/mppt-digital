@@ -1,0 +1,7 @@
+diff --git a/tests/host/standalone/phase6_grant_diagnostic_hooks_tests.cpp b/tests/host/standalone/phase6_grant_diagnostic_hooks_tests.cpp
+--- a/tests/host/standalone/phase6_grant_diagnostic_hooks_tests.cpp
++++ b/tests/host/standalone/phase6_grant_diagnostic_hooks_tests.cpp
+@@ -35,0 +36,3 @@
++  // Preserve this original global-failure regression as the unsafe-epoch
++  // case. Only the new clean pre-negotiation case may fall back to R18.
++  Serial.simulate_tx_loss();

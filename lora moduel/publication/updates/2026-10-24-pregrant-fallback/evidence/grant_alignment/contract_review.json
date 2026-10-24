@@ -1,0 +1,147 @@
+{
+  "schema": "vc-lora-r19-grant-admission-contract-review-v1",
+  "scope": "OFFLINE_VERIFICATION_ONLY",
+  "AGENTS_md_read": true,
+  "production_edits": false,
+  "hardware_or_process_or_PnP_or_network_operations": false,
+  "result": "LOCAL_CONTRACT_MATCHES_OBSERVED_FAILURE_BUT_ARBITRARY_REQUEST_PHASE_NOT_SCHEDULE_FEASIBLE",
+  "contracts": {
+    "Ground_t0": {
+      "definition": "Complete validated PARAM_REQUEST_LIST accepted at Ground USB",
+      "spec_reference": "CURRENT_WORKSPACE_AND_SPEC_R19.md:169",
+      "implementation_reference": "core/src/bulk_session_controller.cpp:190",
+      "owner_and_coordinator_use_same_request_admission_time": true,
+      "fresh_Grant_wait_ms_inclusive": 500,
+      "Ground_hard_lease_ms_inclusive": 28000,
+      "lease_includes_negotiation_and_starts_at_accepted_request": true,
+      "global_completion_target_ms": 30000,
+      "completion_endpoint": "Final PARAM_VALUE index931 host-visible commit, not queue insertion",
+      "pre_admission_wait_may_be_hidden_or_reset_out_of_total": false
+    },
+    "Grant_freshness": {
+      "reference": "core/src/bulk_session_controller.cpp:20",
+      "identity_rule": "Same session requires strictly newer cycle by sequence ordering; different session requires strictly newer nonzero session",
+      "reusing_latest_pre_request_baseline_as_fresh_allowed": false,
+      "VCBN_created_before_new_Grant": false,
+      "request_wait_notifies_Vehicle_to_issue_Grant": false
+    },
+    "two_distinct_500ms_windows": [
+      {"role": "Ground", "from": "accepted PARAM t0", "to": "parsed accepted newer standard Grant", "inclusive_ms": 500, "reference": "core/src/bulk_session_controller.cpp:217"},
+      {"role": "Vehicle", "from": "retained same-identity standard Grant physical-tail completion", "to": "complete canonical VCBN request acceptance", "inclusive_ms": 500, "reference": "firmware/high_speed/high_speed_phase6_adapter.hpp:939"}
+    ],
+    "Ground_negotiation_guard": {
+      "ms": 100,
+      "starts_at": "fresh Grant staging",
+      "reference": "core/src/high_speed_tdd_coordinator.cpp:252",
+      "counts_against_Vehicle_retained_Grant_age": "Yes in a common ideal clock model; actual relation needs valid clock/transport bounds"
+    },
+    "standard_TDD": {
+      "documentation_nominal_cycle_ms": 5000,
+      "documentation_reference": "CURRENT_WORKSPACE_AND_SPEC_R19.md:140",
+      "actual_fixed_Grant_arrival_period_implemented": false,
+      "constants_ms": {"downlink": 3000, "uplink_guard": 650, "receive_timeout": 2000, "return_guard": 650, "late_terminal_wait": 1300, "radio_service_floor": 550, "AUX_HIGH_stable": 15},
+      "runtime_reference": "core/include/vc_lora/runtime_contract.hpp:50",
+      "dynamic_dependencies": ["complete active-frame tail", "radio physical completion contract", "AUX stable", "write spacing", "retained Heartbeat deferral", "early UL_DONE/UL_IDLE", "receive timeout", "late terminal/raw activity"],
+      "state_machine_reference": "core/src/tdd_vehicle.cpp:265",
+      "ideal_no_terminal_phase_sum_from_prior_Grant_tail_to_next_Grant_generation_ms": 6950,
+      "phase_sum_formula": "650 guard +2000 receive timeout +1300 late-terminal wait +3000 downlink; excludes polls, drains, heartbeat deferral and next Grant serialization",
+      "phase_sum_scope": "One hypothetical timeout path only, not a measured or universal period"
+    }
+  },
+  "quantitative_feasibility": {
+    "necessary_Ground_window": "0 <= fresh_Grant_receive - t0 <=500ms with strictly newer identity",
+    "fixed_5000ms_counterfactual": {
+      "allowed_request_interval": "For next Grant at G, request must be accepted during [G-500,G], before that Grant becomes its baseline",
+      "continuous_phase_coverage_fraction": 0.1,
+      "scope": "Length of ideal500ms admission window in ideal5000ms period; not an observed success rate or a probability claim",
+      "observed_baseline_ms_used_for_counterfactual": 9233,
+      "observed_request_ms": 12351,
+      "hypothetical_next_Grant_ms": 14233,
+      "hypothetical_wait_ms": 1882,
+      "excess_over_500ms": 1382,
+      "actual_next_Grant_time_in_trial_proven": false
+    },
+    "joint_Ground_and_Vehicle_window_ideal_only": {
+      "symbols": "P=Vehicle retained Grant tail; G=Ground accepted fresh Grant; Q=Vehicle complete VCBN acceptance on an assumed common ideal clock",
+      "conditions": ["0<=G-t0<=500", "0<=Q-P<=500", "Q>=G+100 before any additional UART/RF/parser latency"],
+      "necessary_overlap": "max(P,G+100)<=P+500; equivalently G-P<=400 before extra transport cost",
+      "remaining_non_guard_budget_if_G_equals_P_ms": 400,
+      "scope": "Mathematical possible-window only; no measured role-clock subtraction, RF latency bound, or physical guarantee",
+      "32byte_payload_air_lower_bound_ms": 13.333333333333334,
+      "32byte_UART_8N1_at115200_lower_bound_ms": 2.7777777777777777,
+      "lower_bounds_must_not_be_treated_as_upper_bounds_or_blindly_added_when_overlapping": true,
+      "AUX_HIGH_or_550ms_service_floor_does_not_alone_bound_final_RF_arrival": true
+    },
+    "30second_arithmetic": {
+      "critical_wire_bytes": 61760,
+      "air_rate_bps": 19200,
+      "ceil_payload_air_lower_bound_ms": 25734,
+      "allocated_Grant_wait_ms": 500,
+      "four_guard_total_ms": 400,
+      "model_USB_commit_budget_ms": 100,
+      "sum_lower_bound_ms": 26734,
+      "unproven_slack_to_30000_ms": 3266,
+      "unproven_slack_to_28000_lease_ms": 1266,
+      "unmodelled_costs": ["LoRa packet overhead", "RF service/drain uncertainty", "contention/retry", "Pixhawk production pace", "USB/OS scheduling", "actual queue age"],
+      "physical_30seconds_proven": false,
+      "500ms_is_allocated_contract_not_RF_hardware_requirement": true,
+      "comment_precision_issue": "core/include/vc_lora/bulk_session_controller.hpp:23 says later500ms cannot satisfy30s; arithmetic alone does not prove that categorical statement. For example501 instead of500 increases26734 to26735, still below30000 but violates the current explicit500ms contract. This observation authorizes neither deadline extension nor acceptance."
+    }
+  },
+  "actual_trial_join": {
+    "run": "20261024T122935Z-grant-cause-param-once-retry",
+    "candidate_id": "20261024T071533391Z-c8216c13",
+    "prior_analysis_sha256": "45F6B3FDF9649089B23FA161BE83C37CF1F65114A67FEDB09A886804554D49E4",
+    "Ground_request_t0_ms": 12351,
+    "inclusive_last_allowed_Grant_ms": 12851,
+    "failure_tick_ms": 12852,
+    "elapsed_ms": 501,
+    "owner_last_error": "GrantDeadlineExceeded",
+    "coordinator_last_error": "GrantDeadlineExceeded",
+    "new_Grant_observed_or_staged_before_failure": false,
+    "post_request_negotiation_UART_output": false,
+    "all_five_reviewed_canonical_core_adapter_bridge_sources_match_frozen_candidate_hashes": true,
+    "cross_role_clock_mapping_bounds_available": false,
+    "conclusion": "Current exact contract deterministically explains this local stop. It does not establish why/when the next standard Grant would physically reach Ground."
+  },
+  "existing_test_coverage_and_gaps": {
+    "unit_boundaries_already_covered": [
+      "tests/host/unit/bulk_session_controller_tests.cpp:633 accepts fresh Grant at t0+500 and rejects+501",
+      "tests/host/unit/high_speed_tdd_coordinator_tests.cpp:720 checks500 equality and28000/+1 lease",
+      "tests/host/unit/r19_grant_adapter_diagnostics_tests.cpp:71 checks tick500 NoAction then501 FailClosed",
+      "tests/host/unit/r19_grant_adapter_diagnostics_tests.cpp:105 checks fresh Grant exactly500",
+      "tests/host/unit/high_speed_phase6_adapter_tests.cpp:782 checks Vehicle retained age500/501 and future/mismatched identities"
+    ],
+    "integration_fixture_limitation": "tests/host/integration/phase6_high_speed_route_integration_tests.cpp:46,253 manually injects t0=1000, Grant tail/arrival1500, request arrival2000. It validates both inclusive500 boundaries by construction, without real VehicleTddController scheduling or fixed-profile E220 service simulation.",
+    "likely_missing_integration_cases": [
+      "Live replay baseline9233 / request12351 / tick12851 and12852, with exact no-output and both error codes",
+      "Tick then Grant vs Grant then tick at exactly500; same permutations at501; latched failures must never revive",
+      "Local USB request then new Grant vs new Grant then local request at the same MCU timestamp; the latter makes that Grant the baseline and must not reuse it as fresh",
+      "Production loop callback order with same now_ms: Ground collect_local_ingress before deliver_radio_bytes before adapter.tick",
+      "Grant bytes buffered in UART before deadline but parsed only after deadline; distinguish physical arrival from application-observed timestamp rather than inventing freshness",
+      "Real standard-TDD phase sweep including downlink-drain and Heartbeat deferral, timeout recovery and radio writer lease constraints",
+      "Combined Vehicle retained-tail freshness500 with Ground100 guard and bounded variable write/arrival delay; early request before retained tail also fails",
+      "Pre-admission waiting counted honestly in original request-to-completion30s and Ground28s lease; no t0 reset, no duplicate/repeated PARAM request"
+    ],
+    "firmware_callback_references": ["firmware/phase6/vc_lora_phase6_bridge.hpp:7148", "firmware/phase6/vc_lora_phase6_bridge.hpp:7152", "firmware/phase6/vc_lora_phase6_bridge.hpp:7199"],
+    "new_test_execution_in_this_review": false
+  },
+  "safe_correction_options_not_implemented": [
+    {
+      "option": "Preserve all existing origin/deadline contracts and make R19 admission radio-schedule aware",
+      "conditions": "Before selecting accelerated path, require a provable upcoming fresh-Grant window and verify the separate Vehicle freshness/guard window; otherwise use a specified safe not-ready/standard-path outcome rather than admitting an impossible R19 session.",
+      "limitation": "USB READY is not a radio phase promise. Current periodic/dynamic standard TDD provides no arbitrary-phase500ms guarantee. Merely sending just after a newly received baseline Grant is the wrong phase. Standard fallback does not satisfy the30s target."
+    },
+    {
+      "option": "Explicit pending-request state and separate clocks, only under an approved revised admission contract",
+      "conditions": "Keep original complete-request acceptance t0 for global30s and existing28s accounting; record queued wait separately. Do not silently start all clocks again at a later Grant. If500ms wait origin is revised, state that semantic change explicitly and test all associated freshness, lease and one-shot rules.",
+      "limitation": "Local buffering alone cannot force an earlier standard Grant or recover time consumed before it; this is not a proved30s fix."
+    },
+    {
+      "option": "Explicit request-aware standard-to-high-speed bootstrap/schedule",
+      "conditions": "Provide a bounded fresh-Grant opportunity while preserving writer ownership, physical direction reversal safety, nonce/cycle freshness and downstream Vehicle500ms acceptance. Isolate any TDD logic revision from UART/RF parameter changes and prove failure paths test-first.",
+      "limitation": "Needs protocol/schedule design and physical validation; no new radio mode, deadline extension, firmware write or live test is authorized by this review."
+    }
+  ],
+  "overall_conclusion": "The failure is not an off-by-one bug:501ms is the intended failure boundary. The inconsistency is admitting R19 for an arbitrary USB request phase while relying on a later standard Grant that has no demonstrated<=500ms bound. A second Vehicle500ms freshness window remains after that first issue. Offline tests must cover schedule-level feasibility, not only injected boundary events."
+}

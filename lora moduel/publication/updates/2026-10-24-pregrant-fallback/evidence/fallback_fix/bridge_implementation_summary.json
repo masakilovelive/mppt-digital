@@ -1,0 +1,66 @@
+{
+  "schema": "vc-lora-r19-pre-negotiation-bridge-fallback-implementation-v1",
+  "result": "FINAL_PRODUCTION_FROZEN_POST_HARDENING_19_GREEN_FULL_SUITE_AND_HIL_PENDING",
+  "selected_user_option": "One-shot safe R18 fallback; explicitly not a30-second acquisition fix",
+  "production_files_edited": ["firmware/phase6/vc_lora_phase6_bridge.hpp"],
+  "before_sha256": "3E48D852E7620F0951126D30C8A3CF00F6D8F02939305D6A13546B5690E4E2A8",
+  "after_sha256": "896D1014C6BB75686F5A4EA0D5F5DA4A98E7DE83541E0288E3D6ED6226E9168E",
+  "before_snapshot": "vc_lora_phase6_bridge.before.hpp",
+  "diff": "bridge_implementation.diff",
+  "diff_sha256": "AD88E9F32A2AAC1E054F0356F1A3A4506D45ABCE79559ED3FA620E8E8D5BE429",
+  "historical_pre_hardening_artifacts": {
+    "bridge": "vc_lora_phase6_bridge.before_epoch_hardening.hpp",
+    "bridge_sha256": "29858800BA2FBD51D21DC940757157820E02775994484A25F9585AA974E8BE01",
+    "diff": "bridge_implementation.pre_epoch_hardening.diff",
+    "summary": "bridge_implementation_summary.pre_epoch_hardening.json"
+  },
+  "test_first_evidence": {
+    "genuine_original_behavior_RED": {"log": "behavioral_RED_success.log", "checks": 27, "failures": 7, "exit_code": 1, "root_confirmed_before_production_edit": true},
+    "intermediate_partial_prefix_RED": {"log": "focused_ctest.log", "passed": 14, "total": 16, "finding": "Previously allowed orphan partial standard ingress prefix; production guard strengthened, test not weakened"},
+    "initial_focused_GREEN": {"log": "focused_ctest_green.log", "passed": 17, "total": 17, "root_executed": true},
+    "async_epoch_behavior_RED": {"log": "behavioral_RED_epoch_transition.log", "sha256": "D0A3171CBAD3F925F21EE4228658E2D0B3273F78C5B84026E4BE08898D843FB0", "checks": 16, "failures": 1, "exit_code": 1, "root_confirmed_before_post_guard_edit": true},
+    "final_post_hardening_focused_GREEN": {"log": "post_hardening_focused_green.log", "sha256": "20DF6CBFD0F36FDBAFC47944791C4B5D23561DEAEF6153882B2DF7567AE372C1", "passed": 19, "total": 19, "root_executed": true, "includes_existing_flush_isolation_contract": true},
+    "full_host_suite": "Root running final430 tests with supported Windows PowerShell5.1 and corrected module path; not claimed completed by this implementation report",
+    "Arduino_Vehicle_then_Ground_build": "Root responsible; not executed by this subagent",
+    "HIL": "Not executed by this subagent; offline change not a live repair proof"
+  },
+  "implementation": {
+    "first_Held_capture": "Retain exact complete #21, original request-origin MCU time and unchanged USB loss epoch once; Busy duplicates cannot replace it",
+    "fallback_entry": "Only after actual adapter tick returns failure and immutable first snapshot proves both owner/coordinator AwaitFreshGrant->FailClosed with GrantDeadlineExceeded, exact original t0 and no fresh/staged Grant",
+    "deadline_bounds": "500ms remains inclusive and501 fails; no hard-lease or request-origin reset; decline after original28000ms is refused",
+    "uncertainty_guards": [
+      "Changed Serial or observed USB epoch, absent host/endpoint, invalid retained frame or existing runtime failure",
+      "Any fresh/staged Grant, VCBN/radio stream state, constructed session owner, receipt, output commit, TDD freeze or explicit restore state",
+      "High-speed writer ownership, stream record/byte count or incoherent active standard writer identity/action",
+      "Active/occupied standard proxy, stale admitted/dequeued token or nonempty/failed ingress FIFO",
+      "Suppressed/coalesced proxy Consumed without a newly allocated exact NativeStream request lease",
+      "Normal proxy/descriptor admission failure or missing admitted-token evidence"
+    ],
+    "normal_route_shared_helper": "admit_ground_standard_frame",
+    "exact_once_lease_proof": "NativeStream lease counter increments exactly one, nonzero peek token and exact original wire bytes; existing service_ground_parameter_proxy must then admit the same token before fallback is marked successful",
+    "post_admission_epoch_hardening": "Immediately after ordinary queue admission and before consumed/count publication, re-read Serial loss epoch, cached observed epoch and cached host/endpoint state. Any change refuses fallback and the existing outer path fails closed with the queued request still unsent; no retry or retraction claim.",
+    "source_layout_compatibility": "Shared admission helper and fallback definition are located after the existing service_ground_parameter_proxy definition. No new prototype shadows that function in existing source-contract tests; its pending PARAM_VALUE publication guard is unchanged.",
+    "successful_decline_state": "Mark acceleration consumed, deselect R19, record count1/fallback time, invalidate retry permission for retained copy; keep original bytes/time/epoch and failed adapter/first-failure diagnostics unchanged",
+    "no_success_fabrication": "No R19 Complete, VCRC, RF receipt,30-second success or rearm is invented",
+    "old_standard_writer": "Existing coherent StandardTdd action/token/generation retains ownership; no writer reset/takeover, no blocking wait, request uses ordinary bounded queue/watchdog"
+  },
+  "invariants": {
+    "core_and_adapter_primitives_modified": false,
+    "diagnostic_record_ABI_or_reserved_fields_modified": false,
+    "Grant_budget_ms": 500,
+    "AUX_timeout_ms": 2000,
+    "product_USB_budget_ms": 106,
+    "Ground_original_hard_lease_ms": 28000,
+    "runner_original_request_completion_target_ms": 30000,
+    "UART_RF_profile_pin_or_TDD_parameter_changes": false,
+    "dynamic_memory_added": false,
+    "product_USB_debug_or_control_bytes_added": false
+  },
+  "limitations": [
+    "Fallback currently requires an empty standard ingress FIFO. The existing public API exposes remaining front bytes, not the original descriptor length/started state, so queued-prefix safety cannot be proved bridge-only. Nonempty FIFO is deliberately refused, including complete queued frames; this is more conservative than all-workload fallback.",
+    "Mission Planner continuous GCS traffic can keep a queue nonempty. A successful one-PARAM diagnostic run would not prove universal fallback under such backlog. Supporting proven unstarted queued prefixes requires separate introspection and tests.",
+    "The original R19 admission deadline still fails as designed; this change contains a safe pre-negotiation decline rather than accelerating a request whose fresh Grant is late.",
+    "Standard proxy fallback response/watchdog time is separate from the failed accelerated session. Original t0 remains recorded, and runner30-second measurement must not be reset or interpreted as fast-path success.",
+    "No device, COM, PnP, process audit, network, firmware upload or compiler was invoked by this implementation subagent. Root coordinates build and any separately scoped live operation."
+  ]
+}

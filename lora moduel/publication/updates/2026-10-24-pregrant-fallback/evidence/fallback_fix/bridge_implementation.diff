@@ -1,0 +1,254 @@
+diff --git a/runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/vc_lora_phase6_bridge.before.hpp b/firmware/phase6/vc_lora_phase6_bridge.hpp
+index d3ee244..2f5fc0f 100644
+--- a/runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/vc_lora_phase6_bridge.before.hpp
++++ b/firmware/phase6/vc_lora_phase6_bridge.hpp
+@@ -939,6 +939,16 @@ alignas(GroundHighSpeedPhase6Adapter)
+         r19_role_adapter_storage{};
+ GroundHighSpeedPhase6Adapter* r19_ground_adapter{nullptr};
+ 
++// One immutable request copy for a pre-negotiation decline. This is neither a
++// second radio request nor a new timing origin: the failed adapter and its
++// original t0 remain untouched after the standard-path handoff.
++MavlinkFrame r19_held_parameter_request{};
++bool r19_held_parameter_request_valid{false};
++std::uint64_t r19_held_parameter_request_origin_ms{0U};
++std::uint64_t r19_held_parameter_request_loss_epoch{0U};
++std::uint32_t r19_pre_negotiation_fallback_count{0U};
++std::uint64_t r19_pre_negotiation_fallback_ms{0U};
++
+ alignas(BulkDataStreamDecoder)
+     std::array<std::uint8_t, sizeof(BulkDataStreamDecoder)>
+         r19_bulk_decoder_storage{};
+@@ -1915,10 +1925,18 @@ bool r19_intercept_ground_usb_frame(const MavlinkFrame& frame,
+   switch (status) {
+     case HighSpeedPhase6AdapterStatus::Held:
+       if (!r19_have_ground_usb_heartbeat_commit ||
+-          r19_last_ground_usb_heartbeat_commit_ms > now_ms) {
++          r19_last_ground_usb_heartbeat_commit_ms > now_ms ||
++          r19_held_parameter_request_valid ||
++          r19_pre_negotiation_fallback_count != 0U ||
++          Serial.txLossEpoch() != ground_usb_observed_loss_epoch) {
+         latch_runtime_fail_closed();
+         return true;
+       }
++      r19_held_parameter_request = frame;
++      r19_held_parameter_request_origin_ms = now_ms;
++      r19_held_parameter_request_loss_epoch =
++          static_cast<std::uint64_t>(ground_usb_observed_loss_epoch);
++      r19_held_parameter_request_valid = true;
+       r19_product_route_selected = true;
+       return true;
+     case HighSpeedPhase6AdapterStatus::Busy:
+@@ -2312,6 +2330,7 @@ void r19_observe_ground_grant(const TddControlMessage& message,
+ #if defined(VC_LORA_PHASE6_GROUND)
+ bool r19_route_ground_usb_output(const HighSpeedPhase6Output& output,
+                                  std::uint64_t now_ms) noexcept;
++bool r19_service_pre_negotiation_fallback(std::uint64_t now_ms) noexcept;
+ #else
+ bool r19_route_pixhawk_output(const HighSpeedPhase6Output& output,
+                               std::uint64_t now_ms) noexcept;
+@@ -2346,6 +2365,11 @@ void r19_service_high_speed_product_route(
+   r19_note_ground_adapter_diagnostics(__LINE__);
+ #endif
+   if (tick_status != HighSpeedPhase6AdapterStatus::NoAction) {
++#if defined(VC_LORA_PHASE6_GROUND)
++    if (r19_service_pre_negotiation_fallback(now_ms)) {
++      return;
++    }
++#endif
+     latch_runtime_fail_closed();
+     return;
+   }
+@@ -6216,6 +6240,167 @@ void service_ground_parameter_proxy(std::uint64_t now_ms) noexcept {
+   latch_runtime_fail_closed();
+ }
+ 
++// Both normal GCS ingress and the one clean pre-negotiation decline use this
++// exact proxy/descriptor admission path. A Consumed result is not by itself
++// proof that a fallback request was admitted; that caller proves the new
++// NativeStream lease and its ordinary physical-commit watchdog separately.
++bool admit_ground_standard_frame(const MavlinkFrame& frame,
++                                 std::uint64_t now_ms) noexcept {
++  const GroundParameterProxyDisposition disposition =
++      ground_parameter_proxy.on_gcs_frame(frame, now_ms);
++  if (disposition == GroundParameterProxyDisposition::Consumed) {
++    return true;
++  }
++  if (disposition == GroundParameterProxyDisposition::Invalid) {
++    ++link_diagnostics.mavlink_crc_errors;
++    return false;
++  }
++  const FrameIngressStatus status =
++      ground_ingress.admit_validated_frame(frame);
++  if (status == FrameIngressStatus::DroppedOverflow ||
++      status == FrameIngressStatus::FailClosed || ground_ingress.fail_closed()) {
++    latch_runtime_fail_closed();
++    return false;
++  }
++  return status == FrameIngressStatus::Queued;
++}
++
++#if VC_LORA_R19_HIGH_SPEED_CANDIDATE
++bool r19_service_pre_negotiation_fallback(std::uint64_t now_ms) noexcept {
++  if (!bridge_ready || runtime_fail_closed || !r19_product_route_selected ||
++      !r19_role_adapter_constructed || r19_ground_adapter == nullptr ||
++      !r19_ground_adapter->failure_latched() || r19_acceleration_consumed ||
++      !r19_held_parameter_request_valid ||
++      r19_pre_negotiation_fallback_count != 0U ||
++      !ground_usb_host_present_state || !ground_usb_endpoint_ready_state ||
++      r19_held_parameter_request_loss_epoch !=
++          static_cast<std::uint64_t>(ground_usb_observed_loss_epoch) ||
++      r19_held_parameter_request_loss_epoch !=
++          static_cast<std::uint64_t>(Serial.txLossEpoch())) {
++    return false;
++  }
++  const auto& first = r19_ground_adapter->first_failure_diagnostics();
++  if (first.event != experimental::GroundHighSpeedDiagnosticEvent::Tick ||
++      first.observed_ms != now_ms || !first.request_origin_valid ||
++      !first.await_fresh_grant_started_valid ||
++      first.request_origin_ms != r19_held_parameter_request_origin_ms ||
++      first.await_fresh_grant_started_ms !=
++          r19_held_parameter_request_origin_ms ||
++      now_ms < r19_held_parameter_request_origin_ms ||
++      now_ms - r19_held_parameter_request_origin_ms <=
++          BulkSessionTiming::grant_wait_budget_ms ||
++      now_ms - r19_held_parameter_request_origin_ms >
++          BulkSessionTiming::hard_lease_ms ||
++      !first.owner_result_valid || !first.coordinator_result_valid ||
++      first.owner_state_before != GroundBulkSessionState::AwaitFreshGrant ||
++      first.owner_state_after != GroundBulkSessionState::FailClosed ||
++      first.coordinator_state_before != GroundHighSpeedTddState::AwaitFreshGrant ||
++      first.coordinator_state_after != GroundHighSpeedTddState::FailClosed ||
++      first.owner_result != BulkSessionResult::GrantDeadlineExceeded ||
++      first.owner_last_error != BulkSessionResult::GrantDeadlineExceeded ||
++      first.coordinator_result != HighSpeedCoordinatorResult::GrantDeadlineExceeded ||
++      first.coordinator_last_error != HighSpeedCoordinatorResult::GrantDeadlineExceeded ||
++      first.adapter_status != HighSpeedPhase6AdapterStatus::FailClosed ||
++      first.adapter_failure_reason != HighSpeedPhase6AdapterStatus::FailClosed ||
++      first.fresh_grant_observed_valid || first.coordinator_grant_staged_valid) {
++    return false;
++  }
++  // A possible VCBN prefix is irreversible. Only a never-negotiated local
++  // request may decline; no active stream, session, receipt or explicit
++  // restoration state can be converted into a standard-path retry.
++  if (r19_standard_tdd_frozen || r19_session_owners_constructed ||
++      r19_radio_session != nullptr ||
++      r19_radio_stream_purpose != R19RadioStreamPurpose::None ||
++      r19_radio_buffer_credit_pending || r19_retained_radio_action_final ||
++      r19_radio_final_action_committed || r19_radio_final_action_token != 0U ||
++      r19_radio_final_writer_generation != 0U ||
++      r19_bulk_decoder != nullptr || r19_bulk_transcript != nullptr ||
++      r19_bulk_sla != nullptr || r19_terminal_producer != nullptr ||
++      r19_ground_usb_commit_active || r19_ground_negotiation_response_pending ||
++      r19_peer_receipt_ledger_armed || r19_peer_receipt_proof_delivered ||
++      r19_peer_receipt_ledger_kind != PeerCompletionReceiptKind::None ||
++      r19_peer_receipt_producer_staged || r19_peer_receipt_standard_tail_pending ||
++      r19_peer_receipt_producer_kind != PeerCompletionReceiptKind::None ||
++      r19_peer_receipt_send_not_before_ms != 0U ||
++      r19_peer_receipt_send_deadline_ms != 0U ||
++      r19_standard_resume_not_before_ms != 0U ||
++      e220_writer_arbiter.fail_closed() ||
++      e220_writer_arbiter.high_speed_active() ||
++      e220_writer_arbiter.explicit_restore_required() ||
++      e220_writer_arbiter.high_speed_stream_uart_records() != 0U ||
++      e220_writer_arbiter.high_speed_stream_accepted_bytes() != 0U) {
++    return false;
++  }
++  // Existing StandardTdd work keeps its exact lease. Queuing the complete
++  // request behind that work needs neither takeover nor an unbounded wait.
++  const auto& active = e220_writer_arbiter.active_lease();
++  if (e220_writer_arbiter.write_active()) {
++    if (!active.valid() || active.owner != Phase6RadioWriterOwner::StandardTdd ||
++        !standard_radio_writer_lease.valid() ||
++        standard_radio_writer_action_type == LinkActionType::None ||
++        standard_radio_writer_lease.owner != active.owner ||
++        standard_radio_writer_lease.action_token != active.action_token ||
++        standard_radio_writer_lease.writer_generation != active.writer_generation) {
++      return false;
++    }
++  } else if (standard_radio_writer_lease.valid() ||
++             standard_radio_writer_tail_pending) {
++    return false;
++  }
++  MavlinkFrame checked{};
++  const auto& held = r19_held_parameter_request;
++  if (validate_mavlink_frame(held.bytes.data(), held.size, checked) !=
++          MavlinkParseStatus::FrameReady || checked.message_id != 21U ||
++      checked.payload_length != 2U || checked.signed_frame ||
++      checked.payload()[0U] == 0U || checked.payload()[1U] == 0U ||
++      ground_parameter_proxy.active() || ground_proxy_request_admitted ||
++      ground_proxy_request_dequeued || ground_proxy_request_token != 0U ||
++      ground_ingress.fail_closed() || !ground_ingress.empty()) {
++    return false;
++  }
++  // The public descriptor API exposes remaining bytes, not the original
++  // front-frame length. A nonempty FIFO therefore cannot prove that no
++  // application prefix was committed. Decline conservatively rather than
++  // reinterpret a suffix or mutate an existing standard transaction.
++  const auto leases_before =
++      ground_parameter_proxy.diagnostics().native_list_requests_leased;
++  if (leases_before == std::numeric_limits<decltype(leases_before)>::max() ||
++      !admit_ground_standard_frame(held, now_ms)) {
++    return false;
++  }
++  MavlinkFrame leased{};
++  std::uint32_t token = 0U;
++  if (!ground_parameter_proxy.peek_next_request(leased, token) || token == 0U ||
++      ground_parameter_proxy.diagnostics().native_list_requests_leased !=
++          leases_before + 1U || leased.size != held.size ||
++      !std::equal(held.bytes.begin(), held.bytes.begin() + held.size,
++                  leased.bytes.begin())) {
++    return false;
++  }
++  service_ground_parameter_proxy(now_ms);
++  if (!bridge_ready || runtime_fail_closed || !ground_proxy_request_admitted ||
++      ground_proxy_request_token != token || ground_ingress.fail_closed() ||
++      !ground_usb_host_present_state || !ground_usb_endpoint_ready_state ||
++      r19_held_parameter_request_loss_epoch !=
++          static_cast<std::uint64_t>(ground_usb_observed_loss_epoch) ||
++      r19_held_parameter_request_loss_epoch !=
++          static_cast<std::uint64_t>(Serial.txLossEpoch())) {
++    // USB reset can race the synchronous proxy/queue admission. The request
++    // remains unsent in the ordinary FIFO; preserve it and fail closed rather
++    // than mark a changed-epoch handoff successful or attempt a second enqueue.
++    return false;
++  }
++  // This is a decline, not successful R19 completion: never reset/rearm the
++  // failed adapter, invent VCRC evidence, or move its original t0/28s lease.
++  r19_acceleration_consumed = true;
++  r19_product_route_selected = false;
++  r19_held_parameter_request_valid = false;
++  r19_pre_negotiation_fallback_count = 1U;
++  r19_pre_negotiation_fallback_ms = now_ms;
++  return true;
++}
++#endif
++
+ void collect_local_ingress(std::uint64_t now_ms) noexcept {
+   std::size_t consumed = 0U;
+   while (Serial.available() > 0 && consumed < kLoopReadBudget &&
+@@ -6246,23 +6431,7 @@ void collect_local_ingress(std::uint64_t now_ms) noexcept {
+       return;
+     }
+ #endif
+-    const GroundParameterProxyDisposition disposition =
+-        ground_parameter_proxy.on_gcs_frame(frame, now_ms);
+-    if (disposition == GroundParameterProxyDisposition::Consumed) {
+-      continue;
+-    }
+-    if (disposition == GroundParameterProxyDisposition::Invalid) {
+-      ++link_diagnostics.mavlink_crc_errors;
+-      continue;
+-    }
+-
+-    const FrameIngressStatus queue_status =
+-        ground_ingress.admit_validated_frame(frame);
+-    if (queue_status == FrameIngressStatus::DroppedOverflow ||
+-        queue_status == FrameIngressStatus::FailClosed ||
+-        ground_ingress.fail_closed()) {
+-      latch_runtime_fail_closed();
+-    }
++    (void)admit_ground_standard_frame(frame, now_ms);
+   }
+   if (bridge_ready) {
+     service_ground_parameter_proxy(now_ms);

@@ -1,0 +1,6 @@
+E:\VESC\_codex_build\mppt-lora-aux-20261022\lora moduel\publication\updates\2026-10-24-pregrant-fallback\validation\che
+ck_publication.ps1 : Exception calling "IsMatch" with "2" argument(s): "Value cannot be null.
+Parameter name: input"
+    + CategoryInfo          : NotSpecified: (:) [check_publication.ps1], MethodInvocationException
+    + FullyQualifiedErrorId : ArgumentNullException,check_publication.ps1
+ 

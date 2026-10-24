@@ -1,0 +1,48 @@
+Internal ctest changing into directory: E:/VESC/_codex_build/lora-publication-checks-20261025-pregrant
+Test project E:/VESC/_codex_build/lora-publication-checks-20261025-pregrant
+      Start 76: IT-R19-GRANT-DIAGNOSTIC-BRIDGE-001
+      Start 77: IT-R19-PRENEGOTIATION-FALLBACK-success-001
+      Start 78: IT-R19-PRENEGOTIATION-FALLBACK-boundary500-001
+      Start 79: IT-R19-PRENEGOTIATION-FALLBACK-duplicate-001
+ 1/18 Test #76: IT-R19-GRANT-DIAGNOSTIC-BRIDGE-001 ..........................   Passed    0.49 sec
+      Start 80: IT-R19-PRENEGOTIATION-FALLBACK-epoch-001
+ 2/18 Test #77: IT-R19-PRENEGOTIATION-FALLBACK-success-001 ..................   Passed    0.26 sec
+      Start 81: IT-R19-PRENEGOTIATION-FALLBACK-epoch-during-admission-001
+ 3/18 Test #78: IT-R19-PRENEGOTIATION-FALLBACK-boundary500-001 ..............   Passed    0.05 sec
+      Start 82: IT-R19-PRENEGOTIATION-FALLBACK-late-fresh-001
+ 4/18 Test #79: IT-R19-PRENEGOTIATION-FALLBACK-duplicate-001 ................   Passed    0.06 sec
+      Start 83: IT-R19-PRENEGOTIATION-FALLBACK-staged-001
+ 5/18 Test #80: IT-R19-PRENEGOTIATION-FALLBACK-epoch-001 ....................   Passed    0.07 sec
+      Start 84: IT-R19-PRENEGOTIATION-FALLBACK-writer-001
+ 6/18 Test #81: IT-R19-PRENEGOTIATION-FALLBACK-epoch-during-admission-001 ...   Passed    0.07 sec
+      Start 85: IT-R19-PRENEGOTIATION-FALLBACK-standard-writer-001
+ 7/18 Test #82: IT-R19-PRENEGOTIATION-FALLBACK-late-fresh-001 ...............   Passed    0.07 sec
+      Start 86: IT-R19-PRENEGOTIATION-FALLBACK-session-001
+ 8/18 Test #83: IT-R19-PRENEGOTIATION-FALLBACK-staged-001 ...................   Passed    0.07 sec
+      Start 87: IT-R19-PRENEGOTIATION-FALLBACK-frozen-001
+ 9/18 Test #84: IT-R19-PRENEGOTIATION-FALLBACK-writer-001 ...................   Passed    0.06 sec
+      Start 88: IT-R19-PRENEGOTIATION-FALLBACK-partial-prefix-001
+10/18 Test #85: IT-R19-PRENEGOTIATION-FALLBACK-standard-writer-001 ..........   Passed    0.06 sec
+      Start 89: IT-R19-PRENEGOTIATION-FALLBACK-occupied-proxy-001
+11/18 Test #86: IT-R19-PRENEGOTIATION-FALLBACK-session-001 ..................   Passed    0.06 sec
+      Start 90: IT-R19-PRENEGOTIATION-FALLBACK-queue-full-001
+12/18 Test #87: IT-R19-PRENEGOTIATION-FALLBACK-frozen-001 ...................   Passed    0.06 sec
+      Start 91: IT-R19-PRENEGOTIATION-FALLBACK-unknown-error-001
+13/18 Test #88: IT-R19-PRENEGOTIATION-FALLBACK-partial-prefix-001 ...........   Passed    0.06 sec
+      Start 92: IT-R19-PRENEGOTIATION-FALLBACK-nonparam-001
+14/18 Test #89: IT-R19-PRENEGOTIATION-FALLBACK-occupied-proxy-001 ...........   Passed    0.06 sec
+      Start 93: IT-R19-PRENEGOTIATION-FALLBACK-negotiation-success-001
+15/18 Test #90: IT-R19-PRENEGOTIATION-FALLBACK-queue-full-001 ...............   Passed    0.06 sec
+16/18 Test #91: IT-R19-PRENEGOTIATION-FALLBACK-unknown-error-001 ............   Passed    0.05 sec
+17/18 Test #92: IT-R19-PRENEGOTIATION-FALLBACK-nonparam-001 .................   Passed    0.05 sec
+18/18 Test #93: IT-R19-PRENEGOTIATION-FALLBACK-negotiation-success-001 ......   Passed    0.04 sec
+
+100% tests passed, 0 tests failed out of 18
+
+Label Time Summary:
+fallback    =   1.22 sec*proc (17 tests)
+grant       =   1.22 sec*proc (17 tests)
+offline     =   1.22 sec*proc (17 tests)
+r19         =   1.22 sec*proc (17 tests)
+
+Total Test time (real) =   0.86 sec

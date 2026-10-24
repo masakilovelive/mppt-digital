@@ -1,0 +1,20 @@
+[1/5] Linking CXX static library libvc_lora_core.a
+[2/5] Building CXX object tests/host/CMakeFiles/vc_lora_phase6_grant_diagnostic_hooks_tests.dir/standalone/phase6_grant_diagnostic_hooks_tests.cpp.obj
+In file included from E:/VESC/_codex_build/mppt-lora-aux-20261022/lora moduel/publication/updates/2026-10-24-pregrant-fallback/source_snapshot/tests/host/standalone/phase6_grant_diagnostic_hooks_tests.cpp:10:
+E:/VESC/_codex_build/mppt-lora-aux-20261022/lora moduel/publication/updates/2026-10-24-pregrant-fallback/source_snapshot/firmware/phase6/vc_lora_phase6_bridge.hpp:2235:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 2235 |                             std::uint64_t now_ms) noexcept {
+      |                                           ^
+1 warning generated.
+[3/5] Building CXX object tests/host/CMakeFiles/vc_lora_r19_pre_negotiation_fallback_tests.dir/standalone/r19_pre_negotiation_fallback_tests.cpp.obj
+In file included from E:/VESC/_codex_build/mppt-lora-aux-20261022/lora moduel/publication/updates/2026-10-24-pregrant-fallback/source_snapshot/tests/host/standalone/r19_pre_negotiation_fallback_tests.cpp:10:
+
+E:/VESC/_codex_build/mppt-lora-aux-20261022/lora moduel/publication/updates/2026-10-24-pregrant-fallback/source_snapshot/firmware/phase6/vc_lora_phase6_bridge.hpp:2235:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+
+ 2235 |                             std::uint64_t now_ms) noexcept {
+
+      |                                           ^
+
+1 warning generated.
+
+[4/5] Linking CXX executable tests\host\vc_lora_phase6_grant_diagnostic_hooks_tests.exe
+[5/5] Linking CXX executable tests\host\vc_lora_r19_pre_negotiation_fallback_tests.exe

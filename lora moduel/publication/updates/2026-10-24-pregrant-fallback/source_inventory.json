@@ -1,0 +1,2376 @@
+{
+    "schema":  "vc-lora-pregrant-fallback-publication-inventory-v1",
+    "trial_date_jst":  "2026-10-24",
+    "candidate_id":  "20261024T134821302Z-9e36e182",
+    "source_tree_sha256":  "D1C5FD58F0DEF08A683EA226BBA7AB2C314FB98BCDF528BA9323E8BEC36BD55F",
+    "scope":  "Selected byte-identical originals. No flashable firmware package, live permit, operator attestations, device inventory, build tree or executable.",
+    "original_canonical_source_files":  76,
+    "original_live_tool_count":  22,
+    "omitted_identity_bound_tools":  [
+                                         "tools/invoke_r19_candidate_app_flash_hil.ps1",
+                                         "tools/invoke_r19_jtag_preflash_gate.ps1",
+                                         "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1"
+                                     ],
+    "omitted_dependencies":  "Candidate and restoration metadata intentionally reference omitted BIN/ELF/MAP and historical files. Do not run device tools from this archive.",
+    "files":  [
+                  {
+                      "source":  "runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T134821302Z-9e36e182/artifact_manifest.json",
+                      "destination":  "evidence/candidate_metadata/artifact_manifest.json",
+                      "sha256":  "59633B3D5868E47872C2B66FD6C8C51F2FAB0DC0A376B0855CC9F8F99F015B15",
+                      "bytes":  54365,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T134821302Z-9e36e182/candidate_manifest.json",
+                      "destination":  "evidence/candidate_metadata/candidate_manifest.json",
+                      "sha256":  "2951578811105BCBBDF46F77FF04417F39678EBBCEB2C16C6A5B6881B3378243",
+                      "bytes":  183566,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T134821302Z-9e36e182/final_seal.json",
+                      "destination":  "evidence/candidate_metadata/final_seal.json",
+                      "sha256":  "9CF678EA89AF3794E3105AAF5FA65828218E849CD437DA2B26881458B633F6FD",
+                      "bytes":  25105,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T134821302Z-9e36e182/final_seal.sha256",
+                      "destination":  "evidence/candidate_metadata/final_seal.sha256",
+                      "sha256":  "039A30C1AF07C2CB283235B4702362962AAF83D61286D1669E8C0EC178ABC561",
+                      "bytes":  82,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T134821302Z-9e36e182/handoff.json",
+                      "destination":  "evidence/candidate_metadata/handoff.json",
+                      "sha256":  "E9E9786C68502086027C0FD7BB17F73F9B5ABA78CD2AC660B80B630ABD7E341A",
+                      "bytes":  27328,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T134821302Z-9e36e182/handoff.sha256",
+                      "destination":  "evidence/candidate_metadata/handoff.sha256",
+                      "sha256":  "3B9B3F26E57806A204DD85478A71D3BF3B16DEC300074367D9DFA320F3403196",
+                      "bytes":  79,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T134821302Z-9e36e182/SHA256SUMS.txt",
+                      "destination":  "evidence/candidate_metadata/SHA256SUMS.txt",
+                      "sha256":  "8A449AF54F699C63D4D7C1C9E3743D10284991B5A0E58A3B6E85DA3097C9BF64",
+                      "bytes":  21117,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/adapter_test_new_file.patch",
+                      "destination":  "evidence/fallback_fix/adapter_test_new_file.patch",
+                      "sha256":  "569FD1045053D4CA346821668C6E40BA585309F80CF1D9B1D1B45CC6D442B062",
+                      "bytes":  19218,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/adapter_test_plan.json",
+                      "destination":  "evidence/fallback_fix/adapter_test_plan.json",
+                      "sha256":  "1B4287BB0C84F96C067758A9399079EDB2490E3F647BA7ABB94E86C6C4F12A40",
+                      "bytes":  4139,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/artifact_verification.log",
+                      "destination":  "evidence/fallback_fix/artifact_verification.log",
+                      "sha256":  "5C603C9975F0E095A044E29E81A0AAC518EE301388FC78452864CBEA4365170D",
+                      "bytes":  465,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/behavioral_RED_epoch_transition.log",
+                      "destination":  "evidence/fallback_fix/behavioral_RED_epoch_transition.log",
+                      "sha256":  "D0A3171CBAD3F925F21EE4228658E2D0B3273F78C5B84026E4BE08898D843FB0",
+                      "bytes":  212,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/behavioral_RED_success.log",
+                      "destination":  "evidence/fallback_fix/behavioral_RED_success.log",
+                      "sha256":  "D4B3F6451761DEEAAA5AFF4847174F3F29628F0C14434C1C3B95D3CB12B80BB5",
+                      "bytes":  595,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/bridge_implementation.diff",
+                      "destination":  "evidence/fallback_fix/bridge_implementation.diff",
+                      "sha256":  "AD88E9F32A2AAC1E054F0356F1A3A4506D45ABCE79559ED3FA620E8E8D5BE429",
+                      "bytes":  12888,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/bridge_implementation_summary.json",
+                      "destination":  "evidence/fallback_fix/bridge_implementation_summary.json",
+                      "sha256":  "15C7904A4247C4F61382B8EFDECCD187A3FC0CF717FAAE6E768337F080DF6B70",
+                      "bytes":  6874,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/candidate_build.log",
+                      "destination":  "evidence/fallback_fix/candidate_build.log",
+                      "sha256":  "C3BCA4F33EA7121660C91691E231F68EF4526199A1F93C02F5EB796795CB643C",
+                      "bytes":  1554,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/fake_arduino_epoch_hook.diff",
+                      "destination":  "evidence/fallback_fix/fake_arduino_epoch_hook.diff",
+                      "sha256":  "E99CE5D1DFE67FA7B8A7B6D1A6C3DAA69E764C415B0D4AADBCBC41CC6722EAC9",
+                      "bytes":  8358,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/grant_fallback_trial_analysis.json",
+                      "destination":  "evidence/fallback_fix/grant_fallback_trial_analysis.json",
+                      "sha256":  "1409B1FE1CF0A6F6CA1BF13AB733F8254A24583293C7C9E2F2C959E9FD1A21FA",
+                      "bytes":  16506,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/grant_hooks_negative_fixture.diff",
+                      "destination":  "evidence/fallback_fix/grant_hooks_negative_fixture.diff",
+                      "sha256":  "FE205E2B39F1102AFE9B576C02F4EAC7ECB7095A4AC7DE93DD90FB08C365E80A",
+                      "bytes":  472,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/host_CMakeLists.diff",
+                      "destination":  "evidence/fallback_fix/host_CMakeLists.diff",
+                      "sha256":  "388D0607F63DFF98DFA567759BC2A525861222E7E1D6319590A55EAAF7B5159C",
+                      "bytes":  1874,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/host_suite_final_windows_ps51.log",
+                      "destination":  "evidence/fallback_fix/host_suite_final_windows_ps51.log",
+                      "sha256":  "087F81998A0DE4FD24ACF55D70FCC590F09BB90B83026646046C49F8DEFC56DA",
+                      "bytes":  109906,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/independent_bridge_review.json",
+                      "destination":  "evidence/fallback_fix/independent_bridge_review.json",
+                      "sha256":  "89B259252F6FF7C3C2B0553DC7806B056D6B66DC3D9791F25F5121CC9A02354D",
+                      "bytes":  8180,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/offline_validation_audit.json",
+                      "destination":  "evidence/fallback_fix/offline_validation_audit.json",
+                      "sha256":  "4B91DE1E36692D3F1E2EA00421D552B21E7B1D5FF773D2D6BB612219CF61E266",
+                      "bytes":  6121,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/post_hardening_focused_green.log",
+                      "destination":  "evidence/fallback_fix/post_hardening_focused_green.log",
+                      "sha256":  "20DF6CBFD0F36FDBAFC47944791C4B5D23561DEAEF6153882B2DF7567AE372C1",
+                      "bytes":  3632,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/summary.json",
+                      "destination":  "evidence/fallback_fix/summary.json",
+                      "sha256":  "1BCB5611247935AB1DF87F28AC917503E1D0CD25D0E95768F569A7252B2A4ECB",
+                      "bytes":  5554,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/trial_evaluation.json",
+                      "destination":  "evidence/fallback_fix/trial_evaluation.json",
+                      "sha256":  "78AF46C6DDF3E0BCF858CD67E3EC02D5D46774B53FE33DD5F2533E8D8E59B00B",
+                      "bytes":  6772,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/trial_safety_evidence_audit.json",
+                      "destination":  "evidence/fallback_fix/trial_safety_evidence_audit.json",
+                      "sha256":  "B48553F308B06690E7B14E81827266B054A970C6182AA406B59D864AE2D510F5",
+                      "bytes":  10378,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-PRENEGOTIATION-FALLBACK-FIX-OFFLINE-001/20261024T-fix/usb_aux_product_trial_analysis.json",
+                      "destination":  "evidence/fallback_fix/usb_aux_product_trial_analysis.json",
+                      "sha256":  "010EEFB54DBC0C1C8E6AEF286DCA15AD75999F44D321C8B2495042C578E090B0",
+                      "bytes":  43059,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-ADMISSION-ALIGNMENT-OFFLINE-001/20261024T-verification/admission_characterization.log",
+                      "destination":  "evidence/grant_alignment/admission_characterization.log",
+                      "sha256":  "97151F44AC91428B074B8B98AA932F4F642B08CB17ECE610EF897B08F358934F",
+                      "bytes":  868,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-ADMISSION-ALIGNMENT-OFFLINE-001/20261024T-verification/admission_requirement_RED.log",
+                      "destination":  "evidence/grant_alignment/admission_requirement_RED.log",
+                      "sha256":  "C51A7A88EA8F67C677A8343B1DFE3F5EA0B35334D6E3FFFEAA4EACD914A8F5F6",
+                      "bytes":  1234,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-ADMISSION-ALIGNMENT-OFFLINE-001/20261024T-verification/contract_review.json",
+                      "destination":  "evidence/grant_alignment/contract_review.json",
+                      "sha256":  "E106C8704B52E2B39C9072C6F455504E5C56574B265B1A764FB7F47CA525393F",
+                      "bytes":  11771,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-ADMISSION-ALIGNMENT-OFFLINE-001/20261024T-verification/final_invariance_and_hashes.json",
+                      "destination":  "evidence/grant_alignment/final_invariance_and_hashes.json",
+                      "sha256":  "F7BC48A1748DBE60DB8CF8DFE933280D43104E42388C2E8BAB58A183AAC02B9B",
+                      "bytes":  5388,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-ADMISSION-ALIGNMENT-OFFLINE-001/20261024T-verification/independent_test_review.json",
+                      "destination":  "evidence/grant_alignment/independent_test_review.json",
+                      "sha256":  "1140E8F388D442D1B9C8B8455A4FEAE12F02C2D2F10D62736496560E60063DAA",
+                      "bytes":  5992,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-ADMISSION-ALIGNMENT-OFFLINE-001/20261024T-verification/standard_phase_characterization.log",
+                      "destination":  "evidence/grant_alignment/standard_phase_characterization.log",
+                      "sha256":  "CF7F94E0203C990BDDF66C7AB588FFE939DD14522D349F77359DCBF6E6C12ED0",
+                      "bytes":  2985,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-ADMISSION-ALIGNMENT-OFFLINE-001/20261024T-verification/standard_phase_requirement_RED.log",
+                      "destination":  "evidence/grant_alignment/standard_phase_requirement_RED.log",
+                      "sha256":  "A9FC01026CC175383E6BD5341A9C400C58368CB614AEC5896CB11B5F205430D3",
+                      "bytes":  3344,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-ADMISSION-ALIGNMENT-OFFLINE-001/20261024T-verification/standard_phase_summary.json",
+                      "destination":  "evidence/grant_alignment/standard_phase_summary.json",
+                      "sha256":  "4278C7A7182663D9C8B78E6B35BC983589DCA7C676B9B78B10BC7A6CE215439C",
+                      "bytes":  8789,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-ADMISSION-ALIGNMENT-OFFLINE-001/20261024T-verification/summary.json",
+                      "destination":  "evidence/grant_alignment/summary.json",
+                      "sha256":  "5FA4430BC99CD674BC2E435B7341B904F7CEA46999FD4E805D96DB56CDA516E2",
+                      "bytes":  5752,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-install/artifact_manifest.json",
+                      "destination":  "evidence/install/artifact_manifest.json",
+                      "sha256":  "4BCB5E739CB00E986228D790F0E671CBD8C6E4987ABF97EB776BD3050F61B9CB",
+                      "bytes":  18351,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-install/final_seal.json",
+                      "destination":  "evidence/install/final_seal.json",
+                      "sha256":  "FAA7E3F1031FA4F03477A8367CD42F95E7AEEBE0FA22F7D40516B1BEB92DA1FD",
+                      "bytes":  1268,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-install/final_seal.sha256",
+                      "destination":  "evidence/install/final_seal.sha256",
+                      "sha256":  "B444298B5FC21C0F97B7465B7322370F40DC350DF40D9D5F8BFB4EFCFA676AE9",
+                      "bytes":  83,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-install/flash_record.json",
+                      "destination":  "evidence/install/flash_record.json",
+                      "sha256":  "27E7CDDC3513924A9F6126ADA65700C2D35A8791B0B54441962753BEB9E09DB5",
+                      "bytes":  18299,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-install/SHA256SUMS.txt",
+                      "destination":  "evidence/install/SHA256SUMS.txt",
+                      "sha256":  "D9844CCD6EEE1ED5B062A21D0D4BF01BD60F3B78EABD43AB57FAC3715CCA4BE4",
+                      "bytes":  7311,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-CAUSE-RETRY-PREPARATION-001/20261024T122232Z-persistence-fixed/grant_cause_analysis.json",
+                      "destination":  "evidence/previous_grant_failure/grant_cause_analysis.json",
+                      "sha256":  "45F6B3FDF9649089B23FA161BE83C37CF1F65114A67FEDB09A886804554D49E4",
+                      "bytes":  12515,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-CAUSE-RETRY-PREPARATION-001/20261024T122232Z-persistence-fixed/raw_analysis.json",
+                      "destination":  "evidence/previous_grant_failure/raw_analysis.json",
+                      "sha256":  "FFD3DD687308ECC9DDDEC8FB05F9E2F3D46457CA65843C4E6433CE04B13119F4",
+                      "bytes":  31073,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-CAUSE-RETRY-PREPARATION-001/20261024T122232Z-persistence-fixed/trial_evaluation.json",
+                      "destination":  "evidence/previous_grant_failure/trial_evaluation.json",
+                      "sha256":  "4064783F387594DCCE2D011EFA739FA9397AF6CF69B25FA43206889340DCBDA5",
+                      "bytes":  4756,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-GRANT-CAUSE-RETRY-PREPARATION-001/20261024T122232Z-persistence-fixed/usb_aux_analysis.json",
+                      "destination":  "evidence/previous_grant_failure/usb_aux_analysis.json",
+                      "sha256":  "4FA5D9D30A4AFF6EBFAF126D91120AC25CBB8F4A5B5957E36F4CB610C3E18230",
+                      "bytes":  15760,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/artifact_manifest.json",
+                      "destination":  "evidence/rollback/artifact_manifest.json",
+                      "sha256":  "C4EF8200DB5D5614BE19DF4C0905E989D0BAFA72BC5D6F747EA2CB83D6080C6E",
+                      "bytes":  16291,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/final_seal.json",
+                      "destination":  "evidence/rollback/final_seal.json",
+                      "sha256":  "E4DA837CC8A8FC771DBCAD842A5EC1A718F81F573C538EE95DA664A8F7BBC3D4",
+                      "bytes":  1140,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/final_seal.sha256",
+                      "destination":  "evidence/rollback/final_seal.sha256",
+                      "sha256":  "8EE869DB0243F9B30530446D887E03B33C79C832C77D43FB0DC9BB49ABE1DBF6",
+                      "bytes":  83,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/flash_record.json",
+                      "destination":  "evidence/rollback/flash_record.json",
+                      "sha256":  "409FB9FE3EE483BF7E911314AC227BEC642AAEA6874CC439885EC9E60C9655C8",
+                      "bytes":  44814,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/rollback_02_vehicle_r18_write_attempt_1.record.json",
+                      "destination":  "evidence/rollback/rollback_02_vehicle_r18_write_attempt_1.record.json",
+                      "sha256":  "2915C6C9D1C2A4F95781A1B13F3BFBC0D09D551E9A2CEF6DFC02DCA6C4F6BDDF",
+                      "bytes":  4184,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/rollback_02_vehicle_r18_write_attempt_1.stdout.log",
+                      "destination":  "evidence/rollback/rollback_02_vehicle_r18_write_attempt_1.stdout.log",
+                      "sha256":  "320550059319EEFEE7CB0DA0D5A12A25364C7168C18FECF304E4E3767C4FB79D",
+                      "bytes":  3788,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/rollback_03_vehicle_r18_verify_attempt_1.record.json",
+                      "destination":  "evidence/rollback/rollback_03_vehicle_r18_verify_attempt_1.record.json",
+                      "sha256":  "186A3FA1B7969275ABD549C17E298CA1AF91B29D22A798A3DB2ABB38CE9D0E34",
+                      "bytes":  1724,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/rollback_03_vehicle_r18_verify_attempt_1.stdout.log",
+                      "destination":  "evidence/rollback/rollback_03_vehicle_r18_verify_attempt_1.stdout.log",
+                      "sha256":  "DBBDA6A6DF5916E246E1E2DCED3A525620EBAC5452BDB679709F75791398ECFF",
+                      "bytes":  1654,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/rollback_06_ground_r18_write_attempt_1.record.json",
+                      "destination":  "evidence/rollback/rollback_06_ground_r18_write_attempt_1.record.json",
+                      "sha256":  "47E5B11310B35B3836873A99B4C6C3458D5977F2A973DF7C827AF23B4A971D21",
+                      "bytes":  4180,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/rollback_06_ground_r18_write_attempt_1.stdout.log",
+                      "destination":  "evidence/rollback/rollback_06_ground_r18_write_attempt_1.stdout.log",
+                      "sha256":  "BD3DE484C21B1314F0A981DFC59F5A05B3DC77AAAFB9D103CA2FE9E14B9BE278",
+                      "bytes":  3788,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/rollback_07_ground_r18_verify_attempt_1.record.json",
+                      "destination":  "evidence/rollback/rollback_07_ground_r18_verify_attempt_1.record.json",
+                      "sha256":  "326D544B7864736740B5B60BE5221A9B5CA5EBBD3FCA73B099A0CAD975ED0375",
+                      "bytes":  1720,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/rollback_07_ground_r18_verify_attempt_1.stdout.log",
+                      "destination":  "evidence/rollback/rollback_07_ground_r18_verify_attempt_1.stdout.log",
+                      "sha256":  "820ACF0C185C53047AEE60C22012CB408C775EA6A394D0992295A94F80FCDEB7",
+                      "bytes":  1652,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261024T140812604Z-1db5ddb9-rollback/SHA256SUMS.txt",
+                      "destination":  "evidence/rollback/SHA256SUMS.txt",
+                      "sha256":  "328B73871306567CF60A121978D485E88B898DCB46E87273448E9450701D4AE1",
+                      "bytes":  6811,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/capture/ground.raw.bin",
+                      "destination":  "evidence/trial/capture/ground.raw.bin",
+                      "sha256":  "91F84005CCB6D7475ECDDEC00BA333FB9BAA23471A22338637F42E7794BCAEB0",
+                      "bytes":  3710,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/capture/param_list_30s.json",
+                      "destination":  "evidence/trial/capture/param_list_30s.json",
+                      "sha256":  "AA56E82BDE1F9F4CA67A674A52F3022F87D67A392A84B44D7D0CE1BF19B6CCBE",
+                      "bytes":  151790,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/capture/summary.json",
+                      "destination":  "evidence/trial/capture/summary.json",
+                      "sha256":  "79673B52BB01434B9F86D1BB2303AC8057D63F507E8EF8AC42E2D9E3A8337E14",
+                      "bytes":  910232,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/capture/vehicle.raw.bin",
+                      "destination":  "evidence/trial/capture/vehicle.raw.bin",
+                      "sha256":  "79539C60EFCE5D1436C66E42C34E5A2E55BA9F1310F01520ACE320DC6E41474B",
+                      "bytes":  2674,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/param_list_diagnostics.json",
+                      "destination":  "evidence/trial/param_list_diagnostics.json",
+                      "sha256":  "BF675A0FC1B4AB5464F3555498C2F606966C260498E7D6DAD8491A812076BBF5",
+                      "bytes":  154652,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/aux_readiness_first.bin",
+                      "destination":  "evidence/trial/stage_ground/aux_readiness_first.bin",
+                      "sha256":  "49AF88B0F7935779F9E2A94DF7C645F5E8E0B2934B10B09A0B991143FCB797FD",
+                      "bytes":  6144,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/aux_readiness_second.bin",
+                      "destination":  "evidence/trial/stage_ground/aux_readiness_second.bin",
+                      "sha256":  "49AF88B0F7935779F9E2A94DF7C645F5E8E0B2934B10B09A0B991143FCB797FD",
+                      "bytes":  6144,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/diagnostic_usb_failure_first.bin",
+                      "destination":  "evidence/trial/stage_ground/diagnostic_usb_failure_first.bin",
+                      "sha256":  "A639A4E5781616EEB419495D1D0F2DE0EF945C085DD9D31E7D147DEA579651ED",
+                      "bytes":  256,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/diagnostic_usb_failure_second.bin",
+                      "destination":  "evidence/trial/stage_ground/diagnostic_usb_failure_second.bin",
+                      "sha256":  "A639A4E5781616EEB419495D1D0F2DE0EF945C085DD9D31E7D147DEA579651ED",
+                      "bytes":  256,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/endpoint-fifo-first.bin",
+                      "destination":  "evidence/trial/stage_ground/endpoint-fifo-first.bin",
+                      "sha256":  "B05ED16388BCE6481B33250513B64D7C689213F415AD7D484929D5FA4387761C",
+                      "bytes":  112,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/endpoint-fifo-second.bin",
+                      "destination":  "evidence/trial/stage_ground/endpoint-fifo-second.bin",
+                      "sha256":  "B05ED16388BCE6481B33250513B64D7C689213F415AD7D484929D5FA4387761C",
+                      "bytes":  112,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/first-usb-failure-first.bin",
+                      "destination":  "evidence/trial/stage_ground/first-usb-failure-first.bin",
+                      "sha256":  "C57BD52D4B7719BF725CF4DA7C95B484DF9D6F96395C999A6936B3001D73A572",
+                      "bytes":  384,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/first-usb-failure-second.bin",
+                      "destination":  "evidence/trial/stage_ground/first-usb-failure-second.bin",
+                      "sha256":  "C57BD52D4B7719BF725CF4DA7C95B484DF9D6F96395C999A6936B3001D73A572",
+                      "bytes":  384,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/grant_diagnostic_first.bin",
+                      "destination":  "evidence/trial/stage_ground/grant_diagnostic_first.bin",
+                      "sha256":  "C4FD8ECF01EA6D9B38FB0709131A73FEE5F31197AF528CD1447429498DA5045A",
+                      "bytes":  1024,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/grant_diagnostic_second.bin",
+                      "destination":  "evidence/trial/stage_ground/grant_diagnostic_second.bin",
+                      "sha256":  "C4FD8ECF01EA6D9B38FB0709131A73FEE5F31197AF528CD1447429498DA5045A",
+                      "bytes":  1024,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/ground-usb-commit-first.bin",
+                      "destination":  "evidence/trial/stage_ground/ground-usb-commit-first.bin",
+                      "sha256":  "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669",
+                      "bytes":  128,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/ground-usb-commit-second.bin",
+                      "destination":  "evidence/trial/stage_ground/ground-usb-commit-second.bin",
+                      "sha256":  "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669",
+                      "bytes":  128,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/hwcdc-restart-first.bin",
+                      "destination":  "evidence/trial/stage_ground/hwcdc-restart-first.bin",
+                      "sha256":  "4A1B78B31B5BC4484AD34A072C51FEABEB37F66B9B473A4AA760A503FB9D1BB7",
+                      "bytes":  128,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/hwcdc-restart-second.bin",
+                      "destination":  "evidence/trial/stage_ground/hwcdc-restart-second.bin",
+                      "sha256":  "4A1B78B31B5BC4484AD34A072C51FEABEB37F66B9B473A4AA760A503FB9D1BB7",
+                      "bytes":  128,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/openocd-attempt-1-cleanup.log",
+                      "destination":  "evidence/trial/stage_ground/openocd-attempt-1-cleanup.log",
+                      "sha256":  "5CBAAEDE1D18CF50FE1C761DE75CA275D340FC635D7DAC7654520FA49A534EEC",
+                      "bytes":  1134,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/runtime-stage-first.bin",
+                      "destination":  "evidence/trial/stage_ground/runtime-stage-first.bin",
+                      "sha256":  "F9DDE6675526855795521FD1233CBAE35F856AEB1A8BE32A8613889DCD6054B1",
+                      "bytes":  68,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/runtime-stage-second.bin",
+                      "destination":  "evidence/trial/stage_ground/runtime-stage-second.bin",
+                      "sha256":  "F9DDE6675526855795521FD1233CBAE35F856AEB1A8BE32A8613889DCD6054B1",
+                      "bytes":  68,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/summary.json",
+                      "destination":  "evidence/trial/stage_ground/summary.json",
+                      "sha256":  "74D4E7E2C440A9C1D37AD89A921FC0C1CBAF2632962CC79095F94366CC9B04F3",
+                      "bytes":  271066,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/timed_path_first.bin",
+                      "destination":  "evidence/trial/stage_ground/timed_path_first.bin",
+                      "sha256":  "4D1D54B7E5E204212AA8DA9795F2AD31F615ED0DDBFC41B7C7638C521115CEBA",
+                      "bytes":  512,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_ground/timed_path_second.bin",
+                      "destination":  "evidence/trial/stage_ground/timed_path_second.bin",
+                      "sha256":  "4D1D54B7E5E204212AA8DA9795F2AD31F615ED0DDBFC41B7C7638C521115CEBA",
+                      "bytes":  512,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/aux_readiness_first.bin",
+                      "destination":  "evidence/trial/stage_vehicle/aux_readiness_first.bin",
+                      "sha256":  "501E79C61D157280B5CD83BFF5CDEB15580D49F4E6C5E2A05E582497FC34B15D",
+                      "bytes":  6144,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/aux_readiness_second.bin",
+                      "destination":  "evidence/trial/stage_vehicle/aux_readiness_second.bin",
+                      "sha256":  "501E79C61D157280B5CD83BFF5CDEB15580D49F4E6C5E2A05E582497FC34B15D",
+                      "bytes":  6144,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/diagnostic_usb_failure_first.bin",
+                      "destination":  "evidence/trial/stage_vehicle/diagnostic_usb_failure_first.bin",
+                      "sha256":  "F46AD269F2244C32B5D2F4E2435E14CA9017B26705607FBC69EBAC98379D6360",
+                      "bytes":  256,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/diagnostic_usb_failure_second.bin",
+                      "destination":  "evidence/trial/stage_vehicle/diagnostic_usb_failure_second.bin",
+                      "sha256":  "F46AD269F2244C32B5D2F4E2435E14CA9017B26705607FBC69EBAC98379D6360",
+                      "bytes":  256,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/endpoint-fifo-first.bin",
+                      "destination":  "evidence/trial/stage_vehicle/endpoint-fifo-first.bin",
+                      "sha256":  "3C1A4EE06DDEEDDB44FC36723E0385942CF23C363D53ABC66F6E4D372540ED82",
+                      "bytes":  112,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/endpoint-fifo-second.bin",
+                      "destination":  "evidence/trial/stage_vehicle/endpoint-fifo-second.bin",
+                      "sha256":  "3C1A4EE06DDEEDDB44FC36723E0385942CF23C363D53ABC66F6E4D372540ED82",
+                      "bytes":  112,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/first-usb-failure-first.bin",
+                      "destination":  "evidence/trial/stage_vehicle/first-usb-failure-first.bin",
+                      "sha256":  "FDCAE8FC246A2202348F54551B0C41E907473C4DDB22EB2AC79BE0D203DC3EB0",
+                      "bytes":  384,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/first-usb-failure-second.bin",
+                      "destination":  "evidence/trial/stage_vehicle/first-usb-failure-second.bin",
+                      "sha256":  "FDCAE8FC246A2202348F54551B0C41E907473C4DDB22EB2AC79BE0D203DC3EB0",
+                      "bytes":  384,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/grant_diagnostic_first.bin",
+                      "destination":  "evidence/trial/stage_vehicle/grant_diagnostic_first.bin",
+                      "sha256":  "E8D45180C29F99CD75D382F5A69215A95897742D8B6B63063009491873F21845",
+                      "bytes":  1024,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/grant_diagnostic_second.bin",
+                      "destination":  "evidence/trial/stage_vehicle/grant_diagnostic_second.bin",
+                      "sha256":  "E8D45180C29F99CD75D382F5A69215A95897742D8B6B63063009491873F21845",
+                      "bytes":  1024,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/ground-usb-commit-first.bin",
+                      "destination":  "evidence/trial/stage_vehicle/ground-usb-commit-first.bin",
+                      "sha256":  "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F",
+                      "bytes":  128,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/ground-usb-commit-second.bin",
+                      "destination":  "evidence/trial/stage_vehicle/ground-usb-commit-second.bin",
+                      "sha256":  "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F",
+                      "bytes":  128,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/hwcdc-restart-first.bin",
+                      "destination":  "evidence/trial/stage_vehicle/hwcdc-restart-first.bin",
+                      "sha256":  "D0B26C75ED8E51CB06924B6C68E8467C1EBFCD9FB1A73C956B91C17565D4D4DF",
+                      "bytes":  128,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/hwcdc-restart-second.bin",
+                      "destination":  "evidence/trial/stage_vehicle/hwcdc-restart-second.bin",
+                      "sha256":  "D0B26C75ED8E51CB06924B6C68E8467C1EBFCD9FB1A73C956B91C17565D4D4DF",
+                      "bytes":  128,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/openocd-attempt-1-cleanup.log",
+                      "destination":  "evidence/trial/stage_vehicle/openocd-attempt-1-cleanup.log",
+                      "sha256":  "260E44920B71DC4A3F9873EFE94A78C8BDE97A45C71324509038E5709AD18FCF",
+                      "bytes":  1134,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/runtime-stage-first.bin",
+                      "destination":  "evidence/trial/stage_vehicle/runtime-stage-first.bin",
+                      "sha256":  "FA7E5D04CD550E597274C73C7511FD36A2C0BA20A69B6824EA472939F89A3831",
+                      "bytes":  68,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/runtime-stage-second.bin",
+                      "destination":  "evidence/trial/stage_vehicle/runtime-stage-second.bin",
+                      "sha256":  "FA7E5D04CD550E597274C73C7511FD36A2C0BA20A69B6824EA472939F89A3831",
+                      "bytes":  68,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/summary.json",
+                      "destination":  "evidence/trial/stage_vehicle/summary.json",
+                      "sha256":  "B5471CF8A3F3CA0C69F9725A2B6AAC613013769474135BD16C269064C818D17E",
+                      "bytes":  198205,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/timed_path_first.bin",
+                      "destination":  "evidence/trial/stage_vehicle/timed_path_first.bin",
+                      "sha256":  "4C4EC1DB26FD74394127ABEDAEACD0069936DA944536EABF5F07DBA9B9F1212D",
+                      "bytes":  512,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/stage_vehicle/timed_path_second.bin",
+                      "destination":  "evidence/trial/stage_vehicle/timed_path_second.bin",
+                      "sha256":  "4C4EC1DB26FD74394127ABEDAEACD0069936DA944536EABF5F07DBA9B9F1212D",
+                      "bytes":  512,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/summary.json",
+                      "destination":  "evidence/trial/summary.json",
+                      "sha256":  "0D354207D9D7A86083DC4899AE2649399BF0C9B90F1FE42CB67C14B5AEAE5322",
+                      "bytes":  940984,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once/timed_path_evaluation.json",
+                      "destination":  "evidence/trial/timed_path_evaluation.json",
+                      "sha256":  "FEE0449C80166A3BFFFC37713DAC5A3D8E547D768AC98ACAF4ACD765E93A3757",
+                      "bytes":  40863,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "AGENTS.md",
+                      "destination":  "source_snapshot/AGENTS.md",
+                      "sha256":  "54C72FA6ADFF8B430098801D7EEEF0A78D82FA6F8E8920D5229EC8319F4F2906",
+                      "bytes":  1879,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "CMakeLists.txt",
+                      "destination":  "source_snapshot/CMakeLists.txt",
+                      "sha256":  "F05D1870E1D0036E946357C75C7610C7A38D5FE8399714793534AC8E3E813F56",
+                      "bytes":  10181,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "CMakePresets.json",
+                      "destination":  "source_snapshot/CMakePresets.json",
+                      "sha256":  "768F5A234015F7F43230E4638C1FC538B9C33FA332A498F5F629EC348F051E32",
+                      "bytes":  665,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/bulk_data_codec.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/bulk_data_codec.hpp",
+                      "sha256":  "0ABF929F5119D6DCB18D8BCC88A6089369BA3FAEFB3B66811336BBEA2063958C",
+                      "bytes":  7972,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/bulk_heartbeat_sla.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/bulk_heartbeat_sla.hpp",
+                      "sha256":  "D61F0D2096EDF6013F4DAE73F1952DC55A94E3B28382A1FC2C2D9066489FCB1A",
+                      "bytes":  3919,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/bulk_negotiation_codec.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/bulk_negotiation_codec.hpp",
+                      "sha256":  "2E910D835A07254CEC5DE944A0AEADC941E2598F9225EB91E72BBECB085A1A5C",
+                      "bytes":  5241,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/bulk_session_controller.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/bulk_session_controller.hpp",
+                      "sha256":  "6A92DC55EF2EBCEA5ACFE062A94C31D345CA268116E7FEF79AFA3A9EF22633F4",
+                      "bytes":  17733,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/bulk_transcript.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/bulk_transcript.hpp",
+                      "sha256":  "CF5FC5D9AEDF05DD537C760E4992DFEB40B1BB53368732B47D07F6CC16335AFF",
+                      "bytes":  5274,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/bulk_tx_lease.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/bulk_tx_lease.hpp",
+                      "sha256":  "DA6D9FF0101E0E463F813D84CCE0545C1820B80D610270CBA4AA5EA865DE69BF",
+                      "bytes":  4918,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/byte_ring_buffer.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/byte_ring_buffer.hpp",
+                      "sha256":  "57D3F2411EA2837B14A98161A8D65CE0B3B6EBDAD21890AB92B1D9D07ACAA674",
+                      "bytes":  3467,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/embedded_io_adapter.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/embedded_io_adapter.hpp",
+                      "sha256":  "63F3687F1E7F3146D4EFA1C9BDE4AAEF6CBAAC4881F338B1900A0B4981CB4B3F",
+                      "bytes":  23878,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/ground_parameter_download_proxy.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/ground_parameter_download_proxy.hpp",
+                      "sha256":  "E5ACB41E2D36028DBDDF20C7F3194D4AEE0F35AD608C442EEB9156DEB6CA3131",
+                      "bytes":  14086,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/ground_usb_heartbeat_pacer.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/ground_usb_heartbeat_pacer.hpp",
+                      "sha256":  "052EB8588AE150C8E53233AB6F8367663EDCC5138A162AAFCD1225848DD55E81",
+                      "bytes":  9269,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/ground_usb_host_presence_filter.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/ground_usb_host_presence_filter.hpp",
+                      "sha256":  "A125ECF770B72CD779714292A25F2CA343AEB9272EE089A7D98E6A709D47298E",
+                      "bytes":  4237,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/ground_usb_ordered_frame_backlog.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/ground_usb_ordered_frame_backlog.hpp",
+                      "sha256":  "1D3BB7D5CBA1C3826096424628F9CD2D424E33C14CD312E698E1BC52DB5BA422",
+                      "bytes":  8885,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/high_speed_tdd_coordinator.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/high_speed_tdd_coordinator.hpp",
+                      "sha256":  "B877FA20BEF05574BBE5C9AE8255782CAF7BE78B973F79CB17390443B6C48AAE",
+                      "bytes":  14131,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/late_uplink_recovery.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/late_uplink_recovery.hpp",
+                      "sha256":  "607CBE9CD32D886DA0AEA975D9C047B4203261F3B3FE4F262FE301DEA677304B",
+                      "bytes":  2279,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/legacy_silence_gate.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/legacy_silence_gate.hpp",
+                      "sha256":  "2825DF10FB5F15CA8D8E6D51ABFEB08884318BC1911C6850AF8DBD4409A35402",
+                      "bytes":  1174,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/link_data_codec.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/link_data_codec.hpp",
+                      "sha256":  "25384B3468CCD5F091A4076696451A4CD938C530DC1EBC6CD57D7BDCE9AD7D2C",
+                      "bytes":  1297,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/link_diagnostics.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/link_diagnostics.hpp",
+                      "sha256":  "DC353B681960DFD38481919F6B1FC2188DA94F8E6E781FD7DB497605E70A936D",
+                      "bytes":  3184,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/mavlink_frame.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/mavlink_frame.hpp",
+                      "sha256":  "C3E740599350B19F8EAD5C8DF7E12FB9D1F35E43C10CEA621AA832BB26856D57",
+                      "bytes":  3898,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/mavlink_scheduler.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/mavlink_scheduler.hpp",
+                      "sha256":  "5D607A54A7B522772DEFC6A9D529123512B17B046A14E6B6FD222A98F2D7DCD2",
+                      "bytes":  16870,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/runtime_contract.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/runtime_contract.hpp",
+                      "sha256":  "4C1E05D03E72A40660971CFDE65EDC6901B5589C1990295A99F208B03D1CA2CF",
+                      "bytes":  13903,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/tdd_control_codec.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/tdd_control_codec.hpp",
+                      "sha256":  "608689BE3549D874A19A51725EA36879DDAD19F0476F43B0B7FED9357F8D0C76",
+                      "bytes":  1310,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/tdd_ground.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/tdd_ground.hpp",
+                      "sha256":  "CAE5E17E0936D772CE29BC6F9C457295E0DDB493BCA3DFE9C85DBA7F238FAE32",
+                      "bytes":  3740,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/tdd_link_demux.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/tdd_link_demux.hpp",
+                      "sha256":  "7A255DF5D16AFBD93655CB85645E73DBDA1EBA57C74B6DBC647B2A326CD1F511",
+                      "bytes":  3751,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/tdd_types.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/tdd_types.hpp",
+                      "sha256":  "BD428D8153726964DDE609AFF12ECB8FF3D5D4171092C274125938746C4EBE95",
+                      "bytes":  5535,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/tdd_vehicle.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/tdd_vehicle.hpp",
+                      "sha256":  "5A26F9FD46FB8808330EF982E7BB0B2D4D1744FD8EE4888864D229D1587A014A",
+                      "bytes":  3629,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/include/vc_lora/tx_gate.hpp",
+                      "destination":  "source_snapshot/core/include/vc_lora/tx_gate.hpp",
+                      "sha256":  "34EFA4672519FA0ADC6A9CA5F014A66DDF5741FE80D51A52120B171FB2194055",
+                      "bytes":  853,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/bulk_data_codec.cpp",
+                      "destination":  "source_snapshot/core/src/bulk_data_codec.cpp",
+                      "sha256":  "6BC7BF9C22D49E1122888ACA27F9322BF4E36B5DC3C8E68BBE99E4FDAEEF9691",
+                      "bytes":  15068,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/bulk_heartbeat_sla.cpp",
+                      "destination":  "source_snapshot/core/src/bulk_heartbeat_sla.cpp",
+                      "sha256":  "7B4F741855ED9350258B39C8A488E7751145BB891042A59FAADE9ACFEB40D124",
+                      "bytes":  6654,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/bulk_negotiation_codec.cpp",
+                      "destination":  "source_snapshot/core/src/bulk_negotiation_codec.cpp",
+                      "sha256":  "AFCCD13D3B4EC550DF5BE3208CC19DE5477CE108B150683EE68BCBDAC29D258B",
+                      "bytes":  16283,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/bulk_session_controller.cpp",
+                      "destination":  "source_snapshot/core/src/bulk_session_controller.cpp",
+                      "sha256":  "2ECBB529D1588A4F45CBDF00CADFB4E153AF5C447AF6C6447C6483188A7FDA40",
+                      "bytes":  36418,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/bulk_transcript.cpp",
+                      "destination":  "source_snapshot/core/src/bulk_transcript.cpp",
+                      "sha256":  "83CD7FC38B4F9A5AF86319A6D9E48FC3368C150A3DE7A0638E8D165421D3F8DA",
+                      "bytes":  15834,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/bulk_tx_lease.cpp",
+                      "destination":  "source_snapshot/core/src/bulk_tx_lease.cpp",
+                      "sha256":  "4EF6B0D642F04143C9F0AB367906256D4BA022F9A10969978542B6417D8B82E1",
+                      "bytes":  6824,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/ground_parameter_download_proxy.cpp",
+                      "destination":  "source_snapshot/core/src/ground_parameter_download_proxy.cpp",
+                      "sha256":  "58F2AB0B77F0ABD8C3949649C172BEB43CB75C48DE7C1C6D78FFD9C15C208FE8",
+                      "bytes":  46311,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/ground_usb_heartbeat_pacer.cpp",
+                      "destination":  "source_snapshot/core/src/ground_usb_heartbeat_pacer.cpp",
+                      "sha256":  "5FDE2D6885A691D8B1F20FA5A2609199455823405094A26B1A0F8639A31DF762",
+                      "bytes":  12279,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/high_speed_tdd_coordinator.cpp",
+                      "destination":  "source_snapshot/core/src/high_speed_tdd_coordinator.cpp",
+                      "sha256":  "E5C62F4C46BC25AE1FD6E9A4137333DC8916BEACE352336A35752DDEA8C833A7",
+                      "bytes":  45658,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/late_uplink_recovery.cpp",
+                      "destination":  "source_snapshot/core/src/late_uplink_recovery.cpp",
+                      "sha256":  "2E107949D842805DA811007D1D97366D556570EDD9E87D8C300431C94B46F094",
+                      "bytes":  4360,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/link_data_codec.cpp",
+                      "destination":  "source_snapshot/core/src/link_data_codec.cpp",
+                      "sha256":  "B00D07F92AFA42B6790F0C8B533F29A3DF7E5750ECA5AA82EF12872C0102C211",
+                      "bytes":  1552,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/link_diagnostics.cpp",
+                      "destination":  "source_snapshot/core/src/link_diagnostics.cpp",
+                      "sha256":  "3E4D18315752DA14612300CC3DE5693FB22394C99663F3B84EA23F5A9D33047A",
+                      "bytes":  687,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/mavlink_frame.cpp",
+                      "destination":  "source_snapshot/core/src/mavlink_frame.cpp",
+                      "sha256":  "BD2890D8973C5A694D53AB2866A6B3DBF319FAE40B3CC308AE2DAE91B634F3A8",
+                      "bytes":  16510,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/mavlink_scheduler.cpp",
+                      "destination":  "source_snapshot/core/src/mavlink_scheduler.cpp",
+                      "sha256":  "128F9AEEB6B624244DF3146BF24F5FE5D46F04628A83E67FE20CCA0CA789605F",
+                      "bytes":  44421,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/runtime_contract.cpp",
+                      "destination":  "source_snapshot/core/src/runtime_contract.cpp",
+                      "sha256":  "1DDA0464CFFAEABF68F3782593C607965144AC2BF5DD774C77888847DEA668B5",
+                      "bytes":  7792,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/tdd_control_codec.cpp",
+                      "destination":  "source_snapshot/core/src/tdd_control_codec.cpp",
+                      "sha256":  "91DF9C17ACC4D4DDCE1B6456EB3865A8BD374885CAFFB4FC0C32B63923260155",
+                      "bytes":  5773,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/tdd_ground.cpp",
+                      "destination":  "source_snapshot/core/src/tdd_ground.cpp",
+                      "sha256":  "6021D0799274A92A5F7AF7EC28AF7D7883DFB0CA6AD688D1D4162F042FD67EDF",
+                      "bytes":  20278,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/tdd_link_demux.cpp",
+                      "destination":  "source_snapshot/core/src/tdd_link_demux.cpp",
+                      "sha256":  "861235A0DF5254FE0D7DB2386956E512B7F02C0B90EA099DF323F85BAF594A6C",
+                      "bytes":  7022,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/tdd_vehicle.cpp",
+                      "destination":  "source_snapshot/core/src/tdd_vehicle.cpp",
+                      "sha256":  "B64C9E253E52109C0B47BE6C4A64E3A7A42CC10458F54D3080EF6710D54325A8",
+                      "bytes":  16282,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "core/src/tx_gate.cpp",
+                      "destination":  "source_snapshot/core/src/tx_gate.cpp",
+                      "sha256":  "BE9E894ED9DD59023FCFF763E7AE575DCC80E1A295CF50D127A7FD48275F75BC",
+                      "bytes":  1570,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/arduino_libraries/VC_LoRa_Core/src/VC_LoRa_Core.h",
+                      "destination":  "source_snapshot/firmware/arduino_libraries/VC_LoRa_Core/src/VC_LoRa_Core.h",
+                      "sha256":  "6D537B590FCFFB95346BD328218A1A1CF54C6629BF6DA3CE1FE3DD2C4DFFE3AF",
+                      "bytes":  133,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/diagnostics/r19_host_readiness.hpp",
+                      "destination":  "source_snapshot/firmware/diagnostics/r19_host_readiness.hpp",
+                      "sha256":  "AB2407134125CE8E64F8CF44B08A265DF7A1BA1D9A0BF3C89C74B740527F8D56",
+                      "bytes":  13605,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/e220_high_speed_transport_model.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/e220_high_speed_transport_model.hpp",
+                      "sha256":  "F72984F9DD907E3A27B0CE21774523F788B9D89D3BB8D3787E58F251DCB705C0",
+                      "bytes":  106250,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/high_speed_phase6_adapter.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/high_speed_phase6_adapter.hpp",
+                      "sha256":  "44922450926350EFE085D0E1E073182C63BEF1803664954AE0E41749D63CE665",
+                      "bytes":  57821,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/peer_completion_receipt.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/peer_completion_receipt.hpp",
+                      "sha256":  "AFD2F61CEBD6A768D3E0D04B11498B2252076B084CF09145657EC759AC3767F4",
+                      "bytes":  21253,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/phase6_bulk_rx_tail_ledger.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/phase6_bulk_rx_tail_ledger.hpp",
+                      "sha256":  "0E41966E36EFC43CD6FCFE2EFEC3D0859DD77C7138DA3A00FDDF697398745E21",
+                      "bytes":  11321,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/phase6_high_speed_radio_session.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/phase6_high_speed_radio_session.hpp",
+                      "sha256":  "1017D7301344F48E9AD88715F36E75530FE5481D769508E70DE715232D58000C",
+                      "bytes":  18563,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/phase6_high_speed_role_config.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/phase6_high_speed_role_config.hpp",
+                      "sha256":  "2DB746252B18A476AC7CA32DDFAF674753ABF27F45E51D3501E408530D9F5A69",
+                      "bytes":  6518,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/phase6_radio_writer_arbiter.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/phase6_radio_writer_arbiter.hpp",
+                      "sha256":  "F5A11253CE0A3322BB9D89B60494B3A42F84CF92CF545B972F6130E2E5A5CC11",
+                      "bytes":  14728,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/r19_aux_readiness_record.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/r19_aux_readiness_record.hpp",
+                      "sha256":  "F3965E54988F9D35F4B20A0720D41405E5AD76F7A481955198FEA318577BE0BC",
+                      "bytes":  19236,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+                      "sha256":  "47CE684BB11CD3807CA15605982BD98B66C7CB4258BE63DEA229E10E1793A258",
+                      "bytes":  9293,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/r19_first_usb_failure_record.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/r19_first_usb_failure_record.hpp",
+                      "sha256":  "EF9DE6A4F9C4DAA5F67238856826306E2DC5EC75E650C65B849C0CE552919E9B",
+                      "bytes":  9939,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/r19_grant_diagnostic_record.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/r19_grant_diagnostic_record.hpp",
+                      "sha256":  "23A1ACD6F33C7D14AFE66D1FA76CD43FD96524FD83BCAA7E7DDBA824F2226AB5",
+                      "bytes":  16965,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/r19_runtime_fail_diagnostic.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/r19_runtime_fail_diagnostic.hpp",
+                      "sha256":  "FC566FD26C258F060AF25002705E3120D24BBBEAAAB7D036DA35F4DA81C336C7",
+                      "bytes":  25790,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/r19_runtime_stage_record.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/r19_runtime_stage_record.hpp",
+                      "sha256":  "8A587AF9AF324781FD58575A73BC00931A2697CBCA8BBD028A9B0742A5F110A8",
+                      "bytes":  18783,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/r19_timed_path_record.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/r19_timed_path_record.hpp",
+                      "sha256":  "EA448319F2B4208E3D76934F3F543B9C49C418B98947A135319895F73DBEB5A4",
+                      "bytes":  13249,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/r19_usb_clock_sync.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/r19_usb_clock_sync.hpp",
+                      "sha256":  "D540FFCD9F9B61B1AE617168EEFEA3306CD96404B49055AA904AAD3D27EC7B5B",
+                      "bytes":  2661,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/terminal_ack_bridge.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/terminal_ack_bridge.hpp",
+                      "sha256":  "D073709EA57B604AB1602B5C3542C70F53094FC83047890DE03C370D90CC2743",
+                      "bytes":  7337,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/terminal_ack_producer.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/terminal_ack_producer.hpp",
+                      "sha256":  "8655DA7C65F4219D6F7922E345ABCD59A7958F28B3886CC3691B4975D8382B32",
+                      "bytes":  31937,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/terminal_ack_wire.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/terminal_ack_wire.hpp",
+                      "sha256":  "AEC6EB39F7BC987EE05DD756D9211041F6D9FD22EC2B117EA6CB7929BF1A1848",
+                      "bytes":  31958,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/high_speed/vc_lora_high_speed_candidate.hpp",
+                      "destination":  "source_snapshot/firmware/high_speed/vc_lora_high_speed_candidate.hpp",
+                      "sha256":  "53D047532E5BB2596D5C0613B12F583C304237986AA6E76B7EA1DEB08E52E811",
+                      "bytes":  13448,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "firmware/phase6/vc_lora_phase6_bridge.hpp",
+                      "destination":  "source_snapshot/firmware/phase6/vc_lora_phase6_bridge.hpp",
+                      "sha256":  "896D1014C6BB75686F5A4EA0D5F5DA4A98E7DE83541E0288E3D6ED6226E9168E",
+                      "bytes":  294463,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/hil/check_r19_grant_artifact_contract.ps1",
+                      "destination":  "source_snapshot/tests/hil/check_r19_grant_artifact_contract.ps1",
+                      "sha256":  "064816B74E9BDC72FDB0B13F5D5EC3408371E0FD82CF0BC57571E504258F5DF6",
+                      "bytes":  23255,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/hil/check_r19_grant_capture_actual_parent_replay.ps1",
+                      "destination":  "source_snapshot/tests/hil/check_r19_grant_capture_actual_parent_replay.ps1",
+                      "sha256":  "916715EED95330CA3F468870F99F3AA7775BDBE00771E0EF3A03EF53EE443A91",
+                      "bytes":  6536,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/hil/check_r19_grant_capture_persistence.ps1",
+                      "destination":  "source_snapshot/tests/hil/check_r19_grant_capture_persistence.ps1",
+                      "sha256":  "C021D268533BD4A48B4C5C15EC800B3E3AFDB5AA274AEF0DB0B56455BC0E9A4D",
+                      "bytes":  11157,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/hil/check_r19_grant_diagnostic_record.ps1",
+                      "destination":  "source_snapshot/tests/hil/check_r19_grant_diagnostic_record.ps1",
+                      "sha256":  "005E11495C52C1B277AD36BC84F737BE9C9E4B14D359C3D97232941E981D09AD",
+                      "bytes":  4242,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/hil/check_r19_grant_flash_actual_shapes.ps1",
+                      "destination":  "source_snapshot/tests/hil/check_r19_grant_flash_actual_shapes.ps1",
+                      "sha256":  "7D44CF14741C2542D91DB4E9CDC7AD3FB6497D8B55DFD5771566BBF8B1385CF7",
+                      "bytes":  6017,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/hil/check_r19_grant_flash_contract.ps1",
+                      "destination":  "source_snapshot/tests/hil/check_r19_grant_flash_contract.ps1",
+                      "sha256":  "B5092A778FA37DF3BD29408AA60150635EA285652A36071AE97F1B3E03ADBEF8",
+                      "bytes":  6610,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/hil/check_r19_grant_outer_contract.ps1",
+                      "destination":  "source_snapshot/tests/hil/check_r19_grant_outer_contract.ps1",
+                      "sha256":  "7DF95086B3698FBA50C0EF6A42CC485262129C69D99472C2B52A4025D0F1D8CD",
+                      "bytes":  6915,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/hil/check_r19_grant_parent_contract.ps1",
+                      "destination":  "source_snapshot/tests/hil/check_r19_grant_parent_contract.ps1",
+                      "sha256":  "0403F9C6AF4132F59663799445C59B0AFEE3E95EF37DB5D377C6FF252039339C",
+                      "bytes":  11923,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/check_high_speed_candidate_contract.ps1",
+                      "destination":  "source_snapshot/tests/host/check_high_speed_candidate_contract.ps1",
+                      "sha256":  "CF2181409E9B6C2C5225A2FA49552BB0FAF021709E68AAECE537B4F8410C51C0",
+                      "bytes":  29521,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/check_host_sanitizer_full_suite_runner_contract.ps1",
+                      "destination":  "source_snapshot/tests/host/check_host_sanitizer_full_suite_runner_contract.ps1",
+                      "sha256":  "E090E403767685FA673BDA76E0FAF24A4B124D7758FF1397499147C5ABC3802B",
+                      "bytes":  11623,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/check_jev_phase_a_artifacts_contract.ps1",
+                      "destination":  "source_snapshot/tests/host/check_jev_phase_a_artifacts_contract.ps1",
+                      "sha256":  "B8979ACDB4A4D3048AB88BDC504610FB84FEE5ABB8EC4C120B57F91195DCB6B3",
+                      "bytes":  18913,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/check_terminal_ack_wire_contract.ps1",
+                      "destination":  "source_snapshot/tests/host/check_terminal_ack_wire_contract.ps1",
+                      "sha256":  "42DBAA82EF5D426E2F26F059EB8D32803D09C425E2D43A9AB246AC249E8F97A6",
+                      "bytes":  14281,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/CMakeLists.txt",
+                      "destination":  "source_snapshot/tests/host/CMakeLists.txt",
+                      "sha256":  "AA64CB47C3A19338A2EDF544A9646941B42B0B51189E96E752317DEE8694ACB0",
+                      "bytes":  44699,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/fakes/Arduino.h",
+                      "destination":  "source_snapshot/tests/host/fakes/Arduino.h",
+                      "sha256":  "761BD7CF8F294C169C9BA798EAC12EE2604FFE7E8354A20B705025293906C271",
+                      "bytes":  52,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/fakes/driver/gpio.h",
+                      "destination":  "source_snapshot/tests/host/fakes/driver/gpio.h",
+                      "sha256":  "D76BAE4577DB59100F8493E249085492D92AE663F2ACDF671E39AA0F05AB7E57",
+                      "bytes":  670,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/fakes/driver/uart.h",
+                      "destination":  "source_snapshot/tests/host/fakes/driver/uart.h",
+                      "sha256":  "A5DA372B868A2A58044F5E1E9217BCC5F9B9DC2EC3473A09347EBEEDD0B829D9",
+                      "bytes":  393,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/fakes/esp_random.h",
+                      "destination":  "source_snapshot/tests/host/fakes/esp_random.h",
+                      "sha256":  "6A4E6DB56B4C96D9D5332E4FEDD11A268C605FB8883F510CCD32F4A3227332BA",
+                      "bytes":  321,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/fakes/esp_timer.h",
+                      "destination":  "source_snapshot/tests/host/fakes/esp_timer.h",
+                      "sha256":  "B508308AD8E67350B4828892DB953EE908A22295AD1509E3352D0ECC4DB9F92C",
+                      "bytes":  165,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/fakes/fake_arduino_test_api.hpp",
+                      "destination":  "source_snapshot/tests/host/fakes/fake_arduino_test_api.hpp",
+                      "sha256":  "78FBB5C8A6F6EB639E656C0A52DB122B440C93E8CC257DB2480C5DBBDB8B344E",
+                      "bytes":  15125,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/fakes/hal/gpio_ll.h",
+                      "destination":  "source_snapshot/tests/host/fakes/hal/gpio_ll.h",
+                      "sha256":  "4404013AE975E868DB90DAF31609BF23F142359870E89000060E8B283647BE6A",
+                      "bytes":  257,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/fakes/hal/usb_serial_jtag_ll.h",
+                      "destination":  "source_snapshot/tests/host/fakes/hal/usb_serial_jtag_ll.h",
+                      "sha256":  "DB0213BC0BB0C6513344CB7A7D416E016FA6A331A2BC8D74BDAA96B08D30BA93",
+                      "bytes":  248,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/fakes/Preferences.h",
+                      "destination":  "source_snapshot/tests/host/fakes/Preferences.h",
+                      "sha256":  "B7F8AFFBC3BA9B4C7680314389337FFD2BB7528C1C8EA47258E2E210E08714F7",
+                      "bytes":  1723,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/fixtures/mavlink/golden_frames.hpp",
+                      "destination":  "source_snapshot/tests/host/fixtures/mavlink/golden_frames.hpp",
+                      "sha256":  "E5792870F79E3A6E7F254BFFEED16CB268206CED8E691294DAFCF9A6D54225A0",
+                      "bytes":  4361,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/fixtures/mavlink/MANIFEST.md",
+                      "destination":  "source_snapshot/tests/host/fixtures/mavlink/MANIFEST.md",
+                      "sha256":  "78850AFB6D48BB52C8AEF78DA59F9BD7B471D7DB63D8B3D3E225B1C7A265C6FF",
+                      "bytes":  3077,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/fixtures/mavlink_fixtures.hpp",
+                      "destination":  "source_snapshot/tests/host/fixtures/mavlink_fixtures.hpp",
+                      "sha256":  "3C7A3BAF5FBAAA4BECCA86D4ABF92D4DD9F367B23C9C751EA8AB404CEC3FD098",
+                      "bytes":  7007,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/buffer_integration_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/buffer_integration_tests.cpp",
+                      "sha256":  "1A09EBE42BED57265141A8FD1AE34FE101CDDCF379287157F29F5D1A9847AB2C",
+                      "bytes":  13727,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/buffered_e220_integration_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/buffered_e220_integration_tests.cpp",
+                      "sha256":  "67999B5BBB479D58F4F09E6D8C33966A4E3D25B3201B755844B2A4BDA8618EE6",
+                      "bytes":  92391,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/control_subpacket_integration_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/control_subpacket_integration_tests.cpp",
+                      "sha256":  "424FE7029141403AAF83AB885CCBEFF46F686251CD209DE1983E6C843349A767",
+                      "bytes":  24081,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/ground_usb_heartbeat_pacer_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/ground_usb_heartbeat_pacer_tests.cpp",
+                      "sha256":  "3CF70D337393BF953DEE261D212E00DFBC6344C0439DC09C46FC86848BD46A8C",
+                      "bytes":  29590,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/ground_usb_heartbeat_phase6_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/ground_usb_heartbeat_phase6_tests.cpp",
+                      "sha256":  "CD95BA4BD2CB26BB4762AFE750F8F49F6F2A0E065B12013659DE598EA9839DAC",
+                      "bytes":  120577,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/mavlink_e2e_sim.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/mavlink_e2e_sim.cpp",
+                      "sha256":  "4C4AAE284C8DA01AACCE2D9B2B9652E0146199775013AEE77F802922A7E3C4F7",
+                      "bytes":  30533,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/mavlink_e2e_sim.hpp",
+                      "destination":  "source_snapshot/tests/host/integration/mavlink_e2e_sim.hpp",
+                      "sha256":  "CBD2B64A81029B41A4258F101F372CE6A3C365901DB7B9107EF8A3F62B7360B1",
+                      "bytes":  8740,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/mavlink_e2e_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/mavlink_e2e_tests.cpp",
+                      "sha256":  "CC7BE77921C8654316DC8F45E135B96B0C35AD84ED2E5CE44A978DC6F5B4159D",
+                      "bytes":  26175,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/parameter_proxy_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/parameter_proxy_tests.cpp",
+                      "sha256":  "1EFDAEC09ABCA7BB776C9CEBA355109EE43FE28347573BC73F4B88462EB0BA31",
+                      "bytes":  222656,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/phase6_high_speed_route_integration_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/phase6_high_speed_route_integration_tests.cpp",
+                      "sha256":  "E63A91E4028C446AAC97D03452432F1B6F33FC3BC10DC11422D6C5A4659FC373",
+                      "bytes":  55945,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/r19_candidate_standard_path_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/r19_candidate_standard_path_tests.cpp",
+                      "sha256":  "1AB5C9F1123C695955C34E0EF27D432819CB3C5CBFA0BA0557B70B1E40C983C2",
+                      "bytes":  12372,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/tdd_integration_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/tdd_integration_tests.cpp",
+                      "sha256":  "7263A0BB3CAB1DDF20BC4B79C50A2E2FF9126C4814CE443F9B0A62377A747E12",
+                      "bytes":  23476,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/tdd_simulation.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/tdd_simulation.cpp",
+                      "sha256":  "848166BD5E88EC32D1265550EFBBA46EE8E537E4549AACA4F891294F5FE998EB",
+                      "bytes":  22618,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/tdd_simulation.hpp",
+                      "destination":  "source_snapshot/tests/host/integration/tdd_simulation.hpp",
+                      "sha256":  "0B6E6FA88F4E30B886DCBCAE31F193FAACE055841EC1FBD42CD2DEB6433F3E7F",
+                      "bytes":  5463,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/uplink_guard_integration_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/integration/uplink_guard_integration_tests.cpp",
+                      "sha256":  "634BA0824AF600CF6FFBEA017D5B249F19449FB8A24AB9E2520A1DE1D1DD83B8",
+                      "bytes":  18260,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/integration/uplink_guard_integration_tests.hpp",
+                      "destination":  "source_snapshot/tests/host/integration/uplink_guard_integration_tests.hpp",
+                      "sha256":  "F82F2AF141A868EAE85506519E5CBE1358B038969B764B01220C64053E7CEF95",
+                      "bytes":  278,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/sim/e220_sim.hpp",
+                      "destination":  "source_snapshot/tests/host/sim/e220_sim.hpp",
+                      "sha256":  "11D4F106096156A75967D17E284B8B5ABF0589DD2F9059F31A494596CE23BD53",
+                      "bytes":  1208,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/sim/rf_medium_sim.cpp",
+                      "destination":  "source_snapshot/tests/host/sim/rf_medium_sim.cpp",
+                      "sha256":  "F6D90EE7868F4ECB76E555371BF36B5EA3B3FEB206F51778FF949B3986F903CB",
+                      "bytes":  13157,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/sim/rf_medium_sim.hpp",
+                      "destination":  "source_snapshot/tests/host/sim/rf_medium_sim.hpp",
+                      "sha256":  "BB41D8FAD4F06FFD5E1CFD81450B9D6F091510DE8A4A058A85AE87954129645A",
+                      "bytes":  5672,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/sim/trace_recorder.cpp",
+                      "destination":  "source_snapshot/tests/host/sim/trace_recorder.cpp",
+                      "sha256":  "3B8E28F079D470A7BF70CDEB5ED9D490932E76683527B0F03E289554BFD03EC8",
+                      "bytes":  1993,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/sim/trace_recorder.hpp",
+                      "destination":  "source_snapshot/tests/host/sim/trace_recorder.hpp",
+                      "sha256":  "F665EB989A90FA3F99E67D030F3EE6F150F7870E5BC7250047F9E69B355F35A2",
+                      "bytes":  1362,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/sim/virtual_clock.hpp",
+                      "destination":  "source_snapshot/tests/host/sim/virtual_clock.hpp",
+                      "sha256":  "0789A8C2DF0FFE5ECA020D2F192BFF9E3809E602ABC97A2BD2D3D35FF558A46D",
+                      "bytes":  939,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/check_r19_host_readiness_integration.ps1",
+                      "destination":  "source_snapshot/tests/host/standalone/check_r19_host_readiness_integration.ps1",
+                      "sha256":  "9719EC9AC2A15DF3EFF9F1AA1B4B233040802C6A7ABF4730797061D58110F155",
+                      "bytes":  7512,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/d7_param_observer_contract_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/d7_param_observer_contract_tests.cpp",
+                      "sha256":  "393B51AE104C51BF5DC0D25E6213041A61332BC0A4CEB86A49519B05413BBC34",
+                      "bytes":  17911,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/e220_continuous_aux_credit_red.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/e220_continuous_aux_credit_red.cpp",
+                      "sha256":  "C75602D3BAC425F85CFB5F1C96ED9B371B083801F9F7D426F14BF10316BBEFEC",
+                      "bytes":  8439,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/ground_diag_query_observer_contract_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/ground_diag_query_observer_contract_tests.cpp",
+                      "sha256":  "01061A3444AB7A025EA1F26B752881425B83AB0D56CC90BF77A67B94DE350B41",
+                      "bytes":  29430,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/high_speed_candidate_contract_compile.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/high_speed_candidate_contract_compile.cpp",
+                      "sha256":  "EB21AB6B8669EDB8761DACA3188F554B04F9A69DE724D25B2BA880947B3D74C3",
+                      "bytes":  1710,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/high_speed_transport_model_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/high_speed_transport_model_tests.cpp",
+                      "sha256":  "686B7C4230768FCEF614CE8C38D7945B83ED69ACE4B58698A76E88F52636B864",
+                      "bytes":  95632,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_diagnostic_usb_failure_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_diagnostic_usb_failure_tests.cpp",
+                      "sha256":  "A63D7FEAE9E8F7BD3F6CDDCF036A68A3DBE8978874A236BA73C351416FCADCBB",
+                      "bytes":  8548,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_first_usb_failure_integration_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_first_usb_failure_integration_tests.cpp",
+                      "sha256":  "ED33F0E0A1CC857276C9866F8038B291BAF6B4DF116264797EF85AFFCF2AF114",
+                      "bytes":  5428,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_grant_diagnostic_hooks_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_grant_diagnostic_hooks_tests.cpp",
+                      "sha256":  "6417041473660D30EF24CD2C59B2587401983827AF77F425672E7EF4AF593862",
+                      "bytes":  3679,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_aux_independence_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_aux_independence_tests.cpp",
+                      "sha256":  "611CEC3FB91A8FBD7C7237B1D0F85892B1DE468BE73651F3F03A9D45CA40C034",
+                      "bytes":  13633,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_host_readiness_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_host_readiness_tests.cpp",
+                      "sha256":  "A61A5C1FFE5FBBB5748E8DACF4A4EDE0C35CD32E0A63F913DCCBB229395042A4",
+                      "bytes":  19650,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_product_loop_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_product_loop_tests.cpp",
+                      "sha256":  "17163F5D79F19E97FB52B468B9A6CA0CDD71E643C13AEB7254A9DFCAB6ADD9E4",
+                      "bytes":  14161,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_runtime_alive_backpressure_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_runtime_alive_backpressure_tests.cpp",
+                      "sha256":  "642FA1800E861F96F85ADF61A660DA43C94E5CF8DD81712BEFF106923348C8F0",
+                      "bytes":  3446,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_runtime_alive_diagnostic_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_runtime_alive_diagnostic_tests.cpp",
+                      "sha256":  "7A9C015C9AA10E26CAFFE9C3B50B85CF22C87DAFBF1CFB217BE30465BD486495",
+                      "bytes":  4462,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_runtime_alive_read_only_bootstrap_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_runtime_alive_read_only_bootstrap_tests.cpp",
+                      "sha256":  "2B3231169D0FD47DCA4A1B7953CB8F37FDD8CE5351CE0C160160EDA35384A5D5",
+                      "bytes":  6727,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_runtime_alive_starvation_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_runtime_alive_starvation_tests.cpp",
+                      "sha256":  "6F737380A6EBC8447772AEB7886E25CF4FF93D1587F1EBB34AD044087553417C",
+                      "bytes":  6731,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_runtime_fail_boundary_loss_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_runtime_fail_boundary_loss_tests.cpp",
+                      "sha256":  "1F0AEC1A2B5BFC3EEA6D673B9AD3FF1C4A616EAB7F61615A18F42D890F67D5BC",
+                      "bytes":  4121,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_runtime_fail_deadline_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_runtime_fail_deadline_tests.cpp",
+                      "sha256":  "D4E30BC3822DB347B795CDB33FBDD2B70CCBE9A42CF85250F37B48F4627DC06B",
+                      "bytes":  6446,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_runtime_fail_diagnostic_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_runtime_fail_diagnostic_tests.cpp",
+                      "sha256":  "EC1BD1D327EAD7CD01F2C1958B4EFA69E3B4BCABDEA52CC545BE4F4000A7C0EB",
+                      "bytes":  6589,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_runtime_fail_pending_alive_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_runtime_fail_pending_alive_tests.cpp",
+                      "sha256":  "C328C784DA6675D5492A0D0E6D1581559148BABB8808FE0540926D431F9478CE",
+                      "bytes":  3844,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_runtime_fail_recovery_guard_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_runtime_fail_recovery_guard_tests.cpp",
+                      "sha256":  "C9998AE6EFB11681352DC6E06638FDE71803B17FCCB4B55FBF5823DBB8A6C4C2",
+                      "bytes":  4682,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_ground_usb_commit_latch_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_ground_usb_commit_latch_tests.cpp",
+                      "sha256":  "A9684D7174FF6AADA9CD12E52BEAF522226BD7E2AB849F58BF973E58B9668BEF",
+                      "bytes":  7555,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_timed_path_integration_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_timed_path_integration_tests.cpp",
+                      "sha256":  "FF587D92D387DD5981432B2325FA6A9074DB826FE0452895E948B52DE59AFD6B",
+                      "bytes":  6188,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_vehicle_product_loop_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_vehicle_product_loop_tests.cpp",
+                      "sha256":  "B79237CEB789A7C81AEBE69757CCE0BF185F575209E376A46CCBE1C91D1F7846",
+                      "bytes":  9164,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_vehicle_runtime_alive_diagnostic_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_alive_diagnostic_tests.cpp",
+                      "sha256":  "D308A6D6ADF01241DA8640A1F05365CB226504C2175E4B85E1F85CC4D8BF6F09",
+                      "bytes":  8358,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_vehicle_runtime_alive_read_only_bootstrap_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_alive_read_only_bootstrap_tests.cpp",
+                      "sha256":  "B07A96CBC2BF72265B710C1C5E983F84D646F871666977C5EC12457CB2914878",
+                      "bytes":  6084,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_vehicle_runtime_fail_diagnostic_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_fail_diagnostic_tests.cpp",
+                      "sha256":  "F7C0E122F3F556408B6D67509766451210E98CE453DADFEF18D29EE7C9A97959",
+                      "bytes":  5094,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_vehicle_runtime_fail_flush_deadline_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_fail_flush_deadline_tests.cpp",
+                      "sha256":  "EF810EA73BCDF387EC30259552779317A8EF06062940D43CE34BF9BD3B826478",
+                      "bytes":  4064,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_vehicle_runtime_fail_partial_deadline_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_fail_partial_deadline_tests.cpp",
+                      "sha256":  "4206CBF33A894A518D28B7387097C78924E86ABC69BE37D9CC2255493C49FD57",
+                      "bytes":  2413,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_vehicle_runtime_fail_recovery_guard_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_fail_recovery_guard_tests.cpp",
+                      "sha256":  "E32E2CEEFA4CE6793C114DA275AEF3C5781F7A9AB3534F910AD8ACEEBB8A6DE0",
+                      "bytes":  2853,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_vehicle_runtime_fail_staged_partial_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_fail_staged_partial_tests.cpp",
+                      "sha256":  "0AD580CB87F00F2FF41D7DF4DEF9CA570AECEFB710349ACE65A7E4023050C6BD",
+                      "bytes":  4480,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_vehicle_runtime_fail_staged_zero_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_fail_staged_zero_tests.cpp",
+                      "sha256":  "F45277036F2F3009503FCB59E9C63F73EBB6387728D2326B932112364744553E",
+                      "bytes":  3782,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/phase6_vehicle_usb_clock_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/phase6_vehicle_usb_clock_tests.cpp",
+                      "sha256":  "80F2EFC19349D31F635C523CC6B2C51C25DAF106CA1944833A59ADC471C2492B",
+                      "bytes":  8852,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_diagnostic_usb_failure_record_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_diagnostic_usb_failure_record_tests.cpp",
+                      "sha256":  "036DF5F426FB61B4467BD7F86E781FFC41273DF9588495AF83D09609F092CBBD",
+                      "bytes":  7645,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_first_usb_failure_record_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_first_usb_failure_record_tests.cpp",
+                      "sha256":  "19C8735ED294BBBFE169DDF9E5D016E4CE2815668FBA7DFC5406F92ED63B20B8",
+                      "bytes":  6752,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_grant_admission_timing_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_grant_admission_timing_tests.cpp",
+                      "sha256":  "B75F5B8E1F4DA0C324EA3BBB68F3ADF70BE05B13C2938F009DE5D4A644F983B6",
+                      "bytes":  19710,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_grant_diagnostic_record_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_grant_diagnostic_record_tests.cpp",
+                      "sha256":  "9234CDDD3C7B98C271D8EF56D448ED7BA1967A60A01ECE0DD4357A5431569301",
+                      "bytes":  7809,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_ground_usb_commit_record_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_ground_usb_commit_record_tests.cpp",
+                      "sha256":  "8EBA132C0BAD67B29EB0EB30063C987437CCD9740A802287CC8F0575C959E95F",
+                      "bytes":  7110,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_ground_usb_commit_source_contract_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_ground_usb_commit_source_contract_tests.cpp",
+                      "sha256":  "86509A6D742BBADAC581EFCF87528C6BEB30D8230E6F3776964F692A27909836",
+                      "bytes":  3984,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_host_readiness_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_host_readiness_tests.cpp",
+                      "sha256":  "A727493461AA0E13D65C4D7A41540D83ED15369C15B3DAA2FD4E7E051DA9B892",
+                      "bytes":  12256,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_hwcdc_fifo_diagnostic_record_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_hwcdc_fifo_diagnostic_record_tests.cpp",
+                      "sha256":  "09816AA71362E7629C280E27E515A560A0FAEAD8BCF0195C4BE8831CE2A47775",
+                      "bytes":  102442,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_hwcdc_flush_call_evidence_actual_template.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_hwcdc_flush_call_evidence_actual_template.cpp",
+                      "sha256":  "141B1F92E5A274896F6D6E4EC2690E08D6C577A9629A979C15ADF5BCE7240D6D",
+                      "bytes":  10931,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_hwcdc_ll_bootstrap_model_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_hwcdc_ll_bootstrap_model_tests.cpp",
+                      "sha256":  "3AEFFACBF49863670E3E88C9B1808EF01C915C75E7376E7DB6F088F6E5B7DCDC",
+                      "bytes":  42944,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_hwcdc_task_prime_model_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_hwcdc_task_prime_model_tests.cpp",
+                      "sha256":  "A306314033DEB83C89A794C6EEF6945F03D20AB55C241C7EC718CBE2A5D218D0",
+                      "bytes":  36926,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_pre_negotiation_fallback_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_pre_negotiation_fallback_tests.cpp",
+                      "sha256":  "42B4A0CF43B266479D89C19C1939FAB2B8C8F898CDFE14D70BAB68CBAA0CAE25",
+                      "bytes":  18592,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_runtime_fail_diagnostic_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_runtime_fail_diagnostic_tests.cpp",
+                      "sha256":  "7C8EDAABF01660EA29CA65343D7094018A1AFB4CD00630BE3AF11E3BCEEEAF1F",
+                      "bytes":  22373,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_runtime_fail_product_source_contract_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_runtime_fail_product_source_contract_tests.cpp",
+                      "sha256":  "0532F223FA70766BF814D900B0F147F84C87FFAE984180E9D8668831B4312340",
+                      "bytes":  63879,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_runtime_stage_record_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_runtime_stage_record_tests.cpp",
+                      "sha256":  "09094FC4AA5C8CE59201D410DAB3D37BB030EC16E009F6B5C14E3D6B53F18EA7",
+                      "bytes":  12325,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_standard_grant_phase_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_standard_grant_phase_tests.cpp",
+                      "sha256":  "71EF88B72008D71844A8F2ED18178B22218394A87C3DF324FF8CF1C0AB9B9F5A",
+                      "bytes":  17627,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_timed_path_record_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_timed_path_record_tests.cpp",
+                      "sha256":  "CD53C0D210D14BDC54D2ABDE6AF224ABAB4F47E8C92C87008E7F3B5C001CD036",
+                      "bytes":  8492,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/r19_usb_clock_sync_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/r19_usb_clock_sync_tests.cpp",
+                      "sha256":  "F0FB492CA7A85730938F9B17D9CB49EE6CA51E7106B7BB25C1729E1B17620615",
+                      "bytes":  2144,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/terminal_ack_bridge_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/terminal_ack_bridge_tests.cpp",
+                      "sha256":  "49FE56921C5BC12E0EED9BA36A0C8AAEE4650BC64C0C691912253A523CC36FAB",
+                      "bytes":  13711,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/terminal_ack_producer_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/terminal_ack_producer_tests.cpp",
+                      "sha256":  "2D7142A3133BDA8BC0151FE3AE2042625237A89E2344A88F99CF3D3738D8696C",
+                      "bytes":  38231,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/terminal_ack_wire_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/terminal_ack_wire_tests.cpp",
+                      "sha256":  "9CFAC0EB32039F638F2588EAE563BE19845EBB1D480A920C5986A4275F401C1B",
+                      "bytes":  25773,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/standalone/vehicle_diag_scheduler_sync_contract_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/standalone/vehicle_diag_scheduler_sync_contract_tests.cpp",
+                      "sha256":  "6E9E5DBDCC6090B1F42AA9707A6554211D495F842C3CC158615AE086FE6DB700",
+                      "bytes":  11770,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/stress/phase5_stress_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/stress/phase5_stress_tests.cpp",
+                      "sha256":  "0541F9B7FB90FA72B79A9F44F2DE1F8AC3F1405F3A5ED1FF801434931AC5AFB4",
+                      "bytes":  59571,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/test_main.cpp",
+                      "destination":  "source_snapshot/tests/host/test_main.cpp",
+                      "sha256":  "60F30B1883C4DC49EEC67699C9A3BBA793BC1D49C7DD876C3D677DDFDA63BAC5",
+                      "bytes":  20327,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/test_support.hpp",
+                      "destination":  "source_snapshot/tests/host/test_support.hpp",
+                      "sha256":  "36B9F65D79A1951D94D7AA824077C159DC27E8C7A25206865D7AE0BA031E82E9",
+                      "bytes":  7577,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/buffer_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/buffer_tests.cpp",
+                      "sha256":  "247EA968D6C8636CB392D6CF24568BAC0B61CEB1E7A5A9410501965DD806C0F9",
+                      "bytes":  5585,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/bulk_data_codec_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/bulk_data_codec_tests.cpp",
+                      "sha256":  "7872E08E5075DEC8280AF7511109FC8D4CF5279F2A7D71F36A812E07AE8F7375",
+                      "bytes":  74422,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/bulk_heartbeat_policy_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/bulk_heartbeat_policy_tests.cpp",
+                      "sha256":  "A124C73E2986C3CC19A846BD32F0FA07908BA8B6DC1A9AB9C53EF06EB4FA95BB",
+                      "bytes":  21750,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/bulk_heartbeat_sla_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/bulk_heartbeat_sla_tests.cpp",
+                      "sha256":  "9B852DBFF02D432E3FF9AF70E6C405F0589D4DF4F10BFB2A1DD1F5D258E72751",
+                      "bytes":  14296,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/bulk_negotiation_codec_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/bulk_negotiation_codec_tests.cpp",
+                      "sha256":  "6B7564575AF3E0326007779AEB8DD0AE53EC0833E982F79AD8655C8B250A72D5",
+                      "bytes":  22033,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/bulk_session_controller_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/bulk_session_controller_tests.cpp",
+                      "sha256":  "91E45FB80CAB7D99567F7CC870F0FE327E9C040C8FDE0F58B00F5AF97EF68B82",
+                      "bytes":  42799,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/bulk_transcript_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/bulk_transcript_tests.cpp",
+                      "sha256":  "A28FCFAFC8AA569FC05C4C9E6A082D045AD18AEA4AFB08AB1D716B67FADB62B9",
+                      "bytes":  20982,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/bulk_tx_lease_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/bulk_tx_lease_tests.cpp",
+                      "sha256":  "94C778E4E17FECC4B94EC89ECB887C31A7B05ABC4D23B031B3444ED66D6047A5",
+                      "bytes":  40663,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/control_v2_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/control_v2_tests.cpp",
+                      "sha256":  "9594B3907D29128C0BB319D36BA1A720FC0EED003AF5AE421093DF18D3192121",
+                      "bytes":  49973,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/e220_startup_contract_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/e220_startup_contract_tests.cpp",
+                      "sha256":  "03678AE1208EB77BF827CA235D7A2191758D81BDE286F2D86844F99AAD4DC997",
+                      "bytes":  13368,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/embedded_adapter_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/embedded_adapter_tests.cpp",
+                      "sha256":  "D8D540FC33C2D069FE86EF58E87679792A3E999E124A5488D35CCF9467EC021F",
+                      "bytes":  35402,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/encoded_accounting_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/encoded_accounting_tests.cpp",
+                      "sha256":  "FC1B21A87745798BB132E61F810ED77B67329973642C3C80EE8DF2E0352C8160",
+                      "bytes":  4385,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/high_speed_phase6_adapter_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/high_speed_phase6_adapter_tests.cpp",
+                      "sha256":  "5768E0B4086CD66AAAE7503379ECAEF1B5AB478C10510350B92180D6AD1B402F",
+                      "bytes":  45822,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/high_speed_tdd_coordinator_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/high_speed_tdd_coordinator_tests.cpp",
+                      "sha256":  "A069726B08CCB2053B18D0EBE28B5D04E3A0E901985333ED7191A42F903A82CD",
+                      "bytes":  67590,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/late_uplink_recovery_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/late_uplink_recovery_tests.cpp",
+                      "sha256":  "59DA41A3C14FF4CDAB19EEF7FFC8FBB5A21D26334AA4568C765FD94A5286096E",
+                      "bytes":  42013,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/link_data_codec_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/link_data_codec_tests.cpp",
+                      "sha256":  "58DC529FB5F9C5BAB240810A130F6636ADF212A5EC648DFE1D09391E38C84DDE",
+                      "bytes":  10256,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/mavlink_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/mavlink_tests.cpp",
+                      "sha256":  "E839158E38D8721D7A788118D09A6A47EA294BEED42DBA4E5183F9546AB216DF",
+                      "bytes":  50085,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/phase6_bulk_rx_tail_ledger_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/phase6_bulk_rx_tail_ledger_tests.cpp",
+                      "sha256":  "1E06FA969EFEC48F93C0A5A0194C9C11462DB8C0C975639D5ED8B7711414030E",
+                      "bytes":  14177,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/phase6_high_speed_product_route_source_contract_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/phase6_high_speed_product_route_source_contract_tests.cpp",
+                      "sha256":  "92241C0A1408BC94D55CC9CCA44E5BC96280BC85896CFFCF043E1FAEAE2520E3",
+                      "bytes":  19821,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/phase6_high_speed_radio_session_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/phase6_high_speed_radio_session_tests.cpp",
+                      "sha256":  "E39CE1F40129B87F5E3195CD9ED868D598A5F1F9F0C4726FBBAEEF91300BA2E0",
+                      "bytes":  28342,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/phase6_high_speed_role_config_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/phase6_high_speed_role_config_tests.cpp",
+                      "sha256":  "BFB1FA8C37D3BC186A7896D041BBC32EFB5E72D9C06E59CBC2FE00BDEE3D6BF2",
+                      "bytes":  10977,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/phase6_product_writer_source_contract_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/phase6_product_writer_source_contract_tests.cpp",
+                      "sha256":  "7DD65670329C0DE1188F35F9C6B5A621E2851ED231061E3B508E267869A1710E",
+                      "bytes":  7485,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/phase6_radio_writer_arbiter_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/phase6_radio_writer_arbiter_tests.cpp",
+                      "sha256":  "7B5449C89C0CDBA7469206D11A3CD24F78A9B7329BF74EDE33C41DFAA41F4D5D",
+                      "bytes":  23464,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/r19_aux_readiness_record_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/r19_aux_readiness_record_tests.cpp",
+                      "sha256":  "8204FDA6836F1DBA0EBDDAB77DA61BAE5FCB210C7DC92F2DFE36F7A7913D76FF",
+                      "bytes":  19351,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/r19_grant_adapter_diagnostics_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/r19_grant_adapter_diagnostics_tests.cpp",
+                      "sha256":  "3F27EFD223A76056BFE4421CC6210A794709B63BB50FB73F7B06BF2BA1DE9514",
+                      "bytes":  10022,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/runtime_contract_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/runtime_contract_tests.cpp",
+                      "sha256":  "C5F4F9EC7A5E08226DA400AB1419A2D7E168A24B31F77EAE30A31AD928EEAEBC",
+                      "bytes":  21950,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/terminal_completion_ack_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/terminal_completion_ack_tests.cpp",
+                      "sha256":  "547BCDA33D28D54950716E282ADAAFCE9EB1FF7726A20672354C6B5EACD1C515",
+                      "bytes":  32266,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/unit_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/unit_tests.cpp",
+                      "sha256":  "0F50824CC475DAB0DD2E5F39DE5C38FC0B81D013718610979B1FA237E6B06F76",
+                      "bytes":  22400,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/uplink_guard_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/uplink_guard_tests.cpp",
+                      "sha256":  "2EF82E150404BAD3A8794D68D21FD48E1F52537682D504F83BA1DF721CC50C23",
+                      "bytes":  32997,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/uplink_residual_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/uplink_residual_tests.cpp",
+                      "sha256":  "95348E389580DFA3FEF926B33BD2514A22FDAC7F71DBBE5815799F3FAAECE478",
+                      "bytes":  7740,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/vehicle_boundary_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/vehicle_boundary_tests.cpp",
+                      "sha256":  "7EE7F78C9E2A6AA5320321C335600C30C8EEF1ADDDB8F4E4EEE866AAAB05C000",
+                      "bytes":  26457,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tests/host/unit/vehicle_parameter_priority_tests.cpp",
+                      "destination":  "source_snapshot/tests/host/unit/vehicle_parameter_priority_tests.cpp",
+                      "sha256":  "3110DD5834521BEC7F914B3FAC0037C07725C719F22BD3016BA93563B64073FC",
+                      "bytes":  57816,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDCR19Diagnostic.h",
+                      "destination":  "source_snapshot/third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDCR19Diagnostic.h",
+                      "sha256":  "786E36D9178F1976AC1A185E994ACAF00C8FCA75486A172BB22993A9B6B546EE",
+                      "bytes":  52973,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/build_r19_candidate_artifacts.ps1",
+                      "destination":  "source_snapshot/tools/build_r19_candidate_artifacts.ps1",
+                      "sha256":  "85B50E6882B125736360CC24C51E50B42B5BFDB05DCA9B4BD124607C402E6068",
+                      "bytes":  44546,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/r19_candidate_artifact_common.ps1",
+                      "destination":  "source_snapshot/tools/r19_candidate_artifact_common.ps1",
+                      "sha256":  "6EF245F7CBD3E121C0C24E27B6ABFE10AB3721630546DE2176C5D49D4383E9F0",
+                      "bytes":  36333,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/r19_continuous_reader.cs",
+                      "destination":  "source_snapshot/tools/r19_continuous_reader.cs",
+                      "sha256":  "B9C22B9E74F32E09C1210F976363CF4513C66F3131780B96972BEC48B1F907EF",
+                      "bytes":  23809,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/r19_host_readiness_wire.ps1",
+                      "destination":  "source_snapshot/tools/r19_host_readiness_wire.ps1",
+                      "sha256":  "91CEEF26F4CFF3E8DED4C6132CD274BDC325051592715D70CBAF08CDF71BCBE4",
+                      "bytes":  7713,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/r19_host_readiness_workflow.ps1",
+                      "destination":  "source_snapshot/tools/r19_host_readiness_workflow.ps1",
+                      "sha256":  "1B0740C84FE8B54C8F573846E6EBCDCDA7DF330565833500F1EE557CF11BD099",
+                      "bytes":  12934,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/r19_param_list_diagnostics.ps1",
+                      "destination":  "source_snapshot/tools/r19_param_list_diagnostics.ps1",
+                      "sha256":  "87111812DE5674B38F54C05D2A1771FDFC7B00CCE757F4C167CD74D594104E5B",
+                      "bytes":  18822,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/r19_startup_reader.cs",
+                      "destination":  "source_snapshot/tools/r19_startup_reader.cs",
+                      "sha256":  "939EF6C3333B1BC67782CFB02AEBFBC067EE6AAC7C789FB171F06C2B9F8A8C2E",
+                      "bytes":  7610,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/r19_timed_path_acquisition.ps1",
+                      "destination":  "source_snapshot/tools/r19_timed_path_acquisition.ps1",
+                      "sha256":  "AA47AB3BA1AE07B3196CF884CE840FF9CE5FF2BA876CB4500BA80F0C94237915",
+                      "bytes":  37599,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/r19_timed_path_outer.ps1",
+                      "destination":  "source_snapshot/tools/r19_timed_path_outer.ps1",
+                      "sha256":  "120D3531FAF2E6BC0107F54C655F9386F7ECCD3D0A14F6CE724AD9726C615ADE",
+                      "bytes":  20017,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/r19_timed_path_trace.ps1",
+                      "destination":  "source_snapshot/tools/r19_timed_path_trace.ps1",
+                      "sha256":  "09786F523F0A5DDBC7B84B377E620886A574D552CABBF5EA5CEE5B4F2890660A",
+                      "bytes":  22932,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/r19_usb_clock_correlation.ps1",
+                      "destination":  "source_snapshot/tools/r19_usb_clock_correlation.ps1",
+                      "sha256":  "B6759C777FCC4C3F2BB3F8D8DA7A890EF54043CA5ECC4A3DC1EB2937FB8DD1D1",
+                      "bytes":  12420,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/r19_usb_role_contract.ps1",
+                      "destination":  "source_snapshot/tools/r19_usb_role_contract.ps1",
+                      "sha256":  "10787A8D4064FC7370F40AE81BA3034E8D59F063E4D207E81B3E4F37FD020238",
+                      "bytes":  4870,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/read_r19_aux_readiness_record.ps1",
+                      "destination":  "source_snapshot/tools/read_r19_aux_readiness_record.ps1",
+                      "sha256":  "C011580259EA94F3092B1B3CCAF34DB30C4D9CA1158D2A51D2DC96EA76D880DF",
+                      "bytes":  22317,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/read_r19_diagnostic_usb_failure_record.ps1",
+                      "destination":  "source_snapshot/tools/read_r19_diagnostic_usb_failure_record.ps1",
+                      "sha256":  "26E15CAC70F9414F2EE3A43FBF44A820BC1F7B8DC41672EC81733A9B1CD54451",
+                      "bytes":  8407,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/read_r19_first_usb_failure_record.ps1",
+                      "destination":  "source_snapshot/tools/read_r19_first_usb_failure_record.ps1",
+                      "sha256":  "E11CDBF18EFA90F22BC9E69ADF357FD795396725EC0D2B091C759A69A929E47D",
+                      "bytes":  8232,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/read_r19_grant_diagnostic_record.ps1",
+                      "destination":  "source_snapshot/tools/read_r19_grant_diagnostic_record.ps1",
+                      "sha256":  "024B52920F2F91C0806988EE43968F0B90D189E82FC52F0D403C2025656EB4B0",
+                      "bytes":  15756,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/read_r19_runtime_stage_jtag.ps1",
+                      "destination":  "source_snapshot/tools/read_r19_runtime_stage_jtag.ps1",
+                      "sha256":  "B31EF744CD0B2E49DB2129C58EC6160FF8624062DB2E18F9B8FFAD87D50AC1BF",
+                      "bytes":  168266,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/read_r19_timed_path_record.ps1",
+                      "destination":  "source_snapshot/tools/read_r19_timed_path_record.ps1",
+                      "sha256":  "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C",
+                      "bytes":  5949,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/run_host_tests.ps1",
+                      "destination":  "source_snapshot/tools/run_host_tests.ps1",
+                      "sha256":  "36155922C60C492DAEA5D4945524DBD3254B6DEA35E0FCEB95A23607187BCDBC",
+                      "bytes":  2639,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/run_r19_timed_path_capture.ps1",
+                      "destination":  "source_snapshot/tools/run_r19_timed_path_capture.ps1",
+                      "sha256":  "DB6CC99BF72DE4AD76696577C4FF79BC7EE6EDA3A70559476923E7DB4B0CC094",
+                      "bytes":  44916,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "tools/verify_r19_candidate_artifact.ps1",
+                      "destination":  "source_snapshot/tools/verify_r19_candidate_artifact.ps1",
+                      "sha256":  "4C4DC9312621B3547C70B2A749744E241AFE32234AD30869EE8F7C98CC71A86C",
+                      "bytes":  48493,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "vc_lora_ground_xiao_esp32s3/vc_lora_ground_xiao_esp32s3.ino",
+                      "destination":  "source_snapshot/vc_lora_ground_xiao_esp32s3/vc_lora_ground_xiao_esp32s3.ino",
+                      "sha256":  "33723E560F44D4D528C10425B62F8D36CCBF790D0B3ADFAB6615D01B575DE040",
+                      "bytes":  259,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  },
+                  {
+                      "source":  "vc_lora_vehicle_xiao_esp32s3/vc_lora_vehicle_xiao_esp32s3.ino",
+                      "destination":  "source_snapshot/vc_lora_vehicle_xiao_esp32s3/vc_lora_vehicle_xiao_esp32s3.ino",
+                      "sha256":  "B48C2E5197A7BF6F5C8B0896BACC7517997567FFDDBC835651C1FE56A88003B7",
+                      "bytes":  289,
+                      "representation":  "BYTE_IDENTICAL_ORIGINAL"
+                  }
+              ]
+}

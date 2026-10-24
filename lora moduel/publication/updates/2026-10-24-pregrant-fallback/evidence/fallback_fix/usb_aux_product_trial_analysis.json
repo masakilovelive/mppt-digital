@@ -1,0 +1,1147 @@
+{
+  "schema": "vc-lora-r19-usb-aux-product-trial-analysis-v1",
+  "mode": "saved-evidence-only",
+  "hardware_operations_performed_by_this_analysis": false,
+  "source_run": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261024T140809428Z-fixed-pregrant-r18-fallback-param-once",
+  "candidate_id": "20261024T134821302Z-9e36e182",
+  "bridge_source_sha256": "896D1014C6BB75686F5A4EA0D5F5DA4A98E7DE83541E0288E3D6ED6226E9168E",
+  "overall": {
+    "offline_consistency_checks": 17,
+    "offline_consistency_passed": 17,
+    "offline_consistency_failed": 0,
+    "product_outcome": "PARTIAL_IMPROVEMENT_PRE_GRANT_FAILURE_NO_LONGER_PREVENTS_STANDARD_ROUTE_PROGRESS",
+    "high_speed_932_in_30s_pass": false,
+    "product_acceptance": false,
+    "deployment_authorized": false,
+    "all_error_zero": false,
+    "conclusion": "The local 501 ms fresh-Grant failure remains, but this trial continued validated Heartbeat delivery and received six PARAM_VALUE frames through the bound fallback-capable firmware. It did not achieve 932 parameters in30s. AUX timeout did not recur. Diagnostic USB backpressure/timeouts remain a separate unresolved issue.",
+    "outer_pass_semantics": "Capture/diagnostic/restore workflow success, not high-speed product acceptance.",
+    "r18_restore_scope": "Root reported the parent rollback proof true. This report does not redo hardware readback; see saved parent and rollback evidence."
+  },
+  "capture": {
+    "result": "CAPTURE_COMPLETE_OBSERVATIONS_ONLY",
+    "started_utc": "2026-10-24T14:09:24.9957381Z",
+    "completed_utc": "2026-10-24T14:10:11.8202532Z",
+    "measurement_start_ticks": "65406009",
+    "measurement_end_ticks": "465424031",
+    "pc_tick_frequency": "10000000",
+    "measured_duration_seconds": 40.0018022,
+    "serial_write_calls": 4,
+    "writes_explained": [
+      "Vehicle ClockRequest",
+      "Ground ClockRequest",
+      "Ground Arm",
+      "One Ground PARAM_REQUEST_LIST"
+    ],
+    "cleanup_proven": true,
+    "raw_parser": {
+      "method": "Independent linear MAVLink parsing of saved raw bytes; X25 CRC over headers/payload plus canonical CRC extra, using ids0=50,22=220,42=28,111=34,253=83. Frame completion time is the saved reader-block end containing the frame's final byte.",
+      "frames_crc_valid_total": 131,
+      "roles": [
+        {
+          "role": "vehicle",
+          "raw_bytes": 2674,
+          "sha256": "79539C60EFCE5D1436C66E42C34E5A2E55BA9F1310F01520ACE320DC6E41474B",
+          "all_bytes_accounted": true,
+          "skipped_count": 0,
+          "bad": [],
+          "frame_count": 43,
+          "counts": [
+            {
+              "message_id": 111,
+              "count": 1
+            },
+            {
+              "message_id": 253,
+              "count": 42
+            }
+          ],
+          "primary_hb_count": 0,
+          "primary_hb_distinct_sha_count": 0,
+          "primary_hb_observations_match": true
+        },
+        {
+          "role": "ground",
+          "raw_bytes": 3710,
+          "sha256": "91F84005CCB6D7475ECDDEC00BA333FB9BAA23471A22338637F42E7794BCAEB0",
+          "all_bytes_accounted": true,
+          "skipped_count": 0,
+          "bad": [],
+          "frame_count": 88,
+          "counts": [
+            {
+              "message_id": 253,
+              "count": 42
+            },
+            {
+              "message_id": 111,
+              "count": 1
+            },
+            {
+              "message_id": 0,
+              "count": 37
+            },
+            {
+              "message_id": 42,
+              "count": 2
+            },
+            {
+              "message_id": 22,
+              "count": 6
+            }
+          ],
+          "primary_hb_count": 37,
+          "primary_hb_distinct_sha_count": 33,
+          "primary_hb_observations_match": true
+        }
+      ],
+      "partial_truncated_or_bad_crc_frames": 0,
+      "raw_coverage_limit": "Only saved PC receive bytes; no RF packet waveform or guaranteed device-to-PC clock bounds."
+    }
+  },
+  "primary_heartbeat": {
+    "source_system": 1,
+    "source_component": 1,
+    "count": 37,
+    "distinct_wire_sha256_count": 33,
+    "first_offset": 157,
+    "last_offset": 3589,
+    "first_read_completed_ticks": "73222367",
+    "last_read_completed_ticks": "456991535",
+    "maximum_pc_interarrival_gap": {
+      "previous_offset": 157,
+      "next_offset": 367,
+      "previous_ticks": "73222367",
+      "next_ticks": "94221634",
+      "gap_ms": 2099.9267
+    },
+    "below_2500ms": true,
+    "first_from_measurement_start_ms": 781.6358,
+    "last_from_measurement_start_ms": 39158.5526,
+    "tail_after_last_hb_to_capture_end_ms": 843.2496,
+    "first_product_usb": {
+      "record_sha256": "4D1D54B7E5E204212AA8DA9795F2AD31F615ED0DDBFC41B7C7638C521115CEBA",
+      "ready_arm_accepted": true,
+      "usb_completed": true,
+      "usb_failed": false,
+      "budget_ms": 106,
+      "enqueue_us": "12717934",
+      "terminal_us": "12718421",
+      "enqueue_to_terminal_us": 487,
+      "frame_sha256": "532C9FCB150F917D216ABC456CB75854B094A3268BFDACF5B4F7C65B6B6EEDF3",
+      "exact_raw_first_heartbeat_bound": true,
+      "scope": "First armed product Heartbeat only, not the duration/error history of all product and diagnostic USB writes."
+    },
+    "rf_freshness": {
+      "per_frame_rf_receive_timestamp_available": false,
+      "independent_fresh_rf_heartbeat_count_proven": false,
+      "physical_rf_loss_rate_or_latency_proven": false,
+      "bound_source_design": "GroundUsbHeartbeatPacer ingests validated primary RF Heartbeat frames and releases byte-exact retained frames. It schedules genuine received frames; it does not create a new local primary Heartbeat every second.",
+      "limitation": "The37 USB arrivals show PC-side liveness and valid source1/component1 frames. Their local pacing/timing is not the same measurement as fresh RF arrivals. Four repeated wire hashes can also arise from8-bit MAVLink sequence wrap with constant payload and are not proof of retransmission or freshness. Current RAM capture lacks each pacer entry's RF receive time."
+    }
+  },
+  "parameters": {
+    "request_attempts": 1,
+    "request": {
+      "write_started_ticks": "73495146",
+      "write_returned_ticks": "73749145",
+      "accepted_bytes": 14,
+      "api_exception_type": "",
+      "exception_type": "",
+      "local_write_api_accepted_only": true,
+      "delivery_proven": false,
+      "raw_offset_at_write_start": "178",
+      "request_frame_hex": "FD02000063FFBE1500000101D507",
+      "expected_bytes": 14,
+      "frame_sha256": "FC3A47A83D35D44E96E044A216FDBF082805F9FACCDD5E4B9252E0C7026D4A75"
+    },
+    "local_vs_remote": "The14-byte write return proves only local API acceptance. Six independent CRC-valid PARAM_VALUE frames with indices0..5 and param_count932 show remote-source response progress in this run. The request frame itself was not independently captured at Pixhawk RX, and causality is not a cryptographic delivery acknowledgment.",
+    "at30s": {
+      "unique_count": 4,
+      "target_count": 932,
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "all_932_received": false,
+      "deadline_ticks": "373495146",
+      "result": "INCOMPLETE_PARAMETERS",
+      "error_counters": {
+        "bad_crc": 0,
+        "bad_length": 0,
+        "unsupported_flags": 0,
+        "unsupported_signed": 0,
+        "invalid_source": 0,
+        "invalid_count": 0,
+        "invalid_index": 0,
+        "invalid_id": 0,
+        "invalid_type": 0,
+        "duplicate_index": 0,
+        "duplicate_id": 0,
+        "noise_bytes": 0,
+        "partial_frame": 0,
+        "total": 0
+      }
+    },
+    "at_capture_end": {
+      "unique_count": 6,
+      "target_count": 932,
+      "indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "all_932_received": false,
+      "result": "INCOMPLETE_PARAMETERS",
+      "error_counters": {
+        "bad_crc": 0,
+        "bad_length": 0,
+        "unsupported_flags": 0,
+        "unsupported_signed": 0,
+        "invalid_source": 0,
+        "invalid_count": 0,
+        "invalid_index": 0,
+        "invalid_id": 0,
+        "invalid_type": 0,
+        "duplicate_index": 0,
+        "duplicate_id": 0,
+        "noise_bytes": 0,
+        "partial_frame": 0,
+        "total": 0
+      },
+      "coverage": "INGESTED_RAW_PREFIX_ONLY"
+    },
+    "ledger": [
+      {
+        "index": 0,
+        "param_id": "FORMAT_VERSION",
+        "param_count": 932,
+        "mavlink_sequence": 144,
+        "raw_offset": 1094,
+        "frame_bytes": 37,
+        "source_system": 1,
+        "source_component": 1,
+        "crc_valid": true,
+        "frame_sha256": "28EEB122B8D3344175686BDB5F90C91BCC59FB4697A36F4BBD6557CFFD810F82",
+        "read_completed_ticks": "174802412",
+        "seconds_from_request_write_start": 10.1307266
+      },
+      {
+        "index": 1,
+        "param_id": "LOG_BITMASK",
+        "param_count": 932,
+        "mavlink_sequence": 145,
+        "raw_offset": 1572,
+        "frame_bytes": 37,
+        "source_system": 1,
+        "source_component": 1,
+        "crc_valid": true,
+        "frame_sha256": "D6DBB5282F9D10280D76A7214CE8A8A7B8043681A85A8696385E5CB8AA1B3AA8",
+        "read_completed_ticks": "233441357",
+        "seconds_from_request_write_start": 15.9946211
+      },
+      {
+        "index": 2,
+        "param_id": "RST_SWITCH_CH",
+        "param_count": 932,
+        "mavlink_sequence": 146,
+        "raw_offset": 2092,
+        "frame_bytes": 37,
+        "source_system": 1,
+        "source_component": 1,
+        "crc_valid": true,
+        "frame_sha256": "637A22388BD26DAE587C08E007AFFAF9DCF95140BCE7B61AA832D5BD6C424646",
+        "read_completed_ticks": "286585668",
+        "seconds_from_request_write_start": 21.3090522
+      },
+      {
+        "index": 3,
+        "param_id": "INITIAL_MODE",
+        "param_count": 932,
+        "mavlink_sequence": 147,
+        "raw_offset": 2612,
+        "frame_bytes": 37,
+        "source_system": 1,
+        "source_component": 1,
+        "crc_valid": true,
+        "frame_sha256": "C4A81D2F3B4E2251A0E6959AA739F2444CD332AE0130FC853847A80C63EC59FF",
+        "read_completed_ticks": "345241316",
+        "seconds_from_request_write_start": 27.174617
+      },
+      {
+        "index": 4,
+        "param_id": "GCS_PID_MASK",
+        "param_count": 932,
+        "mavlink_sequence": 148,
+        "raw_offset": 3090,
+        "frame_bytes": 37,
+        "source_system": 1,
+        "source_component": 1,
+        "crc_valid": true,
+        "frame_sha256": "BBF4E29D513A93E82148243BA10911AB70D880DF18B6306879541154D7D885CE",
+        "read_completed_ticks": "403863967",
+        "seconds_from_request_write_start": 33.0368821
+      },
+      {
+        "index": 5,
+        "param_id": "AUTO_TRIGGER_PIN",
+        "param_count": 932,
+        "mavlink_sequence": 149,
+        "raw_offset": 3610,
+        "frame_bytes": 37,
+        "source_system": 1,
+        "source_component": 1,
+        "crc_valid": true,
+        "frame_sha256": "D35E848ADA3B8390D184C4BCDCADA7E3EEB6EB133334DCB1F0FA44DFB7EFDD4C",
+        "read_completed_ticks": "456999497",
+        "seconds_from_request_write_start": 38.3504351
+      }
+    ],
+    "no_extrapolated_completion_claim": true,
+    "fallback_count_hardware_proven": false,
+    "fallback_count_limitation": "No direct fallback queue-insertion/counter RAM field exists in this diagnostic ABI; one PC request plus six responses must not be relabeled as a measured exactly-one MCU fallback queue insertion."
+  },
+  "grant_and_runtime": {
+    "ground_record_sha256": "C4FD8ECF01EA6D9B38FB0709131A73FEE5F31197AF528CD1447429498DA5045A",
+    "ground_first_failure": {
+      "event": 5,
+      "event_name": "Tick",
+      "validity_flags": 31,
+      "owner_state_before": 2,
+      "owner_state_after": 9,
+      "owner_state_before_name": "AwaitFreshGrant",
+      "owner_state_after_name": "FailClosed",
+      "coordinator_state_before": 2,
+      "coordinator_state_after": 14,
+      "coordinator_state_before_name": "AwaitFreshGrant",
+      "coordinator_state_after_name": "FailClosed",
+      "owner_result": 25,
+      "owner_result_observed": true,
+      "owner_last_error": 25,
+      "owner_result_name": "GrantDeadlineExceeded",
+      "owner_last_error_name": "GrantDeadlineExceeded",
+      "coordinator_result": 15,
+      "coordinator_result_observed": true,
+      "coordinator_last_error": 15,
+      "coordinator_result_name": "GrantDeadlineExceeded",
+      "coordinator_last_error_name": "GrantDeadlineExceeded",
+      "adapter_status": 26,
+      "adapter_failure_reason": 26,
+      "observed_ms": "13271",
+      "adapter_status_name": "FailClosed",
+      "adapter_failure_reason_name": "FailClosed",
+      "request_origin_ms": "12770",
+      "await_fresh_grant_started_ms": "12770",
+      "standard_grant_observed_ms": "11252",
+      "fresh_grant_observed_ms": null,
+      "coordinator_grant_staged_ms": null,
+      "standard_grant_session": 647,
+      "standard_grant_cycle": 2,
+      "fresh_grant_session": null,
+      "fresh_grant_cycle": null,
+      "source_line": 2365,
+      "action_token": null,
+      "generation": null,
+      "disposition": null
+    },
+    "await_to_local_error_ms": 501,
+    "local_adapter_error_confirmed": "Both recorded owner/coordinator last_error are GrantDeadlineExceeded; the recorded deadline error is real and is not fixed by lengthening a timeout.",
+    "upstream_grant_absence_cause_proven": false,
+    "fresh_grant_observation": null,
+    "vehicle_grant_journal": {
+      "count": 10,
+      "dropped": 20,
+      "complete": false,
+      "latest_wire_event": {
+        "event": 8,
+        "event_name": "GrantPhysicalTail",
+        "validity_flags": 16,
+        "owner_state_before": 0,
+        "owner_state_after": 0,
+        "owner_state_before_name": "Disabled",
+        "owner_state_after_name": "Disabled",
+        "coordinator_state_before": 0,
+        "coordinator_state_after": 0,
+        "coordinator_state_before_name": "Disabled",
+        "coordinator_state_after_name": "Disabled",
+        "owner_result": null,
+        "owner_result_observed": false,
+        "owner_last_error": 0,
+        "owner_result_name": "NotObserved",
+        "owner_last_error_name": "NoAction",
+        "coordinator_result": null,
+        "coordinator_result_observed": false,
+        "coordinator_last_error": 0,
+        "coordinator_result_name": "NotObserved",
+        "coordinator_last_error_name": "NoAction",
+        "adapter_status": 0,
+        "adapter_failure_reason": 0,
+        "observed_ms": "66058",
+        "adapter_status_name": "NoAction",
+        "adapter_failure_reason_name": "NoAction",
+        "request_origin_ms": null,
+        "await_fresh_grant_started_ms": null,
+        "standard_grant_observed_ms": "66058",
+        "fresh_grant_observed_ms": null,
+        "coordinator_grant_staged_ms": null,
+        "standard_grant_session": 647,
+        "standard_grant_cycle": 9,
+        "fresh_grant_session": null,
+        "fresh_grant_cycle": null,
+        "source_line": 2776,
+        "action_token": 92,
+        "generation": 92,
+        "disposition": 0
+      },
+      "limitation": "Wire-event zero adapter-state words are unavailable placeholders, not Disabled/NoAction proof. Dropped events prohibit inferring absence near the Ground failure."
+    },
+    "ground_alive_samples": {
+      "total": 41,
+      "adapter_failure_bit_true": 39,
+      "first_adapter_failure_sample": {
+        "offset": 241,
+        "sequence": 4,
+        "mcu_ms": 13792,
+        "status": "000100040080",
+        "adapter_failed": true,
+        "read_completed_ticks": "83969298"
+      },
+      "last": {
+        "offset": 3647,
+        "sequence": 42,
+        "mcu_ms": 51814,
+        "status": "000100040080",
+        "adapter_failed": true,
+        "read_completed_ticks": "464172905"
+      },
+      "r19f_received": 0
+    },
+    "global_runtime_fail_closed_direct_ram_field_available": false,
+    "runtime_continuity_interpretation": "Later primary Heartbeats, PARAM_VALUE and R19A continue after the local adapter failure under the source-bound fallback design. No R19F was captured. This supports continued standard-route execution; a direct runtime_fail_closed Boolean or fallback count was not acquired.",
+    "transport_latch_distinction": "runtime-stage first_failure0x54520010/FlushFailed records diagnostic USB transport failure and does not itself set global runtime_fail_closed. It must not be interpreted as a product runtime stop."
+  },
+  "auxiliary_and_usb": {
+    "roles": [
+      {
+        "role": "vehicle",
+        "aux_raw_sha256": "501E79C61D157280B5CD83BFF5CDEB15580D49F4E6C5E2A05E582497FC34B15D",
+        "auxiliary_observation": {
+          "poll_count": 1026130,
+          "first_low_us": null,
+          "first_high_us": "832837",
+          "last_gpio_begin_us": "68738889",
+          "last_gpio_end_us": "68738893",
+          "maximum_poll_gap_us": "111005",
+          "maximum_gap_previous_end_us": "23793895",
+          "maximum_gap_next_begin_us": "23904900",
+          "last_aux_level": 1,
+          "uart_calls": 92,
+          "last_requested_bytes": 32,
+          "last_written_bytes": 32,
+          "last_uart_begin_us": "65508335",
+          "last_uart_end_us": "65508377",
+          "fault_code": 0,
+          "first_fault_latched": false,
+          "transaction_sequence": 92,
+          "transaction_accepted_us": "65508377",
+          "transaction_first_low_us": null,
+          "transaction_first_high_us": "65508397"
+        },
+        "edge_evidence": {
+          "event_count": 0,
+          "history_used": 0,
+          "history_capacity": 120,
+          "overflow_count": 0,
+          "initial_level": 1,
+          "initial_us": "5501",
+          "first_edge_us": null,
+          "last_edge_us": null,
+          "continuous_interrupt_coverage_proven": false
+        },
+        "busy_vs_observation_delay": {
+          "verdict": "UNKNOWN",
+          "physical_busy_proven": false,
+          "observation_delay_root_cause_proven": false,
+          "reasons": [
+            "ISR events show observed digital transitions only; continuous interrupt and physical waveform coverage are not independently proven.",
+            "Ordinal/event sequence is not physical ordering across independent writers; compare same-clock brackets and retain overlaps as ambiguous.",
+            "AUX LOW alone is not proof of RF airtime or E220 hardware failure."
+          ]
+        },
+        "first_product_usb_failure_latched": false,
+        "diagnostic_usb_failure": {
+          "raw_sha256": "F46AD269F2244C32B5D2F4E2435E14CA9017B26705607FBC69EBAC98379D6360",
+          "failure_latched": true,
+          "physical_fifo_fault_proven": false,
+          "immutable_first_failure": {
+            "reason": 16,
+            "source_line": 5318,
+            "action": 2,
+            "diagnostic_sequence": 1,
+            "bootstrap_flags": 6,
+            "expected_epoch": 1,
+            "observed_epoch": 1,
+            "budget_ms": 93,
+            "attempt_id": 6,
+            "wrapper_flags": 21,
+            "api_called": true,
+            "raw_return": false,
+            "sdk_context_matches": true,
+            "failure_observed_us": "2580884",
+            "started_us": "2487980",
+            "finished_us": "2580869",
+            "deadline_us": "2580000",
+            "expected_frame_bytes": 63,
+            "accepted_frame_bytes": 63,
+            "sdk": {
+              "schema": 1,
+              "validity_flags": 127,
+              "transaction_token": 2,
+              "attempt_id": 6,
+              "terminal_reason": 5,
+              "timeout_ms": 93,
+              "expected_loss_epoch": 1,
+              "started_ms": 2487,
+              "finished_ms": 2580,
+              "lock_wait_ms": 0,
+              "elapsed_ms": 93,
+              "raw_return": 0,
+              "state_flags": 22,
+              "observed_loss_epoch": 1,
+              "ring_pending_bytes": 31,
+              "stash_pending_bytes": 0,
+              "publish_generation": 3,
+              "pickup_generation": 2,
+              "raw_interrupt_status": 256,
+              "interrupt_enable_mask": 524,
+              "flush_blocker_mask": 28,
+              "snapshot_started_ms": 2580,
+              "snapshot_finished_ms": 2580,
+              "snapshot_duration_us": 5,
+              "call_context_matches": true,
+              "snapshot_observed": true,
+              "lock_acquired": true,
+              "matching_terminal_snapshot": true,
+              "terminal_name": "LoopTimeout"
+            }
+          }
+        },
+        "endpoint_last_committed_event": {
+          "semantics": "last-committed-diagnostic-event-not-live-hardware-state",
+          "pending_bytes": {
+            "ring": 31,
+            "stash": 0
+          },
+          "generations": {
+            "publish": 106,
+            "pickup": 105,
+            "relationship": "publish-is-one-ahead-modulo-uint32"
+          },
+          "counters": {
+            "fifo_write_attempt": 106,
+            "fifo_write_bytes": 3021,
+            "fifo_zero_write": 0,
+            "wr_done": 106,
+            "in_empty_irq": 106,
+            "payload_in_empty": 105,
+            "bus_reset": 0,
+            "flush_attempt": 248,
+            "flush_success": 48,
+            "flush_timeout": 199,
+            "flush_abort_inferred": 0,
+            "zlp_flush": 0
+          },
+          "flush_blockers": {
+            "mask": "0x0000001c",
+            "names": [
+              "SoftwarePending",
+              "FifoNotWritable",
+              "PayloadPickupPending"
+            ]
+          },
+          "classification": "flush-blocked",
+          "live_hardware_state_proven": false
+        },
+        "runtime_transport_first_failure": {
+          "code": "0x54520010",
+          "name": "FlushFailed",
+          "stage_mask": "0x00007fff",
+          "detail": 2580
+        }
+      },
+      {
+        "role": "ground",
+        "aux_raw_sha256": "49AF88B0F7935779F9E2A94DF7C645F5E8E0B2934B10B09A0B991143FCB797FD",
+        "auxiliary_observation": {
+          "poll_count": 535456,
+          "first_low_us": "2103963",
+          "first_high_us": "832637",
+          "last_gpio_begin_us": "64214892",
+          "last_gpio_end_us": "64214893",
+          "maximum_poll_gap_us": "100591",
+          "maximum_gap_previous_end_us": "52814339",
+          "maximum_gap_next_begin_us": "52914930",
+          "last_aux_level": 1,
+          "uart_calls": 8,
+          "last_requested_bytes": 32,
+          "last_written_bytes": 32,
+          "last_uart_begin_us": "47088545",
+          "last_uart_end_us": "47088594",
+          "fault_code": 0,
+          "first_fault_latched": false,
+          "transaction_sequence": 8,
+          "transaction_accepted_us": "47088594",
+          "transaction_first_low_us": "47088721",
+          "transaction_first_high_us": "47088613"
+        },
+        "edge_evidence": {
+          "event_count": 204,
+          "history_used": 120,
+          "history_capacity": 120,
+          "overflow_count": 84,
+          "initial_level": 1,
+          "initial_us": "5551",
+          "first_edge_us": "20663",
+          "last_edge_us": "64165361",
+          "continuous_interrupt_coverage_proven": false
+        },
+        "busy_vs_observation_delay": {
+          "verdict": "UNKNOWN",
+          "physical_busy_proven": false,
+          "observation_delay_root_cause_proven": false,
+          "reasons": [
+            "ISR events show observed digital transitions only; continuous interrupt and physical waveform coverage are not independently proven.",
+            "Ordinal/event sequence is not physical ordering across independent writers; compare same-clock brackets and retain overlaps as ambiguous.",
+            "AUX LOW alone is not proof of RF airtime or E220 hardware failure."
+          ]
+        },
+        "first_product_usb_failure_latched": false,
+        "diagnostic_usb_failure": {
+          "raw_sha256": "A639A4E5781616EEB419495D1D0F2DE0EF945C085DD9D31E7D147DEA579651ED",
+          "failure_latched": true,
+          "physical_fifo_fault_proven": false,
+          "immutable_first_failure": {
+            "reason": 16,
+            "source_line": 5318,
+            "action": 2,
+            "diagnostic_sequence": 43,
+            "bootstrap_flags": 6,
+            "expected_epoch": 1,
+            "observed_epoch": 1,
+            "budget_ms": 100,
+            "attempt_id": 54,
+            "wrapper_flags": 21,
+            "api_called": true,
+            "raw_return": false,
+            "sdk_context_matches": true,
+            "failure_observed_us": "53314898",
+            "started_us": "53214924",
+            "finished_us": "53314884",
+            "deadline_us": "53314000",
+            "expected_frame_bytes": 63,
+            "accepted_frame_bytes": 63,
+            "sdk": {
+              "schema": 1,
+              "validity_flags": 127,
+              "transaction_token": 44,
+              "attempt_id": 54,
+              "terminal_reason": 5,
+              "timeout_ms": 100,
+              "expected_loss_epoch": 1,
+              "started_ms": 53214,
+              "finished_ms": 53314,
+              "lock_wait_ms": 0,
+              "elapsed_ms": 100,
+              "raw_return": 0,
+              "state_flags": 22,
+              "observed_loss_epoch": 1,
+              "ring_pending_bytes": 59,
+              "stash_pending_bytes": 0,
+              "publish_generation": 156,
+              "pickup_generation": 155,
+              "raw_interrupt_status": 258,
+              "interrupt_enable_mask": 524,
+              "flush_blocker_mask": 28,
+              "snapshot_started_ms": 53314,
+              "snapshot_finished_ms": 53314,
+              "snapshot_duration_us": 5,
+              "call_context_matches": true,
+              "snapshot_observed": true,
+              "lock_acquired": true,
+              "matching_terminal_snapshot": true,
+              "terminal_name": "LoopTimeout"
+            }
+          }
+        },
+        "endpoint_last_committed_event": {
+          "semantics": "last-committed-diagnostic-event-not-live-hardware-state",
+          "pending_bytes": {
+            "ring": 59,
+            "stash": 0
+          },
+          "generations": {
+            "publish": 156,
+            "pickup": 155,
+            "relationship": "publish-is-one-ahead-modulo-uint32"
+          },
+          "counters": {
+            "fifo_write_attempt": 156,
+            "fifo_write_bytes": 3840,
+            "fifo_zero_write": 0,
+            "wr_done": 156,
+            "in_empty_irq": 156,
+            "payload_in_empty": 155,
+            "bus_reset": 0,
+            "flush_attempt": 209,
+            "flush_success": 90,
+            "flush_timeout": 118,
+            "flush_abort_inferred": 0,
+            "zlp_flush": 0
+          },
+          "flush_blockers": {
+            "mask": "0x0000001c",
+            "names": [
+              "SoftwarePending",
+              "FifoNotWritable",
+              "PayloadPickupPending"
+            ]
+          },
+          "classification": "flush-blocked",
+          "live_hardware_state_proven": false
+        },
+        "runtime_transport_first_failure": {
+          "code": "0x54520010",
+          "name": "FlushFailed",
+          "stage_mask": "0x00007fff",
+          "detail": 53314
+        }
+      }
+    ],
+    "no_aux_timeout_recurrence_this_run": true,
+    "physical_busy_or_gpio_failure_proven": false,
+    "ground_same_clock_order_us": {
+      "clock_request": "12278298",
+      "arm_accepted": "12508851",
+      "first_product_heartbeat_enqueue": "12717934",
+      "first_product_heartbeat_terminal": "12718421",
+      "parameter_request_origin": "12770000",
+      "grant_deadline_error": "13271000",
+      "last_received_alive_sample": "51814000",
+      "diagnostic_usb_first_failure_observed": "53314898",
+      "last_aux_poll_end": "64214893"
+    },
+    "vehicle_startup_order_us": {
+      "diagnostic_usb_first_failure_observed": "2580884",
+      "matched_clock_response_device_timestamp": "25421217",
+      "startup_before_clock_response": true
+    },
+    "ground_max_aux_gap_vs_diagnostic_interval": {
+      "gap_begin_us": "52814339",
+      "gap_end_us": "52914930",
+      "gap_us": 100591,
+      "diagnostic_begin_us": "52814392",
+      "diagnostic_end_us": "52914911",
+      "diagnostic_us": 100519,
+      "overlap_us": 100519,
+      "interpretation": "The longest recorded diagnostic interval sits inside the longest Ground AUX polling gap on the same MCU clock. This supports a blocking-time association; no AUX fault occurred, and overlap alone does not establish a physical E220 Busy fault or sole causation."
+    },
+    "chronology_limits": [
+      "Vehicle immutable first diagnostic failure is before its matched clock-response timestamp on the same MCU boot; this is startup-phase evidence.",
+      "Ground immutable first diagnostic failure is later than Grant failure and the last received R19A on its MCU clock. The last R19A was received125.1126ms before the capture end.",
+      "The capture workflows report UNKNOWN_NO_OFFSET_BOUNDS. These saved observations cannot strictly prove the first Ground diagnostic failure occurred after PC read stop/COM close, nor which side caused backpressure.",
+      "Ground pending59 bytes is the actual first-failure snapshot, not31. Vehicle pending31 bytes remains. Neither proves physical FIFO damage.",
+      "Endpoint snapshots are last committed event states, not live hardware. Flush timeout counters include startup/diagnostic/end conditions and cannot be counted as product Heartbeat failures.",
+      "No oscilloscope trace was acquired. Ground edge history overflow84 and unproven continuous ISR coverage prevent claiming a complete physical AUX waveform; Vehicle zero edge history does not prove no physical LOW occurred."
+    ],
+    "all_error_zero_guardrail": "Not met: adapter GrantDeadlineExceeded and diagnostic USB timeouts remain even though PARAM ledger parser/CRC counters are zero."
+  },
+  "integrity": {
+    "raw_pairs": [
+      {
+        "first": "stage_ground/runtime-stage-first.bin",
+        "second": "stage_ground/runtime-stage-second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_ground/endpoint-fifo-first.bin",
+        "second": "stage_ground/endpoint-fifo-second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_ground/hwcdc-restart-first.bin",
+        "second": "stage_ground/hwcdc-restart-second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_ground/ground-usb-commit-first.bin",
+        "second": "stage_ground/ground-usb-commit-second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_ground/first-usb-failure-first.bin",
+        "second": "stage_ground/first-usb-failure-second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_ground/timed_path_first.bin",
+        "second": "stage_ground/timed_path_second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_ground/aux_readiness_first.bin",
+        "second": "stage_ground/aux_readiness_second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_ground/diagnostic_usb_failure_first.bin",
+        "second": "stage_ground/diagnostic_usb_failure_second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_ground/grant_diagnostic_first.bin",
+        "second": "stage_ground/grant_diagnostic_second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_vehicle/runtime-stage-first.bin",
+        "second": "stage_vehicle/runtime-stage-second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_vehicle/endpoint-fifo-first.bin",
+        "second": "stage_vehicle/endpoint-fifo-second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_vehicle/hwcdc-restart-first.bin",
+        "second": "stage_vehicle/hwcdc-restart-second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_vehicle/ground-usb-commit-first.bin",
+        "second": "stage_vehicle/ground-usb-commit-second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_vehicle/first-usb-failure-first.bin",
+        "second": "stage_vehicle/first-usb-failure-second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_vehicle/timed_path_first.bin",
+        "second": "stage_vehicle/timed_path_second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_vehicle/aux_readiness_first.bin",
+        "second": "stage_vehicle/aux_readiness_second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_vehicle/diagnostic_usb_failure_first.bin",
+        "second": "stage_vehicle/diagnostic_usb_failure_second.bin",
+        "identical": true
+      },
+      {
+        "first": "stage_vehicle/grant_diagnostic_first.bin",
+        "second": "stage_vehicle/grant_diagnostic_second.bin",
+        "identical": true
+      }
+    ],
+    "all_record_pairs_identical": true,
+    "files": [
+      {
+        "relative_path": "summary.json",
+        "bytes": 940984,
+        "sha256": "0D354207D9D7A86083DC4899AE2649399BF0C9B90F1FE42CB67C14B5AEAE5322"
+      },
+      {
+        "relative_path": "capture/summary.json",
+        "bytes": 910232,
+        "sha256": "79673B52BB01434B9F86D1BB2303AC8057D63F507E8EF8AC42E2D9E3A8337E14"
+      },
+      {
+        "relative_path": "capture/ground.raw.bin",
+        "bytes": 3710,
+        "sha256": "91F84005CCB6D7475ECDDEC00BA333FB9BAA23471A22338637F42E7794BCAEB0"
+      },
+      {
+        "relative_path": "capture/vehicle.raw.bin",
+        "bytes": 2674,
+        "sha256": "79539C60EFCE5D1436C66E42C34E5A2E55BA9F1310F01520ACE320DC6E41474B"
+      },
+      {
+        "relative_path": "stage_ground/summary.json",
+        "bytes": 271066,
+        "sha256": "74D4E7E2C440A9C1D37AD89A921FC0C1CBAF2632962CC79095F94366CC9B04F3"
+      },
+      {
+        "relative_path": "stage_vehicle/summary.json",
+        "bytes": 198205,
+        "sha256": "B5471CF8A3F3CA0C69F9725A2B6AAC613013769474135BD16C269064C818D17E"
+      },
+      {
+        "relative_path": "stage_ground/runtime-stage-first.bin",
+        "bytes": 68,
+        "sha256": "F9DDE6675526855795521FD1233CBAE35F856AEB1A8BE32A8613889DCD6054B1"
+      },
+      {
+        "relative_path": "stage_ground/runtime-stage-second.bin",
+        "bytes": 68,
+        "sha256": "F9DDE6675526855795521FD1233CBAE35F856AEB1A8BE32A8613889DCD6054B1"
+      },
+      {
+        "relative_path": "stage_ground/endpoint-fifo-first.bin",
+        "bytes": 112,
+        "sha256": "B05ED16388BCE6481B33250513B64D7C689213F415AD7D484929D5FA4387761C"
+      },
+      {
+        "relative_path": "stage_ground/endpoint-fifo-second.bin",
+        "bytes": 112,
+        "sha256": "B05ED16388BCE6481B33250513B64D7C689213F415AD7D484929D5FA4387761C"
+      },
+      {
+        "relative_path": "stage_ground/hwcdc-restart-first.bin",
+        "bytes": 128,
+        "sha256": "4A1B78B31B5BC4484AD34A072C51FEABEB37F66B9B473A4AA760A503FB9D1BB7"
+      },
+      {
+        "relative_path": "stage_ground/hwcdc-restart-second.bin",
+        "bytes": 128,
+        "sha256": "4A1B78B31B5BC4484AD34A072C51FEABEB37F66B9B473A4AA760A503FB9D1BB7"
+      },
+      {
+        "relative_path": "stage_ground/ground-usb-commit-first.bin",
+        "bytes": 128,
+        "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669"
+      },
+      {
+        "relative_path": "stage_ground/ground-usb-commit-second.bin",
+        "bytes": 128,
+        "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669"
+      },
+      {
+        "relative_path": "stage_ground/first-usb-failure-first.bin",
+        "bytes": 384,
+        "sha256": "C57BD52D4B7719BF725CF4DA7C95B484DF9D6F96395C999A6936B3001D73A572"
+      },
+      {
+        "relative_path": "stage_ground/first-usb-failure-second.bin",
+        "bytes": 384,
+        "sha256": "C57BD52D4B7719BF725CF4DA7C95B484DF9D6F96395C999A6936B3001D73A572"
+      },
+      {
+        "relative_path": "stage_ground/timed_path_first.bin",
+        "bytes": 512,
+        "sha256": "4D1D54B7E5E204212AA8DA9795F2AD31F615ED0DDBFC41B7C7638C521115CEBA"
+      },
+      {
+        "relative_path": "stage_ground/timed_path_second.bin",
+        "bytes": 512,
+        "sha256": "4D1D54B7E5E204212AA8DA9795F2AD31F615ED0DDBFC41B7C7638C521115CEBA"
+      },
+      {
+        "relative_path": "stage_ground/aux_readiness_first.bin",
+        "bytes": 6144,
+        "sha256": "49AF88B0F7935779F9E2A94DF7C645F5E8E0B2934B10B09A0B991143FCB797FD"
+      },
+      {
+        "relative_path": "stage_ground/aux_readiness_second.bin",
+        "bytes": 6144,
+        "sha256": "49AF88B0F7935779F9E2A94DF7C645F5E8E0B2934B10B09A0B991143FCB797FD"
+      },
+      {
+        "relative_path": "stage_ground/diagnostic_usb_failure_first.bin",
+        "bytes": 256,
+        "sha256": "A639A4E5781616EEB419495D1D0F2DE0EF945C085DD9D31E7D147DEA579651ED"
+      },
+      {
+        "relative_path": "stage_ground/diagnostic_usb_failure_second.bin",
+        "bytes": 256,
+        "sha256": "A639A4E5781616EEB419495D1D0F2DE0EF945C085DD9D31E7D147DEA579651ED"
+      },
+      {
+        "relative_path": "stage_ground/grant_diagnostic_first.bin",
+        "bytes": 1024,
+        "sha256": "C4FD8ECF01EA6D9B38FB0709131A73FEE5F31197AF528CD1447429498DA5045A"
+      },
+      {
+        "relative_path": "stage_ground/grant_diagnostic_second.bin",
+        "bytes": 1024,
+        "sha256": "C4FD8ECF01EA6D9B38FB0709131A73FEE5F31197AF528CD1447429498DA5045A"
+      },
+      {
+        "relative_path": "stage_vehicle/runtime-stage-first.bin",
+        "bytes": 68,
+        "sha256": "FA7E5D04CD550E597274C73C7511FD36A2C0BA20A69B6824EA472939F89A3831"
+      },
+      {
+        "relative_path": "stage_vehicle/runtime-stage-second.bin",
+        "bytes": 68,
+        "sha256": "FA7E5D04CD550E597274C73C7511FD36A2C0BA20A69B6824EA472939F89A3831"
+      },
+      {
+        "relative_path": "stage_vehicle/endpoint-fifo-first.bin",
+        "bytes": 112,
+        "sha256": "3C1A4EE06DDEEDDB44FC36723E0385942CF23C363D53ABC66F6E4D372540ED82"
+      },
+      {
+        "relative_path": "stage_vehicle/endpoint-fifo-second.bin",
+        "bytes": 112,
+        "sha256": "3C1A4EE06DDEEDDB44FC36723E0385942CF23C363D53ABC66F6E4D372540ED82"
+      },
+      {
+        "relative_path": "stage_vehicle/hwcdc-restart-first.bin",
+        "bytes": 128,
+        "sha256": "D0B26C75ED8E51CB06924B6C68E8467C1EBFCD9FB1A73C956B91C17565D4D4DF"
+      },
+      {
+        "relative_path": "stage_vehicle/hwcdc-restart-second.bin",
+        "bytes": 128,
+        "sha256": "D0B26C75ED8E51CB06924B6C68E8467C1EBFCD9FB1A73C956B91C17565D4D4DF"
+      },
+      {
+        "relative_path": "stage_vehicle/ground-usb-commit-first.bin",
+        "bytes": 128,
+        "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+      },
+      {
+        "relative_path": "stage_vehicle/ground-usb-commit-second.bin",
+        "bytes": 128,
+        "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F"
+      },
+      {
+        "relative_path": "stage_vehicle/first-usb-failure-first.bin",
+        "bytes": 384,
+        "sha256": "FDCAE8FC246A2202348F54551B0C41E907473C4DDB22EB2AC79BE0D203DC3EB0"
+      },
+      {
+        "relative_path": "stage_vehicle/first-usb-failure-second.bin",
+        "bytes": 384,
+        "sha256": "FDCAE8FC246A2202348F54551B0C41E907473C4DDB22EB2AC79BE0D203DC3EB0"
+      },
+      {
+        "relative_path": "stage_vehicle/timed_path_first.bin",
+        "bytes": 512,
+        "sha256": "4C4EC1DB26FD74394127ABEDAEACD0069936DA944536EABF5F07DBA9B9F1212D"
+      },
+      {
+        "relative_path": "stage_vehicle/timed_path_second.bin",
+        "bytes": 512,
+        "sha256": "4C4EC1DB26FD74394127ABEDAEACD0069936DA944536EABF5F07DBA9B9F1212D"
+      },
+      {
+        "relative_path": "stage_vehicle/aux_readiness_first.bin",
+        "bytes": 6144,
+        "sha256": "501E79C61D157280B5CD83BFF5CDEB15580D49F4E6C5E2A05E582497FC34B15D"
+      },
+      {
+        "relative_path": "stage_vehicle/aux_readiness_second.bin",
+        "bytes": 6144,
+        "sha256": "501E79C61D157280B5CD83BFF5CDEB15580D49F4E6C5E2A05E582497FC34B15D"
+      },
+      {
+        "relative_path": "stage_vehicle/diagnostic_usb_failure_first.bin",
+        "bytes": 256,
+        "sha256": "F46AD269F2244C32B5D2F4E2435E14CA9017B26705607FBC69EBAC98379D6360"
+      },
+      {
+        "relative_path": "stage_vehicle/diagnostic_usb_failure_second.bin",
+        "bytes": 256,
+        "sha256": "F46AD269F2244C32B5D2F4E2435E14CA9017B26705607FBC69EBAC98379D6360"
+      },
+      {
+        "relative_path": "stage_vehicle/grant_diagnostic_first.bin",
+        "bytes": 1024,
+        "sha256": "E8D45180C29F99CD75D382F5A69215A95897742D8B6B63063009491873F21845"
+      },
+      {
+        "relative_path": "stage_vehicle/grant_diagnostic_second.bin",
+        "bytes": 1024,
+        "sha256": "E8D45180C29F99CD75D382F5A69215A95897742D8B6B63063009491873F21845"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "ground_raw_crc_complete",
+      "pass": true
+    },
+    {
+      "name": "vehicle_raw_crc_complete",
+      "pass": true
+    },
+    {
+      "name": "primary_heartbeat_capture_matches_raw",
+      "pass": true
+    },
+    {
+      "name": "primary_heartbeat_max_gap_below_2500ms",
+      "pass": true
+    },
+    {
+      "name": "param_ledger_matches_raw",
+      "pass": true
+    },
+    {
+      "name": "param_single_request_local_attempt",
+      "pass": true
+    },
+    {
+      "name": "param_30s_unique_count_four",
+      "pass": true
+    },
+    {
+      "name": "param_final_unique_count_six",
+      "pass": true
+    },
+    {
+      "name": "param_ledger_indices_zero_through_five",
+      "pass": true
+    },
+    {
+      "name": "param_ledger_error_counters_zero",
+      "pass": true
+    },
+    {
+      "name": "both_aux_fault_zero",
+      "pass": true
+    },
+    {
+      "name": "both_first_product_usb_failure_unlatched",
+      "pass": true
+    },
+    {
+      "name": "ground_grant_local_error_501ms",
+      "pass": true
+    },
+    {
+      "name": "ground_alive_after_adapter_failure_observed",
+      "pass": true
+    },
+    {
+      "name": "both_reader_cleanup_complete",
+      "pass": true
+    },
+    {
+      "name": "all_nine_record_pairs_each_role_identical",
+      "pass": true
+    },
+    {
+      "name": "bridge_source_matches_fixed_candidate_contract",
+      "pass": true
+    }
+  ],
+  "limitations": [
+    "This is a single bounded40-second trial of safe pre-negotiation fallback, not R19 fast-path acceptance or a general reliability claim.",
+    "No source, candidate, baseline, prepared pin or device state was changed by this analysis.",
+    "The known500ms,2000ms and106ms policy conditions were not altered by this analysis.",
+    "One successful first product USB completion does not clear the independent diagnostic USB defect.",
+    "Heartbeat PC-side maxgap passes this interval only; continuous RF freshness, worst-case RF latency and all-error-zero acceptance remain unproven."
+  ]
+}

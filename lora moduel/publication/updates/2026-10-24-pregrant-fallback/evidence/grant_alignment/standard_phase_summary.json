@@ -1,0 +1,193 @@
+{
+  "schema": "vc-lora-r19-standard-grant-phase-verification-v1",
+  "result": "PASS_CURRENT_TIMING_MISMATCH_CHARACTERIZED_NOT_FIXED",
+  "scope": "OFFLINE_VERIFICATION_ONLY",
+  "hardware_interaction": false,
+  "firmware_modified": false,
+  "communication_parameters_modified": false,
+  "candidate_modified": false,
+  "source": "tests/host/standalone/r19_standard_grant_phase_tests.cpp",
+  "source_sha256": "71EF88B72008D71844A8F2ED18178B22218394A87C3DF324FF8CF1C0AB9B9F5A",
+  "binary_sha256": "46F42AF2CBD00DA17DE66B1F6F679C17F341A281E68D99AE4A4D680900F81020",
+  "product_sources": [
+    {
+      "path": "core/include/vc_lora/tdd_types.hpp",
+      "sha256": "BD428D8153726964DDE609AFF12ECB8FF3D5D4171092C274125938746C4EBE95"
+    },
+    {
+      "path": "core/include/vc_lora/runtime_contract.hpp",
+      "sha256": "4C1E05D03E72A40660971CFDE65EDC6901B5589C1990295A99F208B03D1CA2CF"
+    },
+    {
+      "path": "core/include/vc_lora/bulk_session_controller.hpp",
+      "sha256": "6A92DC55EF2EBCEA5ACFE062A94C31D345CA268116E7FEF79AFA3A9EF22633F4"
+    },
+    {
+      "path": "core/src/tdd_vehicle.cpp",
+      "sha256": "B64C9E253E52109C0B47BE6C4A64E3A7A42CC10458F54D3080EF6710D54325A8"
+    },
+    {
+      "path": "core/src/tdd_ground.cpp",
+      "sha256": "6021D0799274A92A5F7AF7EC28AF7D7883DFB0CA6AD688D1D4162F042FD67EDF"
+    }
+  ],
+  "normal_verification": {
+    "checks": 34381,
+    "failures": 0,
+    "exit_code": 0,
+    "log": "standard_phase_characterization.log",
+    "log_sha256": "CF7F94E0203C990BDDF66C7AB588FFE939DD14522D349F77359DCBF6E6C12ED0",
+    "executed_by": "root",
+    "result": "PASS"
+  },
+  "counterfactual_verification": {
+    "argument": "--expect-all-phases-fit-500",
+    "expected_exit_code": 1,
+    "actual_exit_code": 1,
+    "checks": 34387,
+    "failures": 6,
+    "result": "EXPECTED_RED_FOR_ARBITRARY_PHASE_ALIGNMENT_CLAIM",
+    "log": "standard_phase_counterfactual.log",
+    "log_format": "merged stdout/stderr text; negative assertions deliberately emit FAIL lines; not a standalone JSON document"
+  },
+  "quantified_models": [
+    {
+      "name": "zero_RF_mathematical_lower_bound_not_physical",
+      "mathematical_only": true,
+      "local_service_ms": 0,
+      "assumed_remote_delivery_ms": 0,
+      "first_grant_generated_ms": 3002,
+      "first_grant_sender_tail_ms": 3002,
+      "first_grant_observed_ms": 3002,
+      "next_grant_observed_ms": 7305,
+      "interval_ms": 4303,
+      "request_phases": 4303,
+      "within500_phases": 500,
+      "exceed500_phases": 3803,
+      "exceed500_fraction": 0.8838019986,
+      "minimum_wait_ms": 1,
+      "maximum_wait_ms": 4303
+    },
+    {
+      "name": "service550_delivery550_tail_hint_disabled",
+      "mathematical_only": false,
+      "local_service_ms": 550,
+      "assumed_remote_delivery_ms": 550,
+      "first_grant_generated_ms": 3002,
+      "first_grant_sender_tail_ms": 3552,
+      "first_grant_observed_ms": 3552,
+      "next_grant_observed_ms": 8955,
+      "interval_ms": 5403,
+      "request_phases": 5403,
+      "within500_phases": 500,
+      "exceed500_phases": 4903,
+      "exceed500_fraction": 0.9074588192,
+      "minimum_wait_ms": 1,
+      "maximum_wait_ms": 5403
+    },
+    {
+      "name": "service550_delivery180_tail_hint_disabled",
+      "mathematical_only": false,
+      "local_service_ms": 550,
+      "assumed_remote_delivery_ms": 180,
+      "first_grant_generated_ms": 3002,
+      "first_grant_sender_tail_ms": 3552,
+      "first_grant_observed_ms": 3182,
+      "next_grant_observed_ms": 7845,
+      "interval_ms": 4663,
+      "request_phases": 4663,
+      "within500_phases": 500,
+      "exceed500_phases": 4163,
+      "exceed500_fraction": 0.892772893,
+      "minimum_wait_ms": 1,
+      "maximum_wait_ms": 4663
+    },
+    {
+      "name": "service550_delivery550_heartbeat_absent",
+      "mathematical_only": false,
+      "local_service_ms": 550,
+      "assumed_remote_delivery_ms": 550,
+      "first_grant_generated_ms": 4102,
+      "first_grant_sender_tail_ms": 4652,
+      "first_grant_observed_ms": 4652,
+      "next_grant_observed_ms": 11155,
+      "interval_ms": 6503,
+      "request_phases": 6503,
+      "within500_phases": 500,
+      "exceed500_phases": 6003,
+      "exceed500_fraction": 0.9231124097,
+      "minimum_wait_ms": 1,
+      "maximum_wait_ms": 6503
+    },
+    {
+      "name": "service550_delivery550_one_boundary_heartbeat",
+      "mathematical_only": false,
+      "local_service_ms": 550,
+      "assumed_remote_delivery_ms": 550,
+      "first_grant_generated_ms": 3551,
+      "first_grant_sender_tail_ms": 4101,
+      "first_grant_observed_ms": 4101,
+      "next_grant_observed_ms": 10053,
+      "interval_ms": 5952,
+      "request_phases": 5952,
+      "within500_phases": 500,
+      "exceed500_phases": 5452,
+      "exceed500_fraction": 0.9159946237,
+      "minimum_wait_ms": 1,
+      "maximum_wait_ms": 5952
+    },
+    {
+      "name": "service550_delivery550_terminal_lost",
+      "mathematical_only": false,
+      "local_service_ms": 550,
+      "assumed_remote_delivery_ms": 550,
+      "first_grant_generated_ms": 3002,
+      "first_grant_sender_tail_ms": 3552,
+      "first_grant_observed_ms": 3552,
+      "next_grant_observed_ms": 11054,
+      "interval_ms": 7502,
+      "request_phases": 7502,
+      "within500_phases": 500,
+      "exceed500_phases": 7002,
+      "exceed500_fraction": 0.9333511064,
+      "minimum_wait_ms": 1,
+      "maximum_wait_ms": 7502
+    }
+  ],
+  "admission_vs_completion": {
+    "payload_started_ms": 4203,
+    "admission_deadline_ms": 4502,
+    "done_uart_accepted_ms": 4754,
+    "done_sender_tail_ms": 5304,
+    "done_observed_ms": 5304,
+    "transaction_deadline_ms": 6203
+  },
+  "interpretation": [
+    "The exact current VehicleTddController and GroundTddController generate the Grant opportunities. No fixed five-second period is hardcoded.",
+    "After an already-observed baseline Grant, a new request requires a newer cycle. Across every integer-ms arrival phase before the actual next Grant, exactly the final500 phases meet the inclusive request-origin500ms budget.",
+    "Even the explicitly impossible zero-RF/local-service mathematical lower bound has4303ms between accepted standard Grants;500ms is not guaranteed for arbitrary arrival phase.",
+    "With local service550ms and independently assumed remote delivery550ms, the ordinary empty-uplink terminal path repeats5403ms; when the product heartbeat-tail hint is enabled, the supplied heartbeat-absent and single-boundary-heartbeat stimuli produce6503ms and5952ms respectively.",
+    "The30-second objective cannot be declared achievable from Grant-admission alignment alone; the second Vehicle Grant-age window, negotiation, guarded physical transport, bulk transfer and Heartbeat SLA need separate verification.",
+    "In the started14-byte standard transaction, payload starts4203 before the4502 admission deadline; separate DONE reaches physical completion and Vehicle at5304, after admission closes but before the6203 transaction completion deadline. A new frame at the exact admission boundary is rejected to IDLE."
+  ],
+  "limitations": [
+    "Model fractions are fractions of enumerated1ms phases, not measured probabilities or real-user failure rates.",
+    "Zero RF/local service is a mathematical counterfactual only and is physically impossible on the configured module.",
+    "550ms local writer service floor and assumed remote RF delivery are separate parameters.550ms or180ms remote delivery is illustrative, not inferred from AUX or a measured E220 delay.",
+    "AUX LOW/HIGH history in this test is synthetic: HIGH returns20ms before the local service floor; the real controller independently enforces its15ms stable condition.",
+    "Heartbeat inputs are explicitly bounded controller hints, not parsed live Pixhawk telemetry. The generic no-tail lower-bound schedules are not a full production Heartbeat workload.",
+    "This test exercises controller scheduling and admission semantics, not complete MAVLink CRC, E220 demux/quarantine or the high-speed adapter end-to-end path. A separate real-adapter replay belongs to the companion agent.",
+    "1ms polling adds deterministic controller transitions. The displayed intervals are conditional model outcomes, not new HIL observations.",
+    "No product timeout, state machine, USB, AUX, RF or UART policy has been changed."
+  ],
+  "build_integration": {
+    "target": "vc_lora_r19_standard_grant_phase_tests",
+    "ctest": "R19-standard_grant_phase-ALIGNMENT-OFFLINE-001",
+    "registered_by": "root",
+    "additional_dependencies": "Existing vc_lora_core only; no Arduino or additional fixture dependency",
+    "full_host_suite": "root running; not claimed complete by this report"
+  },
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "live_authorization_granted": false
+}
