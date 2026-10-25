@@ -1,0 +1,10 @@
+r19-grant-reservation checks=437 failures=8 diagnostic_dual_usb_only=1 product_RF_reservation=0
+FAIL delayed callback cannot publish an already-expired original held t0
+FAIL invalid enum/order/premature fault snapshot rejected without write
+FAIL invalid enum/order/premature fault snapshot rejected without write
+FAIL invalid enum/order/premature fault snapshot rejected without write
+FAIL invalid enum/order/premature fault snapshot rejected without write
+FAIL invalid enum/order/premature fault snapshot rejected without write
+FAIL invalid enum/order/premature fault snapshot rejected without write
+FAIL request opcode cannot be reported as USB reply commit
+test_exit_code=1

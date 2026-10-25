@@ -1,0 +1,13 @@
+diff --git "a/runs\\validation\\R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001\\20261025T-fix\\CMakeLists.before-flash-boundary-tests.txt" b/CMakeLists.txt
+index f6cfb7c..1f9efb9 100644
+--- "a/runs\\validation\\R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001\\20261025T-fix\\CMakeLists.before-flash-boundary-tests.txt"
++++ b/CMakeLists.txt
+@@ -78,7 +78,7 @@ if(VC_LORA_BUILD_TESTS)
+           -RepoRoot "${CMAKE_SOURCE_DIR}")
+     endforeach()
+ 
+-    foreach(reservation_contract IN ITEMS artifact workflow capture)
++    foreach(reservation_contract IN ITEMS artifact workflow capture flash_boundary flash_operation_regression)
+       add_test(NAME R19-GRANT-RESERVATION-${reservation_contract}-CONTRACT-001
+         COMMAND "${VC_LORA_POWERSHELL_EXECUTABLE}"
+           -NoProfile -NonInteractive -ExecutionPolicy Bypass

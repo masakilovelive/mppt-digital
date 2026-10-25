@@ -1,0 +1,1004 @@
+--- a/tools/run_r19_timed_path_capture.ps1
++++ b/tools/run_r19_timed_path_capture.ps1
+@@ -5,12 +5,18 @@
+   [switch]$DiagnosticUsbFailureDiagnostics,
+   [switch]$ParamListDiagnostics,
+   [switch]$GrantDiagnostics,
++  [switch]$GrantReservationDiagnostics,
+   [switch]$RequireHighSpeedStart,
+   [ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None',
+   [ValidateSet('SyncOnly','ExplicitHostArm')][string]$Mode='SyncOnly',[ValidateRange(40,40)][int]$CaptureSeconds=40)
+ Set-StrictMode -Version Latest
+ $ErrorActionPreference='Stop'
++if($RequireHighSpeedStart-and-not$ImportOnly-and-not$GrantReservationDiagnostics){throw 'Future-slot producer unavailable; no live high-speed admission. No permit or device access was attempted.'}
++if($GrantReservationDiagnostics){
++  if($Mode-cne'ExplicitHostArm'-or-not$GrantDiagnostics-or-not$ParamListDiagnostics-or-not$AuxReadinessDiagnostics-or-not$DiagnosticUsbFailureDiagnostics-or$ReadComparisonMode-cne'None'){
++    throw 'Grant reservation requires full ExplicitHostArm Grant/PARAM/AUX/USB diagnostics without comparison. No device or permit access was attempted.'
++  }
++}
+-if($RequireHighSpeedStart-and-not$ImportOnly){throw 'Future-slot producer unavailable; no live high-speed admission. No permit or device access was attempted.'}
+ # Dot-sourced script parameters share this scope. Keep the caller's execution
+ # switches intact even when a definitions-only dependency binds ImportOnly.
+ $r19CaptureRequestedImportOnly=$ImportOnly
+@@ -22,18 +28,28 @@
+   $Execute=$r19CaptureRequestedExecute
+ }
+ if($ParamListDiagnostics){. (Join-Path $PSScriptRoot 'r19_param_list_diagnostics.ps1')}
++if($GrantReservationDiagnostics){
++  . (Join-Path $PSScriptRoot 'r19_grant_reservation_wire.ps1')
++  . (Join-Path $PSScriptRoot 'r19_grant_reservation_workflow.ps1')
++  . (Join-Path $PSScriptRoot 'r19_grant_reservation_contract.ps1')
++}
+ 
+ function Invoke-R19ParamListRequest {
+   param([object]$State,[string]$Role,[object]$Workflow,[int]$HeartbeatCount,
+     [string]$CaptureDeadlineTicks,[long]$RawOffset,[int]$ReaderPendingBytes,
+     [scriptblock]$NowTicks,[scriptblock]$Writer,
++    [object]$StartAdmissionEvidence=$null,[switch]$RequireHighSpeedStart,
++    [object]$ReservationWorkflow=$null,[switch]$GrantReservationDiagnostics)
+-    [object]$StartAdmissionEvidence=$null,[switch]$RequireHighSpeedStart)
+   $basicReadiness= -not($null-eq$State-or$Role-cne'ground'-or$State.write_attempts-ne0-or
+       $null-eq$Workflow-or$Workflow.arm_write_accepted-isnot[bool]-or-not$Workflow.arm_write_accepted-or
+       $HeartbeatCount-lt1-or$ReaderPendingBytes-ne0)
+   if(-not$basicReadiness-and(-not$RequireHighSpeedStart-or$null-eq$State)){return $false}
+   $now=[string](& $NowTicks)
++  if($GrantReservationDiagnostics){
++    if($null-eq$ReservationWorkflow){return $false}
++    if(-not(Test-R19GrantReservationRequestAllowed -State $ReservationWorkflow -NowTicks $now)){return $false}
++  }
++  if($RequireHighSpeedStart-and-not$GrantReservationDiagnostics){
+-  if($RequireHighSpeedStart){
+     # This opt-in is simulation-only until a trusted future-slot producer and
+     # separately bound live permit exist. Do not infer Grant readiness from ARM/HB.
+     if($null-eq(Get-Command Test-R19StartAdmissionEvidence -ErrorAction SilentlyContinue)){
+@@ -53,12 +69,14 @@
+   # request-origin window plus a second of observation, not a truncated SLA.
+   if([Numerics.BigInteger]$CaptureDeadlineTicks-[Numerics.BigInteger]$now-lt31*[Numerics.BigInteger]$State.frequency){return $false}
+   [byte[]]$requestBytes=Begin-R19ParamListWrite -State $State -WriteStartedTicks $now -RawOffsetAtWriteStart $RawOffset
++  if($GrantReservationDiagnostics){Begin-R19GrantReservationParamWrite -State $ReservationWorkflow -Bytes $requestBytes -StartedTicks $now}
++  if($RequireHighSpeedStart-and-not$GrantReservationDiagnostics){$State.start_admission.simulation_writer_attempted=$true}
+-  if($RequireHighSpeedStart){$State.start_admission.simulation_writer_attempted=$true}
+   try{
+     $accepted=& $Writer $requestBytes
+     if($accepted-isnot[int]-and$accepted-isnot[long]){throw 'Request writer did not report an exact accepted-byte count'}
+     $null=Commit-R19ParamListWrite -State $State -AcceptedBytes $accepted -WriteReturnedTicks ([string](& $NowTicks))
+   }catch{$null=Commit-R19ParamListWrite -State $State -AcceptedBytes $null -ExceptionType $_.Exception.GetType().FullName -WriteReturnedTicks ([string](& $NowTicks))}
++  if($GrantReservationDiagnostics){Set-R19GrantReservationParamWriteResult -State $ReservationWorkflow -AcceptedBytes $State.accepted_bytes -ReturnedTicks ([string]$State.request_write_returned_ticks) -ExceptionType $State.api_exception_type}
+   return $true
+ }
+ function Update-R19ParamListCheckpoint {
+@@ -71,6 +89,32 @@
+   Write-R19TimedPathJson -Path (Join-Path $OutputDirectory 'param_list_30s.json') -Value (Get-R19ParamListSnapshot -State $State)
+   return $true
+ }
++function Start-R19ReservationMeasurement {
++  param([object]$Workflow,[object[]]$States,[scriptblock]$NowTicks)
++  if($null-ne$Workflow.measurement_start_ticks){throw 'Reservation measurement may start only once'}
++  $start=[string](&$NowTicks)
++  foreach($s in $States){
++    $marker=$s.reader.MarkPhase('RESERVATION_MEASUREMENT')
++    $s.preparation_cut_offset=[long]$marker.ByteCount;$s.preparation_cut_ticks=[string]$marker.Ticks
++  }
++  $Workflow.measurement_start_ticks=$start
++  return $start
++}
++function Get-R19ReservationRawPhases {
++  param([object[]]$States,[string]$PreparationStart,[string]$MeasurementStart,[string]$MeasurementEnd)
++  $roles=[Collections.Generic.List[object]]::new()
++  foreach($s in $States){
++    if($null-eq$s.raw-or$s.raw-isnot[byte[]]){continue}
++    [long]$cut=$s.preparation_cut_offset
++    if($cut-lt0-or$cut-gt$s.raw.Length){throw 'Reservation phase cut is outside retained native raw'}
++    [byte[]]$prep=New-Object byte[] ([int]$cut);[byte[]]$measurement=New-Object byte[] ($s.raw.Length-[int]$cut)
++    [Array]::Copy($s.raw,0,$prep,0,$prep.Length);[Array]::Copy($s.raw,[int]$cut,$measurement,0,$measurement.Length)
++    $roles.Add([pscustomobject]@{role=$s.spec.role;cut_offset=$cut;cut_ticks=$s.preparation_cut_ticks;preparation_bytes=$prep;measurement_bytes=$measurement
++      preparation_raw_bytes=$prep.Length;measurement_raw_bytes=$measurement.Length;preparation_sha256=(Get-R19AcquisitionSha256 $prep);measurement_sha256=(Get-R19AcquisitionSha256 $measurement)
++      full_raw_bytes=$s.raw.Length;boundary_semantics='ATOMIC_NATIVE_READER_MARKER_NOT_PHYSICAL_WIRE_TIME; native reads may span marker and cleanup tail is retained'})
++  }
++  [pscustomobject]@{schema='vc-lora-r19-reservation-raw-phases-v1';preparation_start_ticks=$PreparationStart;measurement_start_ticks=$MeasurementStart;measurement_end_ticks=$MeasurementEnd;roles=$roles.ToArray()}
++}
+ 
+ function Assert-R19TimedPathLiveIdentity([object]$Spec,[string]$Checkpoint){
+   $rows=@(Get-CimInstance Win32_SerialPort -ErrorAction Stop|Where-Object{[string]$_.DeviceID-ceq$Spec.port})
+@@ -257,6 +301,26 @@
+   }
+   if(-not$grantMetadataValid){$persistenceErrors.Add('Grant diagnostic selection requires exact Boolean metadata with consistent bound presence')}
+   $publishGrantFlag=$grantMetadataValid-and$null-ne$grantFlag-and($null-eq$grantSelection-or$grantSelection.Value)
++  $reservationFlag=$Context.PSObject.Properties['grant_reservation_diagnostics']
++  $publishReservation=$false
++  if($null-ne$reservationFlag){
++    if($reservationFlag.Name-cne'grant_reservation_diagnostics'-or$reservationFlag.Value-isnot[bool]){$persistenceErrors.Add('Reservation selection must be exact Boolean')}
++    elseif($reservationFlag.Value){
++      try{
++        if($null-eq$Context.PSObject.Properties['grant_reservation_contract']-or$null-eq$Context.grant_reservation_contract-or$null-eq$Context.PSObject.Properties['grant_reservation_workflow']-or$null-eq$Context.grant_reservation_workflow-or$null-eq$Context.grant_reservation_workflow.PSObject.Properties['schema']-or$Context.grant_reservation_workflow.schema-cne'vc-lora-r19-grant-reservation-workflow-v1'){throw 'Reservation contract/workflow is unavailable'}
++        if($null-eq$Context.PSObject.Properties['reservation_raw_phases']-or$null-eq$Context.reservation_raw_phases-or$null-eq$Context.reservation_raw_phases.PSObject.Properties['roles']){throw 'Reservation raw phase evidence is unavailable'}
++        if(@($Context.reservation_raw_phases.roles).Count-ne2){throw 'Both reservation raw phases are required'}
++        foreach($phaseRole in $Context.reservation_raw_phases.roles){
++          if($phaseRole.role-cnotin@('vehicle','ground')-or$phaseRole.preparation_bytes-isnot[byte[]]-or$phaseRole.measurement_bytes-isnot[byte[]]){throw 'Invalid reservation phase role/bytes'}
++          $matchingRaw=@($rawEvidence|Where-Object{$_.role-ceq$phaseRole.role-and$_.raw_saved})
++          if($matchingRaw.Count-ne1-or$phaseRole.preparation_bytes.Length+$phaseRole.measurement_bytes.Length-ne$matchingRaw[0].raw_bytes-or(Get-R19AcquisitionSha256 ([byte[]]($phaseRole.preparation_bytes+$phaseRole.measurement_bytes)))-cne$matchingRaw[0].raw_sha256){throw 'Reservation phases do not match full retained raw'}
++          Write-R19TimedPathRaw -Path (Join-Path $OutputDirectory ($phaseRole.role+'.preparation.raw.bin')) -Bytes $phaseRole.preparation_bytes
++          Write-R19TimedPathRaw -Path (Join-Path $OutputDirectory ($phaseRole.role+'.measurement.raw.bin')) -Bytes $phaseRole.measurement_bytes
++        }
++        $publishReservation=$true
++      }catch{$persistenceErrors.Add('Reservation metadata/raw phase preservation: '+$_.Exception.Message)}
++    }
++  }
+   $failure=[string]$Context.failure
+   if(-not$failure-and$persistenceErrors.Count-gt0){$failure='Capture persistence: '+$persistenceErrors[0]}
+   $summary=[pscustomobject][ordered]@{schema='vc-lora-r19-timed-path-capture-v1'
+@@ -273,6 +337,14 @@
+     limitations=@('Missing reply, READY or ARM is a diagnostic observation failure, not automatic invalidation of raw capture.','A successful private ARM write proves PC-local acceptance only; MCU ARM acceptance comes from JTAG.','No parameter, flight-command, RF-rate or product timeout changes are performed.','The safe outer must perform JTAG acquisition and mandatory accepted R18 restoration.')}
+   if($null-ne$Context.PSObject.Properties['read_comparison']){Add-Member -InputObject $summary -NotePropertyName read_comparison -NotePropertyValue $Context.read_comparison}
+   if($publishGrantFlag){Add-Member -InputObject $summary -NotePropertyName grant_diagnostics_enabled -NotePropertyValue $grantFlag.Value}
++  if($publishReservation){
++    Add-Member -InputObject $summary -NotePropertyName grant_reservation_diagnostics -NotePropertyValue $true
++    Add-Member -InputObject $summary -NotePropertyName grant_reservation_contract -NotePropertyValue $Context.grant_reservation_contract
++    Add-Member -InputObject $summary -NotePropertyName grant_reservation_workflow -NotePropertyValue $Context.grant_reservation_workflow
++    Add-Member -InputObject $summary -NotePropertyName reservation_prepare_seconds -NotePropertyValue 15
++    Add-Member -InputObject $summary -NotePropertyName measurement_seconds -NotePropertyValue 40
++    Add-Member -InputObject $summary -NotePropertyName reservation_raw_phases -NotePropertyValue $Context.reservation_raw_phases
++  }
+   if($null-ne$Context.PSObject.Properties['param_list_diagnostics_enabled']-and$Context.param_list_diagnostics_enabled){
+     Add-Member -InputObject $summary -NotePropertyName param_list_diagnostics_enabled -NotePropertyValue ([bool]$Context.param_list_diagnostics_enabled)
+     Add-Member -InputObject $summary -NotePropertyName param_list_diagnostics -NotePropertyValue $Context.param_list_diagnostics
+@@ -328,7 +400,7 @@
+ $permit=Get-Content -LiteralPath $permitPath -Raw|ConvertFrom-Json
+ $handoffSha=(Get-FileHash -LiteralPath $handoffPath -Algorithm SHA256).Hash
+ $flashSha=(Get-FileHash -LiteralPath $flashPath -Algorithm SHA256).Hash
++$plan=Get-R19TimedPathCapturePlan -Handoff $handoff -FlashEvidence $flash -Permit $permit -Mode $Mode -HandoffSha256 $handoffSha -FlashEvidenceSha256 $flashSha -NowUtc ([DateTime]::UtcNow) -DiagnosticUsbFailureDiagnostics $DiagnosticUsbFailureDiagnostics.IsPresent -RepoRoot $repo -ReadComparisonMode $ReadComparisonMode -ParamListDiagnostics ([bool]$ParamListDiagnostics) -AuxReadinessDiagnostics ([bool]$AuxReadinessDiagnostics) -GrantDiagnostics ([bool]$GrantDiagnostics) -GrantReservationDiagnostics ([bool]$GrantReservationDiagnostics)
+-$plan=Get-R19TimedPathCapturePlan -Handoff $handoff -FlashEvidence $flash -Permit $permit -Mode $Mode -HandoffSha256 $handoffSha -FlashEvidenceSha256 $flashSha -NowUtc ([DateTime]::UtcNow) -DiagnosticUsbFailureDiagnostics $DiagnosticUsbFailureDiagnostics.IsPresent -RepoRoot $repo -ReadComparisonMode $ReadComparisonMode -ParamListDiagnostics ([bool]$ParamListDiagnostics) -AuxReadinessDiagnostics ([bool]$AuxReadinessDiagnostics) -GrantDiagnostics ([bool]$GrantDiagnostics)
+ if($DiagnosticUsbFailureDiagnostics){
+   Assert-R19UsbRoleCapabilities -Contract $handoff.usb_role_capabilities -RepoRoot $repo -Mode $Mode
+   foreach($role in @('vehicle','ground')){[void](Get-R19UsbRoleEffectiveMode -Contract $handoff.usb_role_capabilities -Role $role -RequestedMode $Mode)}
+@@ -342,6 +414,7 @@
+ $states=[Collections.Generic.List[object]]::new();$identityEvidence=[Collections.Generic.List[object]]::new()
+ $clock=[Diagnostics.Stopwatch]::StartNew();$domain=[Guid]::NewGuid().ToString('N');$frequency=[string][Diagnostics.Stopwatch]::Frequency
+ $measurementStart='';$measurementEnd='';$pinInputs=[Collections.Generic.List[object]]::new();$readComparisonRequested=$false
++$preparationStart='';$reservationWorkflow=$null;$reservationSnapshot=$null;$reservationRawPhases=$null
+ $paramState=$null;$paramDeliveredOffset=[long]0;$paramDiagnosticsFailure=''
+ if($ParamListDiagnostics){$paramState=New-R19ParamListDiagnosticsState -Frequency $frequency -ClockDomainId $domain}
+ try{
+@@ -354,6 +427,7 @@
+   if($AuxReadinessDiagnostics){$verifierArguments+=,'-AuxReadinessDiagnostics'}
+   if($DiagnosticUsbFailureDiagnostics){$verifierArguments+=,'-DiagnosticUsbFailureDiagnostics'}
+   if($GrantDiagnostics){$verifierArguments+=,'-GrantDiagnostics'}
++  if($GrantReservationDiagnostics){$verifierArguments+=,'-GrantReservationDiagnostics'}
+   $verifyOutput=& $engine @verifierArguments 2>&1
+   [IO.File]::WriteAllLines((Join-Path $OutputDirectory 'candidate_verify.log'),[string[]]@($verifyOutput),[Text.UTF8Encoding]::new($false))
+   Assert-R19Acquisition ($LASTEXITCODE-eq0) 'Mode-specific sealed candidate verification failed'
+@@ -363,6 +437,7 @@
+   if($DiagnosticUsbFailureDiagnostics){$relative='tools/r19_usb_role_contract.ps1';$pinInputs.Add([pscustomobject]@{path=$relative;sha256=(Get-FileHash -LiteralPath (Join-Path $repo $relative) -Algorithm SHA256).Hash})}
+   if($ParamListDiagnostics){$relative='tools/r19_param_list_diagnostics.ps1';$pinInputs.Add([pscustomobject]@{path=$relative;sha256=(Get-FileHash -LiteralPath (Join-Path $repo $relative) -Algorithm SHA256).Hash})}
+   if($GrantDiagnostics){$relative='tools/read_r19_grant_diagnostic_record.ps1';$pinInputs.Add([pscustomobject]@{path=$relative;sha256=(Get-FileHash -LiteralPath (Join-Path $repo $relative) -Algorithm SHA256).Hash})}
++  if($GrantReservationDiagnostics){foreach($relative in @('tools/r19_grant_reservation_wire.ps1','tools/r19_grant_reservation_workflow.ps1','tools/r19_grant_reservation_contract.ps1','tools/read_r19_grant_reservation_record.ps1')){$pinInputs.Add([pscustomobject]@{path=$relative;sha256=(Get-FileHash -LiteralPath (Join-Path $repo $relative) -Algorithm SHA256).Hash})}}
+   Assert-R19Acquisition ($null-eq('VcLora.R19.ContinuousReader'-as[type])) 'Fresh isolated capture process required'
+   $startupSource=[IO.File]::ReadAllText((Join-Path $repo 'tools/r19_startup_reader.cs'))
+   $continuousSource=[IO.File]::ReadAllText((Join-Path $repo 'tools/r19_continuous_reader.cs'))
+@@ -375,9 +450,10 @@
+     $reader=[VcLora.R19.ContinuousReader]::new([VcLora.R19.SerialStartupSource]::new($port),$clock,1048576,4096)
+     $nonce=[string](New-R19TimesyncNonce)
+     $states.Add([pscustomobject]@{spec=$spec;port=$port;reader=$reader;reader_id=[Guid]::NewGuid().ToString('N');nonce=$nonce;parser=(New-R19TimedPathPrivateParser $nonce);product_parser=(New-R19TimedPathHeartbeatParser);product_observations=[Collections.Generic.List[object]]::new();workflow=$null;workflow_failure='';observations=[Collections.Generic.List[object]]::new();writes=[Collections.Generic.List[object]]::new();opened=$false;open_before_ticks='';open_after_ticks='';read_started_ticks='';snapshot=$null;raw=$null;joined=$false;cleanup_close_fallback=$false;diagnostic_usb_failure_diagnostics=$(if($DiagnosticUsbFailureDiagnostics){$handoff.diagnostic_usb_failure_diagnostics}else{$null});usb_role_capabilities=$(if($DiagnosticUsbFailureDiagnostics){$handoff.usb_role_capabilities}else{$null});usb_role_contract_version=$(if($DiagnosticUsbFailureDiagnostics){'v1-source-bound'}else{'legacy-v0-role-name-workflow-not-a-support-assertion'})})
++    if($GrantReservationDiagnostics){$states[$states.Count-1]|Add-Member NoteProperty reservation_parser (New-R19GrantReservationParser);$states[$states.Count-1]|Add-Member NoteProperty preparation_cut_offset 0L;$states[$states.Count-1]|Add-Member NoteProperty preparation_cut_ticks ''}
+   }
+   foreach($s in $states){Assert-R19Acquisition ($s.reader.WaitReady(1000)) 'Native read owner preparation timeout';[void]$s.reader.GetStatus();[void]$s.reader.PollBytes(1)}
++  [void](Test-R19TimedPathExecutionPermit -Permit $permit -Mode $Mode -CandidateId $plan.candidate_id -HandoffSha256 $handoffSha -FlashEvidenceSha256 $flashSha -NowUtc ([DateTime]::UtcNow) -ReadComparisonMode $ReadComparisonMode -ParamListDiagnostics ([bool]$ParamListDiagnostics) -GrantDiagnostics ([bool]$GrantDiagnostics) -GrantReservationDiagnostics ([bool]$GrantReservationDiagnostics))
+-  [void](Test-R19TimedPathExecutionPermit -Permit $permit -Mode $Mode -CandidateId $plan.candidate_id -HandoffSha256 $handoffSha -FlashEvidenceSha256 $flashSha -NowUtc ([DateTime]::UtcNow) -ReadComparisonMode $ReadComparisonMode -ParamListDiagnostics ([bool]$ParamListDiagnostics) -GrantDiagnostics ([bool]$GrantDiagnostics))
+   Assert-R19Acquisition ((Get-FileHash -LiteralPath $handoffPath -Algorithm SHA256).Hash-ceq$handoffSha-and(Get-FileHash -LiteralPath $flashPath -Algorithm SHA256).Hash-ceq$flashSha) 'Provenance changed before Open'
+   foreach($s in $states){
+     $s.open_before_ticks=[string]$clock.ElapsedTicks;$hardware=$true
+@@ -386,9 +462,22 @@
+     $s.reader.Arm([long]$s.open_after_ticks)
+     Assert-R19TimedPathLiveIdentity $s.spec 'POST_OPEN';$identityEvidence.Add([pscustomobject]@{role=$s.spec.role;checkpoint='POST_OPEN';result='PASS'})
+   }
++  if($GrantReservationDiagnostics){
++    $preparationStart=[string]$clock.ElapsedTicks
++    [uint64]$sharedReader=[uint64](New-R19TimesyncNonce)
++    [uint64]$slotNonce=([uint64](New-R19TimesyncNonce)-band[uint64]0x0000FFFFFFFFFFFF)-bor([uint64]0x521B-shl48)
++    $reservationWorkflow=New-R19GrantReservationWorkflow -CandidateId $plan.candidate_id -HandoffSha256 $handoffSha -FlashSha256 $flashSha -ReaderSession $sharedReader.ToString() -SlotNonce $slotNonce.ToString() -ClockDomainId $domain -Frequency $frequency -StartTicks $preparationStart
++    $deadline=[Numerics.BigInteger]::Parse($preparationStart)+[Numerics.BigInteger]::Parse($frequency)*15
++  }else{
++    $measurementStart=[string]$clock.ElapsedTicks
++    $deadline=[Numerics.BigInteger]::Parse($measurementStart)+[Numerics.BigInteger]::Parse($frequency)*40
++  }
++  while(($GrantReservationDiagnostics-and-not$measurementStart)-or[Numerics.BigInteger]$clock.ElapsedTicks-lt$deadline){
++    if($GrantReservationDiagnostics-and-not$measurementStart-and[Numerics.BigInteger]$clock.ElapsedTicks-ge$deadline){
++      if($reservationWorkflow.status-cne'Failed'){try{Stop-R19GrantReservationWorkflow $reservationWorkflow 'PREPARATION_15_SECONDS_EXPIRED'}catch{}}
++      $measurementStart=Start-R19ReservationMeasurement $reservationWorkflow $states.ToArray() {[string]$clock.ElapsedTicks}
++      $deadline=[Numerics.BigInteger]::Parse($measurementStart)+[Numerics.BigInteger]::Parse($frequency)*40
++    }
+-  $measurementStart=[string]$clock.ElapsedTicks
+-  $deadline=[Numerics.BigInteger]::Parse($measurementStart)+[Numerics.BigInteger]::Parse($frequency)*40
+-  while([Numerics.BigInteger]$clock.ElapsedTicks-lt$deadline){
+     if($readComparisonPlan.enabled-and-not$readComparisonRequested-and[long]$clock.ElapsedTicks-ge([long]$measurementStart+20*[long]$frequency)){
+       $groundOwner=@($states|Where-Object{$_.spec.role-ceq'ground'})
+       Assert-R19Acquisition ($groundOwner.Count-eq1) 'Comparison Ground owner missing'
+@@ -411,6 +500,11 @@
+         }catch{$s.workflow_failure=$_.Exception.Message}
+       }
+       foreach($block in $s.reader.PollBytes(8192)){
++        if($GrantReservationDiagnostics){
++          foreach($r in (Add-R19GrantReservationBytes -Parser $s.reservation_parser -Bytes $block.Data -RawOffset $block.Offset -ReadCompletedTicks ([string]$block.EndTicks))){
++            if($reservationWorkflow.status-cne'Failed'){try{Add-R19GrantReservationObservation -State $reservationWorkflow -ChannelRole $s.spec.role -Bytes $r.bytes -ReadCompletedTicks $r.read_completed_ticks -NowTicks ([string]$clock.ElapsedTicks) -RawOffset $r.raw_offset}catch{}}
++          }
++        }
+         if($ParamListDiagnostics-and$s.spec.role-ceq'ground'-and-not$paramDiagnosticsFailure){
+           try{
+             $null=Add-R19ParamListBytes -State $paramState -Bytes $block.Data -RawOffset $block.Offset -ReadCompletedTicks ([string]$block.EndTicks)
+@@ -442,14 +536,37 @@
+       if($ParamListDiagnostics-and$s.spec.role-ceq'ground'-and-not$paramDiagnosticsFailure){
+         try{
+           $paramReaderStatus=$s.reader.GetStatus()
++          if([string]::IsNullOrEmpty($s.workflow_failure)-and(-not$PSBoundParameters['GrantReservationDiagnostics']-or($measurementStart-and$reservationWorkflow.status-cne'Failed'))){
++            $paramAttemptsBefore=$paramState.write_attempts
++            try{
++              $attempted=Invoke-R19ParamListRequest -State $paramState -Role $s.spec.role -Workflow $s.workflow -HeartbeatCount $s.product_observations.Count -CaptureDeadlineTicks ([string]$deadline) -RawOffset $paramDeliveredOffset -ReaderPendingBytes $paramReaderStatus.PendingByteCount -NowTicks {[string]$clock.ElapsedTicks} -Writer {param([byte[]]$payload)$s.port.Write($payload,0,$payload.Length);return [int]$payload.Length} -GrantReservationDiagnostics:([bool]$PSBoundParameters['GrantReservationDiagnostics']) -ReservationWorkflow $(if($PSBoundParameters['GrantReservationDiagnostics']){$reservationWorkflow}else{$null})
++            }finally{
++              # The one-shot ledger latches before the OUT call. Preserve its
++              # attempt even if reservation commit throws after a write error.
++              $serialWrites+=($paramState.write_attempts-$paramAttemptsBefore)
++            }
+-          if([string]::IsNullOrEmpty($s.workflow_failure)){
+-            $attempted=Invoke-R19ParamListRequest -State $paramState -Role $s.spec.role -Workflow $s.workflow -HeartbeatCount $s.product_observations.Count -CaptureDeadlineTicks ([string]$deadline) -RawOffset $paramDeliveredOffset -ReaderPendingBytes $paramReaderStatus.PendingByteCount -NowTicks {[string]$clock.ElapsedTicks} -Writer {param([byte[]]$payload)$s.port.Write($payload,0,$payload.Length);return [int]$payload.Length}
+-            if($attempted){$serialWrites++}
+           }
+           [void](Update-R19ParamListCheckpoint -State $paramState -ReaderStatus $paramReaderStatus -OutputDirectory $OutputDirectory)
+         }catch{$paramDiagnosticsFailure=$_.Exception.Message}
+       }
+     }
++    if($GrantReservationDiagnostics-and$reservationWorkflow.status-cne'Failed'){
++      try{
++        $g=@($states|Where-Object{$_.spec.role-ceq'ground'})[0];$v=@($states|Where-Object{$_.spec.role-ceq'vehicle'})[0]
++        $primary=$false
++        if($null-ne$g.workflow-and$g.workflow.arm_write_accepted){$primary=@($g.product_observations|Where-Object{$_.system_id-eq1-and$_.component_id-eq1-and[Numerics.BigInteger]$_.read_completed_ticks-ge[Numerics.BigInteger]$g.workflow.arm_write_started_ticks}).Count-gt0}
++        Set-R19GrantReservationPrerequisites -State $reservationWorkflow -GroundClockReplyValidated ($null-ne$g.workflow-and$g.workflow.reply_read_validated) -VehicleClockReplyValidated ($null-ne$v.workflow-and$v.workflow.reply_read_validated) -GroundArmWriteAccepted ($null-ne$g.workflow-and$g.workflow.arm_write_accepted) -PrimaryHeartbeatAfterArm $primary -NowTicks ([string]$clock.ElapsedTicks)
++        $command=Get-R19GrantReservationNextCommand $reservationWorkflow ([string]$clock.ElapsedTicks)
++        if($null-ne$command){
++          $target=@($states|Where-Object{$_.spec.role-ceq$command.role})[0];$serialWrites++
++          $null=Invoke-R19ReservationPrivateWrite -State $reservationWorkflow -Command $command -NowTicks {[string]$clock.ElapsedTicks} -Writer {param([byte[]]$payload)$target.port.Write($payload,0,$payload.Length);return [int]$payload.Length}
++        }
++        if(-not$measurementStart-and$null-ne$reservationWorkflow.bound){
++          $measurementStart=Start-R19ReservationMeasurement $reservationWorkflow $states.ToArray() {[string]$clock.ElapsedTicks}
++          $deadline=[Numerics.BigInteger]::Parse($measurementStart)+[Numerics.BigInteger]::Parse($frequency)*40
++        }
++      }catch{if($reservationWorkflow.status-cne'Failed'){try{Stop-R19GrantReservationWorkflow $reservationWorkflow $_.Exception.Message}catch{}}}
++    }
+     # Native read owners continue independently during the bounded parser pause.
+     Start-Sleep -Milliseconds 2
+   }
+@@ -502,6 +619,12 @@
+ $readComparison=[pscustomobject]@{plan=$readComparisonPlan;evidence=$readComparisonEvidence;evaluation=(Get-R19ReadComparisonEvaluation -Plan $readComparisonPlan -Evidence $readComparisonEvidence)}
+ $paramSnapshot=$null
+ if($ParamListDiagnostics){$paramSnapshot=Get-R19ParamListSnapshot -State $paramState}
++if($GrantReservationDiagnostics){
++  try{
++    $reservationSnapshot=Get-R19GrantReservationSnapshot $reservationWorkflow
++    $reservationRawPhases=Get-R19ReservationRawPhases -States $states.ToArray() -PreparationStart $preparationStart -MeasurementStart $measurementStart -MeasurementEnd $measurementEnd
++  }catch{if(-not$failure){$failure='Reservation evidence: '+$_.Exception.Message}}
++}
+ # Keep the persistence entry self-contained: legacy callers can materialize the
+ # inert CLI context without opt-in locals, helper imports or device operations.
+ $summary=Save-R19TimedPathCaptureEvidence -States $states.ToArray() -OutputDirectory $OutputDirectory -Context ([pscustomobject]@{
+@@ -512,6 +635,10 @@
+   param_list_diagnostics_enabled=[bool]$PSBoundParameters['ParamListDiagnostics']
+   grant_diagnostics_enabled=[bool]$PSBoundParameters['GrantDiagnostics']
+   grant_diagnostics_selection_present=($PSBoundParameters.Keys-ccontains'GrantDiagnostics')
++  grant_reservation_diagnostics=[bool]$PSBoundParameters['GrantReservationDiagnostics']
++  grant_reservation_contract=if($PSBoundParameters['GrantReservationDiagnostics']){$handoff.grant_reservation_diagnostics}else{$null}
++  grant_reservation_workflow=if($PSBoundParameters['GrantReservationDiagnostics']){$reservationSnapshot}else{$null}
++  reservation_raw_phases=if($PSBoundParameters['GrantReservationDiagnostics']){$reservationRawPhases}else{$null}
+   param_list_diagnostics=if($PSBoundParameters['ParamListDiagnostics']){$paramSnapshot}else{$null}
+   param_list_diagnostics_failure=if($PSBoundParameters['ParamListDiagnostics']){$paramDiagnosticsFailure}else{''}})
+ Write-Output ($summary.result+' candidate='+$plan.candidate_id+' mode='+$Mode)
+
+--- a/tools/r19_timed_path_acquisition.ps1
++++ b/tools/r19_timed_path_acquisition.ps1
+@@ -38,7 +38,7 @@
+     [Parameter(Mandatory)][string]$CandidateId,[Parameter(Mandatory)][string]$HandoffSha256,
+     [Parameter(Mandatory)][string]$FlashEvidenceSha256,[Parameter(Mandatory)][DateTime]$NowUtc,
+     [ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None',
++    [bool]$ParamListDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false)
+-    [bool]$ParamListDiagnostics=$false,[bool]$GrantDiagnostics=$false)
+   Set-StrictMode -Version Latest
+   Assert-R19Acquisition ($Permit.schema-ceq'vc-lora-r19-timed-path-execution-permit-v1'-and$Permit.status-ceq'AUTHORIZED_SINGLE_CAPTURE') 'Unknown execution permit'
+   Assert-R19Acquisition ($Permit.candidate_id-ceq$CandidateId-and$Permit.mode-ceq$Mode) 'Permit candidate/mode mismatch'
+@@ -61,6 +61,16 @@
+     $permitGrant=$Permit.grant_diagnostics
+   }
+   Assert-R19Acquisition ($permitGrant-eq$GrantDiagnostics) 'Permit Grant option mismatch'
++  $permitReservation=$false
++  if($null-ne$Permit.PSObject.Properties['grant_reservation_diagnostics']){
++    Assert-R19Acquisition ($Permit.PSObject.Properties['grant_reservation_diagnostics'].Name-ceq'grant_reservation_diagnostics'-and$Permit.grant_reservation_diagnostics-is[bool]) 'Permit reservation option must be exact Boolean'
++    $permitReservation=$Permit.grant_reservation_diagnostics
++  }
++  Assert-R19Acquisition ($permitReservation-eq$GrantReservationDiagnostics) 'Permit Grant reservation option mismatch'
++  if($GrantReservationDiagnostics){
++    Assert-R19Acquisition ($GrantDiagnostics-and$ParamListDiagnostics-and$Mode-ceq'ExplicitHostArm'-and$ReadComparisonMode-ceq'None') 'Reservation permit requires complete Grant/PARAM ExplicitHostArm diagnostics'
++    Assert-R19Acquisition (($Permit.reservation_prepare_seconds-is[int]-or$Permit.reservation_prepare_seconds-is[long])-and$Permit.reservation_prepare_seconds-eq15-and$null-ne$Permit.PSObject.Properties['grant_reservation_contract']) 'Reservation permit requires exact15s preparation and canonical contract'
++  }elseif($null-ne$Permit.PSObject.Properties['grant_reservation_contract']){throw 'Undeclared reservation contract in permit'}
+   Assert-R19Acquisition (-not$GrantDiagnostics-or($Mode-ceq'ExplicitHostArm'-and$ReadComparisonMode-ceq'None')) 'Grant permit requires ExplicitHostArm without comparison'
+   Assert-R19Acquisition (-not$ParamListDiagnostics-or($Mode-ceq'ExplicitHostArm'-and$ReadComparisonMode-ceq'None')) 'Parameter-list permit requires ExplicitHostArm without read comparison'
+   foreach($field in @('safety_confirmed','one_time','restore_required')){Assert-R19Acquisition ($Permit.$field-is[bool]-and$Permit.$field) "Permit $field is not explicit true"}
+@@ -81,7 +91,7 @@
+   [pscustomobject]@{valid=$true;hardware_interaction=$false;capture_seconds=40;mode=$Mode;candidate_id=$CandidateId}
+ }
+ function Assert-R19GrantCaptureMetadata {
++  param([object]$Value,[string]$RepoRoot,[bool]$Enabled=$false,[bool]$GrantReservationDiagnostics=$false)
+-  param([object]$Value,[string]$RepoRoot,[bool]$Enabled=$false)
+   function ExactGrantFields($Object,[string[]]$Names){
+     Assert-R19Acquisition ($null-ne$Object-and$Object-isnot[string]-and$Object-isnot[ValueType]-and$Object-isnot[array]) 'Grant contract must be object'
+     $actual=@($Object.PSObject.Properties.Name)
+@@ -95,7 +105,8 @@
+   ExactGrantFields $g @('schema','enabled','macro','reader_schema','record','decoder')
+   ExactGrantFields $g.record @('symbol','schema_version','size_bytes')
+   ExactGrantFields $g.decoder @('path','sha256')
++  $topReader=if($GrantReservationDiagnostics){'vc-lora-r19-runtime-stage-jtag-read-v10'}else{'vc-lora-r19-runtime-stage-jtag-read-v9'}
++  Assert-R19Acquisition ($Value.reader_schema-is[string]-and$Value.reader_schema-ceq$topReader) 'Grant capture reader generation differs'
+-  Assert-R19Acquisition ($Value.reader_schema-is[string]-and$Value.reader_schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v9') 'Grant capture reader generation differs'
+   Assert-R19Acquisition ($g.schema-is[string]-and$g.schema-ceq'vc-lora-r19-grant-diagnostic-candidate-v1'-and$g.enabled-is[bool]-and$g.enabled-and$g.macro-is[string]-and$g.macro-ceq'VC_LORA_R19_GRANT_DIAGNOSTICS'-and$g.reader_schema-is[string]-and$g.reader_schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v9') 'Grant diagnostic ABI mismatch'
+   Assert-R19Acquisition ($g.record.symbol-is[string]-and$g.record.symbol-ceq'vc_lora_r19_grant_diagnostic_record'-and($g.record.schema_version-is[int]-or$g.record.schema_version-is[long])-and$g.record.schema_version-eq1-and($g.record.size_bytes-is[int]-or$g.record.size_bytes-is[long])-and$g.record.size_bytes-eq1024) 'Grant record exact integer layout differs'
+   Assert-R19Acquisition ($g.decoder.path-is[string]-and$g.decoder.path-ceq'tools/read_r19_grant_diagnostic_record.ps1'-and$g.decoder.sha256-is[string]-and$g.decoder.sha256-cmatch'^[A-F0-9]{64}$'-and$g.decoder.sha256-ceq(Get-FileHash -LiteralPath (Join-Path $RepoRoot $g.decoder.path) -Algorithm SHA256 -ErrorAction Stop).Hash) 'Grant decoder source digest differs'
+@@ -107,10 +118,11 @@
+     [Parameter(Mandatory)][string]$FlashEvidenceSha256,[Parameter(Mandatory)][DateTime]$NowUtc,
+     [bool]$DiagnosticUsbFailureDiagnostics=$false,[string]$RepoRoot='',
+     [ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None',
++    [bool]$ParamListDiagnostics=$false,[bool]$AuxReadinessDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false)
+-    [bool]$ParamListDiagnostics=$false,[bool]$AuxReadinessDiagnostics=$false,[bool]$GrantDiagnostics=$false)
+   Set-StrictMode -Version Latest
+   Assert-R19Acquisition ($ReadComparisonMode-ceq'None'-or($Mode-ceq'ExplicitHostArm'-and$DiagnosticUsbFailureDiagnostics)) 'Read comparison requires explicit diagnostic role capabilities'
+   Assert-R19Acquisition (-not$ParamListDiagnostics-or($Mode-ceq'ExplicitHostArm'-and$AuxReadinessDiagnostics-and$DiagnosticUsbFailureDiagnostics-and$ReadComparisonMode-ceq'None')) 'Parameter-list capture requires ExplicitHostArm AUX/diagnostic mode without read comparison'
++  Assert-R19Acquisition (-not$GrantReservationDiagnostics-or($GrantDiagnostics-and$ParamListDiagnostics-and$Mode-ceq'ExplicitHostArm'-and$AuxReadinessDiagnostics-and$DiagnosticUsbFailureDiagnostics-and$ReadComparisonMode-ceq'None')) 'Reservation capture requires full Grant/PARAM ExplicitHostArm diagnostics'
+   Assert-R19Acquisition ($Handoff.schema-ceq'vc-lora-r19-candidate-artifact-handoff-v1'-and$Handoff.result-ceq'PASS') 'Candidate handoff is not accepted diagnostic artifact evidence'
+   Assert-R19Acquisition ($Handoff.runtime_fail_diagnostics_enabled-is[bool]-and$Handoff.runtime_fail_diagnostics_enabled) 'Candidate diagnostics are disabled'
+   $d=$Handoff.timed_path_diagnostics
+@@ -122,7 +134,7 @@
+     Assert-R19Acquisition (-not[string]::IsNullOrWhiteSpace($RepoRoot)) 'New diagnostic role capabilities require an explicit canonical repository source binding'
+     foreach($value in @($Handoff,$FlashEvidence)){
+       Assert-R19Acquisition ($null-ne$value.PSObject.Properties['diagnostic_usb_failure_diagnostics']-and$null-ne$value.PSObject.Properties['usb_role_capabilities']) 'Missing new diagnostic USB failure/role capability declaration'
++      $expectedReader=if($GrantReservationDiagnostics){'vc-lora-r19-runtime-stage-jtag-read-v10'}elseif($GrantDiagnostics){'vc-lora-r19-runtime-stage-jtag-read-v9'}else{'vc-lora-r19-runtime-stage-jtag-read-v8'}
+-      $expectedReader=if($GrantDiagnostics){'vc-lora-r19-runtime-stage-jtag-read-v9'}else{'vc-lora-r19-runtime-stage-jtag-read-v8'}
+       Assert-R19Acquisition ($value.runtime_fail_diagnostics_enabled-is[bool]-and$value.runtime_fail_diagnostics_enabled-and$value.reader_schema-ceq$expectedReader-and$value.aux_readiness_diagnostics.enabled-is[bool]-and$value.aux_readiness_diagnostics.enabled-and$value.aux_readiness_diagnostics.schema-ceq'vc-lora-r19-aux-readiness-candidate-v1'-and$value.aux_readiness_diagnostics.record.size_bytes-eq6144) 'Capture runtime/AUX diagnostics or reader generation mismatch'
+       $failureAbi=$value.diagnostic_usb_failure_diagnostics
+       Assert-R19Acquisition ($failureAbi.schema-ceq'vc-lora-r19-diagnostic-usb-failure-candidate-v1'-and$failureAbi.enabled-is[bool]-and$failureAbi.enabled-and$failureAbi.macro-ceq'VC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD'-and$failureAbi.reader_schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v8'-and$failureAbi.record.symbol-ceq'vc_lora_r19_diagnostic_usb_failure_record'-and$failureAbi.record.schema_version-eq1-and$failureAbi.record.size_bytes-eq256) 'New diagnostic USB failure ABI mismatch'
+@@ -138,12 +150,23 @@
+   if($GrantDiagnostics){
+     Assert-R19Acquisition ($Mode-ceq'ExplicitHostArm'-and$AuxReadinessDiagnostics-and$DiagnosticUsbFailureDiagnostics-and$ReadComparisonMode-ceq'None') 'Grant capture requires full explicit diagnostics without comparison'
+     foreach($value in @($Handoff,$FlashEvidence)){
++      Assert-R19GrantCaptureMetadata -Value $value -RepoRoot $RepoRoot -Enabled $true -GrantReservationDiagnostics $GrantReservationDiagnostics
+-      Assert-R19GrantCaptureMetadata -Value $value -RepoRoot $RepoRoot -Enabled $true
+     }
+     Assert-R19Acquisition (($Handoff.grant_diagnostics|ConvertTo-Json -Depth 15 -Compress)-ceq($FlashEvidence.grant_diagnostics|ConvertTo-Json -Depth 15 -Compress)) 'Flash and handoff Grant contracts differ'
+   }else{
+     foreach($value in @($Handoff,$FlashEvidence)){Assert-R19GrantCaptureMetadata -Value $value -RepoRoot $RepoRoot}
+   }
++  if($GrantReservationDiagnostics){
++    . (Join-Path $PSScriptRoot 'r19_grant_reservation_contract.ps1')
++    foreach($value in @($Handoff,$FlashEvidence)){
++      Assert-R19Acquisition ($null-ne$value.PSObject.Properties['grant_reservation_diagnostics']-and$value.PSObject.Properties['grant_reservation_diagnostics'].Name-ceq'grant_reservation_diagnostics') 'Reservation candidate/flash contract absent'
++      [void](Assert-R19GrantReservationCandidateContract -Value $value.grant_reservation_diagnostics -RepoRoot $RepoRoot -Enabled $true)
++    }
++    Assert-R19Acquisition (($Handoff.grant_reservation_diagnostics|ConvertTo-Json -Depth 18 -Compress)-ceq($FlashEvidence.grant_reservation_diagnostics|ConvertTo-Json -Depth 18 -Compress)) 'Reservation candidate/flash contracts differ'
++    Assert-R19Acquisition ($null-ne$Permit.PSObject.Properties['grant_reservation_contract']-and($Permit.grant_reservation_contract|ConvertTo-Json -Depth 18 -Compress)-ceq($Handoff.grant_reservation_diagnostics|ConvertTo-Json -Depth 18 -Compress)) 'Reservation permit does not bind candidate contract'
++  }else{
++    foreach($value in @($Handoff,$FlashEvidence)){Assert-R19Acquisition ($null-eq$value.PSObject.Properties['grant_reservation_diagnostics']) 'Reservation candidate requires explicit capture mode'}
++  }
+   Assert-R19Acquisition ($FlashEvidence.one_run_hil_authorized-is[bool]-and$FlashEvidence.one_run_hil_authorized) 'Flash is not authorized for one diagnostic capture'
+   Assert-R19Acquisition (@($FlashEvidence.roles).Count-eq2) 'Flash evidence must have exactly two roles'
+   foreach($r in @('vehicle','ground')){
+@@ -151,7 +174,7 @@
+     $portRows=@($Permit.ports|Where-Object{$_.role-ceq$r});Assert-R19Acquisition ($portRows.Count-eq1) 'Permit role is not unique'
+     Assert-R19Acquisition ($rows[0].port-ceq$portRows[0].port-and$rows[0].pnp_device_id-ceq$portRows[0].pnp_instance_id-and$rows[0].parent_device_id-ceq$portRows[0].usb_parent_instance_id) 'Permit must bind the exact freshly flashed USB devices'
+   }
++  Test-R19TimedPathExecutionPermit -Permit $Permit -Mode $Mode -CandidateId $Handoff.artifact_id -HandoffSha256 $HandoffSha256 -FlashEvidenceSha256 $FlashEvidenceSha256 -NowUtc $NowUtc -ReadComparisonMode $ReadComparisonMode -ParamListDiagnostics $ParamListDiagnostics -GrantDiagnostics $GrantDiagnostics -GrantReservationDiagnostics $GrantReservationDiagnostics
+-  Test-R19TimedPathExecutionPermit -Permit $Permit -Mode $Mode -CandidateId $Handoff.artifact_id -HandoffSha256 $HandoffSha256 -FlashEvidenceSha256 $FlashEvidenceSha256 -NowUtc $NowUtc -ReadComparisonMode $ReadComparisonMode -ParamListDiagnostics $ParamListDiagnostics -GrantDiagnostics $GrantDiagnostics
+ }
+ 
+ function New-R19TimedPathPrivateParser {
+@@ -230,7 +253,7 @@
+     # This sample is taken only after the actual runtime CRC computation above.
+     $validated=[string](& $SampleValidationTicks)
+     Assert-R19Acquisition ((Get-R19ClockInteger $validated 'CRC validation QPC')-ge(Get-R19ClockInteger $ReadCompletedTicks 'native read return')) 'Runtime validation clock precedes native read return'
++    $found.Add([pscustomobject]@{raw_offset=$Parser.buffer_raw_offset;frame_bytes=21;frame_sha256=(Get-R19AcquisitionSha256 $frame);read_completed_ticks=$ReadCompletedTicks;validation_ticks=$validated;clock_domain_id=$ClockDomainId;frequency=$Frequency;system_id=[int]$frame[5];component_id=[int]$frame[6]})
+-    $found.Add([pscustomobject]@{raw_offset=$Parser.buffer_raw_offset;frame_bytes=21;frame_sha256=(Get-R19AcquisitionSha256 $frame);read_completed_ticks=$ReadCompletedTicks;validation_ticks=$validated;clock_domain_id=$ClockDomainId;frequency=$Frequency})
+     $b.RemoveRange(0,21);$Parser.buffer_raw_offset+=21
+   }
+   return ,$found.ToArray()
+
+--- /dev/null
++++ b/tools/r19_grant_reservation_wire.ps1
+@@ -1,0 +1,89 @@
++# Fixed USB-local R19R codec. Definitions only; not RF control or authentication.
++function ConvertTo-R19GrantReservationUInt {
++  param([object]$Value,[string]$Name,[uint64]$Maximum=[uint64]::MaxValue,[switch]$AllowZero)
++  if($null-eq$Value-or$Value-is[bool]-or$Value-is[double]-or$Value-is[single]){throw ('Invalid exact integer '+$Name)}
++  $s=[Convert]::ToString($Value,[Globalization.CultureInfo]::InvariantCulture);[uint64]$n=0
++  if($s-cnotmatch'^(0|[1-9][0-9]*)$'-or-not[uint64]::TryParse($s,[Globalization.NumberStyles]::None,[Globalization.CultureInfo]::InvariantCulture,[ref]$n)-or$n-gt$Maximum-or($n-eq0-and-not$AllowZero)){throw ('Invalid canonical integer '+$Name)}
++  return $n
++}
++function Get-R19GrantReservationOpcode {
++  param([string]$Name)
++  $names=@('','HelloRequest','HelloReply','PrepareVehicle','Prepared','BindGround','BindPeerGround','Bound','BindPeerVehicle','ReleaseVehicle','GroundHeld','TailReady','TailPermitGround','Fault','Started')
++  $i=[Array]::IndexOf($names,$Name);if($i-lt1-or$i-eq14){throw 'Unknown or record-only R19R opcode'};return $i
++}
++function Get-R19GrantReservationCrc {
++  param([byte[]]$Bytes)
++  if($null-eq$Bytes-or$Bytes.Length-ne66){throw 'R19R requires exactly66 bytes'}
++  [uint16]$crc=65535
++  foreach($v in @($Bytes[1..63])+@(83)){[uint16]$t=([uint16]$v-bxor($crc-band255));$t=($t-bxor(($t-shl4)-band255))-band255;$crc=(($crc-shr8)-bxor($t-shl8)-bxor($t-shl3)-bxor($t-shr4))-band65535}
++  return $crc
++}
++function New-R19GrantReservationFrame {
++  param([Parameter(Mandatory)][string]$Opcode,[Parameter(Mandatory)][ValidateSet('ground','vehicle')][string]$Role,
++    [Parameter(Mandatory)][object]$ReaderSession,[Parameter(Mandatory)][object]$SlotNonce,[object]$BootId='0',[object]$UsbEpoch=0,
++    [object]$GrantSession=0,[object]$GrantCycle=0,[object]$SlotToken=0,[object]$Generation=0,[object]$DeviceMs=0,[byte]$Flags=0,[byte]$Sequence=0)
++  $op=Get-R19GrantReservationOpcode $Opcode
++  [uint64]$reader=ConvertTo-R19GrantReservationUInt $ReaderSession 'reader_session'
++  [uint64]$nonce=ConvertTo-R19GrantReservationUInt $SlotNonce 'slot_nonce'
++  if(($nonce-shr48)-ne0x521B-or($nonce-band[uint64]0x0000FFFFFFFFFFFF)-eq0){throw 'R19R nonce must use fresh521B private domain'}
++  [uint64]$boot=ConvertTo-R19GrantReservationUInt $BootId 'boot_id' -AllowZero
++  [uint32]$epoch=ConvertTo-R19GrantReservationUInt $UsbEpoch 'usb_epoch' 4294967295 -AllowZero
++  [uint16]$session=ConvertTo-R19GrantReservationUInt $GrantSession 'grant_session' 65535 -AllowZero
++  [uint16]$cycle=ConvertTo-R19GrantReservationUInt $GrantCycle 'grant_cycle' 65535 -AllowZero
++  [uint32]$token=ConvertTo-R19GrantReservationUInt $SlotToken 'slot_token' 4294967295 -AllowZero
++  [uint32]$generation=ConvertTo-R19GrantReservationUInt $Generation 'generation' 4294967295 -AllowZero
++  [uint32]$ms=ConvertTo-R19GrantReservationUInt $DeviceMs 'device_ms' 4294967295 -AllowZero
++  $request=$op-in@(1,3,5,6,8,9,12)
++  if(($op-in@(3,4,8,9,11)-and$Role-cne'vehicle')-or($op-in@(5,6,7,10,12)-and$Role-cne'ground')){throw 'R19R opcode/role mismatch'}
++  if($Flags-ne0){throw 'R19R flags must be zero; Fault reasons belong to the JTAG record'}
++  if($op-eq1){if($boot-ne0-or$epoch-ne0-or$session-ne0-or$cycle-ne0-or$token-ne0-or$generation-ne0-or$ms-ne0){throw 'HelloRequest reserved fields must be zero'}}
++  elseif($boot-eq0){throw 'R19R local/peer boot identity cannot be zero'}
++  if($op-eq2){if($token-ne0-or$generation-ne0-or($Role-ceq'ground'-and$session-eq0)){throw 'HelloReply Ground requires actual baseline; token/generation reserved'}}
++  if($op-eq3){if($session-eq0-or$token-ne0-or$generation-ne0-or$ms-ne0){throw 'PrepareVehicle requires Ground baseline and zero slot fields'}}
++  if($op-in@(5,6,8)-and$ms-ne0){throw 'Bind commands cannot carry a device time claim'}
++  if($op-in@(4,5,6,7,8,9,10,11,12,14)){if($session-eq0-or$cycle-eq0-or$token-eq0-or$generation-eq0){throw 'R19R reserved slot identity is incomplete'}}
++  [byte[]]$b=[byte[]]::new(66);$b[0]=253;$b[1]=54;$b[4]=$Sequence;$b[5]=249;$b[6]=$(if($request){197}else{198});$b[7]=253
++  $b[10]=82;$b[11]=49;$b[12]=57;$b[13]=82;$b[14]=1;$b[15]=[byte]$op;$b[16]=$(if($Role-ceq'ground'){1}else{2});$b[17]=$Flags
++  foreach($p in @(@(18,$reader,8),@(26,$nonce,8),@(34,$boot,8),@(42,[uint64]$epoch,4),@(46,[uint64]$session,2),@(48,[uint64]$cycle,2),@(50,[uint64]$token,4),@(54,[uint64]$generation,4),@(58,[uint64]$ms,4))){for($i=0;$i-lt$p[2];$i++){$b[[int]$p[0]+$i]=[byte](([uint64]$p[1]-shr(8*$i))-band255)}}
++  $b[62]=165;$b[63]=90;[uint16]$crc=Get-R19GrantReservationCrc $b;$b[64]=[byte]($crc-band255);$b[65]=[byte]($crc-shr8);return ,$b
++}
++function ConvertFrom-R19GrantReservationFrame {
++  param([byte[]]$Bytes)
++  try{
++    if($null-eq$Bytes-or$Bytes.Length-ne66-or$Bytes[0]-ne253-or$Bytes[1]-ne54-or$Bytes[2]-ne0-or$Bytes[3]-ne0-or$Bytes[5]-ne249-or$Bytes[6]-notin@(197,198)-or$Bytes[7]-ne253-or$Bytes[8]-ne0-or$Bytes[9]-ne0-or$Bytes[10]-ne82-or$Bytes[11]-ne49-or$Bytes[12]-ne57-or$Bytes[13]-ne82-or$Bytes[14]-ne1-or$Bytes[62]-ne165-or$Bytes[63]-ne90){throw 'Not canonical R19R namespace'}
++    if(([uint16]$Bytes[64]-bor([uint16]$Bytes[65]-shl8))-ne(Get-R19GrantReservationCrc $Bytes)){throw 'R19R CRC mismatch'}
++    $names=@('','HelloRequest','HelloReply','PrepareVehicle','Prepared','BindGround','BindPeerGround','Bound','BindPeerVehicle','ReleaseVehicle','GroundHeld','TailReady','TailPermitGround','Fault','Started')
++    if($Bytes[15]-lt1-or$Bytes[15]-gt13){throw 'Unknown or record-only R19R opcode'}
++    $role=if($Bytes[16]-eq1){'ground'}elseif($Bytes[16]-eq2){'vehicle'}else{throw 'Unknown R19R role'}
++    $values=@{}
++    foreach($p in @(@('ReaderSession',18,8),@('SlotNonce',26,8),@('BootId',34,8),@('UsbEpoch',42,4),@('GrantSession',46,2),@('GrantCycle',48,2),@('SlotToken',50,4),@('Generation',54,4),@('DeviceMs',58,4))){[uint64]$v=0;for($i=0;$i-lt$p[2];$i++){$v=$v-bor([uint64]$Bytes[[int]$p[1]+$i]-shl(8*$i))};$values[$p[0]]=$v.ToString([Globalization.CultureInfo]::InvariantCulture)}
++    [byte[]]$canonical=New-R19GrantReservationFrame -Opcode $names[$Bytes[15]] -Role $role -Flags $Bytes[17] -Sequence $Bytes[4] @values
++    for($i=0;$i-lt66;$i++){if($canonical[$i]-ne$Bytes[$i]){throw 'R19R component/opcode noncanonical bytes'}}
++    [pscustomobject]@{schema='vc-lora-r19-grant-reservation-usb-v1';valid=$true;opcode=$names[$Bytes[15]];opcode_number=[int]$Bytes[15];role=$role;flags=[int]$Bytes[17]
++      reader_session=$values.ReaderSession;slot_nonce=$values.SlotNonce;boot_id=$values.BootId;usb_epoch=$values.UsbEpoch;grant_session=$values.GrantSession;grant_cycle=$values.GrantCycle;slot_token=$values.SlotToken;generation=$values.Generation;device_ms=$values.DeviceMs;sequence=[int]$Bytes[4];component=[int]$Bytes[6];error=''}
++  }catch{[pscustomobject]@{schema='vc-lora-r19-grant-reservation-usb-v1';valid=$false;opcode='';role='';error=$_.Exception.Message}}
++}
++function New-R19GrantReservationParser {
++  [pscustomobject]@{buffer=[Collections.Generic.List[byte]]::new();next_raw_offset=0L;buffer_raw_offset=0L;input_bytes=0L;accepted_frames=0;invalid_namespace_frames=0}
++}
++function Add-R19GrantReservationBytes {
++  param([object]$Parser,[byte[]]$Bytes,[long]$RawOffset,[string]$ReadCompletedTicks)
++  if($null-eq$Bytes-or$Bytes.Length-gt8192-or$Parser.buffer.Count+$Bytes.Length-gt16384-or$RawOffset-ne$Parser.next_raw_offset){throw 'R19R parser prefix/capacity mismatch'}
++  foreach($v in $Bytes){$Parser.buffer.Add($v)};$Parser.input_bytes+=$Bytes.Length;$Parser.next_raw_offset+=$Bytes.Length;$found=[Collections.Generic.List[object]]::new()
++  while($Parser.buffer.Count-gt0){
++    $b=$Parser.buffer
++    if($b[0]-ne253-and$b[0]-ne254){$b.RemoveAt(0);$Parser.buffer_raw_offset++;continue}
++    $header=if($b[0]-eq253){10}else{6};if($b.Count-lt$header){break}
++    $length=$header+[int]$b[1]+2;if($b[0]-eq253-and($b[2]-band1)-ne0){$length+=13};if($b.Count-lt$length){break}
++    $namespace=$b[0]-eq253-and$b[5]-eq249-and$b[6]-in@(197,198)-and$b[7]-eq253-and$b[8]-eq0-and$b[9]-eq0
++    if($namespace){
++      [byte[]]$frame=$b.GetRange(0,$length).ToArray();$d=ConvertFrom-R19GrantReservationFrame $frame
++      if($d.valid){$found.Add([pscustomobject]@{kind='GrantReservation';read_completed_ticks=$ReadCompletedTicks;raw_offset=$Parser.buffer_raw_offset;bytes=$frame;decoded=$d});$Parser.accepted_frames++}
++      else{$Parser.invalid_namespace_frames++}
++    }
++    # Skip complete declared MAVLink frames, including unknown payloads. Never
++    # promote an embedded R19R-shaped payload into a top-level control command.
++    $b.RemoveRange(0,$length);$Parser.buffer_raw_offset+=$length
++  }
++  return ,$found.ToArray()
++}
+
+--- /dev/null
++++ b/tools/r19_grant_reservation_workflow.ps1
+@@ -1,0 +1,193 @@
++# Pure, bounded dual-USB diagnostic workflow. Writer/clock are explicit seams.
++# USB OUT acceptance is local only; matching IN observations are distinct facts.
++function Add-R19GrantReservationWorkflowEvent {
++  param([object]$State,[string]$Kind,[object]$Details=$null)
++  if($State.events.Count-ge128){$State.status='Failed';$State.failure='WORKFLOW_EVENT_CAPACITY';throw $State.failure}
++  $State.events.Add([pscustomobject]@{ordinal=$State.events.Count+1;kind=$Kind;pc_ticks=$State.last_ticks;details=$Details})
++}
++function Stop-R19GrantReservationWorkflow {
++  param([object]$State,[string]$Reason)
++  if($State.status-cne'Failed'){$State.failure_phase=$State.status;$State.status='Failed';$State.failure=$Reason;$State.not_ready_count=1;Add-R19GrantReservationWorkflowEvent $State 'Failure' $Reason}
++  throw $Reason
++}
++function New-R19GrantReservationWorkflow {
++  param([string]$CandidateId,[string]$HandoffSha256,[string]$FlashSha256,[object]$ReaderSession,[object]$SlotNonce,
++    [string]$ClockDomainId,[string]$Frequency,[string]$StartTicks)
++  if($CandidateId-cnotmatch'^[A-Za-z0-9][A-Za-z0-9._-]{2,127}$'-or$HandoffSha256-cnotmatch'^[A-F0-9]{64}$'-or$FlashSha256-cnotmatch'^[A-F0-9]{64}$'-or[string]::IsNullOrWhiteSpace($ClockDomainId)){throw 'Unbound reservation candidate/provenance/clock'}
++  [uint64]$reader=ConvertTo-R19GrantReservationUInt $ReaderSession 'reader_session';[uint64]$nonce=ConvertTo-R19GrantReservationUInt $SlotNonce 'slot_nonce'
++  [void](New-R19GrantReservationFrame -Opcode HelloRequest -Role ground -ReaderSession $reader -SlotNonce $nonce)
++  [uint64]$frequencyValue=ConvertTo-R19GrantReservationUInt $Frequency 'frequency' 1000000000
++  [uint64]$start=ConvertTo-R19GrantReservationUInt $StartTicks 'start_ticks' 9223372036854775807 -AllowZero
++  if([Numerics.BigInteger]$start+15*[Numerics.BigInteger]$frequencyValue-gt[long]::MaxValue){throw 'Reservation preparation deadline overflow'}
++  [pscustomobject]@{schema='vc-lora-r19-grant-reservation-workflow-v1';status='WaitingPrerequisites';failure='';failure_phase='';not_ready_count=0;candidate_id=$CandidateId;handoff_sha256=$HandoffSha256;flash_evidence_sha256=$FlashSha256
++    reader_session=$reader.ToString();slot_nonce=$nonce.ToString();clock_domain_id=$ClockDomainId;frequency=$frequencyValue.ToString();start_ticks=$start.ToString();last_ticks=$start.ToString();prepare_deadline_ticks=([Numerics.BigInteger]$start+15*[Numerics.BigInteger]$frequencyValue).ToString()
++    prerequisites_validated=$false;hello_ground=$null;hello_vehicle=$null;prepared=$null;bound=$null;held=$null;tail_ready=$null
++    commands=[Collections.Generic.List[object]]::new();observations=[Collections.Generic.List[object]]::new();events=[Collections.Generic.List[object]]::new();pending_command=$null
++    param_attempts=0;param_write_started_ticks=$null;param_write_returned_ticks=$null;param_accepted_bytes=$null;param_write_exception='';param_frame_sha256='FC3A47A83D35D44E96E044A216FDBF082805F9FACCDD5E4B9252E0C7026D4A75'
++    measurement_start_ticks=$null;ground_request_t0_ms=$null;vehicle_tail_ms=$null;high_speed_success_proven=$false;rf_delivery_proven=$false;acceptance_authorized=$false;deployment_authorized=$false}
++}
++function Update-R19GrantReservationWorkflow {
++  param([object]$State,[string]$NowTicks,[string]$ClockDomainId='')
++  if($State.schema-cne'vc-lora-r19-grant-reservation-workflow-v1'-or$State.status-ceq'Failed'){throw 'Invalid or failed reservation workflow'}
++  [uint64]$now=ConvertTo-R19GrantReservationUInt $NowTicks 'now_ticks' 9223372036854775807 -AllowZero
++  if($ClockDomainId-and$ClockDomainId-cne$State.clock_domain_id){Stop-R19GrantReservationWorkflow $State 'PC_CLOCK_DOMAIN_CHANGED'}
++  if([Numerics.BigInteger]$now-lt[Numerics.BigInteger]$State.last_ticks){Stop-R19GrantReservationWorkflow $State 'PC_CLOCK_REGRESSION'}
++  $State.last_ticks=$now.ToString()
++  if($null-eq$State.bound-and[Numerics.BigInteger]$now-gt[Numerics.BigInteger]$State.prepare_deadline_ticks){Stop-R19GrantReservationWorkflow $State 'PREPARATION_15_SECONDS_EXPIRED'}
++}
++function Set-R19GrantReservationPrerequisites {
++  param([object]$State,[bool]$GroundClockReplyValidated,[bool]$VehicleClockReplyValidated,[bool]$GroundArmWriteAccepted,[bool]$PrimaryHeartbeatAfterArm,[string]$NowTicks)
++  Update-R19GrantReservationWorkflow $State $NowTicks
++  if($State.prerequisites_validated){return}
++  if($GroundClockReplyValidated-and$VehicleClockReplyValidated-and$GroundArmWriteAccepted-and$PrimaryHeartbeatAfterArm){$State.prerequisites_validated=$true;$State.status='HelloPending';Add-R19GrantReservationWorkflowEvent $State 'PrerequisitesValidated' 'PC-local clocks/ARM and CRC-valid primary post-ARM Heartbeat; not a reservation.'}
++}
++function Test-R19GrantReservationCommandCommitted {
++  param([object]$State,[string]$Kind)
++  return @($State.commands|Where-Object{$_.kind-ceq$Kind-and$_.write_success}).Count-eq1
++}
++function Assert-R19GrantReservationResponseAfterWrite {
++  param([object]$State,[string[]]$Kinds,[string]$ReadCompletedTicks)
++  [uint64]$read=ConvertTo-R19GrantReservationUInt $ReadCompletedTicks 'read_completed_ticks' 9223372036854775807 -AllowZero
++  foreach($kind in $Kinds){
++    $commands=@($State.commands|Where-Object{$_.kind-ceq$kind-and$_.write_success})
++    if($commands.Count-ne1-or$null-eq$commands[0].started_ticks-or[Numerics.BigInteger]$read-lt[Numerics.BigInteger]$commands[0].started_ticks){Stop-R19GrantReservationWorkflow $State 'RESPONSE_NATIVE_READ_PRECEDES_MATCHING_OUT'}
++  }
++}
++function New-R19GrantReservationWorkflowCommand {
++  param([object]$State,[string]$Kind,[string]$Opcode,[string]$Role,[object]$Identity,[object]$Slot=$null,[string]$DeviceMs='0')
++  if($null-ne$State.pending_command-or@($State.commands|Where-Object{$_.kind-ceq$Kind}).Count-ne0){Stop-R19GrantReservationWorkflow $State 'COMMAND_REPLAY_OR_PENDING'}
++  $args=@{Opcode=$Opcode;Role=$Role;ReaderSession=$State.reader_session;SlotNonce=$State.slot_nonce;BootId=$Identity.boot_id;UsbEpoch=$Identity.usb_epoch;DeviceMs=$DeviceMs}
++  if($null-ne$Slot){$args.GrantSession=$Slot.grant_session;$args.GrantCycle=$Slot.grant_cycle;$args.SlotToken=$Slot.slot_token;$args.Generation=$Slot.generation}
++  [byte[]]$bytes=New-R19GrantReservationFrame @args
++  $command=[pscustomobject]@{index=$State.commands.Count+1;kind=$Kind;opcode=$Opcode;role=$Role;bytes=$bytes;frame_base64=[Convert]::ToBase64String($bytes);built_ticks=$State.last_ticks;started_ticks=$null;returned_ticks=$null;accepted_bytes=$null;write_success=$false;error='';local_write_api_accepted_only=$true;remote_delivery_proven=$false}
++  $State.commands.Add($command);$State.pending_command=$command;Add-R19GrantReservationWorkflowEvent $State 'CommandBuilt' $Kind;return $command
++}
++function Get-R19GrantReservationNextCommand {
++  param([object]$State,[string]$NowTicks)
++  Update-R19GrantReservationWorkflow $State $NowTicks
++  if(-not$State.prerequisites_validated){return $null}
++  if($null-ne$State.pending_command){Stop-R19GrantReservationWorkflow $State 'UNCOMMITTED_COMMAND_NO_RETRY'}
++  foreach($role in @('ground','vehicle')){
++    $kind='Hello'+$role
++    if(-not(Test-R19GrantReservationCommandCommitted $State $kind)){
++      return New-R19GrantReservationWorkflowCommand $State $kind HelloRequest $role ([pscustomobject]@{boot_id='0';usb_epoch='0'})
++    }
++  }
++  if($null-eq$State.hello_ground-or$null-eq$State.hello_vehicle){return $null}
++  if(-not(Test-R19GrantReservationCommandCommitted $State 'PrepareVehicle')){
++    return New-R19GrantReservationWorkflowCommand $State 'PrepareVehicle' PrepareVehicle vehicle $State.hello_vehicle ([pscustomobject]@{grant_session=$State.hello_ground.grant_session;grant_cycle=$State.hello_ground.grant_cycle;slot_token='0';generation='0'})
++  }
++  if($null-eq$State.prepared){return $null}
++  foreach($spec in @(@('BindPeerVehicle','BindPeerVehicle','vehicle','ground'),@('BindGround','BindGround','ground','ground'),@('BindPeerGround','BindPeerGround','ground','vehicle'))){
++    if(-not(Test-R19GrantReservationCommandCommitted $State $spec[0])){$identity=if($spec[3]-ceq'ground'){$State.hello_ground}else{$State.hello_vehicle};return New-R19GrantReservationWorkflowCommand $State $spec[0] $spec[1] $spec[2] $identity $State.prepared}
++  }
++  if($null-eq$State.held){return $null}
++  if(-not(Test-R19GrantReservationCommandCommitted $State 'ReleaseVehicle')){return New-R19GrantReservationWorkflowCommand $State 'ReleaseVehicle' ReleaseVehicle vehicle $State.hello_vehicle $State.prepared $State.ground_request_t0_ms}
++  if($null-eq$State.tail_ready){return $null}
++  if(-not(Test-R19GrantReservationCommandCommitted $State 'TailPermitGround')){return New-R19GrantReservationWorkflowCommand $State 'TailPermitGround' TailPermitGround ground $State.hello_vehicle $State.prepared $State.vehicle_tail_ms}
++  return $null
++}
++function Set-R19GrantReservationWriteResult {
++  param([object]$State,[object]$AcceptedBytes,[string]$StartedTicks,[string]$ReturnedTicks,[string]$ExceptionType='')
++  Update-R19GrantReservationWorkflow $State $ReturnedTicks
++  $c=$State.pending_command;if($null-eq$c){Stop-R19GrantReservationWorkflow $State 'WRITE_WITHOUT_PENDING_COMMAND'}
++  $c.started_ticks=$StartedTicks;$c.returned_ticks=$ReturnedTicks;$c.accepted_bytes=$AcceptedBytes;$c.error=$ExceptionType
++  if([Numerics.BigInteger]$StartedTicks-lt[Numerics.BigInteger]$c.built_ticks-or[Numerics.BigInteger]$ReturnedTicks-lt[Numerics.BigInteger]$StartedTicks){Stop-R19GrantReservationWorkflow $State 'INVALID_PRIVATE_WRITE_ORDER'}
++  if(($AcceptedBytes-isnot[int]-and$AcceptedBytes-isnot[long])-or$AcceptedBytes-ne66-or$ExceptionType){Stop-R19GrantReservationWorkflow $State 'PRIVATE_WRITE_INCOMPLETE_NO_RETRY'}
++  $c.write_success=$true;$State.pending_command=$null
++  if($c.kind-ceq'ReleaseVehicle'){$State.status='WaitingVehicleTail'}
++  elseif($c.kind-ceq'TailPermitGround'){$State.status='TailPermitWrittenAwaitingMcuEvidence'}
++  Add-R19GrantReservationWorkflowEvent $State 'CommandWriteAccepted' $c.kind
++}
++function Test-R19GrantReservationTuple {
++  param([object]$A,[object]$B)
++  foreach($f in @('grant_session','grant_cycle','slot_token','generation')){if([string]$A.$f-cne[string]$B.$f){return $false}};return $true
++}
++function Test-R19GrantReservationNewerGrant {
++  param([object]$Current,[object]$Baseline)
++  $s=([long]$Current.grant_session-[long]$Baseline.grant_session+65536)%65536
++  if($s-ne0){return $s-lt32768};$c=([long]$Current.grant_cycle-[long]$Baseline.grant_cycle+65536)%65536;return $c-gt0-and$c-lt32768
++}
++function Add-R19GrantReservationObservation {
++  param([object]$State,[ValidateSet('ground','vehicle')][string]$ChannelRole,[byte[]]$Bytes,[string]$ReadCompletedTicks,[string]$NowTicks,[long]$RawOffset=0)
++  Update-R19GrantReservationWorkflow $State $NowTicks
++  $d=ConvertFrom-R19GrantReservationFrame $Bytes
++  if(-not$d.valid-or$d.component-ne198-or$d.role-cne$ChannelRole-or$d.reader_session-cne$State.reader_session-or$d.slot_nonce-cne$State.slot_nonce){Stop-R19GrantReservationWorkflow $State 'INVALID_OR_UNBOUND_RESERVATION_RESPONSE'}
++  if([Numerics.BigInteger]$ReadCompletedTicks-gt[Numerics.BigInteger]$NowTicks){Stop-R19GrantReservationWorkflow $State 'RESPONSE_NATIVE_READ_IN_FUTURE'}
++  $hello=if($ChannelRole-ceq'ground'){$State.hello_ground}else{$State.hello_vehicle}
++  if($d.opcode-ceq'HelloReply'){
++    $kind='Hello'+$ChannelRole
++    if(-not(Test-R19GrantReservationCommandCommitted $State $kind)-or$null-ne$hello){Stop-R19GrantReservationWorkflow $State 'HELLO_RESPONSE_REPLAY_OR_UNREQUESTED'}
++    Assert-R19GrantReservationResponseAfterWrite $State @($kind) $ReadCompletedTicks
++    if($ChannelRole-ceq'ground'){$State.hello_ground=$d}else{$State.hello_vehicle=$d}
++  }else{
++    if($null-eq$hello-or$d.boot_id-cne$hello.boot_id-or$d.usb_epoch-cne$hello.usb_epoch){Stop-R19GrantReservationWorkflow $State 'RESPONSE_BOOT_OR_EPOCH_CHANGED'}
++    switch -CaseSensitive ($d.opcode){
++      'Prepared'{
++        if(-not(Test-R19GrantReservationCommandCommitted $State 'PrepareVehicle')-or$null-ne$State.prepared-or-not(Test-R19GrantReservationNewerGrant $d $State.hello_ground)){Stop-R19GrantReservationWorkflow $State 'PREPARED_NOT_FRESH_OR_REPLAYED'}
++        Assert-R19GrantReservationResponseAfterWrite $State @('PrepareVehicle') $ReadCompletedTicks
++        $State.prepared=$d;$State.status='BindingGroundAndVehicle'
++      }
++      'Bound'{
++        foreach($kind in @('BindPeerVehicle','BindGround','BindPeerGround')){if(-not(Test-R19GrantReservationCommandCommitted $State $kind)){Stop-R19GrantReservationWorkflow $State 'BOUND_BEFORE_MATCHING_BIND_WRITES'}}
++        if($null-ne$State.bound-or-not(Test-R19GrantReservationTuple $d $State.prepared)){Stop-R19GrantReservationWorkflow $State 'BOUND_SLOT_REPLAY_OR_MISMATCH'}
++        Assert-R19GrantReservationResponseAfterWrite $State @('BindPeerVehicle','BindGround','BindPeerGround') $ReadCompletedTicks
++        $State.bound=$d;$State.status='BoundReadyForOneParam'
++      }
++      'GroundHeld'{
++        if($State.param_attempts-ne1-or$State.param_accepted_bytes-ne14-or$State.param_write_exception-or$null-ne$State.held-or-not(Test-R19GrantReservationTuple $d $State.prepared)){Stop-R19GrantReservationWorkflow $State 'HELD_WITHOUT_ONE_EXACT_REQUEST_OR_WRONG_SLOT'}
++        if([Numerics.BigInteger]$ReadCompletedTicks-lt[Numerics.BigInteger]$State.param_write_started_ticks){Stop-R19GrantReservationWorkflow $State 'HELD_PRECEDES_REQUEST'}
++        $State.held=$d;$State.ground_request_t0_ms=$d.device_ms;$State.status='GroundHeldReadyToRelease'
++      }
++      'TailReady'{
++        if(-not(Test-R19GrantReservationCommandCommitted $State 'ReleaseVehicle')-or$null-ne$State.tail_ready-or-not(Test-R19GrantReservationTuple $d $State.prepared)){Stop-R19GrantReservationWorkflow $State 'TAIL_WITHOUT_RELEASE_OR_WRONG_SLOT'}
++        Assert-R19GrantReservationResponseAfterWrite $State @('ReleaseVehicle') $ReadCompletedTicks
++        $State.tail_ready=$d;$State.vehicle_tail_ms=$d.device_ms;$State.status='VehicleTailObservedReadyToPermit'
++      }
++      'Fault'{Stop-R19GrantReservationWorkflow $State 'MCU_RESERVATION_FAULT_REASON_IN_JTAG'}
++      default{Stop-R19GrantReservationWorkflow $State 'UNEXPECTED_RESERVATION_RESPONSE_OPCODE'}
++    }
++  }
++  if($State.observations.Count-ge32){Stop-R19GrantReservationWorkflow $State 'RESPONSE_CAPACITY'}
++  $State.observations.Add([pscustomobject]@{role=$ChannelRole;decoded=$d;read_completed_ticks=$ReadCompletedTicks;observation_ticks=$NowTicks;raw_offset=$RawOffset;frame_base64=[Convert]::ToBase64String($Bytes)})
++  Add-R19GrantReservationWorkflowEvent $State 'ResponseValidated' $d.opcode
++}
++function Test-R19GrantReservationRequestAllowed {
++  param([object]$State,[string]$NowTicks)
++  if($null-eq$State){return $false};Update-R19GrantReservationWorkflow $State $NowTicks
++  return $State.status-ceq'BoundReadyForOneParam'-and$null-ne$State.bound-and$null-ne$State.prepared-and$State.param_attempts-eq0-and$null-eq$State.pending_command
++}
++function Begin-R19GrantReservationParamWrite {
++  param([object]$State,[byte[]]$Bytes,[string]$StartedTicks)
++  if(-not(Test-R19GrantReservationRequestAllowed $State $StartedTicks)){Stop-R19GrantReservationWorkflow $State 'PARAM_NOT_BOUND_OR_REPLAYED'}
++  if($null-eq$Bytes-or([BitConverter]::ToString($Bytes).Replace('-',''))-cne'FD02000063FFBE1500000101D507'){Stop-R19GrantReservationWorkflow $State 'PARAM_NOT_EXACT_FROZEN_FRAME'}
++  $State.param_attempts=1;$State.param_write_started_ticks=$StartedTicks;$State.status='ParamWritePending';Add-R19GrantReservationWorkflowEvent $State 'ParamWriteAttempt' 'exact14 bytes; one attempt latched before writer'
++}
++function Set-R19GrantReservationParamWriteResult {
++  param([object]$State,[object]$AcceptedBytes,[string]$ReturnedTicks,[string]$ExceptionType='')
++  Update-R19GrantReservationWorkflow $State $ReturnedTicks
++  if($State.status-cne'ParamWritePending'-or$State.param_attempts-ne1){Stop-R19GrantReservationWorkflow $State 'PARAM_COMMIT_WITHOUT_ATTEMPT'}
++  $State.param_write_returned_ticks=$ReturnedTicks;$State.param_accepted_bytes=$AcceptedBytes;$State.param_write_exception=$ExceptionType
++  if(($AcceptedBytes-isnot[int]-and$AcceptedBytes-isnot[long])-or$AcceptedBytes-ne14-or$ExceptionType){Stop-R19GrantReservationWorkflow $State 'PARAM_WRITE_INCOMPLETE_NO_RETRY'}
++  $State.status='WaitingGroundHeld';Add-R19GrantReservationWorkflowEvent $State 'ParamWriteAccepted' 'PC-local acceptance only'
++}
++function Invoke-R19ReservationPrivateWrite {
++  param([object]$State,[object]$Command,[scriptblock]$NowTicks,[scriptblock]$Writer)
++  $start=[string](&$NowTicks);$accepted=$null;$errorType=''
++  if($null-eq$State.pending_command-or$State.pending_command.index-ne$Command.index-or$null-ne$Command.started_ticks){Stop-R19GrantReservationWorkflow $State 'PRIVATE_WRITE_NOT_PENDING_OR_REPLAYED'}
++  # Fix the attempt evidence before the callback: a throw has an unknown prefix,
++  # and a built but unattempted command must not count as an OUT API invocation.
++  $Command.started_ticks=$start
++  try{$accepted=&$Writer ([byte[]]$Command.bytes)}catch{$errorType=$_.Exception.GetType().FullName}
++  Set-R19GrantReservationWriteResult $State $accepted $start ([string](&$NowTicks)) $errorType
++  return $Command
++}
++function Get-R19GrantReservationSnapshot {
++  param([object]$State)
++  if($null-eq$State){return $null}
++  $copy=$State|ConvertTo-Json -Depth 16 -Compress|ConvertFrom-Json
++  $copy|Add-Member NoteProperty actual_negotiation_start_ms $null
++  $copy|Add-Member NoteProperty actual_bulk_start_ms $null
++  $copy|Add-Member NoteProperty observation_scope 'USB_CONTROL_SEQUENCE_ONLY_ACTUAL_MCU_PROTOCOL_EVIDENCE_REQUIRES_BOUND_JTAG_RECORDS'
++  return $copy
++}
+
+--- /dev/null
++++ b/tests/hil/check_r19_grant_reservation_workflow.ps1
+@@ -1,0 +1,166 @@
++[CmdletBinding()]
++param([string]$RepoRoot='', [string]$OutputDirectory='', [switch]$BaselineProbe)
++Set-StrictMode -Version Latest
++$ErrorActionPreference='Stop'
++if(-not$RepoRoot){$RepoRoot=Split-Path -Parent(Split-Path -Parent $PSScriptRoot)}
++$capture=Join-Path $RepoRoot 'tools/run_r19_timed_path_capture.ps1'
++$savedRoot=$RepoRoot;$savedOutput=$OutputDirectory
++try{. $capture -ImportOnly -ParamListDiagnostics -Mode ExplicitHostArm -AuxReadinessDiagnostics -DiagnosticUsbFailureDiagnostics}finally{$RepoRoot=$savedRoot;$OutputDirectory=$savedOutput}
++$script:checks=0;$script:writes=0
++function Check([bool]$Value,[string]$Name){$script:checks++;if(-not$Value){throw ('FAIL '+$Name)}}
++$paramState=New-R19ParamListDiagnosticsState -Frequency 1000 -ClockDomainId 'reservation-fixture'
++$arguments=@{State=$paramState;Role='ground';Workflow=[pscustomobject]@{arm_write_accepted=$true};HeartbeatCount=1;CaptureDeadlineTicks='40000';RawOffset=0L;ReaderPendingBytes=0;NowTicks={'100'};Writer={param([byte[]]$Bytes)$script:writes++;return [int]$Bytes.Length}}
++# A reservation-mode request is intended here even on the old implementation.
++# Call the old real helper, not a missing-parameter/parse-error substitute.
++if((Get-Command Invoke-R19ParamListRequest).Parameters.ContainsKey('GrantReservationDiagnostics')){$arguments.GrantReservationDiagnostics=$true}
++$sent=Invoke-R19ParamListRequest @arguments
++Check (-not$sent-and$script:writes-eq0-and$paramState.write_attempts-eq0) 'reservation request cannot send with ARM+Heartbeat but no actual Bound slot'
++if($BaselineProbe){Write-Output "R19_GRANT_RESERVATION behavioral PASS checks=$script:checks hardware_interaction=false";exit 0}
++. (Join-Path $RepoRoot 'tools/r19_grant_reservation_wire.ps1')
++. (Join-Path $RepoRoot 'tools/r19_grant_reservation_workflow.ps1')
++function Reject([scriptblock]$Body,[string]$Name){$message='';try{&$Body|Out-Null}catch{$message=$_.Exception.Message};Check (-not[string]::IsNullOrWhiteSpace($message)) $Name}
++$nonce=[Convert]::ToUInt64('521B000000000001',16).ToString()
++$script:now=10L
++function Fixture {
++  $s=New-R19GrantReservationWorkflow -CandidateId SYNTHETIC-NOT-HARDWARE -HandoffSha256 ('A'*64) -FlashSha256 ('B'*64) -ReaderSession '123' -SlotNonce $nonce -ClockDomainId fixture -Frequency '1000' -StartTicks '0'
++  Set-R19GrantReservationPrerequisites $s $true $true $true $true '10'
++  return $s
++}
++function Tick {$script:now+=10;return $script:now.ToString()}
++function NextWrite([object]$S,[string]$Expected){
++  $c=Get-R19GrantReservationNextCommand $S (Tick);Check ($null-ne$c-and$c.opcode-ceq$Expected) ('next canonical command '+$Expected)
++  $null=Invoke-R19ReservationPrivateWrite -State $S -Command $c -NowTicks {$script:now.ToString()} -Writer {param([byte[]]$Bytes)$script:writes++;return [int]$Bytes.Length}
++  return $c
++}
++function Response([string]$Opcode,[string]$Role,[hashtable]$Override=@{}){
++  $a=@{Opcode=$Opcode;Role=$Role;ReaderSession='123';SlotNonce=$nonce;BootId=$(if($Role-ceq'ground'){'100'}else{'200'});UsbEpoch=0;DeviceMs=100}
++  if($Opcode-ceq'HelloReply'){$a.GrantSession=$(if($Role-ceq'ground'){1}else{0});$a.GrantCycle=$(if($Role-ceq'ground'){1}else{0})}
++  elseif($Opcode-cne'Fault'){$a.GrantSession=1;$a.GrantCycle=2;$a.SlotToken=77;$a.Generation=1}
++  foreach($k in $Override.Keys){$a[$k]=$Override[$k]};return ,(New-R19GrantReservationFrame @a)
++}
++function Observe([object]$S,[string]$Opcode,[string]$Role,[hashtable]$Override=@{}){
++  [byte[]]$b=Response $Opcode $Role $Override;$t=Tick
++  Add-R19GrantReservationObservation $S $Role $b $t $t 0
++}
++function BoundFixture {
++  param([switch]$BeforeBound)
++  $script:now=10L;$s=Fixture
++  $null=NextWrite $s HelloRequest;$null=NextWrite $s HelloRequest
++  Observe $s HelloReply vehicle;Observe $s HelloReply ground
++  $c=NextWrite $s PrepareVehicle;$d=ConvertFrom-R19GrantReservationFrame $c.bytes
++  Check ($d.boot_id-ceq'200'-and$d.usb_epoch-ceq'0'-and$d.grant_session-ceq'1'-and$d.grant_cycle-ceq'1'-and$d.slot_token-ceq'0') 'Prepare uses localVehicle identity and actualGround baseline'
++  Observe $s Prepared vehicle
++  $c=NextWrite $s BindPeerVehicle;$d=ConvertFrom-R19GrantReservationFrame $c.bytes;Check ($d.boot_id-ceq'100'-and$d.role-ceq'vehicle') 'Vehicle bind names peerGround identity'
++  $c=NextWrite $s BindGround;$d=ConvertFrom-R19GrantReservationFrame $c.bytes;Check ($d.boot_id-ceq'100'-and$d.device_ms-ceq'0') 'Ground bind names ownGround identity'
++  $c=NextWrite $s BindPeerGround;$d=ConvertFrom-R19GrantReservationFrame $c.bytes;Check ($d.boot_id-ceq'200'-and$d.role-ceq'ground') 'Ground peerbind names Vehicle identity'
++  if($BeforeBound){return $s}
++  Observe $s Bound ground
++  Check (Test-R19GrantReservationRequestAllowed $s (Tick)) 'only actualBound slot opens one-request gate'
++  return $s
++}
++function WriteParam([object]$S,[scriptblock]$Writer={param([byte[]]$Bytes)$script:writes++;return [int]$Bytes.Length}){
++  $p=New-R19ParamListDiagnosticsState -Frequency 1000 -ClockDomainId fixture
++  $a=@{State=$p;Role='ground';Workflow=[pscustomobject]@{arm_write_accepted=$true};HeartbeatCount=1;CaptureDeadlineTicks='40000';RawOffset=0L;ReaderPendingBytes=0;NowTicks={$script:now.ToString()};Writer=$Writer;GrantReservationDiagnostics=$true;ReservationWorkflow=$S}
++  $ok=Invoke-R19ParamListRequest @a
++  return [pscustomobject]@{param=$p;sent=$ok;arguments=$a}
++}
++$script:now=10;$s=Fixture
++Check ($null-eq(Get-R19GrantReservationNextCommand (New-R19GrantReservationWorkflow -CandidateId SYNTHETIC-NOT-HARDWARE -HandoffSha256 ('A'*64) -FlashSha256 ('B'*64) -ReaderSession '123' -SlotNonce $nonce -ClockDomainId fixture -Frequency '1000' -StartTicks '0') '10')) 'noHello before bothclock,ARM,postARMprimaryHB prerequisites'
++$s=BoundFixture;$p=WriteParam $s
++Check ($p.sent-and$p.param.write_attempts-eq1-and$p.param.accepted_bytes-eq14-and$p.param.deadline_ticks-eq($p.param.request_write_started_ticks+30000)) 'realhelper exact14once preserves original30second t0'
++$again=$p.arguments;Check (-not(Invoke-R19ParamListRequest @again)-and$p.param.write_attempts-eq1) 'same realhelper never sends a second request'
++Check ($null-eq(Get-R19GrantReservationNextCommand $s (Tick))) 'PC cannot releaseVehicle without trueGroundHeld response'
++Observe $s GroundHeld ground @{DeviceMs=350}
++$c=NextWrite $s ReleaseVehicle;$d=ConvertFrom-R19GrantReservationFrame $c.bytes
++Check ($d.boot_id-ceq'200'-and$d.device_ms-ceq'350') 'Release uses ownVehicle identity and forwards actualGround t0 as a peer claim'
++Check ($null-eq(Get-R19GrantReservationNextCommand $s (Tick))) 'PC cannot sendGroundTailPermit without actualVehicleTailReady'
++Observe $s TailReady vehicle @{DeviceMs=900}
++$c=NextWrite $s TailPermitGround;$d=ConvertFrom-R19GrantReservationFrame $c.bytes
++Check ($d.boot_id-ceq'200'-and$d.role-ceq'ground'-and$d.device_ms-ceq'900') 'TailPermit names peerVehicle identity and forwards actualP claim unchanged'
++Check ($s.commands.Count-eq8-and$s.param_attempts-eq1-and$null-eq(Get-R19GrantReservationNextCommand $s (Tick))) 'bounded normalflow has8reservationOUT plus1canonicalPARAM and no retries'
++Check (-not$s.high_speed_success_proven-and-not$s.rf_delivery_proven-and-not$s.acceptance_authorized) 'USB control sequence is never RF/highspeed/product success'
++$script:now=10;$x=Fixture;$c=Get-R19GrantReservationNextCommand $x (Tick)
++Check ($null-eq$c.started_ticks) 'builtbutunattempted command is not an OUT attempt'
++$null=Invoke-R19ReservationPrivateWrite $x $c {$script:now.ToString()} {param([byte[]]$Bytes)Check ($null-ne$x.pending_command.started_ticks) 'OUT attempt timestamp is fixed before injected callback';return [int]$Bytes.Length}
++foreach($which in @('HelloReply','Prepared','Bound','TailReady')){
++  if($which-ceq'HelloReply'){$script:now=10;$x=Fixture;$null=NextWrite $x HelloRequest;$role='ground'}
++  elseif($which-ceq'Prepared'){$script:now=10;$x=Fixture;$null=NextWrite $x HelloRequest;$null=NextWrite $x HelloRequest;Observe $x HelloReply ground;Observe $x HelloReply vehicle;$null=NextWrite $x PrepareVehicle;$role='vehicle'}
++  elseif($which-ceq'Bound'){$x=BoundFixture -BeforeBound;$role='ground'}
++  else{$x=BoundFixture;$null=WriteParam $x;Observe $x GroundHeld ground @{DeviceMs=350};$null=NextWrite $x ReleaseVehicle;$role='vehicle'}
++  [byte[]]$earlyResponse=Response $which $role;$t=Tick
++  Reject {Add-R19GrantReservationObservation $x $role $earlyResponse '0' $t 0} ($which+' cannot use native bytes received before matching OUT began')
++}
++foreach($case in @(
++  @{name='Held-before-request';op='GroundHeld';role='ground';changes=@{};param=$false},
++  @{name='Held-wrong-slot';op='GroundHeld';role='ground';changes=@{SlotToken=78};param=$true},
++  @{name='Held-wrong-generation';op='GroundHeld';role='ground';changes=@{Generation=2};param=$true},
++  @{name='Held-wrong-boot';op='GroundHeld';role='ground';changes=@{BootId='101'};param=$true},
++  @{name='Held-wrong-epoch';op='GroundHeld';role='ground';changes=@{UsbEpoch=1};param=$true},
++  @{name='Held-wrong-nonce';op='GroundHeld';role='ground';changes=@{SlotNonce=([Convert]::ToUInt64('521B000000000002',16).ToString())};param=$true},
++  @{name='Held-wrong-reader';op='GroundHeld';role='ground';changes=@{ReaderSession='124'};param=$true},
++  @{name='Tail-before-release';op='TailReady';role='vehicle';changes=@{DeviceMs=900};param=$true})){
++  $x=BoundFixture;if($case.param){$null=WriteParam $x};$beforeCount=$x.commands.Count
++  Reject {Observe $x $case.op $case.role $case.changes} $case.name
++  Check ($x.status-ceq'Failed'-and$x.commands.Count-eq$beforeCount) ($case.name+' blocks further command construction')
++}
++$x=BoundFixture;$null=WriteParam $x
++[byte[]]$held=Response GroundHeld ground @{DeviceMs=350};$t=Tick
++Reject {Add-R19GrantReservationObservation $x vehicle $held $t $t 0} 'response role cannot be moved to the otherUSB channel'
++foreach($accepted in @(0,32,65)){
++  $script:now=10;$x=Fixture;$c=Get-R19GrantReservationNextCommand $x (Tick)
++  Reject {Set-R19GrantReservationWriteResult $x $accepted $script:now.ToString() $script:now.ToString()} ('partialprivatewrite'+$accepted)
++  Check ($x.commands.Count-eq1-and$x.status-ceq'Failed'-and-not$x.commands[0].write_success) 'partialprivatewrite remains one failed attempt'
++  Reject {Get-R19GrantReservationNextCommand $x (Tick)} 'partialprivatewrite cannot automaticallyretry'
++}
++$script:now=10;$x=Fixture;$c=Get-R19GrantReservationNextCommand $x (Tick)
++Reject {Invoke-R19ReservationPrivateWrite $x $c {$script:now.ToString()} {param([byte[]]$Bytes)throw 'OFFLINE_INJECTED_WRITE_ERROR'}} 'throwingprivatewriter cannot invent acceptance'
++Check ($x.commands.Count-eq1-and$x.status-ceq'Failed'-and$x.commands[0].accepted_bytes-eq$null) 'unknownaccepted prefix stays unknown and cannotretry'
++$x=BoundFixture
++Reject {WriteParam $x {param([byte[]]$Bytes)$script:writes++;return [int]7}} 'partialPARAMwrite fails reservation workflow without release'
++Check ($x.param_attempts-eq1-and$x.param_accepted_bytes-eq7-and$x.status-ceq'Failed') 'partialPARAM remains one immutableattempt'
++$script:now=10;$x=Fixture
++Reject {Get-R19GrantReservationNextCommand $x '15001'} 'preparation15seconds bounded without resettingmeasurement or requestt0'
++Check ($x.param_attempts-eq0-and$x.commands.Count-eq0) 'expiredpreparation didnot consumePARAM or buildrelease'
++Check ($x.failure_phase-ceq'HelloPending'-and$x.not_ready_count-eq1-and$x.failure-ceq'PREPARATION_15_SECONDS_EXPIRED') 'failedphase reasonandnotreadycount survive passive capture transition'
++$x=BoundFixture;$null=WriteParam $x;Observe $x GroundHeld ground @{DeviceMs=350}
++Reject {Observe $x GroundHeld ground @{DeviceMs=350}} 'replayedHeld doesnot authorize duplicateVehicleRelease'
++foreach($b in @(
++  @{name='HelloRequest';role='ground';args=@{BootId='0';DeviceMs=0}},
++  @{name='HelloReply';role='ground';args=@{BootId='100';GrantSession=1;GrantCycle=0}},
++  @{name='HelloReply';role='vehicle';args=@{BootId='200'}},
++  @{name='PrepareVehicle';role='vehicle';args=@{BootId='200';GrantSession=1;GrantCycle=0}},
++  @{name='Prepared';role='vehicle';args=@{BootId='200';GrantSession=1;GrantCycle=2;SlotToken=77;Generation=1}},
++  @{name='Fault';role='ground';args=@{BootId='100'}})){
++  $a=@{Opcode=$b.name;Role=$b.role;ReaderSession='123';SlotNonce=$nonce};foreach($k in $b.args.Keys){$a[$k]=$b.args[$k]}
++  [byte[]]$encoded=New-R19GrantReservationFrame @a;$decoded=ConvertFrom-R19GrantReservationFrame $encoded
++  Check ($encoded.Length-eq66-and$decoded.valid-and$decoded.opcode-ceq$b.name-and$decoded.usb_epoch-ceq'0') ('canonicalcodecroundtrip '+$b.name+'/'+$b.role+' zeroepochvalid')
++}
++Reject {New-R19GrantReservationFrame -Opcode Started -Role vehicle -ReaderSession '123' -SlotNonce $nonce -BootId '200' -GrantSession 1 -GrantCycle 2 -SlotToken 77 -Generation 1} 'Started14is record-only,notwire'
++Reject {New-R19GrantReservationFrame -Opcode Fault -Role ground -ReaderSession '123' -SlotNonce $nonce -BootId '100' -Flags 1} 'Faultflags alsozero;reasononlyJTAG'
++foreach($field in @('ReaderSession','SlotNonce','BootId','UsbEpoch','GrantSession','GrantCycle','SlotToken','Generation','DeviceMs')){
++  $a=@{Opcode='Prepared';Role='vehicle';ReaderSession='123';SlotNonce=$nonce;BootId='200';UsbEpoch=0;GrantSession=1;GrantCycle=2;SlotToken=77;Generation=1;DeviceMs=100};$a[$field]=$true
++  Reject {New-R19GrantReservationFrame @a} ('Boolean cannot become integer '+$field)
++}
++foreach($change in @(@(2,1),@(3,1),@(5,1),@(6,197),@(10,83),@(14,2),@(15,14),@(16,1),@(17,1),@(62,0))){
++  [byte[]]$bad=Response Prepared vehicle;$bad[$change[0]]=[byte]$change[1];[uint16]$crc=Get-R19GrantReservationCrc $bad;$bad[64]=[byte]($crc-band255);$bad[65]=[byte]($crc-shr8)
++  Check (-not(ConvertFrom-R19GrantReservationFrame $bad).valid) ('CRC-valid wrongnamespace/opcode rejected atbyte'+$change[0])
++}
++[byte[]]$bad=Response Prepared vehicle;$bad[65]=$bad[65]-bxor1;Check (-not(ConvertFrom-R19GrantReservationFrame $bad).valid) 'badCRC cannot advanceworkflow'
++[byte[]]$valid=Response Prepared vehicle
++for($split=1;$split-lt66;$split++){
++  $parser=New-R19GrantReservationParser
++  $first=Add-R19GrantReservationBytes $parser ([byte[]]$valid[0..($split-1)]) 0 '100'
++  $last=Add-R19GrantReservationBytes $parser ([byte[]]$valid[$split..65]) $split '110'
++  Check (@($first).Count-eq0-and@($last).Count-eq1-and$last[0].decoded.opcode-ceq'Prepared') ('all66byte splits reconstructonce '+$split)
++}
++$outer=[byte[]]::new(78);$outer[0]=253;$outer[1]=66;$outer[5]=1;$outer[6]=1;$outer[7]=253;[Array]::Copy($valid,0,$outer,10,66)
++$parser=New-R19GrantReservationParser;[byte[]]$stream=$outer+$valid
++$found=Add-R19GrantReservationBytes $parser $stream 0 '100'
++Check (@($found).Count-eq1-and$found[0].raw_offset-eq78) 'embeddedR19R in otherMAVLinkpayload is not a top-levelreservationresponse'
++$snap=Get-R19GrantReservationSnapshot $s
++Check ($snap.actual_negotiation_start_ms-eq$null-and$snap.actual_bulk_start_ms-eq$null-and$snap.status-ceq'TailPermitWrittenAwaitingMcuEvidence') 'unknownMCUprotocoltimes remainnull afterallUSBcommands'
++$snap.commands[0].kind='MUTATED';Check ($s.commands[0].kind-cne'MUTATED') 'snapshotcannot mutateworkflowevidence'
++if(-not$OutputDirectory){$OutputDirectory=Join-Path ([IO.Path]::GetTempPath()) ('r19-reservation-'+[guid]::NewGuid().ToString('N'))};[void][IO.Directory]::CreateDirectory($OutputDirectory)
++$path=Join-Path $OutputDirectory 'workflow.json';$saved=Get-R19GrantReservationSnapshot $s;[IO.File]::WriteAllText($path,($saved|ConvertTo-Json -Depth 20),[Text.UTF8Encoding]::new($false));$read=Get-Content -LiteralPath $path -Raw|ConvertFrom-Json
++Check (($saved|ConvertTo-Json -Depth 20 -Compress)-ceq($read|ConvertTo-Json -Depth 20 -Compress)) 'actualsavedworkflowJSONroundtrip preservesallcommands/observations/t0/identity'
++Write-Output "R19_GRANT_RESERVATION_WORKFLOW PASS checks=$script:checks hardware_interaction=false automatic_retries=0 output=$OutputDirectory"
+
+--- /dev/null
++++ b/tests/hil/check_r19_grant_reservation_capture.ps1
+@@ -1,0 +1,135 @@
++[CmdletBinding()]
++param([string]$RepoRoot='', [string]$OutputDirectory='')
++Set-StrictMode -Version Latest
++$ErrorActionPreference='Stop'
++if(-not$RepoRoot){$RepoRoot=Split-Path -Parent(Split-Path -Parent $PSScriptRoot)}
++$repo=(Resolve-Path -LiteralPath $RepoRoot).Path
++if(-not$OutputDirectory){$OutputDirectory=Join-Path $repo ('runs/validation/R19-GRANT-RESERVATION-CAPTURE-TEST-001/'+[guid]::NewGuid().ToString('N'))}
++$OutputDirectory=[IO.Path]::GetFullPath($OutputDirectory)
++if(-not$OutputDirectory.StartsWith((Join-Path $repo 'runs/validation/'),[StringComparison]::OrdinalIgnoreCase)){throw 'Offline evidence output must stay within validation'}
++[void][IO.Directory]::CreateDirectory($OutputDirectory)
++$script:checks=0
++function Check([bool]$Value,[string]$Name){$script:checks++;if(-not$Value){throw ('FAIL '+$Name)}}
++function Reject([scriptblock]$Body,[string]$Name){$rejected=$false;try{&$Body|Out-Null}catch{$rejected=$true};Check $rejected $Name}
++function Clone($Value){$Value|ConvertTo-Json -Depth 40|ConvertFrom-Json}
++$capturePath=Join-Path $repo 'tools/run_r19_timed_path_capture.ps1';$source=[IO.File]::ReadAllText($capturePath)
++$tokens=$null;$errors=$null;$ast=[Management.Automation.Language.Parser]::ParseFile($capturePath,[ref]$tokens,[ref]$errors)
++Check (@($errors).Count-eq0) 'capture source parses'
++# Real definitions only, never the device-owning CLI tail.
++$names=@('Write-R19TimedPathJson','Write-R19TimedPathRaw','Get-R19TimedPathRawRole','Get-R19TimedPathRoleMetadata','Save-R19TimedPathCaptureEvidence','Start-R19ReservationMeasurement','Get-R19ReservationRawPhases','Invoke-R19ParamListRequest','Update-R19ParamListCheckpoint')
++foreach($node in $ast.EndBlock.Statements|Where-Object{$_-is[Management.Automation.Language.FunctionDefinitionAst]-and$_.Name-cin$names}){. ([scriptblock]::Create($node.Extent.Text))}
++$savedOutput=$OutputDirectory
++. (Join-Path $repo 'tools/r19_timed_path_acquisition.ps1') -ImportOnly
++$OutputDirectory=$savedOutput
++. (Join-Path $repo 'tools/r19_grant_reservation_contract.ps1')
++. (Join-Path $repo 'tools/r19_grant_reservation_wire.ps1')
++. (Join-Path $repo 'tools/r19_grant_reservation_workflow.ps1')
++. (Join-Path $repo 'tools/r19_param_list_diagnostics.ps1')
++# Only named filesystem constructors are called. All device/process operations
++# are forbidden stubs; no port, native reader, candidate build, or Execute path.
++foreach($name in @('Get-CimInstance','Get-PnpDevice','Get-PnpDeviceProperty','Get-Process','Start-Process','Invoke-Expression')){Set-Item -Path ('function:script:'+$name) -Value {throw 'FORBIDDEN_OFFLINE_OPERATION'}}
++function NewState([string]$Role){
++  [byte[]]$bytes=if($Role-ceq'ground'){@(4,5,6,7)}else{@(1,2,3,4)}
++  $reader=[pscustomobject]@{calls=0;offset=2L}
++  $reader|Add-Member ScriptMethod MarkPhase {param($Phase)if($Phase-cne'RESERVATION_MEASUREMENT'){throw 'bad phase'};$this.calls++;[pscustomobject]@{ByteCount=$this.offset;Ticks='101'}}
++  [pscustomobject]@{spec=[pscustomobject]@{role=$Role;port=($Role+'-NOT-HARDWARE');baud=57600};reader=$reader;reader_id=($Role+'-fixture');nonce='1';opened=$true;joined=$true;cleanup_close_fallback=$false;open_before_ticks='1';open_after_ticks='2';read_started_ticks='3';snapshot=[pscustomobject]@{ByteCount=4;Blocks=@([pscustomobject]@{Offset=0;Count=4;BeginTicks=90L;EndTicks=110L});Overflow=$false;Failure='';LastReadEndTicks=110L};raw=$bytes;preparation_cut_offset=0L;preparation_cut_ticks='';workflow=$null;workflow_failure='';writes=[Collections.Generic.List[object]]::new();observations=[Collections.Generic.List[object]]::new();product_observations=[Collections.Generic.List[object]]::new()}
++}
++$states=@((NewState vehicle),(NewState ground));$workflow=[pscustomobject]@{measurement_start_ticks=$null}
++$start=Start-R19ReservationMeasurement $workflow $states {'100'}
++Check ($start-ceq'100'-and$workflow.measurement_start_ticks-ceq'100') 'realphase helper fixes global measurement start once'
++foreach($s in $states){Check ($s.reader.calls-eq1-and$s.preparation_cut_offset-eq2-and$s.preparation_cut_ticks-ceq'101') 'marker does not stop/reopen/purge continuous owner'}
++Reject {Start-R19ReservationMeasurement $workflow $states {'101'}} 'measurement cannot restart'
++$phases=Get-R19ReservationRawPhases $states '0' '100' '40100'
++foreach($r in $phases.roles){Check ($r.preparation_raw_bytes-eq2-and$r.measurement_raw_bytes-eq2-and$r.full_raw_bytes-eq4-and$r.boundary_semantics-match'NOT_PHYSICAL_WIRE_TIME') 'crossing native read is labeled and everybyte retained';Check ((Get-R19AcquisitionSha256 ([byte[]]($r.preparation_bytes+$r.measurement_bytes)))-ceq(Get-R19AcquisitionSha256 @($states|Where-Object{$_.spec.role-ceq$r.role})[0].raw)) 'phase concatenation equals exact fullnative raw'}
++function Context {
++  [pscustomobject]@{candidate_id='RESERVATION-CAPTURE-SYNTHETIC-NOT-HARDWARE';mode='ExplicitHostArm';capture_seconds=40;started_utc='2026-10-25T00:00:00Z';clock_domain_id='fixture';frequency='1000';measurement_start_ticks='100';measurement_end_ticks='40100';cleanup_proven=$true;hardware_interaction=$false;serial_write_calls=0;failure='';identity_evidence=@();pinned_inputs=@();handoff_sha256=('A'*64);flash_evidence_sha256=('B'*64);repo_root=$repo}
++}
++$contract=Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true
++function SaveCase([string]$Name,[object]$Context){
++  $directory=Join-Path $OutputDirectory $Name;[void][IO.Directory]::CreateDirectory($directory)
++  $return=Save-R19TimedPathCaptureEvidence $states $directory $Context
++  $disk=Get-Content -LiteralPath (Join-Path $directory 'summary.json') -Raw|ConvertFrom-Json
++  foreach($role in @('vehicle','ground')){Check ((Get-Item -LiteralPath (Join-Path $directory ($role+'.raw.bin'))).Length-eq4) 'allfullraw survive optionalmetadata failures'}
++  return [pscustomobject]@{saved=$return;disk=$disk;directory=$directory}
++}
++function ReservationContext {
++  $c=Context;$c|Add-Member NoteProperty grant_reservation_diagnostics $true;$c|Add-Member NoteProperty grant_reservation_contract $contract
++  $c|Add-Member NoteProperty grant_reservation_workflow ([pscustomobject]@{schema='vc-lora-r19-grant-reservation-workflow-v1';status='Failed';failure='SYNTHETIC_NOT_READY';commands=@();param_attempts=0;high_speed_success_proven=$false})
++  $c|Add-Member NoteProperty reservation_raw_phases $phases;return $c
++}
++$case=SaveCase 'actual-mode' (ReservationContext)
++foreach($value in @($case.saved,$case.disk)){Check ($value.grant_reservation_diagnostics-is[bool]-and$value.grant_reservation_diagnostics-and$value.reservation_prepare_seconds-eq15-and$value.measurement_seconds-eq40-and$value.grant_reservation_workflow.param_attempts-eq0) 'realSave anddisk retainmode/passive40withzeroPARAM';Check (-not$value.acceptance_eligible-and-not$value.grant_reservation_workflow.high_speed_success_proven) 'failedpreparation rawcapture isnever highspeedpass'}
++foreach($role in @('vehicle','ground')){foreach($phase in @('preparation','measurement')){Check ((Get-Item -LiteralPath (Join-Path $case.directory ($role+'.'+$phase+'.raw.bin'))).Length-eq2) 'actualSave writes separatephase raw'}}
++$legacy=SaveCase 'legacy' (Context);Check ($null-eq$legacy.disk.PSObject.Properties['grant_reservation_diagnostics']) 'defaultlegacy mode omission retained'
++foreach($bad in @('stringflag','wrongcase','primitiveworkflow','primitivephases','missingroles')){
++  $c=ReservationContext
++  switch($bad){'stringflag'{$c.grant_reservation_diagnostics='true'} 'wrongcase'{$c.PSObject.Properties.Remove('grant_reservation_diagnostics');$c|Add-Member NoteProperty Grant_Reservation_Diagnostics $true} 'primitiveworkflow'{$c.grant_reservation_workflow='bad'} 'primitivephases'{$c.reservation_raw_phases='bad'} 'missingroles'{$c.reservation_raw_phases=[pscustomobject]@{schema='bad'}}}
++  $case=SaveCase $bad $c;Check ($case.disk.result-ceq'INVALID_CAPTURE'-and@($case.disk.preservation_errors).Count-gt0) ('invalidmode '+$bad+' failsclosed after durable raw')
++}
++# The exact early CLI mode-selection branch is evaluated alone before any
++# imports, permit reads, serial construction, identity queries, or native thread.
++$early=@($ast.EndBlock.Statements|Where-Object{$_-is[Management.Automation.Language.IfStatementAst]-and$_.Extent.Text.Contains('Grant reservation requires full')})
++Check ($early.Count-eq1) 'actualpredevice reservation selection gate found'
++$earlyGate=[scriptblock]::Create($early[0].Extent.Text)
++foreach($missing in @('GrantDiagnostics','ParamListDiagnostics','AuxReadinessDiagnostics','DiagnosticUsbFailureDiagnostics','Mode','ReadComparisonMode')){
++  $GrantReservationDiagnostics=$true;$GrantDiagnostics=$true;$ParamListDiagnostics=$true;$AuxReadinessDiagnostics=$true;$DiagnosticUsbFailureDiagnostics=$true;$Mode='ExplicitHostArm';$ReadComparisonMode='None'
++  if($missing-ceq'Mode'){$Mode='SyncOnly'}elseif($missing-ceq'ReadComparisonMode'){$ReadComparisonMode='GroundPauseResume'}else{Set-Variable $missing $false}
++  Reject {. $earlyGate} ('modecannot escalate without '+$missing)
++}
++# Real pure capture admission, using source-bound declarations and only fake
++# flash/USB identities. This is not a device observation or live authorization.
++. (Join-Path $repo 'tools/r19_candidate_artifact_common.ps1')
++$timed=Get-R19TimedPathCandidateContract $repo ExplicitHostArm
++$aux=Get-R19AuxReadinessCandidateContract $repo $true
++$diag=Get-R19DiagnosticUsbFailureCandidateContract $repo $true
++$grant=Get-R19GrantDiagnosticCandidateContract $repo $true
++$rolecap=Get-R19UsbRoleCapabilities -RepoRoot $repo -Enabled $true
++$nowUtc=[DateTime]::Parse('2026-10-25T00:00:00Z').ToUniversalTime()
++$ports=@([pscustomobject]@{role='vehicle';port='COM3';baud=115200;pnp_instance_id='NOT-HARDWARE-V';usb_parent_instance_id='NOT-HARDWARE-PARENT-V'},[pscustomobject]@{role='ground';port='COM6';baud=57600;pnp_instance_id='NOT-HARDWARE-G';usb_parent_instance_id='NOT-HARDWARE-PARENT-G'})
++$handoff=[pscustomobject]@{schema='vc-lora-r19-candidate-artifact-handoff-v1';result='PASS';artifact_id='RESERVATION-SYNTHETIC-NOT-HARDWARE';runtime_fail_diagnostics_enabled=$true;reader_schema='vc-lora-r19-runtime-stage-jtag-read-v10';timed_path_diagnostics=$timed;aux_readiness_diagnostics=$aux;diagnostic_usb_failure_diagnostics=$diag;grant_diagnostics=$grant;grant_reservation_diagnostics=$contract;usb_role_capabilities=$rolecap}
++$flashRoles=@(foreach($p in $ports){[pscustomobject]@{role=$p.role;port=$p.port;pnp_device_id=$p.pnp_instance_id;parent_device_id=$p.usb_parent_instance_id;write_pass=$true;verify_pass=$true;reenumeration_pass=$true}})
++$flash=[pscustomobject]@{schema='vc-lora-r19-candidate-flash-evidence-v1';result='PASS';status='PASS_R19_DIAGNOSTIC_INSTALLED_HIL_ONLY';candidate=[pscustomobject]@{handoff_sha256=('A'*64)};runtime_fail_diagnostics_enabled=$true;reader_schema='vc-lora-r19-runtime-stage-jtag-read-v10';timed_path_diagnostics=$timed;aux_readiness_diagnostics=$aux;diagnostic_usb_failure_diagnostics=$diag;grant_diagnostics=$grant;grant_reservation_diagnostics=$contract;usb_role_capabilities=$rolecap;one_run_hil_authorized=$true;roles=$flashRoles}
++$permit=[pscustomobject]@{schema='vc-lora-r19-timed-path-execution-permit-v1';status='AUTHORIZED_SINGLE_CAPTURE';candidate_id=$handoff.artifact_id;mode='ExplicitHostArm';safety_confirmed=$true;one_time=$true;restore_required=$true;handoff_sha256=('A'*64);flash_evidence_sha256=('B'*64);issued_utc=$nowUtc.AddSeconds(-1).ToString('o');expires_utc=$nowUtc.AddSeconds(90).ToString('o');capture_seconds=40;ports=$ports;param_list_diagnostics=$true;grant_diagnostics=$true;grant_reservation_diagnostics=$true;grant_reservation_contract=$contract;reservation_prepare_seconds=15}
++$planArgs=@{Handoff=$handoff;FlashEvidence=$flash;Permit=$permit;Mode='ExplicitHostArm';HandoffSha256=('A'*64);FlashEvidenceSha256=('B'*64);NowUtc=$nowUtc;DiagnosticUsbFailureDiagnostics=$true;AuxReadinessDiagnostics=$true;GrantDiagnostics=$true;ParamListDiagnostics=$true;GrantReservationDiagnostics=$true;RepoRoot=$repo}
++Check ((Get-R19TimedPathCapturePlan @planArgs).valid) 'realGetPlan admits exactsourcebound mode and provenance before devices'
++$jsonPermit=Clone $permit;$jsonArgs=$planArgs.Clone();$jsonArgs.Permit=$jsonPermit
++Check ((Get-R19TimedPathCapturePlan @jsonArgs).valid) 'realGetPlan accepts PS JSON integer materialization without type coercion'
++foreach($bad in @('permit-false','permit-string','permit-case','permit-duration','permit-contract','handoff-reader','flash-reader','flash-contract','missing-mode','missing-contract','role-escalation')){
++  $a=$planArgs.Clone();$a.Permit=Clone $permit;$a.Handoff=Clone $handoff;$a.FlashEvidence=Clone $flash
++  switch($bad){
++    'permit-false'{$a.Permit.grant_reservation_diagnostics=$false}
++    'permit-string'{$a.Permit.grant_reservation_diagnostics='true'}
++    'permit-case'{$a.Permit.PSObject.Properties.Remove('grant_reservation_diagnostics');$a.Permit|Add-Member NoteProperty Grant_Reservation_Diagnostics $true}
++    'permit-duration'{$a.Permit.reservation_prepare_seconds='15'}
++    'permit-contract'{$a.Permit.grant_reservation_contract.capture.prepare_seconds=16}
++    'handoff-reader'{$a.Handoff.reader_schema='vc-lora-r19-runtime-stage-jtag-read-v9'}
++    'flash-reader'{$a.FlashEvidence.reader_schema='vc-lora-r19-runtime-stage-jtag-read-v9'}
++    'flash-contract'{$a.FlashEvidence.grant_reservation_diagnostics.record.size_bytes=516}
++    'missing-mode'{$a.GrantReservationDiagnostics=$false}
++    'missing-contract'{$a.Handoff.PSObject.Properties.Remove('grant_reservation_diagnostics')}
++    'role-escalation'{$a.FlashEvidence.usb_role_capabilities.roles[0].arm=$true}
++  }
++  Reject {Get-R19TimedPathCapturePlan @a} ('realGetPlan rejects '+$bad)
++}
++$branches=@($ast.FindAll({param($n)$n-is[Management.Automation.Language.IfStatementAst]-and$n.Extent.Text.StartsWith('if($ParamListDiagnostics-and$s.spec.role')-and$n.Extent.Text.Contains('$attempted=Invoke-R19ParamListRequest')},$true))
++Check ($branches.Count-eq1) 'exactactualproductPARAMcaller found'
++$actualRequestBranch=[scriptblock]::Create('[CmdletBinding()]param([switch]$GrantReservationDiagnostics)'+[Environment]::NewLine+$branches[0].Extent.Text)
++foreach($writeOutcome in @('throw','exact')){
++  $ParamListDiagnostics=$true;$paramDiagnosticsFailure='';$paramState=New-R19ParamListDiagnosticsState -Frequency 1000 -ClockDomainId fixture
++  $paramDeliveredOffset=0L;$deadline=40100L;$serialWrites=3;$measurementStart='100';$clock=[pscustomobject]@{ElapsedTicks=100L}
++  $reservationWorkflow=New-R19GrantReservationWorkflow -CandidateId SYNTHETIC-CALLER-NOT-HARDWARE -HandoffSha256 ('A'*64) -FlashSha256 ('B'*64) -ReaderSession '123' -SlotNonce ([Convert]::ToUInt64('521B000000000001',16).ToString()) -ClockDomainId fixture -Frequency 1000 -StartTicks 0
++  $reservationWorkflow.status='BoundReadyForOneParam';$reservationWorkflow.bound=[pscustomobject]@{offline_fixture=$true};$reservationWorkflow.prepared=[pscustomobject]@{offline_fixture=$true}
++  $s=NewState ground;$s.workflow=[pscustomobject]@{arm_write_accepted=$true};$s.product_observations.Add([pscustomobject]@{crc_valid=$true})
++  $s.reader|Add-Member ScriptMethod GetStatus {return [pscustomobject]@{LastReadEndTicks=200L;PendingByteCount=0}}
++  $s|Add-Member NoteProperty port ([pscustomobject]@{calls=0;outcome=$writeOutcome})
++  $s.port|Add-Member ScriptMethod Write {param([byte[]]$Payload,[int]$Offset,[int]$Count)$this.calls++;if($this.outcome-ceq'throw'){throw [IO.IOException]::new('SYNTHETIC_WRITE_THROW')} }
++  # The real writer returns exact14 after a void SerialPort.Write. To exercise
++  # a helper-level partial count separately, the throw case is the real caller
++  # failure; partial is tested by the workflow suite's injected helper seam.
++  . $actualRequestBranch -GrantReservationDiagnostics
++  Check ($serialWrites-eq4-and$s.port.calls-eq1-and$paramState.write_attempts-eq1) ('actualcaller countsoneattempt evenwhenreservationhelper '+$writeOutcome)
++  . $actualRequestBranch -GrantReservationDiagnostics
++  Check ($serialWrites-eq4-and$s.port.calls-eq1) 'actualcaller never recountsorretrieslatchedattempt'
++  if($writeOutcome-ceq'throw'){Check ($reservationWorkflow.status-ceq'Failed'-and$null-eq$reservationWorkflow.held-and$reservationWorkflow.commands.Count-eq0) 'throwingPARAMcannot authorizeHeldorRelease'}
++}
++Write-Output "R19_GRANT_RESERVATION_CAPTURE PASS checks=$script:checks hardware_interaction=false output=$OutputDirectory"

@@ -1,0 +1,245 @@
+{
+  "schema": "vc-lora-r19-grant-reservation-runner-offline-validation-v1",
+  "result": "PASS_OFFLINE_ONLY_NOT_LIVE_ACCEPTANCE",
+  "root": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge",
+  "scope": "Diagnostic dual-USB actual Grant reservation wire/workflow and capture integration",
+  "hardware_interaction": false,
+  "com_open_attempts": 0,
+  "jtag_attempts": 0,
+  "process_or_device_queries": false,
+  "git_mutations": false,
+  "network_access": false,
+  "source_frozen": true,
+  "sources": [
+    {
+      "path": "tools/run_r19_timed_path_capture.ps1",
+      "sha256": "683F85200F28011221B38CF6B625BA08368A66C2733EC6530774CD6E2FB0A24C"
+    },
+    {
+      "path": "tools/r19_timed_path_acquisition.ps1",
+      "sha256": "2B3F1E36B140DCF298368B79C61AEC831306D190F9FB949E00B8A9A37A7F62EC"
+    },
+    {
+      "path": "tools/r19_grant_reservation_wire.ps1",
+      "sha256": "C61B8C4ED48F2F9B977058A8B1DB97067324CB3DF9BACDB69D43DB9520E3EAEB"
+    },
+    {
+      "path": "tools/r19_grant_reservation_workflow.ps1",
+      "sha256": "5DA7E54EF95567E6B0022C3E1E31BBA058B283EBACB85B8B17C0903456DF360A"
+    },
+    {
+      "path": "tests/hil/check_r19_grant_reservation_workflow.ps1",
+      "sha256": "35624BF2B65D3848281FF4D52ADC058AC860979AAB42EC1AADB5C70059781903"
+    },
+    {
+      "path": "tests/hil/check_r19_grant_reservation_capture.ps1",
+      "sha256": "A1FEDBFE350222A44033BE4A2FB99C0CABE47A233C2DB78F39981857AF902585"
+    }
+  ],
+  "original_sources": [
+    {
+      "path": "tools/run_r19_timed_path_capture.ps1",
+      "sha256": "1550129737FBACD7452B1780884B6A4DB6710353EBCCEB59262F94017B4E3FF9",
+      "backup_base64": "run_r19_timed_path_capture.ps1.runner_before.b64"
+    },
+    {
+      "path": "tools/r19_timed_path_acquisition.ps1",
+      "sha256": "AA47AB3BA1AE07B3196CF884CE840FF9CE5FF2BA876CB4500BA80F0C94237915",
+      "backup_base64": "r19_timed_path_acquisition.ps1.runner_before.b64"
+    }
+  ],
+  "test_first_evidence": [
+    {
+      "log": "runner_behavior_RED_ps51.log",
+      "result": "EXPECTED_RED",
+      "cause": "Existing real PARAM helper sent with ARM+Heartbeat but without actual Bound reservation evidence; not a missing-parameter compile failure."
+    },
+    {
+      "log": "runner_ordering_RED_ps51.log",
+      "result": "EXPECTED_RED",
+      "cause": "Real injected OUT callback observed absent pre-attempt timestamp; actual write-return catch refused acceptance."
+    },
+    {
+      "log": "runner_capture_RED_ps51.log",
+      "result": "EXPECTED_RED",
+      "cause": "Real persistence threw on primitive optional workflow schema after preserving full raw; fixed to save invalid metadata summary."
+    },
+    {
+      "log": "runner_legacy_check_r19_param_list_capture_contract_ps51.log",
+      "result": "INTERMEDIATE_REGRESSION_FIXED",
+      "cause": "New switch call used space instead of colon before explicit Boolean; corrected actual production call, old tests unchanged."
+    }
+  ],
+  "tests": [
+    {
+      "name": "grant_reservation_workflow",
+      "checks": 307,
+      "shells": [
+        "Windows PowerShell5.1",
+        "PowerShell7"
+      ],
+      "result": "PASS",
+      "logs": [
+        "runner_workflow_GREEN_ps51_final.log",
+        "runner_check_r19_grant_reservation_workflow_GREEN_ps7.log"
+      ]
+    },
+    {
+      "name": "grant_reservation_capture",
+      "checks": 63,
+      "shells": [
+        "Windows PowerShell5.1",
+        "PowerShell7"
+      ],
+      "result": "PASS",
+      "logs": [
+        "runner_capture_v3_ps51.log",
+        "runner_capture_v3_ps7.log"
+      ]
+    },
+    {
+      "name": "existing_param_list_capture_contract",
+      "checks": 65,
+      "shells": [
+        "Windows PowerShell5.1",
+        "PowerShell7"
+      ],
+      "result": "PASS",
+      "tests_unchanged": true
+    },
+    {
+      "name": "existing_grant_capture_persistence",
+      "checks": 120,
+      "shells": [
+        "Windows PowerShell5.1",
+        "PowerShell7"
+      ],
+      "result": "PASS",
+      "tests_unchanged": true
+    },
+    {
+      "name": "existing_timed_path_capture_persistence",
+      "checks": 331,
+      "shells": [
+        "Windows PowerShell5.1",
+        "PowerShell7"
+      ],
+      "result": "PASS",
+      "tests_unchanged": true
+    },
+    {
+      "name": "existing_timed_path_capture_entrypoint",
+      "checks": 66,
+      "shells": [
+        "Windows PowerShell5.1",
+        "PowerShell7"
+      ],
+      "result": "PASS",
+      "tests_unchanged": true
+    },
+    {
+      "name": "existing_param_list_outer_contract",
+      "checks": 49,
+      "shells": [
+        "Windows PowerShell5.1",
+        "PowerShell7"
+      ],
+      "result": "PASS",
+      "tests_unchanged": true
+    },
+    {
+      "name": "existing_aux_readiness_capture_routing",
+      "checks": 18,
+      "shells": [
+        "Windows PowerShell5.1",
+        "PowerShell7"
+      ],
+      "result": "PASS",
+      "tests_unchanged": true,
+      "logs": [
+        "runner_aux_routing_GREEN_ps51.log",
+        "runner_aux_routing_GREEN_ps7.log"
+      ]
+    },
+    {
+      "name": "existing_start_admission",
+      "checks": 151,
+      "shells": [
+        "Windows PowerShell5.1",
+        "PowerShell7"
+      ],
+      "result": "PASS",
+      "tests_unchanged": true
+    }
+  ],
+  "behavior": {
+    "namespace": "MAVLink2 #253 sys249 comp197 request /198 response; exact66 bytes CRC83 R19R/v1",
+    "reservation_commands_max": 8,
+    "old_clock_arm_commands_max": 3,
+    "param_request_max": 1,
+    "out_calls_normal_max": 12,
+    "original_param_frame_hex": "FD02000063FFBE1500000101D507",
+    "original_param_t0_preserved": true,
+    "original_param_deadline_seconds": 30,
+    "prepare_seconds": 15,
+    "measurement_seconds": 40,
+    "callback_attempt_latched_before_write": true,
+    "callback_exception_unknown_prefix_no_retry": true,
+    "actual_matching_bound_required_before_param": true,
+    "actual_ground_held_required_before_vehicle_release": true,
+    "actual_vehicle_tail_required_before_ground_tail_permit": true,
+    "reader_and_nonce_bound": true,
+    "boot_and_epoch_bound": true,
+    "grant_tuple_token_generation_bound": true,
+    "response_native_read_must_follow_matching_out": true,
+    "ground_baseline_modular_freshness_required": true,
+    "future_slot_planner_used_as_authority": false,
+    "failed_preparation": "Keep exact failure_phase/reason/not_ready_count; enter passive40s raw measurement with zero further control/PARAM; raw completeness is not reservation/highspeed success.",
+    "source_bound_get_plan_and_permit": "Actual pure GetPlan tests bind canonical v10 candidate/flash contracts, typed permit Boolean, separate reservation contract,15/40,old rolecap constraints.",
+    "raw_preservation": "Save both fullnative raw streams before optional metadata; separate phase raw are exact partitions whose concatenated SHA matches retained fullnative raw.",
+    "raw_boundary_limit": "Atomic native-reader marker, not physical wire-time; a native read can span marker; cleanup tail remains retained.",
+    "legacy": "No reservation fields in legacy summary, old PARAM behavior and old Clock/ARM2 callsites preserved; legacy source/tests not weakened."
+  },
+  "immutable_constraints": {
+    "ground_fresh_grant_ms": 500,
+    "vehicle_fresh_tail_ms": 500,
+    "guard_ms": 100,
+    "aux_timeout_ms": 2000,
+    "usb_completion_ms": 106,
+    "rf_uart_tdd_settings_changed": false
+  },
+  "limitations": [
+    "Offline injected MCU responses are explicitly synthetic and do not constitute an actual prepared hardware reservation.",
+    "USB control completion and a successful raw capture do not prove RF/Pixhawk arrival, highspeed negotiation, bulk transfer,932/932 in30s,or acceptance.",
+    "actual_negotiation_start_ms and actual_bulk_start_ms remain null until source-bound MCU/JTAG records prove them.",
+    "One global measurement window is40s; phase raw boundaries use reader atomic markers and may contain crossing reads/cleanup bytes.",
+    "No firmware/candidate build, full host suite, flash, or live trial performed by this subagent; root owns those gates and one-time authority."
+  ],
+  "independent_review_p2": {
+    "red_log": "runner_caller_RED_ps51.log",
+    "cause": "The reservation helper throws after committing an IOException/unknown prefix, so the caller previously missed its serial_write_calls increment.",
+    "fix": "Count the immutable one-shot write_attempts delta in caller finally. Exactly one original request, no retries, no Held/Release promotion.",
+    "before_source_snapshot": "capture_p2_before.ps1",
+    "before_source_sha256": "27ACD1669FC77FD335788B0696682B9504180EFDC351FCC0B45002FFDA429DED",
+    "final_legacy_param_caller_checks_per_shell": 65,
+    "final_legacy_param_caller_result": "PASS_BOTH_SHELLS",
+    "final_legacy_param_caller_logs": [
+      "runner_caller_legacy_paramlist_ps51.log",
+      "runner_caller_legacy_paramlist_ps7.log"
+    ],
+    "old_diff_superseded": "runner_changes.diff"
+  },
+  "full_host_regression_followup": {
+    "root_suite_result_before_fix": "442/446 PASS; this followup owns test44 only, not the other3 root/metadata fixes",
+    "red_log": "runner_aux_routing_RED_ps51.log",
+    "red_failures": 7,
+    "before_source_snapshot": "capture_aux_routing_before.ps1",
+    "before_source_sha256": "84E4971970E3B1C32B6324A071382EDA915D9010547405C107EBA06B2B93723C",
+    "cause_and_fix": "New combined reservation top-level condition also mentioned AUX, so the unchanged strict routing AST correctly found two AUX guards. Nest the complete reservation prerequisite condition under the reservation-only top-level condition; all mode conditions and pre-device rejection remain identical. The metadata owner separately made its new outer permit property guard use the same PSBoundParameters binding style as neighboring flags.",
+    "existing_tests_modified": false,
+    "green_checks_per_shell": 18,
+    "new_capture_checks_preserved_per_shell": 63,
+    "superseded_diff": "runner_changes_v2.diff"
+  },
+  "diff": "runner_changes_v3.diff"
+}

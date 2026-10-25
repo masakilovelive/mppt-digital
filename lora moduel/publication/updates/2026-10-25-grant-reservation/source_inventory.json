@@ -1,0 +1,3146 @@
+{
+  "schema": "vc-lora-grant-reservation-publication-inventory-v1",
+  "publication_date_jst": "2026-10-25",
+  "candidate_id": "20261024T215821978Z-c1982cbd",
+  "canonical_source_count": 83,
+  "canonical_source_tree_sha256": "BBA7EE5CF24826768EC4EFD98EF5AF2338D1DDFA18DC936ECC220F934BFD5009",
+  "original_live_tool_count": 26,
+  "historical_v5_executed_parent_sha256": "011283705D8DF136FC124629E57A823C4DB92B43F1471183F37C80863F99728D",
+  "current_post_trial_offline_fixed_parent_sha256": "AFC2EBC5EFA842DD00E6642D0B88CE20665DA9533C650AEC75D971CDC56374B1",
+  "current_flash_sha256": "E09A9F01C840EFFB7A6200A636A9FA52DB0796E52884F3B06F0BFF9D57BF9DDF",
+  "source_scope": "Selected immutable firmware and evidence originals. Current tools include post-trial acquisition-gate fix; no new hardware trial, full450 suite or firmware build is implied.",
+  "source_reference_policy": "Three active identity-bound invokers are byte-identical reference.txt data, not directly executable source_snapshot scripts.",
+  "attestation_policy": "Parent/local overall summaries and evidence containing operator-consent fields are withheld. Small raw/stage data retain device and session identities intentionally.",
+  "evidence_scope": "449/449 is pretrial; post-trial 59 portable /109 saved-replay checks per shell are separate. Original HIL FAIL remains unchanged; R18 restored and 0/932 are not product acceptance.",
+  "partial_seal_policy": "Published manifests/seal sidecars may reference intentionally omitted application images, attestation-bearing flash records/install seal and historical files; this is not a complete sealed flash package.",
+  "clean_clone_policy": "The binary-encoded HWCDC migration archive fixture is intentionally omitted; its dependent migration test is not promised reproducible. This selected snapshot is not a full clean-clone test package.",
+  "cause_script_caveat": "The byte-identical historical cause analysis script contains original absolute paths and an output write to its historical analysis path. Inspect/adapt it in a separate offline working copy; do not execute unchanged against the original workspace.",
+  "files": [
+    {
+      "source": "core/include/vc_lora/bulk_data_codec.hpp",
+      "target": "source_snapshot/core/include/vc_lora/bulk_data_codec.hpp",
+      "bytes": 7972,
+      "sha256": "0ABF929F5119D6DCB18D8BCC88A6089369BA3FAEFB3B66811336BBEA2063958C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/bulk_heartbeat_sla.hpp",
+      "target": "source_snapshot/core/include/vc_lora/bulk_heartbeat_sla.hpp",
+      "bytes": 3919,
+      "sha256": "D61F0D2096EDF6013F4DAE73F1952DC55A94E3B28382A1FC2C2D9066489FCB1A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/bulk_negotiation_codec.hpp",
+      "target": "source_snapshot/core/include/vc_lora/bulk_negotiation_codec.hpp",
+      "bytes": 5241,
+      "sha256": "2E910D835A07254CEC5DE944A0AEADC941E2598F9225EB91E72BBECB085A1A5C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/bulk_session_controller.hpp",
+      "target": "source_snapshot/core/include/vc_lora/bulk_session_controller.hpp",
+      "bytes": 17733,
+      "sha256": "6A92DC55EF2EBCEA5ACFE062A94C31D345CA268116E7FEF79AFA3A9EF22633F4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/bulk_transcript.hpp",
+      "target": "source_snapshot/core/include/vc_lora/bulk_transcript.hpp",
+      "bytes": 5274,
+      "sha256": "CF5FC5D9AEDF05DD537C760E4992DFEB40B1BB53368732B47D07F6CC16335AFF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/bulk_tx_lease.hpp",
+      "target": "source_snapshot/core/include/vc_lora/bulk_tx_lease.hpp",
+      "bytes": 4918,
+      "sha256": "DA6D9FF0101E0E463F813D84CCE0545C1820B80D610270CBA4AA5EA865DE69BF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/byte_ring_buffer.hpp",
+      "target": "source_snapshot/core/include/vc_lora/byte_ring_buffer.hpp",
+      "bytes": 3467,
+      "sha256": "57D3F2411EA2837B14A98161A8D65CE0B3B6EBDAD21890AB92B1D9D07ACAA674",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/embedded_io_adapter.hpp",
+      "target": "source_snapshot/core/include/vc_lora/embedded_io_adapter.hpp",
+      "bytes": 23878,
+      "sha256": "63F3687F1E7F3146D4EFA1C9BDE4AAEF6CBAAC4881F338B1900A0B4981CB4B3F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/ground_parameter_download_proxy.hpp",
+      "target": "source_snapshot/core/include/vc_lora/ground_parameter_download_proxy.hpp",
+      "bytes": 14086,
+      "sha256": "E5ACB41E2D36028DBDDF20C7F3194D4AEE0F35AD608C442EEB9156DEB6CA3131",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/ground_usb_heartbeat_pacer.hpp",
+      "target": "source_snapshot/core/include/vc_lora/ground_usb_heartbeat_pacer.hpp",
+      "bytes": 9269,
+      "sha256": "052EB8588AE150C8E53233AB6F8367663EDCC5138A162AAFCD1225848DD55E81",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/ground_usb_host_presence_filter.hpp",
+      "target": "source_snapshot/core/include/vc_lora/ground_usb_host_presence_filter.hpp",
+      "bytes": 4237,
+      "sha256": "A125ECF770B72CD779714292A25F2CA343AEB9272EE089A7D98E6A709D47298E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/ground_usb_ordered_frame_backlog.hpp",
+      "target": "source_snapshot/core/include/vc_lora/ground_usb_ordered_frame_backlog.hpp",
+      "bytes": 8885,
+      "sha256": "1D3BB7D5CBA1C3826096424628F9CD2D424E33C14CD312E698E1BC52DB5BA422",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/high_speed_tdd_coordinator.hpp",
+      "target": "source_snapshot/core/include/vc_lora/high_speed_tdd_coordinator.hpp",
+      "bytes": 14131,
+      "sha256": "B877FA20BEF05574BBE5C9AE8255782CAF7BE78B973F79CB17390443B6C48AAE",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/late_uplink_recovery.hpp",
+      "target": "source_snapshot/core/include/vc_lora/late_uplink_recovery.hpp",
+      "bytes": 2279,
+      "sha256": "607CBE9CD32D886DA0AEA975D9C047B4203261F3B3FE4F262FE301DEA677304B",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/legacy_silence_gate.hpp",
+      "target": "source_snapshot/core/include/vc_lora/legacy_silence_gate.hpp",
+      "bytes": 1174,
+      "sha256": "2825DF10FB5F15CA8D8E6D51ABFEB08884318BC1911C6850AF8DBD4409A35402",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/link_data_codec.hpp",
+      "target": "source_snapshot/core/include/vc_lora/link_data_codec.hpp",
+      "bytes": 1297,
+      "sha256": "25384B3468CCD5F091A4076696451A4CD938C530DC1EBC6CD57D7BDCE9AD7D2C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/link_diagnostics.hpp",
+      "target": "source_snapshot/core/include/vc_lora/link_diagnostics.hpp",
+      "bytes": 3184,
+      "sha256": "DC353B681960DFD38481919F6B1FC2188DA94F8E6E781FD7DB497605E70A936D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/mavlink_frame.hpp",
+      "target": "source_snapshot/core/include/vc_lora/mavlink_frame.hpp",
+      "bytes": 3898,
+      "sha256": "C3E740599350B19F8EAD5C8DF7E12FB9D1F35E43C10CEA621AA832BB26856D57",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/mavlink_scheduler.hpp",
+      "target": "source_snapshot/core/include/vc_lora/mavlink_scheduler.hpp",
+      "bytes": 16870,
+      "sha256": "5D607A54A7B522772DEFC6A9D529123512B17B046A14E6B6FD222A98F2D7DCD2",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/r19_start_admission.hpp",
+      "target": "source_snapshot/core/include/vc_lora/r19_start_admission.hpp",
+      "bytes": 12753,
+      "sha256": "5DFA7BDC7DEF3465A906779EEAC07C50A18B9FCD6D797BEEB00C74A4892B8164",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/runtime_contract.hpp",
+      "target": "source_snapshot/core/include/vc_lora/runtime_contract.hpp",
+      "bytes": 13903,
+      "sha256": "4C1E05D03E72A40660971CFDE65EDC6901B5589C1990295A99F208B03D1CA2CF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/tdd_control_codec.hpp",
+      "target": "source_snapshot/core/include/vc_lora/tdd_control_codec.hpp",
+      "bytes": 1310,
+      "sha256": "608689BE3549D874A19A51725EA36879DDAD19F0476F43B0B7FED9357F8D0C76",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/tdd_ground.hpp",
+      "target": "source_snapshot/core/include/vc_lora/tdd_ground.hpp",
+      "bytes": 3740,
+      "sha256": "CAE5E17E0936D772CE29BC6F9C457295E0DDB493BCA3DFE9C85DBA7F238FAE32",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/tdd_link_demux.hpp",
+      "target": "source_snapshot/core/include/vc_lora/tdd_link_demux.hpp",
+      "bytes": 3751,
+      "sha256": "7A255DF5D16AFBD93655CB85645E73DBDA1EBA57C74B6DBC647B2A326CD1F511",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/tdd_types.hpp",
+      "target": "source_snapshot/core/include/vc_lora/tdd_types.hpp",
+      "bytes": 5535,
+      "sha256": "BD428D8153726964DDE609AFF12ECB8FF3D5D4171092C274125938746C4EBE95",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/tdd_vehicle.hpp",
+      "target": "source_snapshot/core/include/vc_lora/tdd_vehicle.hpp",
+      "bytes": 3629,
+      "sha256": "5A26F9FD46FB8808330EF982E7BB0B2D4D1744FD8EE4888864D229D1587A014A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/include/vc_lora/tx_gate.hpp",
+      "target": "source_snapshot/core/include/vc_lora/tx_gate.hpp",
+      "bytes": 853,
+      "sha256": "34EFA4672519FA0ADC6A9CA5F014A66DDF5741FE80D51A52120B171FB2194055",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/bulk_data_codec.cpp",
+      "target": "source_snapshot/core/src/bulk_data_codec.cpp",
+      "bytes": 15068,
+      "sha256": "6BC7BF9C22D49E1122888ACA27F9322BF4E36B5DC3C8E68BBE99E4FDAEEF9691",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/bulk_heartbeat_sla.cpp",
+      "target": "source_snapshot/core/src/bulk_heartbeat_sla.cpp",
+      "bytes": 6654,
+      "sha256": "7B4F741855ED9350258B39C8A488E7751145BB891042A59FAADE9ACFEB40D124",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/bulk_negotiation_codec.cpp",
+      "target": "source_snapshot/core/src/bulk_negotiation_codec.cpp",
+      "bytes": 16283,
+      "sha256": "AFCCD13D3B4EC550DF5BE3208CC19DE5477CE108B150683EE68BCBDAC29D258B",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/bulk_session_controller.cpp",
+      "target": "source_snapshot/core/src/bulk_session_controller.cpp",
+      "bytes": 36418,
+      "sha256": "2ECBB529D1588A4F45CBDF00CADFB4E153AF5C447AF6C6447C6483188A7FDA40",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/bulk_transcript.cpp",
+      "target": "source_snapshot/core/src/bulk_transcript.cpp",
+      "bytes": 15834,
+      "sha256": "83CD7FC38B4F9A5AF86319A6D9E48FC3368C150A3DE7A0638E8D165421D3F8DA",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/bulk_tx_lease.cpp",
+      "target": "source_snapshot/core/src/bulk_tx_lease.cpp",
+      "bytes": 6824,
+      "sha256": "4EF6B0D642F04143C9F0AB367906256D4BA022F9A10969978542B6417D8B82E1",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/ground_parameter_download_proxy.cpp",
+      "target": "source_snapshot/core/src/ground_parameter_download_proxy.cpp",
+      "bytes": 46311,
+      "sha256": "58F2AB0B77F0ABD8C3949649C172BEB43CB75C48DE7C1C6D78FFD9C15C208FE8",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/ground_usb_heartbeat_pacer.cpp",
+      "target": "source_snapshot/core/src/ground_usb_heartbeat_pacer.cpp",
+      "bytes": 12279,
+      "sha256": "5FDE2D6885A691D8B1F20FA5A2609199455823405094A26B1A0F8639A31DF762",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/high_speed_tdd_coordinator.cpp",
+      "target": "source_snapshot/core/src/high_speed_tdd_coordinator.cpp",
+      "bytes": 45658,
+      "sha256": "E5C62F4C46BC25AE1FD6E9A4137333DC8916BEACE352336A35752DDEA8C833A7",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/late_uplink_recovery.cpp",
+      "target": "source_snapshot/core/src/late_uplink_recovery.cpp",
+      "bytes": 4360,
+      "sha256": "2E107949D842805DA811007D1D97366D556570EDD9E87D8C300431C94B46F094",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/link_data_codec.cpp",
+      "target": "source_snapshot/core/src/link_data_codec.cpp",
+      "bytes": 1552,
+      "sha256": "B00D07F92AFA42B6790F0C8B533F29A3DF7E5750ECA5AA82EF12872C0102C211",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/link_diagnostics.cpp",
+      "target": "source_snapshot/core/src/link_diagnostics.cpp",
+      "bytes": 687,
+      "sha256": "3E4D18315752DA14612300CC3DE5693FB22394C99663F3B84EA23F5A9D33047A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/mavlink_frame.cpp",
+      "target": "source_snapshot/core/src/mavlink_frame.cpp",
+      "bytes": 16510,
+      "sha256": "BD2890D8973C5A694D53AB2866A6B3DBF319FAE40B3CC308AE2DAE91B634F3A8",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/mavlink_scheduler.cpp",
+      "target": "source_snapshot/core/src/mavlink_scheduler.cpp",
+      "bytes": 44421,
+      "sha256": "128F9AEEB6B624244DF3146BF24F5FE5D46F04628A83E67FE20CCA0CA789605F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/runtime_contract.cpp",
+      "target": "source_snapshot/core/src/runtime_contract.cpp",
+      "bytes": 7792,
+      "sha256": "1DDA0464CFFAEABF68F3782593C607965144AC2BF5DD774C77888847DEA668B5",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/tdd_control_codec.cpp",
+      "target": "source_snapshot/core/src/tdd_control_codec.cpp",
+      "bytes": 5773,
+      "sha256": "91DF9C17ACC4D4DDCE1B6456EB3865A8BD374885CAFFB4FC0C32B63923260155",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/tdd_ground.cpp",
+      "target": "source_snapshot/core/src/tdd_ground.cpp",
+      "bytes": 20278,
+      "sha256": "6021D0799274A92A5F7AF7EC28AF7D7883DFB0CA6AD688D1D4162F042FD67EDF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/tdd_link_demux.cpp",
+      "target": "source_snapshot/core/src/tdd_link_demux.cpp",
+      "bytes": 7022,
+      "sha256": "861235A0DF5254FE0D7DB2386956E512B7F02C0B90EA099DF323F85BAF594A6C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/tdd_vehicle.cpp",
+      "target": "source_snapshot/core/src/tdd_vehicle.cpp",
+      "bytes": 16282,
+      "sha256": "B64C9E253E52109C0B47BE6C4A64E3A7A42CC10458F54D3080EF6710D54325A8",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "core/src/tx_gate.cpp",
+      "target": "source_snapshot/core/src/tx_gate.cpp",
+      "bytes": 1570,
+      "sha256": "BE9E894ED9DD59023FCFF763E7AE575DCC80E1A295CF50D127A7FD48275F75BC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/arduino_libraries/VC_LoRa_Core/src/VC_LoRa_Core.h",
+      "target": "source_snapshot/firmware/arduino_libraries/VC_LoRa_Core/src/VC_LoRa_Core.h",
+      "bytes": 133,
+      "sha256": "6D537B590FCFFB95346BD328218A1A1CF54C6629BF6DA3CE1FE3DD2C4DFFE3AF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/diagnostics/r19_host_readiness.hpp",
+      "target": "source_snapshot/firmware/diagnostics/r19_host_readiness.hpp",
+      "bytes": 13605,
+      "sha256": "AB2407134125CE8E64F8CF44B08A265DF7A1BA1D9A0BF3C89C74B740527F8D56",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/e220_high_speed_transport_model.hpp",
+      "target": "source_snapshot/firmware/high_speed/e220_high_speed_transport_model.hpp",
+      "bytes": 106250,
+      "sha256": "F72984F9DD907E3A27B0CE21774523F788B9D89D3BB8D3787E58F251DCB705C0",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/high_speed_phase6_adapter.hpp",
+      "target": "source_snapshot/firmware/high_speed/high_speed_phase6_adapter.hpp",
+      "bytes": 57821,
+      "sha256": "44922450926350EFE085D0E1E073182C63BEF1803664954AE0E41749D63CE665",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/peer_completion_receipt.hpp",
+      "target": "source_snapshot/firmware/high_speed/peer_completion_receipt.hpp",
+      "bytes": 21253,
+      "sha256": "AFD2F61CEBD6A768D3E0D04B11498B2252076B084CF09145657EC759AC3767F4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/phase6_bulk_rx_tail_ledger.hpp",
+      "target": "source_snapshot/firmware/high_speed/phase6_bulk_rx_tail_ledger.hpp",
+      "bytes": 11321,
+      "sha256": "0E41966E36EFC43CD6FCFE2EFEC3D0859DD77C7138DA3A00FDDF697398745E21",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/phase6_high_speed_radio_session.hpp",
+      "target": "source_snapshot/firmware/high_speed/phase6_high_speed_radio_session.hpp",
+      "bytes": 18563,
+      "sha256": "1017D7301344F48E9AD88715F36E75530FE5481D769508E70DE715232D58000C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/phase6_high_speed_role_config.hpp",
+      "target": "source_snapshot/firmware/high_speed/phase6_high_speed_role_config.hpp",
+      "bytes": 6518,
+      "sha256": "2DB746252B18A476AC7CA32DDFAF674753ABF27F45E51D3501E408530D9F5A69",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/phase6_radio_writer_arbiter.hpp",
+      "target": "source_snapshot/firmware/high_speed/phase6_radio_writer_arbiter.hpp",
+      "bytes": 14728,
+      "sha256": "F5A11253CE0A3322BB9D89B60494B3A42F84CF92CF545B972F6130E2E5A5CC11",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/r19_aux_readiness_record.hpp",
+      "target": "source_snapshot/firmware/high_speed/r19_aux_readiness_record.hpp",
+      "bytes": 19236,
+      "sha256": "F3965E54988F9D35F4B20A0720D41405E5AD76F7A481955198FEA318577BE0BC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+      "target": "source_snapshot/firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+      "bytes": 9293,
+      "sha256": "47CE684BB11CD3807CA15605982BD98B66C7CB4258BE63DEA229E10E1793A258",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/r19_first_usb_failure_record.hpp",
+      "target": "source_snapshot/firmware/high_speed/r19_first_usb_failure_record.hpp",
+      "bytes": 9939,
+      "sha256": "EF9DE6A4F9C4DAA5F67238856826306E2DC5EC75E650C65B849C0CE552919E9B",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/r19_grant_diagnostic_record.hpp",
+      "target": "source_snapshot/firmware/high_speed/r19_grant_diagnostic_record.hpp",
+      "bytes": 16965,
+      "sha256": "23A1ACD6F33C7D14AFE66D1FA76CD43FD96524FD83BCAA7E7DDBA824F2226AB5",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/r19_grant_reservation.hpp",
+      "target": "source_snapshot/firmware/high_speed/r19_grant_reservation.hpp",
+      "bytes": 26680,
+      "sha256": "26581DA32C823B78C030170566D87B8940940C4FAEE123DF2F61AA7E7732D2D4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/r19_grant_reservation_record.hpp",
+      "target": "source_snapshot/firmware/high_speed/r19_grant_reservation_record.hpp",
+      "bytes": 4988,
+      "sha256": "101FAD91B30AB85AD9300399635E805B9ACE751BADCC717D431318A13CC75665",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/r19_runtime_fail_diagnostic.hpp",
+      "target": "source_snapshot/firmware/high_speed/r19_runtime_fail_diagnostic.hpp",
+      "bytes": 25790,
+      "sha256": "FC566FD26C258F060AF25002705E3120D24BBBEAAAB7D036DA35F4DA81C336C7",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/r19_runtime_stage_record.hpp",
+      "target": "source_snapshot/firmware/high_speed/r19_runtime_stage_record.hpp",
+      "bytes": 18783,
+      "sha256": "8A587AF9AF324781FD58575A73BC00931A2697CBCA8BBD028A9B0742A5F110A8",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/r19_timed_path_record.hpp",
+      "target": "source_snapshot/firmware/high_speed/r19_timed_path_record.hpp",
+      "bytes": 13249,
+      "sha256": "EA448319F2B4208E3D76934F3F543B9C49C418B98947A135319895F73DBEB5A4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/r19_usb_clock_sync.hpp",
+      "target": "source_snapshot/firmware/high_speed/r19_usb_clock_sync.hpp",
+      "bytes": 2661,
+      "sha256": "D540FFCD9F9B61B1AE617168EEFEA3306CD96404B49055AA904AAD3D27EC7B5B",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/terminal_ack_bridge.hpp",
+      "target": "source_snapshot/firmware/high_speed/terminal_ack_bridge.hpp",
+      "bytes": 7337,
+      "sha256": "D073709EA57B604AB1602B5C3542C70F53094FC83047890DE03C370D90CC2743",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/terminal_ack_producer.hpp",
+      "target": "source_snapshot/firmware/high_speed/terminal_ack_producer.hpp",
+      "bytes": 31937,
+      "sha256": "8655DA7C65F4219D6F7922E345ABCD59A7958F28B3886CC3691B4975D8382B32",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/terminal_ack_wire.hpp",
+      "target": "source_snapshot/firmware/high_speed/terminal_ack_wire.hpp",
+      "bytes": 31958,
+      "sha256": "AEC6EB39F7BC987EE05DD756D9211041F6D9FD22EC2B117EA6CB7929BF1A1848",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/high_speed/vc_lora_high_speed_candidate.hpp",
+      "target": "source_snapshot/firmware/high_speed/vc_lora_high_speed_candidate.hpp",
+      "bytes": 13448,
+      "sha256": "53D047532E5BB2596D5C0613B12F583C304237986AA6E76B7EA1DEB08E52E811",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "target": "source_snapshot/firmware/phase6/vc_lora_phase6_bridge.hpp",
+      "bytes": 313879,
+      "sha256": "97DA0CFF2728BAEE4E8CD04D234895252C44545FF262BCD6CBACB054743A84C0",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_grant_reservation_contract.ps1",
+      "target": "source_snapshot/tools/r19_grant_reservation_contract.ps1",
+      "bytes": 3259,
+      "sha256": "5DAA27A9E16080E0A0524CEDABB44752B337697E2338F373F63CFEE886A2B9DC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_grant_reservation_wire.ps1",
+      "target": "source_snapshot/tools/r19_grant_reservation_wire.ps1",
+      "bytes": 8577,
+      "sha256": "C61B8C4ED48F2F9B977058A8B1DB97067324CB3DF9BACDB69D43DB9520E3EAEB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_grant_reservation_workflow.ps1",
+      "target": "source_snapshot/tools/r19_grant_reservation_workflow.ps1",
+      "bytes": 17571,
+      "sha256": "5DA7E54EF95567E6B0022C3E1E31BBA058B283EBACB85B8B17C0903456DF360A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_usb_role_contract.ps1",
+      "target": "source_snapshot/tools/r19_usb_role_contract.ps1",
+      "bytes": 4870,
+      "sha256": "10787A8D4064FC7370F40AE81BA3034E8D59F063E4D207E81B3E4F37FD020238",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/read_r19_aux_readiness_record.ps1",
+      "target": "source_snapshot/tools/read_r19_aux_readiness_record.ps1",
+      "bytes": 22317,
+      "sha256": "C011580259EA94F3092B1B3CCAF34DB30C4D9CA1158D2A51D2DC96EA76D880DF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/read_r19_diagnostic_usb_failure_record.ps1",
+      "target": "source_snapshot/tools/read_r19_diagnostic_usb_failure_record.ps1",
+      "bytes": 8407,
+      "sha256": "26E15CAC70F9414F2EE3A43FBF44A820BC1F7B8DC41672EC81733A9B1CD54451",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/read_r19_first_usb_failure_record.ps1",
+      "target": "source_snapshot/tools/read_r19_first_usb_failure_record.ps1",
+      "bytes": 8232,
+      "sha256": "E11CDBF18EFA90F22BC9E69ADF357FD795396725EC0D2B091C759A69A929E47D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/read_r19_grant_diagnostic_record.ps1",
+      "target": "source_snapshot/tools/read_r19_grant_diagnostic_record.ps1",
+      "bytes": 15756,
+      "sha256": "024B52920F2F91C0806988EE43968F0B90D189E82FC52F0D403C2025656EB4B0",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/read_r19_grant_reservation_record.ps1",
+      "target": "source_snapshot/tools/read_r19_grant_reservation_record.ps1",
+      "bytes": 6860,
+      "sha256": "0E6FC4C0197DD96DD8C3851EEE5C08AA5AC3A59072385B69CB81459B9C7211F5",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/read_r19_timed_path_record.ps1",
+      "target": "source_snapshot/tools/read_r19_timed_path_record.ps1",
+      "bytes": 5949,
+      "sha256": "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "vc_lora_ground_xiao_esp32s3/vc_lora_ground_xiao_esp32s3.ino",
+      "target": "source_snapshot/vc_lora_ground_xiao_esp32s3/vc_lora_ground_xiao_esp32s3.ino",
+      "bytes": 259,
+      "sha256": "33723E560F44D4D528C10425B62F8D36CCBF790D0B3ADFAB6615D01B575DE040",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "vc_lora_vehicle_xiao_esp32s3/vc_lora_vehicle_xiao_esp32s3.ino",
+      "target": "source_snapshot/vc_lora_vehicle_xiao_esp32s3/vc_lora_vehicle_xiao_esp32s3.ino",
+      "bytes": 289,
+      "sha256": "B48C2E5197A7BF6F5C8B0896BACC7517997567FFDDBC835651C1FE56A88003B7",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "AGENTS.md",
+      "target": "source_snapshot/AGENTS.md",
+      "bytes": 1879,
+      "sha256": "54C72FA6ADFF8B430098801D7EEEF0A78D82FA6F8E8920D5229EC8319F4F2906",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "CMakeLists.txt",
+      "target": "source_snapshot/CMakeLists.txt",
+      "bytes": 12358,
+      "sha256": "D40760946856882B0CD4540207BCE02F9A0447E49576552C4BC9B2E1727FD25F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "CMakePresets.json",
+      "target": "source_snapshot/CMakePresets.json",
+      "bytes": 665,
+      "sha256": "768F5A234015F7F43230E4638C1FC538B9C33FA332A498F5F629EC348F051E32",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "CURRENT_WORKSPACE_AND_SPEC_R19.md",
+      "target": "source_snapshot/CURRENT_WORKSPACE_AND_SPEC_R19.md",
+      "bytes": 402351,
+      "sha256": "CEF9355C4F19823CAB23E11B62446522893FA9BB5D15C91C15D45B3411927092",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "R19_GRANT_RESERVATION_DIAGNOSTICS.md",
+      "target": "source_snapshot/R19_GRANT_RESERVATION_DIAGNOSTICS.md",
+      "bytes": 16567,
+      "sha256": "F85ACD97B951E77A6F2BD6279ABCC5E1028639AAA9E354552BAC7E125FF349FB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "R19_START_ADMISSION.md",
+      "target": "source_snapshot/R19_START_ADMISSION.md",
+      "bytes": 4761,
+      "sha256": "B8103790E33D83772B75274E3C135F3407A7CB3D85A7A8563EE19B3F6706BB0F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "SPEC.md",
+      "target": "source_snapshot/SPEC.md",
+      "bytes": 7633,
+      "sha256": "B573B134C9D4C576242AE400F826B7077D57E2A4E4CCF44BE225EE04A878FB80",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "PROTOCOL.md",
+      "target": "source_snapshot/PROTOCOL.md",
+      "bytes": 31108,
+      "sha256": "4959C2DF64F34C2F8C2401A85DE4A2B7CB309EEEBE7D028D6552D4D3BE9AF009",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/check_high_speed_candidate_contract.ps1",
+      "target": "source_snapshot/tests/host/check_high_speed_candidate_contract.ps1",
+      "bytes": 29521,
+      "sha256": "CF2181409E9B6C2C5225A2FA49552BB0FAF021709E68AAECE537B4F8410C51C0",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/check_host_sanitizer_full_suite_runner_contract.ps1",
+      "target": "source_snapshot/tests/host/check_host_sanitizer_full_suite_runner_contract.ps1",
+      "bytes": 11623,
+      "sha256": "E090E403767685FA673BDA76E0FAF24A4B124D7758FF1397499147C5ABC3802B",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/check_jev_phase_a_artifacts_contract.ps1",
+      "target": "source_snapshot/tests/host/check_jev_phase_a_artifacts_contract.ps1",
+      "bytes": 18913,
+      "sha256": "B8979ACDB4A4D3048AB88BDC504610FB84FEE5ABB8EC4C120B57F91195DCB6B3",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/check_terminal_ack_wire_contract.ps1",
+      "target": "source_snapshot/tests/host/check_terminal_ack_wire_contract.ps1",
+      "bytes": 14281,
+      "sha256": "42DBAA82EF5D426E2F26F059EB8D32803D09C425E2D43A9AB246AC249E8F97A6",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/CMakeLists.txt",
+      "target": "source_snapshot/tests/host/CMakeLists.txt",
+      "bytes": 46577,
+      "sha256": "2601076CC1DC51F74FD4AAB23ADBB33B1040375D7456B2101CFF1658A1297A21",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/test_main.cpp",
+      "target": "source_snapshot/tests/host/test_main.cpp",
+      "bytes": 20327,
+      "sha256": "60F30B1883C4DC49EEC67699C9A3BBA793BC1D49C7DD876C3D677DDFDA63BAC5",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/test_support.hpp",
+      "target": "source_snapshot/tests/host/test_support.hpp",
+      "bytes": 7577,
+      "sha256": "36B9F65D79A1951D94D7AA824077C159DC27E8C7A25206865D7AE0BA031E82E9",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/sim/e220_sim.hpp",
+      "target": "source_snapshot/tests/host/sim/e220_sim.hpp",
+      "bytes": 1208,
+      "sha256": "11D4F106096156A75967D17E284B8B5ABF0589DD2F9059F31A494596CE23BD53",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/sim/rf_medium_sim.cpp",
+      "target": "source_snapshot/tests/host/sim/rf_medium_sim.cpp",
+      "bytes": 13157,
+      "sha256": "F6D90EE7868F4ECB76E555371BF36B5EA3B3FEB206F51778FF949B3986F903CB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/sim/rf_medium_sim.hpp",
+      "target": "source_snapshot/tests/host/sim/rf_medium_sim.hpp",
+      "bytes": 5672,
+      "sha256": "BB41D8FAD4F06FFD5E1CFD81450B9D6F091510DE8A4A058A85AE87954129645A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/sim/trace_recorder.cpp",
+      "target": "source_snapshot/tests/host/sim/trace_recorder.cpp",
+      "bytes": 1993,
+      "sha256": "3B8E28F079D470A7BF70CDEB5ED9D490932E76683527B0F03E289554BFD03EC8",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/sim/trace_recorder.hpp",
+      "target": "source_snapshot/tests/host/sim/trace_recorder.hpp",
+      "bytes": 1362,
+      "sha256": "F665EB989A90FA3F99E67D030F3EE6F150F7870E5BC7250047F9E69B355F35A2",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/sim/virtual_clock.hpp",
+      "target": "source_snapshot/tests/host/sim/virtual_clock.hpp",
+      "bytes": 939,
+      "sha256": "0789A8C2DF0FFE5ECA020D2F192BFF9E3809E602ABC97A2BD2D3D35FF558A46D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/buffer_integration_tests.cpp",
+      "target": "source_snapshot/tests/host/integration/buffer_integration_tests.cpp",
+      "bytes": 13727,
+      "sha256": "1A09EBE42BED57265141A8FD1AE34FE101CDDCF379287157F29F5D1A9847AB2C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/buffered_e220_integration_tests.cpp",
+      "target": "source_snapshot/tests/host/integration/buffered_e220_integration_tests.cpp",
+      "bytes": 92391,
+      "sha256": "67999B5BBB479D58F4F09E6D8C33966A4E3D25B3201B755844B2A4BDA8618EE6",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/control_subpacket_integration_tests.cpp",
+      "target": "source_snapshot/tests/host/integration/control_subpacket_integration_tests.cpp",
+      "bytes": 24081,
+      "sha256": "424FE7029141403AAF83AB885CCBEFF46F686251CD209DE1983E6C843349A767",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/ground_usb_heartbeat_pacer_tests.cpp",
+      "target": "source_snapshot/tests/host/integration/ground_usb_heartbeat_pacer_tests.cpp",
+      "bytes": 29590,
+      "sha256": "3CF70D337393BF953DEE261D212E00DFBC6344C0439DC09C46FC86848BD46A8C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/ground_usb_heartbeat_phase6_tests.cpp",
+      "target": "source_snapshot/tests/host/integration/ground_usb_heartbeat_phase6_tests.cpp",
+      "bytes": 120577,
+      "sha256": "CD95BA4BD2CB26BB4762AFE750F8F49F6F2A0E065B12013659DE598EA9839DAC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/mavlink_e2e_sim.cpp",
+      "target": "source_snapshot/tests/host/integration/mavlink_e2e_sim.cpp",
+      "bytes": 30533,
+      "sha256": "4C4AAE284C8DA01AACCE2D9B2B9652E0146199775013AEE77F802922A7E3C4F7",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/mavlink_e2e_sim.hpp",
+      "target": "source_snapshot/tests/host/integration/mavlink_e2e_sim.hpp",
+      "bytes": 8740,
+      "sha256": "CBD2B64A81029B41A4258F101F372CE6A3C365901DB7B9107EF8A3F62B7360B1",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/mavlink_e2e_tests.cpp",
+      "target": "source_snapshot/tests/host/integration/mavlink_e2e_tests.cpp",
+      "bytes": 26175,
+      "sha256": "CC7BE77921C8654316DC8F45E135B96B0C35AD84ED2E5CE44A978DC6F5B4159D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/parameter_proxy_tests.cpp",
+      "target": "source_snapshot/tests/host/integration/parameter_proxy_tests.cpp",
+      "bytes": 222656,
+      "sha256": "1EFDAEC09ABCA7BB776C9CEBA355109EE43FE28347573BC73F4B88462EB0BA31",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/phase6_high_speed_route_integration_tests.cpp",
+      "target": "source_snapshot/tests/host/integration/phase6_high_speed_route_integration_tests.cpp",
+      "bytes": 55945,
+      "sha256": "E63A91E4028C446AAC97D03452432F1B6F33FC3BC10DC11422D6C5A4659FC373",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/r19_candidate_standard_path_tests.cpp",
+      "target": "source_snapshot/tests/host/integration/r19_candidate_standard_path_tests.cpp",
+      "bytes": 12372,
+      "sha256": "1AB5C9F1123C695955C34E0EF27D432819CB3C5CBFA0BA0557B70B1E40C983C2",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/tdd_integration_tests.cpp",
+      "target": "source_snapshot/tests/host/integration/tdd_integration_tests.cpp",
+      "bytes": 23476,
+      "sha256": "7263A0BB3CAB1DDF20BC4B79C50A2E2FF9126C4814CE443F9B0A62377A747E12",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/tdd_simulation.cpp",
+      "target": "source_snapshot/tests/host/integration/tdd_simulation.cpp",
+      "bytes": 22618,
+      "sha256": "848166BD5E88EC32D1265550EFBBA46EE8E537E4549AACA4F891294F5FE998EB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/tdd_simulation.hpp",
+      "target": "source_snapshot/tests/host/integration/tdd_simulation.hpp",
+      "bytes": 5463,
+      "sha256": "0B6E6FA88F4E30B886DCBCAE31F193FAACE055841EC1FBD42CD2DEB6433F3E7F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/uplink_guard_integration_tests.cpp",
+      "target": "source_snapshot/tests/host/integration/uplink_guard_integration_tests.cpp",
+      "bytes": 18260,
+      "sha256": "634BA0824AF600CF6FFBEA017D5B249F19449FB8A24AB9E2520A1DE1D1DD83B8",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/integration/uplink_guard_integration_tests.hpp",
+      "target": "source_snapshot/tests/host/integration/uplink_guard_integration_tests.hpp",
+      "bytes": 278,
+      "sha256": "F82F2AF141A868EAE85506519E5CBE1358B038969B764B01220C64053E7CEF95",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/buffer_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/buffer_tests.cpp",
+      "bytes": 5585,
+      "sha256": "247EA968D6C8636CB392D6CF24568BAC0B61CEB1E7A5A9410501965DD806C0F9",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/bulk_data_codec_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/bulk_data_codec_tests.cpp",
+      "bytes": 74422,
+      "sha256": "7872E08E5075DEC8280AF7511109FC8D4CF5279F2A7D71F36A812E07AE8F7375",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/bulk_heartbeat_policy_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/bulk_heartbeat_policy_tests.cpp",
+      "bytes": 21750,
+      "sha256": "A124C73E2986C3CC19A846BD32F0FA07908BA8B6DC1A9AB9C53EF06EB4FA95BB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/bulk_heartbeat_sla_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/bulk_heartbeat_sla_tests.cpp",
+      "bytes": 14296,
+      "sha256": "9B852DBFF02D432E3FF9AF70E6C405F0589D4DF4F10BFB2A1DD1F5D258E72751",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/bulk_negotiation_codec_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/bulk_negotiation_codec_tests.cpp",
+      "bytes": 22033,
+      "sha256": "6B7564575AF3E0326007779AEB8DD0AE53EC0833E982F79AD8655C8B250A72D5",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/bulk_session_controller_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/bulk_session_controller_tests.cpp",
+      "bytes": 42799,
+      "sha256": "91E45FB80CAB7D99567F7CC870F0FE327E9C040C8FDE0F58B00F5AF97EF68B82",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/bulk_transcript_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/bulk_transcript_tests.cpp",
+      "bytes": 20982,
+      "sha256": "A28FCFAFC8AA569FC05C4C9E6A082D045AD18AEA4AFB08AB1D716B67FADB62B9",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/bulk_tx_lease_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/bulk_tx_lease_tests.cpp",
+      "bytes": 40663,
+      "sha256": "94C778E4E17FECC4B94EC89ECB887C31A7B05ABC4D23B031B3444ED66D6047A5",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/control_v2_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/control_v2_tests.cpp",
+      "bytes": 49973,
+      "sha256": "9594B3907D29128C0BB319D36BA1A720FC0EED003AF5AE421093DF18D3192121",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/e220_startup_contract_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/e220_startup_contract_tests.cpp",
+      "bytes": 13368,
+      "sha256": "03678AE1208EB77BF827CA235D7A2191758D81BDE286F2D86844F99AAD4DC997",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/embedded_adapter_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/embedded_adapter_tests.cpp",
+      "bytes": 35402,
+      "sha256": "D8D540FC33C2D069FE86EF58E87679792A3E999E124A5488D35CCF9467EC021F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/encoded_accounting_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/encoded_accounting_tests.cpp",
+      "bytes": 4385,
+      "sha256": "FC1B21A87745798BB132E61F810ED77B67329973642C3C80EE8DF2E0352C8160",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/high_speed_phase6_adapter_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/high_speed_phase6_adapter_tests.cpp",
+      "bytes": 45822,
+      "sha256": "5768E0B4086CD66AAAE7503379ECAEF1B5AB478C10510350B92180D6AD1B402F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/high_speed_tdd_coordinator_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/high_speed_tdd_coordinator_tests.cpp",
+      "bytes": 67590,
+      "sha256": "A069726B08CCB2053B18D0EBE28B5D04E3A0E901985333ED7191A42F903A82CD",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/late_uplink_recovery_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/late_uplink_recovery_tests.cpp",
+      "bytes": 42013,
+      "sha256": "59DA41A3C14FF4CDAB19EEF7FFC8FBB5A21D26334AA4568C765FD94A5286096E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/link_data_codec_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/link_data_codec_tests.cpp",
+      "bytes": 10256,
+      "sha256": "58DC529FB5F9C5BAB240810A130F6636ADF212A5EC648DFE1D09391E38C84DDE",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/mavlink_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/mavlink_tests.cpp",
+      "bytes": 50085,
+      "sha256": "E839158E38D8721D7A788118D09A6A47EA294BEED42DBA4E5183F9546AB216DF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/phase6_bulk_rx_tail_ledger_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/phase6_bulk_rx_tail_ledger_tests.cpp",
+      "bytes": 14177,
+      "sha256": "1E06FA969EFEC48F93C0A5A0194C9C11462DB8C0C975639D5ED8B7711414030E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/phase6_high_speed_product_route_source_contract_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/phase6_high_speed_product_route_source_contract_tests.cpp",
+      "bytes": 19821,
+      "sha256": "92241C0A1408BC94D55CC9CCA44E5BC96280BC85896CFFCF043E1FAEAE2520E3",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/phase6_high_speed_radio_session_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/phase6_high_speed_radio_session_tests.cpp",
+      "bytes": 28342,
+      "sha256": "E39CE1F40129B87F5E3195CD9ED868D598A5F1F9F0C4726FBBAEEF91300BA2E0",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/phase6_high_speed_role_config_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/phase6_high_speed_role_config_tests.cpp",
+      "bytes": 10977,
+      "sha256": "BFB1FA8C37D3BC186A7896D041BBC32EFB5E72D9C06E59CBC2FE00BDEE3D6BF2",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/phase6_product_writer_source_contract_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/phase6_product_writer_source_contract_tests.cpp",
+      "bytes": 7485,
+      "sha256": "7DD65670329C0DE1188F35F9C6B5A621E2851ED231061E3B508E267869A1710E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/phase6_radio_writer_arbiter_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/phase6_radio_writer_arbiter_tests.cpp",
+      "bytes": 23464,
+      "sha256": "7B5449C89C0CDBA7469206D11A3CD24F78A9B7329BF74EDE33C41DFAA41F4D5D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/r19_aux_readiness_record_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/r19_aux_readiness_record_tests.cpp",
+      "bytes": 19351,
+      "sha256": "8204FDA6836F1DBA0EBDDAB77DA61BAE5FCB210C7DC92F2DFE36F7A7913D76FF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/r19_grant_adapter_diagnostics_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/r19_grant_adapter_diagnostics_tests.cpp",
+      "bytes": 10022,
+      "sha256": "3F27EFD223A76056BFE4421CC6210A794709B63BB50FB73F7B06BF2BA1DE9514",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/runtime_contract_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/runtime_contract_tests.cpp",
+      "bytes": 21950,
+      "sha256": "C5F4F9EC7A5E08226DA400AB1419A2D7E168A24B31F77EAE30A31AD928EEAEBC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/terminal_completion_ack_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/terminal_completion_ack_tests.cpp",
+      "bytes": 32266,
+      "sha256": "547BCDA33D28D54950716E282ADAAFCE9EB1FF7726A20672354C6B5EACD1C515",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/unit_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/unit_tests.cpp",
+      "bytes": 22400,
+      "sha256": "0F50824CC475DAB0DD2E5F39DE5C38FC0B81D013718610979B1FA237E6B06F76",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/uplink_guard_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/uplink_guard_tests.cpp",
+      "bytes": 32997,
+      "sha256": "2EF82E150404BAD3A8794D68D21FD48E1F52537682D504F83BA1DF721CC50C23",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/uplink_residual_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/uplink_residual_tests.cpp",
+      "bytes": 7740,
+      "sha256": "95348E389580DFA3FEF926B33BD2514A22FDAC7F71DBBE5815799F3FAAECE478",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/vehicle_boundary_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/vehicle_boundary_tests.cpp",
+      "bytes": 26457,
+      "sha256": "7EE7F78C9E2A6AA5320321C335600C30C8EEF1ADDDB8F4E4EEE866AAAB05C000",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/unit/vehicle_parameter_priority_tests.cpp",
+      "target": "source_snapshot/tests/host/unit/vehicle_parameter_priority_tests.cpp",
+      "bytes": 57816,
+      "sha256": "3110DD5834521BEC7F914B3FAC0037C07725C719F22BD3016BA93563B64073FC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/fixtures/mavlink_fixtures.hpp",
+      "target": "source_snapshot/tests/host/fixtures/mavlink_fixtures.hpp",
+      "bytes": 7007,
+      "sha256": "3C7A3BAF5FBAAA4BECCA86D4ABF92D4DD9F367B23C9C751EA8AB404CEC3FD098",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/fixtures/mavlink/golden_frames.hpp",
+      "target": "source_snapshot/tests/host/fixtures/mavlink/golden_frames.hpp",
+      "bytes": 4361,
+      "sha256": "E5792870F79E3A6E7F254BFFEED16CB268206CED8E691294DAFCF9A6D54225A0",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/fixtures/mavlink/MANIFEST.md",
+      "target": "source_snapshot/tests/host/fixtures/mavlink/MANIFEST.md",
+      "bytes": 3077,
+      "sha256": "78850AFB6D48BB52C8AEF78DA59F9BD7B471D7DB63D8B3D3E225B1C7A265C6FF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/stress/phase5_stress_tests.cpp",
+      "target": "source_snapshot/tests/host/stress/phase5_stress_tests.cpp",
+      "bytes": 59571,
+      "sha256": "0541F9B7FB90FA72B79A9F44F2DE1F8AC3F1405F3A5ED1FF801434931AC5AFB4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/check_r19_host_readiness_integration.ps1",
+      "target": "source_snapshot/tests/host/standalone/check_r19_host_readiness_integration.ps1",
+      "bytes": 7512,
+      "sha256": "9719EC9AC2A15DF3EFF9F1AA1B4B233040802C6A7ABF4730797061D58110F155",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/d7_param_observer_contract_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/d7_param_observer_contract_tests.cpp",
+      "bytes": 17911,
+      "sha256": "393B51AE104C51BF5DC0D25E6213041A61332BC0A4CEB86A49519B05413BBC34",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/e220_continuous_aux_credit_red.cpp",
+      "target": "source_snapshot/tests/host/standalone/e220_continuous_aux_credit_red.cpp",
+      "bytes": 8439,
+      "sha256": "C75602D3BAC425F85CFB5F1C96ED9B371B083801F9F7D426F14BF10316BBEFEC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/ground_diag_query_observer_contract_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/ground_diag_query_observer_contract_tests.cpp",
+      "bytes": 29430,
+      "sha256": "01061A3444AB7A025EA1F26B752881425B83AB0D56CC90BF77A67B94DE350B41",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/high_speed_candidate_contract_compile.cpp",
+      "target": "source_snapshot/tests/host/standalone/high_speed_candidate_contract_compile.cpp",
+      "bytes": 1710,
+      "sha256": "EB21AB6B8669EDB8761DACA3188F554B04F9A69DE724D25B2BA880947B3D74C3",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/high_speed_transport_model_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/high_speed_transport_model_tests.cpp",
+      "bytes": 95632,
+      "sha256": "686B7C4230768FCEF614CE8C38D7945B83ED69ACE4B58698A76E88F52636B864",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_diagnostic_usb_failure_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_diagnostic_usb_failure_tests.cpp",
+      "bytes": 8548,
+      "sha256": "A63D7FEAE9E8F7BD3F6CDDCF036A68A3DBE8978874A236BA73C351416FCADCBB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_first_usb_failure_integration_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_first_usb_failure_integration_tests.cpp",
+      "bytes": 5428,
+      "sha256": "ED33F0E0A1CC857276C9866F8038B291BAF6B4DF116264797EF85AFFCF2AF114",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_grant_diagnostic_hooks_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_grant_diagnostic_hooks_tests.cpp",
+      "bytes": 3679,
+      "sha256": "6417041473660D30EF24CD2C59B2587401983827AF77F425672E7EF4AF593862",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_grant_reservation_bridge_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_grant_reservation_bridge_tests.cpp",
+      "bytes": 1918,
+      "sha256": "478E44DB7C0635B97E6289CDDF73A42DD24085AA7BBB92DCFAD3F7E2FD2EF8B7",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_grant_reservation_flow_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_grant_reservation_flow_tests.cpp",
+      "bytes": 11001,
+      "sha256": "4D642EEE18EEE1DA79A878610389B20FB329923A72E2AED83224B759C4650AAB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_aux_independence_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_aux_independence_tests.cpp",
+      "bytes": 13633,
+      "sha256": "611CEC3FB91A8FBD7C7237B1D0F85892B1DE468BE73651F3F03A9D45CA40C034",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_host_readiness_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_host_readiness_tests.cpp",
+      "bytes": 19650,
+      "sha256": "A61A5C1FFE5FBBB5748E8DACF4A4EDE0C35CD32E0A63F913DCCBB229395042A4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_product_loop_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_product_loop_tests.cpp",
+      "bytes": 14161,
+      "sha256": "17163F5D79F19E97FB52B468B9A6CA0CDD71E643C13AEB7254A9DFCAB6ADD9E4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_runtime_alive_backpressure_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_runtime_alive_backpressure_tests.cpp",
+      "bytes": 3446,
+      "sha256": "642FA1800E861F96F85ADF61A660DA43C94E5CF8DD81712BEFF106923348C8F0",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_runtime_alive_diagnostic_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_runtime_alive_diagnostic_tests.cpp",
+      "bytes": 4462,
+      "sha256": "7A9C015C9AA10E26CAFFE9C3B50B85CF22C87DAFBF1CFB217BE30465BD486495",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_runtime_alive_read_only_bootstrap_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_runtime_alive_read_only_bootstrap_tests.cpp",
+      "bytes": 6727,
+      "sha256": "2B3231169D0FD47DCA4A1B7953CB8F37FDD8CE5351CE0C160160EDA35384A5D5",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_runtime_alive_starvation_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_runtime_alive_starvation_tests.cpp",
+      "bytes": 6731,
+      "sha256": "6F737380A6EBC8447772AEB7886E25CF4FF93D1587F1EBB34AD044087553417C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_runtime_fail_boundary_loss_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_runtime_fail_boundary_loss_tests.cpp",
+      "bytes": 4121,
+      "sha256": "1F0AEC1A2B5BFC3EEA6D673B9AD3FF1C4A616EAB7F61615A18F42D890F67D5BC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_runtime_fail_deadline_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_runtime_fail_deadline_tests.cpp",
+      "bytes": 6446,
+      "sha256": "D4E30BC3822DB347B795CDB33FBDD2B70CCBE9A42CF85250F37B48F4627DC06B",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_runtime_fail_diagnostic_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_runtime_fail_diagnostic_tests.cpp",
+      "bytes": 6589,
+      "sha256": "EC1BD1D327EAD7CD01F2C1958B4EFA69E3B4BCABDEA52CC545BE4F4000A7C0EB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_runtime_fail_pending_alive_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_runtime_fail_pending_alive_tests.cpp",
+      "bytes": 3844,
+      "sha256": "C328C784DA6675D5492A0D0E6D1581559148BABB8808FE0540926D431F9478CE",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_runtime_fail_recovery_guard_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_runtime_fail_recovery_guard_tests.cpp",
+      "bytes": 4682,
+      "sha256": "C9998AE6EFB11681352DC6E06638FDE71803B17FCCB4B55FBF5823DBB8A6C4C2",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_ground_usb_commit_latch_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_ground_usb_commit_latch_tests.cpp",
+      "bytes": 7555,
+      "sha256": "A9684D7174FF6AADA9CD12E52BEAF522226BD7E2AB849F58BF973E58B9668BEF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_timed_path_integration_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_timed_path_integration_tests.cpp",
+      "bytes": 6188,
+      "sha256": "FF587D92D387DD5981432B2325FA6A9074DB826FE0452895E948B52DE59AFD6B",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_vehicle_product_loop_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_vehicle_product_loop_tests.cpp",
+      "bytes": 9164,
+      "sha256": "B79237CEB789A7C81AEBE69757CCE0BF185F575209E376A46CCBE1C91D1F7846",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_vehicle_runtime_alive_diagnostic_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_alive_diagnostic_tests.cpp",
+      "bytes": 8358,
+      "sha256": "D308A6D6ADF01241DA8640A1F05365CB226504C2175E4B85E1F85CC4D8BF6F09",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_vehicle_runtime_alive_read_only_bootstrap_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_alive_read_only_bootstrap_tests.cpp",
+      "bytes": 6084,
+      "sha256": "B07A96CBC2BF72265B710C1C5E983F84D646F871666977C5EC12457CB2914878",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_vehicle_runtime_fail_diagnostic_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_fail_diagnostic_tests.cpp",
+      "bytes": 5094,
+      "sha256": "F7C0E122F3F556408B6D67509766451210E98CE453DADFEF18D29EE7C9A97959",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_vehicle_runtime_fail_flush_deadline_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_fail_flush_deadline_tests.cpp",
+      "bytes": 4064,
+      "sha256": "EF810EA73BCDF387EC30259552779317A8EF06062940D43CE34BF9BD3B826478",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_vehicle_runtime_fail_partial_deadline_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_fail_partial_deadline_tests.cpp",
+      "bytes": 2413,
+      "sha256": "4206CBF33A894A518D28B7387097C78924E86ABC69BE37D9CC2255493C49FD57",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_vehicle_runtime_fail_recovery_guard_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_fail_recovery_guard_tests.cpp",
+      "bytes": 2853,
+      "sha256": "E32E2CEEFA4CE6793C114DA275AEF3C5781F7A9AB3534F910AD8ACEEBB8A6DE0",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_vehicle_runtime_fail_staged_partial_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_fail_staged_partial_tests.cpp",
+      "bytes": 4480,
+      "sha256": "0AD580CB87F00F2FF41D7DF4DEF9CA570AECEFB710349ACE65A7E4023050C6BD",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_vehicle_runtime_fail_staged_zero_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_vehicle_runtime_fail_staged_zero_tests.cpp",
+      "bytes": 3782,
+      "sha256": "F45277036F2F3009503FCB59E9C63F73EBB6387728D2326B932112364744553E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/phase6_vehicle_usb_clock_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/phase6_vehicle_usb_clock_tests.cpp",
+      "bytes": 8852,
+      "sha256": "80F2EFC19349D31F635C523CC6B2C51C25DAF106CA1944833A59ADC471C2492B",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_diagnostic_usb_failure_record_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_diagnostic_usb_failure_record_tests.cpp",
+      "bytes": 7645,
+      "sha256": "036DF5F426FB61B4467BD7F86E781FFC41273DF9588495AF83D09609F092CBBD",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_first_usb_failure_record_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_first_usb_failure_record_tests.cpp",
+      "bytes": 6752,
+      "sha256": "19C8735ED294BBBFE169DDF9E5D016E4CE2815668FBA7DFC5406F92ED63B20B8",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_grant_admission_timing_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_grant_admission_timing_tests.cpp",
+      "bytes": 19710,
+      "sha256": "B75F5B8E1F4DA0C324EA3BBB68F3ADF70BE05B13C2938F009DE5D4A644F983B6",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_grant_diagnostic_record_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_grant_diagnostic_record_tests.cpp",
+      "bytes": 7809,
+      "sha256": "9234CDDD3C7B98C271D8EF56D448ED7BA1967A60A01ECE0DD4357A5431569301",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_grant_reservation_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_grant_reservation_tests.cpp",
+      "bytes": 17826,
+      "sha256": "E9D0FB16F8C66C358CD194C4EBAA75CCD7CF94AF6D9F3659FA40862270B16C7D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_ground_usb_commit_record_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_ground_usb_commit_record_tests.cpp",
+      "bytes": 7110,
+      "sha256": "8EBA132C0BAD67B29EB0EB30063C987437CCD9740A802287CC8F0575C959E95F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_ground_usb_commit_source_contract_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_ground_usb_commit_source_contract_tests.cpp",
+      "bytes": 3984,
+      "sha256": "86509A6D742BBADAC581EFCF87528C6BEB30D8230E6F3776964F692A27909836",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_host_readiness_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_host_readiness_tests.cpp",
+      "bytes": 12256,
+      "sha256": "A727493461AA0E13D65C4D7A41540D83ED15369C15B3DAA2FD4E7E051DA9B892",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_hwcdc_fifo_diagnostic_record_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_hwcdc_fifo_diagnostic_record_tests.cpp",
+      "bytes": 102442,
+      "sha256": "09816AA71362E7629C280E27E515A560A0FAEAD8BCF0195C4BE8831CE2A47775",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_hwcdc_flush_call_evidence_actual_template.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_hwcdc_flush_call_evidence_actual_template.cpp",
+      "bytes": 10931,
+      "sha256": "141B1F92E5A274896F6D6E4EC2690E08D6C577A9629A979C15ADF5BCE7240D6D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_hwcdc_ll_bootstrap_model_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_hwcdc_ll_bootstrap_model_tests.cpp",
+      "bytes": 42944,
+      "sha256": "3AEFFACBF49863670E3E88C9B1808EF01C915C75E7376E7DB6F088F6E5B7DCDC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_hwcdc_task_prime_model_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_hwcdc_task_prime_model_tests.cpp",
+      "bytes": 36926,
+      "sha256": "A306314033DEB83C89A794C6EEF6945F03D20AB55C241C7EC718CBE2A5D218D0",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_pre_negotiation_fallback_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_pre_negotiation_fallback_tests.cpp",
+      "bytes": 18592,
+      "sha256": "42B4A0CF43B266479D89C19C1939FAB2B8C8F898CDFE14D70BAB68CBAA0CAE25",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_runtime_fail_diagnostic_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_runtime_fail_diagnostic_tests.cpp",
+      "bytes": 22373,
+      "sha256": "7C8EDAABF01660EA29CA65343D7094018A1AFB4CD00630BE3AF11E3BCEEEAF1F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_runtime_fail_product_source_contract_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_runtime_fail_product_source_contract_tests.cpp",
+      "bytes": 63879,
+      "sha256": "0532F223FA70766BF814D900B0F147F84C87FFAE984180E9D8668831B4312340",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_runtime_stage_record_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_runtime_stage_record_tests.cpp",
+      "bytes": 12325,
+      "sha256": "09094FC4AA5C8CE59201D410DAB3D37BB030EC16E009F6B5C14E3D6B53F18EA7",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_standard_grant_phase_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_standard_grant_phase_tests.cpp",
+      "bytes": 17627,
+      "sha256": "71EF88B72008D71844A8F2ED18178B22218394A87C3DF324FF8CF1C0AB9B9F5A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_start_admission_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_start_admission_tests.cpp",
+      "bytes": 15025,
+      "sha256": "8021E6BE1D528E715ABBB660CA2A169200B67B9B510178B20126F5ABB0D9B01D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_timed_path_record_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_timed_path_record_tests.cpp",
+      "bytes": 8492,
+      "sha256": "CD53C0D210D14BDC54D2ABDE6AF224ABAB4F47E8C92C87008E7F3B5C001CD036",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/r19_usb_clock_sync_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/r19_usb_clock_sync_tests.cpp",
+      "bytes": 2144,
+      "sha256": "F0FB492CA7A85730938F9B17D9CB49EE6CA51E7106B7BB25C1729E1B17620615",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/terminal_ack_bridge_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/terminal_ack_bridge_tests.cpp",
+      "bytes": 13711,
+      "sha256": "49FE56921C5BC12E0EED9BA36A0C8AAEE4650BC64C0C691912253A523CC36FAB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/terminal_ack_producer_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/terminal_ack_producer_tests.cpp",
+      "bytes": 38231,
+      "sha256": "2D7142A3133BDA8BC0151FE3AE2042625237A89E2344A88F99CF3D3738D8696C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/terminal_ack_wire_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/terminal_ack_wire_tests.cpp",
+      "bytes": 25773,
+      "sha256": "9CFAC0EB32039F638F2588EAE563BE19845EBB1D480A920C5986A4275F401C1B",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/standalone/vehicle_diag_scheduler_sync_contract_tests.cpp",
+      "target": "source_snapshot/tests/host/standalone/vehicle_diag_scheduler_sync_contract_tests.cpp",
+      "bytes": 11770,
+      "sha256": "6E9E5DBDCC6090B1F42AA9707A6554211D495F842C3CC158615AE086FE6DB700",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/fakes/Arduino.h",
+      "target": "source_snapshot/tests/host/fakes/Arduino.h",
+      "bytes": 52,
+      "sha256": "761BD7CF8F294C169C9BA798EAC12EE2604FFE7E8354A20B705025293906C271",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/fakes/esp_random.h",
+      "target": "source_snapshot/tests/host/fakes/esp_random.h",
+      "bytes": 321,
+      "sha256": "6A4E6DB56B4C96D9D5332E4FEDD11A268C605FB8883F510CCD32F4A3227332BA",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/fakes/esp_timer.h",
+      "target": "source_snapshot/tests/host/fakes/esp_timer.h",
+      "bytes": 165,
+      "sha256": "B508308AD8E67350B4828892DB953EE908A22295AD1509E3352D0ECC4DB9F92C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/fakes/fake_arduino_test_api.hpp",
+      "target": "source_snapshot/tests/host/fakes/fake_arduino_test_api.hpp",
+      "bytes": 15125,
+      "sha256": "78FBB5C8A6F6EB639E656C0A52DB122B440C93E8CC257DB2480C5DBBDB8B344E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/fakes/Preferences.h",
+      "target": "source_snapshot/tests/host/fakes/Preferences.h",
+      "bytes": 1723,
+      "sha256": "B7F8AFFBC3BA9B4C7680314389337FFD2BB7528C1C8EA47258E2E210E08714F7",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/fakes/hal/gpio_ll.h",
+      "target": "source_snapshot/tests/host/fakes/hal/gpio_ll.h",
+      "bytes": 257,
+      "sha256": "4404013AE975E868DB90DAF31609BF23F142359870E89000060E8B283647BE6A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/fakes/hal/usb_serial_jtag_ll.h",
+      "target": "source_snapshot/tests/host/fakes/hal/usb_serial_jtag_ll.h",
+      "bytes": 248,
+      "sha256": "DB0213BC0BB0C6513344CB7A7D416E016FA6A331A2BC8D74BDAA96B08D30BA93",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/fakes/driver/gpio.h",
+      "target": "source_snapshot/tests/host/fakes/driver/gpio.h",
+      "bytes": 749,
+      "sha256": "AB43A0CF46A5F2103E9C3196A24E17B81C84AB84772AB52581D88F94FE046C26",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/host/fakes/driver/uart.h",
+      "target": "source_snapshot/tests/host/fakes/driver/uart.h",
+      "bytes": 472,
+      "sha256": "07EBC9E8547420EB54830BCFDC66FE22DE870633D2F299B61A2F5CA69F695BD3",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_e220_inventory_readonly_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_e220_inventory_readonly_contract.ps1",
+      "bytes": 12189,
+      "sha256": "32249990E58B83CD974F70BD14DA7615D22D2D049153C452434E5C355D10E5B0",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_future_index_recovery_fault_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_future_index_recovery_fault_contract.ps1",
+      "bytes": 21161,
+      "sha256": "B68B1DD10120E012CB07F7D0D07C59DBC1FF53BAFEF89916104498C65B008CC1",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_ground_diag_firmware_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_ground_diag_firmware_contract.ps1",
+      "bytes": 13058,
+      "sha256": "FB3A2F1181451385686400028B96505E71A00CB68489ACB4409F92CDDCA3D55A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_high_speed_candidate_packaging_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_high_speed_candidate_packaging_contract.ps1",
+      "bytes": 10238,
+      "sha256": "44DABED9EB784F86D09601C16FE9DB3991EC6EF68479B0926004053F39CC15C3",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_hwcdc_installer_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_hwcdc_installer_contract.ps1",
+      "bytes": 44133,
+      "sha256": "5CFFAF7192DE3683BA9F9F828B985ECFFA6938806664FE2F6307F7A874F930AC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_hwcdc_tx_integrity_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_hwcdc_tx_integrity_contract.ps1",
+      "bytes": 153258,
+      "sha256": "81987D6F59CDF8BEB74AD1D626F142AAE28CA9B4C35B9273C5B28EA616783377",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_phase6_compile_publication_behavior.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_phase6_compile_publication_behavior.ps1",
+      "bytes": 10191,
+      "sha256": "FFCDDDC8E63ED04E0DEF401DAF9154C9625979A9D91BB9A681B35D39702479FF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_phase6_firmware_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_phase6_firmware_contract.ps1",
+      "bytes": 19341,
+      "sha256": "0B6090B41D353774CCB3A0BAC55410E25B165DDA655AC9D10C4C9F1526B7BA8A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_phase6_ide_compile.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_phase6_ide_compile.ps1",
+      "bytes": 3266,
+      "sha256": "91DF03521848DB41C414FF607397389B1F6B1CDD923C3FE20E137A0E297598E1",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_phase6_manifest_tooling_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_phase6_manifest_tooling_contract.ps1",
+      "bytes": 19352,
+      "sha256": "836CA3FBCC79078008D7ED4B77ECD658E3BEB0D14190114BB329281F79122B8C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_pixhawk_d7_param_benchmark_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_pixhawk_d7_param_benchmark_contract.ps1",
+      "bytes": 11186,
+      "sha256": "BA19E81E92D40E08F19082D6D04F2738D8A3756D723ADE63BD9480311D645D28",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_r19_candidate_artifact_builder_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_r19_candidate_artifact_builder_contract.ps1",
+      "bytes": 78127,
+      "sha256": "7E0885985D6775DB37AB2269FD00BEF2CCCEB54C8E2B3CCE59FB9EDAEE366AEC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_r19_candidate_compile_gate.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_r19_candidate_compile_gate.ps1",
+      "bytes": 11296,
+      "sha256": "823D6612BCC4D3242A5E5898493B772512F93DBF1428886AC39C4FF4859659B0",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_r19_first_failure_packaging_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_r19_first_failure_packaging_contract.ps1",
+      "bytes": 608,
+      "sha256": "7ACD418500E61FDF3EF47AAD8D0705317B8D1E7138167E819CB05B6479FAE5FF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_r19_first_usb_failure_record_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_r19_first_usb_failure_record_contract.ps1",
+      "bytes": 5695,
+      "sha256": "F5E1DC5B2B0D0C4D690EA7B682D8F99DACAD24E81219DC79BD2E7B2DAACC035D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_r19_hwcdc_flush_call_evidence_behavior.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_r19_hwcdc_flush_call_evidence_behavior.ps1",
+      "bytes": 4412,
+      "sha256": "63E0BA89B9A81AA5199E4F23456CA960559BDF74CEFA1D3BF12A50BE90B68581",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_r19_jtag_log_stage_classification_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_r19_jtag_log_stage_classification_contract.ps1",
+      "bytes": 5293,
+      "sha256": "B92C487D1451EAEBCB1B5C2BCC5B1CB28AC2CFC33234460E6E7B33646156D735",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_r19_runtime_stage_jtag_reader_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_r19_runtime_stage_jtag_reader_contract.ps1",
+      "bytes": 80702,
+      "sha256": "D8EA9BACED70559A97944984ACF7FDEE1BF7817F7BA4C83027C8705689568800",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_r19_usb_extended_live_reader_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_r19_usb_extended_live_reader_contract.ps1",
+      "bytes": 33880,
+      "sha256": "D44A9494545395532CB0B4BDF2410BBB929220EA90BC758C5378C7D5C34B3811",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_r19_usb_extended_records_reader_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_r19_usb_extended_records_reader_contract.ps1",
+      "bytes": 10773,
+      "sha256": "55AC610B9395F16EDEFB6E92A5371864580AE73403C67457829EAA250B357690",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_v2_stage_diag_latest_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_v2_stage_diag_latest_contract.ps1",
+      "bytes": 62319,
+      "sha256": "593EF229AA680C74EACEF16D51D9D61DD8BC999B2D22894CB685D876F47634B2",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_vehicle_diag_firmware_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_vehicle_diag_firmware_contract.ps1",
+      "bytes": 23672,
+      "sha256": "64F42551D17417C1E3F9D8E9DE1C5DDEDFB65529D5795943CBF0DBB8EA38F377",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_vehicle_diag_usb_report_pump_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_vehicle_diag_usb_report_pump_contract.ps1",
+      "bytes": 11814,
+      "sha256": "6C9C810EB1189CAA696E6CC086F2606AA593A560BC522A5DC0CF924738FEF3BB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_vehicle_diag_v2_param_observer_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_vehicle_diag_v2_param_observer_contract.ps1",
+      "bytes": 12938,
+      "sha256": "A829569A653EB17D8221BAFEC8D493956AC07060DB9AE6FF8D4013262E754A1F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/check_vehicle_diag_v2_scheduler_sync_contract.ps1",
+      "target": "source_snapshot/tests/arduino_compile/check_vehicle_diag_v2_scheduler_sync_contract.ps1",
+      "bytes": 23391,
+      "sha256": "F2BBF099A4DAAB40228FAA8000AE995C17C679F527B8F90C1C69C13C1939A73E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/fixtures/fake_arduino_board_details.cs",
+      "target": "source_snapshot/tests/arduino_compile/fixtures/fake_arduino_board_details.cs",
+      "bytes": 509,
+      "sha256": "63C3F4ED2A3302D4159611C346D3873676DBD947D3311037C8DF0771717F91BF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/arduino_compile/fixtures/hwcdc_3_3_11_migration_fixture.json",
+      "target": "source_snapshot/tests/arduino_compile/fixtures/hwcdc_3_3_11_migration_fixture.json",
+      "bytes": 854,
+      "sha256": "C3B3F94F74A2C9BD9E1109AA2CDEF772C9636E7D2D58A8AE287394020B1E0FB4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_artifact_contract.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_artifact_contract.ps1",
+      "bytes": 23255,
+      "sha256": "064816B74E9BDC72FDB0B13F5D5EC3408371E0FD82CF0BC57571E504258F5DF6",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_capture_actual_parent_replay.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_capture_actual_parent_replay.ps1",
+      "bytes": 6536,
+      "sha256": "916715EED95330CA3F468870F99F3AA7775BDBE00771E0EF3A03EF53EE443A91",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_capture_persistence.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_capture_persistence.ps1",
+      "bytes": 11157,
+      "sha256": "C021D268533BD4A48B4C5C15EC800B3E3AFDB5AA274AEF0DB0B56455BC0E9A4D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_diagnostic_record.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_diagnostic_record.ps1",
+      "bytes": 4242,
+      "sha256": "005E11495C52C1B277AD36BC84F737BE9C9E4B14D359C3D97232941E981D09AD",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_flash_actual_shapes.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_flash_actual_shapes.ps1",
+      "bytes": 6017,
+      "sha256": "7D44CF14741C2542D91DB4E9CDC7AD3FB6497D8B55DFD5771566BBF8B1385CF7",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_flash_contract.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_flash_contract.ps1",
+      "bytes": 6610,
+      "sha256": "B5092A778FA37DF3BD29408AA60150635EA285652A36071AE97F1B3E03ADBEF8",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_outer_contract.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_outer_contract.ps1",
+      "bytes": 6915,
+      "sha256": "7DF95086B3698FBA50C0EF6A42CC485262129C69D99472C2B52A4025D0F1D8CD",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_parent_contract.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_parent_contract.ps1",
+      "bytes": 11923,
+      "sha256": "0403F9C6AF4132F59663799445C59B0AFEE3E95EF37DB5D377C6FF252039339C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_reservation_artifact.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_reservation_artifact.ps1",
+      "bytes": 29948,
+      "sha256": "CD3AADBC5491E35AC6D4F9883795146604229E1420F87ED0AF4E556081E9E6DA",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_reservation_builder_pipeline.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_reservation_builder_pipeline.ps1",
+      "bytes": 10846,
+      "sha256": "D1DC6FD80EFF23D59CAEB81F81600B83F7D1EBBBE3BE4556B02EF429001713E5",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_reservation_capture.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_reservation_capture.ps1",
+      "bytes": 16331,
+      "sha256": "A1FEDBFE350222A44033BE4A2FB99C0CABE47A233C2DB78F39981857AF902585",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_reservation_flash_boundary.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_reservation_flash_boundary.ps1",
+      "bytes": 13588,
+      "sha256": "53D84C82AE15F98CC8F163F3FF00F0DF5729EB5EF8013A97ECD46F7DF2CEB8CA",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_reservation_flash_operation_regression.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_reservation_flash_operation_regression.ps1",
+      "bytes": 12372,
+      "sha256": "5F74A49FD273450CC66C8D6D691E346C6F8C822DE82DA0672E77868A2FE5EC67",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_reservation_stage_final_gate.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_reservation_stage_final_gate.ps1",
+      "bytes": 9910,
+      "sha256": "A0E07565573DAC8FAEF1E62348C8CBBD37EDDA3B584AAFC3FBC96D5039DB99EE",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_grant_reservation_workflow.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_grant_reservation_workflow.ps1",
+      "bytes": 15787,
+      "sha256": "35624BF2B65D3848281FF4D52ADC058AC860979AAB42EC1AADB5C70059781903",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tests/hil/check_r19_start_admission.ps1",
+      "target": "source_snapshot/tests/hil/check_r19_start_admission.ps1",
+      "bytes": 20911,
+      "sha256": "F92E4690C2AC2546482EB860F73A4ED30B7A0B495734BEF502011BC482EFAAAB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "third_party/esp32-core-3.3.11-vc-lora/README.md",
+      "target": "source_snapshot/third_party/esp32-core-3.3.11-vc-lora/README.md",
+      "bytes": 7684,
+      "sha256": "BA699BDE4670737E56CBDA936CAC53D18DEEFC4FADB75BACA4AC13D72553218C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp",
+      "target": "source_snapshot/third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.cpp",
+      "bytes": 104865,
+      "sha256": "D1B890A6C37587BF7775E4F9DDB7791C91085F9C2BC4D95CB9EC3C5809B24DCA",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.h",
+      "target": "source_snapshot/third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDC.h",
+      "bytes": 4837,
+      "sha256": "9F59B955C83FF567012B470D33361CDC81AEF30DE68C7B2F8C224BACE9A16B39",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDCR19Diagnostic.h",
+      "target": "source_snapshot/third_party/esp32-core-3.3.11-vc-lora/cores/esp32/HWCDCR19Diagnostic.h",
+      "bytes": 52973,
+      "sha256": "786E36D9178F1976AC1A185E994ACAF00C8FCA75486A172BB22993A9B6B546EE",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "target": "source_reference/tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1.reference.txt",
+      "bytes": 227316,
+      "sha256": "AFC2EBC5EFA842DD00E6642D0B88CE20665DA9533C650AEC75D971CDC56374B1",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/invoke_r19_candidate_app_flash_hil.ps1",
+      "target": "source_reference/tools/invoke_r19_candidate_app_flash_hil.ps1.reference.txt",
+      "bytes": 88873,
+      "sha256": "E09A9F01C840EFFB7A6200A636A9FA52DB0796E52884F3B06F0BFF9D57BF9DDF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/read_r19_runtime_stage_jtag.ps1",
+      "target": "source_snapshot/tools/read_r19_runtime_stage_jtag.ps1",
+      "bytes": 178930,
+      "sha256": "526389C5D21029F48C6DC89FAF20AEA59AA1008B6236EB219BF5EFA75C0AE5D5",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/invoke_r19_jtag_preflash_gate.ps1",
+      "target": "source_reference/tools/invoke_r19_jtag_preflash_gate.ps1.reference.txt",
+      "bytes": 33292,
+      "sha256": "9E9B1D8362520337064D237459471751B6542322821E666A1184B0A4AD38CC94",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/run_r19_timed_path_capture.ps1",
+      "target": "source_snapshot/tools/run_r19_timed_path_capture.ps1",
+      "bytes": 59197,
+      "sha256": "683F85200F28011221B38CF6B625BA08368A66C2733EC6530774CD6E2FB0A24C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_timed_path_acquisition.ps1",
+      "target": "source_snapshot/tools/r19_timed_path_acquisition.ps1",
+      "bytes": 40884,
+      "sha256": "2B3F1E36B140DCF298368B79C61AEC831306D190F9FB949E00B8A9A37A7F62EC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_timed_path_outer.ps1",
+      "target": "source_snapshot/tools/r19_timed_path_outer.ps1",
+      "bytes": 24159,
+      "sha256": "6D0BCD147724424EECA45DFBC638339D15D2B103516EDD7EEACB7EA78DA868B7",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_host_readiness_wire.ps1",
+      "target": "source_snapshot/tools/r19_host_readiness_wire.ps1",
+      "bytes": 7713,
+      "sha256": "91CEEF26F4CFF3E8DED4C6132CD274BDC325051592715D70CBAF08CDF71BCBE4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_host_readiness_workflow.ps1",
+      "target": "source_snapshot/tools/r19_host_readiness_workflow.ps1",
+      "bytes": 12934,
+      "sha256": "1B0740C84FE8B54C8F573846E6EBCDCDA7DF330565833500F1EE557CF11BD099",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_usb_clock_correlation.ps1",
+      "target": "source_snapshot/tools/r19_usb_clock_correlation.ps1",
+      "bytes": 12420,
+      "sha256": "B6759C777FCC4C3F2BB3F8D8DA7A890EF54043CA5ECC4A3DC1EB2937FB8DD1D1",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_timed_path_trace.ps1",
+      "target": "source_snapshot/tools/r19_timed_path_trace.ps1",
+      "bytes": 22932,
+      "sha256": "09786F523F0A5DDBC7B84B377E620886A574D552CABBF5EA5CEE5B4F2890660A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_startup_reader.cs",
+      "target": "source_snapshot/tools/r19_startup_reader.cs",
+      "bytes": 7610,
+      "sha256": "939EF6C3333B1BC67782CFB02AEBFBC067EE6AAC7C789FB171F06C2B9F8A8C2E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_continuous_reader.cs",
+      "target": "source_snapshot/tools/r19_continuous_reader.cs",
+      "bytes": 23809,
+      "sha256": "B9C22B9E74F32E09C1210F976363CF4513C66F3131780B96972BEC48B1F907EF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_candidate_artifact_common.ps1",
+      "target": "source_snapshot/tools/r19_candidate_artifact_common.ps1",
+      "bytes": 38211,
+      "sha256": "8B8BD58EAA9BC0DAF8E466A0C288D584A7FFC5E891936DC6D2DCAC21C2393863",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/verify_r19_candidate_artifact.ps1",
+      "target": "source_snapshot/tools/verify_r19_candidate_artifact.ps1",
+      "bytes": 50835,
+      "sha256": "DD5DB94A874C8BCBC180ABC49415E023E1F90333E34BE138C9CEFC0BDB8411CE",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_param_list_diagnostics.ps1",
+      "target": "source_snapshot/tools/r19_param_list_diagnostics.ps1",
+      "bytes": 18822,
+      "sha256": "87111812DE5674B38F54C05D2A1771FDFC7B00CCE757F4C167CD74D594104E5B",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/build_r19_candidate_artifacts.ps1",
+      "target": "source_snapshot/tools/build_r19_candidate_artifacts.ps1",
+      "bytes": 46245,
+      "sha256": "CB70BCE20526AAF1E4737B0D0F466E3E94E3396071AF2376BC8F818494E9E96E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/run_host_tests.ps1",
+      "target": "source_snapshot/tools/run_host_tests.ps1",
+      "bytes": 2639,
+      "sha256": "36155922C60C492DAEA5D4945524DBD3254B6DEA35E0FCEB95A23607187BCDBC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/run_host_sanitizers.ps1",
+      "target": "source_snapshot/tools/run_host_sanitizers.ps1",
+      "bytes": 13235,
+      "sha256": "D1BFFAAEAF89F66C3F2E4DC2FEFC834960628E1EA6EE008883B0B311B98A5850",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "tools/r19_start_admission.ps1",
+      "target": "source_snapshot/tools/r19_start_admission.ps1",
+      "bytes": 16315,
+      "sha256": "C16C48CC1EFB44823DEB94104B2787F8CEA3710D954B91ECFCFF5710A019E0C6",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/full_host_final449_after_flash_fix.log",
+      "target": "evidence/integration/full_host_final449_after_flash_fix.log",
+      "bytes": 71866,
+      "sha256": "D16B5B25584F4E468A5E4DE4D1ABD1C188320D093FE2C318DC66020D48D5C292",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/host_final449_build.log",
+      "target": "evidence/integration/host_final449_build.log",
+      "bytes": 23,
+      "sha256": "71AA391EC7D7E291B419A7F40FBA91919E14AC2394AB4E8B66ED126E267D70F6",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/host_final449_configure.log",
+      "target": "evidence/integration/host_final449_configure.log",
+      "bytes": 142,
+      "sha256": "F75E0A592EC4742E85970BF94FEB456CFF2F268E867749E5102883998F298C47",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/reservation_core_implementation_summary.json",
+      "target": "evidence/integration/reservation_core_implementation_summary.json",
+      "bytes": 6799,
+      "sha256": "1EF15162D3E1216CC8E862041CC8DCB7F8920BBAE0E9C86D753353E75B4CE8A7",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/metadata_reader_summary.json",
+      "target": "evidence/integration/metadata_reader_summary.json",
+      "bytes": 4829,
+      "sha256": "CDB9F0D73CDB1832D31E72B6D02AC79348F5BB210E5AE44DDDCFB40D79DE99E2",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/runner_summary.json",
+      "target": "evidence/integration/runner_summary.json",
+      "bytes": 9972,
+      "sha256": "6CF7B3C67D0454FC9867282E13779354D1ECB2F2362CA51FDA8C15B74ACE582D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/reservation_end_to_end_independent_review.json",
+      "target": "evidence/integration/reservation_end_to_end_independent_review.json",
+      "bytes": 11396,
+      "sha256": "DD0B4663D4346BDB059DF024539BA2A9DE9BD4E8FCE737CD86218E92888A2BBD",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/offline_flash_repair_independent_review.json",
+      "target": "evidence/integration/offline_flash_repair_independent_review.json",
+      "bytes": 4971,
+      "sha256": "1A8A2033E1DC6BF1E058EDE3310162B7537525E10910E4258ACDBA8D9E5B1149",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/flash_boundary_fix_summary.json",
+      "target": "evidence/integration/flash_boundary_fix_summary.json",
+      "bytes": 4365,
+      "sha256": "82E110149E6AD2FCF3E4B66BD8936803A8CDBAB31D610593E2807E2C8940BD2D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/root_bridge_core_and_tests_final.diff",
+      "target": "evidence/integration/root_bridge_core_and_tests_final.diff",
+      "bytes": 106456,
+      "sha256": "2B161039388C0CEB815C5274791F65E7CFEE663CBFAFD214CEB4E0299194E24B",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/root_CMakeLists.final447.diff",
+      "target": "evidence/integration/root_CMakeLists.final447.diff",
+      "bytes": 2649,
+      "sha256": "AAD931CE8999BA2EDB98F80591A672E431636FB70F7DC18C14647F467F9A72BA",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/reservation_core_implementation.diff",
+      "target": "evidence/integration/reservation_core_implementation.diff",
+      "bytes": 50371,
+      "sha256": "00A8F54B08C78E08DFAB9AFC5B00D6261C12CFF3578CBF7E2A3ABAA490F1D29C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/runner_changes_v3.diff",
+      "target": "evidence/integration/runner_changes_v3.diff",
+      "bytes": 100519,
+      "sha256": "A00B961A5683C396C0F10058CD9BF68B78CF7E4CD56EB53CE4171A355602BE54",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/root_review_flash_boundary_fix.diff",
+      "target": "evidence/integration/root_review_flash_boundary_fix.diff",
+      "bytes": 7553,
+      "sha256": "549A156B2B6EA0455F78149D1A5EC86CDB29F0B4A884745530AA540BA4654A4A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/root_CMakeLists.flash_boundary_tests.diff",
+      "target": "evidence/integration/root_CMakeLists.flash_boundary_tests.diff",
+      "bytes": 819,
+      "sha256": "895082CABAE9278E0C9346D980AE5EAF62E438DE37688DAD4D0FBFB4CBE7BF6F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/reservation_legacy_behavior_RED_attempt2.log",
+      "target": "evidence/integration/reservation_legacy_behavior_RED_attempt2.log",
+      "bytes": 130,
+      "sha256": "1D9C448BACB31C48624107271DB5040FAC6865BF3EB2393DE84181535B2747E6",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/reservation_core_GREEN_attempt1.log",
+      "target": "evidence/integration/reservation_core_GREEN_attempt1.log",
+      "bytes": 123,
+      "sha256": "69D063BDE0B4E8E7B7F61BB97378F5B7D833949CA0D82AB7AA6D349C14184099",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/reservation_deadline_callback_RED.log",
+      "target": "evidence/integration/reservation_deadline_callback_RED.log",
+      "bytes": 324,
+      "sha256": "C4CB6AC7B480E6737300F1D36D038296C6FFFCCE1A43F5C1AD011F37042A9373",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/reservation_deadline_callback_GREEN.log",
+      "target": "evidence/integration/reservation_deadline_callback_GREEN.log",
+      "bytes": 115,
+      "sha256": "EF602C4B17DB7D26C14C7E4A457E0B0A69EB898D87BE564A439A91A906477E45",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/reservation_record_strict_RED.log",
+      "target": "evidence/integration/reservation_record_strict_RED.log",
+      "bytes": 687,
+      "sha256": "66E3BC97FF54B6AC57F35F80BBF8B607FB8505BDCF6B6A574E2A01AC81D93DBD",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/reservation_record_strict_GREEN.log",
+      "target": "evidence/integration/reservation_record_strict_GREEN.log",
+      "bytes": 115,
+      "sha256": "E32E16C7D10956D443B0A4C6B98F7170E86C56290AC670648F192F31B68FD2BA",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/runner_ordering_RED_ps51.log",
+      "target": "evidence/integration/runner_ordering_RED_ps51.log",
+      "bytes": 361,
+      "sha256": "F182133D5BD8182BF850C086F9D517EB92708DFC42A41B131D7BB103D6AF320A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/runner_capture_RED_ps51.log",
+      "target": "evidence/integration/runner_capture_RED_ps51.log",
+      "bytes": 409,
+      "sha256": "DB0D8435833EFAEB7874A6DD11D990BD5743496B8DFC1904D3CD7D8CF82CF117",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/runner_capture_GREEN_ps51_final.log",
+      "target": "evidence/integration/runner_capture_GREEN_ps51_final.log",
+      "bytes": 226,
+      "sha256": "04F4D69C1AE71B39925CB819FDD531284B1510AF806FA2F037DE4788CC3C1D22",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/runner_capture_GREEN_ps7_final.log",
+      "target": "evidence/integration/runner_capture_GREEN_ps7_final.log",
+      "bytes": 225,
+      "sha256": "D1782B13C8E5EB8A895C9D145FE84133FF692EF2D50B77DA2B7ED8695591EB49",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/runner_workflow_GREEN_ps51_final.log",
+      "target": "evidence/integration/runner_workflow_GREEN_ps51_final.log",
+      "bytes": 198,
+      "sha256": "F9AB56978DED8ED5AC4CDB8F11A545F341CE4876E6AD84CB9B01DB21E0E8C63C",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/runner_workflow_GREEN_ps7.log",
+      "target": "evidence/integration/runner_workflow_GREEN_ps7.log",
+      "bytes": 191,
+      "sha256": "94D9F9F4520E4D7ABAE0E2540AB5C1AC40F625556DB9CC5862851B2CED6177FD",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/enable_provenance_main_RED_ps51.log",
+      "target": "evidence/integration/enable_provenance_main_RED_ps51.log",
+      "bytes": 501,
+      "sha256": "E930D800368205838D9FB2182A5E040F2C66F646D0A6B3D3C5D38AB7C5E1CC03",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/enable_provenance_main_GREEN_ps51.log",
+      "target": "evidence/integration/enable_provenance_main_GREEN_ps51.log",
+      "bytes": 428,
+      "sha256": "7A8478A422AD0328798689181B5D39A762BDDAC729AAF327935CEA2F1046DDEB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/enable_provenance_main_GREEN_ps7.log",
+      "target": "evidence/integration/enable_provenance_main_GREEN_ps7.log",
+      "bytes": 428,
+      "sha256": "7A8478A422AD0328798689181B5D39A762BDDAC729AAF327935CEA2F1046DDEB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/flash_boundary_actual_RED_ps51.log",
+      "target": "evidence/integration/flash_boundary_actual_RED_ps51.log",
+      "bytes": 4789,
+      "sha256": "3DCFED715BCCC11852A0EEE2C72A111B3208E7A93132CB5AF52F9D21894E5BF8",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/flash_boundary_actual_RED_ps7.log",
+      "target": "evidence/integration/flash_boundary_actual_RED_ps7.log",
+      "bytes": 2676,
+      "sha256": "8B6AE087836C7EF95C08EA7411DAA0624B58E4C2DD3E428D3EED8836B38475F0",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/flash_boundary_expanded_RED_ps7.log",
+      "target": "evidence/integration/flash_boundary_expanded_RED_ps7.log",
+      "bytes": 4556,
+      "sha256": "9EB6CA6F7D16272F6DA27C184B538CFBD46913E3796CA47C6B3C9BAF17AC64DE",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/flash_boundary_GREEN_ps51.log",
+      "target": "evidence/integration/flash_boundary_GREEN_ps51.log",
+      "bytes": 545,
+      "sha256": "F9FD8081EBD1E5244832E0564D80D0E7EFF1E987F462F2CC94726F1F26D461C3",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/flash_boundary_GREEN_ps7.log",
+      "target": "evidence/integration/flash_boundary_GREEN_ps7.log",
+      "bytes": 545,
+      "sha256": "F9FD8081EBD1E5244832E0564D80D0E7EFF1E987F462F2CC94726F1F26D461C3",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/operation_regression_RED_ps51.log",
+      "target": "evidence/integration/operation_regression_RED_ps51.log",
+      "bytes": 446,
+      "sha256": "37DD72708D13367E5DDE4F48E41BD6E6E6AA8780BA1ECA4FA2EBFFBCBB5584BB",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/operation_regression_GREEN_ps51.log",
+      "target": "evidence/integration/operation_regression_GREEN_ps51.log",
+      "bytes": 260,
+      "sha256": "8258961CC522EA20557F1DF0B3E96883F67FA1292E94F7CA84958DE6208B7BCA",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/operation_regression_GREEN_ps7.log",
+      "target": "evidence/integration/operation_regression_GREEN_ps7.log",
+      "bytes": 259,
+      "sha256": "097BFB79C5DF2645F1949E1941927E627D0BC1CBBAAE145E9FB85B8ACAB0C12F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/flash_boundary_GREEN_ps51/summary.json",
+      "target": "evidence/integration/flash_boundary_GREEN_ps51/summary.json",
+      "bytes": 2631,
+      "sha256": "B995CF914D2A4CB796264D7B89C61DF0CD0A04139EEDB0C4E3427C5913D9E1D6",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/flash_boundary_GREEN_ps7/summary.json",
+      "target": "evidence/integration/flash_boundary_GREEN_ps7/summary.json",
+      "bytes": 1714,
+      "sha256": "DAB748880B87AEB1FEEEC0F0D2055123E5E01CB84BB913DB00F7AB02A2231C80",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/operation_regression_GREEN_ps51/summary.json",
+      "target": "evidence/integration/operation_regression_GREEN_ps51/summary.json",
+      "bytes": 1514,
+      "sha256": "06563D043F3B2D37C89A74DCF152D93992F288D3946BBEBF82F6D6DD849A15AD",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/operation_regression_GREEN_ps7/summary.json",
+      "target": "evidence/integration/operation_regression_GREEN_ps7/summary.json",
+      "bytes": 1076,
+      "sha256": "4E0F73D59F0408E7EFCD4C8A2143FACBA276B51DD3848D1D97F4F6E5EFCD52CF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/builder_whole_main_ps51_final/summary.json",
+      "target": "evidence/integration/builder_whole_main_ps51_final/summary.json",
+      "bytes": 2827,
+      "sha256": "479CAD8EA72C33EDF61079593973F41D725520FE1C7786ABEEB503B3EEFF0C59",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/builder_whole_main_ps7_attempt2/summary.json",
+      "target": "evidence/integration/builder_whole_main_ps7_attempt2/summary.json",
+      "bytes": 2246,
+      "sha256": "DF8AD6B8CE88CA0D8980EAA2B5FABB10E1380261DA31D5EDBC3E3388C59ADC80",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/reviewed_26_tool_source_inventory_v5.json",
+      "target": "evidence/integration/reviewed_26_tool_source_inventory_v5.HISTORICAL.json",
+      "bytes": 29138,
+      "sha256": "F3B7A605092D714B3DC580070650D87EE2D5991443A43E33D49BC740A13ADF55",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/v10_stage_final_gate_fix_summary.json",
+      "target": "evidence/stage_gate_fix/v10_stage_final_gate_fix_summary.json",
+      "bytes": 6494,
+      "sha256": "226B207B40D11B758E3087BBB0DFF8A2F40A5BC999A2217B6D29F67A0E1F8572",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/v10_stage_final_gate_fix.diff",
+      "target": "evidence/stage_gate_fix/v10_stage_final_gate_fix.diff",
+      "bytes": 12226,
+      "sha256": "E455962A6B4C923A87935957D324E9C3966E19F7FC72832481F3A3611435C216",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate_RED_ps51.log",
+      "target": "evidence/stage_gate_fix/stage_final_gate_RED_ps51.log",
+      "bytes": 2221,
+      "sha256": "E96A0B9B78C97A289442948D567A8C5ECA539DA39C39F0169C3CDC2464488537",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate_RED_ps7.log",
+      "target": "evidence/stage_gate_fix/stage_final_gate_RED_ps7.log",
+      "bytes": 2221,
+      "sha256": "E96A0B9B78C97A289442948D567A8C5ECA539DA39C39F0169C3CDC2464488537",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate_saved_RED_ps51.log",
+      "target": "evidence/stage_gate_fix/stage_final_gate_saved_RED_ps51.log",
+      "bytes": 2609,
+      "sha256": "663D9D66D2CFE08B3A78022C189EC284BDABA15F9AA75CD5A80E99ADEC6F30A1",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate_saved_RED_ps7.log",
+      "target": "evidence/stage_gate_fix/stage_final_gate_saved_RED_ps7.log",
+      "bytes": 2609,
+      "sha256": "663D9D66D2CFE08B3A78022C189EC284BDABA15F9AA75CD5A80E99ADEC6F30A1",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate_GREEN_ps51.log",
+      "target": "evidence/stage_gate_fix/stage_final_gate_GREEN_ps51.log",
+      "bytes": 2226,
+      "sha256": "58DDBDE86A1D007F2C7588EE8C7CFB87CEA720945AEA36F93A9D48D86396FEE3",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate_GREEN_ps7.log",
+      "target": "evidence/stage_gate_fix/stage_final_gate_GREEN_ps7.log",
+      "bytes": 2226,
+      "sha256": "58DDBDE86A1D007F2C7588EE8C7CFB87CEA720945AEA36F93A9D48D86396FEE3",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate_related_GREEN_ps51.log",
+      "target": "evidence/stage_gate_fix/stage_final_gate_related_GREEN_ps51.log",
+      "bytes": 2726,
+      "sha256": "11C1908FA08FD4C0D69053575F2DA1FB28740CCBE66E605FC1E0109CF3A9AAF4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate_related_GREEN_ps7.log",
+      "target": "evidence/stage_gate_fix/stage_final_gate_related_GREEN_ps7.log",
+      "bytes": 2726,
+      "sha256": "82C63B97D3C9F23B0639A5C869D75E3E74D71245BA6495AC6CBB02BC6C6EA8A6",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate_legacy_orchestrator_GREEN_ps51.log",
+      "target": "evidence/stage_gate_fix/stage_final_gate_legacy_orchestrator_GREEN_ps51.log",
+      "bytes": 492,
+      "sha256": "0591718B68B54EBC0B4E1A6DB36FF0EB72B4A89668B30260701F71677335644B",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate_v9_history_diagnostic_RED_ps7.log",
+      "target": "evidence/stage_gate_fix/stage_final_gate_v9_history_diagnostic_RED_ps7.log",
+      "bytes": 2606,
+      "sha256": "E5CB748515209D106D5B9FFBAC308D3A9757C782FD4F22DCF14DA96FB0B94450",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate_GREEN_ps51/summary.json",
+      "target": "evidence/stage_gate_fix/stage_final_gate_GREEN_ps51/summary.json",
+      "bytes": 12389,
+      "sha256": "B89D64B27EE4F660B7FC52DFE4542CE01A3E935E9039E4B6809CE03949315E08",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate_GREEN_ps7/summary.json",
+      "target": "evidence/stage_gate_fix/stage_final_gate_GREEN_ps7/summary.json",
+      "bytes": 7446,
+      "sha256": "E1BD39D454A50BC1B270CA4A21550AF41BB6B694B75268C8E6A4A8CAD3A2B966",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/reservation_failure_derived_readonly_analysis.json",
+      "target": "evidence/cause_analysis/reservation_failure_derived_readonly_analysis.json",
+      "bytes": 46202,
+      "sha256": "BFFDF2CB9AB80E15E39067E91855E8A7D05F7D238563577DD6523E7DD41DBF24",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/reservation_failure_derived_readonly_analysis.ps1",
+      "target": "evidence/cause_analysis/reservation_failure_derived_readonly_analysis.ps1",
+      "bytes": 14917,
+      "sha256": "9E40365404EFB7D3BE466BA7F463B43B90FF70EF95DD5FC55710A49CA602559F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/post_repaired_hil_stage_gate_analysis.json",
+      "target": "evidence/cause_analysis/post_repaired_hil_stage_gate_analysis.json",
+      "bytes": 6017,
+      "sha256": "759D65A9DFB84E59E8C80E3FC8423F6CA69369D18D5CD30E61826569A984A974",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/retrial_restore_artifact_independent_audit_20261025T043509262Z.json",
+      "target": "evidence/cause_analysis/retrial_restore_artifact_independent_audit_20261025T043509262Z.json",
+      "bytes": 10768,
+      "sha256": "C6AEAAF22931800F94148E711F9E9AA41D8292AF45B09CF67110FDB787028DA4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/postfailure_independent_review_20261025T033913241Z.json",
+      "target": "evidence/previous_failure/postfailure_independent_review_20261025T033913241Z.json",
+      "bytes": 5887,
+      "sha256": "6D3D9C52DE9B854F3B8133AE4DA1367BEFD317FAB65F3B74430A890886D5E99A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/candidates/R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T215821978Z-c1982cbd/candidate_manifest.json",
+      "target": "evidence/candidate_metadata/candidate_manifest.json",
+      "bytes": 205941,
+      "sha256": "04AE6FC3F70B13CF2A83CF637A073617E76ADC8BDEE3BEEA0FBF43653C6FA770",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/candidates/R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T215821978Z-c1982cbd/artifact_manifest.json",
+      "target": "evidence/candidate_metadata/artifact_manifest.json",
+      "bytes": 60958,
+      "sha256": "A85EA0D1517974CB3D5180B02FBA64E8EE8A801F371749C3634AB02A76E6EBD4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/candidates/R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T215821978Z-c1982cbd/final_seal.json",
+      "target": "evidence/candidate_metadata/final_seal.json",
+      "bytes": 30252,
+      "sha256": "22BC95F4C90B08E6EC7FF91AB2BA580518994BC01A18FF0C2934E0B3ECCF96B6",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/candidates/R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T215821978Z-c1982cbd/final_seal.sha256",
+      "target": "evidence/candidate_metadata/final_seal.sha256",
+      "bytes": 82,
+      "sha256": "5F1D93F9F09961105E62DB7E2E57B977D78865899D0BAF6F2DF405289908E2B7",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/candidates/R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T215821978Z-c1982cbd/SHA256SUMS.txt",
+      "target": "evidence/candidate_metadata/SHA256SUMS.txt",
+      "bytes": 22421,
+      "sha256": "C6200F7CC8FA7FAD372A8783ECF1771EE1EFC53B585C23DF1D2859E56C84AD69",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/candidates/R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T215821978Z-c1982cbd/handoff.json",
+      "target": "evidence/candidate_metadata/handoff.json",
+      "bytes": 32446,
+      "sha256": "A3621991484DA94447BAF53A0DE8286D3069D75D2FDBD541429B7B1F50C8D415",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/candidates/R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T215821978Z-c1982cbd/handoff.sha256",
+      "target": "evidence/candidate_metadata/handoff.sha256",
+      "bytes": 79,
+      "sha256": "28C82E37FBF8CC42A5ABE45FC6FC3E5F9274456BF93ED5192D776F6375527975",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/capture/summary.json",
+      "target": "evidence/trial/capture/summary.json",
+      "bytes": 1741013,
+      "sha256": "3D43FC2DEB857C63ECED3B7E7BFEEA2A6B0FFAF532DAEE233AC499C34AE354C3",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/capture/param_list_30s.json",
+      "target": "evidence/trial/capture/param_list_30s.json",
+      "bytes": 135248,
+      "sha256": "BAD2764743A117E01BBB491A2D20E4746A3018EBBA82BA3D0E837B883EC13418",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/capture/vehicle.raw.bin",
+      "target": "evidence/trial/capture/vehicle.raw.bin",
+      "bytes": 3688,
+      "sha256": "FD5726EDF6146ED261E4DD849A75A16214835C585CABCD3FCF5A9C2A0B34DEA2",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/capture/vehicle.preparation.raw.bin",
+      "target": "evidence/trial/capture/vehicle.preparation.raw.bin",
+      "bytes": 1168,
+      "sha256": "B813E5C666218B4F8BCCE3AB2899D7267A1E7A3BF2BAFFB7467C9BB9BD3EF7F5",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/capture/vehicle.measurement.raw.bin",
+      "target": "evidence/trial/capture/vehicle.measurement.raw.bin",
+      "bytes": 2520,
+      "sha256": "D104DE1B8E5CC140E6F9C85F6D9F97894FB04976207C84E03B5F232A5B075488",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/capture/ground.raw.bin",
+      "target": "evidence/trial/capture/ground.raw.bin",
+      "bytes": 3946,
+      "sha256": "C48150DDFC90DAE20FD38654FF18E989A156C6005228B02F8689103EDD9BEEC9",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/capture/ground.preparation.raw.bin",
+      "target": "evidence/trial/capture/ground.preparation.raw.bin",
+      "bytes": 1339,
+      "sha256": "7956157BBDB13A78951907E487082721F96C7203091E56461E7AF7FA97C29644",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/capture/ground.measurement.raw.bin",
+      "target": "evidence/trial/capture/ground.measurement.raw.bin",
+      "bytes": 2607,
+      "sha256": "5438FD2C0F8CB31DD93A4E162904E397DE5C95DF22DF89AD281700847E9D67F6",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/param_list_diagnostics.json",
+      "target": "evidence/trial/param_list_diagnostics.json",
+      "bytes": 135250,
+      "sha256": "D22ECDD93E3B7CE81C753C0E048871C010F1C6C4714CC515A6B3AAA05029AA30",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/summary.json",
+      "target": "evidence/trial/stage_vehicle/summary.json",
+      "bytes": 225730,
+      "sha256": "6B9A2B70DB441388E1FE26E33CF3EC5551EC9A9B43C36EB05976F44C5F53FC69",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/runtime-stage-first.bin",
+      "target": "evidence/trial/stage_vehicle/runtime-stage-first.bin",
+      "bytes": 68,
+      "sha256": "E0AC32BD690FC38F23B6D2B7036D1D81891CC90A661AA7DFE078AD3BED546C9E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/endpoint-fifo-first.bin",
+      "target": "evidence/trial/stage_vehicle/endpoint-fifo-first.bin",
+      "bytes": 112,
+      "sha256": "0DB5F8BD20B4A952DDEC397121775BA8522175E22A0D7C5626D6D9CB87490B52",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/hwcdc-restart-first.bin",
+      "target": "evidence/trial/stage_vehicle/hwcdc-restart-first.bin",
+      "bytes": 128,
+      "sha256": "CBD7D26A74B3DBFC44B60E1D01A5F3A19F9999C00372B714244F1C3EBC383AC1",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/ground-usb-commit-first.bin",
+      "target": "evidence/trial/stage_vehicle/ground-usb-commit-first.bin",
+      "bytes": 128,
+      "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/first-usb-failure-first.bin",
+      "target": "evidence/trial/stage_vehicle/first-usb-failure-first.bin",
+      "bytes": 384,
+      "sha256": "8D3F0933B6B1F46E2AE2BB4CE7136F9A7FA9795414AA6C760D8831066BB82986",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/runtime-stage-second.bin",
+      "target": "evidence/trial/stage_vehicle/runtime-stage-second.bin",
+      "bytes": 68,
+      "sha256": "E0AC32BD690FC38F23B6D2B7036D1D81891CC90A661AA7DFE078AD3BED546C9E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/endpoint-fifo-second.bin",
+      "target": "evidence/trial/stage_vehicle/endpoint-fifo-second.bin",
+      "bytes": 112,
+      "sha256": "0DB5F8BD20B4A952DDEC397121775BA8522175E22A0D7C5626D6D9CB87490B52",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/hwcdc-restart-second.bin",
+      "target": "evidence/trial/stage_vehicle/hwcdc-restart-second.bin",
+      "bytes": 128,
+      "sha256": "CBD7D26A74B3DBFC44B60E1D01A5F3A19F9999C00372B714244F1C3EBC383AC1",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/ground-usb-commit-second.bin",
+      "target": "evidence/trial/stage_vehicle/ground-usb-commit-second.bin",
+      "bytes": 128,
+      "sha256": "D738E65E518B8E8ECF1CF06069C27238DAC6492362DEF7AA379C57F533DF684F",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/first-usb-failure-second.bin",
+      "target": "evidence/trial/stage_vehicle/first-usb-failure-second.bin",
+      "bytes": 384,
+      "sha256": "8D3F0933B6B1F46E2AE2BB4CE7136F9A7FA9795414AA6C760D8831066BB82986",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/timed_path_first.bin",
+      "target": "evidence/trial/stage_vehicle/timed_path_first.bin",
+      "bytes": 512,
+      "sha256": "19E51C6966723033A68EFA61A5B3E83F8ACCC6A5B6D6AA23E7D6308A5DC936AD",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/timed_path_second.bin",
+      "target": "evidence/trial/stage_vehicle/timed_path_second.bin",
+      "bytes": 512,
+      "sha256": "19E51C6966723033A68EFA61A5B3E83F8ACCC6A5B6D6AA23E7D6308A5DC936AD",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/aux_readiness_first.bin",
+      "target": "evidence/trial/stage_vehicle/aux_readiness_first.bin",
+      "bytes": 6144,
+      "sha256": "9520B8668BB1E5AE46D7EBAD0BB94DD5EF6325C4A9CC6788BF380A50C5D5E484",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/aux_readiness_second.bin",
+      "target": "evidence/trial/stage_vehicle/aux_readiness_second.bin",
+      "bytes": 6144,
+      "sha256": "9520B8668BB1E5AE46D7EBAD0BB94DD5EF6325C4A9CC6788BF380A50C5D5E484",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/diagnostic_usb_failure_first.bin",
+      "target": "evidence/trial/stage_vehicle/diagnostic_usb_failure_first.bin",
+      "bytes": 256,
+      "sha256": "0FEB94AF2C5F0362D1E524123D5B1CA3465D178ADA7F54D3874E4E7798DDBAED",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/diagnostic_usb_failure_second.bin",
+      "target": "evidence/trial/stage_vehicle/diagnostic_usb_failure_second.bin",
+      "bytes": 256,
+      "sha256": "0FEB94AF2C5F0362D1E524123D5B1CA3465D178ADA7F54D3874E4E7798DDBAED",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/grant_diagnostic_first.bin",
+      "target": "evidence/trial/stage_vehicle/grant_diagnostic_first.bin",
+      "bytes": 1024,
+      "sha256": "D89C9CCAF88096739B3DFFA0695ECBD86BFC24C72324B35EFF4F8093E07EDC56",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/grant_diagnostic_second.bin",
+      "target": "evidence/trial/stage_vehicle/grant_diagnostic_second.bin",
+      "bytes": 1024,
+      "sha256": "D89C9CCAF88096739B3DFFA0695ECBD86BFC24C72324B35EFF4F8093E07EDC56",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/grant_reservation_first.bin",
+      "target": "evidence/trial/stage_vehicle/grant_reservation_first.bin",
+      "bytes": 512,
+      "sha256": "6285EF447BFE0FE5675C6F473B1C69B59DEB4C7BCA7B9C1B412AFB7FA0214357",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/grant_reservation_second.bin",
+      "target": "evidence/trial/stage_vehicle/grant_reservation_second.bin",
+      "bytes": 512,
+      "sha256": "6285EF447BFE0FE5675C6F473B1C69B59DEB4C7BCA7B9C1B412AFB7FA0214357",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/openocd-attempt-1-capture.log",
+      "target": "evidence/trial/stage_vehicle/openocd-attempt-1-capture.log",
+      "bytes": 2701,
+      "sha256": "D6342629228759200C92C77C6778616A248721B67D2C0ECDDA7AEE3AAB926CA9",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_vehicle/openocd-attempt-1-cleanup.log",
+      "target": "evidence/trial/stage_vehicle/openocd-attempt-1-cleanup.log",
+      "bytes": 1134,
+      "sha256": "260E44920B71DC4A3F9873EFE94A78C8BDE97A45C71324509038E5709AD18FCF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/summary.json",
+      "target": "evidence/trial/stage_ground/summary.json",
+      "bytes": 276385,
+      "sha256": "A0ADD7C67E53A8223AC72EFB1D4436502F1DBE1DC55B95EB4648FFE1C1DDB19D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/runtime-stage-first.bin",
+      "target": "evidence/trial/stage_ground/runtime-stage-first.bin",
+      "bytes": 68,
+      "sha256": "48E905DC0797C01EFF1507BE6C38974771F4ADEE9F9EE1D93BF9C5E481877371",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/endpoint-fifo-first.bin",
+      "target": "evidence/trial/stage_ground/endpoint-fifo-first.bin",
+      "bytes": 112,
+      "sha256": "903BD49A4C51DCCA0C8B6075F51246B7D1DC815DD28AC7404862F67A8028FA55",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/hwcdc-restart-first.bin",
+      "target": "evidence/trial/stage_ground/hwcdc-restart-first.bin",
+      "bytes": 128,
+      "sha256": "BED564797F8B00396BDE57DDEAEA95B7A6E2846DC6A65F824E5E1C6DB52E4C68",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/ground-usb-commit-first.bin",
+      "target": "evidence/trial/stage_ground/ground-usb-commit-first.bin",
+      "bytes": 128,
+      "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/first-usb-failure-first.bin",
+      "target": "evidence/trial/stage_ground/first-usb-failure-first.bin",
+      "bytes": 384,
+      "sha256": "568141DD1C05508C9E041E22312129012E04997E3005DE8193E5C39F865E8B67",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/runtime-stage-second.bin",
+      "target": "evidence/trial/stage_ground/runtime-stage-second.bin",
+      "bytes": 68,
+      "sha256": "48E905DC0797C01EFF1507BE6C38974771F4ADEE9F9EE1D93BF9C5E481877371",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/endpoint-fifo-second.bin",
+      "target": "evidence/trial/stage_ground/endpoint-fifo-second.bin",
+      "bytes": 112,
+      "sha256": "903BD49A4C51DCCA0C8B6075F51246B7D1DC815DD28AC7404862F67A8028FA55",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/hwcdc-restart-second.bin",
+      "target": "evidence/trial/stage_ground/hwcdc-restart-second.bin",
+      "bytes": 128,
+      "sha256": "BED564797F8B00396BDE57DDEAEA95B7A6E2846DC6A65F824E5E1C6DB52E4C68",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/ground-usb-commit-second.bin",
+      "target": "evidence/trial/stage_ground/ground-usb-commit-second.bin",
+      "bytes": 128,
+      "sha256": "71731E0AA30BD73D07E85EA80CBC6AC86FF843C6216D5C189FF41E0D0BB6A669",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/first-usb-failure-second.bin",
+      "target": "evidence/trial/stage_ground/first-usb-failure-second.bin",
+      "bytes": 384,
+      "sha256": "568141DD1C05508C9E041E22312129012E04997E3005DE8193E5C39F865E8B67",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/timed_path_first.bin",
+      "target": "evidence/trial/stage_ground/timed_path_first.bin",
+      "bytes": 512,
+      "sha256": "5F76BE357CD1E95DD7A03F40B93290BBFD797EB59C2DAB93134FAA7C98A51D20",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/timed_path_second.bin",
+      "target": "evidence/trial/stage_ground/timed_path_second.bin",
+      "bytes": 512,
+      "sha256": "5F76BE357CD1E95DD7A03F40B93290BBFD797EB59C2DAB93134FAA7C98A51D20",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/aux_readiness_first.bin",
+      "target": "evidence/trial/stage_ground/aux_readiness_first.bin",
+      "bytes": 6144,
+      "sha256": "453B01C8018EDC7541F35501ABEEB3A1F57A74D162014874B567D58B6118FF16",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/aux_readiness_second.bin",
+      "target": "evidence/trial/stage_ground/aux_readiness_second.bin",
+      "bytes": 6144,
+      "sha256": "453B01C8018EDC7541F35501ABEEB3A1F57A74D162014874B567D58B6118FF16",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/diagnostic_usb_failure_first.bin",
+      "target": "evidence/trial/stage_ground/diagnostic_usb_failure_first.bin",
+      "bytes": 256,
+      "sha256": "4DC5DD2EF40B588901AB3305A743B724EDB32116507EFBAAD3D95D01E75D4AC4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/diagnostic_usb_failure_second.bin",
+      "target": "evidence/trial/stage_ground/diagnostic_usb_failure_second.bin",
+      "bytes": 256,
+      "sha256": "4DC5DD2EF40B588901AB3305A743B724EDB32116507EFBAAD3D95D01E75D4AC4",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/grant_diagnostic_first.bin",
+      "target": "evidence/trial/stage_ground/grant_diagnostic_first.bin",
+      "bytes": 1024,
+      "sha256": "8E51BB16936C77E9975713781D2AA01BA90D934214606AD050CA52EF851BCACF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/grant_diagnostic_second.bin",
+      "target": "evidence/trial/stage_ground/grant_diagnostic_second.bin",
+      "bytes": 1024,
+      "sha256": "8E51BB16936C77E9975713781D2AA01BA90D934214606AD050CA52EF851BCACF",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/grant_reservation_first.bin",
+      "target": "evidence/trial/stage_ground/grant_reservation_first.bin",
+      "bytes": 512,
+      "sha256": "AD1ECCED60983BCDAC4CF8EDCCEEFD295875AE57A15FDE7F2BAF15E0373D584D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/grant_reservation_second.bin",
+      "target": "evidence/trial/stage_ground/grant_reservation_second.bin",
+      "bytes": 512,
+      "sha256": "AD1ECCED60983BCDAC4CF8EDCCEEFD295875AE57A15FDE7F2BAF15E0373D584D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/openocd-attempt-1-capture.log",
+      "target": "evidence/trial/stage_ground/openocd-attempt-1-capture.log",
+      "bytes": 2707,
+      "sha256": "35E1DCC3EE9B2115B824BEBEB91A50B000AB2972503EA83F650856FD156B9D75",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/stage_ground/openocd-attempt-1-cleanup.log",
+      "target": "evidence/trial/stage_ground/openocd-attempt-1-cleanup.log",
+      "bytes": 1134,
+      "sha256": "5CBAAEDE1D18CF50FE1C761DE75CA275D340FC635D7DAC7654520FA49A534EEC",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/artifact_manifest.json",
+      "target": "evidence/install/artifact_manifest.json",
+      "bytes": 19532,
+      "sha256": "636656CA78E33264C4E95DEB9F3DAF90059773121D2D5B7251B613EA397FC7EE",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/final_seal.sha256",
+      "target": "evidence/install/final_seal.sha256",
+      "bytes": 83,
+      "sha256": "EAF0FBB3333B5EC317BB1BAFE0731249E34CD7B83225291902F7FEC1354C6EE9",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/SHA256SUMS.txt",
+      "target": "evidence/install/SHA256SUMS.txt",
+      "bytes": 7867,
+      "sha256": "973318D39BECB1B8E2EA22BAAE2662AD5625809FEC6160B3C73029E85004E5AD",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/02_vehicle_write.stdout.log",
+      "target": "evidence/install/02_vehicle_write.stdout.log",
+      "bytes": 4322,
+      "sha256": "14EBE9E4C0E7AADBA5B8D9315EA62785A07FC3451ED55E76560CBE21C7D1D024",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/03_vehicle_verify.record.json",
+      "target": "evidence/install/03_vehicle_verify.record.json",
+      "bytes": 1641,
+      "sha256": "E41234521AC91ADB56043693BBC630A8B36FF4FBB685BB83A1570B9FAC2F11F3",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/03_vehicle_verify.stdout.log",
+      "target": "evidence/install/03_vehicle_verify.stdout.log",
+      "bytes": 1646,
+      "sha256": "FC5996D4D9E2513C359044AC0CB5A5675BFC62B03B7EECE553F3E0448465E670",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/06_ground_write.stdout.log",
+      "target": "evidence/install/06_ground_write.stdout.log",
+      "bytes": 4500,
+      "sha256": "3F5449F627B635E1CA0EE774E96D2AA7FD813BE8915DCF31FB3027339F5D8452",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/07_ground_verify.record.json",
+      "target": "evidence/install/07_ground_verify.record.json",
+      "bytes": 1637,
+      "sha256": "47C66BA5FB54CCFD4D791A795DDEF72C582D1059481E21C11E97C56E8976877D",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/07_ground_verify.stdout.log",
+      "target": "evidence/install/07_ground_verify.stdout.log",
+      "bytes": 1644,
+      "sha256": "2E494350156812A1B9B60090F848F6BACE133B192AAFE2D8F2EAFD84AA693092",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/artifact_manifest.json",
+      "target": "evidence/rollback/artifact_manifest.json",
+      "bytes": 16878,
+      "sha256": "81344C5E4B8CDB2C8B796940C227D63C6B4AB72E96D89610DB857BA1379E42D7",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/final_seal.json",
+      "target": "evidence/rollback/final_seal.json",
+      "bytes": 1140,
+      "sha256": "FDD4F438BACE08DF2D6B0333A4771C70D5053372C56F498870C9CD56792CCC10",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/final_seal.sha256",
+      "target": "evidence/rollback/final_seal.sha256",
+      "bytes": 83,
+      "sha256": "8D5D8DE1BCB9378D8DA62478EB652106B9D211966F6E45C6F1CD343CD41B3D74",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/SHA256SUMS.txt",
+      "target": "evidence/rollback/SHA256SUMS.txt",
+      "bytes": 7085,
+      "sha256": "037901734F61AB7C69920629CB73871F84CAE526523C32254D95658EABEF6011",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/rollback_02_vehicle_r18_write_attempt_1.stdout.log",
+      "target": "evidence/rollback/rollback_02_vehicle_r18_write_attempt_1.stdout.log",
+      "bytes": 3788,
+      "sha256": "931B30FA7EE03F2F53AF299353CCB78F46BF4787F9655A83B6CB3671A848FC8A",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/rollback_03_vehicle_r18_verify_attempt_1.record.json",
+      "target": "evidence/rollback/rollback_03_vehicle_r18_verify_attempt_1.record.json",
+      "bytes": 1724,
+      "sha256": "20CCA456A5C74A7B576E6F604F5221879267EB82F76E7B06519946B5964ABDD8",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/rollback_03_vehicle_r18_verify_attempt_1.stdout.log",
+      "target": "evidence/rollback/rollback_03_vehicle_r18_verify_attempt_1.stdout.log",
+      "bytes": 1658,
+      "sha256": "11047AC245C5FD88B2575205072C745832009671CC9862666A99A2AFDFB0A37E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/rollback_06_ground_r18_write_attempt_1.stdout.log",
+      "target": "evidence/rollback/rollback_06_ground_r18_write_attempt_1.stdout.log",
+      "bytes": 3788,
+      "sha256": "A592895BADBCDBBAE893B8ECEAA08826FB80988AFA79834564FF34B012D33196",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/rollback_07_ground_r18_verify_attempt_1.record.json",
+      "target": "evidence/rollback/rollback_07_ground_r18_verify_attempt_1.record.json",
+      "bytes": 1720,
+      "sha256": "F54A5B1856A7BBA37E14672F9FEB1A6C67E0130F3C6BAF1B656322FCA0BD3A4E",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/rollback_07_ground_r18_verify_attempt_1.stdout.log",
+      "target": "evidence/rollback/rollback_07_ground_r18_verify_attempt_1.stdout.log",
+      "bytes": 1652,
+      "sha256": "AA972C7F1EC28661D37849B0F5B2E185D9FBEE26EFDF7BA5C473E2B68C83C2AA",
+      "representation": "BYTE_IDENTICAL_ORIGINAL"
+    }
+  ],
+  "omissions": [
+    {
+      "source": "tests/arduino_compile/fixtures/hwcdc_3_3_11_migration_fixture.zip.b64",
+      "proposed_target": "source_snapshot/tests/arduino_compile/fixtures/hwcdc_3_3_11_migration_fixture.zip.b64",
+      "sha256": "9E94EA747DB620D0C32B19F02408A088663248A8E9E1CF57374109EE6D79DD24",
+      "reason": "BINARY_ENCODED_ARCHIVE_FIXTURE_WITHHELD_MIGRATION_TEST_DEPENDENCY_NOT_INCLUDED"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/flash_record.json",
+      "proposed_target": "evidence/install/flash_record.json",
+      "sha256": "748F681763CED7B4404A6849B0A156A60EE2F651BC4E98CA5192F6800A8314D7",
+      "reason": "OPERATOR_ATTESTATION_OR_CONSENT_MATERIAL_WITHHELD"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/final_seal.json",
+      "proposed_target": "evidence/install/final_seal.json",
+      "sha256": "BF207CF4C21133358EE034B9952639BE0350C70A55D6815782B4B8C6063A4B89",
+      "reason": "OPERATOR_ATTESTATION_OR_CONSENT_MATERIAL_WITHHELD"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/02_vehicle_write.record.json",
+      "proposed_target": "evidence/install/02_vehicle_write.record.json",
+      "sha256": "69B72BCDE1C6A575B3CB2467DCA0DB4CA935430575AB205C60D1D11A1293FEEF",
+      "reason": "OPERATOR_ATTESTATION_OR_CONSENT_MATERIAL_WITHHELD"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-install/06_ground_write.record.json",
+      "proposed_target": "evidence/install/06_ground_write.record.json",
+      "sha256": "FB178DF923C5806D9ECD1BF9838FFC2EF23EDDF7ADC622B94E6C2E0EC26F4575",
+      "reason": "OPERATOR_ATTESTATION_OR_CONSENT_MATERIAL_WITHHELD"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/flash_record.json",
+      "proposed_target": "evidence/rollback/flash_record.json",
+      "sha256": "97FBD6229A3D029658427C8512A2092E00ABA2C676C8B4E51E3E6012A8A14442",
+      "reason": "OPERATOR_ATTESTATION_OR_CONSENT_MATERIAL_WITHHELD"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/rollback_02_vehicle_r18_write_attempt_1.record.json",
+      "proposed_target": "evidence/rollback/rollback_02_vehicle_r18_write_attempt_1.record.json",
+      "sha256": "33511CDD081EAF77FE411BC8B269793B503BE71875266444E298307608A63BD4",
+      "reason": "OPERATOR_ATTESTATION_OR_CONSENT_MATERIAL_WITHHELD"
+    },
+    {
+      "source": "runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T043511024Z-0c60e726-rollback/rollback_06_ground_r18_write_attempt_1.record.json",
+      "proposed_target": "evidence/rollback/rollback_06_ground_r18_write_attempt_1.record.json",
+      "sha256": "D827B202B13D49524EB309D25D2D6A80734E75C148BD8CEDCB667E7F3FC89563",
+      "reason": "OPERATOR_ATTESTATION_OR_CONSENT_MATERIAL_WITHHELD"
+    },
+    {
+      "source": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix/summary.json",
+      "proposed_target": "evidence/trial/summary.json",
+      "reason": "FULL_PARENT_OPERATOR_ATTESTATIONS_WITHHELD"
+    },
+    {
+      "source": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/summary.json",
+      "proposed_target": "evidence/integration/summary.json",
+      "reason": "LOCAL_AUTHORIZATION_AND_DISPATCH_STATE_WITHHELD"
+    },
+    {
+      "source": "permits, prepared pins, authorization/dispatch records, live wrappers and command logs",
+      "reason": "INTENTIONALLY_NOT_SELECTED"
+    },
+    {
+      "source": "application BIN/ELF/MAP/EXE, compiler/build trees and fixture clones",
+      "reason": "NOT_A_FLASHABLE_OR_COMPLETE_SEALED_RELEASE"
+    }
+  ],
+  "file_count": 436,
+  "total_original_bytes": 10233842,
+  "hardware_interaction": false,
+  "git_or_network_operation": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

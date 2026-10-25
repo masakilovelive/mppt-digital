@@ -1,0 +1,148 @@
+{
+  "schema": "vc-lora-r19-stage-final-gate-fix-summary-v1",
+  "result": "PASS_TARGETED_OFFLINE_ONLY",
+  "production_parent_change": "Append exactly v10 to final Get-StageProof acquisition schema allowlist; every existing safety/integrity conjunct remains unchanged.",
+  "source_frozen": true,
+  "parent_sha256": "AFC2EBC5EFA842DD00E6642D0B88CE20665DA9533C650AEC75D971CDC56374B1",
+  "new_test": {
+    "path": "tests/hil/check_r19_grant_reservation_stage_final_gate.ps1",
+    "sha256": "A0E07565573DAC8FAEF1E62348C8CBBD37EDDA3B584AAFC3FBC96D5039DB99EE",
+    "portable_default": true,
+    "saved_file_integration_explicit_opt_in": true
+  },
+  "cmake_change": "One portable stage_final_gate foreach entry; no mandatory historical artifact fixture.",
+  "before_after_snapshots": [
+    {
+      "path": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "before_path": "invoke_r19_runtime_stage_cause_experiment_hil.before-v10-final-gate-fix.ps1",
+      "before_sha256": "011283705D8DF136FC124629E57A823C4DB92B43F1471183F37C80863F99728D",
+      "after_path": "invoke_r19_runtime_stage_cause_experiment_hil.after-v10-final-gate-fix.ps1",
+      "after_sha256": "AFC2EBC5EFA842DD00E6642D0B88CE20665DA9533C650AEC75D971CDC56374B1"
+    },
+    {
+      "path": "CMakeLists.txt",
+      "before_path": "CMakeLists.before-v10-final-gate-registration.txt",
+      "before_sha256": "BC3134DACB120BEF198C87D6A78AC57D3F1C62E7656BC1463D141CBEA72B9D73",
+      "after_path": "CMakeLists.after-v10-final-gate-registration.txt",
+      "after_sha256": "D40760946856882B0CD4540207BCE02F9A0447E49576552C4BC9B2E1727FD25F"
+    }
+  ],
+  "diff": {
+    "path": "v10_stage_final_gate_fix.diff",
+    "sha256": "E455962A6B4C923A87935957D324E9C3966E19F7FC72832481F3A3611435C216"
+  },
+  "tests": [
+    {
+      "shell": "ps51",
+      "checks": 109,
+      "result": "PASS",
+      "summary_path": "stage_final_gate_GREEN_ps51/summary.json",
+      "summary_sha256": "B89D64B27EE4F660B7FC52DFE4542CE01A3E935E9039E4B6809CE03949315E08",
+      "saved_replay": [
+        {
+          "role": "vehicle",
+          "version": 10,
+          "proven": true,
+          "raw_replay_proven": true,
+          "raw_count": 20,
+          "usb_completion_proven": false,
+          "summary_sha256": "6B9A2B70DB441388E1FE26E33CF3EC5551EC9A9B43C36EB05976F44C5F53FC69",
+          "historical_status": "FAIL_STAGE_READ_R18_RESTORED",
+          "historical_status_modified": false
+        },
+        {
+          "role": "ground",
+          "version": 10,
+          "proven": true,
+          "raw_replay_proven": true,
+          "raw_count": 20,
+          "usb_completion_proven": false,
+          "summary_sha256": "A0ADD7C67E53A8223AC72EFB1D4436502F1DBE1DC55B95EB4648FFE1C1DDB19D",
+          "historical_status": "FAIL_STAGE_READ_R18_RESTORED",
+          "historical_status_modified": false
+        }
+      ]
+    },
+    {
+      "shell": "ps7",
+      "checks": 109,
+      "result": "PASS",
+      "summary_path": "stage_final_gate_GREEN_ps7/summary.json",
+      "summary_sha256": "E1BD39D454A50BC1B270CA4A21550AF41BB6B694B75268C8E6A4A8CAD3A2B966",
+      "saved_replay": [
+        {
+          "role": "vehicle",
+          "version": 10,
+          "proven": true,
+          "raw_replay_proven": true,
+          "raw_count": 20,
+          "usb_completion_proven": false,
+          "summary_sha256": "6B9A2B70DB441388E1FE26E33CF3EC5551EC9A9B43C36EB05976F44C5F53FC69",
+          "historical_status": "FAIL_STAGE_READ_R18_RESTORED",
+          "historical_status_modified": false
+        },
+        {
+          "role": "ground",
+          "version": 10,
+          "proven": true,
+          "raw_replay_proven": true,
+          "raw_count": 20,
+          "usb_completion_proven": false,
+          "summary_sha256": "A0ADD7C67E53A8223AC72EFB1D4436502F1DBE1DC55B95EB4648FFE1C1DDB19D",
+          "historical_status": "FAIL_STAGE_READ_R18_RESTORED",
+          "historical_status_modified": false
+        }
+      ]
+    }
+  ],
+  "related_targeted_tests": [
+    {
+      "shell": "ps51",
+      "portable_final_gate_checks": 59,
+      "grant_parent_checks": 52,
+      "reservation_artifact_checks": 128,
+      "result": "PASS",
+      "log_sha256": "11C1908FA08FD4C0D69053575F2DA1FB28740CCBE66E605FC1E0109CF3A9AAF4"
+    },
+    {
+      "shell": "ps7",
+      "portable_final_gate_checks": 59,
+      "grant_parent_checks": 52,
+      "reservation_artifact_checks": 128,
+      "result": "PASS",
+      "log_sha256": "82C63B97D3C9F23B0639A5C869D75E3E74D71245BA6495AC6CBB02BC6C6EA8A6"
+    }
+  ],
+  "legacy_windows_powershell_orchestrator": "PASS",
+  "legacy_orchestrator_log_sha256": "0591718B68B54EBC0B4E1A6DB36FF0EB72B4A89668B30260701F71677335644B",
+  "genuine_red": [
+    "stage_final_gate_RED_ps51.log",
+    "stage_final_gate_RED_ps7.log",
+    "stage_final_gate_saved_RED_ps51.log",
+    "stage_final_gate_saved_RED_ps7.log"
+  ],
+  "historical_v9_optional_replay": {
+    "attempt": "stage_final_gate_v9_history_diagnostic_RED_ps7.log",
+    "result": "REJECTED_AS_EXPECTED_BY_CURRENT_SOURCE_BINDING_NOT_CLAIMED_GREEN",
+    "reason": "USB role capabilities differ from exact canonical implementation fingerprints after subsequent bridge changes.",
+    "weakened_or_rebound": false,
+    "v9_final_gate_compatibility": "PASS on exact production final predicate portable fixture"
+  },
+  "canonical_source_count": 83,
+  "canonical_source_tree_sha256": "BBA7EE5CF24826768EC4EFD98EF5AF2338D1DDFA18DC936ECC220F934BFD5009",
+  "hardware_interaction": false,
+  "firmware_modified": false,
+  "old_run_or_candidate_modified": false,
+  "inventory_or_wrapper_or_pin_rewritten": false,
+  "historical_hil_status": "FAIL_STAGE_READ_R18_RESTORED",
+  "historical_hil_summary_sha256": "264DAD64810ED1B304B47B6C777A03BCDF32D3100981E0692C078C50AEEBF756",
+  "historical_status_preserved": true,
+  "current_offline_record_acquisition_replay": "PASS_BOTH_ROLES",
+  "usb_boundary_completion": "NOT_PROVEN_BOTH_ROLES",
+  "reservation_or_high_speed_success": "NOT_PROVEN",
+  "dispatch_prepared_pin_status": "STALE: v5 and consumed dispatch pins bind parent011283..., current parentAFC2...; future execution requires a separately prepared and reviewed pin plus fresh human permission.",
+  "live_permission_consumed": true,
+  "new_live_authorization": false,
+  "physical_retry_performed": false,
+  "full_450_suite_or_build_performed_in_this_task": false
+}

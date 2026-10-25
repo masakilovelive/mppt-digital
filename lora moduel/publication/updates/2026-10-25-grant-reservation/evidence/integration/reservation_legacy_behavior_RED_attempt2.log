@@ -1,0 +1,2 @@
+legacy-no-reservation-hold-characterization checks=1 failures=1 grant_issued_before_diagnostic_release=1
+RESERVATION_RED_EXIT=1

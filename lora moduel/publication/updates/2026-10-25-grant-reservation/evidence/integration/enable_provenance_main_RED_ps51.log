@@ -1,0 +1,7 @@
+Candidate enable provenance is invalid
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_artifact.ps1:47 char:83
++ ... bool]$Condition,[string]$Message){if(-not$Condition){throw $Message}}
++                                                          ~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Candidate enable provenance is invalid:String) [], RuntimeException
+    + FullyQualifiedErrorId : Candidate enable provenance is invalid
+ 

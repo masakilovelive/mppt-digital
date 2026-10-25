@@ -1,0 +1,41 @@
+{
+    "schema":  "vc-lora-r19-grant-reservation-flash-operation-regression-v1",
+    "result":  "PASS",
+    "checks":  402,
+    "source_sha256":  "E09A9F01C840EFFB7A6200A636A9FA52DB0796E52884F3B06F0BFF9D57BF9DDF",
+    "cases":  [
+                  {
+                      "reservation":  false,
+                      "rollback":  false,
+                      "operations":  8,
+                      "hardware_interaction":  false
+                  },
+                  {
+                      "reservation":  false,
+                      "rollback":  true,
+                      "operations":  8,
+                      "hardware_interaction":  false
+                  },
+                  {
+                      "reservation":  true,
+                      "rollback":  false,
+                      "operations":  8,
+                      "hardware_interaction":  false
+                  },
+                  {
+                      "reservation":  true,
+                      "rollback":  true,
+                      "operations":  8,
+                      "hardware_interaction":  false
+                  }
+              ],
+    "mock_external_calls":  32,
+    "actual_operation_bodies":  true,
+    "actual_durable_serializer":  true,
+    "hardware_interaction":  false,
+    "native_tool_executed":  false,
+    "process_inventory_queried":  false,
+    "candidate_or_prepared_pin_modified":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false
+}

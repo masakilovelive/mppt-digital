@@ -1,0 +1,107 @@
+diff --git "a/runs\\validation\\R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001\\20261025T-fix\\invoke_r19_candidate_app_flash_hil.before-flash-boundary-fix.ps1" b/tools/invoke_r19_candidate_app_flash_hil.ps1
+index 2860612..40c26fa 100644
+--- "a/runs\\validation\\R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001\\20261025T-fix\\invoke_r19_candidate_app_flash_hil.before-flash-boundary-fix.ps1"
++++ b/tools/invoke_r19_candidate_app_flash_hil.ps1
+@@ -334,7 +334,7 @@ function Write-DurableText([string]$Path, [string]$Text) {
+ 
+ function Write-DurableJson([string]$Path, [object]$Value) {
+   Write-DurableText $Path (($Value | ConvertTo-Json -Depth 48) + $newline)
+-  [void](Get-Content -LiteralPath $Path -Raw | ConvertFrom-Json)
++  [void]([IO.File]::ReadAllText($Path, $utf8) | ConvertFrom-Json)
+ }
+ 
+ function Flush-Existing([string]$Path) {
+@@ -1207,13 +1207,6 @@ function Invoke-ToolOperation([string]$Label, [object]$Role,
+   }
+   $recordPath = Join-Path $evidence "$prefix.record.json"
+   Write-DurableJson $recordPath $record
+-  if($grantReservationEnabled-and$null-ne$Bundle){
+-    $record['grant_reservation_diagnostics']=$modeHandoff.grant_reservation_diagnostics
+-    $record['reader_schema']='vc-lora-r19-runtime-stage-jtag-read-v10'
+-    $record.authorization_scope='one host-assisted diagnostic reservation; at most 15-second preparation then one fixed 40-second single-request measurement; mandatory R18 restore; not product acceptance'
+-    $record.next_required_action='Capture once, acquire all ten records twice per role, then mandatory accepted R18 rollback'
+-    Write-DurableJson $recordPath $record
+-  }
+   $record | Add-Member -NotePropertyName record_path `
+       -NotePropertyValue (Get-RelativePath $evidence $recordPath)
+   $record | Add-Member -NotePropertyName record_sha256 `
+@@ -1323,6 +1316,7 @@ function Write-SealedEvidence([string]$Result, [string]$Status,
+     [string]$SimulatedTerminalStatus = '') {
+   $grantDiagnosticsEnabled=[bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $diagnosticUsbFailureEnabled=[bool](Get-Variable -Name diagnosticUsbFailureEnabled -ValueOnly -ErrorAction SilentlyContinue)
++  $grantReservationEnabled=[bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $terminalPath = Join-Path $evidence 'terminal_status.json'
+   Write-DurableJson $terminalPath ([ordered]@{
+     schema_version=1;test_id=$testId;finished_utc=[DateTime]::UtcNow.ToString('o')
+@@ -1399,11 +1393,11 @@ function Write-SealedEvidence([string]$Result, [string]$Status,
+       operator_safety_attestation_sha256=if ($OneRunAuthorized) {
+         Get-TextSha256 $operatorSafetyAttestationText
+       } else {''}
+-      operator_safety_conditions=if ($OneRunAuthorized) {@(
++      operator_safety_conditions=@(if ($OneRunAuthorized) {@(
+         'Pixhawk DISARMED','propulsion and actuator power isolated',
+         'both E220 antennas connected','common GND and 3.3 V logic checked',
+         'Pixhawk parameter backup saved')
+-      } else {@()}
++      } else {@()})
+     }
+     candidate=$candidateObject
+     flash_policy=[ordered]@{
+@@ -1431,29 +1425,48 @@ function Write-SealedEvidence([string]$Result, [string]$Status,
+   }
+   $recordPath = Join-Path $evidence 'flash_record.json'
+   if($timedPathEnabled-and$null-ne$Bundle){
+-    $modeHandoff=Get-Content -LiteralPath $Bundle.handoff_path -Raw|ConvertFrom-Json
++    $modeHandoff=[IO.File]::ReadAllText($Bundle.handoff_path,$utf8)|ConvertFrom-Json
+     $record['timed_path_diagnostics']=$modeHandoff.timed_path_diagnostics
+-    $record.authorization_scope='one immediate private USB timed-path diagnostic capture only; no flight arming or parameter commands'
+-    $record.next_required_action='Run exactly one mode-bound timed-path capture, acquire JTAG records, then mandatory accepted R18 rollback'
++    if($OneRunAuthorized){
++      $authorizationScope='one immediate private USB timed-path diagnostic capture only; no flight arming or parameter commands'
++      $nextRequiredAction='Run exactly one mode-bound timed-path capture, acquire JTAG records, then mandatory accepted R18 rollback'
++    }
+   }
+   if($auxReadinessEnabled-and$null-ne$Bundle){
+     $record['aux_readiness_diagnostics']=$modeHandoff.aux_readiness_diagnostics
+-    $record.authorization_scope='one immediate private USB AUX/readiness timed-path diagnostic capture only; no flight arming or parameter commands'
+-    $record.next_required_action='Run exactly one mode-bound timed-path capture, acquire all seven diagnostic records twice, then mandatory accepted R18 rollback'
++    if($OneRunAuthorized){
++      $authorizationScope='one immediate private USB AUX/readiness timed-path diagnostic capture only; no flight arming or parameter commands'
++      $nextRequiredAction='Run exactly one mode-bound timed-path capture, acquire all seven diagnostic records twice, then mandatory accepted R18 rollback'
++    }
+   }
+   if($diagnosticUsbFailureEnabled-and$null-ne$Bundle){
+     $record['diagnostic_usb_failure_diagnostics']=$modeHandoff.diagnostic_usb_failure_diagnostics
+     $record['usb_role_capabilities']=$modeHandoff.usb_role_capabilities
+     $record['reader_schema']='vc-lora-r19-runtime-stage-jtag-read-v8'
+-    $record.authorization_scope='one immediate versioned-role diagnostic USB cause capture only; no flight arming or parameter commands'
+-    $record.next_required_action='Run exactly one bound capture, acquire all eight diagnostic records twice, then mandatory accepted R18 rollback'
++    if($OneRunAuthorized){
++      $authorizationScope='one immediate versioned-role diagnostic USB cause capture only; no flight arming or parameter commands'
++      $nextRequiredAction='Run exactly one bound capture, acquire all eight diagnostic records twice, then mandatory accepted R18 rollback'
++    }
+   }
+   if($grantDiagnosticsEnabled-and$null-ne$Bundle){
+     $record['grant_diagnostics']=$modeHandoff.grant_diagnostics
+     $record['reader_schema']='vc-lora-r19-runtime-stage-jtag-read-v9'
+-    $record.authorization_scope='one immediate Grant-state diagnostic capture only; no flight arming; parameter request only under the separate bound capture contract'
+-    $record.next_required_action='Run exactly one bound capture, acquire all nine diagnostic records twice, then mandatory accepted R18 rollback'
++    if($OneRunAuthorized){
++      $authorizationScope='one immediate Grant-state diagnostic capture only; no flight arming; parameter request only under the separate bound capture contract'
++      $nextRequiredAction='Run exactly one bound capture, acquire all nine diagnostic records twice, then mandatory accepted R18 rollback'
++    }
++  }
++  if($grantReservationEnabled-and$null-ne$Bundle){
++    $record['grant_reservation_diagnostics']=$modeHandoff.grant_reservation_diagnostics
++    $record['reader_schema']='vc-lora-r19-runtime-stage-jtag-read-v10'
++    if($OneRunAuthorized){
++      $authorizationScope='one host-assisted diagnostic reservation; at most 15-second preparation then one fixed 40-second single-request measurement; mandatory R18 restore; not product acceptance'
++      $nextRequiredAction='Capture once, acquire all ten records twice per role, then mandatory accepted R18 rollback'
++    }
+   }
++  $record.authorization_scope=$authorizationScope
++  $record.authorization.scope=$authorizationScope
++  $record.next_required_action=$nextRequiredAction
+   Write-DurableJson $recordPath $record
+ 
+   $excluded = @('artifact_manifest.json','SHA256SUMS.txt','final_seal.json',

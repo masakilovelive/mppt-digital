@@ -1,0 +1,33 @@
+PASS native-read-mac-reservation-False-rollback-False
+PASS native-read-mac-reservation-False-rollback-True
+FAIL native-read-mac-reservation-True-rollback-False: The variable '$modeHandoff' cannot be retrieved because it has not been set. at Invoke-ToolOperation, <No file>: line 78
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 64
+at Case, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 13
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 62
+FAIL native-read-mac-reservation-True-rollback-True: The variable '$modeHandoff' cannot be retrieved because it has not been set. at Invoke-ToolOperation, <No file>: line 78
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 64
+at Case, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 13
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 62
+PASS durable-json-japanese-lossless
+PASS sealed-reservation-False-failed-False
+FAIL sealed-reservation-False-failed-True: Unauthorized safety conditions remain an empty array, not null at Check, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 11
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 103
+at Case, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 13
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 84
+FAIL sealed-reservation-True-failed-False: Record, nested authorization and final seal must agree at Check, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 11
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 95
+at Case, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 13
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 84
+FAIL sealed-reservation-True-failed-True: Record, nested authorization and final seal must agree at Check, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 11
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 95
+at Case, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 13
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 84
+FAIL rollback-null-bundle-reservation-False: Null-bundle unauthorized safety conditions remain an empty array at Check, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 11
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 125
+at Case, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 13
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 117
+FAIL rollback-null-bundle-reservation-True: Null-bundle unauthorized safety conditions remain an empty array at Check, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 11
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 125
+at Case, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 13
+at <ScriptBlock>, E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_boundary.ps1: line 117
+flash_boundary FAIL checks=60

@@ -1,0 +1,149 @@
+{
+  "schema": 1,
+  "result": "PASS_RESERVATION_PURE_CONTROLLER_CODEC_RECORD_OFFLINE_ONLY",
+  "scope": "Diagnostic dual-USB reservation with causal TailPermit. Not product RF reservation and not hardware acceptance.",
+  "source_files": [
+    {
+      "path": "firmware/high_speed/r19_grant_reservation.hpp",
+      "sha256": "834DD0E5514137F57F0CB16967B6BBF04875C6009646809E20177E27CA6FFB30",
+      "size_bytes": 26631
+    },
+    {
+      "path": "firmware/high_speed/r19_grant_reservation_record.hpp",
+      "sha256": "101FAD91B30AB85AD9300399635E805B9ACE751BADCC717D431318A13CC75665",
+      "size_bytes": 4988
+    },
+    {
+      "path": "tests/host/standalone/r19_grant_reservation_tests.cpp",
+      "sha256": "EB5C64214EC73C50548AB2EA5D201734F04F4800621274DA129DACBC01655777",
+      "size_bytes": 17641
+    }
+  ],
+  "validation": [
+    {
+      "kind": "legacy_behavior_characterization",
+      "compile_log": "reservation_legacy_behavior_RED_compile.log",
+      "run_log": "reservation_legacy_behavior_RED.log",
+      "run_exit": 0,
+      "note": "Initial insufficient fixture; preserved, not genuine RED."
+    },
+    {
+      "kind": "legacy_behavior_characterization",
+      "compile_log": "reservation_legacy_behavior_RED_attempt2_compile.log",
+      "run_log": "reservation_legacy_behavior_RED_attempt2.log",
+      "compile_exit": 0,
+      "run_exit": 1,
+      "checks": 1,
+      "failures": 1,
+      "note": "Actual existing Vehicle TDD issues Grant before a diagnostic release because the legacy path has no reservation seam. This is not a legacy product defect or an assertion that the unchanged legacy API was repaired."
+    },
+    {
+      "kind": "initial_core",
+      "compile_log": "reservation_core_GREEN_attempt1_compile.log",
+      "run_log": "reservation_core_GREEN_attempt1.log",
+      "compile_exit": 0,
+      "run_exit": 0,
+      "checks": 317,
+      "failures": 0
+    },
+    {
+      "kind": "callback_deadline_RED",
+      "compile_log": "reservation_deadline_callback_RED_compile.log",
+      "run_log": "reservation_deadline_callback_RED.log",
+      "compile_exit": 0,
+      "run_exit": 1,
+      "checks": 371,
+      "failures": 3
+    },
+    {
+      "kind": "callback_deadline_GREEN",
+      "compile_log": "reservation_deadline_callback_GREEN_compile.log",
+      "run_log": "reservation_deadline_callback_GREEN.log",
+      "compile_exit": 0,
+      "run_exit": 0,
+      "checks": 371,
+      "failures": 0
+    },
+    {
+      "kind": "record_strict_RED",
+      "compile_log": "reservation_record_strict_RED_compile.log",
+      "run_log": "reservation_record_strict_RED.log",
+      "compile_exit": 0,
+      "run_exit": 1,
+      "checks": 437,
+      "failures": 8
+    },
+    {
+      "kind": "record_strict_GREEN",
+      "compile_log": "reservation_record_strict_GREEN_compile.log",
+      "run_log": "reservation_record_strict_GREEN.log",
+      "compile_exit": 0,
+      "run_exit": 0,
+      "checks": 437,
+      "failures": 0
+    },
+    {
+      "kind": "final_scope_journal_GREEN",
+      "compile_log": "reservation_scope_journal_GREEN_attempt1_compile.log",
+      "run_log": "reservation_scope_journal_GREEN_attempt1.log",
+      "compile_exit": 0,
+      "run_exit": 0,
+      "checks": 684,
+      "failures": 0
+    }
+  ],
+  "contracts": {
+    "ground_original_t0_to_strict_fresh_grant_max_ms": 500,
+    "vehicle_physical_tail_to_complete_canonical_vcbn_max_ms": 500,
+    "ground_after_grant_guard_min_ms": 100,
+    "ground_after_local_tailpermit_receipt_guard_min_ms": 100,
+    "uart_acceptance_to_physical_tail_service_floor_min_ms": 550,
+    "vehicle_pending_action_hold_exclusive_max_ms": 750,
+    "prepare_deadline_exclusive_ms": 8000,
+    "after_ground_grant_wait_max_ms": 2000,
+    "original_highspeed_hard_lease_ms": 28000,
+    "original_pc_completion_budget_ms": 30000,
+    "wire_bytes": 66,
+    "wire_flags": 0,
+    "nonce_high16": "0x521B",
+    "record_bytes": 512,
+    "record_magic": "0x52313952",
+    "record_schema": 1,
+    "record_flags": [
+      1,
+      7
+    ],
+    "record_journal": "first 8 plus last 4 chronological events; first failure freezes entire snapshot/record",
+    "reply_queue": "Fixed 8 entries, no clearing/reordering on failure because a front reply may have an in-flight USB prefix. Pop only after complete whole-frame publication."
+  },
+  "failure_hardening": [
+    "Commands and callbacks enforce already-expired original phase deadlines, even without an intervening periodic tick.",
+    "Delayed actual-Held callback cannot create a new deadline from a stale t0.",
+    "Unknown record enums, inconsistent fault states, non-monotonic journal entries and premature failure events are rejected before record mutation.",
+    "Epoch zero accepted when identity/scope is present; local epoch changes fail closed.",
+    "All wire time overflow is rejected rather than truncated; internal timestamps/JTAG remain 64-bit.",
+    "Generic Fault never overwrites the real action token or writer generation."
+  ],
+  "caller_obligations": [
+    "Parent bridge must bind the exact canonical held #21 and actual original owner t0. Core does not manufacture or reset adapter admission.",
+    "Prepare callback must represent an actual issued standard TDD SendGrant action with acquired unchanged StandardTdd writer lease. Root controls actual zero-write hold/release and all hardware safety conditions.",
+    "Tail callback is only a physically validated matching Grant tail (E220/AUX/service-floor evidence), never UART acceptance, USB release, prefix or PC time.",
+    "VCBN callback is only a complete validated canonical frame tied to the matching Grant. Controller is not a MAVLink/VCBN parser.",
+    "Ground local and Vehicle local clocks are never directly subtracted. Forwarded peer timestamps are claims recorded separately from local causal receipt.",
+    "Reader/nonce/CRC and trusted-PC relay do not authenticate that PC, prove RF timing bounds, or grant product acceptance.",
+    "Controller Hello may await the next actual baseline RF Grant without synthesizing a reception time. Runner must enforce the separate preparation timeout.",
+    "Original adapter 28-second lease and PC 30-second total remain separately enforced; Started retires only diagnostic reservation phase timers."
+  ],
+  "not_performed": [
+    "Hardware/COM/JTAG/PnP operations",
+    "Network/Git operations",
+    "Arduino build",
+    "Full host suite (parent owns)"
+  ],
+  "limitations": [
+    "Synthetic controller tests are not physical RF proof.",
+    "USB relay plus causal 100 ms guard and RF delivery may fail the unchanged Vehicle 500 ms window; such a result must be reported without extending or resetting deadlines.",
+    "No claim of bulk success, VCRC completion, 932/932 within 30 seconds or product acceptance."
+  ],
+  "diff": "reservation_core_implementation.diff"
+}

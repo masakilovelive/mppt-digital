@@ -1,0 +1,52 @@
+{
+    "schema":  "vc-lora-r19-reservation-builder-output-main-replay-v1",
+    "result":  "PASS",
+    "checks":  102,
+    "boundary":  "ACTUAL_BUILDER_OUTPUT_TO_WHOLE_VERIFIER_MAIN_ONLY",
+    "builder_executed":  false,
+    "compiler_executed":  false,
+    "native_tool_executed":  false,
+    "hardware_interaction":  false,
+    "source_candidate_root":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261024T214240351Z-b02ed633",
+    "source_candidate_unchanged":  true,
+    "source_candidate_files":  179,
+    "fixture_artifact_root":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001\\20261025T-fix\\builder_whole_main_ps51_final\\isolated-repository\\runs\\candidates\\R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261024T214240351Z-b02ed633",
+    "compiler_payload_bytes_preserved":  true,
+    "fixture_metadata_rebased_and_resealed":  true,
+    "cases":  [
+                  {
+                      "case":  "RED_observed_missing_reservation_enable",
+                      "passed":  false,
+                      "expected_pass":  false,
+                      "error":  "Candidate enable provenance is invalid",
+                      "verifier_sha256":  "DEF19B28F8EFF54814DB14BB6A9D9583A8424BFC1DA7085D9E7A2D21C7264DA3",
+                      "hardware_interaction":  false
+                  },
+                  {
+                      "case":  "GREEN_current_whole_main",
+                      "passed":  true,
+                      "expected_pass":  true,
+                      "error":  "",
+                      "verifier_sha256":  "DD5DB94A874C8BCBC180ABC49415E023E1F90333E34BE138C9CEFC0BDB8411CE",
+                      "hardware_interaction":  false
+                  },
+                  {
+                      "case":  "NEGATIVE_resealed_missing_macro",
+                      "passed":  false,
+                      "expected_pass":  false,
+                      "error":  "Candidate enable provenance is invalid",
+                      "verifier_sha256":  "DD5DB94A874C8BCBC180ABC49415E023E1F90333E34BE138C9CEFC0BDB8411CE",
+                      "hardware_interaction":  false
+                  },
+                  {
+                      "case":  "GREEN_restored_exact_macro",
+                      "passed":  true,
+                      "expected_pass":  true,
+                      "error":  "",
+                      "verifier_sha256":  "DD5DB94A874C8BCBC180ABC49415E023E1F90333E34BE138C9CEFC0BDB8411CE",
+                      "hardware_interaction":  false
+                  }
+              ],
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false
+}

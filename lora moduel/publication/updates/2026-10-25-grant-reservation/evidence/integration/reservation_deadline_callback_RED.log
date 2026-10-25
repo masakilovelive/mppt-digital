@@ -1,0 +1,5 @@
+r19-grant-reservation checks=371 failures=3 diagnostic_dual_usb_only=1 product_RF_reservation=0
+FAIL expired preparation cannot be revived by a later callback
+FAIL late command cannot skip the original two-second tail wait
+FAIL expired Ground binding cannot be revived by an actual-held callback
+RESERVATION_RUN_EXIT=1

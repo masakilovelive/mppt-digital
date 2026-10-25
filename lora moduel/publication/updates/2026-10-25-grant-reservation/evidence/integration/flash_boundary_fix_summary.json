@@ -1,0 +1,102 @@
+{
+  "schema": "vc-lora-r19-flash-boundary-fix-summary-v1",
+  "result": "PASS_OFFLINE_FOCUSED_NOT_LIVE",
+  "source_frozen": true,
+  "files_changed": [
+    {
+      "path": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "prior_sha256": "0F5CACA680D21C41CD0E192F5737E9B6421D4B36EAEDBF018180DDD425748AD5",
+      "current_sha256": "011283705D8DF136FC124629E57A823C4DB92B43F1471183F37C80863F99728D"
+    },
+    {
+      "path": "tools/invoke_r19_candidate_app_flash_hil.ps1",
+      "prior_sha256": "42EE1335127C7275CC2E4980CE5F6BFD57DEEF4D15E1FCE337340395118965D9",
+      "current_sha256": "E09A9F01C840EFFB7A6200A636A9FA52DB0796E52884F3B06F0BFF9D57BF9DDF"
+    }
+  ],
+  "test_results": [
+    {
+      "name": "flash_boundary_GREEN_ps51",
+      "result": "PASS",
+      "checks": 88,
+      "summary_path": "flash_boundary_GREEN_ps51/summary.json",
+      "summary_sha256": "B995CF914D2A4CB796264D7B89C61DF0CD0A04139EEDB0C4E3427C5913D9E1D6"
+    },
+    {
+      "name": "flash_boundary_GREEN_ps7",
+      "result": "PASS",
+      "checks": 88,
+      "summary_path": "flash_boundary_GREEN_ps7/summary.json",
+      "summary_sha256": "DAB748880B87AEB1FEEEC0F0D2055123E5E01CB84BB913DB00F7AB02A2231C80"
+    },
+    {
+      "name": "operation_regression_GREEN_ps51",
+      "result": "PASS",
+      "checks": 402,
+      "summary_path": "operation_regression_GREEN_ps51/summary.json",
+      "summary_sha256": "06563D043F3B2D37C89A74DCF152D93992F288D3946BBEBF82F6D6DD849A15AD"
+    },
+    {
+      "name": "operation_regression_GREEN_ps7",
+      "result": "PASS",
+      "checks": 402,
+      "summary_path": "operation_regression_GREEN_ps7/summary.json",
+      "summary_sha256": "4E0F73D59F0408E7EFCD4C8A2143FACBA276B51DD3848D1D97F4F6E5EFCD52CF"
+    }
+  ],
+  "test_sources": [
+    {
+      "path": "tests/hil/check_r19_grant_reservation_flash_boundary.ps1",
+      "sha256": "53D84C82AE15F98CC8F163F3FF00F0DF5729EB5EF8013A97ECD46F7DF2CEB8CA"
+    },
+    {
+      "path": "tests/hil/check_r19_grant_reservation_flash_operation_regression.ps1",
+      "sha256": "5F74A49FD273450CC66C8D6D691E346C6F8C822DE82DA0672E77868A2FE5EC67"
+    }
+  ],
+  "before_after_snapshots": [
+    {
+      "path": "tools/invoke_r19_candidate_app_flash_hil.ps1",
+      "before_path": "invoke_r19_candidate_app_flash_hil.before-flash-boundary-fix.ps1",
+      "before_sha256": "42EE1335127C7275CC2E4980CE5F6BFD57DEEF4D15E1FCE337340395118965D9",
+      "after_path": "invoke_r19_candidate_app_flash_hil.after-flash-boundary-fix.ps1",
+      "after_sha256": "E09A9F01C840EFFB7A6200A636A9FA52DB0796E52884F3B06F0BFF9D57BF9DDF",
+      "before_crlf_count": 0,
+      "after_crlf_count": 0,
+      "full_byte_snapshots": true
+    },
+    {
+      "path": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "before_path": "invoke_r19_runtime_stage_cause_experiment_hil.before-flash-boundary-pin.ps1",
+      "before_sha256": "0F5CACA680D21C41CD0E192F5737E9B6421D4B36EAEDBF018180DDD425748AD5",
+      "after_path": "invoke_r19_runtime_stage_cause_experiment_hil.after-flash-boundary-pin.ps1",
+      "after_sha256": "011283705D8DF136FC124629E57A823C4DB92B43F1471183F37C80863F99728D",
+      "before_crlf_count": 0,
+      "after_crlf_count": 0,
+      "full_byte_snapshots": true
+    }
+  ],
+  "diff_sha256": "FBFB4E00EB83BDEE70232BF180C58EF31B2D3A0B36100CAB9F0AEEB385BF1409",
+  "reviewed_inventory_path": "reviewed_26_tool_source_inventory_v5.json",
+  "reviewed_inventory_sha256": "F3B7A605092D714B3DC580070650D87EE2D5991443A43E33D49BC740A13ADF55",
+  "canonical_source_count": 83,
+  "canonical_source_tree_sha256": "BBA7EE5CF24826768EC4EFD98EF5AF2338D1DDFA18DC936ECC220F934BFD5009",
+  "historical_v4_preserved": true,
+  "hardware_access": false,
+  "candidate_or_prepared_pin_modified": false,
+  "permission_consumed": true,
+  "hardware_rollback_proof": "UNPROVEN prior HIL retained",
+  "root_full_suite_pending": true,
+  "red_evidence": [
+    "flash_boundary_actual_RED_ps51.log",
+    "flash_boundary_actual_RED_ps7.log",
+    "flash_boundary_expanded_RED_ps7.log",
+    "operation_regression_RED_ps51.log",
+    "flash_boundary_parent_pin_RED_ps51.log"
+  ],
+  "fixture_development_attempts_not_production_red": [
+    "flash_boundary_RED_ps51",
+    "flash_boundary_RED_ps7",
+    "flash_boundary_fixture_attempt2_ps7"
+  ]
+}

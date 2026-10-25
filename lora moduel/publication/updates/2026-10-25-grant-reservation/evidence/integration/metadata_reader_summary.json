@@ -1,0 +1,118 @@
+{
+  "schema": "vc-lora-r19-grant-reservation-integration-offline-summary-v1",
+  "result": "PASS_SOURCE_FROZEN_OFFLINE_ONLY",
+  "hardware_interaction": false,
+  "scope": "Metadata, strict candidate closure and paired JTAG evidence support only; no device, process inventory, network, Git or build actions.",
+  "files": [
+    {
+      "path": "tools/r19_candidate_artifact_common.ps1",
+      "sha256": "8B8BD58EAA9BC0DAF8E466A0C288D584A7FFC5E891936DC6D2DCAC21C2393863",
+      "size_bytes": 38211
+    },
+    {
+      "path": "tools/build_r19_candidate_artifacts.ps1",
+      "sha256": "CB70BCE20526AAF1E4737B0D0F466E3E94E3396071AF2376BC8F818494E9E96E",
+      "size_bytes": 46245
+    },
+    {
+      "path": "tools/verify_r19_candidate_artifact.ps1",
+      "sha256": "DEF19B28F8EFF54814DB14BB6A9D9583A8424BFC1DA7085D9E7A2D21C7264DA3",
+      "size_bytes": 50730
+    },
+    {
+      "path": "tools/read_r19_runtime_stage_jtag.ps1",
+      "sha256": "526389C5D21029F48C6DC89FAF20AEA59AA1008B6236EB219BF5EFA75C0AE5D5",
+      "size_bytes": 178930
+    },
+    {
+      "path": "tools/r19_timed_path_outer.ps1",
+      "sha256": "6D0BCD147724424EECA45DFBC638339D15D2B103516EDD7EEACB7EA78DA868B7",
+      "size_bytes": 24159
+    },
+    {
+      "path": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+      "sha256": "258D5ABDEC8F342BDA718480B1A3561AF094BBE05AD583CA08E2D1C7B08E8BBC",
+      "size_bytes": 227253
+    },
+    {
+      "path": "tools/invoke_r19_candidate_app_flash_hil.ps1",
+      "sha256": "C22725E12089C2775864C1937A5D2153C9D2A7FDE5F4C4D45CDD472C9206893E",
+      "size_bytes": 88541
+    },
+    {
+      "path": "tools/invoke_r19_jtag_preflash_gate.ps1",
+      "sha256": "9E9B1D8362520337064D237459471751B6542322821E666A1184B0A4AD38CC94",
+      "size_bytes": 33292
+    },
+    {
+      "path": "tools/read_r19_grant_reservation_record.ps1",
+      "sha256": "0E6FC4C0197DD96DD8C3851EEE5C08AA5AC3A59072385B69CB81459B9C7211F5",
+      "size_bytes": 6860
+    },
+    {
+      "path": "tools/r19_grant_reservation_contract.ps1",
+      "sha256": "5DAA27A9E16080E0A0524CEDABB44752B337697E2338F373F63CFEE886A2B9DC",
+      "size_bytes": 3259
+    },
+    {
+      "path": "tests/hil/check_r19_grant_reservation_artifact.ps1",
+      "sha256": "A8D92B5A73C725E26E2E3788442E33EBDB7E375E408072B7554358A973927043",
+      "size_bytes": 27563
+    }
+  ],
+  "defaults_preserved": [
+    "Existing USB role-v1 unchanged",
+    "Reservation flag defaults off; separate candidate output leaf and sidecar",
+    "Existing v9 raw-summary read order preserved; reservation appended at18/19",
+    "Existing identity-bound legacy flash literal pins preserved; reservation branch pins new verifier/common/contract"
+  ],
+  "new_contract": {
+    "switch": "GrantReservationDiagnostics",
+    "macro": "VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS",
+    "reader_schema": "vc-lora-r19-runtime-stage-jtag-read-v10",
+    "record_bytes": 512,
+    "record_symbol": "vc_lora_r19_grant_reservation_record",
+    "paired_raw_reads_per_role": 20,
+    "tools_pinned": 26,
+    "prepare_seconds_maximum": 15,
+    "measurement_seconds": 40,
+    "param_request_maximum": 1
+  },
+  "validation": {
+    "selection_red": "artifact_selection_RED_ps51.log",
+    "parent_switch_red": "parent_decoder_RED_ps51.log",
+    "macro_bind_red": "v10_sealed_ps51.log",
+    "own_scope_red": "own_boot_RED_ps51.log",
+    "legacy_dependency_red": "legacy_module_dependency_RED_confirmed_ps51.log",
+    "final_ps51": { "result": "PASS", "checks": 124, "log": "FROZEN_ps51.log" },
+    "final_ps7": { "result": "PASS", "checks": 124, "log": "FROZEN_ps7.log" },
+    "legacy_v9": {
+      "checks": 87,
+      "result": "PASS",
+      "log": "legacy_grant_ps51.log"
+    },
+    "legacy_outer": {
+      "checks": 40,
+      "result": "PASS",
+      "log": "legacy_check_r19_timed_path_outer.ps1.log"
+    },
+    "legacy_parent": {
+      "checks": 52,
+      "result": "PASS",
+      "log": "legacy_check_r19_grant_parent_contract.ps1.log"
+    },
+    "legacy_preflight": {
+      "result": "PASS",
+      "log": "legacy_preflash_ps51.log"
+    }
+  },
+  "limitations": [
+    "Unit tests use strict mock-native capture; no real JTAG or COM was opened.",
+    "A present/stable reservation record does not prove negotiation, RF delivery, high-speed start or product acceptance.",
+    "Journal first8/last4 retention and drop count require partial-evidence classification when overflowed.",
+    "Whole record freezes on first failure; subsequent MCU progress is not observable in the frozen image.",
+    "Auxiliary Release/TailPermit payload claims are raw forwarded claims, not same-clock local observation timestamps.",
+    "26-tool prepared pin is not live authorization; root must generate a new source-bound candidate and reconfirm trial scope."
+  ],
+  "diff": "Root aggregate diff requested; this agent did not invoke Git."
+}

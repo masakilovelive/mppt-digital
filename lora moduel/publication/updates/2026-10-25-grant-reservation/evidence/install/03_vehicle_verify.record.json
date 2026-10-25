@@ -1,0 +1,31 @@
+{
+    "label":  "vehicle_verify",
+    "role":  "vehicle",
+    "kind":  "verify",
+    "result":  "PASS",
+    "exit_code":  0,
+    "issues":  [
+
+               ],
+    "parsed_mac":  null,
+    "identity_before":  {
+                            "captured_utc":  "2026-10-25T04:36:03.6033955Z",
+                            "port":  "COM3",
+                            "name":  "USB シリアル デバイス (COM3)",
+                            "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                            "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                            "status":  "OK",
+                            "config_manager_error_code":  0,
+                            "location_paths":  [
+                                                   "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USBMI(0)",
+                                                   "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USB(2)",
+                                                   "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USBMI(0)",
+                                                   "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USB(2)"
+                                               ]
+                        },
+    "competing_client_gate":  null,
+    "argv_path":  "03_vehicle_verify.argv.json",
+    "stdout_path":  "03_vehicle_verify.stdout.log",
+    "stderr_path":  "03_vehicle_verify.stderr.log",
+    "application_sha256":  "1C3EF8308FC368456E38252B9A66DDFD3DE2DA905FF71B268636E2C250A27150"
+}

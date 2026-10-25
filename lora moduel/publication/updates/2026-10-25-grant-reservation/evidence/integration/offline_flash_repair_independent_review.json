@@ -1,0 +1,103 @@
+{
+  "schema": "vc-lora-r19-offline-flash-repair-independent-review-v1",
+  "result": "PASS_OFFLINE_REPAIR_BOUNDARY_REVIEW_NOT_LIVE_AUTHORIZATION",
+  "reviewer": "r19_reservation_end_to_end_review",
+  "production_flash_sha256": "E09A9F01C840EFFB7A6200A636A9FA52DB0796E52884F3B06F0BFF9D57BF9DDF",
+  "owned_test": "tests/hil/check_r19_grant_reservation_flash_operation_regression.ps1",
+  "owned_test_sha256": "5F74A49FD273450CC66C8D6D691E346C6F8C822DE82DA0672E77868A2FE5EC67",
+  "red": {
+    "source_sha256": "42EE1335127C7275CC2E4980CE5F6BFD57DEEF4D15E1FCE337340395118965D9",
+    "golden_source": "flash_tool_operation_regression.golden42EE.ps1",
+    "log": "operation_regression_RED_ps51.log",
+    "exit_code": 1,
+    "observed_error": "The variable '$modeHandoff' cannot be retrieved because it has not been set.",
+    "qualification": "Actual production function bodies and durable serializer; legacy flag-off cases passed before reservation read-MAC reproduced the live bug."
+  },
+  "green": [
+    {
+      "run": "operation_regression_GREEN_ps51",
+      "result": "PASS",
+      "checks": 402,
+      "mock_external_calls": 32,
+      "source_sha256": "E09A9F01C840EFFB7A6200A636A9FA52DB0796E52884F3B06F0BFF9D57BF9DDF",
+      "summary_sha256": "06563D043F3B2D37C89A74DCF152D93992F288D3946BBEBF82F6D6DD849A15AD"
+    },
+    {
+      "run": "operation_regression_GREEN_ps7",
+      "result": "PASS",
+      "checks": 402,
+      "mock_external_calls": 32,
+      "source_sha256": "E09A9F01C840EFFB7A6200A636A9FA52DB0796E52884F3B06F0BFF9D57BF9DDF",
+      "summary_sha256": "4E0F73D59F0408E7EFCD4C8A2143FACBA276B51DD3848D1D97F4F6E5EFCD52CF"
+    }
+  ],
+  "coverage": {
+    "actual_imported_production_functions": 10,
+    "external_seams_mocked": [
+      "Assert-NoCompetingClients",
+      "Wait-RoleIdentity",
+      "Invoke-CapturedEspTool"
+    ],
+    "reservation_flag_modes": [
+      false,
+      true
+    ],
+    "ledgers": [
+      "candidate",
+      "rollback"
+    ],
+    "roles": [
+      "vehicle",
+      "ground"
+    ],
+    "operation_kinds": [
+      "read_mac",
+      "write",
+      "verify",
+      "reenumeration"
+    ],
+    "successful_operation_records": 32,
+    "rejected_external_result_cases": 8,
+    "assertions": [
+      "Exact unchanged per-operation field schemas; no aggregate capability/reader/scope/next-action metadata.",
+      "Each operation record is written once through the real CreateNew durable writer, then appended once with matching SHA.",
+      "Real write-intent and attempted-write flags exist before the mocked native writer callback.",
+      "Invalid MAC, nonzero native exit/stderr, missing write success marker and missing verify marker remain failed immutable operations, never successful writes.",
+      "Japanese nested errors, escapes, null, empty arrays,64-bit integer data and a non-BMP Unicode file path survive the actual BOMlessUTF8 writer/readback under both PowerShell5.1 and7."
+    ]
+  },
+  "finalizer_static_review": {
+    "result": "NO_FURTHER_CONCRETE_BLOCKER_IDENTIFIED",
+    "observations": [
+      "Misplaced aggregate block is removed from Invoke-ToolOperation, removing undefined-variable and duplicate-CreateNew failures.",
+      "Write-DurableJson validates through explicit UTF8 readback.",
+      "Aggregate reservation metadata is emitted only with the bound non-null Bundle and reader-v10 declaration.",
+      "Mode decorators retain failure/no-authorization next-action guidance; rollback failure remains power-off guidance.",
+      "Record scope, nested authorization.scope and final seal scope/action use the same final variables.",
+      "Unauthorized operator_safety_conditions is explicitly an empty array."
+    ],
+    "qualification": "Implementation agent owns/runs its separate actual finalizer/parent-consumer regression; this reviewer independently inspected the final source and ran the operation/serializer test above."
+  },
+  "untouched": [
+    "Live failed run evidence",
+    "Candidate artifacts",
+    "Latest pointer",
+    "Prepared run pin",
+    "Reviewed inventory pins"
+  ],
+  "limitations": [
+    "No device/COM/JTAG/PnP/process inventory/native tool access occurred in these independent tests.",
+    "No hardware retry occurred. The prior live run remains FAIL_ROLLBACK_UNPROVEN_POWER_OFF_REQUIRED with user-confirmed power OFF.",
+    "The old preparation/inventory tool hashes do not authorize the repaired source; this offline review neither refreshes those pins nor creates new live authority.",
+    "No flash installation, acceptedR18 device readback, reservation, RF timing or product success is proven.",
+    "This focused regression does not replace the root's applicable suite results."
+  ],
+  "hardware_interaction": false,
+  "production_source_edits_by_reviewer": false,
+  "cmake_edits_by_reviewer": false,
+  "candidate_or_prepared_pin_modified": false,
+  "retry_performed": false,
+  "live_authorization_granted": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

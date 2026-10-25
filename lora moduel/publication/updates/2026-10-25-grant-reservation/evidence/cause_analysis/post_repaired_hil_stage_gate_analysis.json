@@ -1,0 +1,92 @@
+{
+  "schema": "vc-lora-r19-post-trial-stage-gate-file-only-analysis-v1",
+  "result": "ROOT_CAUSE_CONFIRMED_PARENT_FINAL_SCHEMA_ALLOWLIST_OMITS_V10",
+  "run": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T043509262Z-grant-reservation-param-once-after-flash-metadata-fix",
+  "original_hil_status_preserved": "FAIL_STAGE_READ_R18_RESTORED",
+  "original_hil_summary_sha256": "264DAD64810ED1B304B47B6C777A03BCDF32D3100981E0692C078C50AEEBF756",
+  "hardware_interaction_by_this_analysis": false,
+  "production_source_modified": false,
+  "old_run_modified": false,
+  "candidate_or_prepared_pin_modified": false,
+  "new_live_authorization": false,
+  "source": {
+    "path": "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1",
+    "sha256_before_and_after": "011283705D8DF136FC124629E57A823C4DB92B43F1471183F37C80863F99728D",
+    "function": "Get-StageProof",
+    "final_proven_expression_line": 2233,
+    "omitted_schema_line": 2235,
+    "accepted_final_schemas": [3, 4, 5, 6, 7, 8, 9],
+    "actual_selected_schema": "vc-lora-r19-runtime-stage-jtag-read-v10",
+    "earlier_v10_support_already_present": [
+      "isExtended reader selection",
+      "candidateHasExtension and expectedReader downgrade protection",
+      "Get-ExtendedStageRawReplay exact 20-read symbol/source/build/boot/decoder bindings",
+      "Get-GrantReservationRawReplay exact paired 512-byte record replay"
+    ],
+    "failure_mechanism": "The raw replay succeeds and sets recordEvidenceValid=true, but the final conjunctive proven expression rejects schema v10. No exception is thrown, so validation_error remains empty while proven=false."
+  },
+  "immutable_binding_hashes": {
+    "candidate_manifest_sha256": "04AE6FC3F70B13CF2A83CF637A073617E76ADC8BDEE3BEEA0FBF43653C6FA770",
+    "successful_install_flash_record_sha256": "748F681763CED7B4404A6849B0A156A60EE2F651BC4E98CA5192F6800A8314D7"
+  },
+  "file_only_replay_method": {
+    "original": "Imported actual parent function definitions without running its main. Invoked actual Get-StageProof on saved role summaries/raw and sealed candidate/flash evidence only.",
+    "counterfactual": "In a separate in-memory function definition, changed exactly one occurrence of the final schema-list suffix from v9 to v9,v10. Did not change any source file, raw byte, summary or sealed descriptor.",
+    "interpretation": "Both roles becoming proven=true under only this counterfactual establishes that all other final proof conjuncts passed on the same saved evidence. It is not a new live acquisition and does not rewrite the historical HIL result."
+  },
+  "roles": [
+    {
+      "role": "vehicle",
+      "reader_schema": "vc-lora-r19-runtime-stage-jtag-read-v10",
+      "reader_result": "PASS",
+      "child_exit_code": 0,
+      "reader_summary_sha256": "6B9A2B70DB441388E1FE26E33CF3EC5551EC9A9B43C36EB05976F44C5F53FC69",
+      "actual_original_parent_proven": false,
+      "actual_original_validation_error": "",
+      "actual_original_raw_replay_proven": true,
+      "counterfactual_only_final_schema_list_proven": true,
+      "counterfactual_validation_error": "",
+      "raw_file_count": 20,
+      "raw_total_bytes": 18536,
+      "all_raw_hashes_and_lengths_match": true,
+      "cleanup_proven": true,
+      "target_may_be_halted": false,
+      "native_processes_termination_proven": true,
+      "usb_tx_boundary_completion_proven": false,
+      "grant_reservation_raw_sha256": "6285EF447BFE0FE5675C6F473B1C69B59DEB4C7BCA7B9C1B412AFB7FA0214357",
+      "grant_reservation_reason": "ExternalFault"
+    },
+    {
+      "role": "ground",
+      "reader_schema": "vc-lora-r19-runtime-stage-jtag-read-v10",
+      "reader_result": "PASS",
+      "child_exit_code": 0,
+      "reader_summary_sha256": "A0ADD7C67E53A8223AC72EFB1D4436502F1DBE1DC55B95EB4648FFE1C1DDB19D",
+      "actual_original_parent_proven": false,
+      "actual_original_validation_error": "",
+      "actual_original_raw_replay_proven": true,
+      "counterfactual_only_final_schema_list_proven": true,
+      "counterfactual_validation_error": "",
+      "raw_file_count": 20,
+      "raw_total_bytes": 18536,
+      "all_raw_hashes_and_lengths_match": true,
+      "cleanup_proven": true,
+      "target_may_be_halted": false,
+      "native_processes_termination_proven": true,
+      "usb_tx_boundary_completion_proven": false,
+      "grant_reservation_raw_sha256": "AD1ECCED60983BCDAC4CF8EDCCEEFD295875AE57A15FDE7F2BAF15E0373D584D",
+      "grant_reservation_reason": "GrantWaitExpired"
+    }
+  ],
+  "test_coverage_gap": {
+    "new_reservation_artifact_test": "Tests the decoder, candidate metadata, live-reader fixture and isolated Get-GrantReservationRawReplay, but not the final actual Get-StageProof v10 positive path.",
+    "legacy_orchestrator_test": "Calls Get-StageProof on older schema fixtures; its success does not exercise the v10 final schema conjunct.",
+    "recommended_targeted_red": "Run actual Get-StageProof on a complete saved or portable v10 summary/raw/bound-candidate fixture and require proven=true while USB completion remains independently false; current source produces false. Preserve negatives for wrong schema, raw/hash/build/boot mismatch, child termination and cleanup failure."
+  },
+  "conclusions": [
+    "Both complete saved role record sets are independently replayable without hardware. Forty raw files totaling 37072 bytes have matching saved SHA and lengths, and actual parent replay validates source/manifest/application/ELF/MAP/decoder/build/boot metadata.",
+    "The stage-proof discrepancy is conclusively a parent final schema gating omission, not missing or invalid saved v10 acquisition.",
+    "Valid record acquisition is distinct from USB completion, reservation protocol completion, RF delivery, parameter acquisition and product acceptance. Both USB boundary completion proofs remain false; the reservation failures remain substantive evidence.",
+    "No automatic retry or new hardware operation was performed or authorized. The historical parent status remains unchanged."
+  ]
+}

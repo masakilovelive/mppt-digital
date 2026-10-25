@@ -1,29 +1,30 @@
 # VC LoRa Bridge — 検証実験アーカイブ
 
 2026-10-25 JST更新。LoRa通信検証・R19診断開発を、指定フォルダ `lora moduel` にまとめた公開アーカイブです。
-最新は[Grant期限超過と低速切替の実機評価](publication/updates/2026-10-24-pregrant-fallback/README.md)です。2026年10月24日23時台の試験までを反映しています。今回の公開操作自体では、ファームウェア変更・実機操作・通信条件変更を行っていません。
+最新は[Grant予約の実機結果と取得判定の修正](publication/updates/2026-10-25-grant-reservation/README.md)です。2026年10月25日13時台の試験と、その後の測定ツール修正までを反映しています。今回の公開操作自体では、ファームウェア変更・実機操作・通信条件変更を行っていません。
 直下のソースは既存の公開スナップショットを保持し、各更新の関連ソースは日付別の `source_snapshot/` へ分離しています。最新更新も選別コピーであり、直下のソース全体を現行版へ同期したものではありません。
 
 ## 現在の結論
 
 - R18低速経路には、Mission Plannerで932/932パラメータを取得した過去の受入実績があります。取得時間6,045.839秒、同区間のHeartbeat最大間隔2,206.203 msです。
 - R19の目標は「932件を30秒以内、Heartbeat最大2,500 ms以下、全error 0」の同時達成ですが、**未達・受入未完了・Deployment未許可**です。
-- VehicleのUSBローカル時計応答未実装を修正し、直近2回の実機試験では両機の時刻応答が成立しています。
-- 要求後の停止原因は、Groundのownerとcoordinatorが記録した501 msの`GrantDeadlineExceeded`と確定しました。500 ms条件は延長せず、高速交渉前の安全条件を満たす場合だけ同じ要求をR18経路へ1回渡す対策を実装しました。
-- 最新の実機試験は2026年10月24日23時08分12秒から23時11分08秒JST。取得要求1回を含む40.0018022秒測定で、要求起点30秒に4/932件、測定終了時6/932件の有効なPARAM_VALUEを取得しました。Grant期限超過後も通信継続を確認しましたが、高速転送の成功ではありません。
-- 同じrunのPC側Heartbeatは37件、最大間隔2,099.9267 ms。初回製品USB完了487 µs、両機AUX fault 0、生通信131フレームすべてCRC一致です。HeartbeatのPC観測間隔を、各フレームの新しいRF到着間隔と同一視しません。
-- 診断USBの待機はVehicle 31 byte、Ground 59 byteとして残りました。AUXも観測間隔と割込み履歴overflowがあるため、物理波形の連続正常や根因解消は未証明です。
-- 元ワークスペースで最終全430/430試験とVehicle→Ground診断ビルドが合格しています。次の高速開始条件と測定手順の整合は修正案であり、まだ実装・追加実機試験はしていません。
-- 全試験後に両機のaccepted R18復旧を確認済みです。手順PASSは記録取得・復旧の完了であり、製品受入ではありません。追加実機操作には新しい許可が必要です。
+- 最新試験は2026年10月25日13時35分から13時38分JST。診断用の両USB予約を追加した候補で、取得要求1回を含む40秒測定を行いました。30秒時点・終了時とも0/932件で、高速転送は開始していません。
+- VehicleはGrant予約から154 ms後に停止し、PCはPARAM要求送信より80.4178 ms前に停止通知を受信済みでした。Groundは要求受付から501 ms後にownerとcoordinatorの`GrantDeadlineExceeded`で停止しました。予約保持とHeartbeat優先判定の競合が有力ですが、Vehicleの具体的な停止条件は未確定です。
+- 同じrunの製品Heartbeatは準備中11件・40秒測定中1件、合計12件です。初回製品USB完了は472 µsで106 ms以内、AUX faultは両機0ですが、40秒の継続成功ではありません。診断USBの初回31 byte待機は両機に残ります。
+- 親の最終取得判定がreader v10を許可していなかった不具合を、実機試験後にオフライン修正しました。保存済み各20 rawの再解析109項目と最終条件59項目はPS5.1／7で各合格しています。元の実機結果`FAIL_STAGE_READ_R18_RESTORED`は変更していません。
+- 元ワークスペースの全449/449試験とVehicle→Ground診断ビルドは実機開始前の結果です。判定修正後の全450試験やArduinoビルドの再実行ではありません。使用済みpinは現在のツールと不一致のため、次回準備で再照合します。
+- 前段階の10月24日低速切替試験では30秒で4/932件、終了時6/932件を取得しています。今回の厳密な予約診断とは条件が異なり、この実績を今回の高速成功へ読み替えません。
+- 最新の実機試験終了時に両機のaccepted R18復旧を確認済みです。復旧成功を高速通信の受入とは扱いません。追加実機操作には新しい許可が必要です。
 
-最新結果は[Grant期限超過と低速切替の評価](publication/updates/2026-10-24-pregrant-fallback/README.md)、前回段階は[取得要求と高速転送停止](publication/updates/2026-10-24-param-list/README.md)、過去の段階は[時刻応答修正と読取り比較](publication/updates/2026-10-24/README.md)、[2026年10月23日の更新](publication/updates/2026-10-23/README.md)と[保存修正とAUX判定の切分け](publication/updates/2026-10-22/README.md)を参照してください。
+最新結果は[Grant予約の実機結果と取得判定の修正](publication/updates/2026-10-25-grant-reservation/README.md)、前段階は[Grant期限超過と低速切替の評価](publication/updates/2026-10-24-pregrant-fallback/README.md)と[取得要求と高速転送停止](publication/updates/2026-10-24-param-list/README.md)、過去の段階は[時刻応答修正と読取り比較](publication/updates/2026-10-24/README.md)、[2026年10月23日の更新](publication/updates/2026-10-23/README.md)と[保存修正とAUX判定の切分け](publication/updates/2026-10-22/README.md)を参照してください。
 [作業場所と仕様の統合資料](CURRENT_WORKSPACE_AND_SPEC_R19.md)には古い準備段階の記述も残るため、現在の進捗判定は最新の日付別更新を優先し、対象runとソースhashを照合してください。
 
 ## 読む順番
 
 | ファイル／ディレクトリ | 内容 |
 |---|---|
-| [publication/updates/2026-10-24-pregrant-fallback/](publication/updates/2026-10-24-pregrant-fallback/) | 最新の501 ms原因確定、安全な低速切替、4件と6件の取得、関連430試験と実機証拠 |
+| [publication/updates/2026-10-25-grant-reservation/](publication/updates/2026-10-25-grant-reservation/) | 最新の予約診断、Vehicle先行停止、0/932件、R18復旧、取得判定の修正 |
+| [publication/updates/2026-10-24-pregrant-fallback/](publication/updates/2026-10-24-pregrant-fallback/) | 前段階の501 ms原因確定、安全な低速切替、4件と6件の取得、関連430試験と実機証拠 |
 | [publication/updates/2026-10-24-param-list/](publication/updates/2026-10-24-param-list/) | 過去の取得要求1回・0／932件、高速adapter停止、Heartbeat単独試験、台帳追加 |
 | [publication/updates/2026-10-24/](publication/updates/2026-10-24/) | 前回の時刻応答修正、読取り比較、AUXとUSBの残課題 |
 | [publication/updates/2026-10-23/](publication/updates/2026-10-23/) | 過去のAUX修正とVehicle時刻同期の原因調査 |
@@ -92,7 +93,7 @@ Windows PowerShell 5.1またはPowerShell 7で、このディレクトリへ移�
 C++ホスト試験にはCMake 3.20以上、Ninja、C++17対応コンパイラが必要です。
 初回公開時の全host 345/345 PASSと、10月23日公開段階の371/371 PASSは過去の結果です。最新の取得台帳追加段階では、初回399/401合格の後に互換性修正を行い、最終一括試験401/401 PASSを元ワークスペースで確認しています。
 **選別コピーによる全試験のclean-clone再現は保証しません。** 一部の試験は省略した過去run・sealed candidateを参照します。欠測で失敗したテストを削除・緩和して合格としないでください。
-今回の追加物に対する確認は[低速切替更新の公開時検証](publication/updates/2026-10-24-pregrant-fallback/validation/summary.json)、前回段階は[取得台帳更新の公開時検証](publication/updates/2026-10-24-param-list/validation/summary.json)、[時刻応答更新の公開時検証](publication/updates/2026-10-24/validation/summary.json)、初回公開コピーの検査は[初回公開時検証記録](publication/VALIDATION.md)で区別します。全430件の合格は元ワークスペースでの修正後試験であり、選別公開物の全430件再現を示すものではありません。
+今回の追加物に対する確認は[予約診断更新の公開時検証](publication/updates/2026-10-25-grant-reservation/validation/summary.json)、前回は[低速切替更新の公開時検証](publication/updates/2026-10-24-pregrant-fallback/validation/summary.json)を参照してください。元ワークスペースの全449件と、今回公開コピーで再実行した選別試験は別です。選別公開物の全449件再現を示すものではありません。
 
 通常版Arduino buildにはXIAO ESP32-S3環境と所定の変更済みESP32 Core 3.3.11が必要です。
 SDKへのインストール・COM操作・書込みを行うツールは純オフライン確認ではありません。
@@ -100,7 +101,7 @@ SDKへのインストール・COM操作・書込みを行うツールは純オ�
 
 ## 今後の残作業
 
-1. Groundの新Grant待ち500 msとVehicleのGrant送出完了後500 msを同時に満たす高速開始制御・測定手順を設計する。低速切替の成功を高速通信の成功としない。
+1. Vehicleの予約保持とHeartbeat優先判定を整合させ、停止条件を個別に保存する。PCで既に受信した停止をPARAM要求・解放指示の送信前に中止判定へ反映する。両側500 msと106 ms条件は維持する。
 2. 診断USBの起動・測定中・終了の待機を分け、AUX物理信号と観測・判定の問題を切り分ける。今回AUX安全停止がなかったことを根因解消とはしない。106 ms条件を維持する。
 3. オフラインの失敗試験・回帰確認後、別の実機許可と安全確認を経て、実際の高速経路で932件／30秒／Heartbeat／全error 0を同一runで評価する。
 
@@ -113,7 +114,7 @@ Jevは任意のPC側Shadow助言機能であり、製品の判定・実機操作
 - 元ワークスペース全体ではありません。巨大なbuild tree、全run履歴、Arduino compiler生成物、driver配布ZIP、APIキー、履歴・画面画像等は除外しました。
 - raw診断の小さな`.bin`と、一部の過去R18 run内に保存されたaccepted application imageは、そのrunの証拠整合のため保持しています。
 - R19のsealed candidate一式、復旧用baselineの完全な依存関係、ローカルtoolchainは同梱していません。**このcloneをそのまま実機書込み可能な認証済みパッケージとして扱わないでください。**
-- 選別したvalidationのmanifestやsealは省略ファイルも参照し得ます。初回公開分は`publication/source_inventory.json`、日付別の追加原本は各更新の`source_inventory.json`で区別します。最新は`publication/updates/2026-10-24-pregrant-fallback/source_inventory.json`です。初回公開の検証結果を、今回の追加物すべての再検証結果へ読み替えないでください。
+- 選別したvalidationのmanifestやsealは省略ファイルも参照し得ます。初回公開分は`publication/source_inventory.json`、日付別の追加原本は各更新の`source_inventory.json`で区別します。最新は`publication/updates/2026-10-25-grant-reservation/source_inventory.json`です。初回公開の検証結果を、今回の追加物すべての再検証結果へ読み替えないでください。
 - 変更済みEspressifファイルのライセンス・帰属は[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)を参照。プロジェクト全体への新しいライセンス付与は行っていません。
 - GitHubへの公開・記載された過去の許可文言は、将来の実機操作・再試験の許可にはなりません。
 

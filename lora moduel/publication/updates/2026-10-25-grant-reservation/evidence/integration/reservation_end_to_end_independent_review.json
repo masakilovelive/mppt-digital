@@ -1,0 +1,136 @@
+{
+  "schema": "vc-lora-r19-grant-reservation-independent-integration-review-v1",
+  "review_date_jst": "2026-10-25",
+  "reviewer": "r19_reservation_end_to_end_review",
+  "result": "P2_FIX_SOURCE_REVIEWED_NO_P0_P1_CONFIRMED_REGRESSION_PENDING",
+  "scope": "Independent firmware/wire/workflow/capture/outer/reader-v10 integration review",
+  "review_mode": "offline-only",
+  "hardware_interaction": false,
+  "com_access": false,
+  "jtag_access": false,
+  "process_inspection": false,
+  "git_operations": false,
+  "production_source_writes": false,
+  "full_suite_executed_by_reviewer": false,
+  "instructions_read": ["AGENTS.md", "R19_GRANT_RESERVATION_DIAGNOSTICS.md"],
+  "findings": [
+    {
+      "id": "R19R-INTEGRATION-001",
+      "priority": "P2",
+      "status_at_review": "FIXED_IN_SOURCE_REGRESSION_RESULTS_PENDING",
+      "title": "Failed PARAM write is absent from the capture total API-attempt count",
+      "file": "tools/run_r19_timed_path_capture.ps1",
+      "start_line": 535,
+      "end_line": 540,
+      "related_locations": [
+        "tools/run_r19_timed_path_capture.ps1:75",
+        "tools/r19_grant_reservation_workflow.ps1:171",
+        "tools/r19_timed_path_outer.ps1:197"
+      ],
+      "trigger": "In reservation mode, the PARAM_REQUEST_LIST writer throws or reports fewer than fourteen accepted bytes after Begin-R19ParamListWrite has latched its one attempt.",
+      "cause": "The live caller increments serialWrites only after Invoke-R19ParamListRequest returns true. Set-R19GrantReservationParamWriteResult throws PARAM_WRITE_INCOMPLETE_NO_RETRY before the helper returns, so the caller skips the increment even though the request API was invoked.",
+      "effect": "The saved request ledger contains request_attempts=1 while serial_write_calls omits that invocation. The outer exact-count gate rejects the saved evidence, preventing the subsequent diagnostic stage reads for this bounded failure. There is no request retry, unsafe release, or successful-path effect.",
+      "reproduction": {
+        "method": "Imported definitions only; constructed a real Bound workflow with actual codec/workflow helpers; invoked the real request helper with an in-memory throwing writer; used the live caller's try/if bookkeeping.",
+        "hardware_interaction": false,
+        "file_writes": 0,
+        "param_attempts": 1,
+        "serial_write_calls_added": 0,
+        "reservation_status": "Failed",
+        "reservation_failure": "PARAM_WRITE_INCOMPLETE_NO_RETRY",
+        "outer_consistency_would_fail": true
+      },
+      "suggested_fix": "Account for the request attempt from a before/after write_attempts delta in a finally block, or increment through an attempt callback fixed immediately before writer invocation. Regress the actual caller bookkeeping for both partial and throwing writers.",
+      "fix_source_review": {
+        "file": "tools/run_r19_timed_path_capture.ps1",
+        "sha256": "84E4971970E3B1C32B6324A071382EDA915D9010547405C107EBA06B2B93723C",
+        "lines": "536-542",
+        "result": "The actual live caller now captures write_attempts before the helper and adds the delta to serialWrites in finally. This directly covers helper throws and partial acceptance without incrementing for a gate rejection.",
+        "independent_postfix_test_executed": false,
+        "test_status": "Pending root/runner narrow regression; root full host suite was already running."
+      }
+    }
+  ],
+  "checked_relationships": [
+    {
+      "relationship": "Firmware and PowerShell wire66 layout",
+      "result": "MATCH",
+      "evidence": "MAVLink2 length54/sys249/msg253/components197 and198; R19R/schema1; reader@18, nonce@26, boot@34, epoch@42, session@46, cycle@48, token@50, generation@54, device_ms@58, A5/5A@62/63, CRC@64/65. Opcode9 ReleaseGrant/ReleaseVehicle and opcode12 TailPermitGround/TailPermit aliases agree. Started14 is record-only."
+    },
+    {
+      "relationship": "Actual accepted Ground baseline to Vehicle prepared action",
+      "result": "MATCH",
+      "evidence": "Ground HelloReply requires an observed nonzero Grant session; PrepareVehicle sends that Ground baseline with Vehicle's own boot/epoch. Firmware selects a fresh actual SendGrant action and retains its real StandardTdd writer token/generation. No heartbeat or periodic plan constructs the baseline."
+    },
+    {
+      "relationship": "Binding and one-request sequencing",
+      "result": "MATCH",
+      "evidence": "BindPeerVehicle names Ground identity on Vehicle; BindGround names Ground's own identity; BindPeerGround names Vehicle identity on Ground. The exact fourteen-byte request requires the actual Bound reply. ReleaseVehicle is constructed only after the actual GroundHeld reply and forwards Ground t0 as a peer claim without MCU-clock subtraction."
+    },
+    {
+      "relationship": "Physical Vehicle tail to Ground negotiation permission",
+      "result": "MATCH",
+      "evidence": "TailReady is produced only from completion of the existing standard writer physical-tail service for the reserved tuple. TailPermitGround names peer Vehicle boot/epoch and forwards its tail time unchanged. Ground requires both the actual Grant and the permit plus each local100ms guard. Vehicle validates the complete canonical VCBN and its retained Grant evidence before its same-MCU500ms callback."
+    },
+    {
+      "relationship": "Fail gates and timing origin",
+      "result": "MATCH_ON_INSPECTED_PATHS",
+      "evidence": "No actual Held means no Vehicle release; no TailReady means no TailPermit. Partial/throwing writes latch failure and do not retry. Original actual Ground Held time remains t0; Ground t0-to-freshGrant500ms and Vehicle physicalP-to-canonicalQ500ms are checked locally. Guard100, servicefloor550 plus AUX high15, productHeartbeat106, request-origin lease28000 and completion30000 remain unchanged."
+    },
+    {
+      "relationship": "Opt-in, candidate source binding and reader-v10 raw closure",
+      "result": "MATCH_ON_INSPECTED_PATHS",
+      "evidence": "Default-off diagnostic macro and explicit capture opt-in; full Grant/PARAM/AUX/USB ExplicitHostArm dependencies; candidate/flash/permit reservation contract matching; source/decoder digests; exact reader-v10 ten records/twenty paired raw reads per role; record size512 and extension overlap checks. Metadata files were still being finalized by another agent, so hashes below identify the reviewed snapshot rather than a final candidate approval."
+    }
+  ],
+  "limitations": [
+    {
+      "id": "MANUAL_CROSS_ROLE_PROTOCOL_EVALUATION",
+      "classification": "Explicit evaluation limitation, not a confirmed physical telemetry mismatch",
+      "detail": "The v10 raw reader and outer replay independently bind/decode each local record but do not automatically join USB workflow observations and both JTAG records across boot/epoch/reader/nonce/Grant/token/generation or compute both500ms intervals. Decoder and workflow protocol/high-speed/RF/acceptance outputs remain false. Root confirmed that the cross-role join and same-MCU intervals will be independently inspected from saved raw/event evidence; acquisition success must not be reported as protocol or product success."
+    },
+    {
+      "id": "NO_LIVE_LATENCY_PROOF",
+      "classification": "Unmeasured hardware behavior",
+      "detail": "Static sequencing and offline controller tests cannot prove that USB and RF latency fit the500ms windows, or that the diagnostic-only dual-USB hold succeeds on the powered hardware. Both XIAOs were off and no hardware operation was performed by this reviewer."
+    }
+  ],
+  "single_trial_wrapper_review": {
+    "file": "runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/prepare_and_invoke_single_trial.ps1",
+    "sha256": "98EEC77E12A9105D84DC9CDB4FB0A6DE17C211FA9F92DFCBE6BF1C2D6D728945",
+    "review_mode": "Static read only; wrapper was neither imported nor executed",
+    "result": "NO_ADDITIONAL_CONCRETE_AUTHORITY_PATH_OR_TOCTOU_BLOCKER_IDENTIFIED",
+    "corrected_during_review": "Ground accepted-R18 digest at line90 initially omitted C1; root corrected it to the canonical64-hex30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5. The initial typo failed closed before hardware.",
+    "observations": [
+      "Default Action is Validate. Mandatory candidate id and explicit latest/source-tree/bridge/tool-inventory hashes bind input before definitions imports.",
+      "Locks retain the reviewed inventory, all26tools, latest pointer, candidate manifest/handoff/seal, bridge, both selected application binaries and both acceptedR18 rollback binaries throughout child dispatch.",
+      "Exact candidate leaf/id and role-specific application paths agree with the actual builder's application schema. Prepare and Validate perform no PnP, COM or JTAG operations.",
+      "Execute requires explicit distinct physical probe locations and verifies COM3/COM6, exact board USB serial identities and physical paths before the one-time dispatch.",
+      "CreateNew one_time_dispatch.json prevents a repeated dispatch even after a child failure. The locked reviewed parent retains its independent candidate, safety, cleanup and mandatory rollback gates.",
+      "The canonical83file source snapshot is hashed rather than fully locked. Selected sealed firmware images and execution tools are locked and the parent re-verifies source closure; no actionable unsafe authority race was identified in this reviewed setup."
+    ],
+    "live_authorization_granted": false,
+    "execution_performed": false
+  },
+  "reviewed_hashes_provisional": true,
+  "reviewed_source_sha256": {
+    "firmware/high_speed/r19_grant_reservation.hpp": "834DD0E5514137F57F0CB16967B6BBF04875C6009646809E20177E27CA6FFB30",
+    "firmware/high_speed/r19_grant_reservation_record.hpp": "101FAD91B30AB85AD9300399635E805B9ACE751BADCC717D431318A13CC75665",
+    "firmware/phase6/vc_lora_phase6_bridge.hpp": "97DA0CFF2728BAEE4E8CD04D234895252C44545FF262BCD6CBACB054743A84C0",
+    "tools/r19_grant_reservation_wire.ps1": "C61B8C4ED48F2F9B977058A8B1DB97067324CB3DF9BACDB69D43DB9520E3EAEB",
+    "tools/r19_grant_reservation_workflow.ps1": "5DA7E54EF95567E6B0022C3E1E31BBA058B283EBACB85B8B17C0903456DF360A",
+    "tools/run_r19_timed_path_capture.ps1": "27ACD1669FC77FD335788B0696682B9504180EFDC351FCC0B45002FFDA429DED",
+    "tools/r19_timed_path_acquisition.ps1": "2B3F1E36B140DCF298368B79C61AEC831306D190F9FB949E00B8A9A37A7F62EC",
+    "tools/r19_timed_path_outer.ps1": "6D0BCD147724424EECA45DFBC638339D15D2B103516EDD7EEACB7EA78DA868B7",
+    "tools/read_r19_runtime_stage_jtag.ps1": "526389C5D21029F48C6DC89FAF20AEA59AA1008B6236EB219BF5EFA75C0AE5D5",
+    "tools/read_r19_grant_reservation_record.ps1": "0E6FC4C0197DD96DD8C3851EEE5C08AA5AC3A59072385B69CB81459B9C7211F5",
+    "tools/r19_grant_reservation_contract.ps1": "5DAA27A9E16080E0A0524CEDABB44752B337697E2338F373F63CFEE886A2B9DC",
+    "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1": "258D5ABDEC8F342BDA718480B1A3561AF094BBE05AD583CA08E2D1C7B08E8BBC",
+    "tools/build_r19_candidate_artifacts.ps1": "CB70BCE20526AAF1E4737B0D0F466E3E94E3396071AF2376BC8F818494E9E96E",
+    "tools/verify_r19_candidate_artifact.ps1": "DEF19B28F8EFF54814DB14BB6A9D9583A8424BFC1DA7085D9E7A2D21C7264DA3"
+  },
+  "high_speed_success_proven": false,
+  "rf_delivery_proven": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

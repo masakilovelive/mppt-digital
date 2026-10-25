@@ -1,0 +1,5 @@
+E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_capture.ps1 : The property 's
+chema' cannot be found on this object. Verify that the property exists.
+    + CategoryInfo          : NotSpecified: (:) [check_r19_grant_reservation_capture.ps1], PropertyNotFoundException
+    + FullyQualifiedErrorId : PropertyNotFoundStrict,check_r19_grant_reservation_capture.ps1
+ 

@@ -1,0 +1,315 @@
+{
+  "schema": "vc-lora-r19-stage-final-gate-regression-v1",
+  "result": "PASS",
+  "checks": 109,
+  "failed_cases": 0,
+  "shell": "7.6.5",
+  "source_sha256": "AFC2EBC5EFA842DD00E6642D0B88CE20665DA9533C650AEC75D971CDC56374B1",
+  "portable_cases": true,
+  "saved_run_replay_optional": true,
+  "saved_replay": [
+    {
+      "role": "vehicle",
+      "version": 10,
+      "proven": true,
+      "raw_replay_proven": true,
+      "raw_count": 20,
+      "usb_completion_proven": false,
+      "summary_sha256": "6B9A2B70DB441388E1FE26E33CF3EC5551EC9A9B43C36EB05976F44C5F53FC69",
+      "historical_status": "FAIL_STAGE_READ_R18_RESTORED",
+      "historical_status_modified": false
+    },
+    {
+      "role": "ground",
+      "version": 10,
+      "proven": true,
+      "raw_replay_proven": true,
+      "raw_count": 20,
+      "usb_completion_proven": false,
+      "summary_sha256": "A0ADD7C67E53A8223AC72EFB1D4436502F1DBE1DC55B95EB4648FFE1C1DDB19D",
+      "historical_status": "FAIL_STAGE_READ_R18_RESTORED",
+      "historical_status_modified": false
+    }
+  ],
+  "cases": [
+    {
+      "name": "portable-supported-v3",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-supported-v9",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-supported-v10",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-reject-schema-",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-reject-schema-unknown",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-reject-schema-vc-lora-r19-runtime-stage-jtag-read-v0",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-reject-schema-vc-lora-r19-runtime-stage-jtag-read-v2",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-reject-schema-vc-lora-r19-runtime-stage-jtag-read-v11",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-reject-schema-vc-lora-r19-runtime-stage-jtag-read-v10-extra",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-child-exit",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-child-exit",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-reader-result",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-reader-result",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-reader-mode",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-reader-mode",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-hardware-declaration",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-hardware-declaration",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-artifact-id",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-artifact-id",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-bound-role",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-bound-role",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-address",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-address",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-probe-location",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-probe-location",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-probe-identity",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-probe-identity",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-decoded-role",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-decoded-role",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-runtime-record",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-runtime-record",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-fifo-record",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-fifo-record",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-raw-replay",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-raw-replay",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-boundary",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-boundary",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-com-open",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-com-open",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-flash-written",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-flash-written",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-target-restart",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-target-restart",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-paired-read",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-paired-read",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-cleanup-attempt",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-cleanup-attempt",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-cleanup-proof",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-cleanup-proof",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-halted",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-halted",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v9-reject-native-termination",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "portable-v10-reject-native-termination",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "saved-full-v10-vehicle",
+      "result": "PASS",
+      "error": null
+    },
+    {
+      "name": "saved-full-v10-ground",
+      "result": "PASS",
+      "error": null
+    }
+  ],
+  "hardware_interaction": false,
+  "production_main_executed": false,
+  "old_run_or_candidate_modified": false,
+  "new_live_authorization": false
+}

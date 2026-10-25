@@ -1,0 +1,43 @@
+diff --git a/runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/root_CMakeLists.before.txt b/CMakeLists.txt
+index ffa93f7..f6cfb7c 100644
+--- a/runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/root_CMakeLists.before.txt
++++ b/CMakeLists.txt
+@@ -78,6 +78,38 @@ if(VC_LORA_BUILD_TESTS)
+           -RepoRoot "${CMAKE_SOURCE_DIR}")
+     endforeach()
+ 
++    foreach(reservation_contract IN ITEMS artifact workflow capture)
++      add_test(NAME R19-GRANT-RESERVATION-${reservation_contract}-CONTRACT-001
++        COMMAND "${VC_LORA_POWERSHELL_EXECUTABLE}"
++          -NoProfile -NonInteractive -ExecutionPolicy Bypass
++          -File "${CMAKE_SOURCE_DIR}/tests/hil/check_r19_grant_reservation_${reservation_contract}.ps1"
++          -RepoRoot "${CMAKE_SOURCE_DIR}")
++      set_tests_properties(R19-GRANT-RESERVATION-${reservation_contract}-CONTRACT-001
++        PROPERTIES WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
++        LABELS "r19;reservation;offline" TIMEOUT 180 RUN_SERIAL TRUE)
++    endforeach()
++
++    # The portable artifact contract above always runs. This additional replay
++    # uses immutable output of the observed failed build, not a clean-checkout
++    # fixture; absence is reported as unavailable, never as a passing replay.
++    set(r19_actual_reservation_fixture
++      "${CMAKE_SOURCE_DIR}/runs/candidates/R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261024T214240351Z-b02ed633/candidate_manifest.json")
++    set(r19_broken_reservation_verifier
++      "${CMAKE_SOURCE_DIR}/runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/verify_r19_candidate_artifact.pre-reservation-compile-fix.ps1")
++    if(EXISTS "${r19_actual_reservation_fixture}" AND
++       EXISTS "${r19_broken_reservation_verifier}")
++      add_test(NAME R19-GRANT-RESERVATION-ACTUAL-OUTPUT-MAIN-REPLAY-001
++        COMMAND "${VC_LORA_POWERSHELL_EXECUTABLE}"
++          -NoProfile -NonInteractive -ExecutionPolicy Bypass
++          -File "${CMAKE_SOURCE_DIR}/tests/hil/check_r19_grant_reservation_builder_pipeline.ps1"
++          -RepoRoot "${CMAKE_SOURCE_DIR}")
++      set_tests_properties(R19-GRANT-RESERVATION-ACTUAL-OUTPUT-MAIN-REPLAY-001
++        PROPERTIES WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
++        LABELS "r19;reservation;offline;actual-output" TIMEOUT 180 RUN_SERIAL TRUE)
++    else()
++      message(STATUS "R19 reservation actual-output replay unavailable: immutable build fixture or preserved verifier is absent; not registered")
++    endif()
++
+     add_test(
+       NAME FW-R19-CANDIDATE-ARTIFACT-BUILDER-001
+       COMMAND "${VC_LORA_POWERSHELL_EXECUTABLE}"

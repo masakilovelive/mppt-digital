@@ -1,0 +1,56 @@
+PASS portable-supported-v3
+PASS portable-supported-v9
+FAIL portable-supported-v10: Actual final gate must accept valid v10 acquisition
+PASS portable-reject-schema-
+PASS portable-reject-schema-unknown
+PASS portable-reject-schema-vc-lora-r19-runtime-stage-jtag-read-v0
+PASS portable-reject-schema-vc-lora-r19-runtime-stage-jtag-read-v2
+PASS portable-reject-schema-vc-lora-r19-runtime-stage-jtag-read-v11
+PASS portable-reject-schema-vc-lora-r19-runtime-stage-jtag-read-v10-extra
+PASS portable-v9-reject-child-exit
+PASS portable-v10-reject-child-exit
+PASS portable-v9-reject-reader-result
+PASS portable-v10-reject-reader-result
+PASS portable-v9-reject-reader-mode
+PASS portable-v10-reject-reader-mode
+PASS portable-v9-reject-hardware-declaration
+PASS portable-v10-reject-hardware-declaration
+PASS portable-v9-reject-artifact-id
+PASS portable-v10-reject-artifact-id
+PASS portable-v9-reject-bound-role
+PASS portable-v10-reject-bound-role
+PASS portable-v9-reject-address
+PASS portable-v10-reject-address
+PASS portable-v9-reject-probe-location
+PASS portable-v10-reject-probe-location
+PASS portable-v9-reject-probe-identity
+PASS portable-v10-reject-probe-identity
+PASS portable-v9-reject-decoded-role
+PASS portable-v10-reject-decoded-role
+PASS portable-v9-reject-runtime-record
+PASS portable-v10-reject-runtime-record
+PASS portable-v9-reject-fifo-record
+PASS portable-v10-reject-fifo-record
+PASS portable-v9-reject-raw-replay
+PASS portable-v10-reject-raw-replay
+PASS portable-v9-reject-boundary
+PASS portable-v10-reject-boundary
+PASS portable-v9-reject-com-open
+PASS portable-v10-reject-com-open
+PASS portable-v9-reject-flash-written
+PASS portable-v10-reject-flash-written
+PASS portable-v9-reject-target-restart
+PASS portable-v10-reject-target-restart
+PASS portable-v9-reject-paired-read
+PASS portable-v10-reject-paired-read
+PASS portable-v9-reject-cleanup-attempt
+PASS portable-v10-reject-cleanup-attempt
+PASS portable-v9-reject-cleanup-proof
+PASS portable-v10-reject-cleanup-proof
+PASS portable-v9-reject-halted
+PASS portable-v10-reject-halted
+PASS portable-v9-reject-native-termination
+PASS portable-v10-reject-native-termination
+FAIL saved-full-v9-vehicle: Actual entire Get-StageProof must accept intact saved role evidence; validation_error=USB role capabilities differ from exact canonical implementation fingerprints
+FAIL saved-full-v9-ground: Actual entire Get-StageProof must accept intact saved role evidence; validation_error=USB role capabilities differ from exact canonical implementation fingerprints
+STAGE_FINAL_GATE FAIL checks=60 failures=3

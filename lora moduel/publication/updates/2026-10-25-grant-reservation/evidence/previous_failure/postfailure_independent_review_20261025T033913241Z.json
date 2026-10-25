@@ -1,0 +1,122 @@
+{
+  "schema": "vc-lora-r19-one-shot-postfailure-independent-file-review-v1",
+  "result": "AUDIT_COMPLETE_RUN_FAILED_ROLLBACK_UNPROVEN",
+  "reviewer": "r19_reservation_end_to_end_review",
+  "review_mode": "read-only file audit; separate review artifact only",
+  "run_directory": "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\hil\\R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001\\20261025T033913241Z-grant-reservation-param-once",
+  "parent_status": "FAIL_ROLLBACK_UNPROVEN_POWER_OFF_REQUIRED",
+  "parent_summary_sha256": "2C1624D041F53163C8660D28552F1D66041566FBBA31FF02BD9D0A5FD0DF6301",
+  "user_power_off_confirmation": "Root reports that the human confirmed all power OFF after this run; no device state was queried by reviewer.",
+  "actual_recorded_actions": {
+    "active_jtag_roles": 2,
+    "jtag_detail": "Both raw OpenOCD logs show transport init completion, real auto TAP scans, expected serial/location and shutdown. No target configuration, CPU-halt command, system-reset command or memory dump was issued by these preflights.",
+    "esptool_read_mac_calls": 7,
+    "vehicle_read_mac_calls": 4,
+    "ground_read_mac_calls": 3,
+    "read_mac_exit_codes_all_zero": true,
+    "read_mac_com_ports": [
+      "COM3",
+      "COM6"
+    ],
+    "ram_stub_running_reported": 7,
+    "hard_reset_via_rts_reported": 7,
+    "esptool_version_calls": 2,
+    "write_intent_files": 0,
+    "candidate_or_r18_write_operations_reached": 0,
+    "flash_verify_operations_reached": 0,
+    "reservation_capture_runs": 0,
+    "param_request_attempts_in_capture": 0,
+    "runtime_stage_record_reads": 0,
+    "capture_directory_exists": false,
+    "execution_permit_exists": false,
+    "stage_vehicle_exists": false,
+    "stage_ground_exists": false
+  },
+  "causes": [
+    {
+      "phase": "install",
+      "primary": "Undefined $modeHandoff at tools/invoke_r19_candidate_app_flash_hil.ps1:1211, after the successful Vehicle read-MAC operation record was written at1209 and before the operations list was updated or candidate write was called.",
+      "result": "Stopped before any candidate flash write."
+    },
+    {
+      "phase": "rollback",
+      "primary": "The same undefined variable was reached after each successful read-MAC. The existing bounded rollback loop made three attempts per role, six read-MAC/reset sequences total, but none reached its R18 write or verify calls.",
+      "result": "Both roles restored=false; accepted-R18 restoration remains unproven."
+    },
+    {
+      "phase": "evidence finalization",
+      "primary": "Write-DurableJson writes BOMless UTF-8 then validates with Get-Content default decoding in Windows PowerShell5.1. Japanese exception strings fail that default-decoding JSON parse.",
+      "read_only_reproduction": [
+        {
+          "file": "20261025T033915177Z-b4be3a0d-install\\terminal_status.json",
+          "powershell": "5.1",
+          "default_decoding_parses": false,
+          "strict_utf8_parses": true,
+          "file_modified": false
+        },
+        {
+          "file": "20261025T033915177Z-b4be3a0d-rollback\\flash_record.json",
+          "powershell": "5.1",
+          "default_decoding_parses": false,
+          "strict_utf8_parses": true,
+          "file_modified": false
+        }
+      ],
+      "result": "Install terminal_status.json and rollback flash_record.json are valid strict UTF-8 JSON on disk, but the production default-decoding reparse failed. Install produced no flash_record; both install and rollback lack artifact_manifest/finalseal. No incomplete/unsealed JSON is treated as PASS."
+    }
+  ],
+  "cleanup": {
+    "launched_parent_children": [
+      "jtag_preflight",
+      "active_jtag_vehicle",
+      "active_jtag_ground",
+      "install",
+      "rollback"
+    ],
+    "all_five_children_termination_and_process_tree_termination_recorded": true,
+    "parent_timeouts": 0,
+    "nine_esptool_exit_sidecars_zero": true,
+    "active_jtag": [
+      {
+        "role": "vehicle",
+        "summary_sha_matches_parent": true,
+        "exit_code": 0,
+        "timed_out": false,
+        "termination_proven": true,
+        "shutdown_marker": true,
+        "transport_init_marker": true,
+        "auto_tap_scan_reported": true,
+        "target_config_loaded": false,
+        "cpu_halt_command_issued": false,
+        "system_reset_command_issued": false
+      },
+      {
+        "role": "ground",
+        "summary_sha_matches_parent": true,
+        "exit_code": 0,
+        "timed_out": false,
+        "termination_proven": true,
+        "shutdown_marker": true,
+        "transport_init_marker": true,
+        "auto_tap_scan_reported": true,
+        "target_config_loaded": false,
+        "cpu_halt_command_issued": false,
+        "system_reset_command_issued": false
+      }
+    ],
+    "qualification": "Saved termination evidence only; no current process inventory was queried."
+  },
+  "evidence_qualification": [
+    "Aggregate operations=[] is not evidence of no actions: the metadata exception occurs after external read-MAC and durable operation record, but before list append.",
+    "The seven exact saved argv files terminate in read-mac; each stdout reports a connected device, RAM stub and RTS reset. No write intent, write argv or verify argv exists, consistent with the inspected control flow stopping before flash.",
+    "No newly installed candidate or freshly restored/read-back acceptedR18 image is proven. No reservation, RF timing, parameter-download, heartbeat or zero-error success is proven.",
+    "FAIL_ROLLBACK_UNPROVEN_POWER_OFF_REQUIRED is retained. This audit does not authorize reconnecting, rerunning, retrying or fixing code."
+  ],
+  "review_hardware_interaction": false,
+  "review_com_or_jtag_access": false,
+  "review_pnp_or_process_inventory": false,
+  "code_changes": false,
+  "retry_performed_by_reviewer": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

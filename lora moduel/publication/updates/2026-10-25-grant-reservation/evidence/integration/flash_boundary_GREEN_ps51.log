@@ -1,0 +1,12 @@
+PASS native-read-mac-reservation-False-rollback-False
+PASS native-read-mac-reservation-False-rollback-True
+PASS native-read-mac-reservation-True-rollback-False
+PASS native-read-mac-reservation-True-rollback-True
+PASS durable-json-japanese-lossless
+PASS sealed-reservation-False-failed-False
+PASS sealed-reservation-False-failed-True
+PASS sealed-reservation-True-failed-False
+PASS sealed-reservation-True-failed-True
+PASS rollback-null-bundle-reservation-False
+PASS rollback-null-bundle-reservation-True
+flash_boundary PASS checks=88

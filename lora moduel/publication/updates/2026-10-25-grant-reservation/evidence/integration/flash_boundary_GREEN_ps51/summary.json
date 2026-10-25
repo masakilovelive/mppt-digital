@@ -1,0 +1,67 @@
+{
+    "schema":  "vc-lora-r19-flash-boundary-regression-v1",
+    "result":  "PASS",
+    "checks":  88,
+    "shell":  "5.1.26100.9711",
+    "flash_source_sha256":  "E09A9F01C840EFFB7A6200A636A9FA52DB0796E52884F3B06F0BFF9D57BF9DDF",
+    "cases":  [
+                  {
+                      "name":  "native-read-mac-reservation-False-rollback-False",
+                      "result":  "PASS",
+                      "error":  null
+                  },
+                  {
+                      "name":  "native-read-mac-reservation-False-rollback-True",
+                      "result":  "PASS",
+                      "error":  null
+                  },
+                  {
+                      "name":  "native-read-mac-reservation-True-rollback-False",
+                      "result":  "PASS",
+                      "error":  null
+                  },
+                  {
+                      "name":  "native-read-mac-reservation-True-rollback-True",
+                      "result":  "PASS",
+                      "error":  null
+                  },
+                  {
+                      "name":  "durable-json-japanese-lossless",
+                      "result":  "PASS",
+                      "error":  null
+                  },
+                  {
+                      "name":  "sealed-reservation-False-failed-False",
+                      "result":  "PASS",
+                      "error":  null
+                  },
+                  {
+                      "name":  "sealed-reservation-False-failed-True",
+                      "result":  "PASS",
+                      "error":  null
+                  },
+                  {
+                      "name":  "sealed-reservation-True-failed-False",
+                      "result":  "PASS",
+                      "error":  null
+                  },
+                  {
+                      "name":  "sealed-reservation-True-failed-True",
+                      "result":  "PASS",
+                      "error":  null
+                  },
+                  {
+                      "name":  "rollback-null-bundle-reservation-False",
+                      "result":  "PASS",
+                      "error":  null
+                  },
+                  {
+                      "name":  "rollback-null-bundle-reservation-True",
+                      "result":  "PASS",
+                      "error":  null
+                  }
+              ],
+    "native_child":  "fresh local CMD echo-only fixture; exact production argv and parser; no device access",
+    "live_authority":  false,
+    "hardware_access":  false
+}

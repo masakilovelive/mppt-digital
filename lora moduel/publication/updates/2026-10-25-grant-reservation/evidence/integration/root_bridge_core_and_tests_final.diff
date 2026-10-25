@@ -1,0 +1,1914 @@
+diff --git "a/runs\\validation\\R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001\\20261025T-fix\\bridge.before.hpp" b/firmware/phase6/vc_lora_phase6_bridge.hpp
+index 2f5fc0f..38164b4 100644
+--- "a/runs\\validation\\R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001\\20261025T-fix\\bridge.before.hpp"
++++ b/firmware/phase6/vc_lora_phase6_bridge.hpp
+@@ -87,6 +87,18 @@
+ #error "Grant diagnostics require full ExplicitHostArm diagnostic mode"
+ #endif
+ 
++// Host-assisted reservation is a separate diagnostic capability, never an
++// implicit change to the accepted standard path or an on-air reservation.
++#ifndef VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++#define VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS 0
++#endif
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS != 0 && VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS != 1
++#error "VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS must be 0 or 1"
++#endif
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS && !VC_LORA_R19_GRANT_DIAGNOSTICS
++#error "Grant reservation requires full Grant/ExplicitHostArm diagnostics"
++#endif
++
+ #include <Arduino.h>
+ #include <Preferences.h>
+ #include <esp_timer.h>
+@@ -132,6 +144,10 @@
+ #if VC_LORA_R19_GRANT_DIAGNOSTICS
+ #include "high_speed/r19_grant_diagnostic_record.hpp"
+ #endif
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++#include "high_speed/r19_grant_reservation.hpp"
++#include "high_speed/r19_grant_reservation_record.hpp"
++#endif
+ #if VC_LORA_R19_TIMED_PATH_DIAGNOSTICS
+ #include "high_speed/r19_timed_path_record.hpp"
+ #endif
+@@ -379,6 +395,10 @@ __attribute__((used, aligned(4))) experimental::R19DiagnosticUsbFailureRecord
+ __attribute__((used, aligned(4))) experimental::R19GrantDiagnosticRecord
+     vc_lora_r19_grant_diagnostic_record{};
+ #endif
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++__attribute__((used, aligned(4))) experimental::R19GrantReservationRecord
++    vc_lora_r19_grant_reservation_record{};
++#endif
+ #if VC_LORA_R19_TIMED_PATH_DIAGNOSTICS
+ __attribute__((used, aligned(4))) experimental::R19TimedPathRecord
+     vc_lora_r19_timed_path_record{};
+@@ -389,6 +409,34 @@ __attribute__((used, aligned(4))) experimental::R19AuxReadinessRecord
+ #endif
+ }
+ 
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++std::uint64_t monotonic_now_ms() noexcept;
++experimental::R19GrantReservationController r19_grant_reservation{};
++std::uint64_t r19_grant_reservation_boot_id{0U};
++MavlinkFrame r19_grant_reservation_reply{};
++std::size_t r19_grant_reservation_reply_offset{0U};
++std::uint32_t r19_grant_reservation_reply_epoch{0U};
++std::uint64_t r19_grant_reservation_reply_deadline_ms{0U};
++std::uint8_t r19_grant_reservation_sequence{0U};
++bool r19_grant_reservation_reply_active{false};
++bool r19_grant_reservation_reply_fault{false};
++bool r19_grant_reservation_negotiation_started{false};
++#if defined(VC_LORA_PHASE6_VEHICLE)
++LinkAction r19_reserved_grant_action{};
++bool r19_reserved_grant_action_valid{false};
++bool r19_reserved_grant_releasing{false};
++bool r19_reserved_grant_uart_accepted{false};
++#endif
++bool r19_intercept_grant_reservation_usb_frame(const MavlinkFrame&) noexcept;
++void r19_note_grant_reservation() noexcept;
++void r19_abort_grant_reservation(std::uint32_t detail) noexcept;
++bool r19_service_grant_reservation_reply() noexcept;
++void r19_tick_grant_reservation() noexcept;
++#if defined(VC_LORA_PHASE6_GROUND)
++bool r19_reservation_ground_boundary_clean() noexcept;
++#endif
++#endif
++
+ #if VC_LORA_R19_AUX_READINESS_DIAGNOSTICS
+ experimental::R19BootInstance r19_aux_readiness_boot_instance{};
+ using experimental::R19UsbReadinessEvent;
+@@ -473,6 +521,15 @@ void r19_initialize_runtime_stage_record() noexcept {
+       esp_random(), esp_random(), esp_random(), esp_random()};
+   if ((instance[0] | instance[1] | instance[2] | instance[3]) == 0U)
+     instance[3] = 1U;
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++  if ((instance[0] | instance[1]) == 0U) instance[0] = 1U;
++  r19_grant_reservation_boot_id = static_cast<std::uint64_t>(instance[0]) |
++      (static_cast<std::uint64_t>(instance[1]) << 32U);
++  if (r19_grant_reservation_boot_id == 0U) r19_grant_reservation_boot_id = 1U;
++  (void)vc_lora_r19_grant_reservation_record.initialize(
++      static_cast<experimental::R19GrantReservationRole>(kR19RuntimeStageRole),
++      kR19RuntimeDiagnosticGenerationFingerprint, instance);
++#endif
+ #if defined(VC_LORA_PHASE6_GROUND) && VC_LORA_R19_USB_READINESS_MODE != 0
+   r19_usb_readiness_boot_id = static_cast<std::uint64_t>(instance[0]) |
+       (static_cast<std::uint64_t>(instance[1]) << 32U);
+@@ -600,6 +657,13 @@ std::uint64_t r19_usb_clock_reply_device_us{0U};
+ #endif
+ 
+ bool r19_intercept_usb_clock_request(const MavlinkFrame& frame) noexcept {
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++  if (r19_intercept_grant_reservation_usb_frame(frame)) return true;
++#else
++  // A disabled diagnostic namespace is still private: never leak it to RF.
++  if (frame.system_id == 249U &&
++      (frame.component_id == 197U || frame.component_id == 198U)) return true;
++#endif
+ #if VC_LORA_R19_USB_READINESS_MODE != 0
+   if (experimental::r19_is_host_readiness_namespace(frame)) {
+     // Consume invalid/stale/replayed diagnostic ARM and READY locally too.
+@@ -715,8 +779,11 @@ void r19_collect_vehicle_usb_clock_requests() noexcept {
+     if (byte < 0) break;
+     MavlinkFrame frame{};
+     if (r19_vehicle_usb_clock_parser.push(static_cast<std::uint8_t>(byte), frame)
+-            != MavlinkParseStatus::FrameReady || r19_vehicle_usb_clock_seen ||
+-        r19_vehicle_usb_clock_fault) continue;
++            != MavlinkParseStatus::FrameReady) continue;
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++    if (r19_intercept_grant_reservation_usb_frame(frame)) continue;
++#endif
++    if (r19_vehicle_usb_clock_seen || r19_vehicle_usb_clock_fault) continue;
+     std::uint64_t nonce = 0U;
+     if (!experimental::r19_decode_usb_clock_request(frame, nonce)) continue;
+     const auto sampled_us = static_cast<std::uint64_t>(esp_timer_get_time());
+@@ -1455,10 +1522,24 @@ bool route_r19_high_speed_radio_output(
+ bool r19_complete_adapter_radio_output(std::uint32_t token,
+                                        std::uint64_t now_ms) noexcept {
+ #if defined(VC_LORA_PHASE6_GROUND)
+-  return r19_ground_adapter != nullptr &&
++  const bool accepted = r19_ground_adapter != nullptr &&
+          r19_ground_adapter->complete_output(
+              token, TxResult::Accepted, now_ms) ==
+              HighSpeedPhase6AdapterStatus::Accepted;
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++  if (accepted && r19_radio_stream_purpose ==
++          R19RadioStreamPurpose::GroundNegotiationRequest &&
++      !r19_grant_reservation_negotiation_started) {
++    r19_grant_reservation.on_ground_negotiation_started(now_ms);
++    r19_note_grant_reservation();
++    if (r19_grant_reservation.failed()) {
++      latch_runtime_fail_closed();
++      return false;
++    }
++    r19_grant_reservation_negotiation_started = true;
++  }
++#endif
++  return accepted;
+ #else
+   return r19_vehicle_adapter != nullptr &&
+          r19_vehicle_adapter->complete_output(
+@@ -1904,6 +1985,19 @@ void r19_note_ground_adapter_diagnostics(std::uint32_t source_line) noexcept {
+ 
+ bool r19_intercept_ground_usb_frame(const MavlinkFrame& frame,
+                                     std::uint64_t now_ms) noexcept {
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++  // Private commands can span a millisecond during the ingress loop. Take
++  // the actual whole-request callback time once, before starting its owner.
++  now_ms = monotonic_now_ms();
++  if (frame.message_id == 21U &&
++      (!r19_grant_reservation.ground_request_allowed() ||
++       !r19_reservation_ground_boundary_clean() ||
++       frame.size != 14U || frame.payload_length != 2U || frame.signed_frame ||
++       frame.payload()[0U] != 1U || frame.payload()[1U] != 1U)) {
++    r19_abort_grant_reservation(1U);
++    return true;
++  }
++#endif
+   if (r19_acceleration_consumed) {
+     // A later Mission Planner refresh is valid, but remains on the already
+     // accepted R18 path; never reuse a consumed VCRC ledger or producer.
+@@ -1923,7 +2017,7 @@ bool r19_intercept_ground_usb_frame(const MavlinkFrame& frame,
+           now_ms);
+   r19_note_ground_adapter_diagnostics(__LINE__);
+   switch (status) {
+-    case HighSpeedPhase6AdapterStatus::Held:
++    case HighSpeedPhase6AdapterStatus::Held: {
+       if (!r19_have_ground_usb_heartbeat_commit ||
+           r19_last_ground_usb_heartbeat_commit_ms > now_ms ||
+           r19_held_parameter_request_valid ||
+@@ -1937,8 +2031,19 @@ bool r19_intercept_ground_usb_frame(const MavlinkFrame& frame,
+       r19_held_parameter_request_loss_epoch =
+           static_cast<std::uint64_t>(ground_usb_observed_loss_epoch);
+       r19_held_parameter_request_valid = true;
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++      const auto& baseline = r19_ground_adapter->diagnostics();
++      r19_grant_reservation.on_ground_held(now_ms,
++          baseline.standard_grant_session, baseline.standard_grant_cycle, now_ms);
++      r19_note_grant_reservation();
++      if (r19_grant_reservation.failed()) {
++        latch_runtime_fail_closed();
++        return true;
++      }
++#endif
+       r19_product_route_selected = true;
+       return true;
++    }
+     case HighSpeedPhase6AdapterStatus::Busy:
+       return true;
+     case HighSpeedPhase6AdapterStatus::PassThrough:
+@@ -2067,6 +2172,9 @@ bool r19_process_pending_ground_negotiation_response(
+ 
+ bool r19_route_bulk_negotiation(
+     const TddDemuxEvent& event, std::uint64_t now_ms) noexcept {
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++  now_ms = monotonic_now_ms();
++#endif
+   if (!event.has_bulk_negotiation || event.has_bulk_data ||
+       event.has_terminal_ack || event.has_peer_completion_receipt ||
+       !r19_role_adapter_constructed) {
+@@ -2115,6 +2223,14 @@ bool r19_route_bulk_negotiation(
+     latch_runtime_fail_closed();
+     return false;
+   }
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++  r19_grant_reservation.on_vehicle_vcbn(grant.session_id, grant.cycle_id, now_ms);
++  r19_note_grant_reservation();
++  if (r19_grant_reservation.failed()) {
++    latch_runtime_fail_closed();
++    return false;
++  }
++#endif
+   retained_standard_vehicle_grant_tail = {};
+   r19_product_route_selected = true;
+   r19_standard_tdd_frozen = true;
+@@ -2289,6 +2405,9 @@ bool r19_route_terminal_ack(const TddDemuxEvent& event,
+ void r19_observe_ground_grant(const TddControlMessage& message,
+                               ControlDisposition disposition,
+                               std::uint64_t now_ms) noexcept {
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++  now_ms = monotonic_now_ms();
++#endif
+ #if VC_LORA_R19_GRANT_DIAGNOSTICS
+   if (message.type == ControlType::UlGrant) {
+     (void)vc_lora_r19_grant_diagnostic_record.observe_grant_event(
+@@ -2321,6 +2440,22 @@ void r19_observe_ground_grant(const TddControlMessage& message,
+     latch_runtime_fail_closed();
+     return;
+   }
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++  if (r19_grant_reservation.initialized()) {
++    if (r19_ground_adapter->hold_standard_uplink()) {
++      r19_grant_reservation.on_ground_grant(message.session_id, message.cycle_id,
++          now_ms);
++    } else {
++      r19_grant_reservation.on_ground_baseline(message.session_id,
++          message.cycle_id, now_ms);
++    }
++    r19_note_grant_reservation();
++    if (r19_grant_reservation.failed()) {
++      latch_runtime_fail_closed();
++      return;
++    }
++  }
++#endif
+   if (r19_ground_adapter->hold_standard_uplink()) {
+     r19_standard_tdd_frozen = true;
+   }
+@@ -2338,6 +2473,9 @@ bool r19_route_pixhawk_output(const HighSpeedPhase6Output& output,
+ 
+ void r19_service_high_speed_product_route(
+     std::uint64_t now_ms) noexcept {
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++  now_ms = monotonic_now_ms();
++#endif
+   if (!r19_product_route_selected || runtime_fail_closed ||
+       !r19_role_adapter_constructed) {
+     return;
+@@ -2444,6 +2582,13 @@ void r19_service_high_speed_product_route(
+       return;
+     }
+   }
++#endif
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS && defined(VC_LORA_PHASE6_GROUND)
++  // Tick above keeps the original owner deadlines alive. The first VCBN
++  // additionally needs a causally observed Vehicle physical-tail permit;
++  // receiving a Grant alone does not prove that the peer writer drained.
++  if (!r19_grant_reservation_negotiation_started &&
++      !r19_grant_reservation.negotiation_allowed(now_ms)) return;
+ #endif
+   const HighSpeedPhase6Output output =
+ #if defined(VC_LORA_PHASE6_GROUND)
+@@ -2722,6 +2867,22 @@ bool retain_accepted_standard_radio_writer_lease(
+     return false;
+   }
+   standard_radio_writer_tail_pending = true;
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS && defined(VC_LORA_PHASE6_VEHICLE)
++  if (r19_reserved_grant_releasing &&
++      standard_radio_writer_action_type == LinkActionType::SendGrant) {
++    r19_grant_reservation.on_grant_write_accepted(
++        standard_radio_writer_control.session_id,
++        standard_radio_writer_control.cycle_id,
++        standard_radio_writer_lease.action_token,
++        standard_radio_writer_lease.writer_generation, now_ms);
++    r19_note_grant_reservation();
++    if (r19_grant_reservation.failed()) {
++      latch_runtime_fail_closed();
++      return false;
++    }
++    r19_reserved_grant_uart_accepted = true;
++  }
++#endif
+ #if VC_LORA_R19_GRANT_DIAGNOSTICS && defined(VC_LORA_PHASE6_VEHICLE)
+   if (standard_radio_writer_action_type == LinkActionType::SendGrant) {
+     (void)vc_lora_r19_grant_diagnostic_record.observe_grant_event(
+@@ -2768,6 +2929,19 @@ bool complete_standard_radio_writer_physical_tail(
+     }
+     retained_standard_vehicle_grant_tail = {
+         evidence, standard_radio_writer_control, true};
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++    if (r19_reserved_grant_uart_accepted) {
++      r19_grant_reservation.on_tail(standard_radio_writer_control.session_id,
++          standard_radio_writer_control.cycle_id, evidence.lease.action_token,
++          evidence.lease.writer_generation, now_ms);
++      r19_note_grant_reservation();
++      if (r19_grant_reservation.failed()) {
++        latch_runtime_fail_closed();
++        return false;
++      }
++      r19_reserved_grant_uart_accepted = false;
++    }
++#endif
+ #if VC_LORA_R19_GRANT_DIAGNOSTICS
+     (void)vc_lora_r19_grant_diagnostic_record.observe_grant_event(
+         experimental::R19GrantDiagnosticEvent::GrantPhysicalTail, now_ms,
+@@ -6267,6 +6441,11 @@ bool admit_ground_standard_frame(const MavlinkFrame& frame,
+ 
+ #if VC_LORA_R19_HIGH_SPEED_CANDIDATE
+ bool r19_service_pre_negotiation_fallback(std::uint64_t now_ms) noexcept {
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++  // This experiment evaluates reservation, never a successful slow fallback.
++  (void)now_ms;
++  return false;
++#else
+   if (!bridge_ready || runtime_fail_closed || !r19_product_route_selected ||
+       !r19_role_adapter_constructed || r19_ground_adapter == nullptr ||
+       !r19_ground_adapter->failure_latched() || r19_acceleration_consumed ||
+@@ -6398,6 +6577,7 @@ bool r19_service_pre_negotiation_fallback(std::uint64_t now_ms) noexcept {
+   r19_pre_negotiation_fallback_count = 1U;
+   r19_pre_negotiation_fallback_ms = now_ms;
+   return true;
++#endif
+ }
+ #endif
+ 
+@@ -6504,12 +6684,27 @@ bool start_radio_write(const LinkAction& action, PendingPayload payload,
+     reject_action(action, payload, application_bytes, now_ms);
+     return false;
+   }
++  bool reuse_reserved_writer = false;
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS && defined(VC_LORA_PHASE6_VEHICLE)
++  const auto& lease = e220_writer_arbiter.active_lease();
++  reuse_reserved_writer = r19_reserved_grant_releasing &&
++      r19_reserved_grant_action_valid &&
++      action.type == LinkActionType::SendGrant &&
++      action.token == r19_reserved_grant_action.token &&
++      action.control.session_id == r19_reserved_grant_action.control.session_id &&
++      action.control.cycle_id == r19_reserved_grant_action.control.cycle_id &&
++      standard_radio_writer_lease.valid() && lease.valid() &&
++      lease.owner == Phase6RadioWriterOwner::StandardTdd &&
++      lease.action_token == action.token &&
++      lease.writer_generation == standard_radio_writer_lease.writer_generation &&
++      !standard_radio_writer_tail_pending;
++#endif
+   if (radio_busy || pending_radio_action.active ||
+-      e220_writer_arbiter.write_active()) {
++      (e220_writer_arbiter.write_active() && !reuse_reserved_writer)) {
+     latch_runtime_fail_closed();
+     return false;
+   }
+-  if (!acquire_standard_radio_writer_lease(action)) {
++  if (!reuse_reserved_writer && !acquire_standard_radio_writer_lease(action)) {
+     return false;
+   }
+ #else
+@@ -6799,6 +6994,241 @@ TddInput make_tdd_input(std::uint64_t now_ms) noexcept {
+ }
+ #endif
+ 
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++void r19_note_grant_reservation() noexcept {
++  (void)vc_lora_r19_grant_reservation_record.observe(
++      r19_grant_reservation.snapshot());
++}
++
++#if defined(VC_LORA_PHASE6_GROUND)
++bool r19_reservation_ground_boundary_clean() noexcept {
++  return !r19_product_route_selected && !r19_acceleration_consumed &&
++      !ground_parameter_proxy.active() && !ground_proxy_request_admitted &&
++      !ground_proxy_request_dequeued && ground_ingress.empty() &&
++      !ground_ingress.fail_closed() && !radio_busy && !pending_radio_action.active &&
++      !e220_writer_arbiter.write_active() &&
++      tdd_controller.state() == GroundTddState::WaitGrant;
++}
++#endif
++
++void r19_abort_grant_reservation(std::uint32_t detail) noexcept {
++  if (!r19_grant_reservation.initialized()) {
++    (void)r19_grant_reservation.initialize(
++#if defined(VC_LORA_PHASE6_GROUND)
++        experimental::R19GrantReservationRole::Ground,
++#else
++        experimental::R19GrantReservationRole::Vehicle,
++#endif
++        r19_grant_reservation_boot_id, Serial.txLossEpoch(), monotonic_now_ms());
++  }
++  r19_grant_reservation.abort(
++      experimental::R19GrantReservationReason::ExternalFault,
++      monotonic_now_ms(), detail);
++  r19_note_grant_reservation();
++  latch_runtime_fail_closed();
++}
++
++bool r19_intercept_grant_reservation_usb_frame(
++    const MavlinkFrame& frame) noexcept {
++  using Op = experimental::R19GrantReservationOpcode;
++  using Role = experimental::R19GrantReservationRole;
++  if (!experimental::r19_is_grant_reservation_namespace(frame)) return false;
++  experimental::R19GrantReservationWireMessage command{};
++  if (!experimental::r19_decode_grant_reservation_frame(frame.bytes.data(),
++          frame.size, false, command) || runtime_fail_closed || !bridge_ready) {
++    r19_abort_grant_reservation(2U);
++    return true;
++  }
++  const auto now_ms = monotonic_now_ms();
++  if (!r19_grant_reservation.initialized()) {
++    if (command.opcode != Op::HelloRequest) {
++      r19_abort_grant_reservation(3U);
++      return true;
++    }
++#if defined(VC_LORA_PHASE6_GROUND)
++    if (!r19_usb_readiness_initialized ||
++        !r19_host_readiness_gate.allow_ground_usb_product_admission() ||
++        !r19_have_ground_usb_heartbeat_commit) {
++      r19_abort_grant_reservation(4U);
++      return true;
++    }
++    (void)r19_grant_reservation.initialize(Role::Ground,
++#else
++    if (!r19_vehicle_usb_clock_seen || r19_vehicle_usb_clock_pending ||
++        r19_vehicle_usb_clock_active || r19_vehicle_usb_clock_fault) {
++      r19_abort_grant_reservation(5U);
++      return true;
++    }
++    (void)r19_grant_reservation.initialize(Role::Vehicle,
++#endif
++        r19_grant_reservation_boot_id, Serial.txLossEpoch(), now_ms);
++  }
++  r19_grant_reservation.observe_local_epoch(Serial.txLossEpoch(), now_ms);
++#if defined(VC_LORA_PHASE6_GROUND)
++  if ((command.opcode == Op::BindGround || command.opcode == Op::BindPeerGround) &&
++      !r19_reservation_ground_boundary_clean()) {
++    r19_abort_grant_reservation(6U);
++    return true;
++  }
++#endif
++  (void)r19_grant_reservation.handle_command(command, now_ms);
++  r19_note_grant_reservation();
++  if (r19_grant_reservation.failed()) latch_runtime_fail_closed();
++  return true;
++}
++
++void r19_tick_grant_reservation() noexcept {
++  const auto now_ms = monotonic_now_ms();
++  r19_observe_e220_aux(now_ms);
++  if (r19_grant_reservation.initialized()) {
++    r19_grant_reservation.observe_local_epoch(Serial.txLossEpoch(), now_ms);
++    (void)r19_grant_reservation.tick(now_ms);
++    if (e220_write_contract.fail_closed() || runtime_fail_closed)
++      r19_grant_reservation.abort(
++          experimental::R19GrantReservationReason::ExternalFault, now_ms, 7U);
++    r19_note_grant_reservation();
++    if (r19_grant_reservation.failed()) latch_runtime_fail_closed();
++  }
++}
++
++// One logical 66-byte reply owns USB until whole-frame completion. Partial
++// prefixes are never replayed; polling, AUX and original deadlines continue.
++bool r19_service_grant_reservation_reply() noexcept {
++  if (r19_grant_reservation_reply_fault) return true;
++  const auto* reply = r19_grant_reservation.peek_reply();
++  if (reply == nullptr) return false;
++  auto now_ms = monotonic_now_ms();
++  if (!r19_grant_reservation_reply_active) {
++    if (r19_runtime_fail_diagnostic_staged ||
++        r19_runtime_fail_diagnostic_flush_pending ||
++        r19_runtime_fail_diagnostic_transport_failed ||
++        r19_runtime_diagnostic_committed_this_service ||
++        !Serial.isPlugged() || !static_cast<bool>(Serial)) return false;
++#if defined(VC_LORA_PHASE6_GROUND)
++    const auto& egress = radio_application_endpoint.egress();
++    if (r19_usb_clock_reply_pending || r19_usb_clock_reply_active ||
++        r19_usb_clock_reply_fault || ground_paced_heartbeat_commit_active ||
++        ground_parameter_publish_commit_active || r19_ground_usb_commit_active ||
++        !egress.empty() || egress.write_pending() ||
++        egress.stats().bytes_committed != ground_usb_transport_published_bytes)
++      return false;
++#else
++    if (r19_vehicle_usb_clock_pending || r19_vehicle_usb_clock_active ||
++        r19_vehicle_usb_clock_fault) return false;
++#endif
++    if (!experimental::r19_encode_grant_reservation_frame(*reply, true,
++            r19_grant_reservation_sequence, r19_grant_reservation_reply)) {
++      r19_abort_grant_reservation(8U);
++      return true;
++    }
++    r19_grant_reservation_reply_active = true;
++    r19_grant_reservation_reply_offset = 0U;
++    r19_grant_reservation_reply_epoch = Serial.txLossEpoch();
++    r19_grant_reservation_reply_deadline_ms = now_ms + 106U;
++  }
++  if (Serial.txLossEpoch() != r19_grant_reservation_reply_epoch ||
++      now_ms >= r19_grant_reservation_reply_deadline_ms) {
++    r19_grant_reservation_reply_fault = true;
++    r19_abort_grant_reservation(9U);
++    return true;
++  }
++  if (r19_grant_reservation_reply_offset < r19_grant_reservation_reply.size) {
++    const auto available = Serial.availableForWrite();
++    if (available <= 0) return true;
++    const auto count = std::min<std::size_t>({32U,
++        static_cast<std::size_t>(available), r19_grant_reservation_reply.size -
++            r19_grant_reservation_reply_offset});
++    const auto written = Serial.writeTxChecked(
++        r19_grant_reservation_reply.bytes.data() +
++            r19_grant_reservation_reply_offset, count,
++        r19_grant_reservation_reply_epoch);
++    if (written > count) {
++      r19_grant_reservation_reply_fault = true;
++      r19_abort_grant_reservation(10U);
++      return true;
++    }
++    r19_grant_reservation_reply_offset += written;
++    if (r19_grant_reservation_reply_offset != r19_grant_reservation_reply.size)
++      return true;
++  }
++  now_ms = monotonic_now_ms();
++  const auto remaining = now_ms < r19_grant_reservation_reply_deadline_ms
++      ? r19_grant_reservation_reply_deadline_ms - now_ms : 0U;
++  const bool published = remaining != 0U && Serial.flushTxComplete(
++      static_cast<std::uint32_t>(remaining), r19_grant_reservation_reply_epoch);
++  if (!published || Serial.txLossEpoch() != r19_grant_reservation_reply_epoch ||
++      !Serial.isPlugged() || !static_cast<bool>(Serial) ||
++      monotonic_now_ms() > r19_grant_reservation_reply_deadline_ms) {
++    r19_grant_reservation_reply_fault = true;
++    r19_abort_grant_reservation(11U);
++    return true;
++  }
++  const auto opcode = reply->opcode;
++  (void)r19_grant_reservation.pop_reply();
++  r19_grant_reservation.note_reply_completed(opcode, monotonic_now_ms());
++  ++r19_grant_reservation_sequence;
++  r19_grant_reservation_reply_active = false;
++  r19_note_grant_reservation();
++  if (r19_grant_reservation.failed()) latch_runtime_fail_closed();
++  return true;
++}
++
++#if defined(VC_LORA_PHASE6_VEHICLE)
++bool r19_hold_generated_grant(const LinkAction& action,
++    std::uint64_t now_ms) noexcept {
++  now_ms = monotonic_now_ms();
++  if (!r19_grant_reservation.awaiting_grant() ||
++      action.type != LinkActionType::SendGrant) return false;
++  const auto input = make_tdd_input(now_ms);
++  const auto deadline = input.heartbeat_deadline_valid && input.heartbeat_tail_available
++      ? std::min(now_ms + 750U, input.heartbeat_deadline_ms)
++      : now_ms + 750U;
++  if (r19_reserved_grant_action_valid || radio_busy || pending_radio_action.active ||
++      !e220_write_contract.ready_for_write() || !aux_high() ||
++      deadline <= now_ms || !acquire_standard_radio_writer_lease(action)) {
++    r19_abort_grant_reservation(12U);
++    return true;
++  }
++  r19_reserved_grant_action = action;
++  r19_reserved_grant_action_valid = true;
++  (void)r19_grant_reservation.on_prepared(action.control.session_id,
++      action.control.cycle_id, action.token,
++      standard_radio_writer_lease.writer_generation, deadline, now_ms);
++  r19_note_grant_reservation();
++  if (r19_grant_reservation.failed()) latch_runtime_fail_closed();
++  return true;
++}
++
++bool r19_service_reserved_grant(std::uint64_t now_ms) noexcept {
++  now_ms = monotonic_now_ms();
++  if (!r19_reserved_grant_action_valid) return false;
++  const auto& lease = e220_writer_arbiter.active_lease();
++  const auto input = make_tdd_input(now_ms);
++  const bool heartbeat_urgent = input.heartbeat_deadline_valid &&
++      input.heartbeat_tail_available &&
++      (input.heartbeat_deadline_ms <= now_ms ||
++       input.heartbeat_deadline_ms - now_ms <=
++           FixedFirmwareContract::heartbeat_grant_reserve_ms);
++  if (r19_grant_reservation.failed() || heartbeat_urgent || !aux_high() ||
++      !lease.valid() || lease.owner != Phase6RadioWriterOwner::StandardTdd ||
++      lease.action_token != r19_reserved_grant_action.token ||
++      lease.writer_generation != standard_radio_writer_lease.writer_generation ||
++      radio_busy || pending_radio_action.active || standard_radio_writer_tail_pending) {
++    r19_abort_grant_reservation(13U);
++    return true;
++  }
++  if (!r19_grant_reservation.should_release()) return true;
++  r19_reserved_grant_releasing = true;
++  process_action(r19_reserved_grant_action, now_ms);
++  r19_reserved_grant_releasing = false;
++  r19_reserved_grant_action_valid = false;
++  if (!r19_reserved_grant_uart_accepted || runtime_fail_closed)
++    r19_abort_grant_reservation(14U);
++  return true;
++}
++#endif
++#endif
++
+ #if VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS && defined(VC_LORA_PHASE6_GROUND)
+ // Exclusive, bounded writer for a 28-byte clock reply or 66-byte READY record.
+ // Keep each API write within the SDK's 32-byte limit without splitting the
+@@ -7230,6 +7660,17 @@ void loop_bridge() noexcept {
+   R19AuxReadinessIntervalScope loop_interval(R19UsbIntervalKind::Loop);
+ #endif
+ #if VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++  // Do not let an unrelated private USB reply conceal AUX transitions or a
++  // reservation expiry. Complete only the genuine existing RF tail service.
++  r19_tick_grant_reservation();
++  if (bridge_ready && !runtime_fail_closed)
++    observe_radio_completion(monotonic_now_ms());
++  if (r19_grant_reservation_reply_active || r19_grant_reservation_reply_fault) {
++    (void)r19_service_grant_reservation_reply();
++    return;
++  }
++#endif
+   r19_increment_runtime_stage_counter(R19RuntimeStageCounter::Loop);
+   r19_mark_runtime_stage(R19RuntimeStage::LoopEntered);
+ #if defined(VC_LORA_PHASE6_GROUND)
+@@ -7255,7 +7696,12 @@ void loop_bridge() noexcept {
+     R19AuxReadinessIntervalScope diagnostic_interval(
+         R19UsbIntervalKind::RuntimeDiagnostic, false);
+ #endif
+-    r19_service_runtime_fail_diagnostic();
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++    if (r19_grant_reservation.peek_reply() == nullptr ||
++        r19_runtime_fail_diagnostic_staged ||
++        r19_runtime_fail_diagnostic_flush_pending || runtime_fail_closed)
++#endif
++      r19_service_runtime_fail_diagnostic();
+   }
+ #if defined(VC_LORA_PHASE6_GROUND)
+   if (r19_observe_usb_clock_reply_service()) return;
+@@ -7364,6 +7810,12 @@ void loop_bridge() noexcept {
+   if (!bridge_ready) {
+     return;
+   }
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++  if (r19_service_grant_reservation_reply()) return;
++#if defined(VC_LORA_PHASE6_VEHICLE)
++  if (r19_service_reserved_grant(now_ms)) return;
++#endif
++#endif
+ #if VC_LORA_R19_HIGH_SPEED_CANDIDATE
+   r19_service_high_speed_product_route(now_ms);
+   if (!bridge_ready || runtime_fail_closed) {
+@@ -7382,6 +7834,9 @@ void loop_bridge() noexcept {
+         action.token, 0U, __LINE__);
+   }
+ #endif
++#if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS && defined(VC_LORA_PHASE6_VEHICLE)
++  if (r19_hold_generated_grant(action, now_ms)) return;
++#endif
+ #if !defined(VC_LORA_PHASE6_VEHICLE)
+   // Once a DATA prefix has been physically accepted it cannot be rolled back.
+   // If UART readiness/zero-write rejection prevents DATA+UL_DONE from
+diff --git "a/runs\\validation\\R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001\\20261025T-fix\\host_CMakeLists.before.txt" b/tests/host/CMakeLists.txt
+index b14de6a..0e3f422 100644
+--- "a/runs\\validation\\R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001\\20261025T-fix\\host_CMakeLists.before.txt"
++++ b/tests/host/CMakeLists.txt
+@@ -441,6 +441,37 @@ add_executable(vc_lora_phase6_ground_host_readiness_tests
+   standalone/phase6_ground_host_readiness_tests.cpp)
+ add_executable(vc_lora_phase6_grant_diagnostic_hooks_tests
+   standalone/phase6_grant_diagnostic_hooks_tests.cpp)
++add_executable(vc_lora_phase6_grant_reservation_ground_tests
++  standalone/phase6_grant_reservation_bridge_tests.cpp)
++add_executable(vc_lora_r19_grant_reservation_tests
++  standalone/r19_grant_reservation_tests.cpp)
++target_link_libraries(vc_lora_r19_grant_reservation_tests PRIVATE vc_lora_core)
++target_compile_features(vc_lora_r19_grant_reservation_tests PRIVATE cxx_std_17)
++if(NOT MSVC)
++  target_compile_options(vc_lora_r19_grant_reservation_tests PRIVATE
++    -Wall -Wextra -Wpedantic -Wconversion)
++  if(WIN32)
++    target_link_options(vc_lora_r19_grant_reservation_tests PRIVATE -static)
++  endif()
++endif()
++add_test(NAME UT-R19-GRANT-RESERVATION-CORE-001
++  COMMAND vc_lora_r19_grant_reservation_tests)
++add_test(NAME IT-R19-GRANT-RESERVATION-GROUND-001
++  COMMAND vc_lora_phase6_grant_reservation_ground_tests)
++add_executable(vc_lora_phase6_grant_reservation_ground_flow_tests
++  standalone/phase6_grant_reservation_flow_tests.cpp)
++add_executable(vc_lora_phase6_grant_reservation_vehicle_flow_tests
++  standalone/phase6_grant_reservation_flow_tests.cpp)
++target_compile_definitions(vc_lora_phase6_grant_reservation_vehicle_flow_tests PRIVATE
++  RESERVATION_TEST_VEHICLE=1)
++foreach(reservation_case IN ITEMS positive grant-late busy-at-request duplicate-request stale-loop-ms)
++  add_test(NAME IT-R19-GRANT-RESERVATION-GROUND-${reservation_case}-001
++    COMMAND vc_lora_phase6_grant_reservation_ground_flow_tests ${reservation_case})
++endforeach()
++foreach(reservation_case IN ITEMS positive hold-expired epoch-after-prepare usb-prefix-expired)
++  add_test(NAME IT-R19-GRANT-RESERVATION-VEHICLE-${reservation_case}-001
++    COMMAND vc_lora_phase6_grant_reservation_vehicle_flow_tests ${reservation_case})
++endforeach()
+ add_test(NAME IT-R19-GRANT-DIAGNOSTIC-BRIDGE-001 COMMAND vc_lora_phase6_grant_diagnostic_hooks_tests)
+ add_executable(vc_lora_r19_pre_negotiation_fallback_tests
+   standalone/r19_pre_negotiation_fallback_tests.cpp)
+@@ -488,6 +519,9 @@ set_tests_properties(IT-R19-GROUND-HOST-READINESS-001 PROPERTIES
+   WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} LABELS "r19;diagnostic;offline" TIMEOUT 30)
+ 
+ foreach(runtime_fail_bridge_target IN ITEMS
++    vc_lora_phase6_grant_reservation_ground_tests
++  vc_lora_phase6_grant_reservation_ground_flow_tests
++  vc_lora_phase6_grant_reservation_vehicle_flow_tests
+     vc_lora_r19_pre_negotiation_fallback_tests
+     vc_lora_phase6_grant_diagnostic_hooks_tests
+     vc_lora_phase6_vehicle_usb_clock_tests
+diff --git "a/runs\\validation\\R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001\\20261025T-fix\\root_CMakeLists.before.txt" b/CMakeLists.txt
+index ffa93f7..ac7beac 100644
+--- "a/runs\\validation\\R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001\\20261025T-fix\\root_CMakeLists.before.txt"
++++ b/CMakeLists.txt
+@@ -78,6 +78,17 @@ if(VC_LORA_BUILD_TESTS)
+           -RepoRoot "${CMAKE_SOURCE_DIR}")
+     endforeach()
+ 
++    foreach(reservation_contract IN ITEMS artifact workflow capture)
++      add_test(NAME R19-GRANT-RESERVATION-${reservation_contract}-CONTRACT-001
++        COMMAND "${VC_LORA_POWERSHELL_EXECUTABLE}"
++          -NoProfile -NonInteractive -ExecutionPolicy Bypass
++          -File "${CMAKE_SOURCE_DIR}/tests/hil/check_r19_grant_reservation_${reservation_contract}.ps1"
++          -RepoRoot "${CMAKE_SOURCE_DIR}")
++      set_tests_properties(R19-GRANT-RESERVATION-${reservation_contract}-CONTRACT-001
++        PROPERTIES WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
++        LABELS "r19;reservation;offline" TIMEOUT 180 RUN_SERIAL TRUE)
++    endforeach()
++
+     add_test(
+       NAME FW-R19-CANDIDATE-ARTIFACT-BUILDER-001
+       COMMAND "${VC_LORA_POWERSHELL_EXECUTABLE}"
+diff --git a/tests/host/standalone/phase6_grant_reservation_bridge_tests.cpp b/tests/host/standalone/phase6_grant_reservation_bridge_tests.cpp
+new file mode 100644
+index 0000000..9ae6c69
+--- /dev/null
++++ b/tests/host/standalone/phase6_grant_reservation_bridge_tests.cpp
+@@ -0,0 +1,46 @@
++#include "fake_arduino_test_api.hpp"
++#define VC_LORA_PHASE6_GROUND 1
++#define VC_LORA_R19_HIGH_SPEED_CANDIDATE 1
++#define VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS 1
++#define VC_LORA_R19_USB_READINESS_MODE 2
++#define VC_LORA_R19_TIMED_PATH_DIAGNOSTICS 1
++#define VC_LORA_R19_AUX_READINESS_DIAGNOSTICS 1
++#define VC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD 1
++#define VC_LORA_R19_GRANT_DIAGNOSTICS 1
++#define VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS 1
++#include "phase6/vc_lora_phase6_bridge.hpp"
++#include <array>
++#include <iostream>
++
++int main() {
++  using namespace vc_lora_phase6_firmware;
++  using namespace vc_lora;
++  fake_arduino::reset_platform();
++  fake_arduino::set_pin_input_level(D8,HIGH);
++  Serial.set_plugged(true);
++  Serial.set_endpoint_ready(true);
++  setup_bridge();
++  if (!bridge_ready || runtime_fail_closed || r19_ground_adapter==nullptr)
++    return 2;
++  const auto now=monotonic_now_ms();
++  TddControlMessage baseline{};
++  baseline.type=ControlType::UlGrant;
++  baseline.session_id=7U;
++  baseline.cycle_id=1U;
++  r19_observe_ground_grant(baseline,ControlDisposition::Accepted,now);
++  constexpr std::array<std::uint8_t,14U> raw{{
++      253,2,0,0,99,255,190,21,0,0,1,1,213,7}};
++  MavlinkFrame request{};
++  if (validate_mavlink_frame(raw.data(),raw.size(),request)!=MavlinkParseStatus::FrameReady)
++    return 2;
++  r19_have_ground_usb_heartbeat_commit=true;
++  r19_last_ground_usb_heartbeat_commit_ms=now;
++  const auto radio_before=e220_serial.normal_tx_bytes().size();
++  const bool consumed=r19_intercept_ground_usb_frame(request,now);
++  const bool safe=consumed && !r19_product_route_selected && runtime_fail_closed &&
++      e220_serial.normal_tx_bytes().size()==radio_before;
++  std::cout << "reservation-unbound-real-bridge checks=1 failures="
++            << (safe?0:1) << " product_route_selected=" << r19_product_route_selected
++            << " runtime_fail_closed=" << runtime_fail_closed << '\n';
++  return safe?0:1;
++}
+diff --git a/tests/host/standalone/phase6_grant_reservation_flow_tests.cpp b/tests/host/standalone/phase6_grant_reservation_flow_tests.cpp
+new file mode 100644
+index 0000000..98643aa
+--- /dev/null
++++ b/tests/host/standalone/phase6_grant_reservation_flow_tests.cpp
+@@ -0,0 +1,193 @@
++#include "fake_arduino_test_api.hpp"
++#if defined(RESERVATION_TEST_VEHICLE)
++#define VC_LORA_PHASE6_VEHICLE 1
++#else
++#define VC_LORA_PHASE6_GROUND 1
++#endif
++#define VC_LORA_R19_HIGH_SPEED_CANDIDATE 1
++#define VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS 1
++#define VC_LORA_R19_USB_READINESS_MODE 2
++#define VC_LORA_R19_TIMED_PATH_DIAGNOSTICS 1
++#define VC_LORA_R19_AUX_READINESS_DIAGNOSTICS 1
++#define VC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD 1
++#define VC_LORA_R19_GRANT_DIAGNOSTICS 1
++#define VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS 1
++#include "phase6/vc_lora_phase6_bridge.hpp"
++#include <iostream>
++#include <string>
++
++using namespace vc_lora_phase6_firmware;
++using namespace vc_lora;
++using namespace vc_lora::experimental;
++using Op=R19GrantReservationOpcode;
++using Role=R19GrantReservationRole;
++unsigned checks=0, failures=0;
++void check(bool value,const char* name) {
++  ++checks;if(!value){++failures;std::cerr<<"FAIL "<<name<<'\n';}
++}
++constexpr std::uint64_t nonce=0x521B000000000001ULL;
++R19GrantReservationWireMessage command(Op op,Role role) {
++  R19GrantReservationWireMessage m{};
++  m.opcode=op;m.role=role;m.reader_session=17;m.slot_nonce=nonce;
++  if(op!=Op::HelloRequest){m.boot_id=r19_grant_reservation_boot_id;m.usb_epoch=Serial.txLossEpoch();}
++  return m;
++}
++void send(const R19GrantReservationWireMessage& m) {
++  MavlinkFrame f{};
++  check(r19_encode_grant_reservation_frame(m,false,1,f),"encode command");
++  check(r19_intercept_grant_reservation_usb_frame(f),"private consumed");
++}
++void drain() {
++  for(unsigned n=0;n<40 && r19_grant_reservation.peek_reply()!=nullptr;++n)
++    (void)r19_service_grant_reservation_reply();
++  check(r19_grant_reservation.peek_reply()==nullptr &&
++      !r19_grant_reservation_reply_fault,"whole66 reply completion");
++}
++int main(int argc,char** argv) {
++  const std::string test=argc>1?argv[1]:"positive";
++  fake_arduino::reset_platform();fake_arduino::set_pin_input_level(D8,HIGH);
++  Serial.set_plugged(true);Serial.set_endpoint_ready(true);setup_bridge();
++  check(bridge_ready&&!runtime_fail_closed,"setup actual bridge");
++#if defined(RESERVATION_TEST_VEHICLE)
++  // This fixture supplies the prior validated local-clock witness; all new
++  // reservation commands, actual issued TDD action and writer/tail callbacks
++  // below use the real bridge, not a replacement protocol implementation.
++  r19_vehicle_usb_clock_seen=true;
++  send(command(Op::HelloRequest,Role::Vehicle));
++  if(test=="usb-prefix-expired") {
++    const auto before=Serial.tx_bytes().size();Serial.set_tx_checked_accept_limit(16);
++    check(r19_service_grant_reservation_reply(),"partial private writer active");
++    check(Serial.tx_bytes().size()==before+16,"prefix accepted once");
++    fake_arduino::advance_time_ms(106);r19_tick_grant_reservation();
++    (void)r19_service_grant_reservation_reply();
++    check(r19_grant_reservation_reply_fault && runtime_fail_closed &&
++        Serial.tx_bytes().size()==before+16,"106ms expiry no replay no radio");
++    std::cout<<"USB prefix checks="<<checks<<" failures="<<failures<<'\n';return failures?1:0;
++  }
++  drain();
++  auto prepare=command(Op::PrepareVehicle,Role::Vehicle);
++  prepare.grant_session=640;prepare.grant_cycle=1;
++  send(prepare);
++  const auto begin=monotonic_now_ms();tdd_controller.reset(640,2,begin);
++  fake_arduino::advance_time_ms(3000);
++  r19_observe_e220_aux(monotonic_now_ms());
++  (void)tdd_controller.tick(make_tdd_input(monotonic_now_ms()));
++  fake_arduino::advance_time_ms(16);
++  r19_observe_e220_aux(monotonic_now_ms());
++  (void)tdd_controller.tick(make_tdd_input(monotonic_now_ms()));
++  fake_arduino::advance_time_ms(1);
++  r19_observe_e220_aux(monotonic_now_ms());
++  const auto action=tdd_controller.tick(make_tdd_input(monotonic_now_ms()));
++  const auto before=e220_serial.normal_tx_bytes().size();
++  check(action.type==LinkActionType::SendGrant,"real TDD issued Grant");
++  check(r19_hold_generated_grant(action,monotonic_now_ms()),"issued Grant intercepted");
++  check(r19_reserved_grant_action_valid && e220_writer_arbiter.write_active() &&
++      e220_serial.normal_tx_bytes().size()==before,"exclusive real lease zero radio bytes");
++  const auto generation=standard_radio_writer_lease.writer_generation;
++  drain();
++  auto bind=command(Op::BindPeerVehicle,Role::Vehicle);
++  bind.boot_id=111;bind.usb_epoch=19;bind.grant_session=640;bind.grant_cycle=2;
++  bind.action_token=action.token;bind.writer_generation=generation;send(bind);
++  if(test=="epoch-after-prepare") {
++    Serial.simulate_tx_loss();r19_tick_grant_reservation();
++    (void)r19_service_reserved_grant(monotonic_now_ms());
++    check(runtime_fail_closed && e220_serial.normal_tx_bytes().size()==before,
++        "epoch change invalidates exact held action before any RF bytes");
++  } else if(test=="hold-expired") {
++    fake_arduino::advance_time_ms(750);r19_tick_grant_reservation();
++    check(runtime_fail_closed && e220_serial.normal_tx_bytes().size()==before,
++        "750ms hold is exclusive and cannot emit after expiry");
++  } else {
++    auto release=command(Op::ReleaseGrant,Role::Vehicle);
++    release.grant_session=640;release.grant_cycle=2;release.action_token=action.token;
++    release.writer_generation=generation;release.device_ms=123;send(release);
++    check(r19_service_reserved_grant(monotonic_now_ms()),"one exact retained action released");
++    check(!runtime_fail_closed && r19_reserved_grant_uart_accepted &&
++        standard_radio_writer_lease.writer_generation==generation &&
++        e220_serial.normal_tx_bytes().size()==before+32,"same lease exact32 UART accepted");
++    const auto written=monotonic_now_ms();
++    fake_arduino::set_pin_input_level(D8,LOW);observe_radio_completion(monotonic_now_ms());
++    fake_arduino::advance_time_ms(530);fake_arduino::set_pin_input_level(D8,HIGH);
++    observe_radio_completion(monotonic_now_ms());fake_arduino::advance_time_ms(20);
++    observe_radio_completion(monotonic_now_ms());
++    check(!runtime_fail_closed && retained_standard_vehicle_grant_tail.valid &&
++        r19_grant_reservation.snapshot().tail_ms==written+550 &&
++        r19_grant_reservation.peek_reply()!=nullptr,"TailReady only actual550ms physical completion");
++    drain();
++    const auto count=e220_serial.normal_tx_bytes().size();
++    (void)r19_service_reserved_grant(monotonic_now_ms());
++    check(e220_serial.normal_tx_bytes().size()==count,"no duplicate release");
++  }
++#else
++  // Prior ARM/post-ARM product witness is independently tested in existing
++  // readiness suites. Initialize that boundary as a fixture here.
++  check(r19_grant_reservation.initialize(Role::Ground,r19_grant_reservation_boot_id,
++      Serial.txLossEpoch(),monotonic_now_ms()),"ground initialization fixture");
++  send(command(Op::HelloRequest,Role::Ground));
++  check(r19_grant_reservation.peek_reply()==nullptr,"Hello waits real RF baseline callback");
++  TddControlMessage grant{};grant.type=ControlType::UlGrant;grant.session_id=640;grant.cycle_id=1;
++  r19_observe_ground_grant(grant,ControlDisposition::Accepted,monotonic_now_ms());drain();
++  auto bind=command(Op::BindGround,Role::Ground);bind.grant_session=640;bind.grant_cycle=2;
++  bind.action_token=7;bind.writer_generation=9;send(bind);
++  bind.opcode=Op::BindPeerGround;bind.boot_id=111;bind.usb_epoch=19;send(bind);drain();
++  MavlinkFrame request{};const std::array<std::uint8_t,2> payload{{1,1}};
++  check(encode_mavlink_v2(99,255,190,21,payload.data(),payload.size(),request),"PARAM fixture");
++  r19_have_ground_usb_heartbeat_commit=true;r19_last_ground_usb_heartbeat_commit_ms=monotonic_now_ms();
++  const auto t0=monotonic_now_ms();
++  if(test=="stale-loop-ms") {
++    fake_arduino::advance_time_ms(1);r19_tick_grant_reservation();
++    const auto actual_receipt=monotonic_now_ms();
++    (void)r19_intercept_ground_usb_frame(request,t0);
++    check(!runtime_fail_closed&&r19_product_route_selected&&
++        r19_ground_adapter->t0_ms()==actual_receipt,
++        "whole request timestamps actual callback not older loop sample");
++    std::cout<<"stale loop checks="<<checks<<" failures="<<failures<<'\n';return failures?1:0;
++  }
++  if(test=="busy-at-request") {
++    radio_busy=true;
++    (void)r19_intercept_ground_usb_frame(request,t0);
++    check(runtime_fail_closed&&!r19_product_route_selected,
++        "revalidate actual request boundary, not only prior Bind");
++    std::cout<<"busy request checks="<<checks<<" failures="<<failures<<'\n';return failures?1:0;
++  }
++  check(r19_intercept_ground_usb_frame(request,t0)&&r19_product_route_selected&&
++      !runtime_fail_closed,"actual adapter Held after Bound");drain();
++  if(test=="duplicate-request") {
++    (void)r19_intercept_ground_usb_frame(request,t0);
++    check(runtime_fail_closed&&r19_ground_adapter->t0_ms()==t0,
++        "duplicate whole request cannot reset owner deadline");
++    std::cout<<"duplicate request checks="<<checks<<" failures="<<failures<<'\n';return failures?1:0;
++  }
++  fake_arduino::advance_time_ms(test=="grant-late"?501:50);
++  if(test=="grant-late") {
++    r19_service_high_speed_product_route(monotonic_now_ms());
++    check(runtime_fail_closed && r19_pre_negotiation_fallback_count==0 &&
++        r19_ground_adapter->t0_ms()==t0,"original500 preserved no slow fallback promotion");
++  } else {
++    grant.cycle_id=2;r19_observe_ground_grant(grant,ControlDisposition::Accepted,monotonic_now_ms());
++    fake_arduino::advance_time_ms(100);r19_service_high_speed_product_route(monotonic_now_ms());
++    check(r19_radio_session==nullptr&&!runtime_fail_closed,"no VCBN from Grant alone");
++    auto tail=command(Op::TailPermit,Role::Ground);tail.boot_id=111;tail.usb_epoch=19;
++    tail.grant_session=640;tail.grant_cycle=2;tail.action_token=7;tail.writer_generation=9;
++    tail.device_ms=777;send(tail);
++    fake_arduino::advance_time_ms(99);r19_service_high_speed_product_route(monotonic_now_ms());
++    check(r19_radio_session==nullptr,"second causal100ms guard");
++    fake_arduino::advance_time_ms(1);r19_service_high_speed_product_route(monotonic_now_ms());
++    // The real high-speed radio session also needs its independent AUX-HIGH
++    // admission interval. It is not bypassed by the host tail permit.
++    fake_arduino::advance_time_ms(16);r19_service_high_speed_product_route(monotonic_now_ms());
++    check(r19_ground_adapter->t0_ms()==t0,"request origin immutable after tail permit");
++    check(!runtime_fail_closed && r19_radio_session!=nullptr &&
++        r19_grant_reservation_negotiation_started,"actual VCBN writer accepts after both guards");
++    if(failures) {
++      std::cerr<<"ground debug runtime="<<runtime_fail_closed<<" session="<<(r19_radio_session!=nullptr)
++        <<" started="<<r19_grant_reservation_negotiation_started<<" adapter="
++        <<static_cast<unsigned>(r19_ground_adapter->diagnostics().adapter_status)
++        <<" resstate="<<static_cast<unsigned>(r19_grant_reservation.state())
++        <<" reason="<<static_cast<unsigned>(r19_grant_reservation.snapshot().reason)<<'\n';
++    }
++  }
++#endif
++  std::cout<<"reservation actual bridge case="<<test<<" checks="<<checks<<" failures="<<failures<<'\n';
++  return failures?1:0;
++}
+diff --git a/firmware/high_speed/r19_grant_reservation.hpp b/firmware/high_speed/r19_grant_reservation.hpp
+new file mode 100644
+index 0000000..22a5d40
+--- /dev/null
++++ b/firmware/high_speed/r19_grant_reservation.hpp
+@@ -0,0 +1,431 @@
++#pragma once
++
++#include <array>
++#include <cstddef>
++#include <cstdint>
++#include <limits>
++#include "vc_lora/bulk_session_controller.hpp"
++#include "vc_lora/mavlink_frame.hpp"
++#include "vc_lora/tdd_types.hpp"
++
++namespace vc_lora::experimental {
++
++// Diagnostic dual-USB orchestration only. A trusted PC relays peer claims;
++// neither CRC nor reader/nonce binding authenticates that PC. This is not a
++// product RF reservation protocol or a guaranteed future-latency bound.
++enum class R19GrantReservationRole : std::uint8_t { Invalid=0U, Ground=1U, Vehicle=2U };
++enum class R19GrantReservationOpcode : std::uint8_t {
++  HelloRequest=1U, HelloReply=2U, PrepareVehicle=3U, Prepared=4U,
++  BindGround=5U, BindPeerGround=6U, Bound=7U, BindPeerVehicle=8U,
++  ReleaseGrant=9U, ReleaseVehicle=9U, GroundHeld=10U, TailReady=11U,
++  TailPermitGround=12U, TailPermit=12U, Fault=13U, Started=14U
++};
++enum class R19GrantReservationState : std::uint8_t {
++  Cold=0U, HelloPending=1U, HelloReady=2U, AwaitVehicleGrant=3U,
++  VehiclePrepared=4U, GroundLocalBound=5U, GroundBound=6U, GroundHeld=7U,
++  GroundGranted=8U, VehicleReleaseGranted=9U, VehicleGrantWritten=10U,
++  VehicleTailReady=11U, GroundTailPermitted=12U, Started=13U, Failed=14U
++};
++enum class R19GrantReservationReason : std::uint16_t {
++  None=0U, InvalidConfiguration=1U, InvalidWire=2U, WrongRole=3U,
++  WrongScope=4U, WrongBoot=5U, WrongEpoch=6U, WrongState=7U,
++  WrongGrant=8U, WrongToken=9U, Replay=10U, ClockRegression=11U,
++  TimeOverflow=12U, PrepareExpired=13U, HoldExpired=14U,
++  GrantWaitExpired=15U, TailWaitExpired=16U, VehicleWindowExpired=17U,
++  QueueFull=18U, UnsafeHold=19U, CanonicalRequestMismatch=20U,
++  ExternalFault=21U
++};
++enum class R19GrantReservationEvent : std::uint8_t {
++  None=0U, Hello=1U, Baseline=2U, Prepare=3U, Prepared=4U,
++  BoundLocal=5U, BoundPeer=6U, GroundHeld=7U, ReleaseGrant=8U,
++  GrantWritten=9U, GrantObserved=10U, TailObserved=11U, TailPermit=12U,
++  Started=13U, ReplyCommitted=14U, Failure=15U
++};
++
++struct R19GrantReservationWireMessage final {
++  R19GrantReservationOpcode opcode{R19GrantReservationOpcode::HelloRequest};
++  R19GrantReservationRole role{R19GrantReservationRole::Invalid};
++  std::uint8_t flags{0U};
++  std::uint64_t reader_session{0U};
++  std::uint64_t slot_nonce{0U};
++  std::uint64_t boot_id{0U};
++  std::uint32_t usb_epoch{0U};
++  std::uint16_t grant_session{0U};
++  std::uint16_t grant_cycle{0U};
++  std::uint32_t action_token{0U};
++  std::uint32_t writer_generation{0U};
++  std::uint64_t device_ms{0U}; // Encode rejects uptime above UINT32_MAX.
++};
++
++namespace r19_grant_reservation_detail {
++using Op=R19GrantReservationOpcode;
++using Role=R19GrantReservationRole;
++constexpr bool response_opcode(Op op) noexcept {
++  return op==Op::HelloReply || op==Op::Prepared || op==Op::Bound ||
++         op==Op::GroundHeld || op==Op::TailReady || op==Op::Fault;
++}
++constexpr bool request_opcode(Op op) noexcept {
++  return op==Op::HelloRequest || op==Op::PrepareVehicle || op==Op::BindGround ||
++         op==Op::BindPeerGround || op==Op::BindPeerVehicle || op==Op::ReleaseGrant ||
++         op==Op::TailPermitGround;
++}
++constexpr bool valid_role(Role role) noexcept { return role==Role::Ground || role==Role::Vehicle; }
++constexpr bool complete_tuple(const R19GrantReservationWireMessage& m) noexcept {
++  return m.grant_session!=0U && m.grant_cycle!=0U && m.action_token!=0U && m.writer_generation!=0U;
++}
++constexpr bool semantic(const R19GrantReservationWireMessage& m,bool response) noexcept {
++  if(!valid_role(m.role) || m.flags!=0U || m.reader_session==0U ||
++     (m.slot_nonce>>48U)!=0x521BU || (m.slot_nonce&0x0000FFFFFFFFFFFFULL)==0U ||
++     m.device_ms>std::numeric_limits<std::uint32_t>::max() ||
++     (response ? !response_opcode(m.opcode) : !request_opcode(m.opcode))) return false;
++  switch(m.opcode) {
++    case Op::HelloRequest:
++      return m.boot_id==0U && m.usb_epoch==0U && m.grant_session==0U &&
++             m.grant_cycle==0U && m.action_token==0U && m.writer_generation==0U && m.device_ms==0U;
++    case Op::HelloReply:
++      return m.boot_id!=0U && m.action_token==0U && m.writer_generation==0U &&
++             (m.role!=Role::Ground || m.grant_session!=0U);
++    case Op::PrepareVehicle:
++      return m.role==Role::Vehicle && m.boot_id!=0U && m.grant_session!=0U &&
++             m.action_token==0U && m.writer_generation==0U && m.device_ms==0U;
++    case Op::BindGround: case Op::BindPeerGround:
++      return m.role==Role::Ground && m.boot_id!=0U && complete_tuple(m) && m.device_ms==0U;
++    case Op::BindPeerVehicle:
++      return m.role==Role::Vehicle && m.boot_id!=0U && complete_tuple(m) && m.device_ms==0U;
++    case Op::Prepared: case Op::TailReady: case Op::ReleaseGrant:
++      return m.role==Role::Vehicle && m.boot_id!=0U && complete_tuple(m);
++    case Op::Bound: case Op::GroundHeld: case Op::TailPermitGround:
++      return m.role==Role::Ground && m.boot_id!=0U && complete_tuple(m);
++    case Op::Fault: return m.boot_id!=0U;
++    default: return false; // Started is record-only, never wire authority.
++  }
++}
++inline void put(std::uint8_t* p,std::uint64_t v,std::size_t n) noexcept {
++  for(std::size_t i=0U;i<n;++i) p[i]=static_cast<std::uint8_t>(v>>(8U*i));
++}
++inline std::uint64_t get(const std::uint8_t* p,std::size_t n) noexcept {
++  std::uint64_t v=0U; for(std::size_t i=0U;i<n;++i) v|=static_cast<std::uint64_t>(p[i])<<(8U*i); return v;
++}
++constexpr bool fresh(std::uint16_t s,std::uint16_t c,std::uint16_t bs,std::uint16_t bc) noexcept {
++  return s!=0U && c!=0U && bs!=0U && (s==bs ? compare_sequence(c,bc)==SequenceOrder::Newer : compare_sequence(s,bs)==SequenceOrder::Newer);
++}
++} // namespace r19_grant_reservation_detail
++
++inline bool r19_is_grant_reservation_namespace(const std::uint8_t* bytes,std::size_t size) noexcept {
++  return bytes!=nullptr && size>=10U && bytes[0U]==0xFDU && bytes[5U]==249U &&
++         (bytes[6U]==197U || bytes[6U]==198U) && bytes[7U]==253U && bytes[8U]==0U && bytes[9U]==0U;
++}
++inline bool r19_is_grant_reservation_namespace(const MavlinkFrame& frame) noexcept {
++  return r19_is_grant_reservation_namespace(frame.bytes.data(),frame.size);
++}
++inline bool r19_encode_grant_reservation_frame(const R19GrantReservationWireMessage& m,
++    bool response,std::uint8_t sequence,MavlinkFrame& out) noexcept {
++  using namespace r19_grant_reservation_detail;
++  if(!semantic(m,response)) return false;
++  std::array<std::uint8_t,54U> p{};
++  p[0U]='R';p[1U]='1';p[2U]='9';p[3U]='R';p[4U]=1U;
++  p[5U]=static_cast<std::uint8_t>(m.opcode);p[6U]=static_cast<std::uint8_t>(m.role);
++  put(p.data()+8U,m.reader_session,8U);put(p.data()+16U,m.slot_nonce,8U);
++  put(p.data()+24U,m.boot_id,8U);put(p.data()+32U,m.usb_epoch,4U);
++  put(p.data()+36U,m.grant_session,2U);put(p.data()+38U,m.grant_cycle,2U);
++  put(p.data()+40U,m.action_token,4U);put(p.data()+44U,m.writer_generation,4U);
++  put(p.data()+48U,m.device_ms,4U);p[52U]=0xA5U;p[53U]=0x5AU;
++  MavlinkFrame candidate{};
++  if(!encode_mavlink_v2(sequence,249U,response?198U:197U,253U,p.data(),p.size(),candidate) || candidate.size!=66U) return false;
++  out=candidate;return true;
++}
++inline bool r19_decode_grant_reservation_frame(const std::uint8_t* bytes,std::size_t size,
++    bool response,R19GrantReservationWireMessage& out) noexcept {
++  using namespace r19_grant_reservation_detail;
++  if(!r19_is_grant_reservation_namespace(bytes,size) || size!=66U || bytes[1U]!=54U ||
++     bytes[2U]!=0U || bytes[3U]!=0U || bytes[6U]!=(response?198U:197U)) return false;
++  MavlinkFrame frame{};
++  if(validate_mavlink_frame(bytes,size,frame)!=MavlinkParseStatus::FrameReady || frame.signed_frame || frame.payload_length!=54U) return false;
++  const auto* p=frame.payload();
++  if(p[0U]!='R' || p[1U]!='1' || p[2U]!='9' || p[3U]!='R' || p[4U]!=1U || p[7U]!=0U || p[52U]!=0xA5U || p[53U]!=0x5AU) return false;
++  R19GrantReservationWireMessage m{};
++  m.opcode=static_cast<Op>(p[5U]);m.role=static_cast<Role>(p[6U]);m.flags=p[7U];
++  m.reader_session=get(p+8U,8U);m.slot_nonce=get(p+16U,8U);m.boot_id=get(p+24U,8U);
++  m.usb_epoch=static_cast<std::uint32_t>(get(p+32U,4U));m.grant_session=static_cast<std::uint16_t>(get(p+36U,2U));
++  m.grant_cycle=static_cast<std::uint16_t>(get(p+38U,2U));m.action_token=static_cast<std::uint32_t>(get(p+40U,4U));
++  m.writer_generation=static_cast<std::uint32_t>(get(p+44U,4U));m.device_ms=get(p+48U,4U);
++  if(!semantic(m,response)) return false;
++  out=m;return true;
++}
++
++struct R19GrantReservationJournalEntry final {
++  std::uint32_t event{0U};
++  std::uint32_t state_reason{0U};
++  std::uint64_t timestamp_ms{0U};
++  std::uint32_t grant_tuple{0U};
++  std::uint32_t action_token{0U};
++  std::uint32_t writer_generation{0U};
++  std::uint32_t aux{0U};
++};
++struct R19GrantReservationSnapshot final {
++  R19GrantReservationRole role{R19GrantReservationRole::Invalid};
++  R19GrantReservationState state{R19GrantReservationState::Cold};
++  R19GrantReservationReason reason{R19GrantReservationReason::None};
++  bool initialized{false};bool frozen{false};
++  std::uint64_t own_boot_id{0U},peer_boot_id{0U};
++  std::uint32_t own_epoch{0U},peer_epoch{0U};
++  std::uint64_t slot_nonce{0U},reader_session{0U};
++  std::uint16_t grant_session{0U},grant_cycle{0U};
++  std::uint32_t action_token{0U},writer_generation{0U};
++  std::uint64_t ground_t0_ms{0U},ground_grant_ms{0U},grant_write_ms{0U},tail_ms{0U},tail_permit_received_ms{0U};
++  std::uint32_t event_count{0U};std::uint16_t journal_count{0U},journal_dropped{0U};
++  std::array<R19GrantReservationJournalEntry,12U> journal{};
++};
++
++class R19GrantReservationController final {
++ public:
++  using Role=R19GrantReservationRole;using Op=R19GrantReservationOpcode;
++  using State=R19GrantReservationState;using Reason=R19GrantReservationReason;
++  using Event=R19GrantReservationEvent;using Message=R19GrantReservationWireMessage;
++  bool initialize(Role role,std::uint64_t own_boot,std::uint32_t epoch,std::uint64_t now) noexcept {
++    if(s_.initialized) return fail(Reason::Replay,last_now_);
++    s_.role=role;s_.own_boot_id=own_boot;s_.own_epoch=epoch;s_.initialized=true;last_now_=now;
++    if(!r19_grant_reservation_detail::valid_role(role) || own_boot==0U) return fail(Reason::InvalidConfiguration,now);
++    if(now>std::numeric_limits<std::uint32_t>::max()) return fail(Reason::TimeOverflow,now);
++    return true;
++  }
++  bool initialized() const noexcept {return s_.initialized;}
++  State state() const noexcept {return s_.state;}
++  bool failed() const noexcept {return s_.state==State::Failed;}
++  bool can_prepare() const noexcept {return s_.role==Role::Vehicle && s_.state==State::HelloReady;}
++  bool awaiting_grant() const noexcept {return s_.state==State::AwaitVehicleGrant;}
++  bool holding() const noexcept {return s_.state==State::VehiclePrepared || s_.state==State::VehicleReleaseGranted;}
++  bool should_release() const noexcept {return s_.state==State::VehicleReleaseGranted && peer_bound_ && !failed();}
++  bool ground_request_allowed() const noexcept {return s_.role==Role::Ground && s_.state==State::GroundBound && peer_bound_;}
++  const R19GrantReservationSnapshot& snapshot() const noexcept {return s_;}
++  const Message* peek_reply() const noexcept {return queue_count_==0U?nullptr:&queue_[queue_head_];}
++  bool pop_reply() noexcept {
++    if(queue_count_==0U) return false;
++    queue_head_=(queue_head_+1U)%queue_.size();--queue_count_;return true;
++  }
++  bool note_reply_completed(Op opcode,std::uint64_t now) noexcept {
++    if(failed()) return true;
++    if(!tick(now)) return false;
++    if(!r19_grant_reservation_detail::response_opcode(opcode)) return fail(Reason::InvalidWire,now);
++    journal(Event::ReplyCommitted,now,static_cast<std::uint32_t>(opcode));return true;
++  }
++  bool abort(Reason reason,std::uint64_t now,std::uint32_t detail=0U) noexcept {
++    return fail(reason==Reason::None?Reason::ExternalFault:reason,now,detail);
++  }
++  bool observe_local_epoch(std::uint32_t epoch,std::uint64_t now) noexcept {
++    if(!tick(now)) return false;
++    return epoch==s_.own_epoch || fail(Reason::WrongEpoch,now,epoch);
++  }
++  bool on_ground_baseline(std::uint16_t session,std::uint16_t cycle,std::uint64_t now) noexcept {
++    if(!tick(now)) return false;
++    if(s_.role!=Role::Ground || (s_.state!=State::Cold && s_.state!=State::HelloPending && s_.state!=State::HelloReady)) return fail(Reason::WrongState,now);
++    if(session==0U) return fail(Reason::WrongGrant,now);
++    if(baseline_session_!=0U && session==baseline_session_ && cycle==baseline_cycle_) return true;
++    if(baseline_session_!=0U && !r19_grant_reservation_detail::fresh(session,cycle,baseline_session_,baseline_cycle_)) return fail(Reason::WrongGrant,now);
++    baseline_session_=session;baseline_cycle_=cycle;s_.grant_session=session;s_.grant_cycle=cycle;
++    const bool pending_hello=s_.state==State::HelloPending;
++    if(pending_hello) s_.state=State::HelloReady;
++    journal(Event::Baseline,now);
++    if(pending_hello) return reply(Op::HelloReply,now);
++    return true;
++  }
++  bool handle_command(const Message& m,std::uint64_t now) noexcept {
++    using namespace r19_grant_reservation_detail;
++    // An event must not revive an expired phase merely because the bridge has
++    // not run its periodic tick yet. The original phase clocks remain intact.
++    if(!tick(now)) return false;
++    if(!semantic(m,false)) return fail(Reason::InvalidWire,now);
++    if(m.role!=s_.role) return fail(Reason::WrongRole,now);
++    if(m.opcode==Op::HelloRequest) {
++      if(s_.state!=State::Cold || s_.reader_session!=0U) return fail(Reason::Replay,now);
++      s_.reader_session=m.reader_session;s_.slot_nonce=m.slot_nonce;
++      s_.state=(s_.role==Role::Vehicle || baseline_session_!=0U)?State::HelloReady:State::HelloPending;
++      journal(Event::Hello,now);
++      if(s_.state==State::HelloReady) return reply(Op::HelloReply,now);
++      return true;
++    }
++    if(m.reader_session!=s_.reader_session || m.slot_nonce!=s_.slot_nonce || s_.reader_session==0U) return fail(Reason::WrongScope,now);
++    const bool peer=m.opcode==Op::BindPeerGround || m.opcode==Op::BindPeerVehicle || m.opcode==Op::TailPermitGround;
++    if(!peer && m.boot_id!=s_.own_boot_id) return fail(Reason::WrongBoot,now);
++    if(!peer && m.usb_epoch!=s_.own_epoch) return fail(Reason::WrongEpoch,now);
++    switch(m.opcode) {
++      case Op::PrepareVehicle:
++        if(!can_prepare()) return fail(Reason::WrongState,now);
++        baseline_session_=m.grant_session;baseline_cycle_=m.grant_cycle;prepare_start_=now;prepare_active_=true;
++        s_.state=State::AwaitVehicleGrant;journal(Event::Prepare,now);return true;
++      case Op::BindGround:
++        if(s_.state!=State::HelloReady || !fresh(m.grant_session,m.grant_cycle,baseline_session_,baseline_cycle_)) return fail(Reason::WrongGrant,now);
++        set_tuple(m);prepare_start_=now;prepare_active_=true;s_.state=State::GroundLocalBound;
++        journal(Event::BoundLocal,now);return true;
++      case Op::BindPeerGround:
++        if(s_.state!=State::GroundLocalBound || peer_bound_) return fail(Reason::WrongState,now);
++        if(!tuple(m,now)) return false;
++        s_.peer_boot_id=m.boot_id;s_.peer_epoch=m.usb_epoch;peer_bound_=true;s_.state=State::GroundBound;
++        journal(Event::BoundPeer,now);return reply(Op::Bound,now);
++      case Op::BindPeerVehicle:
++        if(s_.state!=State::VehiclePrepared || peer_bound_) return fail(Reason::WrongState,now);
++        if(!tuple(m,now)) return false;
++        s_.peer_boot_id=m.boot_id;s_.peer_epoch=m.usb_epoch;peer_bound_=true;journal(Event::BoundPeer,now);return true;
++      case Op::ReleaseGrant:
++        if(s_.state!=State::VehiclePrepared || !peer_bound_) return fail(Reason::WrongState,now);
++        if(!tuple(m,now) || !hold_valid(now)) return false;
++        s_.state=State::VehicleReleaseGranted;journal(Event::ReleaseGrant,now,static_cast<std::uint32_t>(m.device_ms));return true;
++      case Op::TailPermitGround:
++        if(s_.role!=Role::Ground || !ground_held_ || tail_permit_seen_ || !peer_bound_ ||
++           (s_.state!=State::GroundHeld && s_.state!=State::GroundGranted)) return fail(Reason::WrongState,now);
++        if(m.boot_id!=s_.peer_boot_id) return fail(Reason::WrongBoot,now);
++        if(m.usb_epoch!=s_.peer_epoch) return fail(Reason::WrongEpoch,now);
++        if(!tuple(m,now)) return false;
++        tail_permit_seen_=true;s_.tail_permit_received_ms=now;peer_tail_claim_=m.device_ms;
++        if(ground_grant_seen_) s_.state=State::GroundTailPermitted;
++        journal(Event::TailPermit,now,static_cast<std::uint32_t>(m.device_ms));return true;
++      default: return fail(Reason::InvalidWire,now);
++    }
++  }
++  bool on_prepared(std::uint16_t session,std::uint16_t cycle,std::uint32_t token,
++      std::uint32_t generation,std::uint64_t deadline,std::uint64_t now) noexcept {
++    if(!tick(now)) return false;
++    if(!awaiting_grant()) return fail(Reason::WrongState,now);
++    if(!r19_grant_reservation_detail::fresh(session,cycle,baseline_session_,baseline_cycle_) || token==0U || generation==0U) return fail(Reason::WrongGrant,now);
++    if(deadline<=now || deadline-now>750U) return fail(Reason::UnsafeHold,now);
++    s_.grant_session=session;s_.grant_cycle=cycle;s_.action_token=token;s_.writer_generation=generation;
++    hold_deadline_=deadline;s_.state=State::VehiclePrepared;journal(Event::Prepared,now);return reply(Op::Prepared,now);
++  }
++  // Bridge must first validate the exact canonical #21 and actual adapter Held
++  // event. This callback never manufactures an adapter request or moves t0.
++  bool on_ground_held(std::uint64_t t0,std::uint16_t baseline_session,
++      std::uint16_t baseline_cycle,std::uint64_t now) noexcept {
++    if(!tick(now)) return false;
++    if(!ground_request_allowed() || ground_held_) return fail(Reason::WrongState,now);
++    if(baseline_session!=baseline_session_ || baseline_cycle!=baseline_cycle_ ||
++       !r19_grant_reservation_detail::fresh(s_.grant_session,s_.grant_cycle,baseline_session,baseline_cycle)) return fail(Reason::WrongGrant,now);
++    if(t0>now || t0<last_journal_ms_) return fail(Reason::ClockRegression,now);
++    if(now-t0>500U) return fail(Reason::GrantWaitExpired,now);
++    s_.ground_t0_ms=t0;ground_held_=true;prepare_active_=false;s_.state=State::GroundHeld;
++    journal(Event::GroundHeld,t0);return reply(Op::GroundHeld,t0);
++  }
++  bool on_ground_grant(std::uint16_t session,std::uint16_t cycle,std::uint64_t now) noexcept {
++    if(!tick(now)) return false;
++    if(!ground_held_ || ground_grant_seen_ || s_.role!=Role::Ground) return fail(Reason::WrongState,now);
++    if(session!=s_.grant_session || cycle!=s_.grant_cycle) return fail(Reason::WrongGrant,now);
++    if(now<s_.ground_t0_ms || now-s_.ground_t0_ms>500U) return fail(Reason::GrantWaitExpired,now);
++    ground_grant_seen_=true;s_.ground_grant_ms=now;s_.state=tail_permit_seen_?State::GroundTailPermitted:State::GroundGranted;
++    journal(Event::GrantObserved,now);return true;
++  }
++  bool on_grant_write_accepted(std::uint16_t session,std::uint16_t cycle,std::uint32_t token,
++      std::uint32_t generation,std::uint64_t now) noexcept {
++    if(!tick(now)) return false;
++    if(!should_release() || !hold_valid(now)) return fail_if_healthy(Reason::WrongState,now);
++    if(!tuple(session,cycle,token,generation,now)) return false;
++    s_.grant_write_ms=now;grant_written_=true;prepare_active_=false;s_.state=State::VehicleGrantWritten;
++    journal(Event::GrantWritten,now);return true;
++  }
++  bool on_tail(std::uint16_t session,std::uint16_t cycle,std::uint32_t token,
++      std::uint32_t generation,std::uint64_t now) noexcept {
++    if(!tick(now)) return false;
++    if(s_.role!=Role::Vehicle || s_.state!=State::VehicleGrantWritten || !grant_written_) return fail(Reason::WrongState,now);
++    if(!tuple(session,cycle,token,generation,now)) return false;
++    if(now<s_.grant_write_ms || now-s_.grant_write_ms<550U) return fail(Reason::UnsafeHold,now);
++    s_.tail_ms=now;tail_seen_=true;s_.state=State::VehicleTailReady;journal(Event::TailObserved,now);return reply(Op::TailReady,now);
++  }
++  // Caller has validated complete canonical VCBN and correlated Grant identity;
++  // no raw arrival, prefix, UART acceptance, or PC timestamp may call this.
++  bool on_vehicle_vcbn(std::uint16_t session,std::uint16_t cycle,std::uint64_t now) noexcept {
++    if(!tick(now)) return false;
++    if(s_.role!=Role::Vehicle || s_.state!=State::VehicleTailReady || !tail_seen_) return fail(Reason::WrongState,now);
++    if(session!=s_.grant_session || cycle!=s_.grant_cycle) return fail(Reason::WrongGrant,now);
++    if(now<s_.tail_ms || now-s_.tail_ms>500U) return fail(Reason::VehicleWindowExpired,now);
++    s_.state=State::Started;journal(Event::Started,now);return true;
++  }
++  bool negotiation_allowed(std::uint64_t now) const noexcept {
++    if(!initialized() || failed() || s_.role!=Role::Ground || !ground_grant_seen_ || !tail_permit_seen_ || now<last_now_ ||
++       now>std::numeric_limits<std::uint32_t>::max()) return false;
++    if(s_.state==State::Started) return true;
++    return now>=s_.ground_grant_ms && now-s_.ground_grant_ms>=100U &&
++           now>=s_.tail_permit_received_ms && now-s_.tail_permit_received_ms>=100U &&
++           now>=s_.ground_t0_ms && now-s_.ground_t0_ms<=28000U &&
++           now-s_.ground_grant_ms<=2000U;
++  }
++  bool on_ground_negotiation_started(std::uint64_t now) noexcept {
++    if(!tick(now)) return false;
++    if(s_.state==State::Started || !negotiation_allowed(now)) return fail(Reason::WrongState,now);
++    s_.state=State::Started;journal(Event::Started,now);return true;
++  }
++  bool tick(std::uint64_t now) noexcept {
++    if(!time(now)) return false;
++    if(holding() && !hold_valid(now)) return false;
++    if(prepare_active_ && now-prepare_start_>=8000U) return fail(Reason::PrepareExpired,now);
++    if(ground_held_ && s_.state!=State::Started) {
++      if(now-s_.ground_t0_ms>28000U) return fail(Reason::GrantWaitExpired,now);
++      if(!ground_grant_seen_ && now-s_.ground_t0_ms>500U) return fail(Reason::GrantWaitExpired,now);
++      if(ground_grant_seen_ && now-s_.ground_grant_ms>2000U) return fail(Reason::TailWaitExpired,now);
++    }
++    if(tail_seen_ && s_.state!=State::Started && now-s_.tail_ms>500U) return fail(Reason::VehicleWindowExpired,now);
++    return true;
++  }
++ private:
++  R19GrantReservationSnapshot s_{};
++  std::array<Message,8U> queue_{};std::size_t queue_head_{0U},queue_count_{0U};
++  std::uint16_t baseline_session_{0U},baseline_cycle_{0U};
++  std::uint64_t last_now_{0U},last_journal_ms_{0U},prepare_start_{0U},hold_deadline_{0U},peer_tail_claim_{0U};
++  bool prepare_active_{false},peer_bound_{false},ground_held_{false},ground_grant_seen_{false};
++  bool grant_written_{false},tail_seen_{false},tail_permit_seen_{false};
++  bool time(std::uint64_t now) noexcept {
++    if(failed()) return false;
++    if(!s_.initialized) return fail(Reason::InvalidConfiguration,now);
++    if(now<last_now_) return fail(Reason::ClockRegression,last_now_,static_cast<std::uint32_t>(now));
++    last_now_=now;
++    if(now>std::numeric_limits<std::uint32_t>::max()) return fail(Reason::TimeOverflow,now);
++    return true;
++  }
++  bool hold_valid(std::uint64_t now) noexcept {return now<hold_deadline_ || fail(Reason::HoldExpired,now);}
++  void set_tuple(const Message& m) noexcept {s_.grant_session=m.grant_session;s_.grant_cycle=m.grant_cycle;s_.action_token=m.action_token;s_.writer_generation=m.writer_generation;}
++  bool tuple(const Message& m,std::uint64_t now) noexcept {return tuple(m.grant_session,m.grant_cycle,m.action_token,m.writer_generation,now);}
++  bool tuple(std::uint16_t session,std::uint16_t cycle,std::uint32_t token,std::uint32_t generation,std::uint64_t now) noexcept {
++    if(session!=s_.grant_session || cycle!=s_.grant_cycle) return fail(Reason::WrongGrant,now);
++    return (token==s_.action_token && generation==s_.writer_generation) || fail(Reason::WrongToken,now);
++  }
++  bool reply(Op opcode,std::uint64_t now) noexcept {
++    if(queue_count_>=queue_.size()) return fail(Reason::QueueFull,now);
++    Message m{};m.opcode=opcode;m.role=s_.role;m.reader_session=s_.reader_session;m.slot_nonce=s_.slot_nonce;
++    m.boot_id=s_.own_boot_id;m.usb_epoch=s_.own_epoch;m.grant_session=s_.grant_session;m.grant_cycle=s_.grant_cycle;
++    if(opcode!=Op::HelloReply) {m.action_token=s_.action_token;m.writer_generation=s_.writer_generation;}
++    m.device_ms=now;
++    if(!r19_grant_reservation_detail::semantic(m,true)) return fail(Reason::InvalidWire,now);
++    queue_[(queue_head_+queue_count_)%queue_.size()]=m;++queue_count_;return true;
++  }
++  bool fail_if_healthy(Reason reason,std::uint64_t now) noexcept {return failed()?false:fail(reason,now);}
++  bool fail(Reason reason,std::uint64_t now,std::uint32_t detail=0U) noexcept {
++    if(failed()) return false;
++    s_.reason=reason;s_.state=State::Failed;
++    journal(Event::Failure,now,detail);s_.frozen=true;
++    // Generic Fault does not overwrite token/generation with an error code.
++    // If scope/time is unavailable, JTAG first-failure evidence remains final.
++    if(queue_count_<queue_.size() && s_.reader_session!=0U && (s_.slot_nonce>>48U)==0x521BU &&
++       s_.own_boot_id!=0U && now<=std::numeric_limits<std::uint32_t>::max()) {
++      Message m{};m.opcode=Op::Fault;m.role=s_.role;m.reader_session=s_.reader_session;m.slot_nonce=s_.slot_nonce;
++      m.boot_id=s_.own_boot_id;m.usb_epoch=s_.own_epoch;m.grant_session=s_.grant_session;m.grant_cycle=s_.grant_cycle;
++      m.action_token=s_.action_token;m.writer_generation=s_.writer_generation;m.device_ms=now;
++      queue_[(queue_head_+queue_count_)%queue_.size()]=m;++queue_count_;
++    }
++    return false;
++  }
++  void journal(Event event,std::uint64_t now,std::uint32_t aux=0U) noexcept {
++    if(s_.frozen) return;
++    R19GrantReservationJournalEntry entry{};entry.event=static_cast<std::uint32_t>(event);
++    entry.state_reason=static_cast<std::uint32_t>(s_.state)|(static_cast<std::uint32_t>(s_.reason)<<16U);
++    entry.timestamp_ms=now;entry.grant_tuple=static_cast<std::uint32_t>(s_.grant_session)|(static_cast<std::uint32_t>(s_.grant_cycle)<<16U);
++    entry.action_token=s_.action_token;entry.writer_generation=s_.writer_generation;entry.aux=aux;
++    if(s_.event_count!=std::numeric_limits<std::uint32_t>::max()) ++s_.event_count;
++    if(s_.journal_count<12U) {s_.journal[s_.journal_count]=entry;++s_.journal_count;}
++    else {for(std::size_t i=8U;i<11U;++i)s_.journal[i]=s_.journal[i+1U];s_.journal[11U]=entry;
++      if(s_.journal_dropped!=std::numeric_limits<std::uint16_t>::max())++s_.journal_dropped;}
++    last_journal_ms_=now;
++  }
++};
++static_assert(sizeof(R19GrantReservationJournalEntry)==32U);
++static_assert(BulkSessionTiming::grant_wait_budget_ms==500U);
++static_assert(BulkSessionTiming::direction_guard_ms==100U);
++static_assert(BulkSessionTiming::hard_lease_ms==28000U);
++static_assert(BulkSessionAccounting::completion_deadline_ms==30000U);
++} // namespace vc_lora::experimental
+diff --git a/firmware/high_speed/r19_grant_reservation_record.hpp b/firmware/high_speed/r19_grant_reservation_record.hpp
+new file mode 100644
+index 0000000..ef1dc9d
+--- /dev/null
++++ b/firmware/high_speed/r19_grant_reservation_record.hpp
+@@ -0,0 +1,88 @@
++#pragma once
++
++#include <array>
++#include <cstddef>
++#include <cstdint>
++#include <limits>
++#include "r19_grant_reservation.hpp"
++
++namespace vc_lora::experimental {
++
++// Separate diagnostic ABI. No reserved word of any existing record is reused.
++// Words0..31 header; words32..127 twelve chronological journal entries of eight
++// words (first8/last4). Entire record freezes at first controller failure.
++class alignas(4) R19GrantReservationRecord final {
++ public:
++  volatile std::uint32_t words[128U]{};
++
++  bool initialize(R19GrantReservationRole role,
++      const std::array<std::uint32_t,4U>& build,
++      const std::array<std::uint32_t,4U>& boot) noexcept {
++    if(words[2U]==0x52313952U || !r19_grant_reservation_detail::valid_role(role) ||
++       (build[0U]|build[1U]|build[2U]|build[3U])==0U ||
++       (boot[0U]|boot[1U])==0U) return false;
++    words[0U]=1U;words[1U]=1U;
++    for(std::size_t i=2U;i<128U;++i) words[i]=0U;
++    words[2U]=0x52313952U;words[3U]=1U;words[4U]=static_cast<std::uint32_t>(role);
++    for(std::size_t i=0U;i<4U;++i){words[5U+i]=build[i];words[9U+i]=boot[i];}
++    words[13U]=1U;words[14U]=512U;words[18U]=boot[0U];words[19U]=boot[1U];
++    words[1U]=2U;words[0U]=0U;return true;
++  }
++
++  bool observe(const R19GrantReservationSnapshot& s) noexcept {
++    if(words[2U]!=0x52313952U || words[0U]!=0U || (words[1U]&1U)!=0U ||
++       !s.initialized || words[4U]!=static_cast<std::uint32_t>(s.role) ||
++       s.own_boot_id!=(static_cast<std::uint64_t>(words[9U])|
++                      (static_cast<std::uint64_t>(words[10U])<<32U)) ||
++       static_cast<std::uint32_t>(s.state)>14U || static_cast<std::uint32_t>(s.reason)>21U ||
++       s.journal_count>12U || s.event_count!=static_cast<std::uint32_t>(s.journal_count)+s.journal_dropped ||
++       (s.journal_dropped!=0U && s.journal_count!=12U) ||
++       (s.frozen!=(s.state==R19GrantReservationState::Failed)) ||
++       (s.frozen!=(s.reason!=R19GrantReservationReason::None))) return false;
++    for(std::size_t i=0U;i<s.journal_count;++i) {
++      const auto& entry=s.journal[i];
++      const auto state=entry.state_reason&0xFFFFU;
++      const auto reason=entry.state_reason>>16U;
++      const bool failure=entry.event==15U;
++      if(entry.event==0U || entry.event>15U || state>14U || reason>21U ||
++         (i!=0U && entry.timestamp_ms<s.journal[i-1U].timestamp_ms) ||
++         failure!=(state==14U) || failure!=(reason!=0U) ||
++         (failure && (!s.frozen || i+1U!=s.journal_count))) return false;
++    }
++    if(s.journal_count!=0U && s.journal[s.journal_count-1U].state_reason!=
++       (static_cast<std::uint32_t>(s.state)|(static_cast<std::uint32_t>(s.reason)<<16U))) return false;
++    if(words[13U]==7U) return true;
++    const auto state_reason=static_cast<std::uint32_t>(s.state)|
++        (static_cast<std::uint32_t>(s.reason)<<16U);
++    if(words[16U]==s.event_count && words[15U]==state_reason &&
++       words[22U]==s.own_epoch && words[23U]==s.peer_epoch &&
++       words[26U]==static_cast<std::uint32_t>(s.reader_session) &&
++       words[27U]==static_cast<std::uint32_t>(s.reader_session>>32U)) return true;
++    if(words[1U]>std::numeric_limits<std::uint32_t>::max()-2U) return false;
++    if(s.frozen && (s.journal_count==0U || s.journal[s.journal_count-1U].event!=15U)) return false;
++    const auto next_sequence=words[1U]+2U;
++    words[0U]=1U;words[1U]=next_sequence-1U;
++    words[13U]=s.frozen?7U:1U;words[15U]=state_reason;words[16U]=s.event_count;
++    words[17U]=static_cast<std::uint32_t>(s.journal_count)|(static_cast<std::uint32_t>(s.journal_dropped)<<16U);
++    words[18U]=static_cast<std::uint32_t>(s.own_boot_id);words[19U]=static_cast<std::uint32_t>(s.own_boot_id>>32U);
++    words[20U]=static_cast<std::uint32_t>(s.peer_boot_id);words[21U]=static_cast<std::uint32_t>(s.peer_boot_id>>32U);
++    words[22U]=s.own_epoch;words[23U]=s.peer_epoch;
++    words[24U]=static_cast<std::uint32_t>(s.slot_nonce);words[25U]=static_cast<std::uint32_t>(s.slot_nonce>>32U);
++    words[26U]=static_cast<std::uint32_t>(s.reader_session);words[27U]=static_cast<std::uint32_t>(s.reader_session>>32U);
++    words[28U]=static_cast<std::uint32_t>(s.grant_session)|(static_cast<std::uint32_t>(s.grant_cycle)<<16U);
++    words[29U]=s.action_token;words[30U]=s.writer_generation;words[31U]=0U;
++    for(std::size_t i=0U;i<12U;++i) {
++      const auto offset=32U+8U*i;
++      const auto entry=i<s.journal_count?s.journal[i]:R19GrantReservationJournalEntry{};
++      words[offset]=entry.event;words[offset+1U]=entry.state_reason;
++      words[offset+2U]=static_cast<std::uint32_t>(entry.timestamp_ms);
++      words[offset+3U]=static_cast<std::uint32_t>(entry.timestamp_ms>>32U);
++      words[offset+4U]=entry.grant_tuple;words[offset+5U]=entry.action_token;
++      words[offset+6U]=entry.writer_generation;words[offset+7U]=entry.aux;
++    }
++    words[1U]=next_sequence;words[0U]=0U;return true;
++  }
++};
++static_assert(sizeof(R19GrantReservationRecord)==512U);
++static_assert(alignof(R19GrantReservationRecord)>=4U);
++} // namespace vc_lora::experimental
+diff --git a/tests/host/standalone/r19_grant_reservation_tests.cpp b/tests/host/standalone/r19_grant_reservation_tests.cpp
+new file mode 100644
+index 0000000..236db05
+--- /dev/null
++++ b/tests/host/standalone/r19_grant_reservation_tests.cpp
+@@ -0,0 +1,329 @@
++#if defined(VC_LORA_R19_GRANT_RESERVATION_LEGACY_RED)
++#include "vc_lora/tdd_vehicle.hpp"
++#include <iostream>
++int main() {
++  vc_lora::TddConfig config{};
++  vc_lora::LinkDiagnostics diagnostics{};
++  vc_lora::VehicleTddController vehicle(config, diagnostics);
++  vehicle.reset(640U, 2U, 0U);
++  vc_lora::TddInput input{};
++  input.now_ms = 3000U;
++  (void)vehicle.tick(input);
++  input.now_ms = 3016U;
++  (void)vehicle.tick(input);
++  input.now_ms = 3017U;
++  const auto action = vehicle.tick(input);
++  const bool no_unreleased_grant = action.type != vc_lora::LinkActionType::SendGrant;
++  std::cout << "legacy-no-reservation-hold-characterization checks=1 failures="
++            << (no_unreleased_grant ? 0 : 1)
++            << " grant_issued_before_diagnostic_release=" << !no_unreleased_grant << '\n';
++  return no_unreleased_grant ? 0 : 1;
++}
++#else
++#include "../../../firmware/high_speed/r19_grant_reservation.hpp"
++#include "../../../firmware/high_speed/r19_grant_reservation_record.hpp"
++#include <array>
++#include <cstdint>
++#include <iostream>
++#include <limits>
++
++namespace {
++using namespace vc_lora;
++using namespace vc_lora::experimental;
++using Role = R19GrantReservationRole;
++using Op = R19GrantReservationOpcode;
++using State = R19GrantReservationState;
++using Reason = R19GrantReservationReason;
++using Message = R19GrantReservationWireMessage;
++unsigned checks = 0U;
++unsigned failures = 0U;
++void check(bool value, const char* label) {
++  ++checks;
++  if (!value) { ++failures; if (failures <= 25U) std::cerr << "FAIL " << label << '\n'; }
++}
++Message command(Op opcode, Role role, std::uint64_t boot, std::uint32_t epoch) {
++  Message m{};
++  m.opcode = opcode; m.role = role; m.reader_session = 123U;
++  m.slot_nonce = 0x521B000000000123ULL; m.boot_id = boot; m.usb_epoch = epoch;
++  return m;
++}
++Message tuple_command(Op opcode, Role role, std::uint64_t boot,
++                      std::uint32_t epoch) {
++  auto m = command(opcode, role, boot, epoch);
++  m.grant_session = 640U; m.grant_cycle = 2U;
++  m.action_token = 7U; m.writer_generation = 9U;
++  return m;
++}
++void pop(R19GrantReservationController& c, Op expected) {
++  check(c.peek_reply() != nullptr && c.peek_reply()->opcode == expected,
++        "expected fixed reply is queued");
++  check(c.pop_reply(), "whole-frame committed reply may be popped");
++}
++struct Pair {
++  R19GrantReservationController ground{};
++  R19GrantReservationController vehicle{};
++  Pair() {
++    check(ground.initialize(Role::Ground, 11U, 0U, 100U), "Ground initialize epoch zero");
++    check(vehicle.initialize(Role::Vehicle, 22U, 1U, 100U), "Vehicle initialize");
++    auto g = command(Op::HelloRequest, Role::Ground, 0U, 0U);
++    auto v = command(Op::HelloRequest, Role::Vehicle, 0U, 0U);
++    check(ground.handle_command(g, 101U) && ground.peek_reply() == nullptr,
++          "Ground Hello remains pending before actual RF baseline");
++    check(ground.on_ground_baseline(640U, 1U, 102U), "real baseline callback");
++    pop(ground, Op::HelloReply);
++    check(vehicle.handle_command(v, 103U), "Vehicle Hello accepted once");
++    pop(vehicle, Op::HelloReply);
++    auto prepare = command(Op::PrepareVehicle, Role::Vehicle, 22U, 1U);
++    prepare.grant_session = 640U; prepare.grant_cycle = 1U;
++    check(vehicle.handle_command(prepare, 104U) && vehicle.awaiting_grant(),
++          "Prepare waits for bridge-observed real issued Grant");
++    check(vehicle.on_prepared(640U, 2U, 7U, 9U, 850U, 110U),
++          "actual pending action identity and bounded exclusive hold");
++    pop(vehicle, Op::Prepared);
++    check(!vehicle.should_release() && vehicle.holding(),
++          "zero RF writes permitted before explicit release");
++    check(ground.handle_command(tuple_command(Op::BindGround, Role::Ground, 11U, 0U), 111U),
++          "bind own Ground tuple");
++    check(!ground.ground_request_allowed(), "peer binding also mandatory");
++    check(ground.handle_command(tuple_command(Op::BindPeerGround, Role::Ground, 22U, 1U), 112U),
++          "bind peer Vehicle identity");
++    pop(ground, Op::Bound);
++    check(vehicle.handle_command(tuple_command(Op::BindPeerVehicle, Role::Vehicle, 11U, 0U), 113U),
++          "bind peer Ground on prepared Vehicle");
++    check(ground.ground_request_allowed(), "bound Ground permits exact request callback");
++  }
++  void held(std::uint64_t t0 = 200U) {
++    check(ground.on_ground_held(t0, 640U, 1U, t0), "actual original held callback");
++    pop(ground, Op::GroundHeld);
++  }
++  void released() {
++    auto release = tuple_command(Op::ReleaseGrant, Role::Vehicle, 22U, 1U);
++    release.device_ms = 200U;  // Peer claim, never a Vehicle local timestamp.
++    check(vehicle.handle_command(release, 220U) && vehicle.should_release(),
++          "matching explicit release authorizes same held action once");
++    check(vehicle.on_grant_write_accepted(640U, 2U, 7U, 9U, 230U),
++          "actual UART acceptance retires pending release");
++    check(!vehicle.should_release() && !vehicle.holding(), "no duplicate physical write");
++  }
++};
++
++void codec() {
++  auto hello = command(Op::HelloRequest, Role::Ground, 0U, 0U);
++  MavlinkFrame wire{};
++  check(r19_encode_grant_reservation_frame(hello, false, 1U, wire) && wire.size == 66U,
++        "reservation exact66 unsigned MAVLink2 frame");
++  check(r19_is_grant_reservation_namespace(wire), "exclusive private namespace");
++  Message decoded{};
++  check(r19_decode_grant_reservation_frame(wire.bytes.data(), wire.size, false, decoded) &&
++            decoded.slot_nonce == hello.slot_nonce && decoded.reader_session == 123U,
++        "canonical wire roundtrip");
++  for (std::size_t index = 0U; index < wire.size; ++index) {
++    auto damaged = wire; damaged.bytes[index] ^= 1U;
++    Message output{}; output.boot_id = 999U;
++    check(!r19_decode_grant_reservation_frame(damaged.bytes.data(), damaged.size, false, output) &&
++              output.boot_id == 999U, "every single-bit mutation rejected without output mutation");
++  }
++  check(!r19_decode_grant_reservation_frame(wire.bytes.data(), wire.size - 1U, false, decoded),
++        "partial wire rejected");
++  check(!r19_decode_grant_reservation_frame(wire.bytes.data(), wire.size, true, decoded),
++        "request component not response component");
++  auto changed = hello; changed.flags = 1U;
++  check(!r19_encode_grant_reservation_frame(changed, false, 1U, wire), "nonzero flags forbidden");
++  changed = hello; changed.slot_nonce = 123U;
++  check(!r19_encode_grant_reservation_frame(changed, false, 1U, wire), "nonce namespace tag required");
++  changed = hello; changed.slot_nonce = 0x521B000000000000ULL;
++  check(!r19_encode_grant_reservation_frame(changed, false, 1U, wire), "tagged nonce requires nonzero private identity");
++  changed = hello; changed.opcode = Op::Started;
++  check(!r19_encode_grant_reservation_frame(changed, true, 1U, wire), "Started not a wire opcode");
++  changed = tuple_command(Op::TailReady, Role::Vehicle, 22U, 1U);
++  changed.device_ms = static_cast<std::uint64_t>(std::numeric_limits<std::uint32_t>::max()) + 1U;
++  check(!r19_encode_grant_reservation_frame(changed, true, 1U, wire), "wire uptime overflow not truncated");
++}
++
++void causal_fences() {
++  Pair p{}; p.held(); p.released();
++  check(p.ground.on_ground_grant(640U, 2U, 500U), "fresh RF Grant within original500");
++  check(!p.ground.negotiation_allowed(601U), "Groundguard alone cannot substitute Vehicle physicaltail");
++  check(p.vehicle.on_tail(640U, 2U, 7U, 9U, 780U), "actual550ms local Grant drain callback");
++  pop(p.vehicle, Op::TailReady);
++  auto permit = tuple_command(Op::TailPermitGround, Role::Ground, 22U, 1U);
++  permit.device_ms = 780U;
++  check(p.ground.handle_command(permit, 800U), "causal peer-tail permit received");
++  check(!p.ground.negotiation_allowed(899U) && p.ground.negotiation_allowed(900U),
++        "second causal100ms fence independent of GroundGrant guard");
++  check(p.vehicle.on_vehicle_vcbn(640U, 2U, 1280U) && !p.vehicle.failed(),
++        "complete canonical VCBN at actualP+500 inclusive");
++  check(p.ground.snapshot().ground_t0_ms == 200U,
++        "tail permit and guard never rebase original Groundt0");
++  Pair late{}; late.held(); late.released();
++  check(late.vehicle.on_tail(640U, 2U, 7U, 9U, 780U), "late fixture physicaltail");
++  check(!late.vehicle.on_vehicle_vcbn(640U, 2U, 1281U) && late.vehicle.failed(),
++        "VehicleP+501 rejected");
++  Pair missing{}; missing.held();
++  check(!missing.ground.on_ground_grant(640U, 2U, 701U), "Groundt0+501 rejected");
++  Pair edge{}; edge.held();
++  check(edge.ground.on_ground_grant(640U, 2U, 700U), "Groundt0+500 inclusive");
++}
++
++void refusals_and_record() {
++  R19GrantReservationController late_prepare{};
++  check(late_prepare.initialize(Role::Vehicle,22U,1U,100U), "late prepare init");
++  check(late_prepare.handle_command(command(Op::HelloRequest,Role::Vehicle,0U,0U),101U),
++        "late prepare hello");
++  pop(late_prepare,Op::HelloReply);
++  auto preparation=command(Op::PrepareVehicle,Role::Vehicle,22U,1U);
++  preparation.grant_session=640U;preparation.grant_cycle=1U;
++  check(late_prepare.handle_command(preparation,102U), "late prepare requested");
++  check(!late_prepare.on_prepared(640U,2U,7U,9U,8602U,8102U),
++        "expired preparation cannot be revived by a later callback");
++  Pair stale_tail{};stale_tail.held();
++  check(stale_tail.ground.on_ground_grant(640U,2U,500U), "stale tail fixture Grant");
++  auto late_permit=tuple_command(Op::TailPermitGround,Role::Ground,22U,1U);
++  late_permit.device_ms=780U;
++  check(!stale_tail.ground.handle_command(late_permit,2501U),
++        "late command cannot skip the original two-second tail wait");
++  Pair stale_request{};
++  check(!stale_request.ground.on_ground_held(8111U,640U,1U,8111U),
++        "expired Ground binding cannot be revived by an actual-held callback");
++  Pair expired{};
++  check(!expired.vehicle.tick(850U) && !expired.vehicle.should_release(),
++        "hold exclusive deadline expires without action reissue");
++  Pair epoch{};
++  check(!epoch.ground.observe_local_epoch(1U, 120U), "local epoch change fails");
++  const auto frozen = epoch.ground.snapshot();
++  check(!epoch.ground.tick(121U) && epoch.ground.snapshot().event_count == frozen.event_count,
++        "first failure immutable, no postfault journal rewrite");
++  Pair replay{}; replay.held(); replay.released();
++  auto command_again = tuple_command(Op::ReleaseGrant, Role::Vehicle, 22U, 1U);
++  command_again.device_ms = 200U;
++  check(!replay.vehicle.handle_command(command_again, 240U), "release replay never writes twice");
++  Pair wrong{}; wrong.held();
++  auto bad = tuple_command(Op::TailPermitGround, Role::Ground, 22U, 1U);
++  ++bad.writer_generation;
++  check(!wrong.ground.handle_command(bad, 250U), "changed writer generation rejected");
++  Pair order{}; order.held();
++  check(!order.vehicle.on_tail(640U, 2U, 7U, 9U, 225U), "tail cannot precede actual UART accept");
++  R19GrantReservationRecord record{};
++  check(sizeof(record) == 512U, "record512 exact ABI");
++  constexpr std::array<std::uint32_t, 4U> build{{1U,2U,3U,4U}};
++  constexpr std::array<std::uint32_t, 4U> boot{{11U,0U,7U,8U}};
++  check(record.initialize(Role::Ground, build, boot) && record.observe(frozen),
++        "record stable identity initialization and controller snapshot");
++  check(record.words[2U] == 0x52313952U && record.words[14U] == 512U &&
++            record.words[13U] == 7U && record.words[31U] == 0U,
++        "record magic, firstfault freeze and reserved bytes");
++  const auto sequence = record.words[1U];
++  check(record.observe(epoch.ground.snapshot()) && record.words[1U] == sequence,
++        "frozen record not rewritten by repeated observer calls");
++}
++void strict_boundaries_and_record_validation() {
++  Pair delayed{};
++  check(!delayed.ground.on_ground_held(200U,640U,1U,701U),
++        "delayed callback cannot publish an already-expired original held t0");
++  Pair near_wrap{};near_wrap.held();near_wrap.released();
++  check(near_wrap.ground.on_ground_grant(640U,2U,500U), "gate fixture actual Grant");
++  auto permit=tuple_command(Op::TailPermitGround,Role::Ground,22U,1U);
++  permit.device_ms=780U;
++  check(near_wrap.ground.handle_command(permit,800U), "gate fixture TailPermit");
++  check(!near_wrap.ground.negotiation_allowed(
++          static_cast<std::uint64_t>(std::numeric_limits<std::uint32_t>::max())+1U),
++        "permission query cannot authorize wire-time overflow");
++  constexpr std::array<std::uint32_t,4U> build{{1U,2U,3U,4U}};
++  constexpr std::array<std::uint32_t,4U> boot{{11U,0U,7U,8U}};
++  const auto pristine=near_wrap.ground.snapshot();
++  for(unsigned kind=0U;kind<6U;++kind) {
++    R19GrantReservationRecord record{};
++    check(record.initialize(Role::Ground,build,boot), "malformed record fixture init");
++    auto changed=pristine;
++    switch(kind) {
++      case 0U:changed.state=static_cast<State>(15U);break;
++      case 1U:changed.journal[0U].event=16U;break;
++      case 2U:changed.journal[0U].state_reason=15U;break;
++      case 3U:changed.journal[0U].state_reason=22U<<16U;break;
++      case 4U:changed.journal[1U].timestamp_ms=changed.journal[0U].timestamp_ms-1U;break;
++      default:changed.journal[0U].event=15U;break;
++    }
++    check(!record.observe(changed) && record.words[1U]==2U,
++          "invalid enum/order/premature fault snapshot rejected without write");
++  }
++  R19GrantReservationController wrong_reply{};
++  check(wrong_reply.initialize(Role::Vehicle,22U,1U,100U), "reply validation init");
++  check(!wrong_reply.note_reply_completed(Op::PrepareVehicle,101U),
++        "request opcode cannot be reported as USB reply commit");
++}
++void diagnostic_scope_and_journal() {
++  constexpr std::array<std::uint32_t,4U> build{{1U,2U,3U,4U}};
++  constexpr std::array<std::uint32_t,4U> boot{{11U,0U,7U,8U}};
++  R19GrantReservationController c{};
++  check(c.initialize(Role::Ground,11U,0U,100U), "journal epoch-zero init");
++  check(c.handle_command(command(Op::HelloRequest,Role::Ground,0U,0U),101U),
++        "journal Hello remains pending");
++  check(c.tick(14100U) && c.peek_reply()==nullptr,
++        "Hello waits real baseline; runner owns preparation timeout, not fake RF event");
++  check(c.on_ground_baseline(640U,0U,14101U), "actual baseline cycle zero is valid");
++  pop(c,Op::HelloReply);
++  for(std::uint64_t now=14102U;now<14122U;++now)
++    check(c.note_reply_completed(Op::HelloReply,now), "bounded journal observed reply event");
++  check(c.snapshot().event_count==22U && c.snapshot().journal_count==12U &&
++        c.snapshot().journal_dropped==10U, "journal counts first8 plus last4 retention");
++  for(std::size_t i=0U;i<8U;++i)
++    check(c.snapshot().journal[i].timestamp_ms==(i==0U?101U:14100U+i),
++          "journal preserves first eight chronological events");
++  for(std::size_t i=8U;i<12U;++i)
++    check(c.snapshot().journal[i].timestamp_ms==14110U+i,
++          "journal retains four most recent events in order");
++  check(!c.abort(Reason::ExternalFault,14122U,99U), "external stop freezes first failure");
++  const auto frozen=c.snapshot();
++  check(frozen.journal[11U].event==15U && frozen.journal[11U].aux==99U &&
++        frozen.reason==Reason::ExternalFault && frozen.journal_dropped==11U,
++        "first failure is final retained journal entry without reserved-word reuse");
++  R19GrantReservationRecord record{};
++  check(record.initialize(Role::Ground,build,boot) && record.observe(frozen),
++        "retained journal serializes under strict build/boot binding");
++  check(record.words[17U]==(12U|(11U<<16U)) && record.words[120U]==15U &&
++        record.words[127U]==99U && record.words[1U]%2U==0U && record.words[0U]==0U,
++        "512-byte stable seqlock journal matches exact header and final event");
++  for(unsigned mutation=0U;mutation<5U;++mutation) {
++    Pair p{};
++    auto m=tuple_command(Op::TailPermitGround,Role::Ground,22U,1U);
++    p.held();m.device_ms=780U;
++    switch(mutation) {
++      case 0U:++m.reader_session;break;
++      case 1U:++m.slot_nonce;break;
++      case 2U:++m.boot_id;break;
++      case 3U:++m.usb_epoch;break;
++      default:++m.action_token;break;
++    }
++    check(!p.ground.handle_command(m,250U) && p.ground.failed() &&
++          !p.ground.negotiation_allowed(500U), "scope/peer/token mutation cannot open negotiation");
++  }
++  Pair premature{};premature.held();premature.released();
++  check(!premature.vehicle.on_tail(640U,2U,7U,9U,779U), "service floor549 never physical completion");
++  Pair causal{};causal.held();
++  auto permit=tuple_command(Op::TailPermitGround,Role::Ground,22U,1U);
++  permit.device_ms=780U;
++  check(causal.ground.handle_command(permit,300U), "peer claim may arrive before local RF observation");
++  check(!causal.ground.negotiation_allowed(450U), "peer claim alone cannot replace accepted RF Grant");
++  check(causal.ground.on_ground_grant(640U,2U,500U) &&
++        !causal.ground.negotiation_allowed(599U) && causal.ground.negotiation_allowed(600U),
++        "both independent local hundred-ms fences remain mandatory");
++  check(causal.ground.on_ground_negotiation_started(600U) && causal.ground.tick(30000U),
++        "actual negotiation start retires only reservation phase timers");
++  Pair immutable{};
++  check(!immutable.vehicle.tick(112U) && immutable.vehicle.snapshot().reason==Reason::ClockRegression,
++        "local clock regression fails against original timestamp");
++  const auto original=immutable.vehicle.snapshot();
++  check(!immutable.vehicle.abort(Reason::ExternalFault,120U,321U) &&
++        immutable.vehicle.snapshot().event_count==original.event_count &&
++        immutable.vehicle.snapshot().reason==Reason::ClockRegression,
++        "later abort cannot overwrite original first failure");
++}
++}  // namespace
++int main() {
++  codec(); causal_fences(); refusals_and_record(); strict_boundaries_and_record_validation();
++  diagnostic_scope_and_journal();
++  std::cout << "r19-grant-reservation checks=" << checks << " failures=" << failures
++            << " diagnostic_dual_usb_only=1 product_RF_reservation=0\n";
++  return failures == 0U ? 0 : 1;
++}
++#endif
+diff --git a/R19_GRANT_RESERVATION_DIAGNOSTICS.md b/R19_GRANT_RESERVATION_DIAGNOSTICS.md
+new file mode 100644
+index 0000000..0df1c0c
+--- /dev/null
++++ b/R19_GRANT_RESERVATION_DIAGNOSTICS.md
+@@ -0,0 +1,46 @@
++# R19 診断用Grant予約と実機評価手順
++
++更新日: 2026-10-25 JST
++
++両XIAOのUSBを同じPCで監視する診断試験に限り、Vehicleが実際に発行した次のGrantを一時保持し、Groundで完全な取得要求を受け付けた後に送信する。無線だけで任意の時点から高速開始できる製品用予約プロトコルとは区別する。
++
++## 維持する通信条件
++
++Groundの完全なPARAM_REQUEST_LIST受付から新しいGrant受信までは500 ms以内、Vehicleの同じGrantの物理送信完了から正当な完全VCBN受付までも500 ms以内とする。Groundの100 ms guard、製品Heartbeatの106 ms公開条件、元の要求時刻からの28秒leaseと30秒取得条件は変更しない。
++
++ピン、Pixhawkの57600 bps、E220 UARTの115200 bps、air 19.2 kbps、32-byte chunk、550 msのservice floorとAUX HIGH連続15 msも維持する。AUX HIGHだけを最終RF到達の証明にはしない。
++
++## 開始と送信完了の順序
++
++1. 両機の候補・役割・USB epochを照合する。両側のUSBローカル時刻応答、Ground READY／ARM、その後の主機体Heartbeatを確認する。
++2. Groundで実際に受理した標準Grantをbaselineとして取得する。Heartbeatや予定周期からbaselineを作らない。
++3. Vehicleの標準TDDが実際に発行したSendGrantに対して、本物のwriter tokenとgenerationを取得する。まだUARTへ書かず、同じactionを最大750 msだけ保持する。保持中もAUX観測と期限判定を継続し、Heartbeatやepoch等で条件を失えば停止する。
++4. PCが両機のboot、epoch、reader session、slot nonce、Grant session／cycle、writer token／generationを結び付ける。GroundのBound応答前に取得要求を送らない。
++5. 完全な取得要求を最大1回送る。Groundが既存adapterでHeldとなった実時刻を元の要求時刻に固定する。PCは実際のGroundHeld応答後にだけ、Vehicleへ保持したGrantの送信を指示する。
++6. Vehicleは同じwriter leaseとactionを1回だけ使用する。Groundは実際の新Grant受信を元の要求から500 ms以内で検査する。
++7. Vehicleは既存の物理送信完了処理が成立した時刻Pを保存し、TailReadyを公開する。PCがこれを照合してGroundへ渡す。Groundは元のGrant受信後100 msに加え、TailPermitのローカル受信後100 msも満たしてからVCBNを送る。
++8. Vehicleで完全かつ正当なVCBNが受理された時刻Qを保存し、同じMCU時計で0≦Q−P≦500 msを検査する。その後の交渉、bulk、終端確認も既存の条件で評価する。
++
++USBの通知遅延や無線の遅延により条件を満たせない場合は失敗となる。この手順は、将来の通信時間の上限や高速開始の成功を保証するものではない。異なるMCUの時計を直接引き算しない。
++
++## 記録と測定区間
++
++準備は最大15秒とし、その後に固定40秒の測定区間を設ける。準備不成立時は取得要求を送らず、原因記録のための受信のみを続ける。取得要求の部分書込み・例外・期限切れでも再要求せず、元の要求時刻は移動しない。
++
++連続readerが取得した全rawを保存し、準備と測定の区間別raw、境界offset、PC読取り時刻、各制御OUTの試行・完了を別に残す。1回のPC読取りが区間境界をまたぐ場合、そのbyte単位の物理到着時刻は不明として扱う。
++
++新しい512-byte固定JTAG記録 `vc_lora_r19_grant_reservation_record` は、既存記録を変更せず追加する。schema 1、magic `0x52313952`、boot／epoch／tupleと12件のイベント履歴を保持し、初回失敗で全体を固定する。reader v10は両機それぞれ10記録を2回ずつ読み、rawから独立に再照合する。旧reader v8／v9は既存用途のまま残す。
++
++新しい私設制御はMAVLink2 STATUSTEXT内の66-byteフレームで、sys249、要求component197、応答component198を使用する。CRCとnonceは診断の照合用であり、PCの認証ではない。これらのフレームをPixhawkやRF製品経路へ転送しない。製品運用でPowerShellやdual-COMの予約制御を必須にする仕様ではない。
++
++## 有効化と受入判定
++
++機能は既定OFFの `VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS` と測定側の `GrantReservationDiagnostics` で明示的に選ぶ。完全なGrant診断とExplicitHostArmを前提とし、専用candidate・能力契約・26ツールの照合が一致した場合だけ使用する。旧candidateや机上のslot計画を予約成立の代用にしない。
++
++実機試験は一回限定許可、安全6項目、電源OFFと再接続の確認後に実施し、終了時はaccepted R18を両機へ復旧してdigestを照合する。準備15秒を追加した今回の範囲は再接続案内で確認する。
++
++高速成功には、実際の両500 ms条件、交渉完了、bulkと終端確認、および同一runの932/932件・30秒以内・Heartbeat最大2500 ms以下・全error 0が必要である。診断取得やR18復旧だけの成功、低速への切替え、Heartbeatの件数だけを高速成功とはしない。
++
++## 検証結果の入口
++
++[今回の検証summary](runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/summary.json)に、失敗試験と修正後評価、両機ビルド、候補照合、実機試験の実施有無を保存する。実機の通信改善は、当該実測結果で判定する。

@@ -1,0 +1,6 @@
+E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_flash_operation_regression.ps
+1 : The variable '$modeHandoff' cannot be retrieved because it has not been set.
+    + CategoryInfo          : InvalidOperation: (modeHandoff:String) [check_r19_grant..._regression.ps1], RuntimeExcep 
+   tion
+    + FullyQualifiedErrorId : VariableIsUndefined,check_r19_grant_reservation_flash_operation_regression.ps1
+ 

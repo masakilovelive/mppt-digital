@@ -1,0 +1,2 @@
+r19-grant-reservation checks=371 failures=0 diagnostic_dual_usb_only=1 product_RF_reservation=0
+test_exit_code=0
