@@ -1,0 +1,7 @@
+{
+    "schema":  "vc-lora-r19-grant-outer-offline-v1",
+    "result":  "PASS",
+    "checks":  33,
+    "hardware_operations":  0,
+    "deadline_changes":  0
+}

@@ -1,0 +1,68 @@
+warning: in the working copy of 'runs\validation\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-fix\before\tests\host\CMakeLists.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/host/CMakeLists.txt', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\before\\tests\\host\\CMakeLists.txt" b/tests/host/CMakeLists.txt
+index 0e3f422..9fa3d1f 100644
+--- "a/runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\before\\tests\\host\\CMakeLists.txt"
++++ b/tests/host/CMakeLists.txt
+@@ -456,22 +456,50 @@ if(NOT MSVC)
+ endif()
+ add_test(NAME UT-R19-GRANT-RESERVATION-CORE-001
+   COMMAND vc_lora_r19_grant_reservation_tests)
++add_executable(vc_lora_r19_grant_reservation_stop_tests
++  standalone/r19_grant_reservation_stop_tests.cpp)
++target_link_libraries(vc_lora_r19_grant_reservation_stop_tests PRIVATE vc_lora_core)
++target_compile_features(vc_lora_r19_grant_reservation_stop_tests PRIVATE cxx_std_17)
++if(WIN32 AND NOT MSVC)
++  target_link_options(vc_lora_r19_grant_reservation_stop_tests PRIVATE -static)
++endif()
++add_test(NAME UT-R19-GRANT-RESERVATION-STOP-RECORD-001
++  COMMAND vc_lora_r19_grant_reservation_stop_tests)
+ add_test(NAME IT-R19-GRANT-RESERVATION-GROUND-001
+   COMMAND vc_lora_phase6_grant_reservation_ground_tests)
+ add_executable(vc_lora_phase6_grant_reservation_ground_flow_tests
+   standalone/phase6_grant_reservation_flow_tests.cpp)
+ add_executable(vc_lora_phase6_grant_reservation_vehicle_flow_tests
+   standalone/phase6_grant_reservation_flow_tests.cpp)
++add_executable(vc_lora_phase6_grant_reservation_ground_stop_flow_tests
++  standalone/phase6_grant_reservation_flow_tests.cpp)
++add_executable(vc_lora_phase6_grant_reservation_vehicle_stop_flow_tests
++  standalone/phase6_grant_reservation_flow_tests.cpp)
++target_compile_definitions(vc_lora_phase6_grant_reservation_ground_stop_flow_tests PRIVATE
++  RESERVATION_TEST_STOP=1)
++target_compile_definitions(vc_lora_phase6_grant_reservation_vehicle_stop_flow_tests PRIVATE
++  RESERVATION_TEST_STOP=1 RESERVATION_TEST_VEHICLE=1)
+ target_compile_definitions(vc_lora_phase6_grant_reservation_vehicle_flow_tests PRIVATE
+   RESERVATION_TEST_VEHICLE=1)
+-foreach(reservation_case IN ITEMS positive grant-late busy-at-request duplicate-request stale-loop-ms)
++foreach(reservation_case IN ITEMS positive grant-late busy-at-request duplicate-request stale-loop-ms wrong-wire-version)
+   add_test(NAME IT-R19-GRANT-RESERVATION-GROUND-${reservation_case}-001
+     COMMAND vc_lora_phase6_grant_reservation_ground_flow_tests ${reservation_case})
+ endforeach()
+-foreach(reservation_case IN ITEMS positive hold-expired epoch-after-prepare usb-prefix-expired)
++foreach(reservation_case IN ITEMS positive hold-expired epoch-after-prepare usb-prefix-expired wrong-wire-version)
+   add_test(NAME IT-R19-GRANT-RESERVATION-VEHICLE-${reservation_case}-001
+     COMMAND vc_lora_phase6_grant_reservation_vehicle_flow_tests ${reservation_case})
+ endforeach()
++foreach(reservation_case IN ITEMS positive wrong-wire-version stop-aux stop-lease stop-token
++    stop-generation stop-busy stop-pending stop-tail stop-reservation
++    cancel-heartbeat154 cancel-replay hold-expired epoch-after-prepare usb-prefix-expired)
++  add_test(NAME IT-R19-GRANT-RESERVATION-VEHICLE-STOP-${reservation_case}-001
++    COMMAND vc_lora_phase6_grant_reservation_vehicle_stop_flow_tests ${reservation_case})
++endforeach()
++foreach(reservation_case IN ITEMS positive wrong-wire-version cancel-ground-preheld
++    cancel-ground-same-nonce cancel-ground-after-held)
++  add_test(NAME IT-R19-GRANT-RESERVATION-GROUND-STOP-${reservation_case}-001
++    COMMAND vc_lora_phase6_grant_reservation_ground_stop_flow_tests ${reservation_case})
++endforeach()
+ add_test(NAME IT-R19-GRANT-DIAGNOSTIC-BRIDGE-001 COMMAND vc_lora_phase6_grant_diagnostic_hooks_tests)
+ add_executable(vc_lora_r19_pre_negotiation_fallback_tests
+   standalone/r19_pre_negotiation_fallback_tests.cpp)
+@@ -522,6 +550,8 @@ foreach(runtime_fail_bridge_target IN ITEMS
+     vc_lora_phase6_grant_reservation_ground_tests
+   vc_lora_phase6_grant_reservation_ground_flow_tests
+   vc_lora_phase6_grant_reservation_vehicle_flow_tests
++  vc_lora_phase6_grant_reservation_ground_stop_flow_tests
++  vc_lora_phase6_grant_reservation_vehicle_stop_flow_tests
+     vc_lora_r19_pre_negotiation_fallback_tests
+     vc_lora_phase6_grant_diagnostic_hooks_tests
+     vc_lora_phase6_vehicle_usb_clock_tests

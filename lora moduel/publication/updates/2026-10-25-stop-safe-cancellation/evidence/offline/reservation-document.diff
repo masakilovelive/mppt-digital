@@ -1,0 +1,43 @@
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\R19_GRANT_RESERVATION_DIAGNOSTICS.before.md" b/R19_GRANT_RESERVATION_DIAGNOSTICS.md
+index ee465bd..8c1b5a6 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\R19_GRANT_RESERVATION_DIAGNOSTICS.before.md"
++++ b/R19_GRANT_RESERVATION_DIAGNOSTICS.md
+@@ -2,6 +2,38 @@
+ 
+ 更新日: 2026-10-25 JST
+ 
++## Heartbeat優先と予約の安全取消し
++
++2026年10月25日の追加修正は、利用者が選択した「安全取消し、Heartbeat優先、別Grantで新規予約」を診断限定で実装する。実機操作は含めない。過去のdetail 13の単一原因を確定したという意味ではなく、同じ競合を再現した試験と、次回その瞬間を区別するための記録を追加する。
++
++取消しは、予約したGrantのUART受付が0 byteであり、送信中、tail待ち、別actionがなく、同じwriter leaseを退役できる場合に限る。古いRF cycleも退役させ、通常のHeartbeat処理へ戻す。単なる待ち時間延長、Heartbeatの無視、同じGrantの再利用は行わない。
++
++PCは旧予約の識別子を使い、GroundとVehicleそれぞれの取消し応答を取得する。さらに両機へ相手側の取消し情報を伝え、双方の確認応答を得た後だけ、同じ連続reader上の新しいnonceで再準備する。新しいGrantのcycle、token、writer generationを照合し、旧予約や遅れて届いた旧応答による復活を拒否する。取消しは最大1回、予約準備は最大2ラウンドで、元のPC準備15秒とMCU準備8秒を延長しない。
++
++PARAM要求を一度でも送信し始めた場合、またはGroundが要求をHeldにした場合は、自動再準備しない。要求時刻と送信回数を保持して停止し、`ATTEMPTED_ABORT`として扱う。実送信が0回なら`NOT_ATTEMPTED`と記録する。準備中止でも診断rawと所定の測定区間を保存する。
++
++runnerはPARAM要求とGrant解放を送る直前に、両側の連続readerに既に保存された停止通知を検査する。未完のフレームでは送信を保留し、完全な通知を待つ。R19Fにはbootやbuild識別子が入っていないため、候補の照合、物理role、継続reader、Hello、epochを結ぶ間接的な対応付けであることも保存する。
++
++### 追加記録と有効化
++
++新機能は `VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS` と `GrantReservationStopDiagnostics` の明示指定が必要で、既定はOFFとする。新しい私設USB制御はversion 2で、CancelRequest 15、CancelAck 16、Withdrawn 17、CancelPeerConfirmed 18を追加する。旧version 1はこれらを受け付けない。制御は診断USB内に限定し、RF、Pixhawk、GCSへ漏らさない。
++
++初回の停止条件は、独立した128-byte記録 `vc_lora_r19_grant_reservation_stop_record` に固定する。Heartbeat、AUX、lease、owner、token、generation、radio busy、未処理action、tail待ちと、その時点のMCU時刻を区別する。flags 15は安全取消しの記録、flags 7は実停止の記録であり、同じ失敗として集計しない。この初回記録だけでは、後続の双方確認と新規予約の成立を証明しない。
++
++追加モードのreader v11は、両機それぞれ11記録を2回ずつ、計22 rawで照合する。元の512-byte記録のschema 1は変更せず、旧モードのreader v10と20 rawも維持する。候補保存先は別の `R19-GRANT-RESERVATION-STOP-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001` とし、従来の封印済み候補を上書きしない。
++
++今回の修正と検証の入口は[オフライン修正の記録](runs/validation/R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001/20261025T-fix/summary.json)とする。各500 ms、製品USB 106 ms、Heartbeat 2,500 ms、AUX 2,000 ms、guard 100 ms、hold 750 ms、元の要求からの30秒条件と通信設定は維持する。実機の932/932件取得と高速通信成立は、別の実測で判定する。
++
++### オフライン検証結果
++
++修正後の全479/479試験が665.53秒で合格し、Vehicle→Groundの両Arduinoビルドと候補の最終照合も合格した。新候補は `20261025T075246002Z-0508974a` で、85ソース、両ELFの各11診断レコード、保存物175件、旧R18保存物を含む独立照合26項目にも不一致はなかった。最終試験前後で85ソース、27ツール、256試験ファイルとCMakeのハッシュが一致している。
++
++初回の全体検査で見つかった旧モードとの照合値・未定義変数・隔離試験の依存関係は修正し、失敗ログも保存した。既存のログ再解析試験はビルド並行時に60秒で打ち切られたが、同じ試験を変更せずに最後まで実行すると88.24秒で合格した。ビルド終了後の最終一括試験では、元の60秒条件のまま30.80秒で合格した。試験の時間制限も製品の通信期限も延長していない。
++
++今回の作業ではCOM接続、JTAG、実機書込み、追加の無線測定、GitHub更新を行っていない。旧実機ログと使用済み許可は保存したままとし、このオフライン合格を新たな実機許可や高速取得の受入へ読み替えない。
++
++## 既存の予約手順
++
+ 両XIAOのUSBを同じPCで監視する診断試験に限り、Vehicleが実際に発行した次のGrantを一時保持し、Groundで完全な取得要求を受け付けた後に送信する。無線だけで任意の時点から高速開始できる製品用予約プロトコルとは区別する。
+ 
+ ## 維持する通信条件

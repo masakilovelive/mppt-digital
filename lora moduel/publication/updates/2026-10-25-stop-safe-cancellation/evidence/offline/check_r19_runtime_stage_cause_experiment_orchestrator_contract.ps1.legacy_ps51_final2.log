@@ -1,0 +1,4 @@
+Recorded ALIVE32/63 outer admission PASS: fail-only; 20 unsafe evidence mutations rejected; synthetic identity fixtures only.
+Recorded ALIVE raw independent validation PASS: 7 rehashed CRC/identity mutations rejected.
+Recorded R19F boundary outer admission PASS: 441/2646 immutable bytes; fail-only; 18 metadata and 9 rehashed raw mutations rejected, including CRC-repaired snapshot/sequence and valid wrong-prior suffix.
+R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-ORCHESTRATOR-CONTRACT-001 PASS

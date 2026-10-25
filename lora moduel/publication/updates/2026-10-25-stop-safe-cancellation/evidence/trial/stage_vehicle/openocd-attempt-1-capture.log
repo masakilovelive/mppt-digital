@@ -1,0 +1,64 @@
+=== STDOUT ===
+
+=== STDERR ===
+Open On-Chip Debugger v0.12.0-esp32-20260424 (2026-04-24-15:13)
+Licensed under GNU GPL v2
+For bug reports, read
+	http://openocd.org/doc/doxygen/bugs.html
+Info : esp_usb_jtag: VID set to 0x303a and PID to 0x1001
+Info : esp_usb_jtag: capabilities descriptor set to 0x2000
+adapter usb location: 1-4.2
+Info : esp_usb_jtag: serial (90:70:69:11:81:A4)
+Info : esp_usb_jtag: Device found. Base speed 40000KHz, div range 1 to 255
+Info : clock speed 40000 kHz
+Info : JTAG tap: esp32s3.tap0 tap/device found: 0x120034e5 (mfg: 0x272 (Tensilica), part: 0x2003, ver: 0x1)
+Info : JTAG tap: esp32s3.tap1 tap/device found: 0x120034e5 (mfg: 0x272 (Tensilica), part: 0x2003, ver: 0x1)
+Info : [esp32s3.cpu0] Examination succeed
+Info : [esp32s3.cpu1] Examination succeed
+Info : [esp32s3.cpu0] starting gdb server on 3333
+Info : Listening on port 3333 for gdb connections
+VC_LORA_JTAG_OPEN_SERIAL=90:70:69:11:81:A4
+VC_LORA_JTAG_OPEN_LOCATION=1-4.2
+VC_LORA_JTAG_IDENTITY_MATCHED
+Info : [esp32s3.cpu0] Debug controller was reset.
+Info : [esp32s3.cpu0] Core was reset.
+Info : [esp32s3.cpu0] Target halted, PC=0x4037808A, debug_reason=00000000
+Info : Set GDB target to 'esp32s3.cpu0'
+Info : [esp32s3.cpu1] Debug controller was reset.
+Info : [esp32s3.cpu1] Core was reset.
+Info : [esp32s3.cpu1] Target halted, PC=0x4037808A, debug_reason=00000000
+Info : [esp32s3.cpu1] Reset cause (21) - (USB UART reset)
+Info : [esp32s3.cpu1] Chip revision v0.2
+Info : [esp32s3.cpu0] Reset cause (21) - (USB UART reset)
+VC_LORA_HALT_CPU0
+VC_LORA_HALT_CURSTATE_CPU0=halted
+VC_LORA_HALT_CPU1
+VC_LORA_HALT_CURSTATE_CPU1=halted
+dumped 68 bytes in 0.000999s (66.473 KiB/s)
+dumped 112 bytes in 0.001997s (54.770 KiB/s)
+dumped 128 bytes in 0.002000s (62.500 KiB/s)
+dumped 128 bytes in 0.002004s (62.375 KiB/s)
+dumped 384 bytes in 0.005244s (71.510 KiB/s)
+dumped 512 bytes in 0.000894s (559.284 KiB/s)
+dumped 6144 bytes in 0.058887s (101.890 KiB/s)
+dumped 256 bytes in 0.003636s (68.757 KiB/s)
+dumped 1024 bytes in 0.012126s (82.467 KiB/s)
+dumped 512 bytes in 0.005718s (87.443 KiB/s)
+dumped 128 bytes in 0.003081s (40.571 KiB/s)
+dumped 68 bytes in 0.000000s (inf KiB/s)
+dumped 112 bytes in 0.001877s (58.271 KiB/s)
+dumped 128 bytes in 0.001996s (62.625 KiB/s)
+dumped 128 bytes in 0.002000s (62.500 KiB/s)
+dumped 384 bytes in 0.004550s (82.418 KiB/s)
+dumped 512 bytes in 0.002376s (210.438 KiB/s)
+dumped 6144 bytes in 0.076495s (78.437 KiB/s)
+dumped 256 bytes in 0.004223s (59.200 KiB/s)
+dumped 1024 bytes in 0.010479s (95.429 KiB/s)
+dumped 512 bytes in 0.005181s (96.506 KiB/s)
+dumped 128 bytes in 0.002148s (58.194 KiB/s)
+0
+VC_LORA_RESUME_CPU0
+VC_LORA_RESUME_CURSTATE_CPU0=running
+VC_LORA_RESUME_CPU1
+VC_LORA_RESUME_CURSTATE_CPU1=running
+shutdown command invoked

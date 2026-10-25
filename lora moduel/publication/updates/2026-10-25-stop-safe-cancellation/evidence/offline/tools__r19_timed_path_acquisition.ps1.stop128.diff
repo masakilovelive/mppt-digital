@@ -1,0 +1,146 @@
+Comparing files E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_acquisition.ps1.published-before-stop128 and E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_ACQUISITION.PS1
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_acquisition.ps1.published-before-stop128
+   41:      [ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None',
+   42:      [bool]$ParamListDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false)
+   43:    Set-StrictMode -Version Latest
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_ACQUISITION.PS1
+   41:      [ValidateSet('None','GroundPauseResume')][string]$ReadComparisonMode='None',
+   42:      [bool]$ParamListDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false,[bool]$GrantRes
+   43:  ervationStopDiagnostics=$false)
+   44:    Set-StrictMode -Version Latest
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_acquisition.ps1.published-before-stop128
+   73:    Assert-R19Acquisition ($permitReservation-eq$GrantReservationDiagnostics) 'Permit Grant reservation option mismatch'
+   74:    if($GrantReservationDiagnostics){
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_ACQUISITION.PS1
+   74:    Assert-R19Acquisition ($permitReservation-eq$GrantReservationDiagnostics) 'Permit Grant reservation option mismatch'
+   75:    $permitStop=$false
+   76:    if($null-ne$Permit.PSObject.Properties['grant_reservation_stop_diagnostics']){
+   77:      Assert-R19Acquisition ($Permit.PSObject.Properties['grant_reservation_stop_diagnostics'].Name-ceq'grant_reservation_stop_di
+   78:  agnostics'-and$Permit.grant_reservation_stop_diagnostics-is[bool]) 'Permit STOP128 option must be exact Boolean'
+   79:      $permitStop=$Permit.grant_reservation_stop_diagnostics
+   80:    }
+   81:    Assert-R19Acquisition ($permitStop-eq$GrantReservationStopDiagnostics) 'Permit STOP128 option mismatch'
+   82:    if($GrantReservationStopDiagnostics){
+   83:      Assert-R19Acquisition ($GrantReservationDiagnostics-and$null-ne$Permit.PSObject.Properties['grant_reservation_stop_contract
+   84:  ']) 'STOP128 permit requires reservation and explicit contract'
+   85:    }elseif($null-ne$Permit.PSObject.Properties['grant_reservation_stop_contract']){throw 'Undeclared STOP128 contract in permit'
+   86:  }
+   87:    if($GrantReservationDiagnostics){
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_acquisition.ps1.published-before-stop128
+  107:  function Assert-R19GrantCaptureMetadata {
+  108:    param([object]$Value,[string]$RepoRoot,[bool]$Enabled=$false,[bool]$GrantReservationDiagnostics=$false)
+  109:    function ExactGrantFields($Object,[string[]]$Names){
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_ACQUISITION.PS1
+  120:  function Assert-R19GrantCaptureMetadata {
+  121:    param([object]$Value,[string]$RepoRoot,[bool]$Enabled=$false,[bool]$GrantReservationDiagnostics=$false,[bool]$GrantReservatio
+  122:  nStopDiagnostics=$false)
+  123:    Assert-R19Acquisition (-not$GrantReservationStopDiagnostics-or($Enabled-and$GrantReservationDiagnostics)) 'STOP128 Grant meta
+  124:  data requires full reservation mode'
+  125:    function ExactGrantFields($Object,[string[]]$Names){
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_acquisition.ps1.published-before-stop128
+  123:    ExactGrantFields $g.decoder @('path','sha256')
+  124:    $topReader=if($GrantReservationDiagnostics){'vc-lora-r19-runtime-stage-jtag-read-v10'}else{'vc-lora-r19-runtime-stage-jtag-re
+  125:  ad-v9'}
+  126:    Assert-R19Acquisition ($Value.reader_schema-is[string]-and$Value.reader_schema-ceq$topReader) 'Grant capture reader generatio
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_ACQUISITION.PS1
+  139:    ExactGrantFields $g.decoder @('path','sha256')
+  140:    $topReader=if($GrantReservationStopDiagnostics){'vc-lora-r19-runtime-stage-jtag-read-v11'}elseif($GrantReservationDiagnostics
+  141:  ){'vc-lora-r19-runtime-stage-jtag-read-v10'}else{'vc-lora-r19-runtime-stage-jtag-read-v9'}
+  142:    Assert-R19Acquisition ($Value.reader_schema-is[string]-and$Value.reader_schema-ceq$topReader) 'Grant capture reader generatio
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_acquisition.ps1.published-before-stop128
+  147:      [bool]$ParamListDiagnostics=$false,[bool]$AuxReadinessDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReserva
+  148:  tionDiagnostics=$false)
+  149:    Set-StrictMode -Version Latest
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_ACQUISITION.PS1
+  163:      [bool]$ParamListDiagnostics=$false,[bool]$AuxReadinessDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReserva
+  164:  tionDiagnostics=$false,[bool]$GrantReservationStopDiagnostics=$false)
+  165:    Set-StrictMode -Version Latest
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_acquisition.ps1.published-before-stop128
+  157:  requires full Grant/PARAM ExplicitHostArm diagnostics'
+  158:    Assert-R19Acquisition ($Handoff.schema-ceq'vc-lora-r19-candidate-artifact-handoff-v1'-and$Handoff.result-ceq'PASS') 'Candidat
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_ACQUISITION.PS1
+  173:  requires full Grant/PARAM ExplicitHostArm diagnostics'
+  174:    Assert-R19Acquisition (-not$GrantReservationStopDiagnostics-or$GrantReservationDiagnostics) 'STOP128 capture requires explici
+  175:  t reservation mode'
+  176:    Assert-R19Acquisition ($Handoff.schema-ceq'vc-lora-r19-candidate-artifact-handoff-v1'-and$Handoff.result-ceq'PASS') 'Candidat
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_acquisition.ps1.published-before-stop128
+  177:  t.Properties['usb_role_capabilities']) 'Missing new diagnostic USB failure/role capability declaration'
+  178:        $expectedReader=if($GrantReservationDiagnostics){'vc-lora-r19-runtime-stage-jtag-read-v10'}elseif($GrantDiagnostics){'vc-
+  179:  lora-r19-runtime-stage-jtag-read-v9'}else{'vc-lora-r19-runtime-stage-jtag-read-v8'}
+  180:        Assert-R19Acquisition ($value.runtime_fail_diagnostics_enabled-is[bool]-and$value.runtime_fail_diagnostics_enabled-and$va
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_ACQUISITION.PS1
+  195:  t.Properties['usb_role_capabilities']) 'Missing new diagnostic USB failure/role capability declaration'
+  196:        $expectedReader=if($GrantReservationStopDiagnostics){'vc-lora-r19-runtime-stage-jtag-read-v11'}elseif($GrantReservationDi
+  197:  agnostics){'vc-lora-r19-runtime-stage-jtag-read-v10'}elseif($GrantDiagnostics){'vc-lora-r19-runtime-stage-jtag-read-v9'}else{'v
+  198:  c-lora-r19-runtime-stage-jtag-read-v8'}
+  199:        Assert-R19Acquisition ($value.runtime_fail_diagnostics_enabled-is[bool]-and$value.runtime_fail_diagnostics_enabled-and$va
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_acquisition.ps1.published-before-stop128
+  209:        Assert-R19GrantCaptureMetadata -Value $value -RepoRoot $RepoRoot -Enabled $true -GrantReservationDiagnostics $GrantReserv
+  210:  ationDiagnostics
+  211:      }
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_ACQUISITION.PS1
+  228:        Assert-R19GrantCaptureMetadata -Value $value -RepoRoot $RepoRoot -Enabled $true -GrantReservationDiagnostics $GrantReserv
+  229:  ationDiagnostics -GrantReservationStopDiagnostics $GrantReservationStopDiagnostics
+  230:      }
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_acquisition.ps1.published-before-stop128
+  222:        [void](Assert-R19GrantReservationCandidateContract -Value $value.grant_reservation_diagnostics -RepoRoot $RepoRoot -Enabl
+  223:  ed $true)
+  224:      }
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_ACQUISITION.PS1
+  241:        [void](Assert-R19GrantReservationCandidateContract -Value $value.grant_reservation_diagnostics -RepoRoot $RepoRoot -Enabl
+  242:  ed $true -CancellationEnabled $GrantReservationStopDiagnostics)
+  243:      }
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_acquisition.ps1.published-before-stop128
+  233:    }
+  234:    Assert-R19Acquisition ($FlashEvidence.one_run_hil_authorized-is[bool]-and$FlashEvidence.one_run_hil_authorized) 'Flash is not
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_ACQUISITION.PS1
+  252:    }
+  253:    if($GrantReservationStopDiagnostics){
+  254:      foreach($value in @($Handoff,$FlashEvidence)){
+  255:        Assert-R19Acquisition ($null-ne$value.PSObject.Properties['grant_reservation_stop_diagnostics']-and$value.PSObject.Proper
+  256:  ties['grant_reservation_stop_diagnostics'].Name-ceq'grant_reservation_stop_diagnostics') 'STOP128 candidate/flash contract abse
+  257:  nt'
+  258:        [void](Assert-R19GrantReservationStopCandidateContract -Value $value.grant_reservation_stop_diagnostics -RepoRoot $RepoRo
+  259:  ot -Enabled $true)
+  260:      }
+  261:      Assert-R19Acquisition (($Handoff.grant_reservation_stop_diagnostics|ConvertTo-Json -Depth 20 -Compress)-ceq($FlashEvidence.
+  262:  grant_reservation_stop_diagnostics|ConvertTo-Json -Depth 20 -Compress)) 'STOP128 candidate/flash contracts differ'
+  263:      Assert-R19Acquisition ($null-ne$Permit.PSObject.Properties['grant_reservation_stop_contract']-and($Permit.grant_reservation
+  264:  _stop_contract|ConvertTo-Json -Depth 20 -Compress)-ceq($Handoff.grant_reservation_stop_diagnostics|ConvertTo-Json -Depth 20 -Co
+  265:  mpress)) 'STOP128 permit does not bind candidate contract'
+  266:    }else{
+  267:      foreach($value in @($Handoff,$FlashEvidence)){Assert-R19Acquisition ($null-eq$value.PSObject.Properties['grant_reservation_
+  268:  stop_diagnostics']) 'STOP128 candidate requires explicit capture mode'}
+  269:    }
+  270:    Assert-R19Acquisition ($FlashEvidence.one_run_hil_authorized-is[bool]-and$FlashEvidence.one_run_hil_authorized) 'Flash is not
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_acquisition.ps1.published-before-stop128
+  247:  -FlashEvidenceSha256 $FlashEvidenceSha256 -NowUtc $NowUtc -ReadComparisonMode $ReadComparisonMode -ParamListDiagnostics $ParamL
+  248:  istDiagnostics -GrantDiagnostics $GrantDiagnostics -GrantReservationDiagnostics $GrantReservationDiagnostics
+  249:  }
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_ACQUISITION.PS1
+  283:  -FlashEvidenceSha256 $FlashEvidenceSha256 -NowUtc $NowUtc -ReadComparisonMode $ReadComparisonMode -ParamListDiagnostics $ParamL
+  284:  istDiagnostics -GrantDiagnostics $GrantDiagnostics -GrantReservationDiagnostics $GrantReservationDiagnostics -GrantReservationS
+  285:  topDiagnostics $GrantReservationStopDiagnostics
+  286:  }
+*****
+

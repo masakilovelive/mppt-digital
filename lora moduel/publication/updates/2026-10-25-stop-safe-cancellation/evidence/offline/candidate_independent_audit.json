@@ -1,0 +1,219 @@
+{
+  "schema": "vc-lora-r19-stop-candidate-independent-file-audit-v1",
+  "generated_at_utc": "2026-10-25T08:09:44.3682318Z",
+  "candidate_id": "20261025T075246002Z-0508974a",
+  "artifact_root": "runs/candidates/R19-GRANT-RESERVATION-STOP-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261025T075246002Z-0508974a",
+  "result": "PASS",
+  "scope": "Read-only actual files, SHA256, JSON bindings and ELF common-parser analysis; no compiler, test, process scan, hardware or network operations.",
+  "checks": [
+    {
+      "name": "manifest_hash",
+      "result": "PASS",
+      "details": "8D73CE3FB64601460813295012FAEA9B479D24D7C92C431CB2C40AC556EDC5E1"
+    },
+    {
+      "name": "seal_hash_and_sidecar",
+      "result": "PASS",
+      "details": "787BB6F3E76FA91FAA8445EE04470D5C9562EFA31102CDE410692B36DD91101E"
+    },
+    {
+      "name": "handoff_hash_and_sidecar",
+      "result": "PASS",
+      "details": "E465F80386C43C56F0B1DAEEB6807C43B97D1F72AA6EA996725CE18253046F2D"
+    },
+    {
+      "name": "inventory_and_sha256s_seal",
+      "result": "PASS",
+      "details": null
+    },
+    {
+      "name": "all_175_inventory_files_actual_size_sha",
+      "result": "PASS",
+      "details": {
+        "file_count": 175,
+        "mismatches": []
+      }
+    },
+    {
+      "name": "inventory_tree_recomputed",
+      "result": "PASS",
+      "details": "DEDF75B500B47D8D1A22D518D00F1E6E279E010A9F08562F78EE0C01809D586D"
+    },
+    {
+      "name": "all_sha256s_entries_recomputed",
+      "result": "PASS",
+      "details": {
+        "file_count": 175,
+        "mismatches": []
+      }
+    },
+    {
+      "name": "canonical_source_85_actual_files",
+      "result": "PASS",
+      "details": {
+        "file_count": 85,
+        "mismatches": []
+      }
+    },
+    {
+      "name": "canonical_source_tree_matches_expected_and_seal",
+      "result": "PASS",
+      "details": "C27939367A5E34481DE6A552F387620A15E97A108BACD2398B9BAC5C7478AA5A"
+    },
+    {
+      "name": "staged_package_actual_tree",
+      "result": "PASS",
+      "details": {
+        "file_count": 146,
+        "tree_sha256": "2A5E43E7DAF4F220AA6FB29E640F43222D08D4281189C9D2D88F504074F2F143"
+      }
+    },
+    {
+      "name": "manifest_compile_exact_stop_once",
+      "result": "PASS",
+      "details": null
+    },
+    {
+      "name": "vehicle_actual_application_sha",
+      "result": "PASS",
+      "details": {
+        "size_bytes": 466656,
+        "sha256": "A1D49CFFAC440D9A6BB53EB169EB3E4D3624C0314333AF41CD991087C2747CC1"
+      }
+    },
+    {
+      "name": "vehicle_compile_argv_exact_once",
+      "result": "PASS",
+      "details": null
+    },
+    {
+      "name": "vehicle_actual_elf_11_symbols_stop128",
+      "result": "PASS",
+      "details": {
+        "count": 11,
+        "stop": {
+          "name": "vc_lora_r19_grant_reservation_stop_record",
+          "address": "0x3fcada60",
+          "size_bytes": 128,
+          "aligned_32_bit": true
+        },
+        "elf_sha256": "4EFC67FBF1A5AC97481A2D2F3C7AC04731274DEF2AB860B924AB8DB6F3A064AC",
+        "map_sha256": "E5BC104A74F6873A31CF2710FF377F07A8DECA0D57D946E3A1CFC6720AA3CD53"
+      }
+    },
+    {
+      "name": "vehicle_22_headers_stop_present",
+      "result": "PASS",
+      "details": null
+    },
+    {
+      "name": "ground_actual_application_sha",
+      "result": "PASS",
+      "details": {
+        "size_bytes": 446784,
+        "sha256": "7B21A5A1A28FD26D1DC28103BAC02E0C79D86E82A162200039326A2BACE3B3A0"
+      }
+    },
+    {
+      "name": "ground_compile_argv_exact_once",
+      "result": "PASS",
+      "details": null
+    },
+    {
+      "name": "ground_actual_elf_11_symbols_stop128",
+      "result": "PASS",
+      "details": {
+        "count": 11,
+        "stop": {
+          "name": "vc_lora_r19_grant_reservation_stop_record",
+          "address": "0x3fca4fa8",
+          "size_bytes": 128,
+          "aligned_32_bit": true
+        },
+        "elf_sha256": "28911F8F328B985CF215195D92B2CF938C8969B775D2A75ABB05F59A25702FBB",
+        "map_sha256": "93A082C1B10D45D531DD074E97845A31FBA8B66A4C3310BB075A3DB5940AEB85"
+      }
+    },
+    {
+      "name": "ground_22_headers_stop_present",
+      "result": "PASS",
+      "details": null
+    },
+    {
+      "name": "all_three_contracts_reader11_wire2_exact",
+      "result": "PASS",
+      "details": null
+    },
+    {
+      "name": "stop_decoder_actual_canonical_sealed_contract_hash",
+      "result": "PASS",
+      "details": "AC70CEA71CC4C8645D31E4B3E77AFF9D668EBAC554D5DD2C62DFA611D2C84D02"
+    },
+    {
+      "name": "acceptance_deployment_explicit_false",
+      "result": "PASS",
+      "details": null
+    },
+    {
+      "name": "production_sketch_152_preserved_actual_tree",
+      "result": "PASS",
+      "details": {
+        "file_count": 152,
+        "tree_sha256": "B4EDC8F52753B775936E06D63ACEC5AFCB7293364A5602499601A108A13B794C"
+      }
+    },
+    {
+      "name": "standard_artifacts_44_preserved_actual_tree",
+      "result": "PASS",
+      "details": {
+        "file_count": 44,
+        "tree_sha256": "A4740C706F29A582657196824C62349A5092C3D335DC9AC98C374705455511E3"
+      }
+    },
+    {
+      "name": "accepted_R18_vehicle_preserved_sha",
+      "result": "PASS",
+      "details": {
+        "size_bytes": 389280,
+        "sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52"
+      }
+    },
+    {
+      "name": "accepted_R18_ground_preserved_sha",
+      "result": "PASS",
+      "details": {
+        "size_bytes": 360208,
+        "sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5"
+      }
+    }
+  ],
+  "check_count": 26,
+  "failed_count": 0,
+  "manifest_sha256": "8D73CE3FB64601460813295012FAEA9B479D24D7C92C431CB2C40AC556EDC5E1",
+  "handoff_sha256": "E465F80386C43C56F0B1DAEEB6807C43B97D1F72AA6EA996725CE18253046F2D",
+  "seal_sha256": "787BB6F3E76FA91FAA8445EE04470D5C9562EFA31102CDE410692B36DD91101E",
+  "roles": [
+    {
+      "role": "vehicle",
+      "application_sha256": "A1D49CFFAC440D9A6BB53EB169EB3E4D3624C0314333AF41CD991087C2747CC1",
+      "size_bytes": 466656,
+      "elf_symbol_count": 11,
+      "stop_address": "0x3fcada60"
+    },
+    {
+      "role": "ground",
+      "application_sha256": "7B21A5A1A28FD26D1DC28103BAC02E0C79D86E82A162200039326A2BACE3B3A0",
+      "size_bytes": 446784,
+      "elf_symbol_count": 11,
+      "stop_address": "0x3fca4fa8"
+    }
+  ],
+  "limitations": [
+    "ELF symbol parsing reused the repository common parser; addresses were recomputed from actual sealed ELF bytes, not a live MCU.",
+    "This audit does not prove physical UART/RF behavior, cancellation execution, Heartbeat delivery, 932 parameter transfer or 30-second performance.",
+    "Parent flash/preflash pin updates and running whole host regression are outside this artifact-only audit."
+  ],
+  "hardware_interaction": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

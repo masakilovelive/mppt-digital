@@ -1,0 +1,295 @@
+{
+    "schema":  "vc-lora-r19-grant-reservation-stop-runner-fix-v1",
+    "result":  "PASS_OFFLINE_FOCUSED_ONLY",
+    "created_utc":  "2026-10-25T07:57:42.2911297Z",
+    "hardware_interaction":  false,
+    "live_trial_executed":  false,
+    "live_authorization_created":  false,
+    "candidate_resealed":  false,
+    "prepared_pin_updated":  false,
+    "production_frozen":  true,
+    "source_inventory":  [
+                             {
+                                 "path":  "tools/run_r19_timed_path_capture.ps1",
+                                 "before_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\run_r19_timed_path_capture.ps1.before",
+                                 "before_sha256":  "683F85200F28011221B38CF6B625BA08368A66C2733EC6530774CD6E2FB0A24C",
+                                 "after_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_final_source_snapshots\\tools__run_r19_timed_path_capture.ps1",
+                                 "after_sha256":  "DAB1CF32CC1C82DC2A216718D460D3666F236239EAFDB24DE958A8421120F5B4",
+                                 "after_bytes":  64105
+                             },
+                             {
+                                 "path":  "tools/r19_grant_reservation_wire.ps1",
+                                 "before_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\r19_grant_reservation_wire.ps1.before",
+                                 "before_sha256":  "C61B8C4ED48F2F9B977058A8B1DB97067324CB3DF9BACDB69D43DB9520E3EAEB",
+                                 "after_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_final_source_snapshots\\tools__r19_grant_reservation_wire.ps1",
+                                 "after_sha256":  "3AB0876B04A57560C3ECCABE688E8A8F14FC3D45ED9D5AE35685930608463881",
+                                 "after_bytes":  9194
+                             },
+                             {
+                                 "path":  "tools/r19_grant_reservation_workflow.ps1",
+                                 "before_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\r19_grant_reservation_workflow.ps1.before",
+                                 "before_sha256":  "5DA7E54EF95567E6B0022C3E1E31BBA058B283EBACB85B8B17C0903456DF360A",
+                                 "after_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_final_source_snapshots\\tools__r19_grant_reservation_workflow.ps1",
+                                 "after_sha256":  "CC2FA6F062D5948F4D86D898B1419A82D4205D8A689FC0D6D92B7631AAD4F0AF",
+                                 "after_bytes":  39254
+                             },
+                             {
+                                 "path":  "tests/hil/check_r19_grant_reservation_capture.ps1",
+                                 "before_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\check_r19_grant_reservation_capture.ps1.before",
+                                 "before_sha256":  "A1FEDBFE350222A44033BE4A2FB99C0CABE47A233C2DB78F39981857AF902585",
+                                 "after_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_final_source_snapshots\\tests__hil__check_r19_grant_reservation_capture.ps1",
+                                 "after_sha256":  "21479E4C73BCFF0150317D20A6B56D28C48628D575186EE83B5F24DAD8B18D3D",
+                                 "after_bytes":  21723
+                             },
+                             {
+                                 "path":  "tests/hil/check_r19_param_list_capture_contract.ps1",
+                                 "before_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\check_r19_param_list_capture_contract.ps1.before",
+                                 "before_sha256":  "EF138BE42D26A4119FB3FC5B9FE14258B2609B177A5D823E67126C6DBBC80050",
+                                 "after_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_final_source_snapshots\\tests__hil__check_r19_param_list_capture_contract.ps1",
+                                 "after_sha256":  "72698F12DC04D9A81C6F3AAECDEDE0470CCFE0D4691E2E0087ABEDA6FAFEE554",
+                                 "after_bytes":  46731
+                             },
+                             {
+                                 "path":  "tests/hil/check_r19_timed_path_capture_persistence.ps1",
+                                 "before_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\check_r19_timed_path_capture_persistence.ps1.before",
+                                 "before_sha256":  "F7A9227BC45CDF3FFABF939ED025FC1C8D553950E92AEBF63819CA6E2C29230B",
+                                 "after_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_final_source_snapshots\\tests__hil__check_r19_timed_path_capture_persistence.ps1",
+                                 "after_sha256":  "E3F6344FA1116DE48E06D6160F8F9590CFEB62272186282AFC84E3A71836F55A",
+                                 "after_bytes":  27434
+                             },
+                             {
+                                 "path":  "tests/hil/check_r19_grant_reservation_runtime_fault_preflight.ps1",
+                                 "before_snapshot":  null,
+                                 "before_sha256":  null,
+                                 "after_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_final_source_snapshots\\tests__hil__check_r19_grant_reservation_runtime_fault_preflight.ps1",
+                                 "after_sha256":  "4811DAE8126BC1B6B3B10AC33B6AB53485EDBDB915A7DB3803E719DF97A207CE",
+                                 "after_bytes":  15462
+                             },
+                             {
+                                 "path":  "tests/hil/check_r19_grant_reservation_cancellation_workflow.ps1",
+                                 "before_snapshot":  null,
+                                 "before_sha256":  null,
+                                 "after_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_final_source_snapshots\\tests__hil__check_r19_grant_reservation_cancellation_workflow.ps1",
+                                 "after_sha256":  "EDA09B54DB5EB0FD523B9895986E4A5B1AFD05E7DC32F2BE3EF520803808986D",
+                                 "after_bytes":  14877
+                             },
+                             {
+                                 "path":  "tests/hil/check_r19_grant_reservation_workflow.ps1",
+                                 "before_snapshot":  null,
+                                 "before_sha256":  null,
+                                 "before_evidence":  "Actual applied one-line patch input retained above; no whole-file before snapshot claimed.",
+                                 "after_snapshot":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_final_source_snapshots\\tests__hil__check_r19_grant_reservation_workflow.ps1",
+                                 "after_sha256":  "C1A4804335A839C7E79B989A7DB7F43CEB1D7A8787D97215DED84340680EAD5E",
+                                 "after_bytes":  15787
+                             }
+                         ],
+    "unchanged_native_reader":  {
+                                    "path":  "tools/r19_continuous_reader.cs",
+                                    "before_sha256":  "B9C22B9E74F32E09C1210F976363CF4513C66F3131780B96972BEC48B1F907EF",
+                                    "after_sha256":  "B9C22B9E74F32E09C1210F976363CF4513C66F3131780B96972BEC48B1F907EF"
+                                },
+    "tested":  [
+                   {
+                       "shell":  "ps51",
+                       "test":  "runtime_fault_preflight",
+                       "checks":  48,
+                       "result":  "PASS",
+                       "log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_FINAL_runtime_fault_preflight_ps51.log",
+                       "sha256":  "0830624C5A4F3A157FFD9864984B1D51FE6AA84FD711F7E6D801976A3BAADD8E",
+                       "hardware_interaction":  false
+                   },
+                   {
+                       "shell":  "ps51",
+                       "test":  "cancellation_workflow",
+                       "checks":  191,
+                       "result":  "PASS",
+                       "log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_FINAL_cancellation_workflow_ps51.log",
+                       "sha256":  "F1F2C523716B04EB24A9FB2B3A5D162E0A2D7C7809CD970BE4B3BC67943652F2",
+                       "hardware_interaction":  false
+                   },
+                   {
+                       "shell":  "ps51",
+                       "test":  "check_r19_grant_reservation_capture",
+                       "checks":  95,
+                       "result":  "PASS",
+                       "log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_FINAL_check_r19_grant_reservation_capture_ps51.log",
+                       "sha256":  "2C5DC35B861A0973D58FE9CF9F002A9AF81A84F14878EC2EF3599C8EEC5DB13B",
+                       "hardware_interaction":  false
+                   },
+                   {
+                       "shell":  "ps51",
+                       "test":  "workflow",
+                       "checks":  307,
+                       "result":  "PASS",
+                       "log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_FINAL_workflow_ps51.log",
+                       "sha256":  "98062E75F21F5A997303FCE5B6B313617298BF1AC960D2247AACEC1AC1C7959B",
+                       "hardware_interaction":  false
+                   },
+                   {
+                       "shell":  "ps51",
+                       "test":  "check_r19_timed_path_capture_persistence",
+                       "checks":  339,
+                       "result":  "PASS",
+                       "log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_FINAL_check_r19_timed_path_capture_persistence_ps51.log",
+                       "sha256":  "8DA7DD2110379C0759274EC70D3B1949B76F91A158E5BBB6F1F814988AECA8CA",
+                       "hardware_interaction":  false
+                   },
+                   {
+                       "shell":  "ps51",
+                       "test":  "check_r19_param_list_capture_contract",
+                       "checks":  65,
+                       "result":  "PASS",
+                       "log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_FINAL_check_r19_param_list_capture_contract_ps51.log",
+                       "sha256":  "750E85244F00CCC5D14B32C2CC8ADC2F98914989FC7537EA4BDB57F13CC9D16A",
+                       "hardware_interaction":  false
+                   },
+                   {
+                       "shell":  "ps7",
+                       "test":  "runtime_fault_preflight",
+                       "checks":  48,
+                       "result":  "PASS",
+                       "log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_FINAL_runtime_fault_preflight_ps7.log",
+                       "sha256":  "0830624C5A4F3A157FFD9864984B1D51FE6AA84FD711F7E6D801976A3BAADD8E",
+                       "hardware_interaction":  false
+                   },
+                   {
+                       "shell":  "ps7",
+                       "test":  "cancellation_workflow",
+                       "checks":  191,
+                       "result":  "PASS",
+                       "log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_FINAL_cancellation_workflow_ps7.log",
+                       "sha256":  "F1F2C523716B04EB24A9FB2B3A5D162E0A2D7C7809CD970BE4B3BC67943652F2",
+                       "hardware_interaction":  false
+                   },
+                   {
+                       "shell":  "ps7",
+                       "test":  "check_r19_grant_reservation_capture",
+                       "checks":  95,
+                       "result":  "PASS",
+                       "log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_FINAL_check_r19_grant_reservation_capture_ps7.log",
+                       "sha256":  "12821E6C3EFBA657A76D1FB089FDEEF5BC85C2536FE5DCAF29FFAFED648AD21A",
+                       "hardware_interaction":  false
+                   },
+                   {
+                       "shell":  "ps7",
+                       "test":  "workflow",
+                       "checks":  307,
+                       "result":  "PASS",
+                       "log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_FINAL_workflow_ps7.log",
+                       "sha256":  "54B187D99A19E89A4478BD7522CC7143BB2BF9636489CEF433226975E1B2A787",
+                       "hardware_interaction":  false
+                   },
+                   {
+                       "shell":  "ps7",
+                       "test":  "check_r19_timed_path_capture_persistence",
+                       "checks":  339,
+                       "result":  "PASS",
+                       "log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_FINAL_check_r19_timed_path_capture_persistence_ps7.log",
+                       "sha256":  "5A1A759B2955AEC038BAB7B5E227409ECE86CDA98A0C83219DC2D413A8CD94DC",
+                       "hardware_interaction":  false
+                   },
+                   {
+                       "shell":  "ps7",
+                       "test":  "check_r19_param_list_capture_contract",
+                       "checks":  65,
+                       "result":  "PASS",
+                       "log":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_FINAL_check_r19_param_list_capture_contract_ps7.log",
+                       "sha256":  "9AB2575557D1EB0C46FA6D392DC4298FAA26A289EB6865466E13E527FEE7F574",
+                       "hardware_interaction":  false
+                   }
+               ],
+    "per_shell_checks":  1045,
+    "total_checks":  2090,
+    "red_evidence":  [
+                         {
+                             "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_actual_caller_RED_ps51.log",
+                             "sha256":  "C0AC8C7112C0FCF5FD3694D356745B6BE764CB92FD29B0ED29ADBCEA6C418841",
+                             "classification":  "Genuine behavioral RED preserved before corresponding source correction"
+                         },
+                         {
+                             "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_extended_RED_ps51.log",
+                             "sha256":  "AA5F45EAFB118AA586EE1B28E7DA4E56657364FAD2AA7466405DDF6E62BFC32C",
+                             "classification":  "Genuine behavioral RED preserved before corresponding source correction"
+                         },
+                         {
+                             "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_partial_prefix_RED_ps51.log",
+                             "sha256":  "7BBD8C21308DDA6C0DDB084A762EED939D63846037B0838CB1C0B62F0773063B",
+                             "classification":  "Genuine behavioral RED preserved before corresponding source correction"
+                         },
+                         {
+                             "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_cancel_wire_behavior_RED_ps51.log",
+                             "sha256":  "BAFAFCAB2AB2C5820683AF951E0D4139054DD0768B9340CF09EE54265F37023C",
+                             "classification":  "Genuine behavioral RED preserved before corresponding source correction"
+                         },
+                         {
+                             "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_cancel_workflow_RED_ps51.log",
+                             "sha256":  "A7FCE40707ABCC302E36746DB1AB778FBF06F158EF6F9D4D4801376B1D221D66",
+                             "classification":  "Genuine behavioral RED preserved before corresponding source correction"
+                         },
+                         {
+                             "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_cancel_ack_time_RED_ps51.log",
+                             "sha256":  "A3424E4F82158CB6812B3C1E260ECD0B9A8F0DA83804E316C7E91D3B25CF728B",
+                             "classification":  "Genuine behavioral RED preserved before corresponding source correction"
+                         },
+                         {
+                             "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_stop_capture_persistence_RED_ps51.log",
+                             "sha256":  "77849D94581F98C77E228BCE9A1513D2D12AA60226E9B4B452EB6C591308100C",
+                             "classification":  "Genuine behavioral RED preserved before corresponding source correction"
+                         },
+                         {
+                             "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_snapshot_clock_RED_ps51.log",
+                             "sha256":  "F62212AFF9A5AEC90D3630F30EFEA58E9445C7287A75A886FDB8E06D2FBB7F54",
+                             "classification":  "Genuine behavioral RED preserved before corresponding source correction"
+                         },
+                         {
+                             "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_coalesced_withdrawal_RED_ps51.log",
+                             "sha256":  "2DA914A38329246506C668CCFE23BB08944474B8F5403562C9952B8B3F255CC6",
+                             "classification":  "Genuine behavioral RED preserved before corresponding source correction"
+                         },
+                         {
+                             "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_typed_fault_RED_ps51.log",
+                             "sha256":  "B44AFEC1FC284925B711A11955D12EB704F5998393F0E5700B6AED1D6DC6C6E7",
+                             "classification":  "Genuine behavioral RED preserved before corresponding source correction"
+                         },
+                         {
+                             "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_obsolete_bound_RED_ps51.log",
+                             "sha256":  "5351CBD640F79F4DDEF3B66875FA402BACC9E93DF30C7EE1E0F929C871D908CA",
+                             "classification":  "Genuine behavioral RED preserved before corresponding source correction"
+                         }
+                     ],
+    "diff":  {
+                 "path":  "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\runner_changes.diff",
+                 "sha256":  "5CB33F33C92E44218D6C9E9122F26DB25A985E2C0002448B24A65CD8E1D8A0E9",
+                 "format":  "Whole-file line-normalized unified replacement hunks from authentic full before/after snapshots, plus actual one-line applied patch for legacy version fixture; exact bytes proven by snapshot SHA256."
+             },
+    "maintained_limits":  {
+                              "usb_ms":  106,
+                              "ground_fresh_grant_ms":  500,
+                              "vehicle_complete_vcbn_ms":  500,
+                              "original_preparation_seconds":  15,
+                              "measurement_seconds":  40,
+                              "maximum_global_param_attempts":  1,
+                              "maximum_cancellations":  1,
+                              "maximum_rounds":  2,
+                              "maximum_reservation_out_attempts":  18
+                          },
+    "changes":  [
+                    "CRC-valid R19F fatal source_line\u003e0 latches per-role first cause with explicit missing boot/build wire identity limitation.",
+                    "Both immutable native snapshots collected before shared PC clock resampling; both published prefixes checked immediately before PARAM/private OUT.",
+                    "Raw peek does not consume normal parser/parameter ledger: fresh complete undelivered bytes and partial prefix defer without API attempt.",
+                    "Native matching typed R19R Fault blocks OUT; coalesced Prepared+Withdrawn defers until ordinary causal parsing, then cancels.",
+                    "V2 old-slot cancellation requires both local16 and both own18 replies before fresh nonce; strictly newer RF tuple/token/generation required; original deadlines/global PARAM ledger never reset.",
+                    "Exact obsolete old Prepared/Bound are retained in bounded no-authority ledger during cancellation, never Held/Tail/Fault.",
+                    "Before-request fault is NOT_ATTEMPTED; any actual request attempt remains ATTEMPTED_ABORT after failure; no fake t0/deadline.",
+                    "Ground500 is explicitly NOT_EVALUATED without matching fresh RF Grant/actual MCU release evidence; USB workflow never proves highspeed success.",
+                    "STOP capture metadata is typed and source-contract bound in actual durable Save/GetPlan; legacy default omits STOP metadata."
+                ],
+    "limitations":  [
+                        "No hardware evaluation or acceptance result. Root owns complete host suite, Arduino compile and any separately authorized future physical operation.",
+                        "Published native prefix is not physical wire delivery nor proof of no later fault.",
+                        "R19F has no boot/build/session fields; provenance-consistent reader/clock/Hello/epoch evidence is not authentication.",
+                        "Injected writer seams are trusted offline fixtures, not a sandbox.",
+                        "The full previous firmware/candidate/HIL summaries and historical prepared pins remain unchanged; changed tool hashes require future fresh preparation.",
+                        "One legacy existing version fixture has actual applied-patch evidence only, not a falsely claimed whole-file before snapshot."
+                    ]
+}

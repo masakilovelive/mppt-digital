@@ -1,0 +1,5 @@
+In file included from tests/host/standalone/phase6_grant_reservation_flow_tests.cpp:20:
+firmware/phase6/vc_lora_phase6_bridge.hpp:2373:43: warning: unused parameter 'now_ms' [-Wunused-parameter]
+ 2373 |                             std::uint64_t now_ms) noexcept {
+      |                                           ^
+1 warning generated.

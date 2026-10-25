@@ -1,0 +1,146 @@
+{
+  "schema": "vc-lora-stop-cancellation-public-status-v1",
+  "date_jst": "2026-10-25",
+  "representation": "DERIVED_PUBLICATION_EXTRACT_NOT_BYTE_IDENTICAL_HIL_SUMMARY",
+  "source_hil_path": "runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T083255978Z-stop-v11-param-once/summary.json",
+  "source_hil_sha256": "8F15942832D95B586E813EF0BA0A4733E7A747F1ED627ADD338EBC4823B97457",
+  "source_assessment_path": "runs/validation/R19-STOP-HIL-READINESS-20261025T-new-request/20261025T082252772Z-root-preparation/physical_run_assessment.json",
+  "source_assessment_sha256": "4E0C054ED029AAD74E5E01E0A218CAA52347FE53E8BADF105A22E35FC4917013",
+  "started_utc": "2026-10-25T08:32:57.9549143Z",
+  "finished_utc": "2026-10-25T08:36:05.4346655Z",
+  "original_parent_status": "PASS_PARAM_LIST_DIAGNOSTICS_CAPTURED_R18_RESTORED_NOT_ACCEPTANCE",
+  "candidate_id": "20261025T075246002Z-0508974a",
+  "physical_trial_count": 1,
+  "target_verdict": "FAIL_932_IN_30S_AND_HEARTBEAT_CONTINUITY",
+  "parameters": {
+    "attempts": 1,
+    "accepted_bytes": 14,
+    "local_api_acceptance_only": true,
+    "rf_or_pixhawk_delivery_proven": false,
+    "at_30s": 0,
+    "at_end": 0,
+    "target": 932,
+    "pre_request_values_excluded": 1,
+    "excluded_value_id": "STAT_RUNTIME",
+    "excluded_value_index": 65535,
+    "ledger_errors": 0,
+    "ledger_error_scope": "PARAM_VALUE_LEDGER_AND_STREAM_FRAMING_ONLY",
+    "system_all_errors_zero": false
+  },
+  "heartbeat": {
+    "crc_valid_total": 10,
+    "preparation_count": 9,
+    "measurement_count": 1,
+    "measured_window_seconds": 40.00492,
+    "final_silence_ms": 39735.2043,
+    "maximum_2500ms_continuity_target_met": false,
+    "first_local_usb_completion_us": 457,
+    "local_completion_is_rf_delivery_or_continuity": false
+  },
+  "reservation": {
+    "vehicle_stop": {
+      "disposition": "SAFE_CANCEL",
+      "reason_name": "HeartbeatDeadlineConflict",
+      "observed_ms": "36824",
+      "heartbeat_deadline_ms": "39324",
+      "hold_deadline_ms": "37189",
+      "reserve_ms": 5050,
+      "predicates": {
+        "heartbeat_valid": true,
+        "heartbeat_available": true,
+        "aux_high": true,
+        "lease_valid": true,
+        "reservation_failed": false,
+        "radio_busy": false,
+        "pending_action": false,
+        "tail_pending": false,
+        "release_requested": false,
+        "zero_uart_proven": true,
+        "old_cycle_retired": true,
+        "old_lease_retired": true
+      },
+      "writer": {
+        "expected_token": 45,
+        "expected_generation": 45,
+        "active_token": 45,
+        "active_generation": 45,
+        "active_owner": 1
+      }
+    },
+    "heartbeat_remaining_ms": 2500,
+    "ground_held_ms": "23551",
+    "ground_failure_ms": "24052",
+    "ground_wait_elapsed_ms": 501,
+    "ground_reason": "GrantWaitExpired",
+    "vehicle_later_reason": "PrepareExpired",
+    "pc_status": "ATTEMPTED_ABORT_WITHDRAWN_AFTER_REQUEST",
+    "pc_param_start_to_abort_ms": 112.8708,
+    "release_sent": false,
+    "cancellation_round": 1,
+    "completed_cancellation_count": 0,
+    "new_slot_reprepare_proven": false,
+    "high_speed_start_proven": false,
+    "ground_500ms_acceptance": {
+      "result": "NOT_EVALUATED",
+      "reason": "NO_MATCHING_FRESH_GRANT_AND_ACTUAL_MCU_RELEASE_EVIDENCE",
+      "request_attempted": true,
+      "ground_t0_ms": "23551",
+      "release_write_accepted": false,
+      "release_write_is_local_only": true,
+      "fresh_grant_observed": false,
+      "high_speed_success": false
+    },
+    "vehicle_tail_based_500ms_acceptance": "NOT_EVALUATED_NO_GRANT_TAIL",
+    "pc_cancel_detection_does_not_prove_mcu_cancel_time_relative_to_param_write": true
+  },
+  "aux": {
+    "vehicle_fault_code": 0,
+    "ground_fault_code": 0,
+    "physical_waveform_measured": false
+  },
+  "diagnostic_usb": {
+    "vehicle": {
+      "failure_observed_us": "2578873",
+      "expected_frame_bytes": 63,
+      "accepted_frame_bytes": 63,
+      "reason": 16
+    },
+    "vehicle_pending_bytes": 31,
+    "ground": {
+      "failure_observed_us": "12269876",
+      "expected_frame_bytes": 63,
+      "accepted_frame_bytes": 63,
+      "reason": 16
+    },
+    "ground_pending_bytes": 31,
+    "product_heartbeat_first_failure_latched_vehicle": false,
+    "product_heartbeat_first_failure_latched_ground": false,
+    "fifo_physical_failure_proven": false
+  },
+  "r18_restored_both_roles": true,
+  "r18_vehicle_sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+  "r18_ground_sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+  "hardware_quiescence": {
+    "child_termination_proven": true,
+    "active_jtag_cleanup_proven": true,
+    "further_child_launch_blocked": false,
+    "rollback_skipped_due_unproven_child_termination": false
+  },
+  "power_off_required": false,
+  "offline_host_tests": 479,
+  "offline_host_failures": 0,
+  "offline_host_seconds": 665.53,
+  "pretrial_vehicle_and_ground_arduino_build": "PASS",
+  "publication_hardware_interaction": false,
+  "publication_full479_rerun": false,
+  "publication_arduino_build_rerun": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "limitations": [
+    "MCU elapsed values are computed within one role only; no cross-role or PC-to-MCU clock equality is assumed.",
+    "Safe cancellation selection proves local retirement predicates, not peer acknowledgments, new-slot binding, Heartbeat delivery or high-speed success.",
+    "PC detects withdrawal after request; the precise physical cancellation versus PC write order remains unproven.",
+    "PARAM ledger error total excludes runtime faults and diagnostic USB timeouts.",
+    "The 30s target failed; successful diagnostic collection and R18 restoration are not product acceptance."
+  ]
+}

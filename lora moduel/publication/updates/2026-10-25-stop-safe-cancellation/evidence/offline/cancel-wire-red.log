@@ -1,0 +1,4 @@
+tests/host/standalone/phase6_grant_reservation_flow_tests.cpp:33:5: error: no member named 'wire_version' in 'vc_lora::experimental::R19GrantReservationWireMessage'
+   33 |   m.wire_version=cancellation_mode?2U:1U;
+      |   ~ ^
+1 error generated.

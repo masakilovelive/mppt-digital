@@ -1,0 +1,18 @@
+warning: in the working copy of 'runs\validation\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-fix\before\core\include\vc_lora\tdd_vehicle.hpp', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'core/include/vc_lora/tdd_vehicle.hpp', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\before\\core\\include\\vc_lora\\tdd_vehicle.hpp" b/core/include/vc_lora/tdd_vehicle.hpp
+index 1c09e11..3179bb2 100644
+--- "a/runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\before\\core\\include\\vc_lora\\tdd_vehicle.hpp"
++++ b/core/include/vc_lora/tdd_vehicle.hpp
+@@ -27,6 +27,11 @@ class VehicleTddController {
+   void reset(std::uint16_t session_id, std::uint16_t initial_cycle,
+              std::uint64_t now_ms) noexcept;
+   LinkAction tick(const TddInput& input) noexcept;
++  // Caller must separately prove zero UART/prefix/tail and retire the exact
++  // writer lease. This atomically rejects only the matching pending Grant and
++  // retires its RF cycle, preventing a newly-tokened same-cycle alias.
++  bool cancel_unsent_grant(std::uint32_t token,std::uint16_t session,
++                          std::uint16_t cycle,std::uint64_t now_ms) noexcept;
+   void complete_action(std::uint32_t token, TxResult result,
+                        std::uint64_t now_ms,
+                        std::uint16_t accepted_bytes = 0xFFFFU) noexcept;

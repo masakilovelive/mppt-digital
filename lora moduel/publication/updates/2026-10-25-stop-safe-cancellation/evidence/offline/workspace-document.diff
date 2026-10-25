@@ -1,0 +1,15 @@
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\CURRENT_WORKSPACE_AND_SPEC_R19.before.md" b/CURRENT_WORKSPACE_AND_SPEC_R19.md
+index 823b489..744947f 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\CURRENT_WORKSPACE_AND_SPEC_R19.before.md"
++++ b/CURRENT_WORKSPACE_AND_SPEC_R19.md
+@@ -4,6 +4,10 @@
+ 対象: VC LoRa Bridge R18低速製品版とR19高速転送候補  
+ 目的: 作業場所、固定仕様、実測済み結果、30秒目標、未解決事項、再開手順を一つの入口にまとめる。
+ 
++2026-10-25の追加作業は、診断限定の「安全取消し→Heartbeat優先→別Grantで新規予約」の実装とオフライン検証である。取消しは最大1回、要求は全体で最大1回とし、要求送信済みなら自動再準備しない。停止理由の独立128-byte記録とreader v11を明示的な追加モードにし、従来のreader v10、期限、通信設定、accepted R18保存物は維持する。詳細と検証状況は[R19診断仕様](R19_GRANT_RESERVATION_DIAGNOSTICS.md)と[今回のsummary](runs/validation/R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001/20261025T-fix/summary.json)を参照する。今回の実機操作・GitHub更新は行っていない。
++
++同修正は全479/479試験、Vehicle→Groundの両Arduinoビルド、完成候補の独立26項目照合が合格した。新候補は `20261025T075246002Z-0508974a`、reader v11／wire v2である。実機の932件・30秒以内取得は今回未評価で、旧試験の0/932件という結果を修正後の実機成功へ変更していない。
++
+ ## 結論
+ 
+ - 最新の一回限定試験は2026-10-25 13:35～13:38 JSTに実施した。同じ候補 `20261024T215821978Z-c1982cbd` の書込み、取得要求1回を含む40秒測定、両機の内部記録取得、accepted R18への両機復旧とdigest照合まで完了した。30秒時点・終了時とも0/932件で、高速転送は開始していない。Vehicleは予約成立から154 ms後に保持条件の検査で停止し、その失敗通知はPC側でPARAM要求送信の80.4178 ms前に既に受信されていた。Groundは要求受付から501 ms後に `GrantDeadlineExceeded` で停止した。Vehicleのどの保持条件が外れたかは未分離で、Heartbeat優先判定との競合が有力候補である。今回AUX faultは両機0、Groundの初回製品Heartbeatは472 µsでUSB完了したが、診断USBの31-byte待機は残る。詳細は[R19_GRANT_RESERVATION_DIAGNOSTICS.md](R19_GRANT_RESERVATION_DIAGNOSTICS.md)の最新試験結果を参照する。許可は使用済みで、追加実機操作は行っていない。

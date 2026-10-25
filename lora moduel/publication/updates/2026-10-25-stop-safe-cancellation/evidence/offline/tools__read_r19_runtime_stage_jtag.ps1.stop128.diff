@@ -1,0 +1,578 @@
+Comparing files E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128 and E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+   25:    [switch]$OfflineExtendedRecordFixtureOnly,
+   26:    [switch]$OfflineNativeInvocationContractTest,
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+   25:    [switch]$OfflineExtendedRecordFixtureOnly,
+   26:    [switch]$GrantReservationStopDiagnostics,
+   27:    [switch]$OfflineNativeInvocationContractTest,
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+   42:  $script:R19GrantReservationDecoderPath=Join-Path $PSScriptRoot 'read_r19_grant_reservation_record.ps1'
+   43:  $script:R19GrantReservationContractPath=Join-Path $PSScriptRoot 'r19_grant_reservation_contract.ps1'
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+   43:  $script:R19GrantReservationDecoderPath=Join-Path $PSScriptRoot 'read_r19_grant_reservation_record.ps1'
+   44:  $script:R19GrantReservationStopDecoderPath=Join-Path $PSScriptRoot 'read_r19_grant_reservation_stop_record.ps1'
+   45:  $script:R19GrantReservationContractPath=Join-Path $PSScriptRoot 'r19_grant_reservation_contract.ps1'
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+  471:  ra_r19_grant_reservation_record\s*$')
+  472:    $strictBCounts=@{
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+  473:  ra_r19_grant_reservation_record\s*$')
+  474:    $grantReservationStopSymbolMatches=[regex]::Matches(($nmOutput-join"`n"),'(?m)^([0-9a-fA-F]{8})\s+([0-9a-fA-F]{8})\s+[Bb]\s+v
+  475:  c_lora_r19_grant_reservation_stop_record\s*$')
+  476:    $strictBCounts=@{
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+  480:      vc_lora_r19_grant_reservation_record=$grantReservationSymbolMatches.Count
+  481:    }
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+  484:      vc_lora_r19_grant_reservation_record=$grantReservationSymbolMatches.Count
+  485:      vc_lora_r19_grant_reservation_stop_record=$grantReservationStopSymbolMatches.Count
+  486:    }
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+  495:  s -GrantMatches $grantDiagnosticSymbolMatches -ReservationMatches $grantReservationSymbolMatches `
+  496:      -ElfSha256 (Get-Sha256 $elfPath) -MapSha256 (Get-Sha256 $mapPath)
+  497:    if ($stageSymbolMatches.Count -ne 1) {
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+  500:  s -GrantMatches $grantDiagnosticSymbolMatches -ReservationMatches $grantReservationSymbolMatches `
+  501:      -StopMatches $grantReservationStopSymbolMatches -ElfSha256 (Get-Sha256 $elfPath) -MapSha256 (Get-Sha256 $mapPath)
+  502:    if ($stageSymbolMatches.Count -ne 1) {
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+  557:      grant_reservation_enabled = [bool]$extendedBinding.grant_reservation_enabled
+  558:      elf_path = $elfPath
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+  562:      grant_reservation_enabled = [bool]$extendedBinding.grant_reservation_enabled
+  563:      grant_reservation_stop_enabled = [bool]$extendedBinding.grant_reservation_stop_enabled
+  564:      elf_path = $elfPath
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+  613:    }
+  614:    if ($extendedBinding.enabled) {
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+  619:    }
+  620:    if($extendedBinding.grant_reservation_stop_enabled){
+  621:      $binding|Add-Member -NotePropertyName grant_reservation_stop_address -NotePropertyValue $extendedBinding.metadata.symbols.g
+  622:  rant_reservation_stop.address
+  623:      $binding|Add-Member -NotePropertyName grant_reservation_stop_diagnostics -NotePropertyValue $extendedBinding.grant_reservat
+  624:  ion_stop_diagnostics
+  625:      $binding.symbols['grant_reservation_stop']=$extendedBinding.metadata.symbols.grant_reservation_stop
+  626:    }
+  627:    if ($extendedBinding.enabled) {
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+  691:  ionMatches=@(),
+  692:      [string]$ElfSha256,[string]$MapSha256)
+  693:    $handoffPath=Join-Path $Root 'handoff.json'
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+  704:  ionMatches=@(),
+  705:      [object]$StopMatches=@(),[string]$ElfSha256,[string]$MapSha256)
+  706:    $handoffPath=Join-Path $Root 'handoff.json'
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+  701:    $reservationEnabled=$null-ne$Manifest.PSObject.Properties['grant_reservation_diagnostics']
+  702:    $reservationContract=$null
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+  714:    $reservationEnabled=$null-ne$Manifest.PSObject.Properties['grant_reservation_diagnostics']
+  715:    $stopEnabled=$null-ne$Manifest.PSObject.Properties['grant_reservation_stop_diagnostics']
+  716:    $stopContract=$null
+  717:    $stopRequested=[bool](Get-Variable -Name GrantReservationStopDiagnostics -ValueOnly -ErrorAction SilentlyContinue)
+  718:    if($stopRequested-ne$stopEnabled){throw 'STOP128 capability requires its explicit matching acquisition switch'}
+  719:    if($stopEnabled){
+  720:      if(-not$reservationEnabled){throw 'STOP128 requires all preceding ten diagnostic records'}
+  721:      $stopRepo=Split-Path -Parent (Split-Path -Parent $script:R19GrantReservationStopDecoderPath)
+  722:      $stopContract=Assert-R19GrantReservationStopCandidateContract -Value $Manifest.grant_reservation_stop_diagnostics -RepoRoot
+  723:   $stopRepo -Enabled $true
+  724:      foreach($doc in $documents){
+  725:        if($null-eq$doc-or@($doc.PSObject.Properties.Name)-cnotcontains'grant_reservation_stop_diagnostics'-or($doc.grant_reserva
+  726:  tion_stop_diagnostics|ConvertTo-Json -Depth 12 -Compress)-cne($stopContract|ConvertTo-Json -Depth 12 -Compress)){throw 'STOP128
+  727:   differs across manifest seal handoff'}
+  728:      }
+  729:      $stopText=Get-VerifiedR19StopDecoderText -ArtifactRoot $Root -ExpectedSha256 $stopContract.decoder_sha256
+  730:      $script:R19StopDecoderVerifiedText=$stopText
+  731:      $script:R19StopDecoderVerifiedSha256=$stopContract.decoder_sha256
+  732:      foreach($relative in @('firmware/high_speed/r19_grant_reservation_stop_record.hpp','tools/read_r19_grant_reservation_stop_r
+  733:  ecord.ps1')){
+  734:        $src=@($Manifest.canonical_source_snapshot.files|Where-Object{$_.path-ceq$relative});$canonical=Get-Item -LiteralPath (Jo
+  735:  in-Path $stopRepo $relative) -ErrorAction Stop
+  736:        if($src.Count-ne1-or$src[0].sha256-cne(Get-Sha256 $canonical.FullName)-or-not(Test-ExactDiagnosticInteger $src[0].size_by
+  737:  tes $canonical.Length)){throw 'STOP128 source closure differs'}
+  738:      }
+  739:    }elseif($StopMatches.Count-ne0-or@($documents|Where-Object{$null-ne$_-and$_.PSObject.Properties['grant_reservation_stop_diagn
+  740:  ostics']}).Count-ne0){throw 'Undeclared STOP128 symbol or capability metadata'}
+  741:    $reservationContract=$null
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+  706:      $reservationRepo=Split-Path -Parent (Split-Path -Parent $script:R19GrantReservationDecoderPath)
+  707:      [void](Assert-R19GrantReservationCandidateContract -Value $reservationContract -RepoRoot $reservationRepo -Enabled $true)
+  708:      foreach($doc in $documents){
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+  745:      $reservationRepo=Split-Path -Parent (Split-Path -Parent $script:R19GrantReservationDecoderPath)
+  746:      [void](Assert-R19GrantReservationCandidateContract -Value $reservationContract -RepoRoot $reservationRepo -Enabled $true -C
+  747:  ancellationEnabled $stopEnabled)
+  748:      foreach($doc in $documents){
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+  912:      if($reservationEnabled){$expectedFlag+=' -DVC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS=1'}
+  913:      if($Manifest.candidate_enable.property-cne$expectedFlag-or@($RoleEntry.compile.argv)-cnotcontains$expectedFlag){throw 'time
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+  952:      if($reservationEnabled){$expectedFlag+=' -DVC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS=1'}
+  953:      if($stopEnabled){$expectedFlag+=' -DVC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS=1'}
+  954:      if($Manifest.candidate_enable.property-cne$expectedFlag-or@($RoleEntry.compile.argv)-cnotcontains$expectedFlag){throw 'time
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+  930:      return [pscustomobject]@{enabled=$false;first_usb_failure_enabled=$false;timed_path_enabled=$false;aux_readiness_enabled=$f
+  931:  alse;diagnostic_usb_failure_enabled=$false;grant_diagnostics_enabled=$false;grant_reservation_enabled=$false}
+  932:    }
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+  971:      return [pscustomobject]@{enabled=$false;first_usb_failure_enabled=$false;timed_path_enabled=$false;aux_readiness_enabled=$f
+  972:  alse;diagnostic_usb_failure_enabled=$false;grant_diagnostics_enabled=$false;grant_reservation_enabled=$false;grant_reservation_
+  973:  stop_enabled=$false}
+  974:    }
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+  985:    }
+  986:    $decoder=$null
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1027:    }
+ 1028:    if($stopEnabled){
+ 1029:      $symbolNames+=@('grant_reservation_stop');$expected.grant_reservation_stop=@('vc_lora_r19_grant_reservation_stop_record',12
+ 1030:  8,$StopMatches)
+ 1031:      $readerSchema='vc-lora-r19-runtime-stage-jtag-read-v11'
+ 1032:    }
+ 1033:    $decoder=$null
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 1063:  nosticUsbEnabled;diagnostic_usb_failure_diagnostics=$diagnosticUsbContract;grant_diagnostics_enabled=$grantEnabled;grant_diagno
+ 1064:  stics=$grantContract;grant_reservation_enabled=$reservationEnabled;grant_reservation_diagnostics=$reservationContract;usb_role_
+ 1065:  capabilities=$roleCapabilities;decoder=$decoder;metadata=$metadataByDocument[0];handoff_path=$handoffPath;handoff_sha256=Get-Sh
+ 1066:  a256 $handoffPath}
+ 1067:  }
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1110:  nosticUsbEnabled;diagnostic_usb_failure_diagnostics=$diagnosticUsbContract;grant_diagnostics_enabled=$grantEnabled;grant_diagno
+ 1111:  stics=$grantContract;grant_reservation_enabled=$reservationEnabled;grant_reservation_diagnostics=$reservationContract;grant_res
+ 1112:  ervation_stop_enabled=$stopEnabled;grant_reservation_stop_diagnostics=$stopContract;usb_role_capabilities=$roleCapabilities;dec
+ 1113:  oder=$decoder;metadata=$metadataByDocument[0];handoff_path=$handoffPath;handoff_sha256=Get-Sha256 $handoffPath}
+ 1114:  }
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 1068:  
+ 1069:  function Assert-R19GrantDiagnosticContract {
+ 1070:    param([object]$Contract)
+ 1071:    Assert-ExactProperties $Contract @('schema','enabled','macro','reader_schema','record','decoder') 'Grant diagnostic candidate
+ 1072:   contract'
+ 1073:    Assert-ExactProperties $Contract.record @('symbol','schema_version','size_bytes') 'Grant diagnostic record descriptor'
+ 1074:    Assert-ExactProperties $Contract.decoder @('path','sha256') 'Grant diagnostic decoder descriptor'
+ 1075:    if($Contract.schema-cne'vc-lora-r19-grant-diagnostic-candidate-v1'-or$Contract.enabled-isnot[bool]-or-not$Contract.enabled-or
+ 1076:      $Contract.macro-cne'VC_LORA_R19_GRANT_DIAGNOSTICS'-or$Contract.reader_schema-cne'vc-lora-r19-runtime-stage-jtag-read-v9'-or
+ 1077:      $Contract.record.symbol-cne'vc_lora_r19_grant_diagnostic_record'-or-not(Test-ExactDiagnosticInteger $Contract.record.schema
+ 1078:  _version 1)-or
+ 1079:      -not(Test-ExactDiagnosticInteger $Contract.record.size_bytes 1024)-or$Contract.decoder.path-cne'tools/read_r19_grant_diagno
+ 1080:  stic_record.ps1'-or
+ 1081:      $Contract.decoder.sha256-isnot[string]-or$Contract.decoder.sha256-cnotmatch'^[A-F0-9]{64}$'){throw 'Grant diagnostic ABI co
+ 1082:  ntract invalid'}
+ 1083:  }
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1115:  
+ 1116:  function Get-VerifiedR19StopDecoderText {
+ 1117:    param([string]$ArtifactRoot,[Parameter(Mandatory)][string]$ExpectedSha256)
+ 1118:    $verified=$null
+ 1119:    foreach($path in @($script:R19GrantReservationStopDecoderPath,(Join-Path $ArtifactRoot 'evidence/tools/read_r19_grant_reserva
+ 1120:  tion_stop_record.ps1'))){
+ 1121:      [byte[]]$bytes=[IO.File]::ReadAllBytes($path)
+ 1122:      $sha=[Security.Cryptography.SHA256]::Create()
+ 1123:      try{$hash=[BitConverter]::ToString($sha.ComputeHash($bytes)).Replace('-','')}finally{$sha.Dispose()}
+ 1124:      if($hash-cne$ExpectedSha256){throw 'STOP128 decoder dependency bytes/hash mismatch'}
+ 1125:      $text=[Text.UTF8Encoding]::new($false,$true).GetString($bytes).TrimStart([char]0xFEFF)
+ 1126:      if($null-ne$verified-and$verified-cne$text){throw 'STOP128 canonical and sealed decoder bytes differ'}
+ 1127:      $verified=$text
+ 1128:    }
+ 1129:    return $verified
+ 1130:  }
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 1084:  
+ 1085:  function Decode-R19GrantDiagnosticBound {
+ 1086:    param([byte[]]$First,[byte[]]$Second,[string]$ExpectedRole,[object[]]$Fingerprint,[object[]]$Boot,[string]$VerifiedText='')
+ 1087:    # Isolate decoder script parameters: dot-sourcing its ImportOnly entry point
+ 1088:    # must never overwrite the caller's FixturePath or output selectors.
+ 1089:    if([string]::IsNullOrWhiteSpace($VerifiedText)){. $script:R19GrantDiagnosticDecoderPath -ImportOnly}
+ 1090:    else{. ([scriptblock]::Create($VerifiedText)) -ImportOnly}
+ 1091:    ConvertFrom-R19GrantDiagnosticRecord -First $First -Second $Second -ExpectedRole $ExpectedRole -ExpectedFingerprint $Fingerpr
+ 1092:  int -ExpectedBoot $Boot
+ 1093:  }
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1131:  
+ 1132:  function Assert-R19GrantDiagnosticContract {
+ 1133:    param([object]$Contract)
+ 1134:    Assert-ExactProperties $Contract @('schema','enabled','macro','reader_schema','record','decoder') 'Grant diagnostic candidate
+ 1135:   contract'
+ 1136:    Assert-ExactProperties $Contract.record @('symbol','schema_version','size_bytes') 'Grant diagnostic record descriptor'
+ 1137:    Assert-ExactProperties $Contract.decoder @('path','sha256') 'Grant diagnostic decoder descriptor'
+ 1138:    if($Contract.schema-cne'vc-lora-r19-grant-diagnostic-candidate-v1'-or$Contract.enabled-isnot[bool]-or-not$Contract.enabled-or
+ 1139:      $Contract.macro-cne'VC_LORA_R19_GRANT_DIAGNOSTICS'-or$Contract.reader_schema-cne'vc-lora-r19-runtime-stage-jtag-read-v9'-or
+ 1140:      $Contract.record.symbol-cne'vc_lora_r19_grant_diagnostic_record'-or-not(Test-ExactDiagnosticInteger $Contract.record.schema
+ 1141:  _version 1)-or
+ 1142:      -not(Test-ExactDiagnosticInteger $Contract.record.size_bytes 1024)-or$Contract.decoder.path-cne'tools/read_r19_grant_diagno
+ 1143:  stic_record.ps1'-or
+ 1144:      $Contract.decoder.sha256-isnot[string]-or$Contract.decoder.sha256-cnotmatch'^[A-F0-9]{64}$'){throw 'Grant diagnostic ABI co
+ 1145:  ntract invalid'}
+ 1146:  }
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 1094:  
+ 1095:  function Decode-R19GrantReservationBound {
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1147:  
+ 1148:  function Decode-R19GrantDiagnosticBound {
+ 1149:    param([byte[]]$First,[byte[]]$Second,[string]$ExpectedRole,[object[]]$Fingerprint,[object[]]$Boot,[string]$VerifiedText='')
+ 1150:    # Isolate decoder script parameters: dot-sourcing its ImportOnly entry point
+ 1151:    # must never overwrite the caller's FixturePath or output selectors.
+ 1152:    if([string]::IsNullOrWhiteSpace($VerifiedText)){. $script:R19GrantDiagnosticDecoderPath -ImportOnly}
+ 1153:    else{. ([scriptblock]::Create($VerifiedText)) -ImportOnly}
+ 1154:    ConvertFrom-R19GrantDiagnosticRecord -First $First -Second $Second -ExpectedRole $ExpectedRole -ExpectedFingerprint $Fingerpr
+ 1155:  int -ExpectedBoot $Boot
+ 1156:  }
+ 1157:  
+ 1158:  function Decode-R19GrantReservationBound {
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 1106:  
+ 1107:  function Assert-R19ReaderUsbRoleCapabilities {
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1169:  
+ 1170:  function Decode-R19GrantReservationStopBound {
+ 1171:    param([byte[]]$First,[byte[]]$Second,[string]$ExpectedRole,[uint32[]]$Fingerprint,[uint32[]]$Boot,[string]$VerifiedText='')
+ 1172:    if([string]::IsNullOrWhiteSpace($VerifiedText)){
+ 1173:      & {param($a,$b,$r,$f,$i,$p) . $p -ImportOnly; ConvertFrom-R19GrantReservationStopRecord -First $a -Second $b -ExpectedRole 
+ 1174:  $r -ExpectedFingerprint $f -ExpectedBoot $i} $First $Second $ExpectedRole $Fingerprint $Boot $script:R19GrantReservationStopDec
+ 1175:  oderPath
+ 1176:    }else{
+ 1177:      & {param($a,$b,$r,$f,$i,$source) . ([scriptblock]::Create($source)) -ImportOnly; ConvertFrom-R19GrantReservationStopRecord 
+ 1178:  -First $a -Second $b -ExpectedRole $r -ExpectedFingerprint $f -ExpectedBoot $i} $First $Second $ExpectedRole $Fingerprint $Boot
+ 1179:   $VerifiedText
+ 1180:    }
+ 1181:  }
+ 1182:  
+ 1183:  function Assert-R19ReaderUsbRoleCapabilities {
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 1158:    $binding = Get-Content -LiteralPath $LiteralPath -Raw | ConvertFrom-Json
+ 1159:    $reservationEnabled=$Artifact.PSObject.Properties['grant_reservation_enabled']-and[bool]$Artifact.grant_reservation_enabled
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1234:    $binding = Get-Content -LiteralPath $LiteralPath -Raw | ConvertFrom-Json
+ 1235:    $stopEnabled=$Artifact.PSObject.Properties['grant_reservation_stop_enabled']-and[bool]$Artifact.grant_reservation_stop_enable
+ 1236:  d
+ 1237:    $expectedReservationReader=if($stopEnabled){'vc-lora-r19-runtime-stage-jtag-read-v11'}else{'vc-lora-r19-runtime-stage-jtag-re
+ 1238:  ad-v10'}
+ 1239:    if($stopEnabled){
+ 1240:      if(@($binding.PSObject.Properties.Name)-cnotcontains'grant_reservation_stop_diagnostics'-or($binding.grant_reservation_stop
+ 1241:  _diagnostics|ConvertTo-Json -Depth 12 -Compress)-cne($Artifact.grant_reservation_stop_diagnostics|ConvertTo-Json -Depth 12 -Com
+ 1242:  press)){throw 'Flash STOP128 capability binding differs'}
+ 1243:    }elseif($binding.PSObject.Properties['grant_reservation_stop_diagnostics']){throw 'Flash contains undeclared STOP128 capabili
+ 1244:  ty'}
+ 1245:    $reservationEnabled=$Artifact.PSObject.Properties['grant_reservation_enabled']-and[bool]$Artifact.grant_reservation_enabled
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 1162:  cs|ConvertTo-Json -Depth 15 -Compress)-cne($Artifact.grant_reservation_diagnostics|ConvertTo-Json -Depth 15 -Compress)-or$bindi
+ 1163:  ng.reader_schema-cne'vc-lora-r19-runtime-stage-jtag-read-v10'){throw 'Flash reservation capability binding differs'}
+ 1164:    }elseif($binding.PSObject.Properties['grant_reservation_diagnostics']){throw 'Flash contains undeclared reservation capabilit
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1248:  cs|ConvertTo-Json -Depth 15 -Compress)-cne($Artifact.grant_reservation_diagnostics|ConvertTo-Json -Depth 15 -Compress)-or$bindi
+ 1249:  ng.reader_schema-cne$expectedReservationReader){throw 'Flash reservation capability binding differs'}
+ 1250:    }elseif($binding.PSObject.Properties['grant_reservation_diagnostics']){throw 'Flash contains undeclared reservation capabilit
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 1650:    $reservationSecondPath=Join-Path $OutputDirectory ("grant-reservation-attempt-$Attempt-second.bin")
+ 1651:    $extended=[bool]$Artifact.extended_records_enabled
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1736:    $reservationSecondPath=Join-Path $OutputDirectory ("grant-reservation-attempt-$Attempt-second.bin")
+ 1737:    $stopFirstPath=Join-Path $OutputDirectory ("grant-reservation-stop-attempt-$Attempt-first.bin")
+ 1738:    $stopSecondPath=Join-Path $OutputDirectory ("grant-reservation-stop-attempt-$Attempt-second.bin")
+ 1739:    $extended=[bool]$Artifact.extended_records_enabled
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 1658:    $reservationEnabled=$Artifact.PSObject.Properties['grant_reservation_enabled']-and[bool]$Artifact.grant_reservation_enabled
+ 1659:    if($reservationEnabled-and-not$grantEnabled){throw 'Reservation acquisition requires all preceding nine records'}
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1746:    $reservationEnabled=$Artifact.PSObject.Properties['grant_reservation_enabled']-and[bool]$Artifact.grant_reservation_enabled
+ 1747:    $stopEnabled=$Artifact.PSObject.Properties['grant_reservation_stop_enabled']-and[bool]$Artifact.grant_reservation_stop_enable
+ 1748:  d
+ 1749:    if($stopEnabled-and-not$reservationEnabled){throw 'STOP128 acquisition requires all preceding ten records'}
+ 1750:    if($reservationEnabled-and-not$grantEnabled){throw 'Reservation acquisition requires all preceding nine records'}
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 1716:  eservation_address) 512")}
+ 1717:      $captureArguments+=@(
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1807:  eservation_address) 512")}
+ 1808:      if($stopEnabled){$captureArguments+=@('-c', "dump_image $(Convert-TclPath $stopFirstPath) $($Artifact.grant_reservation_sto
+ 1809:  p_address) 128")}
+ 1810:      $captureArguments+=@(
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 1738:  reservation_address) 512")}
+ 1739:      $captureArguments+=@(
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1831:  reservation_address) 512")}
+ 1832:      if($stopEnabled){$captureArguments+=@('-c', "dump_image $(Convert-TclPath $stopSecondPath) $($Artifact.grant_reservation_st
+ 1833:  op_address) 128")}
+ 1834:      $captureArguments+=@(
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 1876:  ]::ReadAllBytes($reservationSecondPath)}else{$null}
+ 1877:      capture_log = $captureLog
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 1971:  ]::ReadAllBytes($reservationSecondPath)}else{$null}
+ 1972:      grant_reservation_stop_first=if($stopEnabled-and(Test-Path -LiteralPath $stopFirstPath -PathType Leaf)){[IO.File]::ReadAllB
+ 1973:  ytes($stopFirstPath)}else{$null}
+ 1974:      grant_reservation_stop_second=if($stopEnabled-and(Test-Path -LiteralPath $stopSecondPath -PathType Leaf)){[IO.File]::ReadAl
+ 1975:  lBytes($stopSecondPath)}else{$null}
+ 1976:      capture_log = $captureLog
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 2549:  function Invoke-OfflineExtendedRecordFixture {
+ 2550:    # This decoder intentionally cannot enter a live/native/toolchain path.
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 2648:  function Invoke-OfflineExtendedRecordFixture {
+ 2649:    $stopV11=$false
+ 2650:    # This decoder intentionally cannot enter a live/native/toolchain path.
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 2572:      if ($f.schema -cnotin @('vc-lora-r19-usb-extended-jtag-fixture-v1','vc-lora-r19-usb-extended-jtag-fixture-v2','vc-lora-r19-
+ 2573:  usb-extended-jtag-fixture-v8','vc-lora-r19-usb-extended-jtag-fixture-v9','vc-lora-r19-usb-extended-jtag-fixture-v10') -or $f.ro
+ 2574:  le -notin @('ground','vehicle') -or
+ 2575:          [string]::IsNullOrWhiteSpace([string]$f.artifact_id)) { throw 'Extended fixture identity or schema is invalid' }
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 2672:      if ($f.schema -cnotin @('vc-lora-r19-usb-extended-jtag-fixture-v1','vc-lora-r19-usb-extended-jtag-fixture-v2','vc-lora-r19-
+ 2673:  usb-extended-jtag-fixture-v8','vc-lora-r19-usb-extended-jtag-fixture-v9','vc-lora-r19-usb-extended-jtag-fixture-v10','vc-lora-r
+ 2674:  19-usb-extended-jtag-fixture-v11') -or $f.role -notin @('ground','vehicle') -or
+ 2675:          [string]::IsNullOrWhiteSpace([string]$f.artifact_id)) { throw 'Extended fixture identity or schema is invalid' }
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 2576:      $sizes=@{runtime_stage=68;endpoint_fifo=112;hwcdc_restart=128;ground_usb_commit=128}
+ 2577:      $reservationV10=$f.schema-ceq'vc-lora-r19-usb-extended-jtag-fixture-v10'
+ 2578:      $grantV9=$f.schema-cin@('vc-lora-r19-usb-extended-jtag-fixture-v9','vc-lora-r19-usb-extended-jtag-fixture-v10')
+ 2579:      $diagnosticV8=$f.schema-cin@('vc-lora-r19-usb-extended-jtag-fixture-v8','vc-lora-r19-usb-extended-jtag-fixture-v9','vc-lora
+ 2580:  -r19-usb-extended-jtag-fixture-v10')
+ 2581:      $firstEnabled=$f.schema-cin@('vc-lora-r19-usb-extended-jtag-fixture-v2','vc-lora-r19-usb-extended-jtag-fixture-v8','vc-lora
+ 2582:  -r19-usb-extended-jtag-fixture-v9','vc-lora-r19-usb-extended-jtag-fixture-v10')
+ 2583:      $names=@('runtime_stage','endpoint_fifo','hwcdc_restart','ground_usb_commit')
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 2676:      $sizes=@{runtime_stage=68;endpoint_fifo=112;hwcdc_restart=128;ground_usb_commit=128}
+ 2677:      $stopV11=$f.schema-ceq'vc-lora-r19-usb-extended-jtag-fixture-v11'
+ 2678:      $stopRequested=[bool](Get-Variable -Name GrantReservationStopDiagnostics -ValueOnly -ErrorAction SilentlyContinue)
+ 2679:      if($stopRequested-ne$stopV11){throw 'STOP128 fixture requires its explicit matching acquisition switch'}
+ 2680:      $reservationV10=$f.schema-cin@('vc-lora-r19-usb-extended-jtag-fixture-v10','vc-lora-r19-usb-extended-jtag-fixture-v11')
+ 2681:      $grantV9=$f.schema-cin@('vc-lora-r19-usb-extended-jtag-fixture-v9','vc-lora-r19-usb-extended-jtag-fixture-v10','vc-lora-r19
+ 2682:  -usb-extended-jtag-fixture-v11')
+ 2683:      $diagnosticV8=$f.schema-cin@('vc-lora-r19-usb-extended-jtag-fixture-v8','vc-lora-r19-usb-extended-jtag-fixture-v9','vc-lora
+ 2684:  -r19-usb-extended-jtag-fixture-v10','vc-lora-r19-usb-extended-jtag-fixture-v11')
+ 2685:      $firstEnabled=$f.schema-cin@('vc-lora-r19-usb-extended-jtag-fixture-v2','vc-lora-r19-usb-extended-jtag-fixture-v8','vc-lora
+ 2686:  -r19-usb-extended-jtag-fixture-v9','vc-lora-r19-usb-extended-jtag-fixture-v10','vc-lora-r19-usb-extended-jtag-fixture-v11')
+ 2687:      $names=@('runtime_stage','endpoint_fifo','hwcdc_restart','ground_usb_commit')
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 2587:      if($diagnosticV8){
+ 2588:        $expectedReader=if($reservationV10){'vc-lora-r19-runtime-stage-jtag-read-v10'}elseif($grantV9){'vc-lora-r19-runtime-stage
+ 2589:  -jtag-read-v9'}else{'vc-lora-r19-runtime-stage-jtag-read-v8'}
+ 2590:        if($f.reader_schema-cne$expectedReader){throw 'v8/v9 fixture reader schema downgrade'}
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 2691:      if($diagnosticV8){
+ 2692:        $expectedReader=if($stopV11){'vc-lora-r19-runtime-stage-jtag-read-v11'}elseif($reservationV10){'vc-lora-r19-runtime-stage
+ 2693:  -jtag-read-v10'}elseif($grantV9){'vc-lora-r19-runtime-stage-jtag-read-v9'}else{'vc-lora-r19-runtime-stage-jtag-read-v8'}
+ 2694:        if($f.reader_schema-cne$expectedReader){throw 'v8/v9 fixture reader schema downgrade'}
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 2613:        [void](Assert-R19GrantReservationCandidateContract -Value $f.grant_reservation_diagnostics -RepoRoot $reservationRepo -En
+ 2614:  abled $true)
+ 2615:        $sizes.grant_reservation=512;$names+=@('grant_reservation')
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 2717:        [void](Assert-R19GrantReservationCandidateContract -Value $f.grant_reservation_diagnostics -RepoRoot $reservationRepo -En
+ 2718:  abled $true -CancellationEnabled $stopV11)
+ 2719:        $sizes.grant_reservation=512;$names+=@('grant_reservation')
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 2618:  record'}}}
+ 2619:      $ranges=[Collections.Generic.List[object]]::new(); $readMap=@{}; $reads=[Collections.Generic.List[object]]::new()
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 2722:  record'}}}
+ 2723:      if($stopV11){
+ 2724:        [void](Assert-R19GrantReservationStopCandidateContract -Value $f.grant_reservation_stop_diagnostics -RepoRoot $reservatio
+ 2725:  nRepo -Enabled $true)
+ 2726:        $sizes.grant_reservation_stop=128;$names+=@('grant_reservation_stop')
+ 2727:      }else{foreach($key in @('grant_reservation_stop_diagnostics','grant_reservation_stop_address','grant_reservation_stop_first
+ 2728:  _read_base64','grant_reservation_stop_second_read_base64')){if($f.PSObject.Properties[$key]){throw 'Legacy fixture contains und
+ 2729:  eclared STOP128 record'}}}
+ 2730:      $ranges=[Collections.Generic.List[object]]::new(); $readMap=@{}; $reads=[Collections.Generic.List[object]]::new()
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 2656:  erprint $legacy.build_fingerprint -Boot $legacy.boot_instance}
+ 2657:      foreach ($name in $names) {
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 2767:  erprint $legacy.build_fingerprint -Boot $legacy.boot_instance}
+ 2768:      if($stopV11){$legacy=$decoded.first_usb_failure;$decoded['grant_reservation_stop']=Decode-R19GrantReservationStopBound -Fir
+ 2769:  st $readMap.grant_reservation_stop_first_read_base64 -Second $readMap.grant_reservation_stop_second_read_base64 -ExpectedRole $
+ 2770:  f.role -Fingerprint $legacy.build_fingerprint -Boot $legacy.boot_instance}
+ 2771:      foreach ($name in $names) {
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 2691:  ation_diagnostics}
+ 2692:      $summary|ConvertTo-Json -Depth 14|Set-Content -LiteralPath (Join-Path $extendedRoot 'summary.json') -Encoding utf8
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 2805:  ation_diagnostics}
+ 2806:      if($stopV11){$summary.schema='vc-lora-r19-usb-extended-offline-read-v11';$summary['reader_schema']='vc-lora-r19-runtime-sta
+ 2807:  ge-jtag-read-v11';$summary['grant_reservation_stop_required']=$true;$summary['grant_reservation_stop_diagnostics']=$f.grant_res
+ 2808:  ervation_stop_diagnostics;if(@($summary.reads).Count-ne22){throw 'STOP128 fixture must emit exactly22 paired reads'}}
+ 2809:      $summary|ConvertTo-Json -Depth 14|Set-Content -LiteralPath (Join-Path $extendedRoot 'summary.json') -Encoding utf8
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 2695:    } catch {
+ 2696:      $summary=[ordered]@{schema=$(if($reservationV10){'vc-lora-r19-usb-extended-offline-read-v10'}elseif($grantV9){'vc-lora-r19-
+ 2697:  usb-extended-offline-read-v9'}elseif($diagnosticV8){'vc-lora-r19-usb-extended-offline-read-v8'}elseif($firstEnabled){'vc-lora-r
+ 2698:  19-usb-extended-offline-read-v2'}else{'vc-lora-r19-usb-extended-offline-read-v1'});result='FAIL';mode='offline-extended-fixture
+ 2699:  ';hardware_interaction=$false;live_binding_supported=$false;error=$_.Exception.Message}
+ 2700:      $summary|ConvertTo-Json -Depth 5|Set-Content -LiteralPath (Join-Path $extendedRoot 'summary.json') -Encoding utf8
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 2812:    } catch {
+ 2813:      $summary=[ordered]@{schema=$(if($stopV11){'vc-lora-r19-usb-extended-offline-read-v11'}elseif($reservationV10){'vc-lora-r19-
+ 2814:  usb-extended-offline-read-v10'}elseif($grantV9){'vc-lora-r19-usb-extended-offline-read-v9'}elseif($diagnosticV8){'vc-lora-r19-u
+ 2815:  sb-extended-offline-read-v8'}elseif($firstEnabled){'vc-lora-r19-usb-extended-offline-read-v2'}else{'vc-lora-r19-usb-extended-of
+ 2816:  fline-read-v1'});result='FAIL';mode='offline-extended-fixture';hardware_interaction=$false;live_binding_supported=$false;error=
+ 2817:  $_.Exception.Message}
+ 2818:      $summary|ConvertTo-Json -Depth 5|Set-Content -LiteralPath (Join-Path $extendedRoot 'summary.json') -Encoding utf8
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 2710:  19-runtime-stage-jtag-read-v9')-or($Fixture.schema-ceq'vc-lora-r19-usb-extended-jtag-fixture-v10'-and$Fixture.reader_schema-ceq
+ 2711:  'vc-lora-r19-runtime-stage-jtag-read-v10')
+ 2712:    if(-not$validVersion){throw 'v8/v9 record fixture declaration is missing or downgraded'}
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 2828:  19-runtime-stage-jtag-read-v9')-or($Fixture.schema-ceq'vc-lora-r19-usb-extended-jtag-fixture-v10'-and$Fixture.reader_schema-ceq
+ 2829:  'vc-lora-r19-runtime-stage-jtag-read-v10')-or($Fixture.schema-ceq'vc-lora-r19-usb-extended-jtag-fixture-v11'-and$Fixture.reader
+ 2830:  _schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v11')
+ 2831:    if(-not$validVersion){throw 'v8/v9 record fixture declaration is missing or downgraded'}
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 2963:    $grantReservationEnabled=$false
+ 2964:    if ($Execute) {
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 3082:    $grantReservationEnabled=$false
+ 3083:    $grantReservationStopEnabled=$false
+ 3084:    if ($Execute) {
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 2985:      $grantReservationEnabled=[bool]$artifactBinding.grant_reservation_enabled
+ 2986:      $flashBinding = Assert-FlashBinding -LiteralPath $FlashEvidencePath `
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 3105:      $grantReservationEnabled=[bool]$artifactBinding.grant_reservation_enabled
+ 3106:      $grantReservationStopEnabled=[bool]$artifactBinding.grant_reservation_stop_enabled
+ 3107:      $flashBinding = Assert-FlashBinding -LiteralPath $FlashEvidencePath `
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 3095:  nt_reservation_second}
+ 3096:        try {
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 3216:  nt_reservation_second}
+ 3217:        if($grantReservationStopEnabled){$stopFirstBytes=$capture.grant_reservation_stop_first;$stopSecondBytes=$capture.grant_re
+ 3218:  servation_stop_second}
+ 3219:        try {
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 3156:          }
+ 3157:          $captureAttempts.Add([ordered]@{
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 3279:          }
+ 3280:          if($grantReservationStopEnabled){
+ 3281:            if($script:R19StopDecoderVerifiedSha256-cne$artifactBinding.grant_reservation_stop_diagnostics.decoder_sha256-or[stri
+ 3282:  ng]::IsNullOrWhiteSpace($script:R19StopDecoderVerifiedText)){throw 'STOP128 verified decoder memory binding missing'}
+ 3283:            $legacy=$decoded.first_usb_failure
+ 3284:            $decoded['grant_reservation_stop']=Decode-R19GrantReservationStopBound -First $stopFirstBytes -Second $stopSecondByte
+ 3285:  s -ExpectedRole $expectedRole -Fingerprint $legacy.build_fingerprint -Boot $legacy.boot_instance -VerifiedText $script:R19StopD
+ 3286:  ecoderVerifiedText
+ 3287:          }
+ 3288:          $captureAttempts.Add([ordered]@{
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 3428:    }
+ 3429:    $summary | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $summaryPath -Encoding utf8
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 3559:    }
+ 3560:    if($grantReservationStopEnabled){
+ 3561:      $summary.schema='vc-lora-r19-runtime-stage-jtag-read-v11'
+ 3562:      $summary['grant_reservation_stop_required']=$true
+ 3563:      $summary.binding['grant_reservation_stop_diagnostics']=$artifactBinding.grant_reservation_stop_diagnostics
+ 3564:      $summary.binding['grant_reservation_stop_address']=$artifactBinding.grant_reservation_stop_address
+ 3565:      foreach($sample in @('first','second')){
+ 3566:        [byte[]]$bytes=if($sample-ceq'first'){$stopFirstBytes}else{$stopSecondBytes}
+ 3567:        $path=Join-Path $resolvedOutput ('grant_reservation_stop_'+$sample+'.bin');[IO.File]::WriteAllBytes($path,$bytes)
+ 3568:        $summary.reads+=@([ordered]@{record='grant_reservation_stop';sample=$(if($sample-ceq'first'){1}else{2});path=$path;size_b
+ 3569:  ytes=128;sha256=Get-Sha256 $path})
+ 3570:      }
+ 3571:      if(@($summary.reads).Count-ne22){throw 'STOP128 acquisition must emit exactly22 paired reads'}
+ 3572:      $summary.limitations+=@('STOP128 first-stop disposition distinguishes safe cancellation from fatal stop; neither proves Hea
+ 3573:  rtbeat delivery, completed cancellation/rebind or high-speed acceptance.')
+ 3574:    }
+ 3575:    $summary | ConvertTo-Json -Depth 12 | Set-Content -LiteralPath $summaryPath -Encoding utf8
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\read_r19_runtime_stage_jtag.ps1.before-stop128
+ 3432:    $failure = [ordered]@{
+ 3433:      schema = if($grantReservationEnabled){'vc-lora-r19-runtime-stage-jtag-read-v10'}elseif($grantDiagnosticsEnabled){'vc-lora-r
+ 3434:  19-runtime-stage-jtag-read-v9'}elseif($diagnosticUsbFailureEnabled){'vc-lora-r19-runtime-stage-jtag-read-v8'}elseif($auxReadine
+ 3435:  ssEnabled){'vc-lora-r19-runtime-stage-jtag-read-v7'}elseif($timedPathEnabled){'vc-lora-r19-runtime-stage-jtag-read-v6'}elseif($
+ 3436:  firstFailureEnabled){'vc-lora-r19-runtime-stage-jtag-read-v5'}elseif($extendedRecordsEnabled){'vc-lora-r19-runtime-stage-jtag-r
+ 3437:  ead-v4'}else{'vc-lora-r19-runtime-stage-jtag-read-v3'}
+ 3438:      result = 'FAIL'
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\READ_R19_RUNTIME_STAGE_JTAG.PS1
+ 3578:    $failure = [ordered]@{
+ 3579:      schema = if($grantReservationStopEnabled){'vc-lora-r19-runtime-stage-jtag-read-v11'}elseif($grantReservationEnabled){'vc-lo
+ 3580:  ra-r19-runtime-stage-jtag-read-v10'}elseif($grantDiagnosticsEnabled){'vc-lora-r19-runtime-stage-jtag-read-v9'}elseif($diagnosti
+ 3581:  cUsbFailureEnabled){'vc-lora-r19-runtime-stage-jtag-read-v8'}elseif($auxReadinessEnabled){'vc-lora-r19-runtime-stage-jtag-read-
+ 3582:  v7'}elseif($timedPathEnabled){'vc-lora-r19-runtime-stage-jtag-read-v6'}elseif($firstFailureEnabled){'vc-lora-r19-runtime-stage-
+ 3583:  jtag-read-v5'}elseif($extendedRecordsEnabled){'vc-lora-r19-runtime-stage-jtag-read-v4'}else{'vc-lora-r19-runtime-stage-jtag-rea
+ 3584:  d-v3'}
+ 3585:      result = 'FAIL'
+*****
+

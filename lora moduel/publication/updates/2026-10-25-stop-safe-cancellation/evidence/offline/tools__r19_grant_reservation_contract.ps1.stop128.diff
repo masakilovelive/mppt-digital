@@ -1,0 +1,84 @@
+Comparing files E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_grant_reservation_contract.ps1.before-stop128 and E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_GRANT_RESERVATION_CONTRACT.PS1
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_grant_reservation_contract.ps1.before-stop128
+    6:  function Get-R19GrantReservationCandidateContract {
+    7:    param([Parameter(Mandatory)][string]$RepoRoot,[bool]$Enabled=$false)
+    8:    if(-not$Enabled){return $null}
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_GRANT_RESERVATION_CONTRACT.PS1
+    6:  function Get-R19GrantReservationCandidateContract {
+    7:    param([Parameter(Mandatory)][string]$RepoRoot,[bool]$Enabled=$false,[bool]$CancellationEnabled=$false)
+    8:    if($CancellationEnabled-and-not$Enabled){throw 'Cancellation requires reservation diagnostics'}
+    9:    if(-not$Enabled){return $null}
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_grant_reservation_contract.ps1.before-stop128
+    9:    $decoder='tools/read_r19_grant_reservation_record.ps1'
+   10:    [pscustomobject][ordered]@{
+   11:      schema='vc-lora-r19-grant-reservation-candidate-v1';enabled=$true
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_GRANT_RESERVATION_CONTRACT.PS1
+   10:    $decoder='tools/read_r19_grant_reservation_record.ps1'
+   11:    $contract=[pscustomobject][ordered]@{
+   12:      schema='vc-lora-r19-grant-reservation-candidate-v1';enabled=$true
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_grant_reservation_contract.ps1.before-stop128
+   22:    }
+   23:  }
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_GRANT_RESERVATION_CONTRACT.PS1
+   23:    }
+   24:    if($CancellationEnabled){
+   25:      $contract.reader_schema='vc-lora-r19-runtime-stage-jtag-read-v11'
+   26:      $contract.usb_control.schema='vc-lora-r19-grant-reservation-usb-v2'
+   27:      $contract|Add-Member -NotePropertyName cancellation -NotePropertyValue (Get-R19GrantReservationCancellationCapability)
+   28:    }
+   29:    return $contract
+   30:  }
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_grant_reservation_contract.ps1.before-stop128
+   45:  function Assert-R19GrantReservationCandidateContract {
+   46:    param([object]$Value,[Parameter(Mandatory)][string]$RepoRoot,[bool]$Enabled=$false)
+   47:    $expected=Get-R19GrantReservationCandidateContract -RepoRoot $RepoRoot -Enabled $Enabled
+   48:    Assert-R19GrantReservationShape $Value $expected 'grant_reservation_diagnostics'
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_GRANT_RESERVATION_CONTRACT.PS1
+   52:  function Assert-R19GrantReservationCandidateContract {
+   53:    param([object]$Value,[Parameter(Mandatory)][string]$RepoRoot,[bool]$Enabled=$false,[bool]$CancellationEnabled=$false)
+   54:    $expected=Get-R19GrantReservationCandidateContract -RepoRoot $RepoRoot -Enabled $Enabled -CancellationEnabled $CancellationEn
+   55:  abled
+   56:    Assert-R19GrantReservationShape $Value $expected 'grant_reservation_diagnostics'
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_grant_reservation_contract.ps1.before-stop128
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_GRANT_RESERVATION_CONTRACT.PS1
+   59:  
+   60:  function Get-R19GrantReservationCancellationCapability {
+   61:    [pscustomobject][ordered]@{
+   62:      schema='vc-lora-r19-grant-reservation-cancellation-v1';maximum_cancellations=1
+   63:      opcodes=[pscustomobject][ordered]@{CancelRequest=15;CancelAck=16;Withdrawn=17;CancelPeerConfirmed=18}
+   64:    }
+   65:  }
+   66:  
+   67:  # Separately opt-in; the original reservation-v10 contract is unchanged.
+   68:  function Get-R19GrantReservationStopCandidateContract {
+   69:    param([Parameter(Mandatory)][string]$RepoRoot,[bool]$Enabled=$false)
+   70:    if(-not$Enabled){return $null}
+   71:    $decoder='tools/read_r19_grant_reservation_stop_record.ps1'
+   72:    [pscustomobject][ordered]@{
+   73:      schema='vc-lora-r19-grant-reservation-stop-candidate-v1';enabled=$true
+   74:      macro='VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS'
+   75:      record_schema=1;size_bytes=128;symbol='vc_lora_r19_grant_reservation_stop_record'
+   76:      decoder_path=$decoder
+   77:      decoder_sha256=(Get-FileHash -LiteralPath (Join-Path $RepoRoot $decoder) -Algorithm SHA256 -ErrorAction Stop).Hash.ToUpperI
+   78:  nvariant()
+   79:      runtime_reader_schema='vc-lora-r19-runtime-stage-jtag-read-v11'
+   80:      usb_control_schema='vc-lora-r19-grant-reservation-usb-v2'
+   81:      cancellation=Get-R19GrantReservationCancellationCapability
+   82:    }
+   83:  }
+   84:  function Assert-R19GrantReservationStopCandidateContract {
+   85:    param([object]$Value,[Parameter(Mandatory)][string]$RepoRoot,[bool]$Enabled=$false)
+   86:    $expected=Get-R19GrantReservationStopCandidateContract -RepoRoot $RepoRoot -Enabled $Enabled
+   87:    Assert-R19GrantReservationShape $Value $expected 'grant_reservation_stop_diagnostics'
+   88:    return $expected
+   89:  }
+*****
+

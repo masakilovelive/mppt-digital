@@ -1,0 +1,221 @@
+warning: in the working copy of 'runs\validation\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-fix\before\firmware\phase6\vc_lora_phase6_bridge.hpp', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'firmware/phase6/vc_lora_phase6_bridge.hpp', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\before\\firmware\\phase6\\vc_lora_phase6_bridge.hpp" b/firmware/phase6/vc_lora_phase6_bridge.hpp
+index 38164b4..9303e80 100644
+--- "a/runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\before\\firmware\\phase6\\vc_lora_phase6_bridge.hpp"
++++ b/firmware/phase6/vc_lora_phase6_bridge.hpp
+@@ -98,6 +98,15 @@
+ #if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS && !VC_LORA_R19_GRANT_DIAGNOSTICS
+ #error "Grant reservation requires full Grant/ExplicitHostArm diagnostics"
+ #endif
++#ifndef VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS
++#define VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS 0
++#endif
++#if VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS != 0 && VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS != 1
++#error "Grant reservation stop diagnostics must be 0 or 1"
++#endif
++#if VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS && !VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
++#error "Grant reservation stop diagnostics require Grant reservation diagnostics"
++#endif
+ 
+ #include <Arduino.h>
+ #include <Preferences.h>
+@@ -147,6 +156,9 @@
+ #if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
+ #include "high_speed/r19_grant_reservation.hpp"
+ #include "high_speed/r19_grant_reservation_record.hpp"
++#if VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS
++#include "high_speed/r19_grant_reservation_stop_record.hpp"
++#endif
+ #endif
+ #if VC_LORA_R19_TIMED_PATH_DIAGNOSTICS
+ #include "high_speed/r19_timed_path_record.hpp"
+@@ -398,6 +410,10 @@ __attribute__((used, aligned(4))) experimental::R19GrantDiagnosticRecord
+ #if VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS
+ __attribute__((used, aligned(4))) experimental::R19GrantReservationRecord
+     vc_lora_r19_grant_reservation_record{};
++#if VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS
++__attribute__((used, aligned(4))) experimental::R19GrantReservationStopRecord
++    vc_lora_r19_grant_reservation_stop_record{};
++#endif
+ #endif
+ #if VC_LORA_R19_TIMED_PATH_DIAGNOSTICS
+ __attribute__((used, aligned(4))) experimental::R19TimedPathRecord
+@@ -426,6 +442,7 @@ LinkAction r19_reserved_grant_action{};
+ bool r19_reserved_grant_action_valid{false};
+ bool r19_reserved_grant_releasing{false};
+ bool r19_reserved_grant_uart_accepted{false};
++bool r19_cancel_unwritten_reserved_grant(std::uint64_t now_ms) noexcept;
+ #endif
+ bool r19_intercept_grant_reservation_usb_frame(const MavlinkFrame&) noexcept;
+ void r19_note_grant_reservation() noexcept;
+@@ -529,6 +546,11 @@ void r19_initialize_runtime_stage_record() noexcept {
+   (void)vc_lora_r19_grant_reservation_record.initialize(
+       static_cast<experimental::R19GrantReservationRole>(kR19RuntimeStageRole),
+       kR19RuntimeDiagnosticGenerationFingerprint, instance);
++#if VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS
++  (void)vc_lora_r19_grant_reservation_stop_record.initialize(
++      static_cast<experimental::R19GrantReservationRole>(kR19RuntimeStageRole),
++      kR19RuntimeDiagnosticGenerationFingerprint, instance);
++#endif
+ #endif
+ #if defined(VC_LORA_PHASE6_GROUND) && VC_LORA_R19_USB_READINESS_MODE != 0
+   r19_usb_readiness_boot_id = static_cast<std::uint64_t>(instance[0]) |
+@@ -6915,6 +6937,9 @@ void process_action(const LinkAction& action,
+ TddInput make_tdd_input(std::uint64_t now_ms) noexcept {
+   TddInput input{};
+   input.now_ms = now_ms;
++#if VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS
++  input.inhibit_new_grant=r19_grant_reservation.inhibit_new_grant();
++#endif
+   input.aux_high = aux_high();
+   input.radio_tx_complete =
+       !radio_busy && !pending_radio_action.active &&
+@@ -7040,6 +7065,15 @@ bool r19_intercept_grant_reservation_usb_frame(
+     return true;
+   }
+   const auto now_ms = monotonic_now_ms();
++#if !VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS
++  if(command.wire_version!=1U) {
++    r19_abort_grant_reservation(15U);return true;
++  }
++#else
++  if(command.wire_version!=2U) {
++    r19_abort_grant_reservation(15U);return true;
++  }
++#endif
+   if (!r19_grant_reservation.initialized()) {
+     if (command.opcode != Op::HelloRequest) {
+       r19_abort_grant_reservation(3U);
+@@ -7064,6 +7098,24 @@ bool r19_intercept_grant_reservation_usb_frame(
+         r19_grant_reservation_boot_id, Serial.txLossEpoch(), now_ms);
+   }
+   r19_grant_reservation.observe_local_epoch(Serial.txLossEpoch(), now_ms);
++#if VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS
++  if(command.opcode==Op::CancelRequest) {
++    if(!r19_grant_reservation.cancel_request_matches(command)) {
++      r19_abort_grant_reservation(16U);return true;
++    }
++#if defined(VC_LORA_PHASE6_VEHICLE)
++    if(!r19_grant_reservation.cancellation_pending() &&
++       !r19_cancel_unwritten_reserved_grant(now_ms)) {
++      r19_abort_grant_reservation(17U);return true;
++    }
++#else
++    if(r19_product_route_selected || r19_grant_reservation_negotiation_started ||
++       !r19_reservation_ground_boundary_clean()) {
++      r19_abort_grant_reservation(18U);return true;
++    }
++#endif
++  }
++#endif
+ #if defined(VC_LORA_PHASE6_GROUND)
+   if ((command.opcode == Op::BindGround || command.opcode == Op::BindPeerGround) &&
+       !r19_reservation_ground_boundary_clean()) {
+@@ -7174,6 +7226,28 @@ bool r19_service_grant_reservation_reply() noexcept {
+ }
+ 
+ #if defined(VC_LORA_PHASE6_VEHICLE)
++bool r19_cancel_unwritten_reserved_grant(std::uint64_t now_ms) noexcept {
++  const auto lease=e220_writer_arbiter.active_lease();
++  if(!r19_grant_reservation.cancellation_available() ||
++     now_ms>=r19_grant_reservation.hold_deadline_ms() ||
++     !r19_reserved_grant_action_valid || r19_reserved_grant_uart_accepted ||
++     r19_reserved_grant_releasing || radio_busy || pending_radio_action.active ||
++     standard_radio_writer_tail_pending ||
++     standard_radio_writer_action_type!=LinkActionType::SendGrant ||
++     !lease.valid() || lease.owner!=Phase6RadioWriterOwner::StandardTdd ||
++     lease.action_token!=r19_reserved_grant_action.token ||
++     lease.action_token!=standard_radio_writer_lease.action_token ||
++     lease.writer_generation!=standard_radio_writer_lease.writer_generation ||
++     Serial.txLossEpoch()!=r19_grant_reservation.snapshot().own_epoch ||
++     !r19_grant_reservation.holding()) return false;
++  const auto& action=r19_reserved_grant_action;
++  if(!tdd_controller.cancel_unsent_grant(action.token,action.control.session_id,
++      action.control.cycle_id,now_ms)) return false;
++  if(!release_rejected_standard_radio_writer_lease(now_ms)) return false;
++  r19_reserved_grant_action_valid=false;
++  return true;
++}
++
+ bool r19_hold_generated_grant(const LinkAction& action,
+     std::uint64_t now_ms) noexcept {
+   now_ms = monotonic_now_ms();
+@@ -7202,21 +7276,66 @@ bool r19_hold_generated_grant(const LinkAction& action,
+ bool r19_service_reserved_grant(std::uint64_t now_ms) noexcept {
+   now_ms = monotonic_now_ms();
+   if (!r19_reserved_grant_action_valid) return false;
+-  const auto& lease = e220_writer_arbiter.active_lease();
++  const auto lease = e220_writer_arbiter.active_lease();
+   const auto input = make_tdd_input(now_ms);
+-  const bool heartbeat_urgent = input.heartbeat_deadline_valid &&
+-      input.heartbeat_tail_available &&
+-      (input.heartbeat_deadline_ms <= now_ms ||
+-       input.heartbeat_deadline_ms - now_ms <=
+-           FixedFirmwareContract::heartbeat_grant_reserve_ms);
+-  if (r19_grant_reservation.failed() || heartbeat_urgent || !aux_high() ||
+-      !lease.valid() || lease.owner != Phase6RadioWriterOwner::StandardTdd ||
+-      lease.action_token != r19_reserved_grant_action.token ||
+-      lease.writer_generation != standard_radio_writer_lease.writer_generation ||
+-      radio_busy || pending_radio_action.active || standard_radio_writer_tail_pending) {
++#if VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS
++  using Stop=experimental::R19GrantReservationStopSnapshot;
++  Stop stop{};
++  stop.now_ms=now_ms;stop.heartbeat_deadline_ms=input.heartbeat_deadline_ms;
++  stop.hold_deadline_ms=r19_grant_reservation.hold_deadline_ms();
++  stop.heartbeat_order=input.heartbeat_order;
++  stop.reserve_ms=FixedFirmwareContract::heartbeat_grant_reserve_ms;
++  stop.expected_token=r19_reserved_grant_action.token;
++  stop.expected_generation=standard_radio_writer_lease.writer_generation;
++  stop.active_token=lease.action_token;stop.active_generation=lease.writer_generation;
++  stop.active_owner=static_cast<std::uint32_t>(lease.owner);
++  stop.current_usb_epoch=Serial.txLossEpoch();
++  stop.predicates=(input.heartbeat_deadline_valid?Stop::heartbeat_valid:0U) |
++      (input.heartbeat_tail_available?Stop::heartbeat_available:0U) |
++      (input.aux_high?Stop::aux_high:0U) | (lease.valid()?Stop::lease_valid:0U) |
++      (r19_grant_reservation.failed()?Stop::reservation_failed:0U) |
++      (radio_busy?Stop::radio_busy:0U) |
++      (pending_radio_action.active?Stop::pending_action:0U) |
++      (standard_radio_writer_tail_pending?Stop::tail_pending:0U) |
++      (r19_grant_reservation.should_release()?Stop::release_requested:0U);
++  if (experimental::r19_grant_reservation_stop_reason(stop)!=
++      experimental::R19GrantReservationStopReason::None) {
++#if VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS
++    const bool only_heartbeat=experimental::r19_grant_reservation_stop_reason(stop)==
++        experimental::R19GrantReservationStopReason::HeartbeatDeadlineConflict &&
++        (stop.predicates&Stop::aux_high)!=0U && (stop.predicates&Stop::lease_valid)!=0U &&
++        stop.active_owner==1U && stop.active_token==stop.expected_token &&
++        stop.active_generation==stop.expected_generation &&
++        (stop.predicates&(Stop::radio_busy|Stop::pending_action|Stop::tail_pending))==0U;
++    if(only_heartbeat && r19_grant_reservation.cancellation_supported() &&
++       r19_cancel_unwritten_reserved_grant(now_ms) &&
++       r19_grant_reservation.begin_cancel(now_ms,true)) {
++      stop.predicates|=Stop::zero_uart_proven|Stop::old_cycle_retired|Stop::old_lease_retired;
++      (void)vc_lora_r19_grant_reservation_stop_record.latch(stop,true);
++      r19_note_grant_reservation();return true;
++    }
++#endif
++    // Preserve the legacy journal/first-failure policy. The separate record
++    // explains the exact local branch; it neither ignores a new heartbeat nor
++    // claims a safe 2500-ms return through the conservative 5050-ms RF path.
++#if VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS
++    (void)vc_lora_r19_grant_reservation_stop_record.latch(stop);
++#endif
+     r19_abort_grant_reservation(13U);
+     return true;
+   }
++#else
++  const bool heartbeat_urgent=input.heartbeat_deadline_valid &&
++      input.heartbeat_tail_available && (input.heartbeat_deadline_ms<=now_ms ||
++      input.heartbeat_deadline_ms-now_ms<=FixedFirmwareContract::heartbeat_grant_reserve_ms);
++  if(r19_grant_reservation.failed() || heartbeat_urgent || !input.aux_high ||
++     !lease.valid() || lease.owner!=Phase6RadioWriterOwner::StandardTdd ||
++     lease.action_token!=r19_reserved_grant_action.token ||
++     lease.writer_generation!=standard_radio_writer_lease.writer_generation ||
++     radio_busy || pending_radio_action.active || standard_radio_writer_tail_pending) {
++    r19_abort_grant_reservation(13U);return true;
++  }
++#endif
+   if (!r19_grant_reservation.should_release()) return true;
+   r19_reserved_grant_releasing = true;
+   process_action(r19_reserved_grant_action, now_ms);

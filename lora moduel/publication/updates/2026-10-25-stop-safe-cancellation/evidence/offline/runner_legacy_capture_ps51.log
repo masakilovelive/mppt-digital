@@ -1,0 +1,7 @@
+FAIL actualcaller countsoneattempt evenwhenreservationhelper throw
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_capture.ps1:12 char:76
++ ... string]$Name){$script:checks++;if(-not$Value){throw ('FAIL '+$Name)}}
++                                                   ~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (FAIL actualcall...ionhelper throw:String) [], RuntimeException
+    + FullyQualifiedErrorId : FAIL actualcaller countsoneattempt evenwhenreservationhelper throw
+ 

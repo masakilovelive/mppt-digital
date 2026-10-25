@@ -1,0 +1,5 @@
+check_r19_grant_reservation_artifact PASS checks=53 hardware_interaction=false
+check_r19_grant_reservation_artifact FINAL_PASS checks=79 hardware_interaction=false
+check_r19_grant_reservation_artifact COMPLETE_PASS checks=90 hardware_interaction=false
+check_r19_grant_reservation_artifact ALL_PASS checks=121 hardware_interaction=false
+check_r19_grant_reservation_artifact FROZEN_PASS checks=128 hardware_interaction=false

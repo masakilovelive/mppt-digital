@@ -1,0 +1,96 @@
+{
+    "schema":  "vc-lora-r19-candidate-flash-final-seal-v1",
+    "test_id":  "R19-CANDIDATE-APP-FLASH-HIL-001",
+    "finalized_utc":  "2026-10-25T08:36:05.2918183Z",
+    "result":  "PASS",
+    "status":  "PASS_R18_ROLLBACK_COMPLETE",
+    "flash_record_sha256":  "74D7932442F14A5D012CD225279226BA0E4B0E3D6FE03DEDFB985B003B25C8A3",
+    "artifact_manifest_sha256":  "9D1620DABDF59324235C2745E4C780A54E100BECB7A6CEB841A71DAFE8C037D8",
+    "sha256sums_sha256":  "17467DF3E929FD194604419B9E3C0822A754CF35458A875A5E28F4DCA3E63078",
+    "candidate_manifest_sha256":  "8D73CE3FB64601460813295012FAEA9B479D24D7C92C431CB2C40AC556EDC5E1",
+    "final_seal_sha256":  "787BB6F3E76FA91FAA8445EE04470D5C9562EFA31102CDE410692B36DD91101E",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "hil_authorization_token":  "",
+    "authorization_scope":  "one immediate R19 runtime-fail diagnostic capture only",
+    "next_required_action":  "No R19 deployment authorization has been granted",
+    "one_run_hil_authorized":  false,
+    "deployment_authorized":  false,
+    "grant_reservation_diagnostics":  {
+                                          "schema":  "vc-lora-r19-grant-reservation-candidate-v1",
+                                          "enabled":  true,
+                                          "macro":  "VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS",
+                                          "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v11",
+                                          "record":  {
+                                                         "symbol":  "vc_lora_r19_grant_reservation_record",
+                                                         "schema_version":  1,
+                                                         "size_bytes":  512
+                                                     },
+                                          "decoder":  {
+                                                          "path":  "tools/read_r19_grant_reservation_record.ps1",
+                                                          "sha256":  "0E6FC4C0197DD96DD8C3851EEE5C08AA5AC3A59072385B69CB81459B9C7211F5"
+                                                      },
+                                          "usb_control":  {
+                                                              "schema":  "vc-lora-r19-grant-reservation-usb-v2",
+                                                              "frame_bytes":  66,
+                                                              "magic":  "R19R",
+                                                              "request_component":  197,
+                                                              "response_component":  198
+                                                          },
+                                          "capture":  {
+                                                          "mode":  "HostAssistedDualUsbReservation",
+                                                          "prepare_seconds":  15,
+                                                          "measurement_seconds":  40,
+                                                          "param_request_maximum":  1
+                                                      },
+                                          "producer":  {
+                                                           "kind":  "actual-dual-usb-grant-hold-tail-release",
+                                                           "role_capabilities":  {
+                                                                                     "ground":  [
+                                                                                                    "Bind",
+                                                                                                    "Held",
+                                                                                                    "TailPermit"
+                                                                                                ],
+                                                                                     "vehicle":  [
+                                                                                                     "Prepare",
+                                                                                                     "Release",
+                                                                                                     "TailReady"
+                                                                                                 ]
+                                                                                 }
+                                                       },
+                                          "cancellation":  {
+                                                               "schema":  "vc-lora-r19-grant-reservation-cancellation-v1",
+                                                               "maximum_cancellations":  1,
+                                                               "opcodes":  {
+                                                                               "CancelRequest":  15,
+                                                                               "CancelAck":  16,
+                                                                               "Withdrawn":  17,
+                                                                               "CancelPeerConfirmed":  18
+                                                                           }
+                                                           }
+                                      },
+    "grant_reservation_stop_diagnostics":  {
+                                               "schema":  "vc-lora-r19-grant-reservation-stop-candidate-v1",
+                                               "enabled":  true,
+                                               "macro":  "VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS",
+                                               "record_schema":  1,
+                                               "size_bytes":  128,
+                                               "symbol":  "vc_lora_r19_grant_reservation_stop_record",
+                                               "decoder_path":  "tools/read_r19_grant_reservation_stop_record.ps1",
+                                               "decoder_sha256":  "AC70CEA71CC4C8645D31E4B3E77AFF9D668EBAC554D5DD2C62DFA611D2C84D02",
+                                               "runtime_reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v11",
+                                               "usb_control_schema":  "vc-lora-r19-grant-reservation-usb-v2",
+                                               "cancellation":  {
+                                                                    "schema":  "vc-lora-r19-grant-reservation-cancellation-v1",
+                                                                    "maximum_cancellations":  1,
+                                                                    "opcodes":  {
+                                                                                    "CancelRequest":  15,
+                                                                                    "CancelAck":  16,
+                                                                                    "Withdrawn":  17,
+                                                                                    "CancelPeerConfirmed":  18
+                                                                                }
+                                                                }
+                                           },
+    "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v11"
+}

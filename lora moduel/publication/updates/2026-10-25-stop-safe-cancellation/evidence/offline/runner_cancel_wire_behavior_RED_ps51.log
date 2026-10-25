@@ -1,0 +1,7 @@
+Unknown or record-only R19R opcode
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tools\r19_grant_reservation_wire.ps1:12 char:58
++ ... ($i-lt1-or$i-eq14){throw 'Unknown or record-only R19R opcode'};return ...
++                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Unknown or record-only R19R opcode:String) [], RuntimeException
+    + FullyQualifiedErrorId : Unknown or record-only R19R opcode
+ 

@@ -1,0 +1,112 @@
+{
+  "schema": "vc-lora-r19-grant-reservation-stop-flash-integration-review-v1",
+  "status": "PASS_OFFLINE_ONLY",
+  "hardware_interaction": false,
+  "live_entrypoints_executed": false,
+  "git_or_network_operations": false,
+  "source_import_policy": "AST_FUNCTION_DEFINITIONS_ONLY_NO_MAIN",
+  "strict_pin_refresh_pending": false,
+  "reader_pin_modified": false,
+  "checks": {
+    "powershell_5_1": {
+      "result": "PASS",
+      "checks": 114
+    },
+    "powershell_7": {
+      "result": "PASS",
+      "checks": 114
+    },
+    "initial_red": {
+      "result": "EXPECTED_FAIL",
+      "exit_code": 1,
+      "reason": "Flash has explicit default-off STOP128 switch"
+    }
+  },
+  "coverage": [
+    "strict_optional_STOP128_candidate_contract_across_latest_manifest_handoff_seal",
+    "legacy_v10_default_compatibility",
+    "source_header_decoder_and_staged_decoder_closure",
+    "reader_v11_downgrade_and_missing_prerequisite_rejection",
+    "actual_flash_record_and_final_seal_file_projection",
+    "PnP_only_gate_generation_metadata_without_active_operations"
+  ],
+  "files": [
+    {
+      "path": "tools/invoke_r19_candidate_app_flash_hil.ps1",
+      "size_bytes": 92798,
+      "sha256": "C6319AB0F8BAD49E305EB8302CE787F66F5DE63D170AB581356658CBB238C0E8"
+    },
+    {
+      "path": "tools/invoke_r19_jtag_preflash_gate.ps1",
+      "size_bytes": 33656,
+      "sha256": "EA1BCF4AD9CC5936FD4A356F6194EE0554BDFD91C3B5DB1E1FFA1138E822835D"
+    },
+    {
+      "path": "tests/hil/check_r19_grant_reservation_stop_flash_contract.ps1",
+      "size_bytes": 16656,
+      "sha256": "F710FBF05B3C20928152053EC84BFC916800207E0AB0CA6EB78634D68C1CBA4F"
+    }
+  ],
+  "evidence": [
+    {
+      "path": "invoke_r19_candidate_app_flash_hil.ps1.before-stop128",
+      "size_bytes": 88873,
+      "sha256": "E09A9F01C840EFFB7A6200A636A9FA52DB0796E52884F3B06F0BFF9D57BF9DDF"
+    },
+    {
+      "path": "invoke_r19_jtag_preflash_gate.ps1.before-stop128",
+      "size_bytes": 33292,
+      "sha256": "9E9B1D8362520337064D237459471751B6542322821E666A1184B0A4AD38CC94"
+    },
+    {
+      "path": "stop_flash_contract_RED_ps51.log",
+      "size_bytes": 532,
+      "sha256": "C1FA2ED6D3C65E309FE4170B06A70880B9DD84AAC1220D92FCF804A28F0A20A0"
+    },
+    {
+      "path": "stop_flash_contract_GREEN_ps51.log",
+      "size_bytes": 92,
+      "sha256": "DCD3B8F311A0F8C6FA99F93E7FCDAB25118B7398171434068A129A859886EF7C"
+    },
+    {
+      "path": "stop_flash_contract_GREEN_ps7.log",
+      "size_bytes": 92,
+      "sha256": "DCD3B8F311A0F8C6FA99F93E7FCDAB25118B7398171434068A129A859886EF7C"
+    },
+    {
+      "path": "stop_flash_contract_repeat_directory_collision_ps51.log",
+      "size_bytes": 616,
+      "sha256": "541914080FD00D582F7AF47AD6B90BA49AC060705AE1A9EA81A53D14E33081EC"
+    },
+    {
+      "path": "stop_flash_contract_repeat_directory_collision_ps7.log",
+      "size_bytes": 336,
+      "sha256": "07457AB6C3D857BB59074A2061B5F8B0C8474E9ABBF86625DCB0549D06902B35"
+    },
+    {
+      "path": "stop_flash_contract_integration.diff",
+      "size_bytes": 34563,
+      "sha256": "0EDF1D0103B2DEBBBC850BD8DC53986510DBBBB6E11944A0425551DEF32D7DCF"
+    }
+  ],
+  "reviewed_pin_refresh_authorized_by_parent": true,
+  "fixture_repeatability": "Unique evidence leaves preserve earlier durable output; directory-collision failures retained as logs before correction.",
+  "reviewed_pins": [
+    {
+      "file": "r19_candidate_artifact_common.ps1",
+      "sha256": "498C9F6E1A246D74F8A5068157AC8DFB97B85E4C115BC8777BF3630C325A59E1",
+      "matches_reviewed": true
+    },
+    {
+      "file": "verify_r19_candidate_artifact.ps1",
+      "sha256": "03314802B639D1943EBFD3EF8B12B5E999253C5B390543D1D7CF8045865CA4E7",
+      "matches_reviewed": true
+    },
+    {
+      "file": "r19_grant_reservation_contract.ps1",
+      "sha256": "AA74C3D971C59E5C6F81DC0FBCD9B955A469DBD4D9043934CFF453D3EC095C4A",
+      "matches_reviewed": true
+    }
+  ],
+  "verifier_pin_refresh_reason": "Parent-approved final AST optional-variable compatibility fix; exact verifier pin updated from 26A278DB... to 03314802...; focused 114 checks rerun in both shells."
+}

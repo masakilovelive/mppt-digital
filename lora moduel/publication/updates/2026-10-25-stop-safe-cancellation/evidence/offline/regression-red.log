@@ -1,0 +1,2 @@
+new-HB hold checks=15 failures=1
+FAIL new Heartbeat154ms into unreleased hold is not automatic generic abort

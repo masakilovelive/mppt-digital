@@ -1,0 +1,129 @@
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\verify_r19_candidate_artifact.before.ps1" b/tools/verify_r19_candidate_artifact.ps1
+index 1744d7c..05e1163 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\verify_r19_candidate_artifact.before.ps1"
++++ b/tools/verify_r19_candidate_artifact.ps1
+@@ -11,7 +11,8 @@ param(
+   [switch]$AuxReadinessDiagnostics,
+   [switch]$DiagnosticUsbFailureDiagnostics,
+   [switch]$GrantDiagnostics,
+-  [switch]$GrantReservationDiagnostics
++  [switch]$GrantReservationDiagnostics,
++  [switch]$GrantReservationStopDiagnostics
+ )
+ 
+ $ErrorActionPreference = 'Stop'
+@@ -24,13 +25,15 @@ $auxReadinessEnabled=$AuxReadinessDiagnostics.IsPresent
+ $diagnosticUsbFailureEnabled=$DiagnosticUsbFailureDiagnostics.IsPresent
+ $grantDiagnosticsEnabled=$GrantDiagnostics.IsPresent
+ $grantReservationEnabled=$GrantReservationDiagnostics.IsPresent
+-$outputLeaf = Get-R19CandidateOutputLeaf $runtimeFailDiagnosticsEnabled $TimedPathMode $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled
++$grantReservationStopEnabled=$GrantReservationStopDiagnostics.IsPresent
++$outputLeaf = Get-R19CandidateOutputLeaf $runtimeFailDiagnosticsEnabled $TimedPathMode $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled $grantReservationStopEnabled
+ $timedPathEnabled=$TimedPathMode-cne'Disabled'
+ $timedPathContract=Get-R19TimedPathCandidateContract $repo $TimedPathMode
+ $auxReadinessContract=Get-R19AuxReadinessCandidateContract $repo $auxReadinessEnabled
+ $diagnosticUsbFailureContract=Get-R19DiagnosticUsbFailureCandidateContract $repo $diagnosticUsbFailureEnabled
+ $grantDiagnosticContract=Get-R19GrantDiagnosticCandidateContract $repo $grantDiagnosticsEnabled
+-$grantReservationContract=if($grantReservationEnabled){Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true}else{$null}
++$grantReservationContract=if([bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)){Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true -CancellationEnabled $true}elseif($grantReservationEnabled){Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true}else{$null}
++$grantReservationStopContract=if($grantReservationStopEnabled){Get-R19GrantReservationStopCandidateContract -RepoRoot $repo -Enabled $true}else{$null}
+ $usbRoleCapabilities=$null
+ if($diagnosticUsbFailureEnabled){$usbRoleCapabilities=Get-R19UsbRoleCapabilities -RepoRoot $repo -Mode $TimedPathMode -Enabled $true}
+ $outputBase = Join-Path $repo `
+@@ -56,10 +59,16 @@ function Assert-Hash([string]$Actual, [string]$Description) {
+ }
+ 
+ function Assert-ModeContract([object]$Record, [string]$Description) {
++  $requireStop=[bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)
++  if($requireStop){
++    Assert-Condition (@($Record.PSObject.Properties.Name)-ccontains'grant_reservation_stop_diagnostics') "$Description lacks explicit reservation stop contract"
++    [void](Assert-R19GrantReservationStopCandidateContract -Value $Record.grant_reservation_stop_diagnostics -RepoRoot $repo -Enabled $true)
++  }else{Assert-Condition ($null-eq$Record.PSObject.Properties['grant_reservation_stop_diagnostics']) "$Description contains undeclared reservation stop contract"}
+   $requireReservation=[bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   if($requireReservation){
+     Assert-Condition (@($Record.PSObject.Properties.Name)-ccontains'grant_reservation_diagnostics') "$Description lacks exact reservation capability property"
+-    [void](Assert-R19GrantReservationCandidateContract -Value $Record.grant_reservation_diagnostics -RepoRoot $repo -Enabled $true)
++    if($requireStop){[void](Assert-R19GrantReservationCandidateContract -Value $Record.grant_reservation_diagnostics -RepoRoot $repo -Enabled $true -CancellationEnabled $true)}
++    else{[void](Assert-R19GrantReservationCandidateContract -Value $Record.grant_reservation_diagnostics -RepoRoot $repo -Enabled $true)}
+   }else{Assert-Condition ($null-eq$Record.PSObject.Properties['grant_reservation_diagnostics']) "$Description contains undeclared reservation producer metadata"}
+   $requireGrantDiagnostics=[bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   if($requireGrantDiagnostics){
+@@ -139,7 +148,7 @@ function Assert-DiagnosticAbiContract([object]$Record,
+         'vc-lora-r19-runtime-stage-jtag-read-v7',
+         'vc-lora-r19-runtime-stage-jtag-read-v8',
+         'vc-lora-r19-runtime-stage-jtag-read-v9',
+-        'vc-lora-r19-runtime-stage-jtag-read-v10')) `
++        'vc-lora-r19-runtime-stage-jtag-read-v10','vc-lora-r19-runtime-stage-jtag-read-v11')) `
+     "$Description diagnostic ABI field is absent or invalid: reader_schema"
+   $extension = $Record.PSObject.Properties['usb_extended_diagnostics']
+   $decoder = $Record.PSObject.Properties['first_usb_failure_decoder']
+@@ -151,13 +160,15 @@ function Assert-DiagnosticAbiContract([object]$Record,
+   }
+   $requireGrantDiagnostics=[bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $requireReservation=[bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)
+-  Assert-Condition (($requireReservation-and$readerProperty.Value-ceq'vc-lora-r19-runtime-stage-jtag-read-v10')-or
++  $requireStop=[bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)
++  Assert-Condition (($requireStop-and$readerProperty.Value-ceq'vc-lora-r19-runtime-stage-jtag-read-v11')-or
++    (-not$requireStop-and$requireReservation-and$readerProperty.Value-ceq'vc-lora-r19-runtime-stage-jtag-read-v10')-or
+     (-not$requireReservation-and$requireGrantDiagnostics-and$readerProperty.Value-ceq'vc-lora-r19-runtime-stage-jtag-read-v9')-or
+     (-not$requireGrantDiagnostics-and$diagnosticUsbFailureEnabled-and$readerProperty.Value-ceq'vc-lora-r19-runtime-stage-jtag-read-v8')-or
+     (-not$diagnosticUsbFailureEnabled-and$auxReadinessEnabled-and$readerProperty.Value-ceq'vc-lora-r19-runtime-stage-jtag-read-v7')-or
+-    (-not$diagnosticUsbFailureEnabled-and-not$auxReadinessEnabled-and$readerProperty.Value-cnotin@('vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8','vc-lora-r19-runtime-stage-jtag-read-v9','vc-lora-r19-runtime-stage-jtag-read-v10'))) "$Description AUX/diagnostic USB/Grant reader declaration mismatch"
++    (-not$diagnosticUsbFailureEnabled-and-not$auxReadinessEnabled-and$readerProperty.Value-cnotin@('vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8','vc-lora-r19-runtime-stage-jtag-read-v9','vc-lora-r19-runtime-stage-jtag-read-v10','vc-lora-r19-runtime-stage-jtag-read-v11'))) "$Description AUX/diagnostic USB/Grant reader declaration mismatch"
+   $firstFailure = [string]$readerProperty.Value -cin @(
+-    'vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8','vc-lora-r19-runtime-stage-jtag-read-v9','vc-lora-r19-runtime-stage-jtag-read-v10')
++    'vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8','vc-lora-r19-runtime-stage-jtag-read-v9','vc-lora-r19-runtime-stage-jtag-read-v10','vc-lora-r19-runtime-stage-jtag-read-v11')
+   Assert-Condition ($null -ne $extension -and
+       $extension.Name -ceq 'usb_extended_diagnostics' -and
+       ($extension.Value | ConvertTo-Json -Depth 12 -Compress) -ceq
+@@ -356,9 +367,9 @@ $extendedDiagnosticsEnabled = $runtimeFailDiagnosticsEnabled -and
+     'vc-lora-r19-runtime-stage-jtag-read-v5',
+     'vc-lora-r19-runtime-stage-jtag-read-v7',
+     'vc-lora-r19-runtime-stage-jtag-read-v8',
+-    'vc-lora-r19-runtime-stage-jtag-read-v9','vc-lora-r19-runtime-stage-jtag-read-v10')
++    'vc-lora-r19-runtime-stage-jtag-read-v9','vc-lora-r19-runtime-stage-jtag-read-v10','vc-lora-r19-runtime-stage-jtag-read-v11')
+ $firstFailureDiagnosticsEnabled = $runtimeFailDiagnosticsEnabled -and
+-  [string]$manifest.reader_schema -cin @('vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8','vc-lora-r19-runtime-stage-jtag-read-v9','vc-lora-r19-runtime-stage-jtag-read-v10')
++  [string]$manifest.reader_schema -cin @('vc-lora-r19-runtime-stage-jtag-read-v5','vc-lora-r19-runtime-stage-jtag-read-v7','vc-lora-r19-runtime-stage-jtag-read-v8','vc-lora-r19-runtime-stage-jtag-read-v9','vc-lora-r19-runtime-stage-jtag-read-v10','vc-lora-r19-runtime-stage-jtag-read-v11')
+ Assert-Condition ([string]$manifest.artifact_id -ceq
+     (Split-Path -Leaf $artifactRootFull)) 'Candidate artifact ID mismatch'
+ Assert-Condition ([string]$manifest.artifact_root -ceq
+@@ -451,6 +462,7 @@ if($auxReadinessEnabled){$expectedCompileProperty+=' -DVC_LORA_R19_AUX_READINESS
+ if($diagnosticUsbFailureEnabled){$expectedCompileProperty+=' -DVC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD=1'}
+ if($grantDiagnosticsEnabled){$expectedCompileProperty+=' -DVC_LORA_R19_GRANT_DIAGNOSTICS=1'}
+ if($grantReservationEnabled){$expectedCompileProperty+=' -DVC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS=1'}
++if([bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)){$expectedCompileProperty+=' -DVC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS=1'}
+ Assert-Condition ([string]$enable.macro -ceq
+     'VC_LORA_R19_HIGH_SPEED_CANDIDATE' -and
+     [int]$enable.value -eq 1 -and
+@@ -480,6 +492,7 @@ if($auxReadinessEnabled){$expectedHeaders+=@('r19_aux_readiness_record.hpp')}
+ if($diagnosticUsbFailureEnabled){$expectedHeaders+=@('r19_diagnostic_usb_failure_record.hpp')}
+ if($grantDiagnosticsEnabled){$expectedHeaders+=@('r19_grant_diagnostic_record.hpp')}
+ if($grantReservationEnabled){$expectedHeaders+=@('r19_grant_reservation.hpp','r19_grant_reservation_record.hpp')}
++if($grantReservationStopEnabled){$expectedHeaders+=@('r19_grant_reservation_stop_record.hpp')}
+ $candidatePackage = $manifest.candidate_package
+ Assert-Condition ([int]$candidatePackage.header_count -eq
+       $expectedHeaders.Count -and
+@@ -508,6 +521,13 @@ if($grantReservationEnabled){
+     if($relative.StartsWith('tools/')){Assert-Condition ((Get-R19Sha256 (Join-Path $artifactRootFull ('evidence/'+$relative)))-ceq$record[0].sha256) 'Reservation sealed tool source differs'}
+   }
+ }
++if($grantReservationStopEnabled){
++  foreach($relative in @('firmware/high_speed/r19_grant_reservation_stop_record.hpp','tools/read_r19_grant_reservation_stop_record.ps1')){
++    $record=@($manifest.canonical_source_snapshot.files|Where-Object{$_.path-ceq$relative})
++    Assert-Condition ($record.Count-eq1-and$record[0].sha256-ceq(Get-R19Sha256 (Join-Path $repo $relative))) 'Reservation stop canonical source closure differs'
++    if($relative.StartsWith('tools/')){Assert-Condition ((Get-R19Sha256 (Join-Path $artifactRootFull ('evidence/'+$relative)))-ceq$record[0].sha256) 'Reservation stop sealed decoder source differs'}
++  }
++}
+ if ($firstFailureDiagnosticsEnabled) {
+   $decoderBinding = Get-R19FirstFailureDecoderBinding $repo
+   $sourceDecoder = @($manifest.canonical_source_snapshot.files |
+@@ -677,7 +697,7 @@ foreach ($role in $roles) {
+       $expectedBinding = Get-R19DiagnosticSymbolBinding $elfPath `
+         (Join-Path $artifactRootFull `
+           "evidence\build\$($role.role)\application.map") `
+-        ([string]$role.application.sha256) $firstFailureDiagnosticsEnabled $timedPathEnabled $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled
++        ([string]$role.application.sha256) $firstFailureDiagnosticsEnabled $timedPathEnabled $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled $grantReservationStopEnabled
+       Assert-Condition ($null -ne $bindingProperty -and
+           ($bindingProperty.Value | ConvertTo-Json -Depth 12 -Compress) -ceq
+           ($expectedBinding | ConvertTo-Json -Depth 12 -Compress)) `

@@ -1,0 +1,15 @@
+FAIL Explicit STOP opt-in tools/build_r19_candidate_artifacts.ps1
+FAIL Explicit STOP opt-in tools/verify_r19_candidate_artifact.ps1
+FAIL STOP has separate publication namespace
+FAIL STOP compilation adds exactly one opt-in macro
+FAIL STOP rejects missing reservation prerequisite
+FAIL STOP rejects missing diagnostic chain
+FAIL STOP source inventory Canonical R19 candidate package is not the exact header allowlist
+R19_STOP_PACKAGING RED checks=12 failures=7
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_stop_packaging.ps1:39 char
+:26
++ ... ilures-gt0){throw ('R19_STOP_PACKAGING RED checks='+$script:checks+'  ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (R19_STOP_PACKAG...s=12 failures=7:String) [], RuntimeException
+    + FullyQualifiedErrorId : R19_STOP_PACKAGING RED checks=12 failures=7
+ 

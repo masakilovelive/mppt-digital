@@ -1,0 +1,10 @@
+{
+    "schema_version":  1,
+    "test_id":  "R19-CANDIDATE-APP-FLASH-HIL-001",
+    "finished_utc":  "2026-10-25T08:34:05.0896560Z",
+    "result":  "PASS",
+    "status":  "PASS_R19_DIAGNOSTIC_INSTALLED_HIL_ONLY",
+    "failure":  "",
+    "rollback_result":  "NOT_REQUIRED",
+    "power_off_required":  false
+}

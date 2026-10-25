@@ -1,0 +1,11 @@
+{
+  "schema": "vc-lora-publication-git-blob-audit-v1",
+  "result": "PASS_BYTE_IDENTICAL_INDEX",
+  "copied_originals_checked": 641,
+  "source_inventory_sha256": "04E3AA6F32DF199416A2EDCE3A3FA599485151C65EEE350AF7D257DC214ACEDB",
+  "source_snapshot_reformatted": false,
+  "hardware_interaction": false,
+  "network_operation": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

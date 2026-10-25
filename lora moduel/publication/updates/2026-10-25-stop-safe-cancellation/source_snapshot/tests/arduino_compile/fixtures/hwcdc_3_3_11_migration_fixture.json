@@ -1,0 +1,25 @@
+{
+  "schema": "vc-lora-hwcdc-migration-fixture-v1",
+  "encoding": "base64-zip",
+  "payload": "hwcdc_3_3_11_migration_fixture.zip.b64",
+  "decoded_size_bytes": 22733,
+  "decoded_sha256": "5C9790B3A2F8048E4EE4966DFDCCB31DDF0D274C4AD693B2AC02684C0DD7EF92",
+  "entries": [
+    {
+      "path": "prior-canonical/HWCDC.cpp",
+      "sha256": "7D0781DCE611B8B322048B74EDE257561DEBD081E9D4204CE0C6153B951D34C3"
+    },
+    {
+      "path": "prior-canonical/HWCDC.h",
+      "sha256": "583CACD7ED221EFE53EC93BC2F2969B6332826BB9AC7197956139D2C810E33C3"
+    },
+    {
+      "path": "esp32-core-3.3.11/cores/esp32/HWCDC.cpp",
+      "sha256": "C5ED5FDD05AA0DF9B74D390812643599223F96B459256718D0AD328AEABA6A8A"
+    },
+    {
+      "path": "esp32-core-3.3.11/cores/esp32/HWCDC.h",
+      "sha256": "9A7D1672193E8F512DCDB020739771D85E98EAAEF090BD080564DDA0FBBF7022"
+    }
+  ]
+}

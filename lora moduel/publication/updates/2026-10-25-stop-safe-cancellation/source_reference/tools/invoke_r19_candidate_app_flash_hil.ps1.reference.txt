@@ -1,0 +1,1850 @@
+[CmdletBinding()]
+param(
+  [string]$RepoRoot = '',
+  [string]$CandidateLatestPath = '',
+  [string]$EvidenceDirectory = '',
+  [switch]$Execute,
+  [ValidateSet('', 'R19_EXPERIMENTAL_HIL_ONE_RUN_NOT_DEPLOYMENT',
+    'R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT')]
+  [string]$HilAuthorization = '',
+  [ValidateSet('', 'PIXHAWK_DISARMED_PROPULSION_ISOLATED_ANTENNAS_CONNECTED_GND_3V3_CHECKED_PARAM_BACKUP_SAVED')]
+  [string]$OperatorSafetyAttestation = '',
+  [switch]$RuntimeFailDiagnostics,
+  [ValidateSet('Disabled','SyncOnly','ExplicitHostArm')]
+  [string]$TimedPathMode = 'Disabled',
+  [switch]$AuxReadinessDiagnostics,
+  [switch]$DiagnosticUsbFailureDiagnostics,
+  [switch]$GrantDiagnostics,
+  [switch]$GrantReservationDiagnostics,
+  [switch]$GrantReservationStopDiagnostics,
+  [switch]$RollbackOnly,
+  [ValidateSet('', 'RESTORE_ACCEPTED_R18_AFTER_R19_HIL')]
+  [string]$RollbackAuthorization = '',
+  [ValidateRange(1, 3)]
+  [int]$MaxRollbackAttempts = 3,
+
+  # This seam is deliberately unavailable from the canonical repository. It
+  # exercises only the state/accounting contract from an isolated TEMP copy;
+  # it cannot inventory processes/devices or invoke esptool.
+  [switch]$OfflineContractTest,
+  [ValidateSet('success', 'ground_write_failure', 'rollback_failure')]
+  [string]$OfflineScenario = 'success'
+)
+
+$ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
+$utf8 = [Text.UTF8Encoding]::new($false)
+$newline = [Environment]::NewLine
+$startedUtc = [DateTime]::UtcNow.ToString('o')
+$testId = 'R19-CANDIDATE-APP-FLASH-HIL-001'
+$runtimeFailDiagnosticsEnabled = $RuntimeFailDiagnostics.IsPresent
+$timedPathEnabled=$TimedPathMode-cne'Disabled'
+$auxReadinessEnabled=$AuxReadinessDiagnostics.IsPresent
+$diagnosticUsbFailureEnabled=$DiagnosticUsbFailureDiagnostics.IsPresent
+$grantDiagnosticsEnabled=$GrantDiagnostics.IsPresent
+$grantReservationEnabled=$GrantReservationDiagnostics.IsPresent
+$grantReservationStopEnabled=$GrantReservationStopDiagnostics.IsPresent
+if($timedPathEnabled-and-not$runtimeFailDiagnosticsEnabled){throw 'Timed-path mode requires diagnostic-only scope'}
+if($auxReadinessEnabled-and(-not$runtimeFailDiagnosticsEnabled-or$TimedPathMode-cne'ExplicitHostArm')){throw 'AUX readiness requires RuntimeFailDiagnostics and ExplicitHostArm'}
+if($diagnosticUsbFailureEnabled-and(-not$runtimeFailDiagnosticsEnabled-or-not$auxReadinessEnabled-or$TimedPathMode-cne'ExplicitHostArm')){throw 'Diagnostic USB failure mode requires RuntimeFailDiagnostics, AUX readiness and ExplicitHostArm'}
+if($grantDiagnosticsEnabled-and(-not$runtimeFailDiagnosticsEnabled-or-not$auxReadinessEnabled-or-not$diagnosticUsbFailureEnabled-or$TimedPathMode-cne'ExplicitHostArm')){throw 'Grant diagnostics require RuntimeFailDiagnostics, diagnostic USB failure, AUX readiness and ExplicitHostArm'}
+if($grantReservationEnabled-and-not$grantDiagnosticsEnabled){throw 'Grant reservation requires the full Grant diagnostic mode'}
+if($grantReservationStopEnabled-and-not$grantReservationEnabled){throw 'STOP128 requires the full Grant reservation diagnostic mode'}
+$acceptanceEligible = -not $runtimeFailDiagnosticsEnabled
+$flashEvidenceSchema = 'vc-lora-r19-candidate-flash-evidence-v1'
+$candidateSchema = 'vc-lora-r19-candidate-artifact-manifest-v1'
+$candidateLatestSchema = 'vc-lora-r19-candidate-artifact-latest-v1'
+$candidateHandoffSchema = 'vc-lora-r19-candidate-artifact-handoff-v1'
+$candidateSealSchema = 'vc-lora-r19-candidate-final-seal-v1'
+$expectedEspToolVersion = '5.3.1'
+$expectedEspToolSha256 =
+    'A939E28FE2FBB53E65E46F0246A4D71B9FD6C052EF0E046182DF4A4FE8BEC946'
+$expectedGrantReservationContractSha256='AA74C3D971C59E5C6F81DC0FBCD9B955A469DBD4D9043934CFF453D3EC095C4A'
+if($grantReservationEnabled){
+  # Reviewed optional STOP128 pipeline; default-off reservation ABI remains v10.
+  $expectedCandidateVerifierSha256='03314802B639D1943EBFD3EF8B12B5E999253C5B390543D1D7CF8045865CA4E7'
+  $expectedCandidateCommonSha256='498C9F6E1A246D74F8A5068157AC8DFB97B85E4C115BC8777BF3630C325A59E1'
+}elseif($grantDiagnosticsEnabled){
+  # Exact reviewed v9 pipeline versions, never sampled as mutable trust pins.
+  $expectedCandidateVerifierSha256='03314802B639D1943EBFD3EF8B12B5E999253C5B390543D1D7CF8045865CA4E7'
+  $expectedCandidateCommonSha256='498C9F6E1A246D74F8A5068157AC8DFB97B85E4C115BC8777BF3630C325A59E1'
+}elseif($diagnosticUsbFailureEnabled){
+  # Exact reviewed current versions; never discover or accept a mutable hash.
+  $expectedCandidateVerifierSha256='03314802B639D1943EBFD3EF8B12B5E999253C5B390543D1D7CF8045865CA4E7'
+  $expectedCandidateCommonSha256='498C9F6E1A246D74F8A5068157AC8DFB97B85E4C115BC8777BF3630C325A59E1'
+}elseif($auxReadinessEnabled){
+  $expectedCandidateVerifierSha256='03314802B639D1943EBFD3EF8B12B5E999253C5B390543D1D7CF8045865CA4E7'
+  $expectedCandidateCommonSha256='498C9F6E1A246D74F8A5068157AC8DFB97B85E4C115BC8777BF3630C325A59E1'
+}else{
+  $expectedCandidateVerifierSha256 =
+    '66DFCFC5B7E59D4B51B704F098ED5A1912312188A2785E1ED2DD59A3B55DE2F2'
+  $expectedCandidateCommonSha256 =
+    'DCE02A5C0202C9B7A206F78872D8C3954C7112954CE61F455415AD2F46FACFED'
+}
+$candidateBaseRelative = if ($runtimeFailDiagnosticsEnabled) {
+    'runs\candidates\R19-RUNTIME-FAIL-DIAGNOSTIC-CANDIDATE-BUILD-001'
+  } else {'runs\candidates\R19-HS-PRODUCT-CANDIDATE-BUILD-001'}
+if($timedPathEnabled){
+  $modeLeaf=if($TimedPathMode-ceq'SyncOnly'){'SYNC-ONLY'}else{'EXPLICIT-HOST-ARM'}
+  $candidateBaseRelative="runs/candidates/R19-TIMED-PATH-$modeLeaf-DIAGNOSTIC-CANDIDATE-BUILD-001"
+}
+if($auxReadinessEnabled){$candidateBaseRelative='runs/candidates/R19-AUX-READINESS-EXPLICIT-HOST-ARM-DIAGNOSTIC-CANDIDATE-BUILD-001'}
+if($diagnosticUsbFailureEnabled){$candidateBaseRelative='runs/candidates/R19-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001'}
+if($grantDiagnosticsEnabled){$candidateBaseRelative='runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001'}
+if($grantReservationEnabled){$candidateBaseRelative='runs/candidates/R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001'}
+if($grantReservationStopEnabled){$candidateBaseRelative='runs/candidates/R19-GRANT-RESERVATION-STOP-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001'}
+$evidenceBaseRelative = if ($runtimeFailDiagnosticsEnabled) {
+    'runs\validation\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001'
+  } else {'runs\validation\R19-CANDIDATE-APP-FLASH-HIL-001'}
+$acceptedR18RootRelative =
+    'runs\baselines\R18-PRODUCTION-R4-ACCEPTED\20260914T225054625Z\artifacts'
+$oneRunAuthorizationText = 'R19_EXPERIMENTAL_HIL_ONE_RUN_NOT_DEPLOYMENT'
+$diagnosticAuthorizationText =
+    'R19_RUNTIME_FAIL_DIAGNOSTIC_HIL_ONE_RUN_NOT_ACCEPTANCE_NOT_DEPLOYMENT'
+$activeAuthorizationText = if ($runtimeFailDiagnosticsEnabled) {
+    $diagnosticAuthorizationText
+  } else {$oneRunAuthorizationText}
+$operatorSafetyAttestationText =
+    'PIXHAWK_DISARMED_PROPULSION_ISOLATED_ANTENNAS_CONNECTED_GND_3V3_CHECKED_PARAM_BACKUP_SAVED'
+$rollbackAuthorizationText = 'RESTORE_ACCEPTED_R18_AFTER_R19_HIL'
+
+$script:Operations = [Collections.ArrayList]::new()
+$script:RollbackOperations = [Collections.ArrayList]::new()
+$script:StageLocks = [Collections.ArrayList]::new()
+$script:CandidateWriteMayHaveChangedDevice = $false
+$script:SuccessfulCandidateWrites = 0
+$script:SuccessfulRollbackWrites = 0
+$script:CompetingClientGateEvidenceSequence = 0
+$script:CompetingClientGateFailures = [Collections.ArrayList]::new()
+$script:ExternalActions = [ordered]@{
+  device_access_attempted = $false
+  process_inventory_queried = $false
+  esptool_executed = $false
+  firmware_write_attempted = $false
+  firmware_may_have_changed = $false
+  device_power_changed = $false
+  erase_performed = $false
+  bootloader_written = $false
+  partition_table_written = $false
+  merged_image_written = $false
+}
+
+function Assert-Condition([bool]$Condition, [string]$Message) {
+  if (-not $Condition) { throw $Message }
+}
+
+function Assert-CandidateModeRecord([object]$Record,
+                                    [string]$Description) {
+  $requireReservation=[bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  $requireStop=[bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  Assert-Condition (-not$requireStop-or$requireReservation) "$Description STOP128 requires reservation mode"
+  if($requireReservation){
+    $contractPin=[string](Get-Variable -Name expectedGrantReservationContractSha256 -ValueOnly -ErrorAction SilentlyContinue)
+    if(-not$contractPin){$contractPin='AA74C3D971C59E5C6F81DC0FBCD9B955A469DBD4D9043934CFF453D3EC095C4A'}
+    $contractSource=Read-PinnedFileUnderLock (Join-Path $repo 'tools/r19_grant_reservation_contract.ps1') $contractPin 'reviewed Grant reservation contract'
+    try{. ([scriptblock]::Create([Text.Encoding]::UTF8.GetString($contractSource.bytes).TrimStart([char]0xFEFF)))}finally{$contractSource.lock.Dispose()}
+    $reservationProperty=$Record.PSObject.Properties['grant_reservation_diagnostics']
+    Assert-Condition ($null-ne$reservationProperty-and$reservationProperty.Name-ceq'grant_reservation_diagnostics') "$Description lacks exact Grant reservation metadata"
+    $null=Assert-R19GrantReservationCandidateContract -Value $reservationProperty.Value -RepoRoot $repo -Enabled $true -CancellationEnabled $requireStop
+  }else{Assert-Condition ($null-eq$Record.PSObject.Properties['grant_reservation_diagnostics']) "$Description contains undeclared Grant reservation diagnostics"}
+  $stopProperty=$Record.PSObject.Properties['grant_reservation_stop_diagnostics']
+  if($requireStop){
+    Assert-Condition ($null-ne$stopProperty-and$stopProperty.Name-ceq'grant_reservation_stop_diagnostics') "$Description lacks exact STOP128 metadata"
+    $null=Assert-R19GrantReservationStopCandidateContract -Value $stopProperty.Value -RepoRoot $repo -Enabled $true
+  }else{Assert-Condition ($null-eq$stopProperty) "$Description contains undeclared STOP128 diagnostics"}
+  $requireGrantDiagnostics=[bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  if($requireGrantDiagnostics){
+    $expectedGrantContract=[pscustomobject][ordered]@{
+      schema='vc-lora-r19-grant-diagnostic-candidate-v1';enabled=$true
+      macro='VC_LORA_R19_GRANT_DIAGNOSTICS';reader_schema='vc-lora-r19-runtime-stage-jtag-read-v9'
+      record=[pscustomobject][ordered]@{symbol='vc_lora_r19_grant_diagnostic_record';schema_version=1;size_bytes=1024}
+      decoder=[pscustomobject][ordered]@{path='tools/read_r19_grant_diagnostic_record.ps1';sha256=Get-Sha256 (Join-Path $repo 'tools/read_r19_grant_diagnostic_record.ps1')}
+    }
+    $schemaProperty=$Record.PSObject.Properties['schema']
+    Assert-Condition ($null-ne$schemaProperty-and$schemaProperty.Name-ceq'schema'-and$schemaProperty.Value-is[string]-and
+      $schemaProperty.Value-cin@('vc-lora-r19-candidate-artifact-latest-v1',
+        'vc-lora-r19-candidate-artifact-handoff-v1','vc-lora-r19-candidate-artifact-manifest-v1',
+        'vc-lora-r19-candidate-final-seal-v1')) "$Description unsupported Grant document schema"
+    $latestPointer=$schemaProperty.Value-ceq'vc-lora-r19-candidate-artifact-latest-v1'
+    $readerProperty=$Record.PSObject.Properties['reader_schema']
+    $readerMatches=$null-ne$readerProperty-and$readerProperty.Name-ceq'reader_schema'-and
+      $readerProperty.Value-is[string]-and$readerProperty.Value-ceq$(if($requireStop){'vc-lora-r19-runtime-stage-jtag-read-v11'}elseif($requireReservation){'vc-lora-r19-runtime-stage-jtag-read-v10'}else{'vc-lora-r19-runtime-stage-jtag-read-v9'})
+    $grantProperty=$Record.PSObject.Properties['grant_diagnostics']
+    # latest-v1 binds the reader in grant_diagnostics; only detailed artifact
+    # documents declare reader_schema at top level. Never invent that field
+    # in the sealed pointer or waive its nested ABI/decoder binding.
+    Assert-Condition ($null-ne$grantProperty-and$grantProperty.Name-ceq'grant_diagnostics'-and
+      ($grantProperty.Value|ConvertTo-Json -Depth 12 -Compress)-ceq($expectedGrantContract|ConvertTo-Json -Depth 12 -Compress)-and
+      (($latestPointer-and$null-eq$readerProperty)-or(-not$latestPointer-and$readerMatches))) "$Description Grant diagnostic ABI/decoder/reader binding mismatch"
+  }else{Assert-Condition ($null-eq$Record.PSObject.Properties['grant_diagnostics']) "$Description contains undeclared Grant diagnostics"}
+  $diagnosticUsbFailureEnabled=[bool](Get-Variable -Name diagnosticUsbFailureEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  if($diagnosticUsbFailureEnabled){
+    Assert-Condition ($Record.PSObject.Properties['diagnostic_usb_failure_diagnostics']-and
+      $Record.PSObject.Properties['usb_role_capabilities']-and
+      $Record.diagnostic_usb_failure_diagnostics.enabled-is[bool]-and$Record.diagnostic_usb_failure_diagnostics.enabled-and
+      $Record.diagnostic_usb_failure_diagnostics.schema-ceq'vc-lora-r19-diagnostic-usb-failure-candidate-v1'-and
+      $Record.diagnostic_usb_failure_diagnostics.reader_schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v8'-and
+      $Record.diagnostic_usb_failure_diagnostics.macro-ceq'VC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD'-and
+      $Record.diagnostic_usb_failure_diagnostics.record.symbol-ceq'vc_lora_r19_diagnostic_usb_failure_record'-and
+      $Record.diagnostic_usb_failure_diagnostics.record.size_bytes-eq256-and
+      $Record.diagnostic_usb_failure_diagnostics.record.schema_version-eq1-and
+      $Record.diagnostic_usb_failure_diagnostics.decoder.path-ceq'tools/read_r19_diagnostic_usb_failure_record.ps1'-and
+      $Record.diagnostic_usb_failure_diagnostics.decoder.sha256-ceq(Get-Sha256 (Join-Path $repo 'tools/read_r19_diagnostic_usb_failure_record.ps1'))) "$Description diagnostic USB contract absent or mismatched"
+    $cap=$Record.usb_role_capabilities
+    Assert-Condition ($cap.schema-ceq'vc-lora-r19-usb-role-capabilities-v1'-and$cap.mode-ceq$TimedPathMode-and
+      $cap.implementation_bound-is[bool]-and$cap.implementation_bound-and@($cap.roles).Count-eq2) "$Description USB role contract absent or mismatched"
+    foreach($spec in @(@('vehicle','SyncOnly',$false),@('ground','ExplicitHostArm',$true))){
+      $rows=@($cap.roles|Where-Object{$_.role-ceq$spec[0]})
+      Assert-Condition ($rows.Count-eq1) "$Description USB role absent or duplicated"
+      $r=$rows[0]
+      Assert-Condition ($r.clock_request_reply-is[bool]-and$r.clock_request_reply-and$r.effective_mode-ceq$spec[1]-and
+        $r.arm-is[bool]-and$r.arm-eq$spec[2]-and$r.ready-is[bool]-and$r.ready-eq$spec[2]) "$Description USB role escalation or unsupported clock handling"
+    }
+    $sources=@('firmware/phase6/vc_lora_phase6_bridge.hpp','firmware/high_speed/r19_diagnostic_usb_failure_record.hpp','tools/r19_usb_role_contract.ps1')
+    Assert-Condition (@($cap.canonical_sources).Count-eq3) "$Description USB role source count differs"
+    foreach($relative in $sources){
+      $binding=@($cap.canonical_sources|Where-Object{$_.path-ceq$relative})
+      Assert-Condition ($binding.Count-eq1-and$binding[0].sha256-cmatch'^[0-9A-F]{64}$'-and
+        (Get-Sha256 (Join-Path $repo $relative))-ceq$binding[0].sha256) "$Description USB role source fingerprint differs"
+    }
+  }else{Assert-Condition ($null-eq$Record.PSObject.Properties['diagnostic_usb_failure_diagnostics']-and$null-eq$Record.PSObject.Properties['usb_role_capabilities']) "$Description requires explicit diagnostic USB mode"}
+  if($auxReadinessEnabled){
+    Assert-Condition ($Record.PSObject.Properties['aux_readiness_diagnostics']-and
+      $Record.aux_readiness_diagnostics.enabled-is[bool]-and$Record.aux_readiness_diagnostics.enabled-and
+      $Record.aux_readiness_diagnostics.schema-ceq'vc-lora-r19-aux-readiness-candidate-v1'-and
+      $Record.aux_readiness_diagnostics.reader_schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v7'-and
+      $Record.aux_readiness_diagnostics.macro-ceq'VC_LORA_R19_AUX_READINESS_DIAGNOSTICS'-and
+      $Record.aux_readiness_diagnostics.record.symbol-ceq'vc_lora_r19_aux_readiness_record'-and
+      $Record.aux_readiness_diagnostics.record.size_bytes-eq6144) "$Description AUX readiness diagnostics absent or mismatched"
+  }else{Assert-Condition ($null-eq$Record.PSObject.Properties['aux_readiness_diagnostics']) "$Description requires explicit AUX readiness diagnostic mode"}
+  if($timedPathEnabled){
+    Assert-Condition ($Record.PSObject.Properties['timed_path_diagnostics']-and
+      $Record.timed_path_diagnostics.mode-ceq$TimedPathMode-and
+      $Record.timed_path_diagnostics.enabled-is[bool]-and
+      $Record.timed_path_diagnostics.enabled) "$Description timed-path mode absent or mismatched"
+  }else{Assert-Condition ($null-eq$Record.PSObject.Properties['timed_path_diagnostics']) "$Description requires explicit timed-path mode"}
+  Assert-Condition ($null -ne $Record -and
+      $Record.PSObject.Properties['runtime_fail_diagnostics_enabled'] -and
+      $Record.runtime_fail_diagnostics_enabled -is [bool] -and
+      [bool]$Record.runtime_fail_diagnostics_enabled -eq
+        $runtimeFailDiagnosticsEnabled) `
+      "$Description runtime_fail_diagnostics_enabled is absent or mismatched"
+  Assert-Condition ($Record.PSObject.Properties['acceptance_eligible'] -and
+      $Record.acceptance_eligible -is [bool] -and
+      [bool]$Record.acceptance_eligible -eq $acceptanceEligible -and
+      $Record.PSObject.Properties['acceptance_authorized'] -and
+      $Record.acceptance_authorized -is [bool] -and
+      -not [bool]$Record.acceptance_authorized -and
+      $Record.PSObject.Properties['deployment_authorized'] -and
+      $Record.deployment_authorized -is [bool] -and
+      -not [bool]$Record.deployment_authorized) `
+      "$Description candidate safety metadata is absent or invalid"
+}
+
+function Assert-GrantReservationStopSourceBinding([object]$Manifest,[string]$ArtifactRoot) {
+  foreach($relative in @('firmware/high_speed/r19_grant_reservation_stop_record.hpp','tools/read_r19_grant_reservation_stop_record.ps1')){
+    $rows=@($Manifest.canonical_source_snapshot.files|Where-Object{$_.path-ceq$relative})
+    $canonical=Get-Item -LiteralPath (Join-Path $repo $relative) -ErrorAction Stop
+    Assert-Condition ($rows.Count-eq1-and$rows[0].sha256-is[string]-and$rows[0].sha256-cmatch'^[A-F0-9]{64}$'-and
+      ($rows[0].size_bytes-is[int]-or$rows[0].size_bytes-is[long])-and$rows[0].size_bytes-eq$canonical.Length-and
+      $rows[0].sha256-ceq(Get-Sha256 $canonical.FullName)) 'STOP128 canonical source closure differs'
+    if($relative.StartsWith('tools/')){
+      Assert-Condition ((Get-Sha256 (Join-Path $ArtifactRoot ('evidence/'+$relative)))-ceq$rows[0].sha256) 'STOP128 staged decoder differs from the source closure'
+    }
+  }
+}
+
+function Get-Sha256([string]$Path) {
+  (Get-FileHash -LiteralPath $Path -Algorithm SHA256 -ErrorAction Stop).Hash.
+      ToUpperInvariant()
+}
+
+function Read-PinnedFileUnderLock([string]$Path,
+                                  [string]$ExpectedSha256,
+                                  [string]$Description) {
+  Assert-Condition ($ExpectedSha256 -cmatch '^[0-9A-F]{64}$') `
+      "$Description expected SHA-256 is invalid"
+  $resolved = (Resolve-Path -LiteralPath $Path -ErrorAction Stop).Path
+  $lock = $null
+  try {
+    $lock = [IO.FileStream]::new(
+        $resolved, [IO.FileMode]::Open, [IO.FileAccess]::Read,
+        [IO.FileShare]::Read, 4096, [IO.FileOptions]::SequentialScan)
+    $sha256 = [Security.Cryptography.SHA256]::Create()
+    try {
+      $lock.Position = 0
+      $actualSha256 = ([BitConverter]::ToString(
+          $sha256.ComputeHash($lock))).Replace('-', '')
+    } finally {
+      $sha256.Dispose()
+    }
+    Assert-Condition ($actualSha256 -ceq $ExpectedSha256) `
+        "$Description differs from its reviewed exact hash"
+    Assert-Condition ($lock.Length -gt 0 -and
+        $lock.Length -le [int]::MaxValue) `
+        "$Description has an invalid size"
+    $lock.Position = 0
+    [byte[]]$bytes = [byte[]]::new([int]$lock.Length)
+    $offset = 0
+    while ($offset -lt $bytes.Length) {
+      $read = $lock.Read($bytes, $offset, $bytes.Length - $offset)
+      Assert-Condition ($read -gt 0) `
+          "$Description changed or truncated while read-locked"
+      $offset += $read
+    }
+    [pscustomobject][ordered]@{
+      path=$resolved;sha256=$actualSha256;bytes=$bytes;lock=$lock
+    }
+  } catch {
+    if ($null -ne $lock) { $lock.Dispose() }
+    throw
+  }
+}
+
+function Open-PinnedReadLock([string]$Path,
+                             [string]$ExpectedSha256,
+                             [string]$Description) {
+  Assert-Condition ($ExpectedSha256 -cmatch '^[0-9A-F]{64}$') `
+      "$Description expected SHA-256 is invalid"
+  $resolved = (Resolve-Path -LiteralPath $Path -ErrorAction Stop).Path
+  $lock = $null
+  try {
+    $lock = [IO.FileStream]::new(
+        $resolved, [IO.FileMode]::Open, [IO.FileAccess]::Read,
+        [IO.FileShare]::Read, 4096, [IO.FileOptions]::SequentialScan)
+    $sha256 = [Security.Cryptography.SHA256]::Create()
+    try {
+      $lock.Position = 0
+      $actualSha256 = ([BitConverter]::ToString(
+          $sha256.ComputeHash($lock))).Replace('-', '')
+      $lock.Position = 0
+    } finally {
+      $sha256.Dispose()
+    }
+    Assert-Condition ($actualSha256 -ceq $ExpectedSha256) `
+        "$Description differs from its reviewed exact hash"
+    return $lock
+  } catch {
+    if ($null -ne $lock) { $lock.Dispose() }
+    throw
+  }
+}
+
+function Get-TextSha256([string]$Text) {
+  $sha = [Security.Cryptography.SHA256]::Create()
+  try {
+    [BitConverter]::ToString($sha.ComputeHash($utf8.GetBytes($Text))).
+        Replace('-', '')
+  } finally {
+    $sha.Dispose()
+  }
+}
+
+function Write-DurableBytes([string]$Path, [byte[]]$Bytes) {
+  $parent = Split-Path -Parent $Path
+  Assert-Condition (Test-Path -LiteralPath $parent -PathType Container) `
+      "Durable output parent is missing: $parent"
+  $stream = [IO.FileStream]::new(
+      $Path, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write,
+      [IO.FileShare]::Read, 65536, [IO.FileOptions]::WriteThrough)
+  try {
+    $stream.Write($Bytes, 0, $Bytes.Length)
+    $stream.Flush($true)
+  } finally {
+    $stream.Dispose()
+  }
+}
+
+function Write-DurableText([string]$Path, [string]$Text) {
+  Write-DurableBytes $Path $utf8.GetBytes($Text)
+}
+
+function Write-DurableJson([string]$Path, [object]$Value) {
+  Write-DurableText $Path (($Value | ConvertTo-Json -Depth 48) + $newline)
+  [void]([IO.File]::ReadAllText($Path, $utf8) | ConvertFrom-Json)
+}
+
+function Flush-Existing([string]$Path) {
+  $stream = [IO.FileStream]::new(
+      $Path, [IO.FileMode]::Open, [IO.FileAccess]::ReadWrite,
+      [IO.FileShare]::Read, 4096, [IO.FileOptions]::WriteThrough)
+  try { $stream.Flush($true) } finally { $stream.Dispose() }
+}
+
+function Get-RelativePath([string]$Root, [string]$Path) {
+  $rootFull = [IO.Path]::GetFullPath($Root).TrimEnd('\')
+  $pathFull = [IO.Path]::GetFullPath($Path)
+  $prefix = $rootFull + '\'
+  Assert-Condition ($pathFull.StartsWith(
+      $prefix, [StringComparison]::OrdinalIgnoreCase)) `
+      "Path escaped required root: $pathFull"
+  $pathFull.Substring($prefix.Length).Replace('\', '/')
+}
+
+function Resolve-Within([string]$Root, [string]$Value,
+                        [string]$Description) {
+  Assert-Condition (-not [string]::IsNullOrWhiteSpace($Value)) `
+      "$Description path is empty"
+  $candidate = if ([IO.Path]::IsPathRooted($Value)) {
+    [IO.Path]::GetFullPath($Value)
+  } else {
+    [IO.Path]::GetFullPath((Join-Path $Root $Value.Replace('/', '\')))
+  }
+  $rootFull = [IO.Path]::GetFullPath($Root).TrimEnd('\')
+  Assert-Condition ($candidate.StartsWith(
+      ($rootFull + '\'), [StringComparison]::OrdinalIgnoreCase)) `
+      "$Description escaped required root"
+  (Resolve-Path -LiteralPath $candidate -ErrorAction Stop).Path
+}
+
+function Assert-ExactArray([object[]]$Actual, [string[]]$Expected,
+                           [string]$Description) {
+  $items = @($Actual)
+  Assert-Condition ($items.Count -eq $Expected.Count) `
+      "$Description count mismatch"
+  for ($index = 0; $index -lt $Expected.Count; ++$index) {
+    Assert-Condition ([string]$items[$index] -ceq $Expected[$index]) `
+        "$Description mismatch at index $index"
+  }
+}
+
+function Get-RequiredProperty([object]$Object, [string]$Name,
+                              [string]$Description) {
+  $property = $Object.PSObject.Properties[$Name]
+  Assert-Condition ($null -ne $property) `
+      "$Description lacks required property '$Name'"
+  $property.Value
+}
+
+function Resolve-RecordPath([object]$Record, [string]$Base,
+                            [string]$Description) {
+  $pathValue = [string](Get-RequiredProperty $Record 'path' $Description)
+  Resolve-Within $Base $pathValue $Description
+}
+
+function Assert-FileRecord([object]$Record, [string]$Base,
+                           [string]$Description) {
+  $path = Resolve-RecordPath $Record $Base $Description
+  $expectedSha = [string](Get-RequiredProperty $Record 'sha256' $Description)
+  Assert-Condition ($expectedSha -cmatch '^[0-9A-F]{64}$') `
+      "$Description SHA-256 is non-canonical"
+  $sizeValue = Get-RequiredProperty $Record 'size_bytes' $Description
+  [int64]$expectedSize = 0
+  Assert-Condition ([int64]::TryParse([string]$sizeValue,
+      [Globalization.NumberStyles]::None,
+      [Globalization.CultureInfo]::InvariantCulture,
+      [ref]$expectedSize) -and $expectedSize -gt 0) `
+      "$Description size is invalid"
+  $file = Get-Item -LiteralPath $path -ErrorAction Stop
+  Assert-Condition ([int64]$file.Length -eq $expectedSize -and
+      (Get-Sha256 $path) -ceq $expectedSha) `
+      "$Description size/SHA-256 mismatch"
+  [pscustomobject][ordered]@{
+    path=$path;size_bytes=$expectedSize;sha256=$expectedSha
+  }
+}
+
+function Read-ShaSidecar([string]$Path, [string]$ExpectedLeaf) {
+  $text = (Get-Content -LiteralPath $Path -Raw -ErrorAction Stop).Trim()
+  $pattern = '^([0-9A-F]{64}) \*' + [regex]::Escape($ExpectedLeaf) + '$'
+  Assert-Condition ($text -cmatch $pattern) "Malformed SHA sidecar: $Path"
+  $Matches[1]
+}
+
+function Initialize-EvidenceDirectory([string]$Requested) {
+  $basePath = Join-Path $repo $evidenceBaseRelative
+  if (-not (Test-Path -LiteralPath $basePath -PathType Container)) {
+    New-Item -ItemType Directory -Path $basePath -Force | Out-Null
+  }
+  $base = (Resolve-Path -LiteralPath $basePath).Path.TrimEnd('\')
+  if ([string]::IsNullOrWhiteSpace($Requested)) {
+    $leaf = [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffZ') + '-' +
+        [Guid]::NewGuid().ToString('N').Substring(0, 8)
+    $Requested = Join-Path $base $leaf
+  }
+  $candidate = [IO.Path]::GetFullPath($Requested).TrimEnd('\')
+  Assert-Condition ((Split-Path -Parent $candidate) -ieq $base) `
+      "EvidenceDirectory must be a direct child of $base"
+  Assert-Condition (-not (Test-Path -LiteralPath $candidate)) `
+      "Refusing to overwrite evidence: $candidate"
+  New-Item -ItemType Directory -Path $candidate | Out-Null
+  (Resolve-Path -LiteralPath $candidate).Path.TrimEnd('\')
+}
+
+function Get-RoleDefinitions {
+  @(
+    [pscustomobject][ordered]@{
+      key='vehicle';name='Vehicle';port='COM3'
+      pnp='USB\VID_303A&PID_1001&MI_00\7&7131F6A&0&0000'
+      parent='USB\VID_303A&PID_1001\90:70:69:11:81:A4'
+      mac='90:70:69:11:81:a4'
+      candidate=$null;candidate_stage='';rollback=$null;rollback_stage=''
+      write_pass=$false;verify_pass=$false;reenumeration_pass=$false
+    },
+    [pscustomobject][ordered]@{
+      key='ground';name='Ground';port='COM6'
+      pnp='USB\VID_303A&PID_1001&MI_00\7&2159A644&0&0000'
+      parent='USB\VID_303A&PID_1001\1C:DB:D4:5A:83:80'
+      mac='1c:db:d4:5a:83:80'
+      candidate=$null;candidate_stage='';rollback=$null;rollback_stage=''
+      write_pass=$false;verify_pass=$false;reenumeration_pass=$false
+    })
+}
+
+function Copy-And-Lock([string]$Source, [string]$Destination,
+                       [string]$ExpectedSha, [int64]$ExpectedSize) {
+  [byte[]]$bytes = [IO.File]::ReadAllBytes($Source)
+  Assert-Condition ($bytes.LongLength -eq $ExpectedSize) `
+      "Source size changed before staging: $Source"
+  Write-DurableBytes $Destination $bytes
+  Assert-Condition ((Get-Item -LiteralPath $Destination).Length -eq
+      $ExpectedSize -and (Get-Sha256 $Destination) -ceq $ExpectedSha) `
+      "Staged file is not byte-exact: $Destination"
+  $lock = [IO.FileStream]::new(
+      $Destination, [IO.FileMode]::Open, [IO.FileAccess]::Read,
+      [IO.FileShare]::Read, 4096, [IO.FileOptions]::SequentialScan)
+  [void]$script:StageLocks.Add($lock)
+}
+
+function Resolve-CandidateBundle {
+  $grantReservationStopEnabled=[bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  $candidateBase = Join-Path $repo $candidateBaseRelative
+  Assert-Condition (Test-Path -LiteralPath $candidateBase -PathType Container) `
+      "Candidate artifact base is missing: $candidateBase"
+  $candidateBase = (Resolve-Path -LiteralPath $candidateBase).Path.TrimEnd('\')
+  $exactLatest = Join-Path $candidateBase 'latest.json'
+  if ([string]::IsNullOrWhiteSpace($CandidateLatestPath)) {
+    $script:CandidateLatestPath = $exactLatest
+  } else {
+    $script:CandidateLatestPath = (Resolve-Path -LiteralPath `
+        $CandidateLatestPath -ErrorAction Stop).Path
+  }
+  Assert-Condition ($script:CandidateLatestPath -ceq $exactLatest) `
+      'Only the canonical R19 candidate latest.json may be consumed'
+  $latestSidecar = Join-Path (Split-Path -Parent $script:CandidateLatestPath) `
+      'latest.sha256'
+  $latestSha = Get-Sha256 $script:CandidateLatestPath
+  Assert-Condition ((Read-ShaSidecar $latestSidecar 'latest.json') -ceq
+      $latestSha) 'Candidate latest.json sidecar mismatch'
+  $latest = Get-Content -LiteralPath $script:CandidateLatestPath -Raw |
+      ConvertFrom-Json
+  Assert-Condition ([string]$latest.schema -ceq $candidateLatestSchema) `
+      'Unsupported R19 candidate latest schema'
+  Assert-Condition ([string]$latest.result -ceq 'PASS') `
+      'R19 candidate latest pointer is not PASS'
+  Assert-CandidateModeRecord $latest 'Candidate latest pointer'
+
+  $artifactId = [string](Get-RequiredProperty $latest 'artifact_id' 'latest')
+  Assert-Condition ($artifactId -cmatch '^[A-Za-z0-9._-]+$') `
+      'Candidate artifact_id is unsafe'
+  $artifactRoot = Resolve-Within $candidateBase $artifactId `
+      'candidate artifact root'
+  Assert-Condition ((Split-Path -Parent $artifactRoot) -ieq $candidateBase) `
+      'Candidate artifact root is not a direct child of the candidate base'
+  $declaredArtifactRoot = Resolve-Within $repo `
+      ([string](Get-RequiredProperty $latest 'artifact_root' 'latest')) `
+      'latest artifact_root'
+  Assert-Condition ($declaredArtifactRoot -ceq $artifactRoot) `
+      'latest artifact_root does not match artifact_id'
+
+  $handoffRecord = Get-RequiredProperty $latest 'handoff' 'latest'
+  $manifestRecord = Get-RequiredProperty $latest 'candidate_manifest' 'latest'
+  $sealRecord = Get-RequiredProperty $latest 'final_seal' 'latest'
+  $handoffPath = Resolve-RecordPath $handoffRecord $repo 'handoff'
+  $manifestPath = Resolve-RecordPath $manifestRecord $repo `
+      'candidate manifest'
+  $candidateSealPath = Resolve-RecordPath $sealRecord $repo `
+      'candidate final seal'
+  foreach ($path in @($handoffPath,$manifestPath,$candidateSealPath)) {
+    Assert-Condition ($path.StartsWith(
+        ($artifactRoot.TrimEnd('\') + '\'),
+        [StringComparison]::OrdinalIgnoreCase)) `
+        'Candidate latest pointer selected a file outside its artifact root'
+  }
+  foreach ($binding in @(
+      [pscustomobject]@{record=$handoffRecord;path=$handoffPath;name='handoff'},
+      [pscustomobject]@{record=$manifestRecord;path=$manifestPath;name='manifest'},
+      [pscustomobject]@{record=$sealRecord;path=$candidateSealPath;name='seal'})) {
+    $sha = [string](Get-RequiredProperty $binding.record 'sha256' $binding.name)
+    Assert-Condition ($sha -cmatch '^[0-9A-F]{64}$' -and
+        (Get-Sha256 $binding.path) -ceq $sha) `
+        "Candidate $($binding.name) hash mismatch"
+  }
+
+  $handoff = Get-Content -LiteralPath $handoffPath -Raw | ConvertFrom-Json
+  Assert-Condition ([string]$handoff.schema -ceq $candidateHandoffSchema -and
+      [string]$handoff.result -ceq 'PASS' -and
+      [string]$handoff.artifact_id -ceq $artifactId) `
+      'Candidate handoff identity/result mismatch'
+  Assert-CandidateModeRecord $handoff 'Candidate handoff'
+  $manifest = Get-Content -LiteralPath $manifestPath -Raw | ConvertFrom-Json
+  Assert-Condition ([string]$manifest.schema -ceq $candidateSchema -and
+      [string]$manifest.result -ceq 'PASS' -and
+      [string]$manifest.artifact_id -ceq $artifactId) `
+      'Candidate manifest identity/result mismatch'
+  Assert-CandidateModeRecord $manifest 'Candidate manifest'
+  $seal = Get-Content -LiteralPath $candidateSealPath -Raw | ConvertFrom-Json
+  Assert-Condition ([string]$seal.schema -ceq $candidateSealSchema -and
+      [string]$seal.result -ceq 'PASS' -and
+      [string]$seal.artifact_id -ceq $artifactId) `
+      'Candidate final seal identity/result mismatch'
+  Assert-CandidateModeRecord $seal 'Candidate final seal'
+  if($grantReservationStopEnabled){Assert-GrantReservationStopSourceBinding -Manifest $manifest -ArtifactRoot $artifactRoot}
+  Assert-Condition ((Resolve-Within $repo ([string]$manifest.artifact_root) `
+        'manifest artifact_root') -ceq $artifactRoot -and
+      (Resolve-Within $repo ([string]$handoff.artifact_root) `
+        'handoff artifact_root') -ceq $artifactRoot) `
+      'Candidate manifest/handoff artifact_root mismatch'
+  $handoffManifest = Get-RequiredProperty $handoff 'candidate_manifest' `
+      'handoff'
+  $handoffSeal = Get-RequiredProperty $handoff 'final_seal' 'handoff'
+  Assert-Condition ((Resolve-RecordPath $handoffManifest $repo `
+        'handoff candidate manifest') -ceq $manifestPath -and
+      [string]$handoffManifest.sha256 -ceq (Get-Sha256 $manifestPath) -and
+      (Resolve-RecordPath $handoffSeal $repo 'handoff final seal') -ceq
+        $candidateSealPath -and
+      [string]$handoffSeal.sha256 -ceq (Get-Sha256 $candidateSealPath)) `
+      'Candidate handoff is not bound to the latest manifest/seal'
+  Assert-Condition ([string]$seal.candidate_manifest_sha256 -ceq
+      (Get-Sha256 $manifestPath) -and
+      $seal.deployment_authorized -is [bool] -and
+      -not [bool]$seal.deployment_authorized -and
+      $seal.hardware_interaction -is [bool] -and
+      -not [bool]$seal.hardware_interaction) `
+      'Candidate seal does not bind the non-deployment offline manifest'
+
+  $deployment = Get-RequiredProperty $manifest 'deployment' 'manifest'
+  Assert-Condition ($deployment.authorized -is [bool] -and
+      -not [bool]$deployment.authorized -and
+      $deployment.physical_30s_proven -is [bool] -and
+      -not [bool]$deployment.physical_30s_proven) `
+      'Candidate manifest must remain non-deployment and physically unproven'
+  $enable = Get-RequiredProperty $manifest 'candidate_enable' 'manifest'
+  Assert-Condition ([string]$enable.macro -ceq
+      'VC_LORA_R19_HIGH_SPEED_CANDIDATE' -and [int]$enable.value -eq 1 -and
+      [string]$enable.compile_flag -ceq
+        '-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1' -and
+      [int]$enable.bridge_default -eq 0) `
+      'Manifest is not an explicitly enabled R19 candidate build'
+  Assert-ExactArray @($manifest.compile_order) @('vehicle','ground') `
+      'candidate compile order'
+  $policy = Get-RequiredProperty $manifest 'flash_policy' 'manifest'
+  Assert-Condition ([string]$policy.mode -ceq 'app-only' -and
+      $policy.app_only -is [bool] -and [bool]$policy.app_only -and
+      [string]$policy.offset -ceq '0x10000' -and
+      $policy.erase_flash -is [bool] -and -not [bool]$policy.erase_flash -and
+      $policy.write_bootloader -is [bool] -and
+        -not [bool]$policy.write_bootloader -and
+      $policy.write_partition_table -is [bool] -and
+        -not [bool]$policy.write_partition_table -and
+      $policy.write_merged_image -is [bool] -and
+        -not [bool]$policy.write_merged_image) `
+      'Candidate manifest flash policy is not exact app-only 0x10000'
+  Assert-ExactArray @($policy.upload_order) @('vehicle','ground') `
+      'candidate upload order'
+  $hardware = Get-RequiredProperty $manifest 'hardware_interaction' 'manifest'
+  Assert-Condition ($hardware.performed -is [bool] -and
+      -not [bool]$hardware.performed -and
+      $hardware.upload_performed -is [bool] -and
+      -not [bool]$hardware.upload_performed -and
+      $hardware.flash_performed -is [bool] -and
+      -not [bool]$hardware.flash_performed -and
+      @($hardware.com_ports_opened).Count -eq 0) `
+      'Candidate builder must have had no hardware interaction'
+
+  $roleRows = @($manifest.roles)
+  $handoffRoleRows = @($handoff.roles)
+  Assert-Condition ($roleRows.Count -eq 2) `
+      'Candidate manifest must contain exactly two roles'
+  Assert-Condition ($handoffRoleRows.Count -eq 2) `
+      'Candidate handoff must contain exactly two roles'
+  $roles = @(Get-RoleDefinitions)
+  for ($index = 0; $index -lt $roles.Count; ++$index) {
+    $row = $roleRows[$index]
+    Assert-Condition ([string]$row.role -ceq $roles[$index].key) `
+        "Candidate role/order mismatch at index $index"
+    $app = Get-RequiredProperty $row 'application' `
+        "$($roles[$index].name) role"
+    $selected = Assert-FileRecord $app $artifactRoot `
+        "$($roles[$index].name) candidate application"
+    Assert-Condition ((Split-Path -Leaf $selected.path) -ceq
+        "$($roles[$index].key).application.bin") `
+        "$($roles[$index].name) candidate selected an unexpected file"
+    $roles[$index].candidate = $selected
+    $handoffRow = $handoffRoleRows[$index]
+    Assert-Condition ([string]$handoffRow.role -ceq $roles[$index].key) `
+        "Candidate handoff role/order mismatch at index $index"
+    $handoffApplication = Assert-FileRecord $handoffRow.application $repo `
+        "$($roles[$index].name) handoff application"
+    Assert-Condition ($handoffApplication.path -ceq $selected.path -and
+        $handoffApplication.size_bytes -eq $selected.size_bytes -and
+        $handoffApplication.sha256 -ceq $selected.sha256) `
+        "$($roles[$index].name) handoff/manifest application mismatch"
+  }
+  Assert-Condition ([string]$seal.vehicle_application_sha256 -ceq
+      $roles[0].candidate.sha256 -and
+      [string]$seal.ground_application_sha256 -ceq
+        $roles[1].candidate.sha256) `
+      'Candidate final seal application hashes do not match selected roles'
+
+  [pscustomobject][ordered]@{
+    runtime_fail_diagnostics_enabled=$runtimeFailDiagnosticsEnabled
+    acceptance_eligible=$acceptanceEligible
+    artifact_id=$artifactId;artifact_root=$artifactRoot
+    latest_path=$script:CandidateLatestPath;latest_sha256=$latestSha
+    handoff_path=$handoffPath;handoff_sha256=Get-Sha256 $handoffPath
+    candidate_manifest_path=$manifestPath
+    candidate_manifest_sha256=Get-Sha256 $manifestPath
+    candidate_final_seal_path=$candidateSealPath
+    candidate_final_seal_sha256=Get-Sha256 $candidateSealPath
+    roles=$roles
+  }
+}
+
+function Invoke-CandidateVerifier([object]$Bundle, [string]$Checkpoint) {
+  $grantReservationEnabled=[bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  $grantReservationStopEnabled=[bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  $grantDiagnosticsEnabled=[bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  $diagnosticUsbFailureEnabled=[bool](Get-Variable -Name diagnosticUsbFailureEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  $verifier = Join-Path $repo 'tools\verify_r19_candidate_artifact.ps1'
+  $common = Join-Path $repo 'tools\r19_candidate_artifact_common.ps1'
+  Assert-Condition (Test-Path -LiteralPath $verifier -PathType Leaf) `
+      'R19 candidate artifact verifier is missing'
+  Assert-Condition (Test-Path -LiteralPath $common -PathType Leaf) `
+      'R19 candidate artifact verifier common dependency is missing'
+  $safe = $Checkpoint -replace '[^A-Za-z0-9_-]', '_'
+  $logPath = Join-Path $evidence "candidate_verify_$safe.log"
+  $stageDirectory = Join-Path $evidence "candidate_verifier_$safe"
+  $stagedVerifierPath = Join-Path $stageDirectory `
+      'verify_r19_candidate_artifact.ps1'
+  $stagedCommonPath = Join-Path $stageDirectory `
+      'r19_candidate_artifact_common.ps1'
+  $output = @()
+  $failure = $null
+  $sourceVerifier = $null
+  $sourceCommon = $null
+  $sourceRoleContract = $null
+  $sourceReservationContract=$null
+  $stagedReservationContractLock=$null
+  $stagedVerifierLock = $null
+  $stagedCommonLock = $null
+  $stagedRoleContractLock = $null
+  try {
+    $sourceVerifier = Read-PinnedFileUnderLock $verifier `
+        $expectedCandidateVerifierSha256 'R19 candidate artifact verifier'
+    $sourceCommon = Read-PinnedFileUnderLock $common `
+        $expectedCandidateCommonSha256 `
+        'R19 candidate artifact verifier common dependency'
+    New-Item -ItemType Directory -Path $stageDirectory | Out-Null
+    Write-DurableBytes $stagedVerifierPath $sourceVerifier.bytes
+    Write-DurableBytes $stagedCommonPath $sourceCommon.bytes
+    if($grantReservationEnabled){
+      $manifest=Get-Content -LiteralPath $Bundle.candidate_manifest_path -Raw|ConvertFrom-Json
+      $reservationBinding=@($manifest.canonical_source_snapshot.files|Where-Object{$_.path-ceq'tools/r19_grant_reservation_contract.ps1'})
+      Assert-Condition ($reservationBinding.Count-eq1) 'Reservation contract source is not uniquely pinned'
+      $reservationContractSha=[string]$reservationBinding[0].sha256
+      Assert-Condition ($reservationContractSha-ceq$expectedGrantReservationContractSha256) 'Candidate reservation contract differs from reviewed implementation'
+      $sourceReservationContract=Read-PinnedFileUnderLock (Join-Path $repo 'tools/r19_grant_reservation_contract.ps1') $reservationContractSha 'Grant reservation contract'
+      $stagedReservationContractPath=Join-Path $stageDirectory 'r19_grant_reservation_contract.ps1'
+      Write-DurableBytes $stagedReservationContractPath $sourceReservationContract.bytes
+      $stagedReservationContractLock=Open-PinnedReadLock $stagedReservationContractPath $reservationContractSha 'staged Grant reservation contract'
+    }
+    if($diagnosticUsbFailureEnabled){
+      $handoff=Get-Content -LiteralPath $Bundle.handoff_path -Raw|ConvertFrom-Json
+      $roleBinding=@($handoff.usb_role_capabilities.canonical_sources|Where-Object{$_.path-ceq'tools/r19_usb_role_contract.ps1'})
+      Assert-Condition ($roleBinding.Count-eq1) 'Role contract source is not uniquely pinned'
+      $roleContractSha=[string]$roleBinding[0].sha256
+      $sourceRoleContract=Read-PinnedFileUnderLock (Join-Path $repo 'tools/r19_usb_role_contract.ps1') $roleContractSha 'USB role contract'
+      $stagedRoleContractPath=Join-Path $stageDirectory 'r19_usb_role_contract.ps1'
+      Write-DurableBytes $stagedRoleContractPath $sourceRoleContract.bytes
+      $stagedRoleContractLock=Open-PinnedReadLock $stagedRoleContractPath $roleContractSha 'staged USB role contract'
+    }
+    $stagedVerifierLock = Open-PinnedReadLock $stagedVerifierPath `
+        $expectedCandidateVerifierSha256 'staged R19 candidate verifier'
+    $stagedCommonLock = Open-PinnedReadLock $stagedCommonPath `
+        $expectedCandidateCommonSha256 `
+        'staged R19 candidate verifier common dependency'
+    $integrityRecord=[ordered]@{
+      schema='vc-lora-r19-candidate-verifier-integrity-v1'
+      checkpoint=$Checkpoint
+      verifier_sha256=$expectedCandidateVerifierSha256
+      common_sha256=$expectedCandidateCommonSha256
+      source_and_stage_read_locked_during_execution=$true
+    }
+    if($diagnosticUsbFailureEnabled){$integrityRecord['role_contract_sha256']=$roleContractSha}
+    if($grantReservationEnabled){$integrityRecord['grant_reservation_contract_sha256']=$reservationContractSha}
+    Write-DurableJson (Join-Path $stageDirectory 'integrity.json') $integrityRecord
+    $modeArguments = @{}
+    if ($runtimeFailDiagnosticsEnabled) {
+      $modeArguments.RuntimeFailDiagnostics = $true
+    }
+    if($timedPathEnabled){$modeArguments.TimedPathMode=$TimedPathMode}
+    if($auxReadinessEnabled){$modeArguments.AuxReadinessDiagnostics=$true}
+    if($diagnosticUsbFailureEnabled){$modeArguments.DiagnosticUsbFailureDiagnostics=$true}
+    if($grantDiagnosticsEnabled){$modeArguments.GrantDiagnostics=$true}
+    if($grantReservationEnabled){$modeArguments.GrantReservationDiagnostics=$true}
+    if($grantReservationStopEnabled){$modeArguments.GrantReservationStopDiagnostics=$true}
+    $output = @(& $stagedVerifierPath -RepoRoot $repo @modeArguments `
+        -LatestPath $Bundle.latest_path `
+        -ExpectedLatestSha256 $Bundle.latest_sha256 2>&1)
+  } catch {
+    $failure = $_.Exception.Message
+    $output += "ERROR: $failure"
+  } finally {
+    if($null-ne$stagedReservationContractLock){$stagedReservationContractLock.Dispose()}
+    if($null-ne$sourceReservationContract){$sourceReservationContract.lock.Dispose()}
+    if ($null -ne $stagedRoleContractLock) { $stagedRoleContractLock.Dispose() }
+    if ($null -ne $stagedCommonLock) { $stagedCommonLock.Dispose() }
+    if ($null -ne $stagedVerifierLock) { $stagedVerifierLock.Dispose() }
+    if ($null -ne $sourceCommon) { $sourceCommon.lock.Dispose() }
+    if ($null -ne $sourceRoleContract) { $sourceRoleContract.lock.Dispose() }
+    if ($null -ne $sourceVerifier) { $sourceVerifier.lock.Dispose() }
+  }
+  Write-DurableText $logPath (($output | Out-String).TrimEnd() + $newline)
+  Assert-Condition ($null -eq $failure) `
+      "Candidate verifier failed at ${Checkpoint}: $failure"
+  Assert-Condition ((($output | Out-String) -match
+      'FW-R19-CANDIDATE-ARTIFACT-VERIFY-001\s+PASS')) `
+      "Candidate verifier emitted no PASS marker at $Checkpoint"
+}
+
+function Assert-CandidateBundlePinned([object]$Bundle, [object[]]$Roles,
+                                      [string]$Checkpoint) {
+  Assert-Condition ((Get-Sha256 $Bundle.latest_path) -ceq
+      $Bundle.latest_sha256 -and
+      (Get-Sha256 $Bundle.handoff_path) -ceq $Bundle.handoff_sha256 -and
+      (Get-Sha256 $Bundle.candidate_manifest_path) -ceq
+        $Bundle.candidate_manifest_sha256 -and
+      (Get-Sha256 $Bundle.candidate_final_seal_path) -ceq
+        $Bundle.candidate_final_seal_sha256) `
+      "Candidate control artifact changed at $Checkpoint"
+  foreach ($role in $Roles) {
+    Assert-Condition ((Get-Item -LiteralPath $role.candidate.path).Length -eq
+        $role.candidate.size_bytes -and
+        (Get-Sha256 $role.candidate.path) -ceq $role.candidate.sha256) `
+        "$($role.name) candidate binary changed at $Checkpoint"
+    if (-not [string]::IsNullOrWhiteSpace($role.candidate_stage)) {
+      Assert-Condition ((Get-Item -LiteralPath `
+          $role.candidate_stage).Length -eq $role.candidate.size_bytes -and
+          (Get-Sha256 $role.candidate_stage) -ceq $role.candidate.sha256) `
+          "$($role.name) staged candidate changed at $Checkpoint"
+    }
+  }
+  Invoke-CandidateVerifier $Bundle $Checkpoint
+}
+
+function Add-AcceptedR18RollbackArtifacts([object[]]$Roles) {
+  $rollbackRoot = Join-Path $repo $acceptedR18RootRelative
+  $pins = @{
+    vehicle=[pscustomobject]@{
+      leaf='vehicle.application.bin';size=[int64]389280
+      sha='9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52'
+    }
+    ground=[pscustomobject]@{
+      leaf='ground.application.bin';size=[int64]360208
+      sha='30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5'
+    }
+  }
+  foreach ($role in $Roles) {
+    $pin = $pins[$role.key]
+    $path = Join-Path $rollbackRoot $pin.leaf
+    $file = Get-Item -LiteralPath $path -ErrorAction Stop
+    Assert-Condition ([int64]$file.Length -eq $pin.size -and
+        (Get-Sha256 $path) -ceq $pin.sha) `
+        "Accepted R18 rollback artifact mismatch for $($role.name)"
+    $role.rollback = [pscustomobject][ordered]@{
+      path=$file.FullName;size_bytes=$pin.size;sha256=$pin.sha
+    }
+  }
+}
+
+function Stage-AllArtifacts([object[]]$Roles) {
+  $stage = Join-Path $evidence 'staged'
+  New-Item -ItemType Directory -Path $stage | Out-Null
+  foreach ($role in $Roles) {
+    $role.candidate_stage = Join-Path $stage `
+        "candidate_$($role.key).application.bin"
+    Copy-And-Lock $role.candidate.path $role.candidate_stage `
+        $role.candidate.sha256 $role.candidate.size_bytes
+    $role.rollback_stage = Join-Path $stage `
+        "accepted_r18_$($role.key).application.bin"
+    Copy-And-Lock $role.rollback.path $role.rollback_stage `
+        $role.rollback.sha256 $role.rollback.size_bytes
+  }
+}
+
+function Resolve-AndStageEspTool {
+  $source = Join-Path $env:LOCALAPPDATA `
+      'Arduino15\packages\esp32\tools\esptool_py\5.3.1\esptool.exe'
+  $file = Get-Item -LiteralPath $source -ErrorAction Stop
+  $sha = Get-Sha256 $file.FullName
+  Assert-Condition ($sha -ceq $expectedEspToolSha256) `
+      "Pinned esptool SHA-256 mismatch: $sha"
+  $destination = Join-Path $evidence 'staged\esptool-5.3.1.exe'
+  Copy-And-Lock $file.FullName $destination $sha $file.Length
+  [pscustomobject][ordered]@{
+    source_path=$file.FullName;source_sha256=$sha
+    execution_path=$destination;execution_sha256=Get-Sha256 $destination
+    expected_version=$expectedEspToolVersion
+  }
+}
+
+function Get-ProcessAncestorIds([object[]]$Processes,
+                                [int]$StartProcessId) {
+  $byId = @{}
+  foreach ($process in @($Processes)) {
+    $processIdProperty = $process.PSObject.Properties['ProcessId']
+    if ($null -eq $processIdProperty) { continue }
+    $processId = [int]$processIdProperty.Value
+    if ($processId -gt 0) {
+      if ($byId.ContainsKey($processId)) { return @() }
+      $byId[$processId] = $process
+    }
+  }
+  if (-not $byId.ContainsKey($StartProcessId)) { return @() }
+  $seen = [Collections.Generic.HashSet[int]]::new()
+  $ancestors = [Collections.Generic.List[int]]::new()
+  $cursor = $StartProcessId
+  while ($cursor -gt 0) {
+    if (-not $seen.Add($cursor)) { return @() }
+    $ancestors.Add($cursor)
+    if (-not $byId.ContainsKey($cursor)) { break }
+    $parentProperty = $byId[$cursor].PSObject.Properties['ParentProcessId']
+    if ($null -eq $parentProperty) { break }
+    $cursor = [int]$parentProperty.Value
+  }
+  $ancestors.ToArray()
+}
+
+function Select-CompetingClients([object[]]$Processes,
+                                 [int]$CurrentProcessId) {
+  $knownNames = @(
+    'missionplanner.exe','arduino-cli.exe','arduino-ide.exe','python.exe',
+    'pythonw.exe','py.exe','putty.exe','ttermpro.exe','coolterm.exe',
+    'mavproxy.exe','qgroundcontrol.exe','esptool.exe','platformio.exe',
+    'serialstudio.exe','plink.exe')
+  $all = @($Processes)
+  $ancestorIds = @(Get-ProcessAncestorIds -Processes $all `
+      -StartProcessId $CurrentProcessId)
+  $ancestorSet = [Collections.Generic.HashSet[int]]::new()
+  foreach ($ancestorId in $ancestorIds) {
+    [void]$ancestorSet.Add([int]$ancestorId)
+  }
+  $trustedLauncherAncestors = @($all | Where-Object {
+    [int]$_.ProcessId -ne $CurrentProcessId -and
+    $ancestorSet.Contains([int]$_.ProcessId) -and
+    ([string]$_.Name).ToLowerInvariant() -in @(
+      'powershell.exe','pwsh.exe') -and
+    -not [string]::IsNullOrWhiteSpace([string]$_.CommandLine) -and
+    [string]$_.CommandLine -match
+      '(?i)(^|[^A-Z0-9_.-])invoke_r19_runtime_stage_cause_experiment_hil\.ps1($|[^A-Z0-9_.-])'
+  } | Select-Object ProcessId,ParentProcessId,Name,ExecutablePath,CommandLine)
+  $trustedLauncherSet = [Collections.Generic.HashSet[int]]::new()
+  foreach ($launcher in $trustedLauncherAncestors) {
+    [void]$trustedLauncherSet.Add([int]$launcher.ProcessId)
+  }
+  [pscustomobject][ordered]@{
+    captured_utc=[DateTime]::UtcNow.ToString('o')
+    trusted_launcher_ancestors=$trustedLauncherAncestors
+    known_serial_clients=@($all | Where-Object {
+      [int]$_.ProcessId -ne $CurrentProcessId -and
+      $knownNames -contains ([string]$_.Name).ToLowerInvariant()
+    } | Select-Object ProcessId,ParentProcessId,Name,ExecutablePath,CommandLine)
+    explicit_com3_or_com6_refs=@($all | Where-Object {
+      [int]$_.ProcessId -ne $CurrentProcessId -and
+      -not $trustedLauncherSet.Contains([int]$_.ProcessId) -and
+      -not [string]::IsNullOrWhiteSpace([string]$_.CommandLine) -and
+      [string]$_.CommandLine -match
+        '(?i)(^|[^A-Z0-9_])COM(3|6)([^0-9]|$)'
+    } | Select-Object ProcessId,ParentProcessId,Name,ExecutablePath,CommandLine)
+  }
+}
+
+function Get-CompetingClients {
+  $script:ExternalActions.process_inventory_queried = $true
+  $all = @(Get-CimInstance Win32_Process -ErrorAction Stop)
+  Select-CompetingClients -Processes $all -CurrentProcessId $PID
+}
+
+function Write-CompetingClientGateEvidence([object]$Clients,
+                                            [string]$EvidenceDirectory) {
+  $trusted = @($Clients.trusted_launcher_ancestors)
+  $known = @($Clients.known_serial_clients)
+  $explicit = @($Clients.explicit_com3_or_com6_refs)
+  $status = if ($known.Count -gt 0 -and $explicit.Count -gt 0) {
+    'FAIL_KNOWN_SERIAL_CLIENT_AND_EXPLICIT_COM_REFERENCE'
+  } elseif ($known.Count -gt 0) {
+    'FAIL_KNOWN_SERIAL_CLIENT'
+  } elseif ($explicit.Count -gt 0) {
+    'FAIL_EXPLICIT_COM_REFERENCE'
+  } else {
+    'PASS_NO_COMPETING_CLIENT'
+  }
+  ++$script:CompetingClientGateEvidenceSequence
+  $sequence = [int]$script:CompetingClientGateEvidenceSequence
+  $record = [pscustomobject][ordered]@{
+    schema='vc-lora-r19-competing-client-gate-v1'
+    evidence_sequence=$sequence
+    captured_utc=[string]$Clients.captured_utc
+    persisted_utc=[DateTime]::UtcNow.ToString('o')
+    result=if ($known.Count -eq 0 -and $explicit.Count -eq 0) {
+      'PASS'
+    } else {
+      'FAIL'
+    }
+    status=$status
+    fail_closed=$true
+    current_process_id=[int]$PID
+    counts=[pscustomobject][ordered]@{
+      trusted_launcher_ancestors=$trusted.Count
+      known_serial_clients=$known.Count
+      explicit_com3_or_com6_refs=$explicit.Count
+    }
+    trusted_launcher_ancestors=$trusted
+    known_serial_clients=$known
+    explicit_com3_or_com6_refs=$explicit
+  }
+  $leaf = 'competing_client_gate_{0:D2}.json' -f $sequence
+  $path = Join-Path $EvidenceDirectory $leaf
+  Write-DurableJson $path $record
+  [void]$script:CompetingClientGateFailures.Add(
+      [pscustomobject][ordered]@{
+        sequence=$sequence;path=$leaf;sha256=Get-Sha256 $path
+        status=$status
+        known_serial_client_count=$known.Count
+        explicit_com3_or_com6_ref_count=$explicit.Count
+      })
+  $record
+}
+
+function Assert-NoCompetingClients {
+  $clients = Get-CompetingClients
+  if (@($clients.known_serial_clients).Count -gt 0 -or
+      @($clients.explicit_com3_or_com6_refs).Count -gt 0) {
+    $gate = Write-CompetingClientGateEvidence -Clients $clients `
+        -EvidenceDirectory $evidence
+  }
+  Assert-Condition (@($clients.known_serial_clients).Count -eq 0) `
+      'Known competing serial client is running; close Mission Planner and all serial tools'
+  Assert-Condition (@($clients.explicit_com3_or_com6_refs).Count -eq 0) `
+      'Another process command line references COM3 or COM6'
+  $clients
+}
+
+function Get-PortIdentity([object]$Role) {
+  $script:ExternalActions.device_access_attempted = $true
+  $matches = @(Get-CimInstance Win32_SerialPort -ErrorAction Stop |
+    Where-Object { [string]$_.DeviceID -ieq [string]$Role.port })
+  Assert-Condition ($matches.Count -eq 1) `
+      "$($Role.port) must resolve to exactly one Win32_SerialPort row"
+  $row = $matches[0]
+  $properties = @(Get-PnpDeviceProperty -InstanceId `
+      ([string]$row.PNPDeviceID) -ErrorAction Stop)
+  $parents = @($properties | Where-Object {
+    $_.KeyName -ceq 'DEVPKEY_Device_Parent' })
+  $locations = @($properties | Where-Object {
+    $_.KeyName -ceq 'DEVPKEY_Device_LocationPaths' })
+  Assert-Condition ($parents.Count -eq 1) `
+      "$($Role.name) parent identity is unavailable"
+  [pscustomobject][ordered]@{
+    captured_utc=[DateTime]::UtcNow.ToString('o')
+    port=[string]$row.DeviceID;name=[string]$row.Name
+    pnp_device_id=[string]$row.PNPDeviceID
+    parent_device_id=[string]$parents[0].Data
+    status=[string]$row.Status
+    config_manager_error_code=[int]$row.ConfigManagerErrorCode
+    location_paths=if ($locations.Count -eq 1) {@($locations[0].Data)}else{@()}
+  }
+}
+
+function Assert-RoleIdentity([object]$Identity, [object]$Role) {
+  Assert-Condition ([string]$Identity.port -ieq [string]$Role.port) `
+      "$($Role.name) COM identity mismatch"
+  Assert-Condition ([string]$Identity.pnp_device_id -ieq [string]$Role.pnp) `
+      "$($Role.name) PNP identity mismatch"
+  Assert-Condition ([string]$Identity.parent_device_id -ieq
+      [string]$Role.parent) "$($Role.name) parent identity mismatch"
+  Assert-Condition ([string]$Identity.status -ceq 'OK' -and
+      [int]$Identity.config_manager_error_code -eq 0) `
+      "$($Role.name) device status is not healthy"
+}
+
+function Wait-RoleIdentity([object]$Role, [int]$TimeoutSeconds = 20) {
+  $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
+  $lastFailure = ''
+  do {
+    try {
+      $identity = Get-PortIdentity $Role
+      Assert-RoleIdentity $identity $Role
+      return $identity
+    } catch {
+      $lastFailure = $_.Exception.Message
+      Start-Sleep -Milliseconds 500
+    }
+  } while ([DateTime]::UtcNow -lt $deadline)
+  throw "$($Role.name) did not re-enumerate with its pinned identity: $lastFailure"
+}
+
+function New-ExactArgv([object]$Role,
+                       [ValidateSet('read_mac','write','verify')]
+                       [string]$Kind, [string]$ApplicationPath = '') {
+  [string[]]$base = @('--chip','esp32s3','--port',[string]$Role.port,
+    '--baud','921600','--before','default-reset','--after','hard-reset')
+  if ($Kind -ceq 'read_mac') { return [string[]]($base + @('read-mac')) }
+  Assert-Condition (-not [string]::IsNullOrWhiteSpace($ApplicationPath)) `
+      "$Kind requires an application path"
+  if ($Kind -ceq 'write') {
+    return [string[]]($base + @('write-flash','-z','--flash-mode','keep',
+      '--flash-freq','keep','--flash-size','keep','0x10000',$ApplicationPath))
+  }
+  [string[]]($base + @('verify-flash','0x10000',$ApplicationPath))
+}
+
+function Assert-SafeArgv([string[]]$Tokens, [object]$Role,
+                         [ValidateSet('read_mac','write','verify')]
+                         [string]$Kind, [string]$ApplicationPath = '') {
+  Assert-Condition ($Tokens.Count -ge 11 -and
+      $Tokens[0] -ceq '--chip' -and $Tokens[1] -ceq 'esp32s3' -and
+      $Tokens[2] -ceq '--port' -and $Tokens[3] -ceq $Role.port -and
+      $Tokens[4] -ceq '--baud' -and $Tokens[5] -ceq '921600' -and
+      $Tokens[6] -ceq '--before' -and $Tokens[7] -ceq 'default-reset' -and
+      $Tokens[8] -ceq '--after' -and $Tokens[9] -ceq 'hard-reset') `
+      "$Kind base argv is not exact"
+  foreach ($token in $Tokens) {
+    Assert-Condition ($token -cnotmatch
+      '(?i)(?:_flashed|bootloader|partitions?|merged|boot_app0).*\.bin$') `
+      "$Kind selected a forbidden image"
+    Assert-Condition ($token.ToLowerInvariant() -notin @(
+      'erase-all','0x0','0x0000','0x8000','0xe000')) `
+      "$Kind contains a forbidden address/action"
+  }
+  if ($Kind -ceq 'read_mac') {
+    Assert-Condition ($Tokens.Count -eq 11 -and
+        $Tokens[10] -ceq 'read-mac') 'read-mac argv is not exact'
+    return
+  }
+  Assert-Condition (@($Tokens | Where-Object { $_ -ceq '0x10000' }).Count `
+      -eq 1 -and @($Tokens | Where-Object {
+        $_ -ceq $ApplicationPath }).Count -eq 1) `
+      "$Kind is not bound to one app at 0x10000"
+  Assert-Condition (@($Tokens | Where-Object {
+      $_.EndsWith('.bin',[StringComparison]::OrdinalIgnoreCase) }).Count -eq 1) `
+      "$Kind must select exactly one .bin"
+}
+
+function Invoke-CapturedEspTool([string]$Prefix, [string[]]$Tokens) {
+  $stdoutPath = Join-Path $evidence "$Prefix.stdout.log"
+  $stderrPath = Join-Path $evidence "$Prefix.stderr.log"
+  $exitPath = Join-Path $evidence "$Prefix.exit.txt"
+  $script:ExternalActions.esptool_executed = $true
+  $global:LASTEXITCODE = 0
+  $invokeFailure = $null
+  try {
+    Assert-Condition ((Get-Sha256 $espTool.execution_path) -ceq
+        $espTool.execution_sha256) 'Staged esptool changed before invocation'
+    & $espTool.execution_path @Tokens 1> $stdoutPath 2> $stderrPath
+  } catch {
+    $invokeFailure = $_.Exception.Message
+  }
+  $exitCode = if ($null -ne $invokeFailure) {255}else{[int]$global:LASTEXITCODE}
+  if (-not (Test-Path -LiteralPath $stdoutPath)) {
+    Write-DurableText $stdoutPath ''
+  } else { Flush-Existing $stdoutPath }
+  if (-not (Test-Path -LiteralPath $stderrPath)) {
+    Write-DurableText $stderrPath ''
+  } else { Flush-Existing $stderrPath }
+  Write-DurableText $exitPath ([string]$exitCode + $newline)
+  [pscustomobject][ordered]@{
+    exit_code=$exitCode;invoke_failure=$invokeFailure
+    stdout_path=$stdoutPath;stderr_path=$stderrPath
+    stdout_text=[IO.File]::ReadAllText($stdoutPath)
+    stderr_text=[IO.File]::ReadAllText($stderrPath)
+  }
+}
+
+function Invoke-ToolOperation([string]$Label, [object]$Role,
+    [ValidateSet('read_mac','write','verify')][string]$Kind,
+    [string]$ApplicationPath, [bool]$Rollback) {
+  $clientGate = if ($Kind -ceq 'write') {
+    Assert-NoCompetingClients
+  } else {$null}
+  [string[]]$argv = New-ExactArgv $Role $Kind $ApplicationPath
+  Assert-SafeArgv $argv $Role $Kind $ApplicationPath
+  $prefix = if ($Rollback) {
+    'rollback_' + ('{0:D2}' -f ($script:RollbackOperations.Count + 1)) +
+      "_$Label"
+  } else {
+    '{0:D2}' -f ($script:Operations.Count + 1) + "_$Label"
+  }
+  $argvPath = Join-Path $evidence "$prefix.argv.json"
+  Write-DurableJson $argvPath @($argv)
+  $intentPath = $null
+  if ($Kind -ceq 'write') {
+    $intentPath = Join-Path $evidence "$prefix.intent.json"
+    Write-DurableJson $intentPath ([ordered]@{
+      schema_version=1;created_utc=[DateTime]::UtcNow.ToString('o')
+      role=$Role.key;label=$Label;rollback=$Rollback
+      state='WRITE_INTENT_DURABLE_BEFORE_ESPTool'
+      app_only=$true;offset='0x10000';application_sha256=Get-Sha256 $ApplicationPath
+    })
+    $script:ExternalActions.firmware_write_attempted = $true
+    $script:ExternalActions.firmware_may_have_changed = $true
+    if (-not $Rollback) {
+      $script:CandidateWriteMayHaveChangedDevice = $true
+    }
+  }
+  $before = Wait-RoleIdentity $Role
+  $capture = Invoke-CapturedEspTool $prefix $argv
+  $issues = [Collections.ArrayList]::new()
+  if ($capture.exit_code -ne 0) {
+    [void]$issues.Add("exit_code=$($capture.exit_code)")
+  }
+  if (-not [string]::IsNullOrWhiteSpace($capture.stderr_text)) {
+    [void]$issues.Add('stderr_not_empty')
+  }
+  $parsedMac = $null
+  if ($Kind -ceq 'read_mac') {
+    $matches = [regex]::Matches($capture.stdout_text,
+      '(?im)^\s*MAC:\s*([0-9a-f]{2}(?::[0-9a-f]{2}){5})\s*$')
+    $macs = @($matches | ForEach-Object {
+      $_.Groups[1].Value.ToLowerInvariant() } | Sort-Object -Unique)
+    if ($macs.Count -ne 1) {
+      [void]$issues.Add("unique_mac_count=$($macs.Count)")
+    } else {
+      $parsedMac = $macs[0]
+      if ($parsedMac -cne $Role.mac) {
+        [void]$issues.Add("MAC_mismatch=$parsedMac")
+      }
+    }
+  } elseif ($Kind -ceq 'write') {
+    if (-not $capture.stdout_text.Contains('Hash of data verified.')) {
+      [void]$issues.Add('write_hash_verification_marker_missing')
+    }
+  } elseif (-not $capture.stdout_text.Contains(
+      'Verification successful (digest matched).')) {
+    [void]$issues.Add('explicit_verify_marker_missing')
+  }
+  $record = [pscustomobject][ordered]@{
+    label=$Label;role=$Role.key;kind=$Kind
+    result=if ($issues.Count -eq 0) {'PASS'}else{'FAIL_STOP'}
+    exit_code=$capture.exit_code;issues=@($issues);parsed_mac=$parsedMac
+    identity_before=$before
+    competing_client_gate=$clientGate
+    argv_path=Get-RelativePath $evidence $argvPath
+    stdout_path=Get-RelativePath $evidence $capture.stdout_path
+    stderr_path=Get-RelativePath $evidence $capture.stderr_path
+    application_sha256=if ($Kind -ceq 'read_mac') {$null}else{
+      Get-Sha256 $ApplicationPath }
+  }
+  $recordPath = Join-Path $evidence "$prefix.record.json"
+  Write-DurableJson $recordPath $record
+  $record | Add-Member -NotePropertyName record_path `
+      -NotePropertyValue (Get-RelativePath $evidence $recordPath)
+  $record | Add-Member -NotePropertyName record_sha256 `
+      -NotePropertyValue (Get-Sha256 $recordPath)
+  if ($Rollback) {
+    [void]$script:RollbackOperations.Add($record)
+  } else {
+    [void]$script:Operations.Add($record)
+  }
+  if ($Kind -ceq 'write' -and $issues.Count -eq 0) {
+    if ($Rollback) {$script:SuccessfulRollbackWrites++}
+    else {$script:SuccessfulCandidateWrites++}
+  }
+  Assert-Condition ($issues.Count -eq 0) `
+      "$Label failed: $(@($issues) -join '; ')"
+}
+
+function Invoke-ReenumerationOperation([string]$Label, [object]$Role,
+                                       [bool]$Rollback) {
+  $identity = Wait-RoleIdentity $Role 25
+  $record = [pscustomobject][ordered]@{
+    label=$Label;role=$Role.key;kind='reenumeration';result='PASS'
+    exit_code=0;issues=@();identity=$identity
+  }
+  $prefix = if ($Rollback) {
+    'rollback_' + ('{0:D2}' -f ($script:RollbackOperations.Count + 1)) +
+      "_$Label"
+  } else {
+    '{0:D2}' -f ($script:Operations.Count + 1) + "_$Label"
+  }
+  $recordPath = Join-Path $evidence "$prefix.record.json"
+  Write-DurableJson $recordPath $record
+  $record | Add-Member -NotePropertyName record_path `
+      -NotePropertyValue (Get-RelativePath $evidence $recordPath)
+  $record | Add-Member -NotePropertyName record_sha256 `
+      -NotePropertyValue (Get-Sha256 $recordPath)
+  if ($Rollback) {[void]$script:RollbackOperations.Add($record)}
+  else {[void]$script:Operations.Add($record)}
+}
+
+function Invoke-EspToolVersion {
+  $capture = Invoke-CapturedEspTool '00_esptool_version' @('version')
+  Assert-Condition ($capture.exit_code -eq 0 -and
+      [string]::IsNullOrWhiteSpace($capture.stderr_text) -and
+      $capture.stdout_text -match '(?m)^\s*5\.3\.1\s*$') `
+      'Pinned esptool version check failed'
+}
+
+function Invoke-CandidateSequence([object[]]$Roles) {
+  foreach ($role in $Roles) {
+    Invoke-ToolOperation "$($role.key)_read_mac" $role 'read_mac' '' $false
+    Invoke-ToolOperation "$($role.key)_write" $role 'write' `
+        $role.candidate_stage $false
+    $role.write_pass = $true
+    Invoke-ToolOperation "$($role.key)_verify" $role 'verify' `
+        $role.candidate_stage $false
+    $role.verify_pass = $true
+    Invoke-ReenumerationOperation "$($role.key)_reenumeration" $role $false
+    $role.reenumeration_pass = $true
+  }
+}
+
+function Invoke-AcceptedR18Rollback([object[]]$Roles, [string]$Reason) {
+  $outcomes = [Collections.ArrayList]::new()
+  foreach ($role in $Roles) {
+    $restored = $false
+    $attemptsUsed = 0
+    $failures = [Collections.ArrayList]::new()
+    for ($attempt = 1; $attempt -le $MaxRollbackAttempts; ++$attempt) {
+      $attemptsUsed = $attempt
+      try {
+        Invoke-ToolOperation `
+            "$($role.key)_r18_read_mac_attempt_$attempt" $role `
+            'read_mac' '' $true
+        Invoke-ToolOperation `
+            "$($role.key)_r18_write_attempt_$attempt" $role `
+            'write' $role.rollback_stage $true
+        Invoke-ToolOperation `
+            "$($role.key)_r18_verify_attempt_$attempt" $role `
+            'verify' $role.rollback_stage $true
+        Invoke-ReenumerationOperation `
+            "$($role.key)_r18_reenumeration_attempt_$attempt" $role $true
+        $restored = $true
+        break
+      } catch {
+        [void]$failures.Add($_.Exception.Message)
+      }
+    }
+    [void]$outcomes.Add([pscustomobject][ordered]@{
+      role=$role.key;restored=$restored;attempts=$attemptsUsed
+      failures=@($failures);accepted_r18_sha256=$role.rollback.sha256
+    })
+  }
+  [pscustomobject][ordered]@{
+    required=$true;reason=$Reason
+    result=if (@($outcomes | Where-Object {-not $_.restored}).Count -eq 0) {
+      'PASS'
+    } else {'FAIL'}
+    max_attempts_per_role=$MaxRollbackAttempts;roles=@($outcomes)
+    operations=@($script:RollbackOperations)
+  }
+}
+
+function Write-SealedEvidence([string]$Result, [string]$Status,
+    [string]$Failure, [object]$Bundle, [object[]]$Roles,
+    [object]$RollbackResult, [bool]$OneRunAuthorized,
+    [string]$SimulatedTerminalStatus = '') {
+  $grantDiagnosticsEnabled=[bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  $diagnosticUsbFailureEnabled=[bool](Get-Variable -Name diagnosticUsbFailureEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  $grantReservationEnabled=[bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  $grantReservationStopEnabled=[bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)
+  $terminalPath = Join-Path $evidence 'terminal_status.json'
+  Write-DurableJson $terminalPath ([ordered]@{
+    schema_version=1;test_id=$testId;finished_utc=[DateTime]::UtcNow.ToString('o')
+    result=$Result;status=$Status;failure=$Failure
+    rollback_result=if ($null -eq $RollbackResult) {'NOT_REQUIRED'}else{
+      [string]$RollbackResult.result }
+    power_off_required=($Status -ceq 'FAIL_ROLLBACK_UNPROVEN_POWER_OFF_REQUIRED')
+  })
+  $candidateObject = if ($null -eq $Bundle) {
+    [ordered]@{
+      runtime_fail_diagnostics_enabled=$runtimeFailDiagnosticsEnabled
+      latest_path='';latest_sha256='';handoff_path='';handoff_sha256=''
+      candidate_manifest_path='';candidate_manifest_sha256=''
+      candidate_final_seal_path='';candidate_final_seal_sha256='';artifact_id=''
+    }
+  } else {
+    [ordered]@{
+      runtime_fail_diagnostics_enabled=
+          [bool]$Bundle.runtime_fail_diagnostics_enabled
+      latest_path=$Bundle.latest_path;latest_sha256=$Bundle.latest_sha256
+      handoff_path=$Bundle.handoff_path;handoff_sha256=$Bundle.handoff_sha256
+      candidate_manifest_path=$Bundle.candidate_manifest_path
+      candidate_manifest_sha256=$Bundle.candidate_manifest_sha256
+      candidate_final_seal_path=$Bundle.candidate_final_seal_path
+      candidate_final_seal_sha256=$Bundle.candidate_final_seal_sha256
+      artifact_id=$Bundle.artifact_id
+    }
+  }
+  $roleRows = @($Roles | ForEach-Object {
+    [ordered]@{
+      role=$_.key;port=$_.port;pnp_device_id=$_.pnp
+      parent_device_id=$_.parent;mac=$_.mac
+      size_bytes=if ($null -eq $_.candidate) {0}else{$_.candidate.size_bytes}
+      sha256=if ($null -eq $_.candidate) {''}else{$_.candidate.sha256}
+      write_pass=[bool]$_.write_pass;verify_pass=[bool]$_.verify_pass
+      reenumeration_pass=[bool]$_.reenumeration_pass
+      rollback_sha256=if ($null -eq $_.rollback) {''}else{$_.rollback.sha256}
+    }
+  })
+  $acceptanceAuthorized = $false
+  $authorizationScope = if ($runtimeFailDiagnosticsEnabled) {
+      'one immediate R19 runtime-fail diagnostic capture only'
+    } else {'one immediate R19 physical acceptance run only'}
+  $nextRequiredAction = if ($OneRunAuthorized -and
+      $runtimeFailDiagnosticsEnabled) {
+      'Run one dual-COM read-only runtime-fail diagnostic capture, then mandatory accepted R18 rollback'
+    } elseif ($OneRunAuthorized) {
+      'Run exactly one bound R19 HIL acceptance, then invoke -RollbackOnly unless a separately reviewed deployment decision exists'
+    } elseif ($Status -ceq 'FAIL_ROLLBACK_UNPROVEN_POWER_OFF_REQUIRED') {
+      'Disconnect all power; do not operate either bridge until accepted R18 is verified on both roles'
+    } else {'No R19 deployment authorization has been granted'}
+  $record = [ordered]@{
+    schema=$flashEvidenceSchema;test_id=$testId
+    started_utc=$startedUtc;finished_utc=[DateTime]::UtcNow.ToString('o')
+    result=$Result;status=$Status
+    mode=if ($OfflineContractTest.IsPresent) {'OfflineContractTest'}elseif (
+      $Execute.IsPresent) {'Execute'}else{'DryRun'}
+    failure=$Failure
+    runtime_fail_diagnostics_enabled=$runtimeFailDiagnosticsEnabled
+    acceptance_eligible=$acceptanceEligible
+    acceptance_authorized=$acceptanceAuthorized
+    one_run_hil_authorized=$OneRunAuthorized
+    deployment_authorized=$false
+    hil_authorization_token=if ($OneRunAuthorized) {
+      $activeAuthorizationText
+    } else {''}
+    authorization_scope=$authorizationScope
+    authorization=[ordered]@{
+      scope=$authorizationScope
+      reusable=$false;deployment_authorization=$false
+      attestation_sha256=if ($OneRunAuthorized) {
+        Get-TextSha256 $activeAuthorizationText
+      } else {''}
+      operator_safety_attestation_sha256=if ($OneRunAuthorized) {
+        Get-TextSha256 $operatorSafetyAttestationText
+      } else {''}
+      operator_safety_conditions=@(if ($OneRunAuthorized) {@(
+        'Pixhawk DISARMED','propulsion and actuator power isolated',
+        'both E220 antennas connected','common GND and 3.3 V logic checked',
+        'Pixhawk parameter backup saved')
+      } else {@()})
+    }
+    candidate=$candidateObject
+    flash_policy=[ordered]@{
+      app_only=$true;offset='0x10000';erase_flash=$false
+      write_bootloader=$false;write_partition_table=$false
+      write_merged_image=$false;upload_order=@('vehicle','ground')
+    }
+    roles=$roleRows
+    operations=@($script:Operations | ForEach-Object {
+      [ordered]@{
+        label=$_.label;role=$_.role;kind=$_.kind;result=$_.result
+        exit_code=$_.exit_code;record_path=$_.record_path
+        record_sha256=$_.record_sha256
+      }
+    })
+    rollback=if ($null -eq $RollbackResult) {
+      [ordered]@{required=$false;result='NOT_REQUIRED';roles=@();operations=@()}
+    } else {$RollbackResult}
+    accepted_r18_rollback_root=$acceptedR18RootRelative.Replace('\','/')
+    max_rollback_attempts=$MaxRollbackAttempts
+    competing_client_gate_failures=@($script:CompetingClientGateFailures)
+    external_actions=$script:ExternalActions
+    simulated_terminal_status=$SimulatedTerminalStatus
+    next_required_action=$nextRequiredAction
+  }
+  $recordPath = Join-Path $evidence 'flash_record.json'
+  if($timedPathEnabled-and$null-ne$Bundle){
+    $modeHandoff=[IO.File]::ReadAllText($Bundle.handoff_path,$utf8)|ConvertFrom-Json
+    $record['timed_path_diagnostics']=$modeHandoff.timed_path_diagnostics
+    if($OneRunAuthorized){
+      $authorizationScope='one immediate private USB timed-path diagnostic capture only; no flight arming or parameter commands'
+      $nextRequiredAction='Run exactly one mode-bound timed-path capture, acquire JTAG records, then mandatory accepted R18 rollback'
+    }
+  }
+  if($auxReadinessEnabled-and$null-ne$Bundle){
+    $record['aux_readiness_diagnostics']=$modeHandoff.aux_readiness_diagnostics
+    if($OneRunAuthorized){
+      $authorizationScope='one immediate private USB AUX/readiness timed-path diagnostic capture only; no flight arming or parameter commands'
+      $nextRequiredAction='Run exactly one mode-bound timed-path capture, acquire all seven diagnostic records twice, then mandatory accepted R18 rollback'
+    }
+  }
+  if($diagnosticUsbFailureEnabled-and$null-ne$Bundle){
+    $record['diagnostic_usb_failure_diagnostics']=$modeHandoff.diagnostic_usb_failure_diagnostics
+    $record['usb_role_capabilities']=$modeHandoff.usb_role_capabilities
+    $record['reader_schema']='vc-lora-r19-runtime-stage-jtag-read-v8'
+    if($OneRunAuthorized){
+      $authorizationScope='one immediate versioned-role diagnostic USB cause capture only; no flight arming or parameter commands'
+      $nextRequiredAction='Run exactly one bound capture, acquire all eight diagnostic records twice, then mandatory accepted R18 rollback'
+    }
+  }
+  if($grantDiagnosticsEnabled-and$null-ne$Bundle){
+    $record['grant_diagnostics']=$modeHandoff.grant_diagnostics
+    $record['reader_schema']='vc-lora-r19-runtime-stage-jtag-read-v9'
+    if($OneRunAuthorized){
+      $authorizationScope='one immediate Grant-state diagnostic capture only; no flight arming; parameter request only under the separate bound capture contract'
+      $nextRequiredAction='Run exactly one bound capture, acquire all nine diagnostic records twice, then mandatory accepted R18 rollback'
+    }
+  }
+  if($grantReservationEnabled-and$null-ne$Bundle){
+    $record['grant_reservation_diagnostics']=$modeHandoff.grant_reservation_diagnostics
+    $record['reader_schema']='vc-lora-r19-runtime-stage-jtag-read-v10'
+    if($OneRunAuthorized){
+      $authorizationScope='one host-assisted diagnostic reservation; at most 15-second preparation then one fixed 40-second single-request measurement; mandatory R18 restore; not product acceptance'
+      $nextRequiredAction='Capture once, acquire all ten records twice per role, then mandatory accepted R18 rollback'
+    }
+  }
+  if($grantReservationStopEnabled-and$null-ne$Bundle){
+    $record['grant_reservation_stop_diagnostics']=$modeHandoff.grant_reservation_stop_diagnostics
+    $record['reader_schema']='vc-lora-r19-runtime-stage-jtag-read-v11'
+    if($OneRunAuthorized){
+      $authorizationScope='one host-assisted STOP128 diagnostic reservation; at most 15-second preparation then one fixed 40-second single-request measurement; mandatory R18 restore; not product acceptance'
+      $nextRequiredAction='Capture once, acquire all eleven records twice per role, then mandatory accepted R18 rollback'
+    }
+  }
+  $record.authorization_scope=$authorizationScope
+  $record.authorization.scope=$authorizationScope
+  $record.next_required_action=$nextRequiredAction
+  Write-DurableJson $recordPath $record
+
+  $excluded = @('artifact_manifest.json','SHA256SUMS.txt','final_seal.json',
+    'final_seal.sha256')
+  $files = @(Get-ChildItem -LiteralPath $evidence -Recurse -File |
+    Where-Object {$excluded -notcontains $_.Name} | Sort-Object FullName |
+    ForEach-Object {
+      [ordered]@{
+        path=Get-RelativePath $evidence $_.FullName
+        size_bytes=[int64]$_.Length;sha256=Get-Sha256 $_.FullName
+      }
+    })
+  $artifactPath = Join-Path $evidence 'artifact_manifest.json'
+  Write-DurableJson $artifactPath ([ordered]@{
+    schema='vc-lora-r19-candidate-flash-artifact-inventory-v1'
+    result=$Result;file_count=$files.Count;files=$files
+  })
+  $sumsPath = Join-Path $evidence 'SHA256SUMS.txt'
+  Write-DurableText $sumsPath ((@($files | ForEach-Object {
+    "$($_.sha256) *$($_.path)" }) -join $newline) + $newline)
+  $sealPath = Join-Path $evidence 'final_seal.json'
+  $flashSeal=[ordered]@{
+    schema='vc-lora-r19-candidate-flash-final-seal-v1';test_id=$testId
+    finalized_utc=[DateTime]::UtcNow.ToString('o');result=$Result;status=$Status
+    flash_record_sha256=Get-Sha256 $recordPath
+    artifact_manifest_sha256=Get-Sha256 $artifactPath
+    sha256sums_sha256=Get-Sha256 $sumsPath
+    candidate_manifest_sha256=$candidateObject.candidate_manifest_sha256
+    final_seal_sha256=$candidateObject.candidate_final_seal_sha256
+    runtime_fail_diagnostics_enabled=$runtimeFailDiagnosticsEnabled
+    acceptance_eligible=$acceptanceEligible
+    acceptance_authorized=$acceptanceAuthorized
+    hil_authorization_token=if ($OneRunAuthorized) {
+      $activeAuthorizationText
+    } else {''}
+    authorization_scope=$authorizationScope
+    next_required_action=$nextRequiredAction
+    one_run_hil_authorized=$OneRunAuthorized;deployment_authorized=$false
+  }
+  if($grantReservationStopEnabled-and$null-ne$Bundle){
+    $flashSeal['grant_reservation_diagnostics']=$modeHandoff.grant_reservation_diagnostics
+    $flashSeal['grant_reservation_stop_diagnostics']=$modeHandoff.grant_reservation_stop_diagnostics
+    $flashSeal['reader_schema']='vc-lora-r19-runtime-stage-jtag-read-v11'
+  }
+  Write-DurableJson $sealPath $flashSeal
+  Write-DurableText (Join-Path $evidence 'final_seal.sha256') `
+      ((Get-Sha256 $sealPath) + ' *final_seal.json' + $newline)
+  $recordPath
+}
+
+function Invoke-OfflineContractScenario {
+  $base = Join-Path $repo $evidenceBaseRelative
+  New-Item -ItemType Directory -Path $base -Force | Out-Null
+  $script:evidence = Join-Path $base `
+      ($OfflineScenario + '-' + [Guid]::NewGuid().ToString('N'))
+  New-Item -ItemType Directory -Path $script:evidence | Out-Null
+  $roles = @(Get-RoleDefinitions)
+  foreach ($role in $roles) {
+    $role.candidate = [pscustomobject]@{size_bytes=1;sha256=('A' * 64)}
+    $role.rollback = [pscustomobject]@{size_bytes=1;sha256=('B' * 64)}
+  }
+  $commandPlan = [Collections.ArrayList]::new()
+  foreach ($role in $roles) {
+    $offlineApplication = Join-Path $script:evidence `
+        "offline_$($role.key).application.bin"
+    foreach ($kind in @('read_mac','write','verify')) {
+      [string[]]$tokens = New-ExactArgv $role $kind `
+          $(if ($kind -ceq 'read_mac') {''} else {$offlineApplication})
+      Assert-SafeArgv $tokens $role $kind `
+          $(if ($kind -ceq 'read_mac') {''} else {$offlineApplication})
+      [void]$commandPlan.Add([ordered]@{
+        role=$role.key;kind=$kind;argv=@($tokens)
+      })
+    }
+  }
+  Write-DurableJson (Join-Path $script:evidence `
+      'offline_command_plan.json') ([ordered]@{
+    app_only=$true;offset='0x10000';upload_order=@('vehicle','ground')
+    commands=@($commandPlan)
+  })
+  $bundle = [pscustomobject][ordered]@{
+    runtime_fail_diagnostics_enabled=$runtimeFailDiagnosticsEnabled
+    acceptance_eligible=$acceptanceEligible
+    latest_path='offline/latest.json';latest_sha256=('1' * 64)
+    handoff_path='offline/handoff.json';handoff_sha256=('2' * 64)
+    candidate_manifest_path='offline/candidate_manifest.json'
+    candidate_manifest_sha256=('3' * 64)
+    candidate_final_seal_path='offline/final_seal.json'
+    candidate_final_seal_sha256=('4' * 64);artifact_id='offline-contract'
+  }
+  $rollback = $null
+  $simulated = ''
+  $oneRun = $true
+  if ($OfflineScenario -ceq 'ground_write_failure') {
+    $rollback = [pscustomobject][ordered]@{
+      required=$true;reason='simulated partial candidate flash';result='PASS'
+      max_attempts_per_role=3;roles=@(
+        [pscustomobject]@{role='vehicle';restored=$true;attempts=1},
+        [pscustomobject]@{role='ground';restored=$true;attempts=1})
+      operations=@()
+    }
+    $oneRun = $false
+    $simulated = 'FAIL_CANDIDATE_FLASH_R18_ROLLBACK_PASS'
+  } elseif ($OfflineScenario -ceq 'rollback_failure') {
+    $rollback = [pscustomobject][ordered]@{
+      required=$true;reason='simulated partial candidate flash';result='FAIL'
+      max_attempts_per_role=3;roles=@(
+        [pscustomobject]@{role='vehicle';restored=$false;attempts=3},
+        [pscustomobject]@{role='ground';restored=$true;attempts=1})
+      operations=@()
+    }
+    $oneRun = $false
+    $simulated = 'FAIL_ROLLBACK_UNPROVEN_POWER_OFF_REQUIRED'
+  }
+  $path = Write-SealedEvidence 'PASS' 'PASS_OFFLINE_CONTRACT_NO_HARDWARE' '' `
+      $bundle $roles $rollback $oneRun $simulated
+  Write-Output "R19-CANDIDATE-FLASH-OFFLINE-CONTRACT scenario=$OfflineScenario record=$path"
+}
+
+if ([string]::IsNullOrWhiteSpace($RepoRoot)) {
+  Assert-Condition (-not [string]::IsNullOrWhiteSpace($PSScriptRoot)) `
+      'Cannot resolve RepoRoot because PSScriptRoot is unavailable'
+  $RepoRoot = Split-Path -Parent $PSScriptRoot
+}
+$canonicalRepo = (Resolve-Path -LiteralPath `
+    (Split-Path -Parent $PSScriptRoot) -ErrorAction Stop).Path.TrimEnd('\')
+$repo = (Resolve-Path -LiteralPath $RepoRoot -ErrorAction Stop).Path.TrimEnd('\')
+
+if ($OfflineContractTest.IsPresent) {
+  $tempPrefix = [IO.Path]::GetFullPath([IO.Path]::GetTempPath())
+  Assert-Condition ($repo.StartsWith(
+      $tempPrefix, [StringComparison]::OrdinalIgnoreCase) -and
+      (Split-Path -Leaf $repo) -match
+        '^vc_lora_r19_candidate_flash_contract_[0-9a-f]{32}$') `
+      'OfflineContractTest is restricted to its isolated TEMP fixture'
+  $expectedCopy = Join-Path $repo `
+      'tools\invoke_r19_candidate_app_flash_hil.ps1'
+  Assert-Condition ((Resolve-Path -LiteralPath $PSCommandPath).Path -ceq
+      $expectedCopy) 'OfflineContractTest requires the fixture wrapper copy'
+  Assert-Condition (-not $Execute.IsPresent -and -not $RollbackOnly.IsPresent) `
+      'OfflineContractTest cannot request execution or rollback'
+  Assert-Condition ([string]::IsNullOrWhiteSpace($OperatorSafetyAttestation)) `
+      'OfflineContractTest rejects a live operator safety attestation'
+  Invoke-OfflineContractScenario
+  return
+}
+
+Assert-Condition ($repo -ceq $canonicalRepo) `
+    'Live/dry-run R19 flash orchestration is restricted to the canonical repository'
+Assert-Condition (-not ($RollbackOnly.IsPresent -and -not $Execute.IsPresent)) `
+    '-RollbackOnly requires -Execute'
+if ($Execute.IsPresent -and -not $RollbackOnly.IsPresent) {
+  Assert-Condition ($HilAuthorization -ceq $activeAuthorizationText) `
+      ('Live candidate flash requires exact one-run HIL authorization: ' +
+       $activeAuthorizationText)
+  Assert-Condition ($OperatorSafetyAttestation -ceq
+      $operatorSafetyAttestationText) `
+      ('Live candidate flash requires exact physical safety attestation: ' +
+       $operatorSafetyAttestationText)
+  Assert-Condition ([string]::IsNullOrWhiteSpace($RollbackAuthorization)) `
+      'Rollback authorization is not valid for candidate installation'
+} elseif ($RollbackOnly.IsPresent) {
+  Assert-Condition ($RollbackAuthorization -ceq $rollbackAuthorizationText) `
+      ('Rollback requires exact authorization: ' + $rollbackAuthorizationText)
+  Assert-Condition ([string]::IsNullOrWhiteSpace($HilAuthorization)) `
+      'HIL authorization is not valid for rollback-only mode'
+  Assert-Condition ([string]::IsNullOrWhiteSpace($OperatorSafetyAttestation)) `
+      'Candidate-install safety attestation is not valid for rollback-only mode'
+} else {
+  Assert-Condition ([string]::IsNullOrWhiteSpace($HilAuthorization) -and
+      [string]::IsNullOrWhiteSpace($RollbackAuthorization) -and
+      [string]::IsNullOrWhiteSpace($OperatorSafetyAttestation)) `
+      'DryRun must not carry a live authorization or safety attestation'
+}
+
+$evidence = Initialize-EvidenceDirectory $EvidenceDirectory
+$bundle = $null
+$roles = @()
+$espTool = $null
+$rollbackResult = $null
+$result = 'FAIL'
+$status = 'FAIL_STOP_BEFORE_CANDIDATE_WRITE'
+$failure = ''
+$oneRunAuthorized = $false
+$recordPath = ''
+
+try {
+  $bundle = Resolve-CandidateBundle
+  $roles = @($bundle.roles)
+  Add-AcceptedR18RollbackArtifacts $roles
+  Assert-CandidateBundlePinned $bundle $roles 'initial_preflight'
+  Write-DurableBytes (Join-Path $evidence 'input_latest.json') `
+      ([IO.File]::ReadAllBytes($bundle.latest_path))
+  Write-DurableBytes (Join-Path $evidence 'input_handoff.json') `
+      ([IO.File]::ReadAllBytes($bundle.handoff_path))
+  Write-DurableBytes (Join-Path $evidence 'input_candidate_manifest.json') `
+      ([IO.File]::ReadAllBytes($bundle.candidate_manifest_path))
+  Write-DurableBytes (Join-Path $evidence 'input_candidate_final_seal.json') `
+      ([IO.File]::ReadAllBytes($bundle.candidate_final_seal_path))
+
+  Write-DurableJson (Join-Path $evidence 'preflight.json') ([ordered]@{
+    schema_version=1;test_id=$testId;checked_utc=[DateTime]::UtcNow.ToString('o')
+    result='PASS';mode=if ($Execute.IsPresent) {'Execute'}else{'DryRun'}
+    rollback_only=$RollbackOnly.IsPresent
+    runtime_fail_diagnostics_enabled=$runtimeFailDiagnosticsEnabled
+    acceptance_eligible=$acceptanceEligible
+    acceptance_authorized=$false
+    one_run_hil_authorization_required=(-not $RollbackOnly.IsPresent)
+    deployment_authorized=$false
+    operator_safety_attestation_sha256=if ($Execute.IsPresent -and
+        -not $RollbackOnly.IsPresent) {
+      Get-TextSha256 $operatorSafetyAttestationText
+    } else {''}
+    candidate_manifest_sha256=$bundle.candidate_manifest_sha256
+    candidate_final_seal_sha256=$bundle.candidate_final_seal_sha256
+    exact_role_order=@('vehicle','ground')
+    exact_operation_order=@('vehicle_read_mac','vehicle_write','vehicle_verify',
+      'vehicle_reenumeration','ground_read_mac','ground_write','ground_verify',
+      'ground_reenumeration')
+    app_only=$true;offset='0x10000'
+    accepted_r18_rollback_available=$true
+  })
+
+  if (-not $Execute.IsPresent) {
+    $result = 'PASS'
+    $status = 'PASS_DRY_RUN_NO_PROCESS_DEVICE_OR_ESPTOOL_ACCESS'
+  } else {
+    Stage-AllArtifacts $roles
+    Assert-CandidateBundlePinned $bundle $roles 'after_staging'
+    $espTool = Resolve-AndStageEspTool
+    Invoke-EspToolVersion
+    $clients = Assert-NoCompetingClients
+    $vehicleIdentity = Wait-RoleIdentity $roles[0]
+    $groundIdentity = Wait-RoleIdentity $roles[1]
+    Write-DurableJson (Join-Path $evidence 'live_preflight.json') ([ordered]@{
+      schema_version=1;result='PASS';checked_utc=[DateTime]::UtcNow.ToString('o')
+      competing_clients=$clients;vehicle_identity=$vehicleIdentity
+      ground_identity=$groundIdentity;esptool=$espTool
+      operator_conditions=@('Pixhawk DISARMED','actuators isolated',
+        'both E220 antennas connected','Mission Planner and serial clients closed')
+    })
+    if ($RollbackOnly.IsPresent) {
+      $rollbackResult = Invoke-AcceptedR18Rollback $roles `
+          'operator-requested post-HIL accepted R18 restore'
+      Assert-Condition ([string]$rollbackResult.result -ceq 'PASS') `
+          'Accepted R18 rollback was not proven on both roles'
+      $result = 'PASS';$status = 'PASS_R18_ROLLBACK_COMPLETE'
+    } else {
+      Assert-CandidateBundlePinned $bundle $roles 'before_candidate_write'
+      Invoke-CandidateSequence $roles
+      Assert-CandidateBundlePinned $bundle $roles 'final_postflight'
+      Assert-ExactArray @($script:Operations | ForEach-Object {$_.label}) @(
+        'vehicle_read_mac','vehicle_write','vehicle_verify',
+        'vehicle_reenumeration','ground_read_mac','ground_write',
+        'ground_verify','ground_reenumeration') 'candidate operation order'
+      Assert-Condition ($script:SuccessfulCandidateWrites -eq 2 -and
+          @($roles | Where-Object {
+            -not $_.write_pass -or -not $_.verify_pass -or
+            -not $_.reenumeration_pass }).Count -eq 0) `
+          'Candidate was not written/read-back/re-enumerated on both roles'
+      $result = 'PASS'
+      $status = if ($runtimeFailDiagnosticsEnabled) {
+        'PASS_R19_DIAGNOSTIC_INSTALLED_HIL_ONLY'
+      } else {'PASS_CANDIDATE_INSTALLED_HIL_ONE_RUN_ONLY'}
+      $oneRunAuthorized = $true
+    }
+  }
+} catch {
+  $failure = $_.Exception.Message
+  if ($Execute.IsPresent -and -not $RollbackOnly.IsPresent -and
+      $script:CandidateWriteMayHaveChangedDevice -and $roles.Count -eq 2 -and
+      $null -ne $roles[0].rollback -and $null -ne $espTool) {
+    try {
+      $rollbackResult = Invoke-AcceptedR18Rollback $roles `
+          "automatic recovery after candidate failure: $failure"
+    } catch {
+      $rollbackResult = [pscustomobject][ordered]@{
+        required=$true;reason=$failure;result='FAIL'
+        max_attempts_per_role=$MaxRollbackAttempts
+        exception=$_.Exception.Message;roles=@();operations=@($script:RollbackOperations)
+      }
+    }
+    if ([string]$rollbackResult.result -ceq 'PASS') {
+      $status = 'FAIL_CANDIDATE_FLASH_R18_ROLLBACK_PASS'
+    } else {
+      $status = 'FAIL_ROLLBACK_UNPROVEN_POWER_OFF_REQUIRED'
+    }
+  } elseif ($RollbackOnly.IsPresent) {
+    if ($null -eq $rollbackResult) {
+      $rollbackResult = [pscustomobject][ordered]@{
+        required=$true;reason=$failure;result='FAIL'
+        max_attempts_per_role=$MaxRollbackAttempts
+        exception='rollback-only execution did not return a complete result'
+        roles=@();operations=@($script:RollbackOperations)
+      }
+    }
+    $status = 'FAIL_ROLLBACK_UNPROVEN_POWER_OFF_REQUIRED'
+  }
+}
+
+try {
+  $recordPath = Write-SealedEvidence $result $status $failure $bundle $roles `
+      $rollbackResult $oneRunAuthorized
+} catch {
+  $sealFailure = $_.Exception.Message
+  $evidenceRecovery = 'NOT_REQUIRED'
+  if ($Execute.IsPresent -and -not $RollbackOnly.IsPresent -and
+      $script:CandidateWriteMayHaveChangedDevice -and $roles.Count -eq 2 -and
+      $null -ne $espTool) {
+    try {
+      $emergencyRollback = Invoke-AcceptedR18Rollback $roles `
+          "automatic recovery after evidence-finalization failure: $sealFailure"
+      $evidenceRecovery = [string]$emergencyRollback.result
+    } catch {
+      $evidenceRecovery = 'FAIL: ' + $_.Exception.Message
+    }
+  }
+  try {
+    Write-DurableJson (Join-Path $evidence `
+        'evidence_finalization_recovery.json') ([ordered]@{
+      created_utc=[DateTime]::UtcNow.ToString('o')
+      finalization_failure=$sealFailure;primary_failure=$failure
+      accepted_r18_recovery=$evidenceRecovery
+      power_off_required=($evidenceRecovery -notin @('NOT_REQUIRED','PASS'))
+    })
+  } catch {}
+  throw ("R19 flash evidence finalization failed: $sealFailure; " +
+    "primary=$failure; accepted_r18_recovery=$evidenceRecovery")
+} finally {
+  foreach ($lock in @($script:StageLocks)) {
+    try { $lock.Dispose() } catch {}
+  }
+  $script:StageLocks.Clear()
+}
+
+if ($result -cne 'PASS') {
+  throw "R19 CANDIDATE FLASH STOP: status=$status failure=$failure evidence=$evidence"
+}
+$sealSha = Get-Sha256 (Join-Path $evidence 'final_seal.json')
+Write-Output ("$testId PASS status=$status evidence=$evidence " +
+    "record=$recordPath seal_sha256=$sealSha")

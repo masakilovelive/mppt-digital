@@ -1,0 +1,89 @@
+{
+  "schema": "vc-lora-r19-grant-cancellation-offline-firmware-summary-v1",
+  "result": "FOCUSED_OFFLINE_PASS_FULL_INTEGRATION_PENDING",
+  "hardware_interaction": false,
+  "com_opened": false,
+  "jtag_used": false,
+  "flash_written": false,
+  "network_used": false,
+  "deployment_authorized": false,
+  "source_freeze": true,
+  "regression_red": {
+    "behavior_log": "regression-red.log",
+    "checks": 15,
+    "failures": 1,
+    "wire_v2_missing_log": "cancel-wire-red.log",
+    "stop_record_missing_log": "stop-record-red.log"
+  },
+  "final_focused_runs": {
+    "vehicle_explicit_stop_v2": {
+      "executable": "cancel-final-vehicle.exe",
+      "cases": 15,
+      "all_exit_codes_zero": true,
+      "heartbeat_154ms_full_cycle_checks": 41,
+      "heartbeat_154ms_full_cycle_failures": 0
+    },
+    "vehicle_legacy_reservation_v1": {
+      "executable": "cancel-final-legacy.exe",
+      "cases": 5,
+      "all_exit_codes_zero": true
+    },
+    "ground_explicit_stop_v2": {
+      "executable": "cancel-ground-green.exe",
+      "cases": 5,
+      "all_exit_codes_zero": true
+    },
+    "stop_record_core_unit": {
+      "log": "stop-record-green.log",
+      "failures": 0,
+      "latest_added_safe_cancel_proof_assertions": "root_full_regression_pending"
+    }
+  },
+  "unchanged_contracts": {
+    "heartbeat_absolute_hard_deadline_ms": 2500,
+    "conservative_grant_reserve_ms": 5050,
+    "exclusive_hold_maximum_ms": 750,
+    "original_ground_grant_wait_ms": 500,
+    "original_vehicle_vcbn_window_ms": 500,
+    "original_device_prepare_timeout_ms": 8000,
+    "pc_overall_prepare_budget_ms": 15000,
+    "reservation_record_bytes": 512,
+    "reservation_record_schema": 1,
+    "reservation_record_reserved_word_31": 0
+  },
+  "cancellation_policy": {
+    "opt_in_macro": "VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS",
+    "macro_default": 0,
+    "legacy_bridge_wire_version": 1,
+    "explicit_stop_bridge_wire_version": 2,
+    "maximum_cancellations": 1,
+    "maximum_preparation_rounds": 2,
+    "zero_uart_required": true,
+    "old_cycle_retired_before_lease_release": true,
+    "old_lease_rejected_released": true,
+    "heartbeat_uses_fresh_data_lease": true,
+    "both_role_cancel_ack_and_peer_confirmation_required": true,
+    "fresh_nonce_and_strictly_new_cycle_token_generation_required": true,
+    "ground_actual_param_or_held_prohibits_cancellation": true,
+    "failed_controller_reset_permitted": false
+  },
+  "stop_record": {
+    "symbol": "vc_lora_r19_grant_reservation_stop_record",
+    "bytes": 128,
+    "schema": 1,
+    "magic": "0x52315354",
+    "initialized_flags": 1,
+    "fatal_first_stop_flags": 7,
+    "safe_cancel_first_stop_flags": 15,
+    "safe_cancel_is_global_runtime_failure": false,
+    "first_observation_immutable": true
+  },
+  "limitations": [
+    "Offline fake-platform proofs do not establish RF waveform delivery or real host USB timing.",
+    "The 550-ms service interval is a minimum service floor, not a guaranteed maximum RF tail.",
+    "The original 5050-ms conservative Grant reserve remains unchanged; no pending heartbeat is ignored to release an old Grant.",
+    "The 512-byte v1 journal retains its original states and events; it is not a complete cancellation-proof record.",
+    "The independent 128-byte record freezes the initiating local stop/cancellation predicates; subsequent faults may require other records.",
+    "Root full host regression, candidate metadata integration and sequential Vehicle/Ground Arduino compiles remain separate verification steps."
+  ]
+}

@@ -1,0 +1,297 @@
+{
+  "schema": "vc-lora-r19-read-comparison-capture-contract-v1",
+  "result": "PASS",
+  "checks": [
+    {
+      "name": "definitions-only-import-is-not-an-execution-grant",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "None-default-retains-legacy-without-new-ledger",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "active-plan-is-single-ground-pause-in-one-fixed-capture",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "selection-rejects-unknown-mode",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "selection-rejects-SyncOnly",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "selection-rejects-missing-AUX",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "selection-rejects-missing-diagnostic-ABI",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "selection-rejects-shorter-capture",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "selection-rejects-longer-capture",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "complete-memory-observation-validates-without-claiming-root-cause",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "evaluation-rejects-null-or-missing-mode-plan-without-throwing",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "evaluation-rejects-forged-plan-role",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "evaluation-rejects-forged-or-missing-plan-authority-flags",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-missing-begin",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-missing-end",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-missing-resumed-read",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-early-request",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-begin-before-request",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-too-short",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-too-long",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-resume-before-end",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-resume-after-measurement",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-read-call-during-pause",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-not-deadline",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-vehicle-paused",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-ground-claimed-continuous",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-missing-role",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-duplicate-role",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-missing-clock-domain",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-zero-frequency",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-noninteger-tick",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-stop-before-measurement-end",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-worker-stop-before-request",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-close-before-worker-stop",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-close-end-before-start",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-close-not-attempted",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-close-not-completed",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-close-error",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-vehicle-stop-before-measurement-end",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "observation-rejects-vehicle-close-error",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "evaluation-does-not-rewrite-close-failure-or-missing-end-evidence",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "CLI-mode-defaults-and-outer-forwarding-are-explicit",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "capture-keeps-one-owner-uses-pause-not-Close-or-Purge-as-intervention",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "outer-childscope-evaluation-cannot-clobber-live-safety-or-output-options",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "prepared-pin-missing-comparison-option-retains-None-only",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "prepared-pin-explicit-comparison-binding-and-no-authority-widening",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "execution-permit-legacy-None-does-not-authorize-pause",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "execution-permit-exact-new-mode-binding-is-required",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "execution-permit-pause-never-relaxes-freshness-or-rollback",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "real-snapshot-metadata-maps-lifecycle-pause-duration-and-unobserved-null",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "legacy-persistence-without-comparison-ledger-stays-compatible",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "persistence-retains-missing-pause-end-without-losing-raw",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "persistence-retains-close-failure-without-losing-raw",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-disposition-admits-requested-paused-Ground-with-exact-raw-roundtrip",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-disposition-preserves-None-continuous-baseline",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-disposition-rejects-wrong-reader-flags-or-corrupt-raw-coverage",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-disposition-binds-nested-owner-and-clock-to-actual-capture",
+      "passed": true,
+      "error": ""
+    }
+  ],
+  "passed_count": 57,
+  "failed_count": 0,
+  "hardware_interaction": false,
+  "child_execute_calls": 0,
+  "native_process_or_device_inspection": false,
+  "capture_source_sha256": "DAB1CF32CC1C82DC2A216718D460D3666F236239EAFDB24DE958A8421120F5B4"
+}

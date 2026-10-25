@@ -1,0 +1,136 @@
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\build_r19_candidate_artifacts.before.ps1" b/tools/build_r19_candidate_artifacts.ps1
+index f54da5d..20a2b0a 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\build_r19_candidate_artifacts.before.ps1"
++++ b/tools/build_r19_candidate_artifacts.ps1
+@@ -14,7 +14,8 @@ param(
+   [switch]$AuxReadinessDiagnostics,
+   [switch]$DiagnosticUsbFailureDiagnostics,
+   [switch]$GrantDiagnostics,
+-  [switch]$GrantReservationDiagnostics
++  [switch]$GrantReservationDiagnostics,
++  [switch]$GrantReservationStopDiagnostics
+ )
+ 
+ $ErrorActionPreference = 'Stop'
+@@ -29,13 +30,15 @@ $auxReadinessEnabled=$AuxReadinessDiagnostics.IsPresent
+ $diagnosticUsbFailureEnabled=$DiagnosticUsbFailureDiagnostics.IsPresent
+ $grantDiagnosticsEnabled=$GrantDiagnostics.IsPresent
+ $grantReservationEnabled=$GrantReservationDiagnostics.IsPresent
+-$outputLeaf = Get-R19CandidateOutputLeaf $runtimeFailDiagnosticsEnabled $TimedPathMode $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled
++$grantReservationStopEnabled=$GrantReservationStopDiagnostics.IsPresent
++$outputLeaf = Get-R19CandidateOutputLeaf $runtimeFailDiagnosticsEnabled $TimedPathMode $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled $grantReservationStopEnabled
+ $timedPathEnabled=$TimedPathMode-cne'Disabled'
+ $timedPathContract=Get-R19TimedPathCandidateContract $repo $TimedPathMode
+ $auxReadinessContract=Get-R19AuxReadinessCandidateContract $repo $auxReadinessEnabled
+ $diagnosticUsbFailureContract=Get-R19DiagnosticUsbFailureCandidateContract $repo $diagnosticUsbFailureEnabled
+ $grantDiagnosticContract=Get-R19GrantDiagnosticCandidateContract $repo $grantDiagnosticsEnabled
+-$grantReservationContract=if($grantReservationEnabled){Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true}else{$null}
++$grantReservationContract=if([bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)){Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true -CancellationEnabled $true}elseif($grantReservationEnabled){Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true}else{$null}
++$grantReservationStopContract=if($grantReservationStopEnabled){Get-R19GrantReservationStopCandidateContract -RepoRoot $repo -Enabled $true}else{$null}
+ $usbRoleCapabilities=$null
+ if($diagnosticUsbFailureEnabled){$usbRoleCapabilities=Get-R19UsbRoleCapabilities -RepoRoot $repo -Mode $TimedPathMode -Enabled $true}
+ $expectedOutputBase = Join-Path $repo `
+@@ -69,6 +72,9 @@ function Get-CompilerSection([object]$CompileResult, [string]$Name) {
+ }
+ 
+ function Add-OptionalUsbFailureMetadata([object]$Record) {
++  if([bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)){
++    Add-Member -InputObject $Record -NotePropertyName grant_reservation_stop_diagnostics -NotePropertyValue $grantReservationStopContract
++  }
+   if([bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)){
+     Add-Member -InputObject $Record -NotePropertyName grant_reservation_diagnostics -NotePropertyValue $grantReservationContract
+   }
+@@ -89,7 +95,7 @@ function Add-DiagnosticAbiMetadata([object]$Record) {
+   Add-Member -InputObject $Record -NotePropertyName 'runtime_stage_size_bytes' `
+     -NotePropertyValue 68
+   Add-Member -InputObject $Record -NotePropertyName 'reader_schema' `
+-    -NotePropertyValue $(if([bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)){'vc-lora-r19-runtime-stage-jtag-read-v10'}elseif([bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)){'vc-lora-r19-runtime-stage-jtag-read-v9'}elseif($diagnosticUsbFailureEnabled){'vc-lora-r19-runtime-stage-jtag-read-v8'}elseif($auxReadinessEnabled){'vc-lora-r19-runtime-stage-jtag-read-v7'}else{'vc-lora-r19-runtime-stage-jtag-read-v5'})
++    -NotePropertyValue $(if([bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)){'vc-lora-r19-runtime-stage-jtag-read-v11'}elseif([bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)){'vc-lora-r19-runtime-stage-jtag-read-v10'}elseif([bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)){'vc-lora-r19-runtime-stage-jtag-read-v9'}elseif($diagnosticUsbFailureEnabled){'vc-lora-r19-runtime-stage-jtag-read-v8'}elseif($auxReadinessEnabled){'vc-lora-r19-runtime-stage-jtag-read-v7'}else{'vc-lora-r19-runtime-stage-jtag-read-v5'})
+   Add-Member -InputObject $Record -NotePropertyName 'usb_extended_diagnostics' `
+     -NotePropertyValue (Get-R19DiagnosticExtensionContract $true)
+   Add-Member -InputObject $Record -NotePropertyName 'first_usb_failure_decoder' `
+@@ -164,6 +170,7 @@ function Copy-CandidateRolePackage([object]$Role) {
+   if([bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)){
+     foreach($header in @('r19_grant_reservation.hpp','r19_grant_reservation_record.hpp')){Copy-R19DurableFile (Join-Path $repo ('firmware/high_speed/'+$header)) (Join-Path $targetSketch ('high_speed/'+$header))}
+   }
++  if([bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)){Copy-R19DurableFile (Join-Path $repo 'firmware/high_speed/r19_grant_reservation_stop_record.hpp') (Join-Path $targetSketch 'high_speed/r19_grant_reservation_stop_record.hpp')}
+   return $targetSketch
+ }
+ 
+@@ -344,7 +351,7 @@ try {
+     [IO.FileShare]::None, 1, [IO.FileOptions]::WriteThrough)
+ 
+   $preservationBefore = Get-CurrentPreservationSnapshot
+-  $sourceBefore = Get-R19CandidateSourceSnapshot $repo $TimedPathMode $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled
++  $sourceBefore = Get-R19CandidateSourceSnapshot $repo $TimedPathMode $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled $grantReservationStopEnabled
+ 
+   $bridgePath = Join-Path $repo `
+     'firmware\phase6\vc_lora_phase6_bridge.hpp'
+@@ -486,6 +493,7 @@ try {
+     }
+     if($grantDiagnosticsEnabled){Copy-R19DurableFile (Join-Path $repo 'tools/read_r19_grant_diagnostic_record.ps1') (Join-Path $decoderEvidenceDir 'read_r19_grant_diagnostic_record.ps1')}
+     if($grantReservationEnabled){foreach($tool in @('read_r19_grant_reservation_record.ps1','r19_grant_reservation_contract.ps1','r19_grant_reservation_wire.ps1','r19_grant_reservation_workflow.ps1')){Copy-R19DurableFile (Join-Path $repo ('tools/'+$tool)) (Join-Path $decoderEvidenceDir $tool)}}
++    if($grantReservationStopEnabled){Copy-R19DurableFile (Join-Path $repo 'tools/read_r19_grant_reservation_stop_record.ps1') (Join-Path $decoderEvidenceDir 'read_r19_grant_reservation_stop_record.ps1')}
+     $hwcdcContractCheck = Join-Path $repo `
+       'tests\arduino_compile\check_hwcdc_tx_integrity_contract.ps1'
+     if (-not (Test-Path -LiteralPath $hwcdcContractCheck -PathType Leaf)) {
+@@ -529,7 +537,7 @@ try {
+   foreach ($role in $script:R19CandidateRoles) {
+     $stagedRoles[$role.role] = Copy-CandidateRolePackage $role
+   }
+-  $sourceAfterStage = Get-R19CandidateSourceSnapshot $repo $TimedPathMode $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled
++  $sourceAfterStage = Get-R19CandidateSourceSnapshot $repo $TimedPathMode $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled $grantReservationStopEnabled
+   Assert-R19SameSnapshot $sourceBefore $sourceAfterStage `
+     'Canonical R19 candidate source after staging'
+   [void](Assert-Preservation $preservationBefore 'candidate staging')
+@@ -547,6 +555,7 @@ try {
+   if($diagnosticUsbFailureEnabled){$extraFlags+=' -DVC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD=1'}
+   if($grantDiagnosticsEnabled){$extraFlags+=' -DVC_LORA_R19_GRANT_DIAGNOSTICS=1'}
+   if($grantReservationEnabled){$extraFlags+=' -DVC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS=1'}
++  if($grantReservationStopEnabled){$extraFlags+=' -DVC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS=1'}
+   $compileProperty = "compiler.cpp.extra_flags=$extraFlags"
+   foreach ($role in $script:R19CandidateRoles) {
+     $buildPath = Join-Path (Join-Path $tempRoot 'build') $role.role
+@@ -625,12 +634,12 @@ try {
+       $symbolBinding = Get-R19DiagnosticSymbolBinding `
+         (Join-Path $runRoot "evidence\build\$($role.role)\application.elf") `
+         (Join-Path $runRoot "evidence\build\$($role.role)\application.map") `
+-        ([string]$applicationRecord.sha256) $true $timedPathEnabled $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled
++        ([string]$applicationRecord.sha256) $true $timedPathEnabled $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled $grantReservationStopEnabled
+       Add-Member -InputObject $roleManifestRecord -NotePropertyName `
+         'runtime_diagnostic_symbols' -NotePropertyValue $symbolBinding
+     }
+     $roleManifestRecords.Add($roleManifestRecord)
+-    $sourceNow = Get-R19CandidateSourceSnapshot $repo $TimedPathMode $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled
++    $sourceNow = Get-R19CandidateSourceSnapshot $repo $TimedPathMode $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled $grantReservationStopEnabled
+     Assert-R19SameSnapshot $sourceBefore $sourceNow `
+       "Canonical source after $($role.name) compile"
+     [void](Assert-Preservation $preservationBefore `
+@@ -639,7 +648,7 @@ try {
+ 
+   $preservationAfter = Assert-Preservation $preservationBefore `
+     'candidate build completion'
+-  $sourceAfter = Get-R19CandidateSourceSnapshot $repo $TimedPathMode $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled
++  $sourceAfter = Get-R19CandidateSourceSnapshot $repo $TimedPathMode $auxReadinessEnabled $diagnosticUsbFailureEnabled $grantDiagnosticsEnabled $grantReservationEnabled $grantReservationStopEnabled
+   Assert-R19SameSnapshot $sourceBefore $sourceAfter `
+     'Canonical source at candidate build completion'
+ 
+@@ -707,8 +716,8 @@ try {
+       write_merged_image = $false
+     }
+     candidate_package = [pscustomobject][ordered]@{
+-      header_count = $script:R19CandidateHeaderNames.Count + $(if($timedPathEnabled){1}else{0}) + $(if($auxReadinessEnabled){1}else{0}) + $(if($diagnosticUsbFailureEnabled){1}else{0}) + $(if([bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)){1}else{0}) + $(if($grantReservationEnabled){2}else{0})
+-      header_names = @($script:R19CandidateHeaderNames)+@(if($timedPathEnabled){'r19_timed_path_record.hpp'})+@(if($auxReadinessEnabled){'r19_aux_readiness_record.hpp'})+@(if($diagnosticUsbFailureEnabled){'r19_diagnostic_usb_failure_record.hpp'})+@(if($grantDiagnosticsEnabled){'r19_grant_diagnostic_record.hpp'})+@(if($grantReservationEnabled){'r19_grant_reservation.hpp';'r19_grant_reservation_record.hpp'})
++      header_count = $script:R19CandidateHeaderNames.Count + $(if($timedPathEnabled){1}else{0}) + $(if($auxReadinessEnabled){1}else{0}) + $(if($diagnosticUsbFailureEnabled){1}else{0}) + $(if([bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)){1}else{0}) + $(if($grantReservationEnabled){2}else{0}) + $(if($grantReservationStopEnabled){1}else{0})
++      header_names = @($script:R19CandidateHeaderNames)+@(if($timedPathEnabled){'r19_timed_path_record.hpp'})+@(if($auxReadinessEnabled){'r19_aux_readiness_record.hpp'})+@(if($diagnosticUsbFailureEnabled){'r19_diagnostic_usb_failure_record.hpp'})+@(if($grantDiagnosticsEnabled){'r19_grant_diagnostic_record.hpp'})+@(if($grantReservationEnabled){'r19_grant_reservation.hpp';'r19_grant_reservation_record.hpp'})+@(if($grantReservationStopEnabled){'r19_grant_reservation_stop_record.hpp'})
+       canonical_tree_sha256 = $candidateHeaderTree
+       files = $candidateHeaderRecords
+     }
+@@ -916,6 +925,7 @@ try {
+   if($diagnosticUsbFailureEnabled){$verifyModeArguments.DiagnosticUsbFailureDiagnostics=$true}
+   if($grantDiagnosticsEnabled){$verifyModeArguments.GrantDiagnostics=$true}
+   if($grantReservationEnabled){$verifyModeArguments.GrantReservationDiagnostics=$true}
++  if($grantReservationStopEnabled){$verifyModeArguments.GrantReservationStopDiagnostics=$true}
+   & $verifier -RepoRoot $repo -ArtifactRoot $runRoot @verifyModeArguments |
+     Out-Null
+   if ($LASTEXITCODE -ne 0) {

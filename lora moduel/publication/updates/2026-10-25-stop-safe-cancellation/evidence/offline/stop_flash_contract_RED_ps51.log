@@ -1,0 +1,8 @@
+FAIL Flash has explicit default-off STOP128 switch
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_stop_flash_contract.ps1:8 
+char:87
++ ... ssage){$script:checks++;if(-not$Condition){throw ('FAIL '+$Message)}}
++                                                ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (FAIL Flash has ... STOP128 switch:String) [], RuntimeException
+    + FullyQualifiedErrorId : FAIL Flash has explicit default-off STOP128 switch
+ 

@@ -1,0 +1,42 @@
+{
+    "label":  "vehicle_r18_write_attempt_1",
+    "role":  "vehicle",
+    "kind":  "write",
+    "result":  "PASS",
+    "exit_code":  0,
+    "issues":  [
+
+               ],
+    "parsed_mac":  null,
+    "identity_before":  {
+                            "captured_utc":  "2026-10-25T08:35:42.7507844Z",
+                            "port":  "COM3",
+                            "name":  "USB シリアル デバイス (COM3)",
+                            "pnp_device_id":  "USB\\VID_303A\u0026PID_1001\u0026MI_00\\7\u00267131F6A\u00260\u00260000",
+                            "parent_device_id":  "USB\\VID_303A\u0026PID_1001\\90:70:69:11:81:A4",
+                            "status":  "OK",
+                            "config_manager_error_code":  0,
+                            "location_paths":  [
+                                                   "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USBMI(0)",
+                                                   "PCIROOT(0)#PCI(1400)#USBROOT(0)#USB(4)#USB(2)#USB(2)",
+                                                   "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USBMI(0)",
+                                                   "ACPI(_SB_)#ACPI(PCI0)#ACPI(XHC_)#ACPI(RHUB)#ACPI(HS04)#USB(2)#USB(2)"
+                                               ]
+                        },
+    "competing_client_gate":  {
+                                  "captured_utc":  "2026-10-25T08:35:41.9843200Z",
+                                  "trusted_launcher_ancestors":  [
+
+                                                                 ],
+                                  "known_serial_clients":  [
+
+                                                           ],
+                                  "explicit_com3_or_com6_refs":  [
+
+                                                                 ]
+                              },
+    "argv_path":  "rollback_02_vehicle_r18_write_attempt_1.argv.json",
+    "stdout_path":  "rollback_02_vehicle_r18_write_attempt_1.stdout.log",
+    "stderr_path":  "rollback_02_vehicle_r18_write_attempt_1.stderr.log",
+    "application_sha256":  "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52"
+}

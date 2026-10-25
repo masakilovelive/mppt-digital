@@ -1,0 +1,9 @@
+FAIL actualcaller resamplesclock AFTER snapshots; newlycompletedvalidfault isnot mislabeled futuretime
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_runtime_fault_preflight.ps
+1:9 char:79
++ ... ]$Message){$script:checks++;if(-not$Value){throw ('FAIL '+$Message)}}
++                                                ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (FAIL actualcall...eled futuretime:String) [], RuntimeException
+    + FullyQualifiedErrorId : FAIL actualcaller resamplesclock AFTER snapshots; newlycompletedvalidfault isnot mislabe 
+   led futuretime
+ 

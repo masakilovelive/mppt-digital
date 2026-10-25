@@ -1,0 +1,146 @@
+--- /dev/null
++++ b/tests/hil/check_r19_grant_reservation_stop_parent.ps1
+@@ -0,0 +1,143 @@
++[CmdletBinding()]
++param([string]$RepoRoot='',[string]$OutputDirectory='',[string]$ParentSourcePath='')
++Set-StrictMode -Version Latest
++$ErrorActionPreference='Stop'
++if(-not$RepoRoot){$RepoRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)}
++if(-not$OutputDirectory){$OutputDirectory=Join-Path $RepoRoot ('runs/validation/R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001/20261025T-fix/stop-parent-'+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffffffZ'))}
++if(-not$ParentSourcePath){$ParentSourcePath=Join-Path $RepoRoot 'tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1'}
++if(Test-Path -LiteralPath $OutputDirectory){throw 'Output directory must be fresh'}
++[void][IO.Directory]::CreateDirectory($OutputDirectory)
++$utf8=[Text.UTF8Encoding]::new($false,$true)
++$checks=0
++function Check([bool]$Value,[string]$Message){$script:checks++;if(-not$Value){throw $Message}}
++function Reject([scriptblock]$Action,[string]$Message){$failed=$false;try{&$Action}catch{$failed=$true};Check $failed $Message}
++function Sha([string]$Path){(Get-FileHash -LiteralPath $Path).Hash}
++$parentSourceSha256=Sha $ParentSourcePath
++$tokens=$null;$errors=$null
++$ast=[Management.Automation.Language.Parser]::ParseFile($ParentSourcePath,[ref]$tokens,[ref]$errors)
++Check (@($errors).Count-eq0) 'Actual parent parses'
++$functions=@($ast.EndBlock.Statements|Where-Object{$_-is[Management.Automation.Language.FunctionDefinitionAst]})
++Check (@($functions|Where-Object{$_.Name-ceq'Get-GrantReservationStopRawReplay'}).Count-eq1) 'Actual parent provides STOP128 raw replay'
++foreach($f in $functions){. ([scriptblock]::Create($f.Extent.Text))}
++. (Join-Path $RepoRoot 'tools/r19_grant_reservation_contract.ps1')
++. (Join-Path $RepoRoot 'tools/read_r19_grant_reservation_stop_record.ps1') -ImportOnly
++$repo=(Resolve-Path -LiteralPath $RepoRoot).Path
++$GrantReservationStopDiagnostics=$true
++$candidate=[pscustomobject]@{artifact_root=(Join-Path $OutputDirectory 'candidate')}
++$evidence=Join-Path $OutputDirectory 'stage_vehicle'
++[void][IO.Directory]::CreateDirectory($evidence)
++$sealedDecoder=Join-Path $candidate.artifact_root 'evidence/tools/read_r19_grant_reservation_stop_record.ps1'
++[void][IO.Directory]::CreateDirectory((Split-Path -Parent $sealedDecoder))
++[IO.File]::Copy((Join-Path $repo 'tools/read_r19_grant_reservation_stop_record.ps1'),$sealedDecoder,$false)
++[uint32[]]$words=[uint32[]]::new(32);$words[1]=2;$words[2]=0x52315354;$words[3]=1;$words[4]=2;$words[13]=1;$words[14]=128
++for($i=0;$i-lt4;$i++){$words[5+$i]=1+$i;$words[9+$i]=10+$i}
++[byte[]]$raw=[byte[]]::new(128);for($i=0;$i-lt32;$i++){[BitConverter]::GetBytes($words[$i]).CopyTo($raw,4*$i)}
++[uint32[]]$legacy=[uint32[]]::new(17);$legacy[5]=1;$legacy[6]=2;$legacy[7]=3;$legacy[8]=4
++$first=[pscustomobject]@{boot_instance=[uint32[]]@(10,11,12,13)}
++$contract=Get-R19GrantReservationStopCandidateContract -RepoRoot $repo -Enabled $true
++$symbols=[ordered]@{}
++foreach($entry in @(@('runtime_stage',68),@('endpoint_fifo',112),@('hwcdc_restart',128),@('ground_usb_commit',128),@('first_usb_failure',384),@('timed_path',512),@('aux_readiness',6144),@('diagnostic_usb_failure',256),@('grant_diagnostic',1024),@('grant_reservation',512))){$symbols[$entry[0]]=[pscustomobject]@{address=('0x{0:x8}'-f(0x3fca0000+0x4000*$symbols.Count));size_bytes=$entry[1]}}
++$symbol=[pscustomobject]@{name='vc_lora_r19_grant_reservation_stop_record';address='0x3fd00000';size_bytes=128;aligned_32_bit=$true}
++$symbols['grant_reservation_stop']=$symbol
++$manifest=[pscustomobject]@{grant_reservation_stop_diagnostics=$contract;canonical_source_snapshot=[pscustomobject]@{files=@([pscustomobject]@{path=$contract.decoder_path;sha256=$contract.decoder_sha256})}}
++$sealed=[pscustomobject]@{symbols=[pscustomobject]$symbols}
++$decoded=ConvertFrom-R19GrantReservationStopRecord -First $raw -Second $raw -ExpectedRole vehicle -ExpectedFingerprint ([uint32[]]@(1,2,3,4)) -ExpectedBoot ([uint32[]]@(10,11,12,13))
++$reads=@(1..20|ForEach-Object{[pscustomobject]@{record='legacy'}})
++foreach($sample in 1,2){$suffix=if($sample-eq1){'first'}else{'second'};$path=Join-Path $evidence ('grant_reservation_stop_'+$suffix+'.bin');[IO.File]::WriteAllBytes($path,$raw);$reads+=,[pscustomobject]@{record='grant_reservation_stop';sample=$sample;path=$path;size_bytes=128;sha256=Sha $path}}
++$summary=[pscustomobject]@{schema='vc-lora-r19-runtime-stage-jtag-read-v11';grant_reservation_stop_required=$true;reads=$reads;binding=[pscustomobject]@{grant_reservation_stop_diagnostics=$contract;grant_reservation_stop_address=$symbol.address;artifact=[pscustomobject]@{grant_reservation_stop_enabled=$true;grant_reservation_stop_diagnostics=$contract;symbols=[pscustomobject]$symbols}};decoded=[pscustomobject]@{grant_reservation_stop=$decoded}}
++function Replay {Get-GrantReservationStopRawReplay -Summary $summary -Role vehicle -EvidenceDirectory $evidence -Manifest $manifest -Sealed $sealed -LegacyWords $legacy -FirstUsbFailure $first}
++$result=Replay
++Check ($result.disposition-ceq'NONE'-and-not$result.runtime_failure_latched-and-not$result.cancellation_completion_proven) 'Actual replay keeps acquisition separate from stop/completion'
++Check ($result.raw_sha256-ceq(Sha $reads[20].path)) 'Actual replay uses saved bytes'
++$summary.reads=@($reads[0..20]);Reject {Replay} 'Missing second STOP read rejected';$summary.reads=$reads
++$summary.schema='vc-lora-r19-runtime-stage-jtag-read-v10';Reject {Replay} 'v10 cannot silently carry STOP';$summary.schema='vc-lora-r19-runtime-stage-jtag-read-v11'
++$GrantReservationStopDiagnostics=$false;Reject {Replay} 'STOP requires explicit mode';$GrantReservationStopDiagnostics=$true
++$summary.decoded.grant_reservation_stop.reason_name='WRONG';Reject {Replay} 'Decoded projection tamper rejected';$summary.decoded.grant_reservation_stop.reason_name='None'
++$raw[31]=1;[IO.File]::WriteAllBytes($reads[21].path,$raw);Reject {Replay} 'Raw mutation rejected before decoding';$raw[31]=0;[IO.File]::WriteAllBytes($reads[21].path,$raw)
++$symbol.address=$symbols.runtime_stage.address;$summary.binding.grant_reservation_stop_address=$symbol.address;Reject {Replay} 'STOP address overlap rejected';$symbol.address='0x3fd00000';$summary.binding.grant_reservation_stop_address=$symbol.address
++$manifest.grant_reservation_stop_diagnostics.decoder_sha256='0'*64;Reject {Replay} 'Decoder hash mismatch rejected';$manifest.grant_reservation_stop_diagnostics.decoder_sha256=Sha (Join-Path $repo $contract.decoder_path)
++Check ($null-ne(Replay)) 'Actual STOP replay restored after negative cases'
++$stage=@($functions|Where-Object{$_.Name-ceq'Get-StageProof'})[0]
++$assignment=@($stage.Body.FindAll({param($n)$n-is[Management.Automation.Language.AssignmentStatementAst]-and$n.Left.Extent.Text-ceq'$proven'-and$n.Right.Extent.Text.Contains('$runtimeStageValid')},$true))[0]
++Check ($assignment.Extent.Text.Contains('vc-lora-r19-runtime-stage-jtag-read-v11')) 'Actual final stage gate includes v11'
++$script:actualFinalGate=[scriptblock]::Create($assignment.Extent.Text)
++$gateAst=[Management.Automation.Language.Parser]::ParseFile((Join-Path $repo 'tests/hil/check_r19_grant_reservation_stage_final_gate.ps1'),[ref]$tokens,[ref]$errors)
++$gateFunction=@($gateAst.EndBlock.Statements|Where-Object{$_-is[Management.Automation.Language.FunctionDefinitionAst]-and$_.Name-ceq'Invoke-ActualFinalGate'})[0]
++. ([scriptblock]::Create($gateFunction.Extent.Text))
++Check (Invoke-ActualFinalGate 'vc-lora-r19-runtime-stage-jtag-read-v11').proven 'Actual v11 final gate passes only opted-in complete evidence'
++Check (-not(Invoke-ActualFinalGate 'vc-lora-r19-runtime-stage-jtag-read-v10').proven) 'STOP mode refuses v10 final gate downgrade'
++foreach($mutation in @('child-exit','reader-result','reader-mode','hardware-declaration','artifact-id','bound-role','address','probe-location','probe-identity','decoded-role','runtime-record','fifo-record','raw-replay','boundary','com-open','flash-written','target-restart','paired-read','cleanup-attempt','cleanup-proof','halted','native-termination')){
++  Check (-not(Invoke-ActualFinalGate 'vc-lora-r19-runtime-stage-jtag-read-v11' $mutation).proven) ('v11 retains actual final gate conjunct '+$mutation)
++}
++$GrantReservationStopDiagnostics=$false
++Check (Invoke-ActualFinalGate 'vc-lora-r19-runtime-stage-jtag-read-v10').proven 'Legacy v10 final gate remains supported'
++Check (-not(Invoke-ActualFinalGate 'vc-lora-r19-runtime-stage-jtag-read-v11').proven) 'Legacy mode refuses undeclared v11'
++$GrantReservationStopDiagnostics=$true
++. (Join-Path $repo 'tools/r19_timed_path_outer.ps1')
++Check ((Get-Command Get-R19TimedPathOuterToolPaths).Parameters.ContainsKey('GrantReservationStopDiagnostics')) 'Actual outer exposes explicit STOP capability'
++. (Join-Path $repo 'tools/r19_timed_path_acquisition.ps1') -ImportOnly
++foreach($name in @('Test-R19TimedPathExecutionPermit','Assert-R19GrantCaptureMetadata','Get-R19TimedPathCapturePlan')){Check ((Get-Command $name).Parameters.ContainsKey('GrantReservationStopDiagnostics')) ('Actual acquisition exposes STOP capability '+$name)}
++function Clone($Value){$Value|ConvertTo-Json -Depth 45|ConvertFrom-Json}
++$options=@{AuxReadinessDiagnostics=$true;DiagnosticUsbFailureDiagnostics=$true;ParamListDiagnostics=$true;GrantDiagnostics=$true;GrantReservationDiagnostics=$true}
++$oldPaths=@(Get-R19TimedPathOuterToolPaths @options)
++$newPaths=@(Get-R19TimedPathOuterToolPaths @options -GrantReservationStopDiagnostics $true)
++Check ($oldPaths.Count-eq26-and$newPaths.Count-eq27-and@($newPaths|Where-Object{$_-ceq$contract.decoder_path}).Count-eq1) 'Legacy26 tools and opted-in27 tools remain exact'
++Reject {Get-R19TimedPathOuterToolPaths -GrantReservationStopDiagnostics $true} 'STOP cannot bypass reservation prerequisites'
++$baseContract=Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true -CancellationEnabled $true
++$roleCapability=Get-R19UsbRoleCapabilities -RepoRoot $repo -Enabled $true
++$pin=[pscustomobject]@{schema='vc-lora-r19-timed-path-prepared-run-v1';mode='ExplicitHostArm';candidate_id='stop-test';latest_sha256=('A'*64);latest_path='runs/candidates/R19-GRANT-RESERVATION-STOP-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/latest.json';capture_seconds=40;product_budget_ms=106;acceptance_authorized=$false;deployment_authorized=$false;live_authorization_granted=$false;vehicle_runtime_stage_address='0x3fcad7f0';ground_runtime_stage_address='0x3fca4b68';aux_readiness_diagnostics=$true;diagnostic_usb_failure_diagnostics=$true;param_list_diagnostics=$true;grant_diagnostics=$true;grant_reservation_diagnostics=$true;grant_reservation_stop_diagnostics=$true;grant_reservation_contract=$baseContract;grant_reservation_stop_contract=$contract;reservation_prepare_seconds=15;tools=@($newPaths|ForEach-Object{[pscustomobject]@{path=$_;sha256=('B'*64)}});usb_role_capabilities=$roleCapability}
++function CheckPin($Value){Assert-R19TimedPathPreparedContract -Pin $Value -Mode ExplicitHostArm @options -GrantReservationStopDiagnostics $true -RepoRoot $repo}
++Check ($null-ne(CheckPin $pin)) 'Actual prepared STOP contract accepts exact27 tools, v11,15+40/106 and no authority'
++foreach($mutation in @('missing-stop','stop-string','stop-case','missing-contract','v1-base','wrong-decoder','old-leaf','old-tools','extra-tool','duration','authority')){
++  $bad=Clone $pin
++  switch($mutation){
++    'missing-stop'{$bad.PSObject.Properties.Remove('grant_reservation_stop_diagnostics')}
++    'stop-string'{$bad.grant_reservation_stop_diagnostics='true'}
++    'stop-case'{$bad.PSObject.Properties.Remove('grant_reservation_stop_diagnostics');$bad|Add-Member NoteProperty Grant_Reservation_Stop_Diagnostics $true}
++    'missing-contract'{$bad.PSObject.Properties.Remove('grant_reservation_stop_contract')}
++    'v1-base'{$bad.grant_reservation_contract=Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true}
++    'wrong-decoder'{$bad.grant_reservation_stop_contract.decoder_sha256='0'*64}
++    'old-leaf'{$bad.latest_path='runs/candidates/R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/latest.json'}
++    'old-tools'{$bad.tools=@($bad.tools|Where-Object{$_.path-cne$contract.decoder_path})}
++    'extra-tool'{$bad.tools+=,[pscustomobject]@{path='tools/foreign.ps1';sha256=('B'*64)}}
++    'duration'{$bad.reservation_prepare_seconds=16}
++    'authority'{$bad.live_authorization_granted=$true}
++  }
++  Reject {CheckPin $bad} ('Prepared STOP rejects '+$mutation)
++}
++Reject {Assert-R19TimedPathPreparedContract -Pin $pin -Mode ExplicitHostArm @options -RepoRoot $repo} 'Prepared STOP cannot downcast to legacy26 mode'
++$commands=@(1..18|ForEach-Object{[pscustomobject]@{started_ticks=$null}})
++$capture=[pscustomobject]@{schema='vc-lora-r19-timed-path-capture-v1';result='CAPTURE_COMPLETE_OBSERVATIONS_ONLY';candidate_id='stop-test';mode='ExplicitHostArm';capture_seconds=40;cleanup_proven=$true;hardware_interaction=$true;acceptance_eligible=$false;deployment_authorized=$false;clock_domain_id='OFFLINE-FIXTURE';frequency='1000';roles=@([pscustomobject]@{role='vehicle';writes=@()},[pscustomobject]@{role='ground';writes=@()});serial_write_calls=0;param_list_diagnostics_enabled=$true;param_list_diagnostics=[pscustomobject]@{schema='vc-lora-r19-param-list-diagnostics-v1';target_count=932;deadline_us='30000000';acceptance_eligible=$false;deployment_authorized=$false;clock_domain_id='OFFLINE-FIXTURE';frequency='1000';request_attempts=0;request=$null;snapshot_30s=[pscustomobject]@{};final=[pscustomobject]@{}};grant_reservation_diagnostics=$true;grant_reservation_contract=$baseContract;grant_reservation_stop_diagnostics=$true;grant_reservation_stop_contract=$contract;grant_reservation_workflow=[pscustomobject]@{cancellation_enabled=$true;wire_version=2;commands=$commands};reservation_prepare_seconds=15;measurement_seconds=40}
++$step=[pscustomobject]@{exit_code=0;timed_out=$false;termination_proven=$true;process_tree_termination_proven=$true}
++function CaptureProof($Value){Get-R19TimedPathOuterCaptureDisposition -Summary $Value -Step $step -CandidateId stop-test -Mode ExplicitHostArm -ParamListDiagnostics $true -GrantReservationDiagnostics $true -GrantReservationContract $baseContract -GrantReservationStopDiagnostics $true -GrantReservationStopContract $contract -RepoRoot $repo}
++Check (CaptureProof $capture).acceptable 'Actual outer admits bounded18-command v2 observations without claiming protocol completion'
++foreach($mutation in @('nineteenth-command','untyped-flag','v1-workflow','missing-contract','mismatch-contract','extra-attempt','counter-mismatch')){
++  $bad=Clone $capture
++  switch($mutation){
++    'nineteenth-command'{$bad.grant_reservation_workflow.commands+=,[pscustomobject]@{started_ticks=$null}}
++    'untyped-flag'{$bad.grant_reservation_stop_diagnostics='true'}
++    'v1-workflow'{$bad.grant_reservation_workflow.wire_version=1}
++    'missing-contract'{$bad.PSObject.Properties.Remove('grant_reservation_stop_contract')}
++    'mismatch-contract'{$bad.grant_reservation_stop_contract.record_schema=2}
++    'extra-attempt'{$bad.param_list_diagnostics.request_attempts=2}
++    'counter-mismatch'{$bad.serial_write_calls=1}
++  }
++  Check (-not(CaptureProof $bad).acceptable) ('Actual outer rejects '+$mutation)
++}
++$legacyCapture=Clone $capture;$legacyCapture.PSObject.Properties.Remove('grant_reservation_stop_diagnostics');$legacyCapture.PSObject.Properties.Remove('grant_reservation_stop_contract');$legacyCapture.grant_reservation_workflow.commands=@($commands[0..7]);$legacyCapture.grant_reservation_contract=Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true
++Check (Get-R19TimedPathOuterCaptureDisposition -Summary $legacyCapture -Step $step -CandidateId stop-test -Mode ExplicitHostArm -ParamListDiagnostics $true -GrantReservationDiagnostics $true -GrantReservationContract $legacyCapture.grant_reservation_contract).acceptable 'Legacy eight-command v1 acquisition remains accepted'
++$legacyCapture.grant_reservation_workflow.commands=$commands
++Check (-not(Get-R19TimedPathOuterCaptureDisposition -Summary $legacyCapture -Step $step -CandidateId stop-test -Mode ExplicitHostArm -ParamListDiagnostics $true -GrantReservationDiagnostics $true -GrantReservationContract $legacyCapture.grant_reservation_contract).acceptable) 'Legacy v1 does not inherit18-command bound'
++$candidate|Add-Member NoteProperty artifact_id 'STOP-SYNTHETIC-NOT-HARDWARE'
++$stageDirectories=@{vehicle=$evidence;ground=$evidence}
++$tooling=[pscustomobject]@{nm_executable='OFFLINE-NM';nm_sha256=('A'*64);executable='OFFLINE-OPENOCD';executable_sha256=('B'*64);interface_config='OFFLINE-INTERFACE';interface_config_sha256=('C'*64);target_config='OFFLINE-TARGET';target_config_sha256=('D'*64);scripts_root='OFFLINE-SCRIPTS'}
++$GrantReservationStopDiagnostics=$true
++$stageArguments=@(Get-StageArguments vehicle '0x3fca0000' 'OFFLINE-SERIAL' 'OFFLINE-LOCATION' $sealedDecoder $tooling)
++Check (@($stageArguments|Where-Object{$_-ceq'-GrantReservationStopDiagnostics'}).Count-eq1) 'Actual parent stage argument builder forwards explicit STOP exactly once'
++$GrantReservationStopDiagnostics=$false
++$stageArguments=@(Get-StageArguments vehicle '0x3fca0000' 'OFFLINE-SERIAL' 'OFFLINE-LOCATION' $sealedDecoder $tooling)
++Check (@($stageArguments|Where-Object{$_-ceq'-GrantReservationStopDiagnostics'}).Count-eq0) 'Actual legacy stage arguments do not activate STOP'
++Check ((Sha $ParentSourcePath)-ceq$parentSourceSha256) 'Actual parent source remains unchanged throughout fixture replay'
++$record=[ordered]@{schema='vc-lora-r19-stop-parent-regression-v1';result='PASS';checks=$checks;parent_sha256=$parentSourceSha256;hardware_interaction=$false;production_main_executed=$false;decoder_replay='actual saved raw and source-bound decoder';legacy_v10_not_redefined=$true;full_parent_main_replay_proven=$false}
++[IO.File]::WriteAllText((Join-Path $OutputDirectory 'summary.json'),($record|ConvertTo-Json -Depth 8),$utf8)
++Write-Output ('STOP_PARENT PASS checks='+$checks)

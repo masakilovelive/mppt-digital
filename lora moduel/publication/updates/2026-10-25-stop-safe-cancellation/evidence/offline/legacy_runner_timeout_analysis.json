@@ -1,0 +1,56 @@
+{
+  "schema": "vc-lora-r19-legacy-offline-runner-timeout-analysis-v1",
+  "result": "FINITE_STANDALONE_PASS_TEST_EXCEEDS_60_SECONDS_UNDER_RECORDED_BUILD_LOAD",
+  "test_path": "tests/hil/check_r19_runtime_fail_diagnostic_hil_runner_contract.ps1",
+  "test_source_before_sha256": "6DCAEFC015F21630033477B77C83AFDFAA1B03C5EF9B5FE9CDEDAE733B067AA0",
+  "test_source_after_sha256": "6DCAEFC015F21630033477B77C83AFDFAA1B03C5EF9B5FE9CDEDAE733B067AA0",
+  "test_source_changed": false,
+  "production_source_changed": false,
+  "test_timeout_changed": false,
+  "hardware_interaction": false,
+  "process_scan_performed": false,
+  "process_kill_performed": false,
+  "parallel_ctest_started": false,
+  "standalone": {
+    "shell": "Windows PowerShell 5.1",
+    "elapsed_ms": 88237.2739,
+    "exit_code": 0,
+    "maximum_authorized_measurement_seconds": 180,
+    "actual_test_and_assertions_unchanged": true,
+    "log": "legacy_runner_profile.log",
+    "profile": "legacy_runner_profile/profile.json",
+    "complete_outputs": [
+      "Recorded R19A replay PASS: unchanged 809/2709 bytes; 32-byte prefix remains incomplete; 8 mutations rejected.",
+      "Recorded R19F boundary replay PASS: unchanged 441/2646 bytes; leading31 uniquely seq2 CRC-derived; terminal32 remains incomplete; 14 unsafe mutations rejected.",
+      "R19 runtime-fail diagnostic PASS evidence=.../R19-RUNTIME-FAIL-DIAGNOSTIC-RUNNER-CONTRACT-001/20261025T080241363Z-9e8c4ef3",
+      "R19-RUNTIME-FAIL-DIAGNOSTIC-RUNNER-CONTRACT-001 PASS"
+    ],
+    "instrumentation_limitation": "Narrow line breakpoints did not bind/fire in this invocation, so profile.events is empty. Total elapsed and completion are measured, but no trustworthy per-stage elapsed values are claimed."
+  },
+  "static_stage_analysis": {
+    "before_last_timeout_output": "R19A fixed-byte replay and 8 negative mutations, test lines227..270",
+    "immediately_after_last_timeout_output": "R19F boundary replay and14 mutations, test lines323..412",
+    "bounded_crc_work": "Get-R19FailureBoundaryPartialContract executes all256 candidate sequence values. Each candidate performs60 payload/header CRC updates plus one extra CRC update. It is invoked for the positive and negative cases. The test also independently enumerates all256 sequences once.",
+    "expected_full_sweep_cases_from_fixed_fixtures": [
+      "positive boundary proof",
+      "leading_unknown_noise",
+      "leading_crc",
+      "terminal_sequence",
+      "terminal_role",
+      "terminal_unknown_message",
+      "tail_read_exception",
+      "tail_progress"
+    ],
+    "estimated_crc_primitive_calls_in_these_eight_sweeps_plus_independent_sweep": 140544,
+    "estimate_scope": "Static algorithm operation count, not an observed CPU-time measurement. Additional CRC/parser work and following complete-frame checks are not included.",
+    "remaining_stages": [
+      "Actual production runner -OfflineSelfTest with isolated generated artifact-chain fixtures and fake PSCustomObject serial readers",
+      "Actual production runner child -OfflineSelfTest -OfflineCaptureFailureProbe with deliberate fake serial-close/persistence failures"
+    ],
+    "child_completed": true,
+    "infinite_wait_observed": false,
+    "safety_basis": "The unchanged test verifies hardware_interaction=false, zero serial writes and false COM/CIM/PnP/process/firmware/E220 external-action flags in both the normal and injected-failure offline outputs. The explicit live branch is not selected."
+  },
+  "conclusion": "The60s CTest event is an offline test-process allowance failure, not a106ms/500ms transport failure or a live-device stall. Recorded build load is a plausible contributor; causation by that load is not yet proven. No fixture assertion or timeout was weakened.",
+  "next_step": "Root will wait for Arduino completion, then rerun the same unchanged test under the existing60s CTest limit in isolation. No additional implementation or repeat physical trial is authorized by this analysis."
+}

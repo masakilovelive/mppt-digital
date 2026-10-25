@@ -1,0 +1,124 @@
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\r19_candidate_artifact_common.before.ps1" b/tools/r19_candidate_artifact_common.ps1
+index 7c4df55..77dfe74 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\r19_candidate_artifact_common.before.ps1"
++++ b/tools/r19_candidate_artifact_common.ps1
+@@ -89,10 +89,12 @@ if(Test-Path -LiteralPath $r19RoleContractModule -PathType Leaf){. $r19RoleContr
+ $r19ReservationContractModule=Join-Path $PSScriptRoot 'r19_grant_reservation_contract.ps1'
+ if(Test-Path -LiteralPath $r19ReservationContractModule -PathType Leaf){. $r19ReservationContractModule}
+ 
+-function Get-R19CandidateOutputLeaf([bool]$RuntimeFailDiagnostics,[string]$TimedPathMode='Disabled',[bool]$AuxReadinessDiagnostics=$false,[bool]$DiagnosticUsbFailureDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false) {
++function Get-R19CandidateOutputLeaf([bool]$RuntimeFailDiagnostics,[string]$TimedPathMode='Disabled',[bool]$AuxReadinessDiagnostics=$false,[bool]$DiagnosticUsbFailureDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false,[bool]$GrantReservationStopDiagnostics=$false) {
+   if($TimedPathMode -cnotin @('Disabled','SyncOnly','ExplicitHostArm')){throw 'Unknown timed path mode'}
++  if($GrantReservationStopDiagnostics-and-not$GrantReservationDiagnostics){throw 'Reservation cancellation/stop diagnostics require reservation diagnostics'}
+   if($GrantReservationDiagnostics){
+     if(-not$RuntimeFailDiagnostics-or$TimedPathMode-cne'ExplicitHostArm'-or-not$AuxReadinessDiagnostics-or-not$DiagnosticUsbFailureDiagnostics-or-not$GrantDiagnostics){throw 'Grant reservation requires full Grant diagnostic ExplicitHostArm mode'}
++    if($GrantReservationStopDiagnostics){return 'R19-GRANT-RESERVATION-STOP-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001'}
+     return 'R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001'
+   }
+   if($GrantDiagnostics){
+@@ -158,8 +160,8 @@ function Get-R19GrantDiagnosticCandidateContract([string]$RepoRoot,[bool]$Enable
+   }
+ }
+ 
+-function Get-R19CandidateCompileProperty([bool]$RuntimeFailDiagnostics,[string]$TimedPathMode='Disabled',[bool]$AuxReadinessDiagnostics=$false,[bool]$DiagnosticUsbFailureDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false) {
+-  [void](Get-R19CandidateOutputLeaf $RuntimeFailDiagnostics $TimedPathMode $AuxReadinessDiagnostics $DiagnosticUsbFailureDiagnostics $GrantDiagnostics $GrantReservationDiagnostics)
++function Get-R19CandidateCompileProperty([bool]$RuntimeFailDiagnostics,[string]$TimedPathMode='Disabled',[bool]$AuxReadinessDiagnostics=$false,[bool]$DiagnosticUsbFailureDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false,[bool]$GrantReservationStopDiagnostics=$false) {
++  [void](Get-R19CandidateOutputLeaf $RuntimeFailDiagnostics $TimedPathMode $AuxReadinessDiagnostics $DiagnosticUsbFailureDiagnostics $GrantDiagnostics $GrantReservationDiagnostics $GrantReservationStopDiagnostics)
+   $flags='compiler.cpp.extra_flags=-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1'
+   if($RuntimeFailDiagnostics){$flags+=' -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1'}
+   if($TimedPathMode-cne'Disabled'){
+@@ -170,6 +172,7 @@ function Get-R19CandidateCompileProperty([bool]$RuntimeFailDiagnostics,[string]$
+   if($DiagnosticUsbFailureDiagnostics){$flags+=' -DVC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD=1'}
+   if($GrantDiagnostics){$flags+=' -DVC_LORA_R19_GRANT_DIAGNOSTICS=1'}
+   if($GrantReservationDiagnostics){$flags+=' -DVC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS=1'}
++  if($GrantReservationStopDiagnostics){$flags+=' -DVC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS=1'}
+   return $flags
+ }
+ 
+@@ -213,7 +216,8 @@ function Get-R19FirstFailureDecoderBinding([string]$RepoRoot) {
+ 
+ function Get-R19ElfDiagnosticSymbols([string]$ElfPath,
+     [bool]$RequireExtensions = $true,
+-    [bool]$RequireFirstFailure = $false,[bool]$RequireTimedPath=$false,[bool]$RequireAuxReadiness=$false,[bool]$RequireDiagnosticUsbFailure=$false,[bool]$RequireGrantDiagnostics=$false,[bool]$RequireGrantReservation=$false) {
++    [bool]$RequireFirstFailure = $false,[bool]$RequireTimedPath=$false,[bool]$RequireAuxReadiness=$false,[bool]$RequireDiagnosticUsbFailure=$false,[bool]$RequireGrantDiagnostics=$false,[bool]$RequireGrantReservation=$false,[bool]$RequireGrantReservationStop=$false) {
++  if($RequireGrantReservationStop-and-not$RequireGrantReservation){throw 'Reservation stop record requires reservation diagnostic ABI'}
+   if($RequireGrantReservation-and-not$RequireGrantDiagnostics){throw 'Grant reservation record requires Grant diagnostic ABI'}
+   if($RequireGrantDiagnostics-and-not$RequireDiagnosticUsbFailure){throw 'Grant record requires diagnostic USB failure ABI'}
+   if($RequireDiagnosticUsbFailure-and-not$RequireAuxReadiness){throw 'Diagnostic USB failure record requires AUX readiness ABI'}
+@@ -251,6 +255,7 @@ function Get-R19ElfDiagnosticSymbols([string]$ElfPath,
+     diagnostic_usb_failure = @('vc_lora_r19_diagnostic_usb_failure_record', 256)
+     grant_diagnostic = @('vc_lora_r19_grant_diagnostic_record', 1024)
+     grant_reservation = @('vc_lora_r19_grant_reservation_record', 512)
++    grant_reservation_stop = @('vc_lora_r19_grant_reservation_stop_record', 128)
+   }
+   $keysByName = [Collections.Generic.Dictionary[string,string]]::new(
+     [StringComparer]::Ordinal)
+@@ -343,7 +348,8 @@ function Get-R19ElfDiagnosticSymbols([string]$ElfPath,
+       ($RequireAuxReadiness -and $key -ceq 'aux_readiness') -or
+       ($RequireDiagnosticUsbFailure -and $key -ceq 'diagnostic_usb_failure') -or
+       ($RequireGrantDiagnostics -and $key -ceq 'grant_diagnostic') -or
+-      ($RequireGrantReservation -and $key -ceq 'grant_reservation')
++      ($RequireGrantReservation -and $key -ceq 'grant_reservation') -or
++      ($RequireGrantReservationStop -and $key -ceq 'grant_reservation_stop')
+     if (-not $found.ContainsKey($key)) {
+       if ($required) {
+         throw "Diagnostic symbol is absent from the sealed ELF: $($definitions[$key][0])"
+@@ -371,13 +377,13 @@ function Get-R19ElfDiagnosticSymbols([string]$ElfPath,
+ 
+ function Get-R19DiagnosticSymbolBinding([string]$ElfPath,
+     [string]$MapPath, [string]$ApplicationSha256,
+-    [bool]$RequireFirstFailure = $false,[bool]$RequireTimedPath=$false,[bool]$RequireAuxReadiness=$false,[bool]$RequireDiagnosticUsbFailure=$false,[bool]$RequireGrantDiagnostics=$false,[bool]$RequireGrantReservation=$false) {
++    [bool]$RequireFirstFailure = $false,[bool]$RequireTimedPath=$false,[bool]$RequireAuxReadiness=$false,[bool]$RequireDiagnosticUsbFailure=$false,[bool]$RequireGrantDiagnostics=$false,[bool]$RequireGrantReservation=$false,[bool]$RequireGrantReservationStop=$false) {
+   return [pscustomobject][ordered]@{
+     schema = 'vc-lora-r19-runtime-diagnostic-symbols-v1'
+     elf_sha256 = Get-R19Sha256 $ElfPath
+     map_sha256 = Get-R19Sha256 $MapPath
+     application_sha256 = $ApplicationSha256
+-    symbols = Get-R19ElfDiagnosticSymbols $ElfPath $true $RequireFirstFailure $RequireTimedPath $RequireAuxReadiness $RequireDiagnosticUsbFailure $RequireGrantDiagnostics $RequireGrantReservation
++    symbols = Get-R19ElfDiagnosticSymbols $ElfPath $true $RequireFirstFailure $RequireTimedPath $RequireAuxReadiness $RequireDiagnosticUsbFailure $RequireGrantDiagnostics $RequireGrantReservation $RequireGrantReservationStop
+   }
+ }
+ 
+@@ -704,7 +710,8 @@ function Assert-R19SameSnapshot([object]$Expected, [object]$Actual,
+   }
+ }
+ 
+-function Get-R19CandidateSourceFiles([string]$RepoRoot,[string]$TimedPathMode='Disabled',[bool]$AuxReadinessDiagnostics=$false,[bool]$DiagnosticUsbFailureDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false) {
++function Get-R19CandidateSourceFiles([string]$RepoRoot,[string]$TimedPathMode='Disabled',[bool]$AuxReadinessDiagnostics=$false,[bool]$DiagnosticUsbFailureDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false,[bool]$GrantReservationStopDiagnostics=$false) {
++  if($GrantReservationStopDiagnostics-and-not$GrantReservationDiagnostics){throw 'Reservation stop source selection requires reservation diagnostics'}
+   if($GrantReservationDiagnostics-and-not$GrantDiagnostics){throw 'Grant reservation source selection requires Grant diagnostics'}
+   if($GrantDiagnostics-and(-not$DiagnosticUsbFailureDiagnostics-or-not$AuxReadinessDiagnostics-or$TimedPathMode-cne'ExplicitHostArm')){throw 'Grant source selection requires full diagnostic USB AUX ExplicitHostArm mode'}
+   if($DiagnosticUsbFailureDiagnostics-and(-not$AuxReadinessDiagnostics-or$TimedPathMode-cne'ExplicitHostArm')){throw 'Diagnostic USB failure source selection requires AUX ExplicitHostArm'}
+@@ -729,7 +736,7 @@ function Get-R19CandidateSourceFiles([string]$RepoRoot,[string]$TimedPathMode='D
+   $candidateRoot = Join-Path $repo 'firmware\high_speed'
+   $actualNames = @(Get-ChildItem -LiteralPath $candidateRoot -File `
+     -Filter '*.hpp' | ForEach-Object { $_.Name } | Sort-Object)
+-  $extraHeaders=@('r19_timed_path_record.hpp','r19_aux_readiness_record.hpp','r19_diagnostic_usb_failure_record.hpp','r19_grant_diagnostic_record.hpp','r19_grant_reservation.hpp','r19_grant_reservation_record.hpp')
++  $extraHeaders=@('r19_timed_path_record.hpp','r19_aux_readiness_record.hpp','r19_diagnostic_usb_failure_record.hpp','r19_grant_diagnostic_record.hpp','r19_grant_reservation.hpp','r19_grant_reservation_record.hpp','r19_grant_reservation_stop_record.hpp')
+   $expectedNames = @(@($script:R19CandidateHeaderNames)+@($extraHeaders|Where-Object{Test-Path (Join-Path $candidateRoot $_)}) | Sort-Object)
+   if (@(Compare-Object -ReferenceObject $expectedNames `
+       -DifferenceObject $actualNames).Count -ne 0) {
+@@ -764,6 +771,11 @@ function Get-R19CandidateSourceFiles([string]$RepoRoot,[string]$TimedPathMode='D
+       $files.Add((Get-Item -LiteralPath (Join-Path $repo $relative) -ErrorAction Stop))
+     }
+   }
++  if($GrantReservationStopDiagnostics){
++    foreach($relative in @('firmware/high_speed/r19_grant_reservation_stop_record.hpp','tools/read_r19_grant_reservation_stop_record.ps1')){
++      $files.Add((Get-Item -LiteralPath (Join-Path $repo $relative) -ErrorAction Stop))
++    }
++  }
+ 
+   $unique = @{}
+   foreach ($file in $files) {
+@@ -777,9 +789,9 @@ function Get-R19CandidateSourceFiles([string]$RepoRoot,[string]$TimedPathMode='D
+   return @($unique.Values | Sort-Object FullName)
+ }
+ 
+-function Get-R19CandidateSourceSnapshot([string]$RepoRoot,[string]$TimedPathMode='Disabled',[bool]$AuxReadinessDiagnostics=$false,[bool]$DiagnosticUsbFailureDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false) {
++function Get-R19CandidateSourceSnapshot([string]$RepoRoot,[string]$TimedPathMode='Disabled',[bool]$AuxReadinessDiagnostics=$false,[bool]$DiagnosticUsbFailureDiagnostics=$false,[bool]$GrantDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false,[bool]$GrantReservationStopDiagnostics=$false) {
+   $repo = Resolve-R19RepositoryRoot $RepoRoot
+-  $sourceRecords = @(Get-R19CandidateSourceFiles $repo $TimedPathMode $AuxReadinessDiagnostics $DiagnosticUsbFailureDiagnostics $GrantDiagnostics $GrantReservationDiagnostics | ForEach-Object {
++  $sourceRecords = @(Get-R19CandidateSourceFiles $repo $TimedPathMode $AuxReadinessDiagnostics $DiagnosticUsbFailureDiagnostics $GrantDiagnostics $GrantReservationDiagnostics $GrantReservationStopDiagnostics | ForEach-Object {
+       New-R19FileRecord $repo $_.FullName
+     })
+   $records = @(Get-R19OrdinalPathRecords $sourceRecords)

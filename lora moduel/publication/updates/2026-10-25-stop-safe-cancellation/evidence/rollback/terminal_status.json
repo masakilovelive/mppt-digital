@@ -1,0 +1,10 @@
+{
+    "schema_version":  1,
+    "test_id":  "R19-CANDIDATE-APP-FLASH-HIL-001",
+    "finished_utc":  "2026-10-25T08:36:04.9929496Z",
+    "result":  "PASS",
+    "status":  "PASS_R18_ROLLBACK_COMPLETE",
+    "failure":  "",
+    "rollback_result":  "PASS",
+    "power_off_required":  false
+}

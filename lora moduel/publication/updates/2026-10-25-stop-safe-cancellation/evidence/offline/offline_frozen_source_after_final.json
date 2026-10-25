@@ -1,0 +1,14 @@
+{
+  "schema": "vc-lora-r19-stop-offline-post-regression-source-audit-v1",
+  "result": "PASS",
+  "checked_utc": "2026-10-25T08:18:54.3790402Z",
+  "canonical_file_count": 85,
+  "canonical_tree_sha256": "C27939367A5E34481DE6A552F387620A15E97A108BACD2398B9BAC5C7478AA5A",
+  "tool_count": 27,
+  "test_file_count": 256,
+  "source_mismatches": [],
+  "cmake_unchanged": true,
+  "original_hil_summary_sha256": "264DAD64810ED1B304B47B6C777A03BCDF32D3100981E0692C078C50AEEBF756",
+  "hardware_interaction": false,
+  "live_authorization_granted": false
+}

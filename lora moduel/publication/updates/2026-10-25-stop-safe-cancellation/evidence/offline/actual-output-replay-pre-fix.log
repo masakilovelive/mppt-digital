@@ -1,0 +1,8 @@
+FAIL Exact builder source core/include/vc_lora/tdd_types.hpp
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_builder_pipeline.ps1:22 ch
+ar:76
++ ... string]$Name){$script:checks++;if(-not$Value){throw ('FAIL '+$Name)}}
++                                                   ~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (FAIL Exact buil...a/tdd_types.hpp:String) [], RuntimeException
+    + FullyQualifiedErrorId : FAIL Exact builder source core/include/vc_lora/tdd_types.hpp
+ 

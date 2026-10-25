@@ -1,0 +1,36 @@
+{
+  "schema": "vc-lora-r19-stop-parent-reader-integration-offline-v1",
+  "result": "PASS_OFFLINE_FOCUSED_PENDING_FINAL_ROOT_SUITE",
+  "hardware_interaction": false,
+  "production_main_live_executed": false,
+  "device_process_pnp_com_jtag_inspection": false,
+  "git_or_network_operations": false,
+  "contract": {"legacy_reader":"v10","legacy_tool_count":26,"legacy_raw_count":20,"legacy_command_limit":8,"stop_reader":"v11","stop_tool_count":27,"stop_raw_count":22,"stop_command_limit":18,"stop_record_bytes":128,"stop_record_schema":1,"wire_version":2,"maximum_cancellations":1,"maximum_rounds":2,"param_attempt_limit":1,"prepare_seconds":15,"measurement_seconds":40,"product_budget_ms":106},
+  "semantics": {"flags1":"initialized/unlatched","flags7":"frozen FATAL_STOP","flags15":"frozen SAFE_CANCEL, not global runtime failure","epoch_zero_valid":true,"safe_cancel_requires_zero_uart_old_cycle_old_lease_retired":true,"safe_cancel_proves_peer_ack_or_heartbeat_or_rebind":false},
+  "focused_tests": [
+    {"test":"check_r19_grant_reservation_stop_parent.ps1","checks_per_shell":71,"ps51":"PASS","ps7":"PASS","parent_sha_unchanged_during_replay":true,"scope":"actual STOP raw replay, verified-memory decoder, exact final stage predicate with all22 integrity/safety mutations, prepared27tool/newleaf strictness, outer v2 bounded18 and legacy8, actual stage argument forwarding"},
+    {"test":"check_r19_grant_reservation_stop_acquisition.ps1","checks_per_shell":267,"initial_ps51":"PASS","initial_ps7":"PASS","final_frozen_ps51":"PASS","final_frozen_ps7":"PASS","scope":"strict STOP capability, decoder positive/adversarial cases, actual offline reader v10/20 and opted-in v11/22 both roles"},
+    {"test":"check_r19_grant_reservation_stop_flash_contract.ps1","checks_per_shell":114,"ps51":"PASS","ps7":"PASS","separate_summary":"stop_flash_contract_integration_summary.json"},
+    {"test":"check_r19_grant_reservation_stage_final_gate.ps1","checks_per_shell":59,"ps51":"PASS","ps7":"PASS"},
+    {"test":"check_r19_read_comparison_capture_contract.ps1","checks_per_shell":57,"ps51":"PASS","ps7":"PASS"},
+    {"test":"check_r19_grant_outer_contract.ps1 + check_r19_param_list_outer_contract.ps1 + check_r19_timed_path_acquisition.ps1","ps51":"PASS","ps7":"PASS"},
+    {"test":"check_r19_runtime_stage_cause_experiment_orchestrator_contract.ps1 + check_r19_candidate_flash_orchestrator_contract.ps1","ps51":"PASS","ps7":"NOT_RERUN_HERE"}
+  ],
+  "red_evidence": ["stop_acquisition_RED_ps51.log","stop_parent_RED_ps51.log","stop_outer_RED_ps51_absolute.log","stop_flash_contract_RED_ps51.log","check_r19_param_list_outer_contract.ps1.legacy_ps51.log","check_r19_runtime_stage_cause_experiment_orchestrator_contract.ps1.legacy_ps51_final.log"],
+  "green_evidence": ["stop_parent_GREEN_ps51_frozen.log","stop_parent_GREEN_ps7_frozen.log","stop_acquisition_GREEN_ps51_frozen.log","stop_acquisition_GREEN_ps7_frozen.log","stop_flash_contract_GREEN_ps51.log","stop_flash_contract_GREEN_ps7.log","stop_legacy_finalgate_ps51_final.log","stop_legacy_finalgate_ps7_final.log","stop_legacy_comparison_ps51_explicit.log","stop_legacy_comparison_ps7_final.log","check_r19_runtime_stage_cause_experiment_orchestrator_contract.ps1.legacy_ps51_final2.log","check_r19_candidate_flash_orchestrator_contract.ps1.legacy_ps51_final2.log"],
+  "frozen_sources": {
+    "tools/r19_grant_reservation_contract.ps1":"AA74C3D971C59E5C6F81DC0FBCD9B955A469DBD4D9043934CFF453D3EC095C4A",
+    "tools/read_r19_grant_reservation_stop_record.ps1":"AC70CEA71CC4C8645D31E4B3E77AFF9D668EBAC554D5DD2C62DFA611D2C84D02",
+    "tools/read_r19_runtime_stage_jtag.ps1":"106CFCDD7B1C916D729E9E77EE5619354BB7FABAE08245C7CD2A78E8E5727AA0",
+    "tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1":"16AE897AE7FA0981687B613972B91F3FC82073766AC5FB25E69B84C8D384C3DE",
+    "tools/r19_timed_path_outer.ps1":"4A6DD8401F85555E252A074EDE61AD8F58495BB30D85138191F4E8DE213DA18A",
+    "tools/r19_timed_path_acquisition.ps1":"1B0495CCB4573A10E893D56CBBCEAB9353B8831914DAEDB79B67380EAF58BB7A",
+    "tools/invoke_r19_candidate_app_flash_hil.ps1":"C6319AB0F8BAD49E305EB8302CE787F66F5DE63D170AB581356658CBB238C0E8",
+    "tools/invoke_r19_jtag_preflash_gate.ps1":"EA1BCF4AD9CC5936FD4A356F6194EE0554BDFD91C3B5DB1E1FFA1138E822835D",
+    "tests/hil/check_r19_grant_reservation_stop_parent.ps1":"DFB061E8EDE0C550153D27893384BF1A493A24F98B0C0BF156EB22E1EB57A555",
+    "tests/hil/check_r19_grant_reservation_stop_acquisition.ps1":"75CB13721DCB8BB61D02583E0ECC0062D330769BE78F150EB9B815289E9AD379",
+    "tests/hil/check_r19_runtime_stage_cause_experiment_orchestrator_contract.ps1":"4862446F3D94A3C8DC789ACF04E19B42BB9EA708F2BA74B5C10F4CD1F3AB2CF2"
+  },
+  "diff_provenance": {"existing_changes":"Numbered FC comparison artifacts *.stop128.diff; new files use full additions. Parent/reader/contract and legacy fixture use retained immediate-before copies.","outer_acquisition_baseline":"Published 2026-10-25 source_snapshot, verified against its source_inventory bytes/SHA/representation. This is NOT asserted as an immediate-before snapshot.","outer_published_baseline_sha256":"6D0BCD147724424EECA45DFBC638339D15D2B103516EDD7EEACB7EA78DA868B7","acquisition_published_baseline_sha256":"2B3F1E36B140DCF298368B79C61AEC831306D190F9FB949E00B8A9A37A7F62EC"},
+  "limitations": ["No physical hardware, CPU resume, UART silence, RF delivery, Heartbeat deadline, paired-role cancellation completion, fresh actual Grant, negotiation/bulk start or product acceptance is proven by these offline tests.","New parent fixture executes actual pure replay functions and the exact final predicate, not the entire parent main.","Runner owns actual capture GetPlan STOP full-chain fixture results; firmware/build/full-host results belong to root/firmware agents.","Native prewrite snapshots cover only already-published uninterrupted role-reader prefixes, not absence of subsequent physical-wire faults.","Historical failed runs, prepared pins, permissions, dispatch markers and candidate packages were not edited."]
+}

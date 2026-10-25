@@ -1,0 +1,197 @@
+--- /dev/null
++++ b/tests/hil/check_r19_grant_reservation_stop_acquisition.ps1
+@@ -0,0 +1,194 @@
++[CmdletBinding()]
++param([string]$RepoRoot='', [string]$OutputDirectory='')
++Set-StrictMode -Version Latest
++$ErrorActionPreference='Stop'
++if(-not$RepoRoot){$RepoRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)}
++$script:checks=0
++function Check([bool]$Condition,[string]$Message){$script:checks++;if(-not$Condition){throw ('FAIL '+$Message)}}
++function Reject([scriptblock]$Action,[string]$Message){$threw=$false;try{&$Action|Out-Null}catch{$threw=$true};Check $threw $Message}
++function Import-SafeDefinitions([string]$Relative,[string[]]$Names=@()){
++  $tokens=$null;$errors=$null
++  $ast=[Management.Automation.Language.Parser]::ParseFile((Join-Path $RepoRoot $Relative),[ref]$tokens,[ref]$errors)
++  Check (@($errors).Count-eq0) ('Pure definition syntax: '+$Relative)
++  foreach($node in $ast.EndBlock.Statements|Where-Object{$_-is[Management.Automation.Language.FunctionDefinitionAst]-and($Names.Count-eq0-or$_.Name-cin$Names)}){
++    . ([scriptblock]::Create($node.Extent.Text))
++    Set-Item -Path ('Function:script:'+$node.Name) -Value (Get-Item ('Function:'+$node.Name)).ScriptBlock
++  }
++}
++# Only pure function bodies are imported; the fixture CLI will be explicitly
++# offline and is never allowed to select Execute, Preflight or a native test.
++Import-SafeDefinitions 'tools/r19_grant_reservation_contract.ps1'
++Check ($null-ne(Get-Command Get-R19GrantReservationStopCandidateContract -CommandType Function -ErrorAction SilentlyContinue)) 'Explicit STOP128 capability contract API exists'
++Check ($null-ne(Get-Command Assert-R19GrantReservationStopCandidateContract -CommandType Function -ErrorAction SilentlyContinue)) 'Strict STOP128 capability assertion API exists'
++Check (Test-Path -LiteralPath (Join-Path $RepoRoot 'tools/read_r19_grant_reservation_stop_record.ps1') -PathType Leaf) 'Separate STOP128 decoder exists'
++$contract=Get-R19GrantReservationStopCandidateContract -RepoRoot $RepoRoot -Enabled $true
++Check ($null-eq(Get-R19GrantReservationStopCandidateContract -RepoRoot $RepoRoot -Enabled $false)) 'STOP128 capability remains absent by default'
++Check ($contract.schema-ceq'vc-lora-r19-grant-reservation-stop-candidate-v1'-and$contract.enabled-is[bool]-and$contract.enabled-and$contract.record_schema-eq1-and$contract.size_bytes-eq128-and$contract.symbol-ceq'vc_lora_r19_grant_reservation_stop_record'-and$contract.decoder_path-ceq'tools/read_r19_grant_reservation_stop_record.ps1'-and$contract.runtime_reader_schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v11') 'STOP128 flat ABI and reader-v11 are exact'
++Check ($contract.decoder_sha256-ceq(Get-FileHash -LiteralPath (Join-Path $RepoRoot $contract.decoder_path) -Algorithm SHA256).Hash) 'STOP128 decoder hash binds actual bytes'
++$null=Assert-R19GrantReservationStopCandidateContract -Value $contract -RepoRoot $RepoRoot -Enabled $true
++$legacyContract=Get-R19GrantReservationCandidateContract -RepoRoot $RepoRoot -Enabled $true
++Check ($legacyContract.reader_schema-ceq'vc-lora-r19-runtime-stage-jtag-read-v10'-and$legacyContract.record.size_bytes-eq512) 'Optional STOP128 does not reinterpret the legacy reservation ABI'
++foreach($mutation in @('disabled','string-bool','extra','wrong-case','decoder-hash','size','schema','record-schema','reader','symbol','decoder-path','macro','wire-schema')){
++  $bad=$contract|ConvertTo-Json -Depth 8|ConvertFrom-Json
++  switch($mutation){
++    'disabled'{$bad.enabled=$false}
++    'string-bool'{$bad.enabled='true'}
++    'extra'{$bad|Add-Member NoteProperty undeclared_record $true}
++    'wrong-case'{$v=$bad.enabled;$bad.PSObject.Properties.Remove('enabled');$bad|Add-Member NoteProperty Enabled $v}
++    'decoder-hash'{$bad.decoder_sha256='0'*64}
++    'size'{$bad.size_bytes=124}
++    'schema'{$bad.schema='vc-lora-r19-grant-reservation-stop-candidate-v2'}
++    'record-schema'{$bad.record_schema=2}
++    'reader'{$bad.runtime_reader_schema='vc-lora-r19-runtime-stage-jtag-read-v10'}
++    'symbol'{$bad.symbol='vc_lora_r19_grant_reservation_record'}
++    'decoder-path'{$bad.decoder_path='tools/read_r19_grant_reservation_record.ps1'}
++    'macro'{$bad.macro='VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS'}
++    'wire-schema'{$bad.usb_control_schema='vc-lora-r19-grant-reservation-usb-v1'}
++  }
++  Reject {Assert-R19GrantReservationStopCandidateContract -Value $bad -RepoRoot $RepoRoot -Enabled $true} ('Strict STOP128 contract rejects '+$mutation)
++}
++Import-SafeDefinitions 'tools/read_r19_grant_reservation_stop_record.ps1'
++Import-SafeDefinitions 'tools/r19_candidate_artifact_common.ps1' @('Get-R19Sha256','Get-R19GrantDiagnosticCandidateContract')
++Import-SafeDefinitions 'tests/hil/check_r19_diagnostic_usb_failure_record.ps1' @('Pack','NewV8Fixture')
++Import-SafeDefinitions 'tests/hil/check_r19_grant_artifact_contract.ps1' @('NewV9Fixture')
++Import-SafeDefinitions 'tests/hil/check_r19_grant_reservation_artifact.ps1' @('NewV10Fixture')
++function New-StopWords([string]$Role='vehicle'){
++  [uint32[]]$w=New-Object uint32[] 32
++  $w[1]=2;$w[2]=0x52315354;$w[3]=1;$w[4]=if($Role-ceq'ground'){1}else{2};$w[13]=1;$w[14]=128
++  for($i=0;$i-lt4;$i++){$w[5+$i]=[uint32]@(0x52313944,0x53544731,0x32303236,0x31303033)[$i];$w[9+$i]=[uint32](1+$i)}
++  return ,$w
++}
++function Decode-Stop([uint32[]]$Words,[string]$Role='vehicle'){
++  [byte[]]$raw=Pack $Words
++  ConvertFrom-R19GrantReservationStopRecord -First $raw -Second $raw -ExpectedRole $Role -ExpectedFingerprint ([uint32[]]@(0x52313944,0x53544731,0x32303236,0x31303033)) -ExpectedBoot ([uint32[]]@(1,2,3,4))
++}
++foreach($role in @('ground','vehicle')){
++  $decoded=Decode-Stop (New-StopWords $role) $role
++  Check ($decoded.role-ceq$role-and$decoded.raw_size_bytes-eq128-and$decoded.expected_identity_bound-and-not$decoded.hardware_interaction) ('Paired STOP128 unlatched identity binds '+$role)
++  Check (-not$decoded.stop_latched-and-not$decoded.frozen-and-not$decoded.runtime_failure_latched-and-not$decoded.safe_cancellation_selected-and$decoded.disposition-ceq'NONE') ('Initialized STOP128 does not invent a stop '+$role)
++}
++function New-LatchedStopWords([int]$Reason=3,[bool]$Safe=$false){
++  [uint32[]]$w=New-StopWords vehicle
++  $w[1]=4;$w[13]=if($Safe){15}else{7};$w[15]=[uint32]$Reason
++  $w[16]=1000;$w[18]=10000;$w[20]=3000;$w[22]=15;$w[23]=5050
++  $w[24]=7;$w[25]=8;$w[26]=7;$w[27]=8;$w[28]=1;$w[29]=11
++  switch($Reason){
++    1{$w[22]=$w[22]-bor16}
++    2{$w[18]=6050}
++    3{$w[22]=$w[22]-band(-bnot4)}
++    4{$w[22]=$w[22]-band(-bnot8)}
++    5{$w[28]=2}
++    6{$w[26]=8}
++    7{$w[27]=9}
++    8{$w[22]=$w[22]-bor32}
++    9{$w[22]=$w[22]-bor64}
++    10{$w[22]=$w[22]-bor128}
++  }
++  if($Safe){$w[22]=$w[22]-bor0xE00}
++  return ,$w
++}
++$reasonNames=@('None','ReservationFailed','HeartbeatDeadlineConflict','AuxLow','LeaseInvalid','LeaseOwnerMismatch','ActionTokenMismatch','WriterGenerationMismatch','RadioBusy','PendingRadioAction','WriterTailPending')
++foreach($reason in 1..10){
++  $decoded=Decode-Stop (New-LatchedStopWords $reason)
++  Check ($decoded.reason-eq$reason-and$decoded.reason_name-ceq$reasonNames[$reason]-and$decoded.stop_latched-and$decoded.frozen-and$decoded.runtime_failure_latched-and-not$decoded.safe_cancellation_selected-and$decoded.disposition-ceq'FATAL_STOP'-and$decoded.disposition_name-ceq'FATAL_STOP') ('Exact fatal first-stop reason '+$reasonNames[$reason])
++  Check ($decoded.current_usb_epoch-eq0-and-not$decoded.cancellation_completion_proven-and-not$decoded.heartbeat_deadline_met_proven-and-not$decoded.reservation_protocol_complete_proven) ('Fatal record keeps epoch0 valid and completion unproven '+$reasonNames[$reason])
++}
++[uint32[]]$safeWords=New-LatchedStopWords 2 $true
++$safeDecoded=Decode-Stop $safeWords
++Check ($safeDecoded.reason-eq2-and$safeDecoded.disposition-ceq'SAFE_CANCEL'-and$safeDecoded.disposition_name-ceq'SAFE_CANCEL'-and$safeDecoded.stop_latched-and$safeDecoded.frozen-and-not$safeDecoded.runtime_failure_latched-and$safeDecoded.safe_cancellation_selected) 'Safe cancellation is distinct from a fatal runtime stop'
++Check ($safeDecoded.predicates.zero_uart_proven-and$safeDecoded.predicates.old_cycle_retired-and$safeDecoded.predicates.old_lease_retired-and-not$safeDecoded.cancellation_completion_proven-and-not$safeDecoded.heartbeat_deadline_met_proven-and-not$safeDecoded.reservation_protocol_complete_proven) 'Local cancellation witnesses do not claim peer ACK, Heartbeat delivery or rebind'
++Check ($safeDecoded.observed_ms-ceq'1000'-and$safeDecoded.heartbeat_deadline_ms-ceq'6050'-and$safeDecoded.reserve_ms-eq5050) 'Heartbeat reserve equality is a stop boundary'
++foreach($mutation in @('unknown-reason','unknown-mask','zero-reserve','no-cause','wrong-first-cause','outside-heartbeat-boundary','fatal-with-retirement','safe-wrong-reason','safe-without-zero-uart','safe-without-cycle-retired','safe-without-lease-retired','latched-wrong-sequence','latched-ground')){
++  [uint32[]]$bad=if($mutation.StartsWith('safe-')){New-LatchedStopWords 2 $true}else{New-LatchedStopWords 3}
++  switch($mutation){
++    'unknown-reason'{$bad[15]=11};'unknown-mask'{$bad[22]=$bad[22]-bor0x1000};'zero-reserve'{$bad[23]=0}
++    'no-cause'{$bad[22]=15};'wrong-first-cause'{$bad[22]=$bad[22]-bor16}
++    'outside-heartbeat-boundary'{$bad=New-LatchedStopWords 2;$bad[18]=6051}
++    'fatal-with-retirement'{$bad[22]=$bad[22]-bor0xE00}
++    'safe-wrong-reason'{$bad[15]=3}
++    'safe-without-zero-uart'{$bad[22]=$bad[22]-band(-bnot0x200)}
++    'safe-without-cycle-retired'{$bad[22]=$bad[22]-band(-bnot0x400)}
++    'safe-without-lease-retired'{$bad[22]=$bad[22]-band(-bnot0x800)}
++    'latched-wrong-sequence'{$bad[1]=6};'latched-ground'{$bad[4]=1}
++  }
++  Reject {Decode-Stop $bad} ('STOP128 semantic validation rejects '+$mutation)
++}
++foreach($at in 15..31){[uint32[]]$bad=New-StopWords;$bad[$at]=1;Reject {Decode-Stop $bad} ('Initialized STOP128 reserved payload word '+$at+' stays zero')}
++foreach($mutation in @('writer','sequence-zero','sequence-odd','magic','schema','role','flags','size','build','boot','empty-build','empty-boot','unlatched-payload')){
++  [uint32[]]$bad=New-StopWords
++  switch($mutation){
++    'writer'{$bad[0]=1};'sequence-zero'{$bad[1]=0};'sequence-odd'{$bad[1]=3};'magic'{$bad[2]=0};'schema'{$bad[3]=2};'role'{$bad[4]=3}
++    'flags'{$bad[13]=3};'size'{$bad[14]=124};'build'{$bad[5]=99};'boot'{$bad[9]=99}
++    'empty-build'{foreach($i in 5..8){$bad[$i]=0}};'empty-boot'{foreach($i in 9..12){$bad[$i]=0}}
++    'unlatched-payload'{$bad[31]=1}
++  }
++  Reject {Decode-Stop $bad} ('STOP128 decoder rejects '+$mutation)
++}
++[byte[]]$baseRaw=Pack (New-StopWords)
++Reject {ConvertFrom-R19GrantReservationStopRecord -First ([byte[]]::new(124)) -Second $baseRaw -ExpectedRole vehicle} 'STOP128 decoder rejects short first read'
++[byte[]]$changed=$baseRaw.Clone();$changed[64]=1
++Reject {ConvertFrom-R19GrantReservationStopRecord -First $baseRaw -Second $changed -ExpectedRole vehicle} 'STOP128 decoder rejects changed paired read'
++Reject {ConvertFrom-R19GrantReservationStopRecord -First $baseRaw -Second $baseRaw -ExpectedRole ground} 'STOP128 decoder rejects wrong bound role'
++if(-not$OutputDirectory){$OutputDirectory=Join-Path $RepoRoot ('runs/validation/R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001/20261025T-fix/stop-acquisition-'+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffffffZ'))}
++[void][IO.Directory]::CreateDirectory($OutputDirectory)
++$readerPath=Join-Path $RepoRoot 'tools/read_r19_runtime_stage_jtag.ps1'
++$tokens=$null;$errors=$null;$readerAst=[Management.Automation.Language.Parser]::ParseFile($readerPath,[ref]$tokens,[ref]$errors)
++Check (@($errors).Count-eq0) 'Optional reader syntax is valid'
++Check (@($readerAst.ParamBlock.Parameters|Where-Object{$_.Name.VariablePath.UserPath-ceq'GrantReservationStopDiagnostics'}).Count-eq1) 'Reader declares one explicit STOP128 selection flag'
++$shellPath=if($PSVersionTable.PSEdition-ceq'Core'){Join-Path $PSHOME 'pwsh.exe'}else{Join-Path $PSHOME 'powershell.exe'}
++function NewV11Fixture([string]$Role='ground'){
++  $f=NewV10Fixture $Role
++  $f.schema='vc-lora-r19-usb-extended-jtag-fixture-v11';$f.reader_schema='vc-lora-r19-runtime-stage-jtag-read-v11'
++  $f.grant_reservation_diagnostics=Get-R19GrantReservationCandidateContract -RepoRoot $RepoRoot -Enabled $true -CancellationEnabled $true
++  $f.grant_reservation_stop_diagnostics=Get-R19GrantReservationStopCandidateContract -RepoRoot $RepoRoot -Enabled $true
++  $f.grant_reservation_stop_address='0x3fcae200'
++  $f.grant_reservation_stop_first_read_base64=[Convert]::ToBase64String((Pack (New-StopWords $Role)))
++  $f.grant_reservation_stop_second_read_base64=$f.grant_reservation_stop_first_read_base64
++  return $f
++}
++function Run-StopFixture([string]$Name,$Fixture,[bool]$Pass,[bool]$StopFlag,[int]$ExpectedReads=22){
++  $caseRoot=Join-Path $OutputDirectory $Name;[void][IO.Directory]::CreateDirectory($caseRoot)
++  $path=Join-Path $caseRoot 'fixture.json';[IO.File]::WriteAllText($path,($Fixture|ConvertTo-Json -Depth 28),[Text.UTF8Encoding]::new($false))
++  $fixtureArgs=@('-NoProfile','-NonInteractive','-ExecutionPolicy','Bypass','-File',$readerPath,'-OfflineExtendedRecordFixtureOnly','-FixturePath',$path,'-OutputRoot',(Join-Path $caseRoot 'read'))
++  if($StopFlag){$fixtureArgs+=@('-GrantReservationStopDiagnostics')}
++  & $shellPath @fixtureArgs *> (Join-Path $caseRoot 'reader.log')
++  $code=$LASTEXITCODE;$summaryPath=Join-Path $caseRoot 'read/summary.json'
++  Check (Test-Path -LiteralPath $summaryPath -PathType Leaf) ('Offline fixture preserves a summary '+$Name)
++  $result=Get-Content -LiteralPath $summaryPath -Raw|ConvertFrom-Json
++  if(-not$Pass){Check ($code-ne0-and$result.result-ceq'FAIL') ('Offline fixture rejects '+$Name);return $result}
++  $expectedSchema=if($ExpectedReads-eq22){'vc-lora-r19-usb-extended-offline-read-v11'}else{'vc-lora-r19-usb-extended-offline-read-v10'}
++  Check ($code-eq0-and$result.result-ceq'PASS'-and$result.schema-ceq$expectedSchema-and@($result.reads).Count-eq$ExpectedReads-and-not$result.hardware_interaction-and-not$result.live_binding_supported) ('Offline fixture exact version/read count '+$Name)
++  foreach($group in $result.reads|Group-Object record){
++    Check ($group.Count-eq2-and@($group.Group|Where-Object sample -eq 1).Count-eq1-and@($group.Group|Where-Object sample -eq 2).Count-eq1) ('Exactly paired samples '+$Name+' '+$group.Name)
++    foreach($read in $group.Group){Check ((Get-Item -LiteralPath $read.path).Length-eq$read.size_bytes-and(Get-FileHash -LiteralPath $read.path -Algorithm SHA256).Hash-ceq$read.sha256) ('Raw size/SHA preserved '+$Name+' '+$group.Name+' '+$read.sample)}
++  }
++  if($ExpectedReads-eq22){Check ($result.decoded.grant_reservation_stop.expected_identity_bound-and$result.decoded.grant_reservation_stop.role-ceq$Fixture.role) ('STOP128 cross-record identity '+$Name)}
++  return $result
++}
++foreach($role in @('ground','vehicle')){
++  $null=Run-StopFixture ('legacy-v10-'+$role) (NewV10Fixture $role) $true $false 20
++  $null=Run-StopFixture ('stop-v11-'+$role) (NewV11Fixture $role) $true $true
++}
++foreach($mutation in @('decoder-hash','overlap','unaligned','overflow','missing-second','short-record','changed-pair','reader-downgrade','fixture-downgrade','missing-contract','boot','build')){
++  $f=NewV11Fixture
++  switch($mutation){
++    'decoder-hash'{$f.grant_reservation_stop_diagnostics.decoder_sha256='0'*64}
++    'overlap'{$f.grant_reservation_stop_address='0x3fcae100'}
++    'unaligned'{$f.grant_reservation_stop_address='0x3fcae202'}
++    'overflow'{$f.grant_reservation_stop_address='0xffffffc0'}
++    'missing-second'{$f.Remove('grant_reservation_stop_second_read_base64')}
++    'short-record'{$f.grant_reservation_stop_first_read_base64=[Convert]::ToBase64String([byte[]]::new(124))}
++    'changed-pair'{$b=[Convert]::FromBase64String($f.grant_reservation_stop_first_read_base64);$b[64]=1;$f.grant_reservation_stop_first_read_base64=[Convert]::ToBase64String($b)}
++    'reader-downgrade'{$f.reader_schema='vc-lora-r19-runtime-stage-jtag-read-v10'}
++    'fixture-downgrade'{$f.schema='vc-lora-r19-usb-extended-jtag-fixture-v10';$f.reader_schema='vc-lora-r19-runtime-stage-jtag-read-v10'}
++    'missing-contract'{$f.Remove('grant_reservation_stop_diagnostics')}
++    'boot'{foreach($sample in @('first','second')){$key='grant_reservation_stop_'+$sample+'_read_base64';$b=[Convert]::FromBase64String($f[$key]);$b[36]=99;$f[$key]=[Convert]::ToBase64String($b)}}
++    'build'{foreach($sample in @('first','second')){$key='grant_reservation_stop_'+$sample+'_read_base64';$b=[Convert]::FromBase64String($f[$key]);$b[20]=99;$f[$key]=[Convert]::ToBase64String($b)}}
++  }
++  $null=Run-StopFixture ('reject-'+$mutation) $f $false $true
++}
++$null=Run-StopFixture 'reject-v11-without-explicit-flag' (NewV11Fixture) $false $false
++$null=Run-StopFixture 'reject-v10-with-stop-flag' (NewV10Fixture) $false $true
++$undeclared=NewV11Fixture;$undeclared.schema='vc-lora-r19-usb-extended-jtag-fixture-v10';$undeclared.reader_schema='vc-lora-r19-runtime-stage-jtag-read-v10'
++$null=Run-StopFixture 'reject-v10-undeclared-stop-record' $undeclared $false $false
++Write-Output "check_r19_grant_reservation_stop_acquisition PASS checks=$script:checks hardware_interaction=false"

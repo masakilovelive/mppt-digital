@@ -1,0 +1,61 @@
+param()
+$ErrorActionPreference = 'Stop'
+$repo = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
+. (Join-Path $repo 'tools/r19_host_readiness_wire.ps1')
+$script:checks = 0; $script:failures = 0
+function Assert-Readiness([bool]$Condition,[string]$Label) {
+  $script:checks++
+  if(-not $Condition){$script:failures++; Write-Output "FAIL $Label"}
+}
+function Assert-ReadinessThrows([scriptblock]$Action,[string]$Label) {
+  $threw=$false; try { & $Action | Out-Null } catch {$threw=$true}
+  Assert-Readiness $threw $Label
+}
+$binding=@{Role='Ground';ReaderSession='456';Nonce='5915779601526205389';BootId='123';UsbEpoch='7';ReplyDeviceUs='1101'}
+[byte[]]$ready=New-R19HostReadinessFrame @binding -Opcode Ready -Sequence 9
+$decoded=ConvertFrom-R19HostReadinessFrame -Bytes $ready
+Assert-Readiness ($ready.Length-eq66-and$decoded.valid-and$decoded.opcode-ceq'Ready'-and$decoded.proof_flags-eq0) 'canonical READY'
+Assert-Readiness ($ready[5]-eq249-and$ready[6]-eq196-and$ready[7]-eq253-and$ready[1]-eq54) 'READY namespace'
+Assert-Readiness ($decoded.reader_session-ceq'456'-and$decoded.nonce-ceq$binding.Nonce-and$decoded.boot_id-ceq'123'-and$decoded.usb_epoch-ceq'7'-and$decoded.reply_device_us-ceq'1101') 'integer binding exact'
+[byte[]]$arm=New-R19HostReadinessArm -Ready $decoded -ReplyReadValidated $true -ContinuousReader $true -Sequence 10
+$armDecoded=ConvertFrom-R19HostReadinessFrame -Bytes $arm
+Assert-Readiness ([BitConverter]::ToString($arm).Replace('-','')-ceq'FD3600000AF9C3FD00005231394101010103C801000000000000CDAB7856341219527B00000000000000070000004D040000000000000000000000000000A55AA4F6') 'cross-language canonical vector'
+Assert-Readiness ($armDecoded.valid-and$armDecoded.opcode-ceq'Arm'-and$armDecoded.proof_flags-eq3-and$arm[6]-eq195) 'ARM explicit PC claims'
+Assert-Readiness (Test-R19HostReadinessBinding -Ready $decoded -Arm $armDecoded) 'ARM echoes READY'
+Assert-ReadinessThrows {New-R19HostReadinessArm -Ready $decoded -ReplyReadValidated $false -ContinuousReader $true} 'no reply proof rejected'
+Assert-ReadinessThrows {New-R19HostReadinessArm -Ready $decoded -ReplyReadValidated $true -ContinuousReader $false} 'reader not continuous rejected'
+Assert-ReadinessThrows {New-R19HostReadinessArm -Ready $armDecoded -ReplyReadValidated $true -ContinuousReader $true} 'ARM cannot replace READY'
+foreach($field in @('reader_session','nonce','boot_id','usb_epoch','reply_device_us')) {
+  $other=$armDecoded.PSObject.Copy(); $other.$field='1'
+  Assert-Readiness (-not(Test-R19HostReadinessBinding -Ready $decoded -Arm $other)) "stale $field rejected"
+}
+$wrongRole=$armDecoded.PSObject.Copy();$wrongRole.role='Vehicle'
+Assert-Readiness (-not(Test-R19HostReadinessBinding -Ready $decoded -Arm $wrongRole)) 'wrong role rejected'
+for($index=0;$index-lt$arm.Length;$index++) {
+  [byte[]]$bad=$arm.Clone();$bad[$index]=$bad[$index]-bxor1
+  Assert-Readiness (-not(ConvertFrom-R19HostReadinessFrame -Bytes $bad).valid) "byte corruption $index"
+}
+[byte[]]$reserved=$arm.Clone();$reserved[54]=1
+[BitConverter]::GetBytes([uint16](Get-R19HostReadinessCrc $reserved)).CopyTo($reserved,64)
+Assert-Readiness (-not(ConvertFrom-R19HostReadinessFrame $reserved).valid) 'reserved byte with valid CRC rejected'
+Assert-Readiness (-not(ConvertFrom-R19HostReadinessFrame ([byte[]]::new(0))).valid) 'empty wire rejected'
+foreach($invalidInteger in @('0','-1','1.0','18446744073709551616','01',' 1','1 ')) {
+  $invalid=$binding.Clone();$invalid.BootId=$invalidInteger
+  Assert-ReadinessThrows {New-R19HostReadinessFrame @invalid -Opcode Ready} "bad unsigned integer $invalidInteger"
+}
+$invalid=$binding.Clone();$invalid.UsbEpoch='4294967296'
+Assert-ReadinessThrows {New-R19HostReadinessFrame @invalid -Opcode Ready} 'epoch overflow'
+$zeroEpoch=$binding.Clone();$zeroEpoch.UsbEpoch='0'
+[byte[]]$zeroEpochWire=New-R19HostReadinessFrame @zeroEpoch -Opcode Ready
+Assert-Readiness ((ConvertFrom-R19HostReadinessFrame $zeroEpochWire).usb_epoch-ceq'0') 'initial zero loss epoch is valid'
+$invalid=$binding.Clone();$invalid.ReplyDeviceUs='9223372036854776'
+Assert-ReadinessThrows {New-R19HostReadinessFrame @invalid -Opcode Ready} 'clock multiplication overflow'
+$invalid=$binding.Clone();$invalid.Nonce='1'
+Assert-ReadinessThrows {New-R19HostReadinessFrame @invalid -Opcode Ready} 'wrong nonce domain'
+Assert-ReadinessThrows {New-R19HostReadinessFrame @binding -Opcode Arm -ProofFlags 0} 'ARM without proof'
+Assert-ReadinessThrows {New-R19HostReadinessFrame @binding -Opcode Ready -ProofFlags 3} 'READY cannot assert PC proof'
+Assert-ReadinessThrows {New-R19HostReadinessFrame @binding -Opcode Arm -ProofFlags 7} 'unknown proof bits'
+$foreign=$armDecoded.PSObject.Copy();$foreign.valid=$false
+Assert-Readiness (-not(Test-R19HostReadinessBinding -Ready $decoded -Arm $foreign)) 'invalid decoded binding'
+Write-Output ("UT-R19-HOST-READINESS-WIRE-001 checks={0} failures={1}" -f $script:checks,$script:failures)
+if($script:failures-ne0){exit 1}

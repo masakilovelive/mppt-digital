@@ -1,0 +1,10 @@
+R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-ORCHESTRATOR-CONTRACT-001: orchestrator lacks required contract pattern: 9E9B1D83625
+20337064D237459471751B6542322821E666A1184B0A4AD38CC94
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_runtime_stage_cause_experiment_orchestrator_
+contract.ps1:25 char:26
++   if (-not $Condition) { throw "$testId`: $Message" }
++                          ~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (R19-RUNTIME-STA...184B0A4AD38CC94:String) [], RuntimeException
+    + FullyQualifiedErrorId : R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-ORCHESTRATOR-CONTRACT-001: orchestrator lacks require 
+   d contract pattern: 9E9B1D8362520337064D237459471751B6542322821E666A1184B0A4AD38CC94
+ 

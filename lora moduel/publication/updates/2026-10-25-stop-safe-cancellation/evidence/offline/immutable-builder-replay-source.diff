@@ -1,0 +1,32 @@
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\check_r19_grant_reservation_builder_pipeline.before.ps1" b/tests/hil/check_r19_grant_reservation_builder_pipeline.ps1
+index c223613..7446713 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\check_r19_grant_reservation_builder_pipeline.before.ps1"
++++ b/tests/hil/check_r19_grant_reservation_builder_pipeline.ps1
+@@ -51,8 +51,25 @@ foreach($role in $manifestOriginal.roles){Check ($role.compile.argv-contains$man
+ $fixtureRepo=Join-Path $out 'isolated-repository'
+ [void][IO.Directory]::CreateDirectory($fixtureRepo)
+ foreach($record in $manifestOriginal.canonical_source_snapshot.files){
+-  $original=Join-Path $repo $record.path
+-  Check ((Hash $original)-ceq$record.sha256) ('Exact builder source '+$record.path)
++  # This is a historical compiler-output replay, not a live-source build. Read
++  # the exact compiler inputs sealed with that candidate, so later source
++  # changes cannot invalidate or silently rebase the historical evidence.
++  $relative=[string]$record.path
++  $sealedRelative=''
++  if($relative.StartsWith('core/include/vc_lora/')){$sealedRelative='vc_lora/'+(Split-Path -Leaf $relative)}
++  elseif($relative.StartsWith('core/src/')){$sealedRelative='src/'+(Split-Path -Leaf $relative)}
++  elseif($relative.StartsWith('firmware/high_speed/')){$sealedRelative='high_speed/'+(Split-Path -Leaf $relative)}
++  elseif($relative.StartsWith('firmware/diagnostics/')){$sealedRelative='diagnostics/'+(Split-Path -Leaf $relative)}
++  elseif($relative-ceq'firmware/phase6/vc_lora_phase6_bridge.hpp'){$sealedRelative='vc_lora_phase6_bridge.hpp'}
++  elseif($relative-ceq'firmware/arduino_libraries/VC_LoRa_Core/src/VC_LoRa_Core.h'){$sealedRelative='VC_LoRa_Core.h'}
++  if($sealedRelative){
++    $original=Join-Path $source ('package/vc_lora_vehicle_xiao_esp32s3/'+$sealedRelative)
++    $groundCopy=Join-Path $source ('package/vc_lora_ground_xiao_esp32s3/'+$sealedRelative)
++    Check ((Hash $groundCopy)-ceq$record.sha256) ('Exact sealed Ground compiler input '+$record.path)
++  }elseif($relative.StartsWith('tools/')){$original=Join-Path $source ('evidence/'+$relative)}
++  elseif($relative.StartsWith('vc_lora_vehicle_xiao_esp32s3/')-or$relative.StartsWith('vc_lora_ground_xiao_esp32s3/')){$original=Join-Path $source ('package/'+$relative)}
++  else{throw ('No sealed source mapping for '+$relative)}
++  Check ((Hash $original)-ceq$record.sha256) ('Exact sealed builder source '+$record.path)
+   $destination=Join-Path $fixtureRepo $record.path
+   [void][IO.Directory]::CreateDirectory((Split-Path -Parent $destination))
+   Copy-Item -LiteralPath $original -Destination $destination

@@ -1,0 +1,4 @@
+tests/host/standalone/r19_grant_reservation_stop_tests.cpp:1:10: fatal error: '../../../firmware/high_speed/r19_grant_reservation_stop_record.hpp' file not found
+    1 | #include "../../../firmware/high_speed/r19_grant_reservation_stop_record.hpp"
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1 error generated.

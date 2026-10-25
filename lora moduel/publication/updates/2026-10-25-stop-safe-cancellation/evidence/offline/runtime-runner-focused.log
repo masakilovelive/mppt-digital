@@ -1,0 +1,19 @@
+Internal ctest changing into directory: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+Test project E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+    Start 22: R19-RUNTIME-FAIL-DIAGNOSTIC-RUNNER-CONTRACT-001
+1/1 Test #22: R19-RUNTIME-FAIL-DIAGNOSTIC-RUNNER-CONTRACT-001 ...***Timeout  60.17 sec
+Recorded R19A replay PASS: unchanged 809/2709 bytes; 32-byte prefix remains incomplete; 8 mutations rejected.
+
+
+0% tests passed, 1 tests failed out of 1
+
+Label Time Summary:
+contract    =  60.17 sec*proc (1 test)
+offline     =  60.17 sec*proc (1 test)
+r19         =  60.17 sec*proc (1 test)
+
+Total Test time (real) =  60.33 sec
+
+The following tests FAILED:
+	 22 - R19-RUNTIME-FAIL-DIAGNOSTIC-RUNNER-CONTRACT-001 (Timeout)
+Errors while running CTest

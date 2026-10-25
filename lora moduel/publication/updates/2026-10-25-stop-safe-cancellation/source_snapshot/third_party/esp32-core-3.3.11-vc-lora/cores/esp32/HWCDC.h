@@ -1,0 +1,145 @@
+// Copyright 2015-2026 Espressif Systems (Shanghai) PTE LTD
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+#pragma once
+
+#include "sdkconfig.h"
+#include "soc/soc_caps.h"
+
+#if SOC_USB_SERIAL_JTAG_SUPPORTED
+
+#include <inttypes.h>
+#include "esp_event.h"
+#include "Stream.h"
+#include "driver/usb_serial_jtag.h"
+#if defined(VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS) && VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS
+#include "HWCDCR19Diagnostic.h"
+#endif
+
+ESP_EVENT_DECLARE_BASE(ARDUINO_HW_CDC_EVENTS);
+
+typedef enum {
+  ARDUINO_HW_CDC_ANY_EVENT = ESP_EVENT_ANY_ID,
+  ARDUINO_HW_CDC_CONNECTED_EVENT = 0,
+  ARDUINO_HW_CDC_BUS_RESET_EVENT,
+  ARDUINO_HW_CDC_RX_EVENT,
+  ARDUINO_HW_CDC_TX_EVENT,
+  ARDUINO_HW_CDC_MAX_EVENT,
+} arduino_hw_cdc_event_t;
+
+typedef union {
+  struct {
+    size_t len;
+  } rx;
+  struct {
+    size_t len;
+  } tx;
+} arduino_hw_cdc_event_data_t;
+
+class HWCDC : public Stream {
+private:
+  static bool deinit(void *busptr);
+  static bool isCDC_Connected();
+
+public:
+  HWCDC();
+  ~HWCDC();
+
+  void onEvent(esp_event_handler_t callback);
+  void onEvent(arduino_hw_cdc_event_t event, esp_event_handler_t callback);
+
+  size_t setRxBufferSize(size_t);
+  size_t setTxBufferSize(size_t);
+  void setTxTimeoutMs(uint32_t timeout);
+  void begin(unsigned long baud = 0);
+  void end();
+
+  int available(void);
+  int availableForWrite(void);
+  int peek(void);
+  int read(void);
+  size_t read(uint8_t *buffer, size_t size);
+  size_t write(uint8_t);
+  size_t write(const uint8_t *buffer, size_t size);
+  // Project integrity extension: enqueue one bounded write only when the
+  // caller's stream epoch is still current. A reset racing the enqueue
+  // quarantines the bytes before TX interrupt enable and returns zero.
+  size_t writeTxChecked(const uint8_t *buffer, size_t size,
+                         uint32_t expected_loss_epoch);
+#if defined(VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS) && VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS
+  // Diagnostic-only cold-start escape: atomically enqueue exactly one
+  // complete 63-byte R19 frame at a proved-empty TX boundary even before the
+  // cached CDC connected bit has observed its first host IN pickup.
+  size_t writeTxBootstrapFrameChecked(const uint8_t *buffer, size_t size,
+                                      uint32_t expected_loss_epoch);
+#endif
+  void flush(void);
+  // Project integrity extension: wait without discarding until every byte in
+  // the software ring/stash and the final hardware FIFO packet has crossed a
+  // host-pickup boundary. A changed loss epoch makes completion fail.
+  uint32_t txLossEpoch() const;
+  bool flushTxComplete(uint32_t timeout_ms, uint32_t expected_loss_epoch);
+#if defined(VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS) && VC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS
+  // Same non-destructive publication fence, with one caller-owned terminal
+  // observation. Preserves evidence.transaction_token and .attempt_id.
+  bool flushTxCompleteDiagnostic(
+    uint32_t timeout_ms, uint32_t expected_loss_epoch,
+    vc_lora::experimental::R19HwcdcFlushCallEvidence &evidence
+  );
+#endif
+
+  inline static bool isPlugged(void) {
+    // SOF ISR is causing esptool to be unable to upload firmware to the board
+    // Using IDF 5.1 helper function because it is based on Timer check instead of ISR
+    return usb_serial_jtag_is_connected();
+  }
+
+  inline static bool isConnected(void) {
+    return isCDC_Connected();
+  }
+
+  inline size_t read(char *buffer, size_t size) {
+    return read((uint8_t *)buffer, size);
+  }
+  inline size_t write(const char *buffer, size_t size) {
+    return write((uint8_t *)buffer, size);
+  }
+  inline size_t write(const char *s) {
+    return write((uint8_t *)s, strlen(s));
+  }
+  inline size_t write(unsigned long n) {
+    return write((uint8_t)n);
+  }
+  inline size_t write(long n) {
+    return write((uint8_t)n);
+  }
+  inline size_t write(unsigned int n) {
+    return write((uint8_t)n);
+  }
+  inline size_t write(int n) {
+    return write((uint8_t)n);
+  }
+  operator bool() const;
+  void setDebugOutput(bool);
+  void updateBaudRate(unsigned long baud);
+  uint32_t baudRate();
+};
+#if ARDUINO_USB_MODE && ARDUINO_USB_CDC_ON_BOOT  // Hardware JTAG CDC selected
+#ifndef HWCDC_SERIAL_IS_DEFINED
+#define HWCDC_SERIAL_IS_DEFINED 1
+#endif
+// HWCDCSerial is always available to be used
+extern HWCDC HWCDCSerial;
+#endif
+
+#endif /* SOC_USB_SERIAL_JTAG_SUPPORTED */

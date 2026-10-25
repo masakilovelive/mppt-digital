@@ -1,0 +1,400 @@
+--- a/tools/invoke_r19_candidate_app_flash_hil.ps1
++++ b/tools/invoke_r19_candidate_app_flash_hil.ps1
+@@ -16,6 +16,7 @@
+   [switch]$DiagnosticUsbFailureDiagnostics,
+   [switch]$GrantDiagnostics,
+   [switch]$GrantReservationDiagnostics,
++  [switch]$GrantReservationStopDiagnostics,
+   [switch]$RollbackOnly,
+   [ValidateSet('', 'RESTORE_ACCEPTED_R18_AFTER_R19_HIL')]
+   [string]$RollbackAuthorization = '',
+@@ -42,11 +43,13 @@
+ $diagnosticUsbFailureEnabled=$DiagnosticUsbFailureDiagnostics.IsPresent
+ $grantDiagnosticsEnabled=$GrantDiagnostics.IsPresent
+ $grantReservationEnabled=$GrantReservationDiagnostics.IsPresent
++$grantReservationStopEnabled=$GrantReservationStopDiagnostics.IsPresent
+ if($timedPathEnabled-and-not$runtimeFailDiagnosticsEnabled){throw 'Timed-path mode requires diagnostic-only scope'}
+ if($auxReadinessEnabled-and(-not$runtimeFailDiagnosticsEnabled-or$TimedPathMode-cne'ExplicitHostArm')){throw 'AUX readiness requires RuntimeFailDiagnostics and ExplicitHostArm'}
+ if($diagnosticUsbFailureEnabled-and(-not$runtimeFailDiagnosticsEnabled-or-not$auxReadinessEnabled-or$TimedPathMode-cne'ExplicitHostArm')){throw 'Diagnostic USB failure mode requires RuntimeFailDiagnostics, AUX readiness and ExplicitHostArm'}
+ if($grantDiagnosticsEnabled-and(-not$runtimeFailDiagnosticsEnabled-or-not$auxReadinessEnabled-or-not$diagnosticUsbFailureEnabled-or$TimedPathMode-cne'ExplicitHostArm')){throw 'Grant diagnostics require RuntimeFailDiagnostics, diagnostic USB failure, AUX readiness and ExplicitHostArm'}
+ if($grantReservationEnabled-and-not$grantDiagnosticsEnabled){throw 'Grant reservation requires the full Grant diagnostic mode'}
++if($grantReservationStopEnabled-and-not$grantReservationEnabled){throw 'STOP128 requires the full Grant reservation diagnostic mode'}
+ $acceptanceEligible = -not $runtimeFailDiagnosticsEnabled
+ $flashEvidenceSchema = 'vc-lora-r19-candidate-flash-evidence-v1'
+ $candidateSchema = 'vc-lora-r19-candidate-artifact-manifest-v1'
+@@ -56,21 +59,22 @@
+ $expectedEspToolVersion = '5.3.1'
+ $expectedEspToolSha256 =
+     'A939E28FE2FBB53E65E46F0246A4D71B9FD6C052EF0E046182DF4A4FE8BEC946'
++$expectedGrantReservationContractSha256='AA74C3D971C59E5C6F81DC0FBCD9B955A469DBD4D9043934CFF453D3EC095C4A'
+ if($grantReservationEnabled){
+-  # Reviewed reservation-v10 verifier/common; legacy identity-bound pins remain.
+-  $expectedCandidateVerifierSha256='DD5DB94A874C8BCBC180ABC49415E023E1F90333E34BE138C9CEFC0BDB8411CE'
+-  $expectedCandidateCommonSha256='8B8BD58EAA9BC0DAF8E466A0C288D584A7FFC5E891936DC6D2DCAC21C2393863'
++  # Reviewed optional STOP128 pipeline; default-off reservation ABI remains v10.
++  $expectedCandidateVerifierSha256='03314802B639D1943EBFD3EF8B12B5E999253C5B390543D1D7CF8045865CA4E7'
++  $expectedCandidateCommonSha256='498C9F6E1A246D74F8A5068157AC8DFB97B85E4C115BC8777BF3630C325A59E1'
+ }elseif($grantDiagnosticsEnabled){
+   # Exact reviewed v9 pipeline versions, never sampled as mutable trust pins.
+-  $expectedCandidateVerifierSha256='DD5DB94A874C8BCBC180ABC49415E023E1F90333E34BE138C9CEFC0BDB8411CE'
+-  $expectedCandidateCommonSha256='8B8BD58EAA9BC0DAF8E466A0C288D584A7FFC5E891936DC6D2DCAC21C2393863'
++  $expectedCandidateVerifierSha256='03314802B639D1943EBFD3EF8B12B5E999253C5B390543D1D7CF8045865CA4E7'
++  $expectedCandidateCommonSha256='498C9F6E1A246D74F8A5068157AC8DFB97B85E4C115BC8777BF3630C325A59E1'
+ }elseif($diagnosticUsbFailureEnabled){
+   # Exact reviewed current versions; never discover or accept a mutable hash.
+-  $expectedCandidateVerifierSha256='DD5DB94A874C8BCBC180ABC49415E023E1F90333E34BE138C9CEFC0BDB8411CE'
+-  $expectedCandidateCommonSha256='8B8BD58EAA9BC0DAF8E466A0C288D584A7FFC5E891936DC6D2DCAC21C2393863'
++  $expectedCandidateVerifierSha256='03314802B639D1943EBFD3EF8B12B5E999253C5B390543D1D7CF8045865CA4E7'
++  $expectedCandidateCommonSha256='498C9F6E1A246D74F8A5068157AC8DFB97B85E4C115BC8777BF3630C325A59E1'
+ }elseif($auxReadinessEnabled){
+-  $expectedCandidateVerifierSha256='DD5DB94A874C8BCBC180ABC49415E023E1F90333E34BE138C9CEFC0BDB8411CE'
+-  $expectedCandidateCommonSha256='8B8BD58EAA9BC0DAF8E466A0C288D584A7FFC5E891936DC6D2DCAC21C2393863'
++  $expectedCandidateVerifierSha256='03314802B639D1943EBFD3EF8B12B5E999253C5B390543D1D7CF8045865CA4E7'
++  $expectedCandidateCommonSha256='498C9F6E1A246D74F8A5068157AC8DFB97B85E4C115BC8777BF3630C325A59E1'
+ }else{
+   $expectedCandidateVerifierSha256 =
+     '66DFCFC5B7E59D4B51B704F098ED5A1912312188A2785E1ED2DD59A3B55DE2F2'
+@@ -88,6 +92,7 @@
+ if($diagnosticUsbFailureEnabled){$candidateBaseRelative='runs/candidates/R19-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001'}
+ if($grantDiagnosticsEnabled){$candidateBaseRelative='runs/candidates/R19-GRANT-DIAGNOSTIC-USB-FAILURE-AUX-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001'}
+ if($grantReservationEnabled){$candidateBaseRelative='runs/candidates/R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001'}
++if($grantReservationStopEnabled){$candidateBaseRelative='runs/candidates/R19-GRANT-RESERVATION-STOP-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001'}
+ $evidenceBaseRelative = if ($runtimeFailDiagnosticsEnabled) {
+     'runs\validation\R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001'
+   } else {'runs\validation\R19-CANDIDATE-APP-FLASH-HIL-001'}
+@@ -131,13 +136,22 @@
+ function Assert-CandidateModeRecord([object]$Record,
+                                     [string]$Description) {
+   $requireReservation=[bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)
++  $requireStop=[bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)
++  Assert-Condition (-not$requireStop-or$requireReservation) "$Description STOP128 requires reservation mode"
+   if($requireReservation){
+-    $contractSource=Read-PinnedFileUnderLock (Join-Path $repo 'tools/r19_grant_reservation_contract.ps1') '5DAA27A9E16080E0A0524CEDABB44752B337697E2338F373F63CFEE886A2B9DC' 'reviewed Grant reservation contract'
++    $contractPin=[string](Get-Variable -Name expectedGrantReservationContractSha256 -ValueOnly -ErrorAction SilentlyContinue)
++    if(-not$contractPin){$contractPin='AA74C3D971C59E5C6F81DC0FBCD9B955A469DBD4D9043934CFF453D3EC095C4A'}
++    $contractSource=Read-PinnedFileUnderLock (Join-Path $repo 'tools/r19_grant_reservation_contract.ps1') $contractPin 'reviewed Grant reservation contract'
+     try{. ([scriptblock]::Create([Text.Encoding]::UTF8.GetString($contractSource.bytes).TrimStart([char]0xFEFF)))}finally{$contractSource.lock.Dispose()}
+     $reservationProperty=$Record.PSObject.Properties['grant_reservation_diagnostics']
+     Assert-Condition ($null-ne$reservationProperty-and$reservationProperty.Name-ceq'grant_reservation_diagnostics') "$Description lacks exact Grant reservation metadata"
+-    $null=Assert-R19GrantReservationCandidateContract -Value $reservationProperty.Value -RepoRoot $repo -Enabled $true
++    $null=Assert-R19GrantReservationCandidateContract -Value $reservationProperty.Value -RepoRoot $repo -Enabled $true -CancellationEnabled $requireStop
+   }else{Assert-Condition ($null-eq$Record.PSObject.Properties['grant_reservation_diagnostics']) "$Description contains undeclared Grant reservation diagnostics"}
++  $stopProperty=$Record.PSObject.Properties['grant_reservation_stop_diagnostics']
++  if($requireStop){
++    Assert-Condition ($null-ne$stopProperty-and$stopProperty.Name-ceq'grant_reservation_stop_diagnostics') "$Description lacks exact STOP128 metadata"
++    $null=Assert-R19GrantReservationStopCandidateContract -Value $stopProperty.Value -RepoRoot $repo -Enabled $true
++  }else{Assert-Condition ($null-eq$stopProperty) "$Description contains undeclared STOP128 diagnostics"}
+   $requireGrantDiagnostics=[bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   if($requireGrantDiagnostics){
+     $expectedGrantContract=[pscustomobject][ordered]@{
+@@ -154,7 +168,7 @@
+     $latestPointer=$schemaProperty.Value-ceq'vc-lora-r19-candidate-artifact-latest-v1'
+     $readerProperty=$Record.PSObject.Properties['reader_schema']
+     $readerMatches=$null-ne$readerProperty-and$readerProperty.Name-ceq'reader_schema'-and
+-      $readerProperty.Value-is[string]-and$readerProperty.Value-ceq$(if($requireReservation){'vc-lora-r19-runtime-stage-jtag-read-v10'}else{'vc-lora-r19-runtime-stage-jtag-read-v9'})
++      $readerProperty.Value-is[string]-and$readerProperty.Value-ceq$(if($requireStop){'vc-lora-r19-runtime-stage-jtag-read-v11'}elseif($requireReservation){'vc-lora-r19-runtime-stage-jtag-read-v10'}else{'vc-lora-r19-runtime-stage-jtag-read-v9'})
+     $grantProperty=$Record.PSObject.Properties['grant_diagnostics']
+     # latest-v1 binds the reader in grant_diagnostics; only detailed artifact
+     # documents declare reader_schema at top level. Never invent that field
+@@ -227,6 +241,19 @@
+       "$Description candidate safety metadata is absent or invalid"
+ }
+ 
++function Assert-GrantReservationStopSourceBinding([object]$Manifest,[string]$ArtifactRoot) {
++  foreach($relative in @('firmware/high_speed/r19_grant_reservation_stop_record.hpp','tools/read_r19_grant_reservation_stop_record.ps1')){
++    $rows=@($Manifest.canonical_source_snapshot.files|Where-Object{$_.path-ceq$relative})
++    $canonical=Get-Item -LiteralPath (Join-Path $repo $relative) -ErrorAction Stop
++    Assert-Condition ($rows.Count-eq1-and$rows[0].sha256-is[string]-and$rows[0].sha256-cmatch'^[A-F0-9]{64}$'-and
++      ($rows[0].size_bytes-is[int]-or$rows[0].size_bytes-is[long])-and$rows[0].size_bytes-eq$canonical.Length-and
++      $rows[0].sha256-ceq(Get-Sha256 $canonical.FullName)) 'STOP128 canonical source closure differs'
++    if($relative.StartsWith('tools/')){
++      Assert-Condition ((Get-Sha256 (Join-Path $ArtifactRoot ('evidence/'+$relative)))-ceq$rows[0].sha256) 'STOP128 staged decoder differs from the source closure'
++    }
++  }
++}
++
+ function Get-Sha256([string]$Path) {
+   (Get-FileHash -LiteralPath $Path -Algorithm SHA256 -ErrorAction Stop).Hash.
+       ToUpperInvariant()
+@@ -480,6 +507,7 @@
+ }
+ 
+ function Resolve-CandidateBundle {
++  $grantReservationStopEnabled=[bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $candidateBase = Join-Path $repo $candidateBaseRelative
+   Assert-Condition (Test-Path -LiteralPath $candidateBase -PathType Container) `
+       "Candidate artifact base is missing: $candidateBase"
+@@ -561,6 +589,7 @@
+       [string]$seal.artifact_id -ceq $artifactId) `
+       'Candidate final seal identity/result mismatch'
+   Assert-CandidateModeRecord $seal 'Candidate final seal'
++  if($grantReservationStopEnabled){Assert-GrantReservationStopSourceBinding -Manifest $manifest -ArtifactRoot $artifactRoot}
+   Assert-Condition ((Resolve-Within $repo ([string]$manifest.artifact_root) `
+         'manifest artifact_root') -ceq $artifactRoot -and
+       (Resolve-Within $repo ([string]$handoff.artifact_root) `
+@@ -674,6 +703,7 @@
+ 
+ function Invoke-CandidateVerifier([object]$Bundle, [string]$Checkpoint) {
+   $grantReservationEnabled=[bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)
++  $grantReservationStopEnabled=[bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $grantDiagnosticsEnabled=[bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $diagnosticUsbFailureEnabled=[bool](Get-Variable -Name diagnosticUsbFailureEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $verifier = Join-Path $repo 'tools\verify_r19_candidate_artifact.ps1'
+@@ -713,7 +743,7 @@
+       $reservationBinding=@($manifest.canonical_source_snapshot.files|Where-Object{$_.path-ceq'tools/r19_grant_reservation_contract.ps1'})
+       Assert-Condition ($reservationBinding.Count-eq1) 'Reservation contract source is not uniquely pinned'
+       $reservationContractSha=[string]$reservationBinding[0].sha256
+-      Assert-Condition ($reservationContractSha-ceq'5DAA27A9E16080E0A0524CEDABB44752B337697E2338F373F63CFEE886A2B9DC') 'Candidate reservation contract differs from reviewed implementation'
++      Assert-Condition ($reservationContractSha-ceq$expectedGrantReservationContractSha256) 'Candidate reservation contract differs from reviewed implementation'
+       $sourceReservationContract=Read-PinnedFileUnderLock (Join-Path $repo 'tools/r19_grant_reservation_contract.ps1') $reservationContractSha 'Grant reservation contract'
+       $stagedReservationContractPath=Join-Path $stageDirectory 'r19_grant_reservation_contract.ps1'
+       Write-DurableBytes $stagedReservationContractPath $sourceReservationContract.bytes
+@@ -753,6 +783,7 @@
+     if($diagnosticUsbFailureEnabled){$modeArguments.DiagnosticUsbFailureDiagnostics=$true}
+     if($grantDiagnosticsEnabled){$modeArguments.GrantDiagnostics=$true}
+     if($grantReservationEnabled){$modeArguments.GrantReservationDiagnostics=$true}
++    if($grantReservationStopEnabled){$modeArguments.GrantReservationStopDiagnostics=$true}
+     $output = @(& $stagedVerifierPath -RepoRoot $repo @modeArguments `
+         -LatestPath $Bundle.latest_path `
+         -ExpectedLatestSha256 $Bundle.latest_sha256 2>&1)
+@@ -1317,6 +1348,7 @@
+   $grantDiagnosticsEnabled=[bool](Get-Variable -Name grantDiagnosticsEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $diagnosticUsbFailureEnabled=[bool](Get-Variable -Name diagnosticUsbFailureEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $grantReservationEnabled=[bool](Get-Variable -Name grantReservationEnabled -ValueOnly -ErrorAction SilentlyContinue)
++  $grantReservationStopEnabled=[bool](Get-Variable -Name grantReservationStopEnabled -ValueOnly -ErrorAction SilentlyContinue)
+   $terminalPath = Join-Path $evidence 'terminal_status.json'
+   Write-DurableJson $terminalPath ([ordered]@{
+     schema_version=1;test_id=$testId;finished_utc=[DateTime]::UtcNow.ToString('o')
+@@ -1464,6 +1496,14 @@
+       $nextRequiredAction='Capture once, acquire all ten records twice per role, then mandatory accepted R18 rollback'
+     }
+   }
++  if($grantReservationStopEnabled-and$null-ne$Bundle){
++    $record['grant_reservation_stop_diagnostics']=$modeHandoff.grant_reservation_stop_diagnostics
++    $record['reader_schema']='vc-lora-r19-runtime-stage-jtag-read-v11'
++    if($OneRunAuthorized){
++      $authorizationScope='one host-assisted STOP128 diagnostic reservation; at most 15-second preparation then one fixed 40-second single-request measurement; mandatory R18 restore; not product acceptance'
++      $nextRequiredAction='Capture once, acquire all eleven records twice per role, then mandatory accepted R18 rollback'
++    }
++  }
+   $record.authorization_scope=$authorizationScope
+   $record.authorization.scope=$authorizationScope
+   $record.next_required_action=$nextRequiredAction
+@@ -1488,7 +1528,7 @@
+   Write-DurableText $sumsPath ((@($files | ForEach-Object {
+     "$($_.sha256) *$($_.path)" }) -join $newline) + $newline)
+   $sealPath = Join-Path $evidence 'final_seal.json'
+-  Write-DurableJson $sealPath ([ordered]@{
++  $flashSeal=[ordered]@{
+     schema='vc-lora-r19-candidate-flash-final-seal-v1';test_id=$testId
+     finalized_utc=[DateTime]::UtcNow.ToString('o');result=$Result;status=$Status
+     flash_record_sha256=Get-Sha256 $recordPath
+@@ -1505,7 +1545,13 @@
+     authorization_scope=$authorizationScope
+     next_required_action=$nextRequiredAction
+     one_run_hil_authorized=$OneRunAuthorized;deployment_authorized=$false
+-  })
++  }
++  if($grantReservationStopEnabled-and$null-ne$Bundle){
++    $flashSeal['grant_reservation_diagnostics']=$modeHandoff.grant_reservation_diagnostics
++    $flashSeal['grant_reservation_stop_diagnostics']=$modeHandoff.grant_reservation_stop_diagnostics
++    $flashSeal['reader_schema']='vc-lora-r19-runtime-stage-jtag-read-v11'
++  }
++  Write-DurableJson $sealPath $flashSeal
+   Write-DurableText (Join-Path $evidence 'final_seal.sha256') `
+       ((Get-Sha256 $sealPath) + ' *final_seal.json' + $newline)
+   $recordPath
+--- a/tools/invoke_r19_jtag_preflash_gate.ps1
++++ b/tools/invoke_r19_jtag_preflash_gate.ps1
+@@ -5,6 +5,7 @@
+   [switch]$Execute,
+   [switch]$GrantDiagnostics,
+   [switch]$GrantReservationDiagnostics,
++  [switch]$GrantReservationStopDiagnostics,
+   [switch]$OfflineContractTest,
+   [ValidateSet('success','topology_change','duplicate_chain',
+       'winusb_unregistered','driver_mismatch')]
+@@ -22,6 +23,7 @@
+ $ErrorActionPreference = 'Stop'
+ Set-StrictMode -Version Latest
+ if($GrantReservationDiagnostics-and-not$GrantDiagnostics){throw 'Grant reservation preflight requires Grant diagnostics'}
++if($GrantReservationStopDiagnostics-and-not$GrantReservationDiagnostics){throw 'STOP128 preflight requires Grant reservation diagnostics'}
+ $utf8 = [Text.UTF8Encoding]::new($false)
+ $newline = [Environment]::NewLine
+ $schema = 'vc-lora-r19-jtag-preflash-gate-v1'
+@@ -730,7 +732,8 @@
+   toolchain=$toolchainEvidence;roles=@($roles)
+   grant_diagnostics_enabled=$GrantDiagnostics.IsPresent
+   grant_reservation_diagnostics_enabled=$GrantReservationDiagnostics.IsPresent
+-  reader_schema=if($GrantReservationDiagnostics.IsPresent){'vc-lora-r19-runtime-stage-jtag-read-v10'}elseif($GrantDiagnostics.IsPresent){'vc-lora-r19-runtime-stage-jtag-read-v9'}else{''}
++  grant_reservation_stop_diagnostics_enabled=$GrantReservationStopDiagnostics.IsPresent
++  reader_schema=if($GrantReservationStopDiagnostics.IsPresent){'vc-lora-r19-runtime-stage-jtag-read-v11'}elseif($GrantReservationDiagnostics.IsPresent){'vc-lora-r19-runtime-stage-jtag-read-v10'}elseif($GrantDiagnostics.IsPresent){'vc-lora-r19-runtime-stage-jtag-read-v9'}else{''}
+   openocd_list=$null;steps=@($steps)
+ }
+ Write-Summary $summary
+--- /dev/null
++++ b/tests/hil/check_r19_grant_reservation_stop_flash_contract.ps1
+@@ -0,0 +1,163 @@
++[CmdletBinding()]
++param([string]$RepoRoot='', [string]$OutputDirectory='')
++Set-StrictMode -Version Latest
++$ErrorActionPreference='Stop'
++if(-not$RepoRoot){$RepoRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)}
++$repo=(Resolve-Path -LiteralPath $RepoRoot).Path
++$script:checks=0
++function Check([bool]$Condition,[string]$Message){$script:checks++;if(-not$Condition){throw ('FAIL '+$Message)}}
++function Reject([scriptblock]$Action,[string]$Message){$threw=$false;try{&$Action|Out-Null}catch{$threw=$true};Check $threw $Message}
++function Read-Ast([string]$Relative){$tokens=$null;$errors=$null;$ast=[Management.Automation.Language.Parser]::ParseFile((Join-Path $repo $Relative),[ref]$tokens,[ref]$errors);Check (@($errors).Count-eq0) ('Syntax '+$Relative);return $ast}
++function Import-PureFunctions([string]$Relative,[string[]]$Names=@()){
++  $ast=Read-Ast $Relative
++  foreach($node in $ast.EndBlock.Statements|Where-Object{$_-is[Management.Automation.Language.FunctionDefinitionAst]-and($Names.Count-eq0-or$_.Name-cin$Names)}){
++    . ([scriptblock]::Create($node.Extent.Text));Set-Item -Path ('Function:script:'+$node.Name) -Value (Get-Item ('Function:'+$node.Name)).ScriptBlock
++  }
++}
++$flashRelative='tools/invoke_r19_candidate_app_flash_hil.ps1'
++$gateRelative='tools/invoke_r19_jtag_preflash_gate.ps1'
++$flashAst=Read-Ast $flashRelative;$gateAst=Read-Ast $gateRelative
++foreach($entry in @(@($flashAst,'Flash'),@($gateAst,'Preflash'))){
++  Check (@($entry[0].ParamBlock.Parameters|Where-Object{$_.Name.VariablePath.UserPath-ceq'GrantReservationStopDiagnostics'}).Count-eq1) ($entry[1]+' has explicit default-off STOP128 switch')
++}
++Import-PureFunctions $flashRelative @('Assert-Condition','Get-Sha256','Read-PinnedFileUnderLock','Assert-CandidateModeRecord','Assert-GrantReservationStopSourceBinding','Write-SealedEvidence','Write-DurableJson','Write-DurableText','Write-DurableBytes','Get-RelativePath','Get-TextSha256')
++Import-PureFunctions 'tools/r19_grant_reservation_contract.ps1'
++Import-PureFunctions 'tools/r19_candidate_artifact_common.ps1' @('Get-R19Sha256','Get-R19TimedPathCandidateContract','Get-R19AuxReadinessCandidateContract','Get-R19DiagnosticUsbFailureCandidateContract','Get-R19GrantDiagnosticCandidateContract')
++Import-PureFunctions 'tools/r19_usb_role_contract.ps1' @('Get-R19UsbRoleCapabilities')
++$runtimeFailDiagnosticsEnabled=$true;$timedPathEnabled=$true;$TimedPathMode='ExplicitHostArm'
++$auxReadinessEnabled=$true;$diagnosticUsbFailureEnabled=$true;$grantDiagnosticsEnabled=$true;$grantReservationEnabled=$true;$grantReservationStopEnabled=$true;$acceptanceEligible=$false
++# Extracted functions receive an explicit file-fixture pin. The canonical main
++# retains its reviewed constants; no live entry point or verifier is invoked.
++$expectedGrantReservationContractSha256=Get-Sha256 (Join-Path $repo 'tools/r19_grant_reservation_contract.ps1')
++function New-ModeFixture([bool]$Stop=$true,[string]$Schema='vc-lora-r19-candidate-artifact-manifest-v1'){
++  $doc=[pscustomobject][ordered]@{
++    schema=$Schema;runtime_fail_diagnostics_enabled=$true;acceptance_eligible=$false;acceptance_authorized=$false;deployment_authorized=$false
++    reader_schema=$(if($Stop){'vc-lora-r19-runtime-stage-jtag-read-v11'}else{'vc-lora-r19-runtime-stage-jtag-read-v10'})
++    timed_path_diagnostics=Get-R19TimedPathCandidateContract $repo ExplicitHostArm
++    aux_readiness_diagnostics=Get-R19AuxReadinessCandidateContract $repo $true
++    diagnostic_usb_failure_diagnostics=Get-R19DiagnosticUsbFailureCandidateContract $repo $true
++    usb_role_capabilities=Get-R19UsbRoleCapabilities $repo ExplicitHostArm $true
++    grant_diagnostics=Get-R19GrantDiagnosticCandidateContract $repo $true
++    grant_reservation_diagnostics=Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true -CancellationEnabled $Stop
++  }
++  if($Stop){$doc|Add-Member NoteProperty grant_reservation_stop_diagnostics (Get-R19GrantReservationStopCandidateContract -RepoRoot $repo -Enabled $true)}
++  if($Schema-ceq'vc-lora-r19-candidate-artifact-latest-v1'){$doc.PSObject.Properties.Remove('reader_schema')}
++  return $doc
++}
++foreach($schema in @('vc-lora-r19-candidate-artifact-manifest-v1','vc-lora-r19-candidate-artifact-handoff-v1','vc-lora-r19-candidate-final-seal-v1','vc-lora-r19-candidate-artifact-latest-v1')){
++  $good=New-ModeFixture $true $schema;Assert-CandidateModeRecord $good 'STOP128 valid document';Check $true ('Strict STOP128 metadata accepts '+$schema)
++  foreach($mutation in @('missing-stop','wrong-case','hash','size','extra','legacy-reader','legacy-wire','old-base-contract','missing-cancellation','grant-reader-downgrade')){
++    $bad=New-ModeFixture $true $schema
++    switch($mutation){
++      'missing-stop'{$bad.PSObject.Properties.Remove('grant_reservation_stop_diagnostics')}
++      'wrong-case'{$v=$bad.grant_reservation_stop_diagnostics;$bad.PSObject.Properties.Remove('grant_reservation_stop_diagnostics');$bad|Add-Member NoteProperty Grant_Reservation_Stop_Diagnostics $v}
++      'hash'{$bad.grant_reservation_stop_diagnostics.decoder_sha256='0'*64}
++      'size'{$bad.grant_reservation_stop_diagnostics.size_bytes=124}
++      'extra'{$bad.grant_reservation_stop_diagnostics|Add-Member NoteProperty undeclared $true}
++      'legacy-reader'{$bad.grant_reservation_stop_diagnostics.runtime_reader_schema='vc-lora-r19-runtime-stage-jtag-read-v10'}
++      'legacy-wire'{$bad.grant_reservation_stop_diagnostics.usb_control_schema='vc-lora-r19-grant-reservation-usb-v1'}
++      'old-base-contract'{$bad.grant_reservation_diagnostics=Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true}
++      'missing-cancellation'{$bad.grant_reservation_diagnostics.PSObject.Properties.Remove('cancellation')}
++      'grant-reader-downgrade'{$bad.grant_reservation_diagnostics.reader_schema='vc-lora-r19-runtime-stage-jtag-read-v10'}
++    }
++    Reject {Assert-CandidateModeRecord $bad 'STOP128 invalid document'} ('Strict STOP128 rejects '+$mutation+' '+$schema)
++  }
++  if($schema-cne'vc-lora-r19-candidate-artifact-latest-v1'){
++    $bad=New-ModeFixture $true $schema;$bad.reader_schema='vc-lora-r19-runtime-stage-jtag-read-v10'
++    Reject {Assert-CandidateModeRecord $bad 'top-level downgrade'} ('STOP128 rejects top-level v10 '+$schema)
++  }
++}
++$pinnedHash=$expectedGrantReservationContractSha256;$expectedGrantReservationContractSha256='0'*64
++Reject {Assert-CandidateModeRecord (New-ModeFixture) 'changed reviewed source'} 'Actual file-lock helper rejects a changed reviewed contract pin'
++$expectedGrantReservationContractSha256=$pinnedHash
++$grantReservationStopEnabled=$false
++Assert-CandidateModeRecord (New-ModeFixture $false) 'legacy v10';Check $true 'Disabled STOP preserves exact legacy v10'
++Reject {Assert-CandidateModeRecord (New-ModeFixture $true) 'undeclared STOP'} 'STOP128 metadata cannot escalate an unselected invocation'
++$bad=New-ModeFixture $false;$bad.reader_schema='vc-lora-r19-runtime-stage-jtag-read-v11'
++Reject {Assert-CandidateModeRecord $bad 'legacy promoted to v11'} 'Legacy v10 cannot downcast or invent v11'
++$grantReservationStopEnabled=$true
++if(-not$OutputDirectory){$OutputDirectory=Join-Path $repo ('runs/validation/R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001/20261025T-fix/stop-flash-'+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffffffZ'))}
++[void][IO.Directory]::CreateDirectory($OutputDirectory)
++$sourceArtifact=Join-Path $OutputDirectory 'source-fixture';[void][IO.Directory]::CreateDirectory((Join-Path $sourceArtifact 'evidence/tools'))
++$sourceRows=@(foreach($relative in @('firmware/high_speed/r19_grant_reservation_stop_record.hpp','tools/read_r19_grant_reservation_stop_record.ps1')){$sourceFile=Get-Item -LiteralPath (Join-Path $repo $relative);[pscustomobject]@{path=$relative;sha256=Get-Sha256 $sourceFile.FullName;size_bytes=[int64]$sourceFile.Length}})
++Copy-Item -LiteralPath (Join-Path $repo 'tools/read_r19_grant_reservation_stop_record.ps1') -Destination (Join-Path $sourceArtifact 'evidence/tools/read_r19_grant_reservation_stop_record.ps1')
++$sourceManifest=[pscustomobject]@{canonical_source_snapshot=[pscustomobject]@{files=$sourceRows}}
++Assert-GrantReservationStopSourceBinding $sourceManifest $sourceArtifact;Check $true 'Actual STOP128 source/staged decoder closure accepts exact bytes'
++foreach($mutation in @('missing-header','duplicate','hash','size','string-size')){
++  $bad=$sourceManifest|ConvertTo-Json -Depth 8|ConvertFrom-Json
++  switch($mutation){
++    'missing-header'{$bad.canonical_source_snapshot.files=@($bad.canonical_source_snapshot.files|Where-Object{$_.path-cne'firmware/high_speed/r19_grant_reservation_stop_record.hpp'})}
++    'duplicate'{$bad.canonical_source_snapshot.files+=@($bad.canonical_source_snapshot.files[0])}
++    'hash'{$bad.canonical_source_snapshot.files[0].sha256='0'*64}
++    'size'{$bad.canonical_source_snapshot.files[0].size_bytes=1}
++    'string-size'{$bad.canonical_source_snapshot.files[0].size_bytes=[string]$bad.canonical_source_snapshot.files[0].size_bytes}
++  }
++  Reject {Assert-GrantReservationStopSourceBinding $bad $sourceArtifact} ('STOP128 source closure rejects '+$mutation)
++}
++[IO.File]::WriteAllText((Join-Path $sourceArtifact 'evidence/tools/read_r19_grant_reservation_stop_record.ps1'),'changed fixture bytes')
++Reject {Assert-GrantReservationStopSourceBinding $sourceManifest $sourceArtifact} 'STOP128 source closure rejects changed staged decoder'
++$flashText=Get-Content -LiteralPath (Join-Path $repo $flashRelative) -Raw
++$modeStart=$flashText.IndexOf('$runtimeFailDiagnosticsEnabled =');$modeEnd=$flashText.IndexOf('$acceptanceEligible =',$modeStart)
++Check ($modeStart-ge0-and$modeEnd-gt$modeStart) 'Mode guard is isolated before execution setup'
++$modeSource=[scriptblock]::Create($flashText.Substring($modeStart,$modeEnd-$modeStart))
++foreach($missing in @('runtime','mode','aux','diagnostic-usb','grant','reservation')){
++  Reject {&{
++    $RuntimeFailDiagnostics=[Management.Automation.SwitchParameter]::new($missing-cne'runtime');$TimedPathMode=if($missing-ceq'mode'){'SyncOnly'}else{'ExplicitHostArm'}
++    $AuxReadinessDiagnostics=[Management.Automation.SwitchParameter]::new($missing-cne'aux');$DiagnosticUsbFailureDiagnostics=[Management.Automation.SwitchParameter]::new($missing-cne'diagnostic-usb')
++    $GrantDiagnostics=[Management.Automation.SwitchParameter]::new($missing-cne'grant');$GrantReservationDiagnostics=[Management.Automation.SwitchParameter]::new($missing-cne'reservation');$GrantReservationStopDiagnostics=[Management.Automation.SwitchParameter]::new($true)
++    . $modeSource
++  }} ('STOP128 rejects missing prerequisite '+$missing+' before main')
++}
++Check ($flashText.Contains('$modeArguments.GrantReservationStopDiagnostics=$true')) 'STOP128 selection reaches the staged verifier'
++Check ($flashText.Contains('R19-GRANT-RESERVATION-STOP-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001')) 'STOP128 selects the separately declared candidate leaf'
++$gateText=Get-Content -LiteralPath (Join-Path $repo $gateRelative) -Raw
++$gateGuardStart=$gateText.IndexOf('if($GrantReservationDiagnostics');$gateGuardEnd=$gateText.IndexOf('$utf8',$gateGuardStart)
++$gateGuard=[scriptblock]::Create($gateText.Substring($gateGuardStart,$gateGuardEnd-$gateGuardStart))
++foreach($missing in @('grant','reservation')){Reject {&{
++  $GrantDiagnostics=[Management.Automation.SwitchParameter]::new($missing-cne'grant');$GrantReservationDiagnostics=[Management.Automation.SwitchParameter]::new($missing-cne'reservation');$GrantReservationStopDiagnostics=[Management.Automation.SwitchParameter]::new($true);. $gateGuard
++}} ('PnP-only STOP metadata rejects missing '+$missing)}
++$gateRuntime=$gateText.Substring($gateText.LastIndexOf('Initialize-OutputDirectory',[StringComparison]::Ordinal))
++Check ($gateRuntime-notmatch'Invoke-ReaderPreflight|Assert-LiveToolchain|Invoke-OpenOcd|transport init') 'STOP128 flag cannot activate JTAG in the PnP-only gate'
++$summaryNode=@($gateAst.EndBlock.Statements|Where-Object{$_-is[Management.Automation.Language.AssignmentStatementAst]-and$_.Left-is[Management.Automation.Language.VariableExpressionAst]-and$_.Left.VariablePath.UserPath-ceq'summary'})
++Check ($summaryNode.Count-eq1) 'PnP-only evidence projection is unambiguous'
++$summarySource=[scriptblock]::Create($summaryNode[0].Extent.Text)
++foreach($stop in @($false,$true)){&{
++  $schema='vc-lora-r19-jtag-preflash-gate-v1';$testId='offline-stop-metadata';$startedUtc='offline';$driverBindingPassed=$true;$terminalStatus='PASS_WINUSB_DRIVER_BINDING_PNP_ONLY';$failure='';$hardwareInteraction=$false;$toolchainEvidence=$null;$roles=@();$steps=@()
++  $OfflineContractTest=[Management.Automation.SwitchParameter]::new($true);$GrantDiagnostics=[Management.Automation.SwitchParameter]::new($true);$GrantReservationDiagnostics=[Management.Automation.SwitchParameter]::new($true);$GrantReservationStopDiagnostics=[Management.Automation.SwitchParameter]::new($stop)
++  . $summarySource
++  $wanted=if($stop){'vc-lora-r19-runtime-stage-jtag-read-v11'}else{'vc-lora-r19-runtime-stage-jtag-read-v10'}
++  Check ($summary.reader_schema-ceq$wanted-and$summary.grant_reservation_stop_diagnostics_enabled-eq$stop) 'Actual PnP-only evidence keeps exact selected generation'
++  foreach($property in $summary.safety.PSObject.Properties){Check (-not[bool]$property.Value) ('PnP-only '+$property.Name+' remains false')}
++}}
++foreach($stop in @($false,$true)){&{
++  $grantReservationStopEnabled=$stop
++  $evidenceLeaf=$(if($stop){'flash-evidence-v11'}else{'flash-evidence-v10'})+'-'+[Guid]::NewGuid().ToString('N')
++  $evidence=Join-Path $OutputDirectory $evidenceLeaf
++  [void][IO.Directory]::CreateDirectory($evidence)
++  $utf8=[Text.UTF8Encoding]::new($false);$newline=[Environment]::NewLine
++  $testId='OFFLINE-STOP-FLASH-PROJECTION';$startedUtc='offline-file-fixture';$flashEvidenceSchema='vc-lora-r19-candidate-flash-evidence-v1'
++  $OfflineContractTest=[Management.Automation.SwitchParameter]::new($true);$Execute=[Management.Automation.SwitchParameter]::new($false)
++  $acceptedR18RootRelative='offline-fixture-only';$MaxRollbackAttempts=3
++  $script:Operations=[Collections.ArrayList]::new();$script:CompetingClientGateFailures=[Collections.ArrayList]::new()
++  $script:ExternalActions=[ordered]@{device_access_attempted=$false;process_inventory_queried=$false;esptool_executed=$false;firmware_write_attempted=$false}
++  $handoffPath=Join-Path $evidence 'fixture-handoff.json'
++  $handoff=New-ModeFixture $stop 'vc-lora-r19-candidate-artifact-handoff-v1';Write-DurableJson $handoffPath $handoff
++  $bundle=[pscustomobject]@{runtime_fail_diagnostics_enabled=$true;latest_path='offline-latest';latest_sha256='A'*64;handoff_path=$handoffPath;handoff_sha256=Get-Sha256 $handoffPath;candidate_manifest_path='offline-manifest';candidate_manifest_sha256='B'*64;candidate_final_seal_path='offline-candidate-seal';candidate_final_seal_sha256='C'*64;artifact_id='offline-stop-fixture'}
++  $recordPath=Write-SealedEvidence -Result PASS -Status OFFLINE_FILE_PROJECTION -Failure '' -Bundle $bundle -Roles @() -RollbackResult $null -OneRunAuthorized $false
++  $record=Get-Content -LiteralPath $recordPath -Raw|ConvertFrom-Json
++  $seal=Get-Content -LiteralPath (Join-Path $evidence 'final_seal.json') -Raw|ConvertFrom-Json
++  $wanted=if($stop){'vc-lora-r19-runtime-stage-jtag-read-v11'}else{'vc-lora-r19-runtime-stage-jtag-read-v10'}
++  Check ($record.reader_schema-ceq$wanted-and-not$record.one_run_hil_authorized-and-not$record.acceptance_authorized-and-not$record.deployment_authorized) 'Actual flash record preserves generation without granting authority'
++  Check ($seal.flash_record_sha256-ceq(Get-Sha256 $recordPath)-and-not$seal.one_run_hil_authorized-and-not$seal.deployment_authorized) 'Actual flash seal binds the emitted record and remains unauthorized'
++  if($stop){
++    foreach($doc in @($record,$seal)){
++      Check ($doc.reader_schema-ceq$wanted) 'STOP128 record and seal both declare exact reader-v11'
++      $null=Assert-R19GrantReservationStopCandidateContract -Value $doc.grant_reservation_stop_diagnostics -RepoRoot $repo -Enabled $true
++      $null=Assert-R19GrantReservationCandidateContract -Value $doc.grant_reservation_diagnostics -RepoRoot $repo -Enabled $true -CancellationEnabled $true
++      Check $true 'Actual flash projection retains exact source-bound STOP128 and cancellation contracts'
++    }
++  }else{
++    Check ($null-eq$record.PSObject.Properties['grant_reservation_stop_diagnostics']-and$null-eq$seal.PSObject.Properties['grant_reservation_stop_diagnostics']-and$null-eq$seal.PSObject.Properties['reader_schema']) 'Disabled STOP leaves legacy flash seal and metadata unchanged'
++  }
++}}
++Write-Output "check_r19_grant_reservation_stop_flash_contract PASS checks=$script:checks hardware_interaction=false"

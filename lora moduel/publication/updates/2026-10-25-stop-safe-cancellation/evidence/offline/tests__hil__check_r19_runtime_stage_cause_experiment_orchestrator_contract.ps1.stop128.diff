@@ -1,0 +1,34 @@
+Comparing files E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\check_r19_runtime_stage_cause_experiment_orchestrator_contract.before.ps1 and E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TESTS\HIL\CHECK_R19_RUNTIME_STAGE_CAUSE_EXPERIMENT_ORCHESTRATOR_CONTRACT.PS1
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\check_r19_runtime_stage_cause_experiment_orchestrator_contract.before.ps1
+   48:      Hash.ToUpperInvariant()
+   49:  $candidateLatestSha256 =
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TESTS\HIL\CHECK_R19_RUNTIME_STAGE_CAUSE_EXPERIMENT_ORCHESTRATOR_CONTRACT.PS1
+   48:      Hash.ToUpperInvariant()
+   49:  $gateSha256 = (Get-FileHash -LiteralPath $gatePath -Algorithm SHA256).
+   50:      Hash.ToUpperInvariant()
+   51:  $candidateLatestSha256 =
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\check_r19_runtime_stage_cause_experiment_orchestrator_contract.before.ps1
+  127:      'runtime-stage orchestrator stage reader pin does not match the actual child'
+  128:  $candidateArtifactPinMatch = [regex]::Match($source,
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TESTS\HIL\CHECK_R19_RUNTIME_STAGE_CAUSE_EXPERIMENT_ORCHESTRATOR_CONTRACT.PS1
+  129:      'runtime-stage orchestrator stage reader pin does not match the actual child'
+  130:  $gatePinMatch = [regex]::Match($source,
+  131:      '(?s)\$expectedJtagPreflightGateSha256\s*=\s*''([0-9A-F]{64})''')
+  132:  Assert-Contract ($gatePinMatch.Success -and
+  133:      [string]$gatePinMatch.Groups[1].Value -ceq $gateSha256) `
+  134:      'runtime-stage orchestrator preflight pin does not match the actual child'
+  135:  $candidateArtifactPinMatch = [regex]::Match($source,
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\check_r19_runtime_stage_cause_experiment_orchestrator_contract.before.ps1
+  184:      $readerSha256,
+  185:      '9E9B1D8362520337064D237459471751B6542322821E666A1184B0A4AD38CC94',
+  186:      $captureToolSha256,
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TESTS\HIL\CHECK_R19_RUNTIME_STAGE_CAUSE_EXPERIMENT_ORCHESTRATOR_CONTRACT.PS1
+  191:      $readerSha256,
+  192:      'EA1BCF4AD9CC5936FD4A356F6194EE0554BDFD91C3B5DB1E1FFA1138E822835D',
+  193:      $captureToolSha256,
+*****
+

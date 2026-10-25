@@ -1,0 +1,130 @@
+[CmdletBinding()]
+param(
+  [string]$RepoRoot='', [string]$OutputDirectory='', [string]$ParentSourcePath='',
+  [string]$SavedV10RunPath='', [string]$SavedV9RunPath=''
+)
+Set-StrictMode -Version Latest
+$ErrorActionPreference='Stop'
+if(-not$RepoRoot){$RepoRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)}
+if(-not$ParentSourcePath){$ParentSourcePath=Join-Path $RepoRoot 'tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1'}
+if(-not$OutputDirectory){$OutputDirectory=Join-Path $RepoRoot ('runs/validation/R19-GRANT-RESERVATION-INTEGRATION-OFFLINE-001/20261025T-fix/stage_final_gate-'+[DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffffffZ'))}
+if(Test-Path -LiteralPath $OutputDirectory){throw 'Test output must be fresh'}
+[void][IO.Directory]::CreateDirectory($OutputDirectory)
+$utf8=[Text.UTF8Encoding]::new($false,$true)
+$script:checks=0;$script:results=[Collections.ArrayList]::new()
+function Check([bool]$Value,[string]$Message){$script:checks++;if(-not$Value){throw $Message}}
+function Case([string]$Name,[scriptblock]$Action){
+  try{&$Action;[void]$script:results.Add([ordered]@{name=$Name;result='PASS';error=$null});Write-Output ('PASS '+$Name)}
+  catch{[void]$script:results.Add([ordered]@{name=$Name;result='FAIL';error=$_.Exception.Message});Write-Output ('FAIL '+$Name+': '+$_.Exception.Message)}
+}
+function Sha([string]$Path){(Get-FileHash -LiteralPath $Path -Algorithm SHA256).Hash}
+function ReadJson([string]$Path){[IO.File]::ReadAllText($Path,$utf8)|ConvertFrom-Json}
+$tokens=$null;$errors=$null
+$ast=[Management.Automation.Language.Parser]::ParseFile($ParentSourcePath,[ref]$tokens,[ref]$errors)
+Check (@($errors).Count-eq0) 'Actual parent source parses'
+$functions=@($ast.EndBlock.Statements|Where-Object{$_-is[Management.Automation.Language.FunctionDefinitionAst]})
+$stage=@($functions|Where-Object{$_.Name-ceq'Get-StageProof'})
+Check ($stage.Count-eq1) 'Exactly one actual Get-StageProof definition'
+$final=@($stage[0].Body.FindAll({param($n)
+  $n-is[Management.Automation.Language.AssignmentStatementAst]-and
+  $n.Left.Extent.Text-ceq'$proven'-and$n.Right.Extent.Text.Contains('$runtimeStageValid')
+},$true))
+Check ($final.Count-eq1) 'Exactly one actual final acquisition predicate'
+$script:actualFinalGate=[scriptblock]::Create($final[0].Extent.Text)
+# The default CTest is portable. It executes the exact final assignment from
+# production with otherwise-valid local proof values, not a copied allowlist.
+function Invoke-ActualFinalGate([string]$Schema,[string]$Mutation=''){
+  $Step=[pscustomobject]@{exit_code=0}
+  $candidate=[pscustomobject]@{artifact_id='portable-proof-fixture'}
+  $Role='ground';$ProbeUsbLocation='OFFLINE-FIXTURE'
+  $summary=[pscustomobject]@{
+    schema=$Schema;result='PASS';mode='live-jtag';hardware_interaction=$true
+    binding=[pscustomobject]@{artifact_id=$candidate.artifact_id;role=$Role;probe=[pscustomobject]@{requested_usb_location=$ProbeUsbLocation;opened_identity_proven_before_halt=$true}}
+    decoded=[pscustomobject]@{role=$Role}
+    safety=[pscustomobject]@{com_opened=$false;flash_written=$false;target_restart_issued=$false;two_identical_reads=$true;resume_shutdown_cleanup_attempted=$true;resume_shutdown_cleanup_proven=$true;target_may_be_halted=$false;native_processes_termination_proven=$true}
+  }
+  $addressEvidenceValid=$true;$runtimeStageValid=$true;$endpointFifoValid=$true;$recordEvidenceValid=$true;$boundary='flush-completed'
+  # A blocked USB completion is valid diagnostic evidence, never product success.
+  $usbTxBoundaryCompletionProven=$false
+  switch($Mutation){
+    'child-exit'{$Step.exit_code=1}
+    'reader-result'{$summary.result='FAIL'}
+    'reader-mode'{$summary.mode='offline-only'}
+    'hardware-declaration'{$summary.hardware_interaction=$false}
+    'artifact-id'{$summary.binding.artifact_id='wrong'}
+    'bound-role'{$summary.binding.role='vehicle'}
+    'address'{$addressEvidenceValid=$false}
+    'probe-location'{$summary.binding.probe.requested_usb_location='WRONG'}
+    'probe-identity'{$summary.binding.probe.opened_identity_proven_before_halt=$false}
+    'decoded-role'{$summary.decoded.role='vehicle'}
+    'runtime-record'{$runtimeStageValid=$false}
+    'fifo-record'{$endpointFifoValid=$false}
+    'raw-replay'{$recordEvidenceValid=$false}
+    'boundary'{$boundary=''}
+    'com-open'{$summary.safety.com_opened=$true}
+    'flash-written'{$summary.safety.flash_written=$true}
+    'target-restart'{$summary.safety.target_restart_issued=$true}
+    'paired-read'{$summary.safety.two_identical_reads=$false}
+    'cleanup-attempt'{$summary.safety.resume_shutdown_cleanup_attempted=$false}
+    'cleanup-proof'{$summary.safety.resume_shutdown_cleanup_proven=$false}
+    'halted'{$summary.safety.target_may_be_halted=$true}
+    'native-termination'{$summary.safety.native_processes_termination_proven=$false}
+  }
+  $proven=$false
+  . $script:actualFinalGate
+  [pscustomobject]@{proven=$proven;usb_completion=$usbTxBoundaryCompletionProven}
+}
+foreach($version in @(3,9,10)){
+  Case ('portable-supported-v'+$version) {
+    $result=Invoke-ActualFinalGate ('vc-lora-r19-runtime-stage-jtag-read-v'+$version)
+    Check $result.proven ('Actual final gate must accept valid v'+$version+' acquisition')
+    Check (-not$result.usb_completion) 'Acquisition validity does not invent USB completion'
+  }
+}
+foreach($schema in @('','unknown','vc-lora-r19-runtime-stage-jtag-read-v0','vc-lora-r19-runtime-stage-jtag-read-v2','vc-lora-r19-runtime-stage-jtag-read-v11','vc-lora-r19-runtime-stage-jtag-read-v10-extra')){
+  Case ('portable-reject-schema-'+$schema) {Check (-not(Invoke-ActualFinalGate $schema).proven) 'Unknown or invalid generation must fail closed'}
+}
+foreach($mutation in @('child-exit','reader-result','reader-mode','hardware-declaration','artifact-id','bound-role','address','probe-location','probe-identity','decoded-role','runtime-record','fifo-record','raw-replay','boundary','com-open','flash-written','target-restart','paired-read','cleanup-attempt','cleanup-proof','halted','native-termination')){
+  foreach($version in @(9,10)){
+    Case ('portable-v'+$version+'-reject-'+$mutation) {Check (-not(Invoke-ActualFinalGate ('vc-lora-r19-runtime-stage-jtag-read-v'+$version) $mutation).proven) 'Existing final integrity/safety conjunct must remain mandatory'}
+  }
+}
+$savedRows=[Collections.ArrayList]::new()
+if($SavedV10RunPath-or$SavedV9RunPath){
+  # Explicit saved-run integration is optional and never part of default CTest.
+  # These imports define pure functions only; no orchestrator main is executed.
+  foreach($f in $functions){. ([scriptblock]::Create($f.Extent.Text))}
+  $repo=(Resolve-Path -LiteralPath $RepoRoot).Path
+  . (Join-Path $repo 'tools/r19_candidate_artifact_common.ps1')
+  . (Join-Path $repo 'tools/r19_usb_role_contract.ps1')
+  $OfflineContractTest=[Management.Automation.SwitchParameter]::new($false)
+  $timedPathEnabled=$true;$TimedPathMode='ExplicitHostArm';$AuxReadinessDiagnostics=$true;$DiagnosticUsbFailureDiagnostics=$true;$GrantDiagnostics=$true;$ParamListDiagnostics=$true
+  foreach($spec in @(@(10,$SavedV10RunPath),@(9,$SavedV9RunPath))){
+    if(-not$spec[1]){continue}
+    $version=$spec[0];$savedRoot=(Resolve-Path -LiteralPath $spec[1]).Path
+    $GrantReservationDiagnostics=($version-eq10)
+    $hilPath=Join-Path $savedRoot 'summary.json';$hilSha=Sha $hilPath;$hil=ReadJson $hilPath;$candidate=$hil.candidate
+    foreach($role in @('vehicle','ground')){
+      $name='saved-full-v'+$version+'-'+$role
+      Case $name {
+        $stagePath=Join-Path $savedRoot ('stage_'+$role+'/summary.json');$saved=ReadJson $stagePath
+        $stageSha=Sha $stagePath;$flashRecordPath=[string]$saved.binding.flash.path
+        $tracked=@($saved.reads|ForEach-Object{[ordered]@{path=$_.path;sha256=Sha $_.path}})
+        $step=@($hil.steps|Where-Object{$_.name-ceq('stage_'+$role)})[0]
+        $proof=Get-StageProof $step $role $saved.binding.runtime_stage_address $saved.binding.probe.requested_usb_location (Split-Path -Parent $stagePath)
+        Check $proof.proven ('Actual entire Get-StageProof must accept intact saved role evidence; validation_error='+$proof.validation_error)
+        Check $proof.extended_raw_replay.proven 'Actual independent raw replay must remain required'
+        Check ($proof.extended_raw_replay.raw_read_count-eq(2*$version)) 'Exact paired read count remains bound to selected generation'
+        Check ($proof.validation_error-ceq''-and$proof.cleanup_proven-and-not$proof.target_may_be_halted-and$proof.native_processes_termination_proven) 'Actual saved safety evidence remains proven'
+        Check ((Sha $stagePath)-ceq$stageSha-and(Sha $hilPath)-ceq$hilSha) 'Historical summaries remain byte-identical'
+        foreach($raw in $tracked){Check ((Sha $raw.path)-ceq$raw.sha256) 'Historical raw bytes remain identical'}
+        [void]$savedRows.Add([ordered]@{role=$role;version=$version;proven=$proof.proven;raw_replay_proven=$proof.extended_raw_replay.proven;raw_count=$proof.extended_raw_replay.raw_read_count;usb_completion_proven=$proof.usb_tx_boundary_completion_proven;summary_sha256=$stageSha;historical_status=$hil.status;historical_status_modified=$false})
+      }
+    }
+  }
+}
+$failed=@($script:results|Where-Object{$_.result-ceq'FAIL'}).Count
+$summary=[ordered]@{schema='vc-lora-r19-stage-final-gate-regression-v1';result=if($failed){'FAIL'}else{'PASS'};checks=$script:checks;failed_cases=$failed;shell=$PSVersionTable.PSVersion.ToString();source_sha256=Sha $ParentSourcePath;portable_cases=$true;saved_run_replay_optional=$true;saved_replay=@($savedRows);cases=@($script:results);hardware_interaction=$false;production_main_executed=$false;old_run_or_candidate_modified=$false;new_live_authorization=$false}
+[IO.File]::WriteAllText((Join-Path $OutputDirectory 'summary.json'),($summary|ConvertTo-Json -Depth 12),$utf8)
+Write-Output ('STAGE_FINAL_GATE '+$summary.result+' checks='+$script:checks+' failures='+$failed)
+if($failed){exit 1}

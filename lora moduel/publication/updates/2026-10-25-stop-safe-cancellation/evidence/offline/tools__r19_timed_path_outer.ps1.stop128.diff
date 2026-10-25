@@ -1,0 +1,143 @@
+Comparing files E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_outer.ps1.published-before-stop128 and E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_OUTER.PS1
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_outer.ps1.published-before-stop128
+    5:      [bool]$ParamListDiagnostics=$false,[bool]$GrantDiagnostics=$false,
+    6:      [bool]$GrantReservationDiagnostics=$false)
+    7:    if($DiagnosticUsbFailureDiagnostics-and-not$AuxReadinessDiagnostics){throw 'Diagnostic USB failure mode requires AUX diagnost
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_OUTER.PS1
+    5:      [bool]$ParamListDiagnostics=$false,[bool]$GrantDiagnostics=$false,
+    6:      [bool]$GrantReservationDiagnostics=$false,[bool]$GrantReservationStopDiagnostics=$false)
+    7:    if($DiagnosticUsbFailureDiagnostics-and-not$AuxReadinessDiagnostics){throw 'Diagnostic USB failure mode requires AUX diagnost
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_outer.ps1.published-before-stop128
+   14:  nt and parameter-list diagnostics'}
+   15:    $paths=@('tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1',
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_OUTER.PS1
+   14:  nt and parameter-list diagnostics'}
+   15:    if($GrantReservationStopDiagnostics-and-not$GrantReservationDiagnostics){throw 'STOP128 requires explicit Grant reservation d
+   16:  iagnostics'}
+   17:    $paths=@('tools/invoke_r19_runtime_stage_cause_experiment_hil.ps1',
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_outer.ps1.published-before-stop128
+   31:  'tools/read_r19_grant_reservation_record.ps1','tools/r19_grant_reservation_contract.ps1')}
+   32:    $paths
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_OUTER.PS1
+   33:  'tools/read_r19_grant_reservation_record.ps1','tools/r19_grant_reservation_contract.ps1')}
+   34:    if($GrantReservationStopDiagnostics){$paths+=,'tools/read_r19_grant_reservation_stop_record.ps1'}
+   35:    $paths
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_outer.ps1.published-before-stop128
+   40:      [bool]$ParamListDiagnostics=$false,[bool]$GrantDiagnostics=$false,
+   41:      [bool]$GrantReservationDiagnostics=$false)
+   42:    function NeedPin($Value,$Message){if(-not$Value){throw $Message}}
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_OUTER.PS1
+   43:      [bool]$ParamListDiagnostics=$false,[bool]$GrantDiagnostics=$false,
+   44:      [bool]$GrantReservationDiagnostics=$false,[bool]$GrantReservationStopDiagnostics=$false,[string]$RepoRoot='')
+   45:    function NeedPin($Value,$Message){if(-not$Value){throw $Message}}
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_outer.ps1.published-before-stop128
+   78:    NeedPin ($preparedReservation-eq$GrantReservationDiagnostics) 'Prepared Grant reservation option differs'
+   79:    NeedPin (-not$GrantReservationDiagnostics-or($GrantDiagnostics-and$ParamListDiagnostics-and$Mode-ceq'ExplicitHostArm'-and$Rea
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_OUTER.PS1
+   81:    NeedPin ($preparedReservation-eq$GrantReservationDiagnostics) 'Prepared Grant reservation option differs'
+   82:    $preparedStop=$false
+   83:    if($null-ne$Pin.PSObject.Properties['grant_reservation_stop_diagnostics']){
+   84:      NeedPin ($Pin.PSObject.Properties['grant_reservation_stop_diagnostics'].Name-ceq'grant_reservation_stop_diagnostics'-and$Pi
+   85:  n.grant_reservation_stop_diagnostics-is[bool]) 'Prepared STOP128 option must be exact Boolean'
+   86:      $preparedStop=$Pin.grant_reservation_stop_diagnostics
+   87:    }
+   88:    NeedPin ($preparedStop-eq$GrantReservationStopDiagnostics) 'Prepared STOP128 option differs'
+   89:    NeedPin (-not$GrantReservationStopDiagnostics-or$GrantReservationDiagnostics) 'Prepared STOP128 requires Grant reservation'
+   90:    if($GrantReservationStopDiagnostics){
+   91:      NeedPin (-not[string]::IsNullOrWhiteSpace($RepoRoot)) 'Prepared STOP128 requires explicit canonical repository binding'
+   92:      . (Join-Path $RepoRoot 'tools/r19_grant_reservation_contract.ps1')
+   93:      [void](Assert-R19GrantReservationCandidateContract -Value $Pin.grant_reservation_contract -RepoRoot $RepoRoot -Enabled $tru
+   94:  e -CancellationEnabled $true)
+   95:      [void](Assert-R19GrantReservationStopCandidateContract -Value $Pin.grant_reservation_stop_contract -RepoRoot $RepoRoot -Ena
+   96:  bled $true)
+   97:    }else{NeedPin ($null-eq$Pin.PSObject.Properties['grant_reservation_stop_contract']) 'Undeclared prepared STOP128 contract'}
+   98:    NeedPin (-not$GrantReservationDiagnostics-or($GrantDiagnostics-and$ParamListDiagnostics-and$Mode-ceq'ExplicitHostArm'-and$Rea
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_outer.ps1.published-before-stop128
+  146:  /latest.json'}
+  147:    NeedPin ($Pin.latest_path-ceq$expectedLatest) 'Prepared latest path differs from mode'
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_OUTER.PS1
+  165:  /latest.json'}
+  166:    if($GrantReservationStopDiagnostics){$expectedLatest='runs/candidates/R19-GRANT-RESERVATION-STOP-EXPLICIT-HOST-ARM-CANDIDATE-
+  167:  BUILD-001/latest.json'}
+  168:    NeedPin ($Pin.latest_path-ceq$expectedLatest) 'Prepared latest path differs from mode'
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_outer.ps1.published-before-stop128
+  163:   $DiagnosticUsbFailureDiagnostics -ParamListDiagnostics $ParamListDiagnostics -GrantDiagnostics $GrantDiagnostics -GrantReserva
+  164:  tionDiagnostics $GrantReservationDiagnostics)
+  165:    NeedPin ($Pin.tools-is[array]-and$Pin.tools.Count-eq$expected.Count) 'Prepared tool count differs'
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_OUTER.PS1
+  184:   $DiagnosticUsbFailureDiagnostics -ParamListDiagnostics $ParamListDiagnostics -GrantDiagnostics $GrantDiagnostics -GrantReserva
+  185:  tionDiagnostics $GrantReservationDiagnostics -GrantReservationStopDiagnostics $GrantReservationStopDiagnostics)
+  186:    NeedPin ($Pin.tools-is[array]-and$Pin.tools.Count-eq$expected.Count) 'Prepared tool count differs'
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_outer.ps1.published-before-stop128
+  221:        $commands=@($Summary.grant_reservation_workflow.commands)
+  222:        NeedLoad ($commands.Count-le8) 'Reservation command ledger exceeds bounded eight commands'
+  223:        foreach($command in $commands){
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_OUTER.PS1
+  242:        $commands=@($Summary.grant_reservation_workflow.commands)
+  243:        $maxCommands=8
+  244:        if($null-ne$Summary.PSObject.Properties['grant_reservation_stop_diagnostics']){
+  245:          NeedLoad ($Summary.PSObject.Properties['grant_reservation_stop_diagnostics'].Name-ceq'grant_reservation_stop_diagnostic
+  246:  s'-and$Summary.grant_reservation_stop_diagnostics-is[bool]) 'STOP128 capture option must be exact Boolean'
+  247:          if($Summary.grant_reservation_stop_diagnostics){
+  248:            NeedLoad ($Summary.grant_reservation_workflow.cancellation_enabled-is[bool]-and$Summary.grant_reservation_workflow.ca
+  249:  ncellation_enabled-and$Summary.grant_reservation_workflow.wire_version-eq2) 'STOP128 command bound requires explicit v2 cancell
+  250:  ation workflow'
+  251:            $maxCommands=18
+  252:          }
+  253:        }
+  254:        NeedLoad ($commands.Count-le$maxCommands) 'Reservation command ledger exceeds selected bounded command count'
+  255:        foreach($command in $commands){
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_outer.ps1.published-before-stop128
+  261:      [bool]$ParamListDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false,
+  262:      [object]$GrantReservationContract=$null)
+  263:    $accepted=$false;$reasons=@()
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_OUTER.PS1
+  293:      [bool]$ParamListDiagnostics=$false,[bool]$GrantReservationDiagnostics=$false,
+  294:      [object]$GrantReservationContract=$null,[bool]$GrantReservationStopDiagnostics=$false,
+  295:      [object]$GrantReservationStopContract=$null,[string]$RepoRoot='')
+  296:    $accepted=$false;$reasons=@()
+*****
+
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\RUNS\VALIDATION\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-FIX\r19_timed_path_outer.ps1.published-before-stop128
+  287:      if($reservationEnabled-ne$GrantReservationDiagnostics){throw 'Capture Grant reservation selection differs'}
+  288:      if($GrantReservationDiagnostics){
+***** E:\VESC\TRIAL_LOG\LORELEY3_SYSTEM\06_VC_LORA_BRIDGE\TOOLS\R19_TIMED_PATH_OUTER.PS1
+  320:      if($reservationEnabled-ne$GrantReservationDiagnostics){throw 'Capture Grant reservation selection differs'}
+  321:      $stopEnabled=$false
+  322:      if($null-ne$Summary.PSObject.Properties['grant_reservation_stop_diagnostics']){
+  323:        if($Summary.PSObject.Properties['grant_reservation_stop_diagnostics'].Name-cne'grant_reservation_stop_diagnostics'-or$Sum
+  324:  mary.grant_reservation_stop_diagnostics-isnot[bool]){throw 'Capture STOP128 selection must be exact Boolean'}
+  325:        $stopEnabled=$Summary.grant_reservation_stop_diagnostics
+  326:      }
+  327:      if($stopEnabled-ne$GrantReservationStopDiagnostics){throw 'Capture STOP128 selection differs'}
+  328:      if($GrantReservationStopDiagnostics){
+  329:        if(-not$GrantReservationDiagnostics-or[string]::IsNullOrWhiteSpace($RepoRoot)){throw 'STOP128 capture requires reservatio
+  330:  n and canonical repository binding'}
+  331:        . (Join-Path $RepoRoot 'tools/r19_grant_reservation_contract.ps1')
+  332:        [void](Assert-R19GrantReservationCandidateContract -Value $GrantReservationContract -RepoRoot $RepoRoot -Enabled $true -C
+  333:  ancellationEnabled $true)
+  334:        [void](Assert-R19GrantReservationStopCandidateContract -Value $GrantReservationStopContract -RepoRoot $RepoRoot -Enabled 
+  335:  $true)
+  336:        if(($Summary.grant_reservation_stop_contract|ConvertTo-Json -Depth 20 -Compress)-cne($GrantReservationStopContract|Conver
+  337:  tTo-Json -Depth 20 -Compress)){throw 'Capture STOP128 capability binding differs'}
+  338:      }elseif($null-ne$Summary.PSObject.Properties['grant_reservation_stop_contract']){throw 'Undeclared capture STOP128 contract
+  339:  '}
+  340:      if($GrantReservationDiagnostics){
+*****
+

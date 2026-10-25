@@ -1,0 +1,7 @@
+E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_stop_flash_contract.ps1 : Exc
+eption calling ".ctor" with "6" argument(s): "The file 'E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\runs\valida
+tion\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-fix\stop_flash_contract_GREEN_ps51\flash-evidence-v
+10\fixture-handoff.json' already exists."
+    + CategoryInfo          : NotSpecified: (:) [check_r19_grant...sh_contract.ps1], MethodInvocationException
+    + FullyQualifiedErrorId : IOException,check_r19_grant_reservation_stop_flash_contract.ps1
+ 

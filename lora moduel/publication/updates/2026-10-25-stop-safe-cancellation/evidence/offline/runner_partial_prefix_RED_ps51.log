@@ -1,0 +1,8 @@
+FAIL Partial32 bytes defer OUT without fabricating a complete runtime fault
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_runtime_fault_preflight.ps
+1:9 char:79
++ ... ]$Message){$script:checks++;if(-not$Value){throw ('FAIL '+$Message)}}
++                                                ~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (FAIL Partial32 ...e runtime fault:String) [], RuntimeException
+    + FullyQualifiedErrorId : FAIL Partial32 bytes defer OUT without fabricating a complete runtime fault
+ 

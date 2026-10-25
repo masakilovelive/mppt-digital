@@ -1,0 +1,14 @@
+diff --git "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\CMakeLists.before-root.txt" b/CMakeLists.txt
+index 0e80d9b..b4a4be7 100644
+--- "a/E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\CMakeLists.before-root.txt"
++++ b/CMakeLists.txt
+@@ -78,7 +78,8 @@ if(VC_LORA_BUILD_TESTS)
+           -RepoRoot "${CMAKE_SOURCE_DIR}")
+     endforeach()
+ 
+-    foreach(reservation_contract IN ITEMS artifact workflow capture flash_boundary flash_operation_regression stage_final_gate)
++    foreach(reservation_contract IN ITEMS artifact workflow capture flash_boundary flash_operation_regression stage_final_gate
++        runtime_fault_preflight cancellation_workflow stop_packaging stop_acquisition stop_parent stop_flash_contract)
+       add_test(NAME R19-GRANT-RESERVATION-${reservation_contract}-CONTRACT-001
+         COMMAND "${VC_LORA_POWERSHELL_EXECUTABLE}"
+           -NoProfile -NonInteractive -ExecutionPolicy Bypass

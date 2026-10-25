@@ -1,0 +1,7 @@
+Actual parent provides STOP128 raw replay
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_grant_reservation_stop_parent.ps1:12 char:79
++ ... ue,[string]$Message){$script:checks++;if(-not$Value){throw $Message}}
++                                                          ~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (Actual parent p...P128 raw replay:String) [], RuntimeException
+    + FullyQualifiedErrorId : Actual parent provides STOP128 raw replay
+ 

@@ -1,0 +1,31 @@
+{
+  "schema": "vc-lora-stop-publication-validation-v1",
+  "result": "PASS_PUBLICATION_CHECKS_NOT_PRODUCT_ACCEPTANCE",
+  "checks": 8799,
+  "original_files": 641,
+  "original_bytes": 12715503,
+  "source_inventory_sha256": "04E3AA6F32DF199416A2EDCE3A3FA599485151C65EEE350AF7D257DC214ACEDB",
+  "text_files_scanned": 605,
+  "json_files_parsed": 35,
+  "raw_files_scanned": 50,
+  "credential_pattern_findings": 0,
+  "local_links_checked": 44,
+  "hardware_interaction": false,
+  "live_authorization_granted": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false,
+  "published_pure_tests": {
+    "powershell_51": {
+      "workflow": 307,
+      "cancellation_workflow": 191,
+      "result": "PASS"
+    },
+    "powershell_7": {
+      "workflow": 307,
+      "cancellation_workflow": 191,
+      "result": "PASS"
+    },
+    "full479_rerun": false,
+    "arduino_build_rerun": false
+  }
+}

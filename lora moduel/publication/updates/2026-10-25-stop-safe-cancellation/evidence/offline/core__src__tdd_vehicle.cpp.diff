@@ -1,0 +1,45 @@
+warning: in the working copy of 'runs\validation\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-fix\before\core\src\tdd_vehicle.cpp', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'core/src/tdd_vehicle.cpp', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\before\\core\\src\\tdd_vehicle.cpp" b/core/src/tdd_vehicle.cpp
+index 55a72f1..049026d 100644
+--- "a/runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\before\\core\\src\\tdd_vehicle.cpp"
++++ b/core/src/tdd_vehicle.cpp
+@@ -269,7 +269,7 @@ LinkAction VehicleTddController::tick(const TddInput& input) noexcept {
+           reopen_heartbeat_tail(
+               input.now_ms,
+               input.now_ms >= input.heartbeat_deadline_ms);
+-        } else {
++        } else if (!input.inhibit_new_grant) {
+           set_state(VehicleTddState::SendUlGrant, input.now_ms);
+         }
+       }
+@@ -283,7 +283,7 @@ LinkAction VehicleTddController::tick(const TddInput& input) noexcept {
+               input.now_ms >= input.heartbeat_deadline_ms);
+           break;
+         }
+-        return issue_grant(input.now_ms);
++        if (!input.inhibit_new_grant) return issue_grant(input.now_ms);
+       }
+       break;
+ 
+@@ -338,6 +338,20 @@ LinkAction VehicleTddController::tick(const TddInput& input) noexcept {
+   return {};
+ }
+ 
++bool VehicleTddController::cancel_unsent_grant(std::uint32_t token,
++    std::uint16_t session,std::uint16_t cycle,std::uint64_t now_ms) noexcept {
++  if(!action_pending_ || pending_type_!=LinkActionType::SendGrant ||
++     state_!=VehicleTddState::SendUlGrant || grant_sent_this_cycle_ ||
++     token==0U || token!=pending_token_ || session!=session_id_ ||
++     cycle!=cycle_id_ || cycle_id_==std::numeric_limits<std::uint16_t>::max() ||
++     now_ms<action_issued_ms_) return false;
++  action_pending_=false;pending_token_=0U;pending_type_=LinkActionType::None;
++  pending_bytes_=0U;pending_heartbeat_tail_=false;
++  ++cycle_id_;++diagnostics_->action_retries;
++  reopen_heartbeat_tail(now_ms,false);
++  return true;
++}
++
+ void VehicleTddController::complete_action(std::uint32_t token,
+                                            TxResult result,
+                                            std::uint64_t now_ms,

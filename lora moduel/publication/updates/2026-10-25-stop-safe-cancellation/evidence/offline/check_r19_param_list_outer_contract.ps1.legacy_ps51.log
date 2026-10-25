@@ -1,0 +1,7 @@
+The variable '$repo' cannot be retrieved because it has not been set.
+At line:10 char:859
++ ... paredPin.grant_reservation_stop_contract}else{$null}) -RepoRoot $repo
++                                                                     ~~~~~
+    + CategoryInfo          : InvalidOperation: (repo:String) [], ParentContainsErrorRecordException
+    + FullyQualifiedErrorId : VariableIsUndefined
+ 

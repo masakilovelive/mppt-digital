@@ -1,0 +1,256 @@
+warning: in the working copy of 'runs\validation\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\20261025T-fix\before\firmware\high_speed\r19_grant_reservation.hpp', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'firmware/high_speed/r19_grant_reservation.hpp', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\before\\firmware\\high_speed\\r19_grant_reservation.hpp" b/firmware/high_speed/r19_grant_reservation.hpp
+index 22a5d40..e68c7d0 100644
+--- "a/runs\\validation\\R19-GRANT-RESERVATION-HEARTBEAT-STOP-FIX-OFFLINE-001\\20261025T-fix\\before\\firmware\\high_speed\\r19_grant_reservation.hpp"
++++ b/firmware/high_speed/r19_grant_reservation.hpp
+@@ -18,7 +18,8 @@ enum class R19GrantReservationOpcode : std::uint8_t {
+   HelloRequest=1U, HelloReply=2U, PrepareVehicle=3U, Prepared=4U,
+   BindGround=5U, BindPeerGround=6U, Bound=7U, BindPeerVehicle=8U,
+   ReleaseGrant=9U, ReleaseVehicle=9U, GroundHeld=10U, TailReady=11U,
+-  TailPermitGround=12U, TailPermit=12U, Fault=13U, Started=14U
++  TailPermitGround=12U, TailPermit=12U, Fault=13U, Started=14U,
++  CancelRequest=15U, CancelAck=16U, Withdrawn=17U, CancelPeerConfirmed=18U
+ };
+ enum class R19GrantReservationState : std::uint8_t {
+   Cold=0U, HelloPending=1U, HelloReady=2U, AwaitVehicleGrant=3U,
+@@ -43,6 +44,7 @@ enum class R19GrantReservationEvent : std::uint8_t {
+ };
+ 
+ struct R19GrantReservationWireMessage final {
++  std::uint8_t wire_version{1U};
+   R19GrantReservationOpcode opcode{R19GrantReservationOpcode::HelloRequest};
+   R19GrantReservationRole role{R19GrantReservationRole::Invalid};
+   std::uint8_t flags{0U};
+@@ -62,19 +64,23 @@ using Op=R19GrantReservationOpcode;
+ using Role=R19GrantReservationRole;
+ constexpr bool response_opcode(Op op) noexcept {
+   return op==Op::HelloReply || op==Op::Prepared || op==Op::Bound ||
+-         op==Op::GroundHeld || op==Op::TailReady || op==Op::Fault;
++         op==Op::GroundHeld || op==Op::TailReady || op==Op::Fault ||
++         op==Op::CancelAck || op==Op::Withdrawn || op==Op::CancelPeerConfirmed;
+ }
+ constexpr bool request_opcode(Op op) noexcept {
+   return op==Op::HelloRequest || op==Op::PrepareVehicle || op==Op::BindGround ||
+          op==Op::BindPeerGround || op==Op::BindPeerVehicle || op==Op::ReleaseGrant ||
+-         op==Op::TailPermitGround;
++         op==Op::TailPermitGround || op==Op::CancelRequest ||
++         op==Op::CancelPeerConfirmed;
+ }
+ constexpr bool valid_role(Role role) noexcept { return role==Role::Ground || role==Role::Vehicle; }
+ constexpr bool complete_tuple(const R19GrantReservationWireMessage& m) noexcept {
+   return m.grant_session!=0U && m.grant_cycle!=0U && m.action_token!=0U && m.writer_generation!=0U;
+ }
+ constexpr bool semantic(const R19GrantReservationWireMessage& m,bool response) noexcept {
+-  if(!valid_role(m.role) || m.flags!=0U || m.reader_session==0U ||
++  if((m.wire_version!=1U && m.wire_version!=2U) ||
++     (static_cast<std::uint8_t>(m.opcode)>=15U && m.wire_version!=2U) ||
++     !valid_role(m.role) || m.flags!=0U || m.reader_session==0U ||
+      (m.slot_nonce>>48U)!=0x521BU || (m.slot_nonce&0x0000FFFFFFFFFFFFULL)==0U ||
+      m.device_ms>std::numeric_limits<std::uint32_t>::max() ||
+      (response ? !response_opcode(m.opcode) : !request_opcode(m.opcode))) return false;
+@@ -97,6 +103,12 @@ constexpr bool semantic(const R19GrantReservationWireMessage& m,bool response) n
+     case Op::Bound: case Op::GroundHeld: case Op::TailPermitGround:
+       return m.role==Role::Ground && m.boot_id!=0U && complete_tuple(m);
+     case Op::Fault: return m.boot_id!=0U;
++    case Op::CancelRequest:
++      return m.boot_id!=0U && complete_tuple(m) && m.device_ms==0U;
++    case Op::CancelAck: case Op::CancelPeerConfirmed:
++      return m.boot_id!=0U && complete_tuple(m);
++    case Op::Withdrawn:
++      return m.role==Role::Vehicle && m.boot_id!=0U && complete_tuple(m);
+     default: return false; // Started is record-only, never wire authority.
+   }
+ }
+@@ -123,7 +135,7 @@ inline bool r19_encode_grant_reservation_frame(const R19GrantReservationWireMess
+   using namespace r19_grant_reservation_detail;
+   if(!semantic(m,response)) return false;
+   std::array<std::uint8_t,54U> p{};
+-  p[0U]='R';p[1U]='1';p[2U]='9';p[3U]='R';p[4U]=1U;
++  p[0U]='R';p[1U]='1';p[2U]='9';p[3U]='R';p[4U]=m.wire_version;
+   p[5U]=static_cast<std::uint8_t>(m.opcode);p[6U]=static_cast<std::uint8_t>(m.role);
+   put(p.data()+8U,m.reader_session,8U);put(p.data()+16U,m.slot_nonce,8U);
+   put(p.data()+24U,m.boot_id,8U);put(p.data()+32U,m.usb_epoch,4U);
+@@ -142,8 +154,9 @@ inline bool r19_decode_grant_reservation_frame(const std::uint8_t* bytes,std::si
+   MavlinkFrame frame{};
+   if(validate_mavlink_frame(bytes,size,frame)!=MavlinkParseStatus::FrameReady || frame.signed_frame || frame.payload_length!=54U) return false;
+   const auto* p=frame.payload();
+-  if(p[0U]!='R' || p[1U]!='1' || p[2U]!='9' || p[3U]!='R' || p[4U]!=1U || p[7U]!=0U || p[52U]!=0xA5U || p[53U]!=0x5AU) return false;
++  if(p[0U]!='R' || p[1U]!='1' || p[2U]!='9' || p[3U]!='R' || (p[4U]!=1U && p[4U]!=2U) || p[7U]!=0U || p[52U]!=0xA5U || p[53U]!=0x5AU) return false;
+   R19GrantReservationWireMessage m{};
++  m.wire_version=p[4U];
+   m.opcode=static_cast<Op>(p[5U]);m.role=static_cast<Role>(p[6U]);m.flags=p[7U];
+   m.reader_session=get(p+8U,8U);m.slot_nonce=get(p+16U,8U);m.boot_id=get(p+24U,8U);
+   m.usb_epoch=static_cast<std::uint32_t>(get(p+32U,4U));m.grant_session=static_cast<std::uint16_t>(get(p+36U,2U));
+@@ -182,6 +195,7 @@ class R19GrantReservationController final {
+   using Role=R19GrantReservationRole;using Op=R19GrantReservationOpcode;
+   using State=R19GrantReservationState;using Reason=R19GrantReservationReason;
+   using Event=R19GrantReservationEvent;using Message=R19GrantReservationWireMessage;
++  enum class CancellationPhase : std::uint8_t {None=0U,LocalCancelled=1U,PeerConfirmed=2U,FreshRound=3U};
+   bool initialize(Role role,std::uint64_t own_boot,std::uint32_t epoch,std::uint64_t now) noexcept {
+     if(s_.initialized) return fail(Reason::Replay,last_now_);
+     s_.role=role;s_.own_boot_id=own_boot;s_.own_epoch=epoch;s_.initialized=true;last_now_=now;
+@@ -194,9 +208,46 @@ class R19GrantReservationController final {
+   bool failed() const noexcept {return s_.state==State::Failed;}
+   bool can_prepare() const noexcept {return s_.role==Role::Vehicle && s_.state==State::HelloReady;}
+   bool awaiting_grant() const noexcept {return s_.state==State::AwaitVehicleGrant;}
+-  bool holding() const noexcept {return s_.state==State::VehiclePrepared || s_.state==State::VehicleReleaseGranted;}
+-  bool should_release() const noexcept {return s_.state==State::VehicleReleaseGranted && peer_bound_ && !failed();}
+-  bool ground_request_allowed() const noexcept {return s_.role==Role::Ground && s_.state==State::GroundBound && peer_bound_;}
++  bool holding() const noexcept {return !cancellation_pending() && (s_.state==State::VehiclePrepared || s_.state==State::VehicleReleaseGranted);}
++  bool should_release() const noexcept {return !cancellation_pending() && s_.state==State::VehicleReleaseGranted && peer_bound_ && !failed();}
++  std::uint64_t hold_deadline_ms() const noexcept {return hold_deadline_;}
++  bool ground_request_allowed() const noexcept {return !cancellation_pending() && s_.role==Role::Ground && s_.state==State::GroundBound && peer_bound_;}
++  bool cancellation_supported() const noexcept {return wire_version_==2U;}
++  bool cancellation_available() const noexcept {return cancellation_supported() && !cancellation_used_ && !failed();}
++  bool cancellation_pending() const noexcept {return cancellation_==CancellationPhase::LocalCancelled || cancellation_==CancellationPhase::PeerConfirmed;}
++  bool cancel_request_seen() const noexcept {return cancel_request_seen_;}
++  bool inhibit_new_grant() const noexcept {return cancellation_pending() ||
++    (cancellation_used_ && cancellation_==CancellationPhase::FreshRound && s_.state==State::HelloReady);}
++  CancellationPhase cancellation_phase() const noexcept {return cancellation_;}
++  bool cancel_request_matches(const Message& m) const noexcept {
++    if(!cancellation_supported() || failed() || m.wire_version!=2U ||
++       m.opcode!=Op::CancelRequest || m.role!=s_.role ||
++       m.reader_session!=s_.reader_session || m.slot_nonce!=s_.slot_nonce ||
++       m.boot_id!=s_.own_boot_id || m.usb_epoch!=s_.own_epoch ||
++       !r19_grant_reservation_detail::semantic(m,false)) return false;
++    if(s_.role==Role::Ground && s_.state==State::HelloReady)
++      return r19_grant_reservation_detail::fresh(m.grant_session,m.grant_cycle,
++          baseline_session_,baseline_cycle_);
++    return m.grant_session==s_.grant_session && m.grant_cycle==s_.grant_cycle &&
++      m.action_token==s_.action_token && m.writer_generation==s_.writer_generation;
++  }
++  // The bridge calls this only after exact zero-UART action/cycle/lease
++  // retirement, or after proving Ground has never admitted its one request.
++  bool begin_cancel(std::uint64_t now,bool withdrawn) noexcept {
++    if(!tick(now)) return false;
++    if(!cancellation_supported() || cancellation_used_ || ground_held_ ||
++       grant_written_ || tail_seen_ ||
++       (s_.role==Role::Vehicle && !holding()) ||
++       (s_.role==Role::Ground && s_.state!=State::HelloReady &&
++        s_.state!=State::GroundLocalBound && s_.state!=State::GroundBound))
++      return fail(Reason::WrongState,now);
++    cancellation_used_=true;cancellation_=CancellationPhase::LocalCancelled;
++    retired_nonce_=s_.slot_nonce;retired_session_=s_.grant_session;
++    retired_cycle_=s_.grant_cycle;retired_token_=s_.action_token;
++    retired_generation_=s_.writer_generation;
++    cancel_request_seen_=!withdrawn;
++    return reply(withdrawn?Op::Withdrawn:Op::CancelAck,now);
++  }
+   const R19GrantReservationSnapshot& snapshot() const noexcept {return s_;}
+   const Message* peek_reply() const noexcept {return queue_count_==0U?nullptr:&queue_[queue_head_];}
+   bool pop_reply() noexcept {
+@@ -207,6 +258,11 @@ class R19GrantReservationController final {
+     if(failed()) return true;
+     if(!tick(now)) return false;
+     if(!r19_grant_reservation_detail::response_opcode(opcode)) return fail(Reason::InvalidWire,now);
++    if(opcode==Op::CancelAck) {
++      if(!cancellation_pending() || !cancel_request_seen_ || cancel_ack_committed_)
++        return fail(Reason::WrongState,now);
++      cancel_ack_committed_=true;
++    }
+     journal(Event::ReplyCommitted,now,static_cast<std::uint32_t>(opcode));return true;
+   }
+   bool abort(Reason reason,std::uint64_t now,std::uint32_t detail=0U) noexcept {
+@@ -237,7 +293,20 @@ class R19GrantReservationController final {
+     if(!semantic(m,false)) return fail(Reason::InvalidWire,now);
+     if(m.role!=s_.role) return fail(Reason::WrongRole,now);
+     if(m.opcode==Op::HelloRequest) {
++      if(cancellation_==CancellationPhase::PeerConfirmed) {
++        if(m.wire_version!=2U || m.reader_session!=s_.reader_session ||
++           m.slot_nonce==retired_nonce_ || !cancel_ack_committed_ ||
++           queue_count_!=0U) return fail(Reason::Replay,now);
++        s_.slot_nonce=m.slot_nonce;s_.peer_boot_id=0U;s_.peer_epoch=0U;
++        s_.action_token=0U;s_.writer_generation=0U;
++        s_.grant_session=s_.role==Role::Ground?baseline_session_:0U;
++        s_.grant_cycle=s_.role==Role::Ground?baseline_cycle_:0U;
++        peer_bound_=false;s_.state=State::HelloReady;
++        cancellation_=CancellationPhase::FreshRound;journal(Event::Hello,now);
++        return reply(Op::HelloReply,now);
++      }
+       if(s_.state!=State::Cold || s_.reader_session!=0U) return fail(Reason::Replay,now);
++      wire_version_=m.wire_version;
+       s_.reader_session=m.reader_session;s_.slot_nonce=m.slot_nonce;
+       s_.state=(s_.role==Role::Vehicle || baseline_session_!=0U)?State::HelloReady:State::HelloPending;
+       journal(Event::Hello,now);
+@@ -245,17 +314,37 @@ class R19GrantReservationController final {
+       return true;
+     }
+     if(m.reader_session!=s_.reader_session || m.slot_nonce!=s_.slot_nonce || s_.reader_session==0U) return fail(Reason::WrongScope,now);
+-    const bool peer=m.opcode==Op::BindPeerGround || m.opcode==Op::BindPeerVehicle || m.opcode==Op::TailPermitGround;
++    if(m.wire_version!=wire_version_) return fail(Reason::InvalidWire,now);
++    const bool peer=m.opcode==Op::BindPeerGround || m.opcode==Op::BindPeerVehicle || m.opcode==Op::TailPermitGround || m.opcode==Op::CancelPeerConfirmed;
+     if(!peer && m.boot_id!=s_.own_boot_id) return fail(Reason::WrongBoot,now);
+     if(!peer && m.usb_epoch!=s_.own_epoch) return fail(Reason::WrongEpoch,now);
+     switch(m.opcode) {
++      case Op::CancelRequest:
++        if(!cancel_request_matches(m)) return fail(Reason::WrongScope,now);
++        if(cancellation_pending()) {
++          if(cancel_request_seen_) return fail(Reason::Replay,now);
++          cancel_request_seen_=true;return reply(Op::CancelAck,now);
++        }
++        if(s_.role==Role::Ground && s_.state==State::HelloReady) set_tuple(m);
++        return begin_cancel(now,false);
++      case Op::CancelPeerConfirmed:
++        if(cancellation_!=CancellationPhase::LocalCancelled || !cancel_ack_committed_ ||
++           !tuple(m,now)) return fail_if_healthy(Reason::WrongState,now);
++        if(s_.peer_boot_id!=0U && (m.boot_id!=s_.peer_boot_id || m.usb_epoch!=s_.peer_epoch))
++          return fail(Reason::WrongBoot,now);
++        s_.peer_boot_id=m.boot_id;s_.peer_epoch=m.usb_epoch;
++        cancellation_=CancellationPhase::PeerConfirmed;return reply(Op::CancelPeerConfirmed,now);
+       case Op::PrepareVehicle:
+-        if(!can_prepare()) return fail(Reason::WrongState,now);
+-        baseline_session_=m.grant_session;baseline_cycle_=m.grant_cycle;prepare_start_=now;prepare_active_=true;
++        if(!can_prepare() || cancellation_pending()) return fail(Reason::WrongState,now);
++        baseline_session_=m.grant_session;baseline_cycle_=m.grant_cycle;
++        if(!prepare_active_)prepare_start_=now;prepare_active_=true;
+         s_.state=State::AwaitVehicleGrant;journal(Event::Prepare,now);return true;
+       case Op::BindGround:
+-        if(s_.state!=State::HelloReady || !fresh(m.grant_session,m.grant_cycle,baseline_session_,baseline_cycle_)) return fail(Reason::WrongGrant,now);
+-        set_tuple(m);prepare_start_=now;prepare_active_=true;s_.state=State::GroundLocalBound;
++        if(cancellation_pending() || s_.state!=State::HelloReady ||
++           !fresh(m.grant_session,m.grant_cycle,baseline_session_,baseline_cycle_) ||
++           (cancellation_used_ && (!fresh(m.grant_session,m.grant_cycle,retired_session_,retired_cycle_) ||
++            m.action_token<=retired_token_ || m.writer_generation<=retired_generation_))) return fail(Reason::WrongGrant,now);
++        set_tuple(m);if(!prepare_active_)prepare_start_=now;prepare_active_=true;s_.state=State::GroundLocalBound;
+         journal(Event::BoundLocal,now);return true;
+       case Op::BindPeerGround:
+         if(s_.state!=State::GroundLocalBound || peer_bound_) return fail(Reason::WrongState,now);
+@@ -287,6 +376,8 @@ class R19GrantReservationController final {
+     if(!tick(now)) return false;
+     if(!awaiting_grant()) return fail(Reason::WrongState,now);
+     if(!r19_grant_reservation_detail::fresh(session,cycle,baseline_session_,baseline_cycle_) || token==0U || generation==0U) return fail(Reason::WrongGrant,now);
++    if(cancellation_used_ && (!r19_grant_reservation_detail::fresh(session,cycle,retired_session_,retired_cycle_) ||
++       token<=retired_token_ || generation<=retired_generation_)) return fail(Reason::WrongGrant,now);
+     if(deadline<=now || deadline-now>750U) return fail(Reason::UnsafeHold,now);
+     s_.grant_session=session;s_.grant_cycle=cycle;s_.action_token=token;s_.writer_generation=generation;
+     hold_deadline_=deadline;s_.state=State::VehiclePrepared;journal(Event::Prepared,now);return reply(Op::Prepared,now);
+@@ -370,6 +461,10 @@ class R19GrantReservationController final {
+   std::uint64_t last_now_{0U},last_journal_ms_{0U},prepare_start_{0U},hold_deadline_{0U},peer_tail_claim_{0U};
+   bool prepare_active_{false},peer_bound_{false},ground_held_{false},ground_grant_seen_{false};
+   bool grant_written_{false},tail_seen_{false},tail_permit_seen_{false};
++  std::uint8_t wire_version_{1U};CancellationPhase cancellation_{CancellationPhase::None};
++  bool cancellation_used_{false},cancel_request_seen_{false},cancel_ack_committed_{false};
++  std::uint64_t retired_nonce_{0U};std::uint16_t retired_session_{0U},retired_cycle_{0U};
++  std::uint32_t retired_token_{0U},retired_generation_{0U};
+   bool time(std::uint64_t now) noexcept {
+     if(failed()) return false;
+     if(!s_.initialized) return fail(Reason::InvalidConfiguration,now);
+@@ -387,7 +482,7 @@ class R19GrantReservationController final {
+   }
+   bool reply(Op opcode,std::uint64_t now) noexcept {
+     if(queue_count_>=queue_.size()) return fail(Reason::QueueFull,now);
+-    Message m{};m.opcode=opcode;m.role=s_.role;m.reader_session=s_.reader_session;m.slot_nonce=s_.slot_nonce;
++    Message m{};m.wire_version=wire_version_;m.opcode=opcode;m.role=s_.role;m.reader_session=s_.reader_session;m.slot_nonce=s_.slot_nonce;
+     m.boot_id=s_.own_boot_id;m.usb_epoch=s_.own_epoch;m.grant_session=s_.grant_session;m.grant_cycle=s_.grant_cycle;
+     if(opcode!=Op::HelloReply) {m.action_token=s_.action_token;m.writer_generation=s_.writer_generation;}
+     m.device_ms=now;
+@@ -403,7 +498,7 @@ class R19GrantReservationController final {
+     // If scope/time is unavailable, JTAG first-failure evidence remains final.
+     if(queue_count_<queue_.size() && s_.reader_session!=0U && (s_.slot_nonce>>48U)==0x521BU &&
+        s_.own_boot_id!=0U && now<=std::numeric_limits<std::uint32_t>::max()) {
+-      Message m{};m.opcode=Op::Fault;m.role=s_.role;m.reader_session=s_.reader_session;m.slot_nonce=s_.slot_nonce;
++      Message m{};m.wire_version=wire_version_;m.opcode=Op::Fault;m.role=s_.role;m.reader_session=s_.reader_session;m.slot_nonce=s_.slot_nonce;
+       m.boot_id=s_.own_boot_id;m.usb_epoch=s_.own_epoch;m.grant_session=s_.grant_session;m.grant_cycle=s_.grant_cycle;
+       m.action_token=s_.action_token;m.writer_generation=s_.writer_generation;m.device_ms=now;
+       queue_[(queue_head_+queue_count_)%queue_.size()]=m;++queue_count_;
