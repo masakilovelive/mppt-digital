@@ -1,0 +1,488 @@
+{
+    "schema":  "vc-lora-r19-candidate-final-seal-v1",
+    "artifact_id":  "20261026T023007458Z-ccd7d4c8",
+    "result":  "PASS",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "candidate_manifest_sha256":  "ADEF5FCD60AF48DA633EB2FA706F393D726186581BA9246D09C5B50FC6CDB5D0",
+    "artifact_manifest_sha256":  "145A90E8CB419AEE5C0924DCD98A766255BEC5D460D4F552231561D4D636828C",
+    "sha256s_sha256":  "ADECA596896DED2CDC00C8CB2FFDC51D3C99762D563CFAA5D2FB8A1FA4287A0F",
+    "canonical_source_tree_sha256":  "8D78EA3623908145C9E8E7FF03946DE91AC3F26DEA918330BA549D9E7D2A3E75",
+    "staged_package_tree_sha256":  "45D496A330EC2ACD2DE44B60AAA9985C38648159423994B4E74B3A04CFFF6E38",
+    "vehicle_application_sha256":  "4777ACB06304BDC3D6E9DCCC73E76722ED65263C2ED59B653DB68FB7555D1F38",
+    "ground_application_sha256":  "FDCA520E9AB21A308AD3AD4F314EBA6453FD032B13E49982AFD05DF7D1D6F7AD",
+    "hwcdc_semantic_contract_required":  true,
+    "hwcdc_semantic_summary_sha256":  "934C9BC0FD35FA4D1F0A12B4360375EA589F045C5A23100CB0430CEF2A750428",
+    "deployment_authorized":  false,
+    "hardware_interaction":  false,
+    "endpoint_fifo_schema":  2,
+    "endpoint_fifo_size_bytes":  112,
+    "runtime_stage_size_bytes":  68,
+    "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v12",
+    "usb_extended_diagnostics":  {
+                                     "schema":  "vc-lora-r19-usb-extended-diagnostics-v2",
+                                     "enabled":  true,
+                                     "records":  {
+                                                     "hwcdc_restart":  {
+                                                                           "symbol":  "vc_lora_r19_hwcdc_restart_diagnostic_record",
+                                                                           "schema_version":  1,
+                                                                           "size_bytes":  128
+                                                                       },
+                                                     "ground_usb_commit":  {
+                                                                               "symbol":  "vc_lora_r19_ground_usb_commit_record",
+                                                                               "schema_version":  1,
+                                                                               "size_bytes":  128
+                                                                           },
+                                                     "first_usb_failure":  {
+                                                                               "symbol":  "vc_lora_r19_first_usb_failure_record",
+                                                                               "schema_version":  1,
+                                                                               "size_bytes":  384
+                                                                           }
+                                                 }
+                                 },
+    "first_usb_failure_decoder":  {
+                                      "path":  "tools/read_r19_first_usb_failure_record.ps1",
+                                      "sha256":  "E11CDBF18EFA90F22BC9E69ADF357FD795396725EC0D2B091C759A69A929E47D"
+                                  },
+    "timed_path_diagnostics":  {
+                                   "schema":  "vc-lora-r19-timed-path-candidate-v1",
+                                   "enabled":  true,
+                                   "mode":  "ExplicitHostArm",
+                                   "mode_value":  2,
+                                   "macro":  "VC_LORA_R19_TIMED_PATH_DIAGNOSTICS",
+                                   "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v6",
+                                   "record":  {
+                                                  "symbol":  "vc_lora_r19_timed_path_record",
+                                                  "schema_version":  1,
+                                                  "size_bytes":  512
+                                              },
+                                   "decoder":  {
+                                                   "path":  "tools/read_r19_timed_path_record.ps1",
+                                                   "sha256":  "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C"
+                                               }
+                               },
+    "aux_readiness_diagnostics":  {
+                                      "schema":  "vc-lora-r19-aux-readiness-candidate-v1",
+                                      "enabled":  true,
+                                      "macro":  "VC_LORA_R19_AUX_READINESS_DIAGNOSTICS",
+                                      "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v7",
+                                      "record":  {
+                                                     "symbol":  "vc_lora_r19_aux_readiness_record",
+                                                     "schema_version":  1,
+                                                     "size_bytes":  6144
+                                                 },
+                                      "decoder":  {
+                                                      "path":  "tools/read_r19_aux_readiness_record.ps1",
+                                                      "sha256":  "C011580259EA94F3092B1B3CCAF34DB30C4D9CA1158D2A51D2DC96EA76D880DF"
+                                                  }
+                                  },
+    "grant_reservation_fatal_diagnostics":  {
+                                                "schema":  "vc-lora-r19-grant-reservation-fatal-candidate-v1",
+                                                "enabled":  true,
+                                                "macro":  "VC_LORA_R19_GRANT_RESERVATION_FATAL_DIAGNOSTICS",
+                                                "scope":  "reserved-grant-detail13-only",
+                                                "runtime_reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v12",
+                                                "record":  {
+                                                               "symbol":  "vc_lora_r19_grant_reservation_fatal_record",
+                                                               "schema_version":  1,
+                                                               "size_bytes":  128
+                                                           },
+                                                "decoder":  {
+                                                                "path":  "tools/read_r19_grant_reservation_fatal_record.ps1",
+                                                                "sha256":  "54AA6DD96ECA100A9BE6B37913834E159837F57E52BC0B16514A5067BD5C261E"
+                                                            },
+                                                "paired_raw_reads":  24
+                                            },
+    "grant_agreement_diagnostics":  {
+                                        "schema":  "vc-lora-r19-grant-agreement-candidate-v1",
+                                        "enabled":  true,
+                                        "macro":  "VC_LORA_R19_GRANT_AGREEMENT_DIAGNOSTICS",
+                                        "requires_stop_diagnostics":  true,
+                                        "usb_control_schema":  "vc-lora-r19-grant-reservation-usb-v3",
+                                        "wire_version":  3,
+                                        "frame_bytes":  66,
+                                        "runtime_reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v12",
+                                        "reservation_record_bytes":  512,
+                                        "stop_record_bytes":  128,
+                                        "capability_symbol":  "vc_lora_r19_grant_agreement_capability",
+                                        "capability_symbol_bytes":  4,
+                                        "capability_symbol_evidence":  "compiled-v3-capability-only-not-runtime-completion",
+                                        "opcodes":  {
+                                                        "CommitRequest":  19,
+                                                        "CommitAck":  20,
+                                                        "AbortRequest":  21,
+                                                        "AbortAck":  22
+                                                    },
+                                        "commit":  {
+                                                       "requires_both_role_ack_before_param":  true,
+                                                       "ack_is_future_cancellation_guarantee":  false,
+                                                       "current_tuple_revalidated":  true
+                                                   },
+                                        "terminal_abort":  {
+                                                               "requires_both_role_ack":  true,
+                                                               "unknown_prefix_retry_allowed":  false,
+                                                               "param_reissue_allowed":  false,
+                                                               "maximum_abort_requests_per_role":  1,
+                                                               "missing_ack_result":  "ABORTED_UNCONFIRMED"
+                                                           },
+                                        "source_bindings":  [
+                                                                {
+                                                                    "path":  "firmware/phase6/vc_lora_phase6_bridge.hpp",
+                                                                    "sha256":  "C3455ADBFBD03D1C1C0CF204E67BA7A46FF300C25BABE44B10D7F6F91FEF566C"
+                                                                },
+                                                                {
+                                                                    "path":  "firmware/high_speed/r19_grant_reservation.hpp",
+                                                                    "sha256":  "2CAD96D4644C5E13AEA2CF0A5A2978D21C4FDCB4AFE900D33308236A9469F73F"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/r19_grant_reservation_wire.ps1",
+                                                                    "sha256":  "8EF2E05151B4F859C84E35595452EF08D3F8F5873897D0CCD475E8DEDEB29553"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/r19_grant_reservation_workflow.ps1",
+                                                                    "sha256":  "268301BDC10AB1C934791AE5E5147C618D090E94BA4CAF7D0F205B619CB34B44"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/r19_grant_reservation_contract.ps1",
+                                                                    "sha256":  "80ECF4135382E37E59DAB3F0AD38D3E2DFE6DF68604D134195911DB414FFC669"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/run_r19_timed_path_capture.ps1",
+                                                                    "sha256":  "C0BBB652987DB00834D9D95D7EC012186BA40E460D6FAC7CBF12549B5F50B8E1"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/build_r19_candidate_artifacts.ps1",
+                                                                    "sha256":  "507701BCD2297EC75447CFA92CA0F69D54858BFD975F163CF40DF744946074E3"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/r19_candidate_artifact_common.ps1",
+                                                                    "sha256":  "8B44FD32F88167C3491A55FC82928072F3F98FA89E83A00D25B0259F04EAA24F"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/verify_r19_candidate_artifact.ps1",
+                                                                    "sha256":  "99EE6740836E6B1AF9AD7D657DD0C7994775A0BFD2853D7B4865BF497E010A49"
+                                                                }
+                                                            ]
+                                    },
+    "grant_reservation_stop_diagnostics":  {
+                                               "schema":  "vc-lora-r19-grant-reservation-stop-candidate-v1",
+                                               "enabled":  true,
+                                               "macro":  "VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS",
+                                               "record_schema":  1,
+                                               "size_bytes":  128,
+                                               "symbol":  "vc_lora_r19_grant_reservation_stop_record",
+                                               "decoder_path":  "tools/read_r19_grant_reservation_stop_record.ps1",
+                                               "decoder_sha256":  "AC70CEA71CC4C8645D31E4B3E77AFF9D668EBAC554D5DD2C62DFA611D2C84D02",
+                                               "runtime_reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v12",
+                                               "usb_control_schema":  "vc-lora-r19-grant-reservation-usb-v3",
+                                               "cancellation":  {
+                                                                    "schema":  "vc-lora-r19-grant-reservation-cancellation-v1",
+                                                                    "maximum_cancellations":  1,
+                                                                    "opcodes":  {
+                                                                                    "CancelRequest":  15,
+                                                                                    "CancelAck":  16,
+                                                                                    "Withdrawn":  17,
+                                                                                    "CancelPeerConfirmed":  18
+                                                                                }
+                                                                }
+                                           },
+    "grant_reservation_diagnostics":  {
+                                          "schema":  "vc-lora-r19-grant-reservation-candidate-v1",
+                                          "enabled":  true,
+                                          "macro":  "VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS",
+                                          "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v12",
+                                          "record":  {
+                                                         "symbol":  "vc_lora_r19_grant_reservation_record",
+                                                         "schema_version":  1,
+                                                         "size_bytes":  512
+                                                     },
+                                          "decoder":  {
+                                                          "path":  "tools/read_r19_grant_reservation_record.ps1",
+                                                          "sha256":  "0E6FC4C0197DD96DD8C3851EEE5C08AA5AC3A59072385B69CB81459B9C7211F5"
+                                                      },
+                                          "usb_control":  {
+                                                              "schema":  "vc-lora-r19-grant-reservation-usb-v3",
+                                                              "frame_bytes":  66,
+                                                              "magic":  "R19R",
+                                                              "request_component":  197,
+                                                              "response_component":  198
+                                                          },
+                                          "capture":  {
+                                                          "mode":  "HostAssistedDualUsbReservation",
+                                                          "prepare_seconds":  15,
+                                                          "measurement_seconds":  40,
+                                                          "param_request_maximum":  1
+                                                      },
+                                          "producer":  {
+                                                           "kind":  "actual-dual-usb-grant-hold-tail-release",
+                                                           "role_capabilities":  {
+                                                                                     "ground":  [
+                                                                                                    "Bind",
+                                                                                                    "Held",
+                                                                                                    "TailPermit"
+                                                                                                ],
+                                                                                     "vehicle":  [
+                                                                                                     "Prepare",
+                                                                                                     "Release",
+                                                                                                     "TailReady"
+                                                                                                 ]
+                                                                                 }
+                                                       },
+                                          "cancellation":  {
+                                                               "schema":  "vc-lora-r19-grant-reservation-cancellation-v1",
+                                                               "maximum_cancellations":  1,
+                                                               "opcodes":  {
+                                                                               "CancelRequest":  15,
+                                                                               "CancelAck":  16,
+                                                                               "Withdrawn":  17,
+                                                                               "CancelPeerConfirmed":  18
+                                                                           }
+                                                           }
+                                      },
+    "grant_diagnostics":  {
+                              "schema":  "vc-lora-r19-grant-diagnostic-candidate-v1",
+                              "enabled":  true,
+                              "macro":  "VC_LORA_R19_GRANT_DIAGNOSTICS",
+                              "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v9",
+                              "record":  {
+                                             "symbol":  "vc_lora_r19_grant_diagnostic_record",
+                                             "schema_version":  1,
+                                             "size_bytes":  1024
+                                         },
+                              "decoder":  {
+                                              "path":  "tools/read_r19_grant_diagnostic_record.ps1",
+                                              "sha256":  "024B52920F2F91C0806988EE43968F0B90D189E82FC52F0D403C2025656EB4B0"
+                                          }
+                          },
+    "diagnostic_usb_failure_diagnostics":  {
+                                               "schema":  "vc-lora-r19-diagnostic-usb-failure-candidate-v1",
+                                               "enabled":  true,
+                                               "macro":  "VC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD",
+                                               "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v8",
+                                               "record":  {
+                                                              "symbol":  "vc_lora_r19_diagnostic_usb_failure_record",
+                                                              "schema_version":  1,
+                                                              "size_bytes":  256
+                                                          },
+                                               "decoder":  {
+                                                               "path":  "tools/read_r19_diagnostic_usb_failure_record.ps1",
+                                                               "sha256":  "26E15CAC70F9414F2EE3A43FBF44A820BC1F7B8DC41672EC81733A9B1CD54451"
+                                                           }
+                                           },
+    "usb_role_capabilities":  {
+                                  "schema":  "vc-lora-r19-usb-role-capabilities-v1",
+                                  "mode":  "ExplicitHostArm",
+                                  "implementation_bound":  true,
+                                  "canonical_sources":  [
+                                                            {
+                                                                "path":  "firmware/phase6/vc_lora_phase6_bridge.hpp",
+                                                                "sha256":  "C3455ADBFBD03D1C1C0CF204E67BA7A46FF300C25BABE44B10D7F6F91FEF566C"
+                                                            },
+                                                            {
+                                                                "path":  "firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+                                                                "sha256":  "47CE684BB11CD3807CA15605982BD98B66C7CB4258BE63DEA229E10E1793A258"
+                                                            },
+                                                            {
+                                                                "path":  "tools/r19_usb_role_contract.ps1",
+                                                                "sha256":  "10787A8D4064FC7370F40AE81BA3034E8D59F063E4D207E81B3E4F37FD020238"
+                                                            }
+                                                        ],
+                                  "roles":  [
+                                                {
+                                                    "role":  "vehicle",
+                                                    "clock_request_reply":  true,
+                                                    "effective_mode":  "SyncOnly",
+                                                    "ready":  false,
+                                                    "arm":  false
+                                                },
+                                                {
+                                                    "role":  "ground",
+                                                    "clock_request_reply":  true,
+                                                    "effective_mode":  "ExplicitHostArm",
+                                                    "ready":  true,
+                                                    "arm":  true
+                                                }
+                                            ]
+                              },
+    "roles":  [
+                  {
+                      "role":  "vehicle",
+                      "runtime_diagnostic_symbols":  {
+                                                         "schema":  "vc-lora-r19-runtime-diagnostic-symbols-v1",
+                                                         "elf_sha256":  "8D12E2BBB44CD6870C425645CC0FD2003A4FF4A71AC575B51A6BFA6DFEA403A4",
+                                                         "map_sha256":  "4E0D9B0552B1E5C8C06B2B8FB55099703841B0D08BC2FEB16B8A1221CC7E6E04",
+                                                         "application_sha256":  "4777ACB06304BDC3D6E9DCCC73E76722ED65263C2ED59B653DB68FB7555D1F38",
+                                                         "symbols":  {
+                                                                         "runtime_stage":  {
+                                                                                               "name":  "vc_lora_r19_runtime_stage_record",
+                                                                                               "address":  "0x3fcae470",
+                                                                                               "size_bytes":  68,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "endpoint_fifo":  {
+                                                                                               "name":  "vc_lora_r19_hwcdc_fifo_diagnostic_record",
+                                                                                               "address":  "0x3fcae86c",
+                                                                                               "size_bytes":  112,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "hwcdc_restart":  {
+                                                                                               "name":  "vc_lora_r19_hwcdc_restart_diagnostic_record",
+                                                                                               "address":  "0x3fcae7ec",
+                                                                                               "size_bytes":  128,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "ground_usb_commit":  {
+                                                                                                   "name":  "vc_lora_r19_ground_usb_commit_record",
+                                                                                                   "address":  "0x3fcae3f0",
+                                                                                                   "size_bytes":  128,
+                                                                                                   "aligned_32_bit":  true
+                                                                                               },
+                                                                         "first_usb_failure":  {
+                                                                                                   "name":  "vc_lora_r19_first_usb_failure_record",
+                                                                                                   "address":  "0x3fcae270",
+                                                                                                   "size_bytes":  384,
+                                                                                                   "aligned_32_bit":  true
+                                                                                               },
+                                                                         "timed_path":  {
+                                                                                            "name":  "vc_lora_r19_timed_path_record",
+                                                                                            "address":  "0x3fcad870",
+                                                                                            "size_bytes":  512,
+                                                                                            "aligned_32_bit":  true
+                                                                                        },
+                                                                         "aux_readiness":  {
+                                                                                               "name":  "vc_lora_r19_aux_readiness_record",
+                                                                                               "address":  "0x3fcac070",
+                                                                                               "size_bytes":  6144,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "diagnostic_usb_failure":  {
+                                                                                                        "name":  "vc_lora_r19_diagnostic_usb_failure_record",
+                                                                                                        "address":  "0x3fcae170",
+                                                                                                        "size_bytes":  256,
+                                                                                                        "aligned_32_bit":  true
+                                                                                                    },
+                                                                         "grant_diagnostic":  {
+                                                                                                  "name":  "vc_lora_r19_grant_diagnostic_record",
+                                                                                                  "address":  "0x3fcadd70",
+                                                                                                  "size_bytes":  1024,
+                                                                                                  "aligned_32_bit":  true
+                                                                                              },
+                                                                         "grant_reservation":  {
+                                                                                                   "name":  "vc_lora_r19_grant_reservation_record",
+                                                                                                   "address":  "0x3fcadb70",
+                                                                                                   "size_bytes":  512,
+                                                                                                   "aligned_32_bit":  true
+                                                                                               },
+                                                                         "grant_reservation_stop":  {
+                                                                                                        "name":  "vc_lora_r19_grant_reservation_stop_record",
+                                                                                                        "address":  "0x3fcadaf0",
+                                                                                                        "size_bytes":  128,
+                                                                                                        "aligned_32_bit":  true
+                                                                                                    },
+                                                                         "grant_agreement_capability":  {
+                                                                                                            "name":  "vc_lora_r19_grant_agreement_capability",
+                                                                                                            "address":  "0x3fcae4b4",
+                                                                                                            "size_bytes":  4,
+                                                                                                            "aligned_32_bit":  true
+                                                                                                        },
+                                                                         "grant_reservation_fatal":  {
+                                                                                                         "name":  "vc_lora_r19_grant_reservation_fatal_record",
+                                                                                                         "address":  "0x3fcada70",
+                                                                                                         "size_bytes":  128,
+                                                                                                         "aligned_32_bit":  true
+                                                                                                     }
+                                                                     }
+                                                     }
+                  },
+                  {
+                      "role":  "ground",
+                      "runtime_diagnostic_symbols":  {
+                                                         "schema":  "vc-lora-r19-runtime-diagnostic-symbols-v1",
+                                                         "elf_sha256":  "575646A47251E29BE296BC0F6AD3BA6F4FF35D2954A02C243D6AE38811CC002D",
+                                                         "map_sha256":  "FB8E933A564466D8A7915A9430936BF5A5372A650E1F26FB7B687D5181329BD7",
+                                                         "application_sha256":  "FDCA520E9AB21A308AD3AD4F314EBA6453FD032B13E49982AFD05DF7D1D6F7AD",
+                                                         "symbols":  {
+                                                                         "runtime_stage":  {
+                                                                                               "name":  "vc_lora_r19_runtime_stage_record",
+                                                                                               "address":  "0x3fca59b8",
+                                                                                               "size_bytes":  68,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "endpoint_fifo":  {
+                                                                                               "name":  "vc_lora_r19_hwcdc_fifo_diagnostic_record",
+                                                                                               "address":  "0x3fca5d68",
+                                                                                               "size_bytes":  112,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "hwcdc_restart":  {
+                                                                                               "name":  "vc_lora_r19_hwcdc_restart_diagnostic_record",
+                                                                                               "address":  "0x3fca5ce8",
+                                                                                               "size_bytes":  128,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "ground_usb_commit":  {
+                                                                                                   "name":  "vc_lora_r19_ground_usb_commit_record",
+                                                                                                   "address":  "0x3fca5938",
+                                                                                                   "size_bytes":  128,
+                                                                                                   "aligned_32_bit":  true
+                                                                                               },
+                                                                         "first_usb_failure":  {
+                                                                                                   "name":  "vc_lora_r19_first_usb_failure_record",
+                                                                                                   "address":  "0x3fca57b8",
+                                                                                                   "size_bytes":  384,
+                                                                                                   "aligned_32_bit":  true
+                                                                                               },
+                                                                         "timed_path":  {
+                                                                                            "name":  "vc_lora_r19_timed_path_record",
+                                                                                            "address":  "0x3fca4db8",
+                                                                                            "size_bytes":  512,
+                                                                                            "aligned_32_bit":  true
+                                                                                        },
+                                                                         "aux_readiness":  {
+                                                                                               "name":  "vc_lora_r19_aux_readiness_record",
+                                                                                               "address":  "0x3fca35b8",
+                                                                                               "size_bytes":  6144,
+                                                                                               "aligned_32_bit":  true
+                                                                                           },
+                                                                         "diagnostic_usb_failure":  {
+                                                                                                        "name":  "vc_lora_r19_diagnostic_usb_failure_record",
+                                                                                                        "address":  "0x3fca56b8",
+                                                                                                        "size_bytes":  256,
+                                                                                                        "aligned_32_bit":  true
+                                                                                                    },
+                                                                         "grant_diagnostic":  {
+                                                                                                  "name":  "vc_lora_r19_grant_diagnostic_record",
+                                                                                                  "address":  "0x3fca52b8",
+                                                                                                  "size_bytes":  1024,
+                                                                                                  "aligned_32_bit":  true
+                                                                                              },
+                                                                         "grant_reservation":  {
+                                                                                                   "name":  "vc_lora_r19_grant_reservation_record",
+                                                                                                   "address":  "0x3fca50b8",
+                                                                                                   "size_bytes":  512,
+                                                                                                   "aligned_32_bit":  true
+                                                                                               },
+                                                                         "grant_reservation_stop":  {
+                                                                                                        "name":  "vc_lora_r19_grant_reservation_stop_record",
+                                                                                                        "address":  "0x3fca5038",
+                                                                                                        "size_bytes":  128,
+                                                                                                        "aligned_32_bit":  true
+                                                                                                    },
+                                                                         "grant_agreement_capability":  {
+                                                                                                            "name":  "vc_lora_r19_grant_agreement_capability",
+                                                                                                            "address":  "0x3fca59fc",
+                                                                                                            "size_bytes":  4,
+                                                                                                            "aligned_32_bit":  true
+                                                                                                        },
+                                                                         "grant_reservation_fatal":  {
+                                                                                                         "name":  "vc_lora_r19_grant_reservation_fatal_record",
+                                                                                                         "address":  "0x3fca4fb8",
+                                                                                                         "size_bytes":  128,
+                                                                                                         "aligned_32_bit":  true
+                                                                                                     }
+                                                                     }
+                                                     }
+                  }
+              ]
+}

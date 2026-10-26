@@ -1,0 +1,9 @@
+r19-grant-agreement checks=1351 failures=8
+FAIL same-tuple repeated Abort is idempotent while ACK is queued
+FAIL dequeued but unpublished AbortAck remains single in-flight publication
+FAIL completed terminal duplicate succeeds without implicit ACK republication
+FAIL same-tuple repeated Abort is idempotent while ACK is queued
+FAIL dequeued but unpublished AbortAck remains single in-flight publication
+FAIL completed terminal duplicate succeeds without implicit ACK republication
+FAIL Failed cleanup is idempotent without clearing first failure
+FAIL core exposes a const exact-tuple unwritten retirement tombstone

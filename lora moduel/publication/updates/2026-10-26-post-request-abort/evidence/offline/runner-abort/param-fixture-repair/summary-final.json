@@ -1,0 +1,135 @@
+{
+    "schema":  "r19-param-capture-fixture-repair-v1",
+    "result":  "FOCUSED_PASS_SOURCE_FROZEN",
+    "scope":  "test-only",
+    "hardware_interaction":  false,
+    "tests_run":  [
+                      "PS5.1 PARAM_LIST contract",
+                      "PS7 PARAM_LIST contract"
+                  ],
+    "whole_host_run_by_this_agent":  false,
+    "before_test_sha256":  "72698F12DC04D9A81C6F3AAECDEDE0470CCFE0D4691E2E0087ABEDA6FAFEE554",
+    "after_test_sha256":  "8493F81EFBAF301EE27350F17DFA393AA65CCCA756CF3CBE6B7DF1F0F9D30C87",
+    "diff_sha256":  "74DCABB6E56A60C93FBBD70F63D4B0C8EFC703363BE5183B8CB9116513CE8DF1",
+    "production_changed":  false,
+    "source_pins":  [
+                        {
+                            "path":  "tests/hil/check_r19_param_list_capture_contract.ps1",
+                            "sha256":  "8493F81EFBAF301EE27350F17DFA393AA65CCCA756CF3CBE6B7DF1F0F9D30C87"
+                        },
+                        {
+                            "path":  "tools/run_r19_timed_path_capture.ps1",
+                            "sha256":  "C0BBB652987DB00834D9D95D7EC012186BA40E460D6FAC7CBF12549B5F50B8E1"
+                        },
+                        {
+                            "path":  "tools/r19_grant_reservation_workflow.ps1",
+                            "sha256":  "268301BDC10AB1C934791AE5E5147C618D090E94BA4CAF7D0F205B619CB34B44"
+                        },
+                        {
+                            "path":  "tools/r19_grant_reservation_wire.ps1",
+                            "sha256":  "8EF2E05151B4F859C84E35595452EF08D3F8F5873897D0CCD475E8DEDEB29553"
+                        }
+                    ],
+    "results":  [
+                    {
+                        "directory":  "red-ps51",
+                        "result":  "FAIL",
+                        "passed_count":  64,
+                        "failed_count":  1,
+                        "summary_sha256":  "EDA358D6C8F0F15616FEACB0D6306D55514B32A8D73388FDDD60F47C1173D206",
+                        "failures":  [
+                                         {
+                                             "name":  "actual-production-param-branches-are-unique-and-hardware-free",
+                                             "passed":  false,
+                                             "error":  "Unexpected command inside isolated production fixture: Invoke-R19CaptureReservationPriorityAbort"
+                                         }
+                                     ]
+                    },
+                    {
+                        "directory":  "green-ps51-01",
+                        "result":  "PASS",
+                        "passed_count":  71,
+                        "failed_count":  0,
+                        "summary_sha256":  "C39D75A1A7168EED0F2976FBE89AB7EB6690FCE9B9813BC0284EE5301AA47009",
+                        "failures":  [
+
+                                     ]
+                    },
+                    {
+                        "directory":  "green-ps7-01",
+                        "result":  "PASS",
+                        "passed_count":  71,
+                        "failed_count":  0,
+                        "summary_sha256":  "FE1B61585371824827E03D10E405631580E1375639F734EAAAC1F1F87AF5F0C1",
+                        "failures":  [
+
+                                     ]
+                    },
+                    {
+                        "directory":  "final-ps51-02",
+                        "result":  "FAIL",
+                        "passed_count":  71,
+                        "failed_count":  1,
+                        "summary_sha256":  "D06A9C2EB5981152C8A8F2E009A3F74E86490A83CD7D6AEC60BA11A3B8ECF104",
+                        "failures":  [
+                                         {
+                                             "name":  "actual-production-param-branches-are-unique-and-hardware-free",
+                                             "passed":  false,
+                                             "error":  "The property \u0027Count\u0027 cannot be found on this object. Verify that the property exists."
+                                         }
+                                     ]
+                    },
+                    {
+                        "directory":  "final-ps7-02",
+                        "result":  "FAIL",
+                        "passed_count":  71,
+                        "failed_count":  1,
+                        "summary_sha256":  "9BBFFB20A7FC9F5D86A4840086D877E79B33D95E96C37CEDCA51FCD8BDAB9DD3",
+                        "failures":  [
+                                         {
+                                             "name":  "actual-production-param-branches-are-unique-and-hardware-free",
+                                             "passed":  false,
+                                             "error":  "The property \u0027Count\u0027 cannot be found on this object. Verify that the property exists."
+                                         }
+                                     ]
+                    },
+                    {
+                        "directory":  "final-ps51-03",
+                        "result":  "PASS",
+                        "passed_count":  72,
+                        "failed_count":  0,
+                        "summary_sha256":  "C5901B75D2F9B9FC7FCFF2BF2F97965BF5EE523FA642F3EE85A0F46B83CFE08E",
+                        "failures":  [
+
+                                     ]
+                    },
+                    {
+                        "directory":  "final-ps7-03",
+                        "result":  "PASS",
+                        "passed_count":  72,
+                        "failed_count":  0,
+                        "summary_sha256":  "2138D78B18054295C463045AD8F2DCE21E39B4B8490469D3B1475F05DB76D330",
+                        "failures":  [
+
+                                     ]
+                    }
+                ],
+    "reason":  "Old branch fixture did not recognize the newly integrated priority Abort callback. The actual closure is now audited recursively before import/admission; no callback success stub was introduced.",
+    "closure_scope":  "41 actual source-bound functions: priority Abort closure plus the constructors and v3 handshake functions used by the inert fixture. External commands are restricted to byte[] New-Object and Where-Object; exact callback names, types and member names are reviewed.",
+    "new_negative_cases":  [
+                               "unknown command",
+                               "unknown type",
+                               "unknown dynamic callback",
+                               "unknown constructor",
+                               "injected unknown command in actual delivered branch (Final only)"
+                           ],
+    "final_branch_audit":  true,
+    "final_branch_scope":  "The executed delivered branch independently permits only the two actual audited closure commands, a string cast, and argument-free states.ToArray. Unknown injected command is rejected without execution. The initial final audit Count failure was a test AST null/empty representation issue, not a production regression.",
+    "behavior":  "Actual v3 handshake and production PARAM caller send canonical PARAM once, then actual delivered-control branch consumes a native Withdrawn and sends both actual Abort frames before any ACK. No ACK remains ABORT_UNCONFIRMED. Further PARAM/Abort OUTs are absent; request origin and role/total command bounds remain fixed.",
+    "limitations":  [
+                        "Pure synthetic fixture, not a real device measurement",
+                        "No hard scheduling or 500 ms arrival guarantee claimed",
+                        "No RF success, 932/932 acquisition, acceptance or deployment claim",
+                        "Initial full run was stopped after 519/548 (518 PASS, 1 FAIL); parent must restart all 548 after the new source freeze"
+                    ]
+}

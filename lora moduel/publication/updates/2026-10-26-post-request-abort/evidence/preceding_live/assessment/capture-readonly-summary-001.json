@@ -1,0 +1,1028 @@
+{
+  "schema": "r19-reader-fixed-capture-readonly-summary-v1",
+  "result": "CAPTURE_VALID_PARAM_ATTEMPTED_INCOMPLETE_NOT_PRODUCT_ACCEPTANCE",
+  "analysis_frozen": true,
+  "run_directory": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/hil/R19-RUNTIME-STAGE-CAUSE-EXPERIMENT-HIL-001/20261025T161621967Z-reader-fixed-param-once-ps51",
+  "candidate_id": "20261025T151239434Z-90a93ae7",
+  "outer_summary_sha256": "545CF1261925B6A4C1E41A9DD2687CE36924486FB833BF11DF350BFA19808EC0",
+  "outer_status": "PASS_PARAM_LIST_DIAGNOSTICS_CAPTURED_R18_RESTORED_NOT_ACCEPTANCE",
+  "status_scope": "PASS is acquisition/restoration evidence acceptance only, not successful bulk transfer, 932/30 acceptance, RF delivery or deployment.",
+  "principal_conclusions": {
+    "reservation_rounds": 1,
+    "confirmed_cancellations": 0,
+    "matching_Prepared_Bound_both_CommitAck_GroundHeld_observed": true,
+    "param_request_attempts": 1,
+    "param_local_bytes_accepted": 14,
+    "param_count_at_30s": 0,
+    "target_count": 932,
+    "param_result": "INCOMPLETE_PARAMETERS",
+    "first_stop": "Vehicle Withdrawn after PARAM request; runtime workflow ATTEMPTED_ABORT_WITHDRAWN_AFTER_REQUEST",
+    "release_OUT_attempts": 0,
+    "fresh_grant_or_high_speed_start_proven": false,
+    "RF_uplink_to_Pixhawk_proven": false,
+    "primary_heartbeat_total": 11,
+    "heartbeat_preparation": 10,
+    "heartbeat_measurement": 1,
+    "initial_local_product_USB_completed_within_106ms": true,
+    "initial_local_product_USB_enqueue_to_complete_us": 474,
+    "terminal_abort": "ABORT_UNCONFIRMED_BOTH_ACK_MISSING"
+  },
+  "chronological_facts": {
+    "Vehicle_MCU_ms": {
+      "Prepared": "40579",
+      "CommitAck": "40781",
+      "Withdrawn": "41029",
+      "later_R19F": "41480"
+    },
+    "Ground_MCU_ms": {
+      "Bound": "27178",
+      "CommitAck": "27332",
+      "GroundHeld": "27469"
+    },
+    "PC_events": [
+      {
+        "ordinal": 1,
+        "kind": "PrerequisitesValidated",
+        "pc_ticks": "86862737",
+        "details": "PC-local clocks/ARM and CRC-valid primary post-ARM Heartbeat; not a reservation."
+      },
+      {
+        "ordinal": 2,
+        "kind": "CommandBuilt",
+        "pc_ticks": "86974224",
+        "details": "Helloground"
+      },
+      {
+        "ordinal": 3,
+        "kind": "CommandWriteAccepted",
+        "pc_ticks": "88208924",
+        "details": "Helloground"
+      },
+      {
+        "ordinal": 4,
+        "kind": "CommandBuilt",
+        "pc_ticks": "88530132",
+        "details": "Hellovehicle"
+      },
+      {
+        "ordinal": 5,
+        "kind": "CommandWriteAccepted",
+        "pc_ticks": "88887320",
+        "details": "Hellovehicle"
+      },
+      {
+        "ordinal": 6,
+        "kind": "ResponseValidated",
+        "pc_ticks": "88932978",
+        "details": "HelloReply"
+      },
+      {
+        "ordinal": 7,
+        "kind": "ResponseValidated",
+        "pc_ticks": "141315717",
+        "details": "HelloReply"
+      },
+      {
+        "ordinal": 8,
+        "kind": "CommandBuilt",
+        "pc_ticks": "141525850",
+        "details": "PrepareVehicle"
+      },
+      {
+        "ordinal": 9,
+        "kind": "CommandWriteAccepted",
+        "pc_ticks": "141687819",
+        "details": "PrepareVehicle"
+      },
+      {
+        "ordinal": 10,
+        "kind": "ResponseValidated",
+        "pc_ticks": "196824007",
+        "details": "Prepared"
+      },
+      {
+        "ordinal": 11,
+        "kind": "CommandBuilt",
+        "pc_ticks": "197284375",
+        "details": "BindPeerVehicle"
+      },
+      {
+        "ordinal": 12,
+        "kind": "CommandWriteAccepted",
+        "pc_ticks": "197394034",
+        "details": "BindPeerVehicle"
+      },
+      {
+        "ordinal": 13,
+        "kind": "CommandBuilt",
+        "pc_ticks": "197423670",
+        "details": "BindGround"
+      },
+      {
+        "ordinal": 14,
+        "kind": "CommandWriteAccepted",
+        "pc_ticks": "197734581",
+        "details": "BindGround"
+      },
+      {
+        "ordinal": 15,
+        "kind": "CommandBuilt",
+        "pc_ticks": "197750737",
+        "details": "BindPeerGround"
+      },
+      {
+        "ordinal": 16,
+        "kind": "CommandWriteAccepted",
+        "pc_ticks": "197855140",
+        "details": "BindPeerGround"
+      },
+      {
+        "ordinal": 17,
+        "kind": "ResponseValidated",
+        "pc_ticks": "197868695",
+        "details": "Bound"
+      },
+      {
+        "ordinal": 18,
+        "kind": "CommandBuilt",
+        "pc_ticks": "198385710",
+        "details": "CommitVehicle"
+      },
+      {
+        "ordinal": 19,
+        "kind": "CommandWriteAccepted",
+        "pc_ticks": "198825667",
+        "details": "CommitVehicle"
+      },
+      {
+        "ordinal": 20,
+        "kind": "ResponseValidated",
+        "pc_ticks": "198842375",
+        "details": "CommitAck"
+      },
+      {
+        "ordinal": 21,
+        "kind": "CommandBuilt",
+        "pc_ticks": "199259019",
+        "details": "CommitGround"
+      },
+      {
+        "ordinal": 22,
+        "kind": "CommandWriteAccepted",
+        "pc_ticks": "199399714",
+        "details": "CommitGround"
+      },
+      {
+        "ordinal": 23,
+        "kind": "ResponseValidated",
+        "pc_ticks": "199416007",
+        "details": "CommitAck"
+      },
+      {
+        "ordinal": 24,
+        "kind": "ParamWriteAttempt",
+        "pc_ticks": "200353772",
+        "details": "exact14 bytes; one attempt latched before writer"
+      },
+      {
+        "ordinal": 25,
+        "kind": "ParamWriteAccepted",
+        "pc_ticks": "200767874",
+        "details": "PC-local acceptance only"
+      },
+      {
+        "ordinal": 26,
+        "kind": "ResponseValidated",
+        "pc_ticks": "200971884",
+        "details": "GroundHeld"
+      },
+      {
+        "ordinal": 27,
+        "kind": "Failure",
+        "pc_ticks": "201422668",
+        "details": "ATTEMPTED_ABORT_WITHDRAWN_AFTER_REQUEST"
+      }
+    ],
+    "PC_commands": [
+      {
+        "index": 1,
+        "round": 1,
+        "kind": "Helloground",
+        "opcode": "HelloRequest",
+        "role": "ground",
+        "built_ticks": "86974224",
+        "started_ticks": "88040470",
+        "returned_ticks": "88208924",
+        "accepted_bytes": 66,
+        "write_success": true
+      },
+      {
+        "index": 2,
+        "round": 1,
+        "kind": "Hellovehicle",
+        "opcode": "HelloRequest",
+        "role": "vehicle",
+        "built_ticks": "88530132",
+        "started_ticks": "88876943",
+        "returned_ticks": "88887320",
+        "accepted_bytes": 66,
+        "write_success": true
+      },
+      {
+        "index": 3,
+        "round": 1,
+        "kind": "PrepareVehicle",
+        "opcode": "PrepareVehicle",
+        "role": "vehicle",
+        "built_ticks": "141525850",
+        "started_ticks": "141676265",
+        "returned_ticks": "141687819",
+        "accepted_bytes": 66,
+        "write_success": true
+      },
+      {
+        "index": 4,
+        "round": 1,
+        "kind": "BindPeerVehicle",
+        "opcode": "BindPeerVehicle",
+        "role": "vehicle",
+        "built_ticks": "197284375",
+        "started_ticks": "197383508",
+        "returned_ticks": "197394034",
+        "accepted_bytes": 66,
+        "write_success": true
+      },
+      {
+        "index": 5,
+        "round": 1,
+        "kind": "BindGround",
+        "opcode": "BindGround",
+        "role": "ground",
+        "built_ticks": "197423670",
+        "started_ticks": "197724977",
+        "returned_ticks": "197734581",
+        "accepted_bytes": 66,
+        "write_success": true
+      },
+      {
+        "index": 6,
+        "round": 1,
+        "kind": "BindPeerGround",
+        "opcode": "BindPeerGround",
+        "role": "ground",
+        "built_ticks": "197750737",
+        "started_ticks": "197846982",
+        "returned_ticks": "197855140",
+        "accepted_bytes": 66,
+        "write_success": true
+      },
+      {
+        "index": 7,
+        "round": 1,
+        "kind": "CommitVehicle",
+        "opcode": "CommitRequest",
+        "role": "vehicle",
+        "built_ticks": "198385710",
+        "started_ticks": "198814394",
+        "returned_ticks": "198825667",
+        "accepted_bytes": 66,
+        "write_success": true
+      },
+      {
+        "index": 8,
+        "round": 1,
+        "kind": "CommitGround",
+        "opcode": "CommitRequest",
+        "role": "ground",
+        "built_ticks": "199259019",
+        "started_ticks": "199387129",
+        "returned_ticks": "199399714",
+        "accepted_bytes": 66,
+        "write_success": true
+      },
+      {
+        "index": 9,
+        "round": 1,
+        "kind": "Abortvehicle",
+        "opcode": "AbortRequest",
+        "role": "vehicle",
+        "built_ticks": "202321002",
+        "started_ticks": "205747376",
+        "returned_ticks": "205810866",
+        "accepted_bytes": 66,
+        "write_success": true
+      },
+      {
+        "index": 10,
+        "round": 1,
+        "kind": "Abortground",
+        "opcode": "AbortRequest",
+        "role": "ground",
+        "built_ticks": "202742880",
+        "started_ticks": "206631048",
+        "returned_ticks": "206641447",
+        "accepted_bytes": 66,
+        "write_success": true
+      }
+    ],
+    "USB_reservation_responses": [
+      {
+        "role": "vehicle",
+        "opcode": "HelloReply",
+        "device_ms": "29787",
+        "cycle": "0",
+        "generation": "0",
+        "nonce": "5916454417363433549",
+        "read_completed_ticks": "88913863",
+        "observation_ticks": "88932978",
+        "raw_offset": 217
+      },
+      {
+        "role": "ground",
+        "opcode": "HelloReply",
+        "device_ms": "21497",
+        "cycle": "3",
+        "generation": "0",
+        "nonce": "5916454417363433549",
+        "read_completed_ticks": "141067763",
+        "observation_ticks": "141315717",
+        "raw_offset": 677
+      },
+      {
+        "role": "vehicle",
+        "opcode": "Prepared",
+        "device_ms": "40579",
+        "cycle": "4",
+        "generation": "50",
+        "nonce": "5916454417363433549",
+        "read_completed_ticks": "196810880",
+        "observation_ticks": "196824007",
+        "raw_offset": 976
+      },
+      {
+        "role": "ground",
+        "opcode": "Bound",
+        "device_ms": "27178",
+        "cycle": "4",
+        "generation": "50",
+        "nonce": "5916454417363433549",
+        "read_completed_ticks": "197866165",
+        "observation_ticks": "197868695",
+        "raw_offset": 1243
+      },
+      {
+        "role": "vehicle",
+        "opcode": "CommitAck",
+        "device_ms": "40781",
+        "cycle": "4",
+        "generation": "50",
+        "nonce": "5916454417363433549",
+        "read_completed_ticks": "198832427",
+        "observation_ticks": "198842375",
+        "raw_offset": 1042
+      },
+      {
+        "role": "ground",
+        "opcode": "CommitAck",
+        "device_ms": "27332",
+        "cycle": "4",
+        "generation": "50",
+        "nonce": "5916454417363433549",
+        "read_completed_ticks": "199409502",
+        "observation_ticks": "199416007",
+        "raw_offset": 1309
+      },
+      {
+        "role": "ground",
+        "opcode": "GroundHeld",
+        "device_ms": "27469",
+        "cycle": "4",
+        "generation": "50",
+        "nonce": "5916454417363433549",
+        "read_completed_ticks": "200779819",
+        "observation_ticks": "200971884",
+        "raw_offset": 1375
+      }
+    ],
+    "Withdrawn_trigger": {
+      "role": "vehicle",
+      "decoded": {
+        "schema": "vc-lora-r19-grant-reservation-usb-v3",
+        "version": 3,
+        "valid": true,
+        "opcode": "Withdrawn",
+        "opcode_number": 17,
+        "role": "vehicle",
+        "flags": 0,
+        "reader_session": "5915986187163897646",
+        "slot_nonce": "5916454417363433549",
+        "boot_id": "9433094794668774009",
+        "usb_epoch": "1",
+        "grant_session": "690",
+        "grant_cycle": "4",
+        "slot_token": "50",
+        "generation": "50",
+        "device_ms": "41029",
+        "sequence": 3,
+        "component": 198,
+        "error": ""
+      },
+      "read_completed_ticks": "201316079",
+      "observation_ticks": "201422668",
+      "raw_offset": 1108,
+      "frame_base64": "/TYAAAP5xv0AAFIxOVIDEQIALo8FzhfOGVJN+Lwk8ncbUnmS0bC8FemCAQAAALICBAAyAAAAMgAAAEWgAAClWlwS"
+    },
+    "clock_rule": "Within-domain comparisons only. No PC-to-MCU or Vehicle-to-Ground timestamp subtraction."
+  },
+  "param_ledger": {
+    "request": {
+      "write_started_ticks": "200353772",
+      "write_returned_ticks": "200767874",
+      "accepted_bytes": 14,
+      "api_exception_type": "",
+      "exception_type": "",
+      "local_write_api_accepted_only": true,
+      "delivery_proven": false,
+      "raw_offset_at_write_start": "1375",
+      "request_frame_hex": "FD02000063FFBE1500000101D507",
+      "expected_bytes": 14,
+      "frame_sha256": "FC3A47A83D35D44E96E044A216FDBF082805F9FACCDD5E4B9252E0C7026D4A75"
+    },
+    "raw_request_validation": {
+      "frame_bytes": 14,
+      "sha_matches": true,
+      "crc_valid": true,
+      "message_id": 21,
+      "target_system": 1,
+      "target_component": 1,
+      "accepted_bytes": 14,
+      "local_only": true
+    },
+    "snapshot_30s": {
+      "result": "INCOMPLETE_PARAMETERS",
+      "target_count": 932,
+      "unique_count": 0,
+      "all_932_received": false,
+      "deadline_ticks": "500353772",
+      "snapshot_complete": true,
+      "sealed": true,
+      "missing_index_count": 932,
+      "all_indexes_0_to_931_missing": true,
+      "errors": {
+        "bad_crc": 0,
+        "bad_length": 0,
+        "unsupported_flags": 0,
+        "unsupported_signed": 0,
+        "invalid_source": 0,
+        "invalid_count": 0,
+        "invalid_index": 0,
+        "invalid_id": 0,
+        "invalid_type": 0,
+        "duplicate_index": 0,
+        "duplicate_id": 0,
+        "noise_bytes": 0,
+        "partial_frame": 0,
+        "total": 0
+      }
+    },
+    "final": {
+      "result": "INCOMPLETE_PARAMETERS",
+      "target_count": 932,
+      "unique_count": 0,
+      "all_932_received": false,
+      "complete_read_completed_ticks": null,
+      "elapsed_us": null,
+      "deadline_ticks": "500353772",
+      "errors": {
+        "bad_crc": 0,
+        "bad_length": 0,
+        "unsupported_flags": 0,
+        "unsupported_signed": 0,
+        "invalid_source": 0,
+        "invalid_count": 0,
+        "invalid_index": 0,
+        "invalid_id": 0,
+        "invalid_type": 0,
+        "duplicate_index": 0,
+        "duplicate_id": 0,
+        "noise_bytes": 0,
+        "partial_frame": 0,
+        "total": 0
+      },
+      "coverage": "INGESTED_RAW_PREFIX_ONLY"
+    },
+    "pre_request_only": {
+      "count": 1,
+      "param_id": "STAT_RUNTIME",
+      "index": 65535,
+      "classification": "PRE_REQUEST",
+      "is_part_of_932": false
+    },
+    "whole_saved_raw_PARAM_VALUE_count": 1,
+    "post_request_PARAM_VALUE_count": 0,
+    "interpretation": "Unlike the previous NOT_ATTEMPTED run, the runner made one exact14-byte request and GroundHeld acknowledged the same slot. No valid requested-list entries arrived before the 30-second deadline. Zero parser errors do not mean all product communication errors zero."
+  },
+  "USB_and_RF_proof_layers": {
+    "PC_local_API_write": "PROVEN",
+    "PC_MCU_USB_control_exchange": "PROVEN_BY_MATCHING_RAW_CRC_VALID_RESPONSES",
+    "both_role_commit_ack": "PROVEN_CURRENT_TUPLE_NOT_FUTURE_RESERVATION_GUARANTEE",
+    "GroundHeld": "OBSERVED_CURRENT_TUPLE_AFTER_REQUEST",
+    "Vehicle_Grant_Release": "NOT_ATTEMPTED",
+    "matching_fresh_RF_Grant": "NOT_OBSERVED",
+    "Pixhawk_request_receipt_or_reply": "NOT_PROVEN",
+    "high_speed_session_start": "NOT_PROVEN",
+    "Ground_500ms_evaluation": {
+      "result": "NOT_EVALUATED",
+      "reason": "NO_MATCHING_FRESH_GRANT_AND_ACTUAL_MCU_RELEASE_EVIDENCE",
+      "request_attempted": true,
+      "ground_t0_ms": "27469",
+      "release_write_accepted": false,
+      "release_write_is_local_only": true,
+      "fresh_grant_observed": false,
+      "high_speed_success": false
+    },
+    "note": "USB control acknowledgements and host-API accepted bytes are not RF uplink proof."
+  },
+  "heartbeat": {
+    "independent_whole_raw_scan": "11 CRC-valid primary sysid1/compid1 HEARTBEAT frames, all match summary offsets/SHA",
+    "preparation_count": 10,
+    "measurement_count": 1,
+    "max_gap_among_received_only_ms": 2015.1094,
+    "last_HB_after_measurement_start_ms": 422.8231,
+    "last_HB_to_measurement_end_s": 39.609138099999996,
+    "continuous_2500ms_acceptance": false,
+    "scope": "The maximum between received frames excludes the long silent tail after cancellation. It cannot be used as a sustained Heartbeat PASS."
+  },
+  "initial_106ms_proof": {
+    "normalized_outer_binding": "RAW_BYTES_AND_MCU_RECORD_BOUND",
+    "bound_frame_sha256": "A3EB2A834308FA0F916E89B1BEC91D5F8600739C16A3917E5B03E1BED3DB237F",
+    "independently_matched_complete_raw_frame": true,
+    "same_Ground_MCU_ARM_accepted_us": "15866497",
+    "same_Ground_MCU_FRAME_enqueued_us": "15866709",
+    "same_Ground_MCU_USB_completed_us": "15867183",
+    "enqueue_to_complete_us": 474,
+    "ARM_to_complete_us": 686,
+    "local_completed": true,
+    "product_budget_us": 106000,
+    "source": "Saved outer normalized trace, joining the saved MCU record to the first CRC-valid21-byte raw Heartbeat. Internal RAM decoding is owned by the root assessment and not repeated by this capture-only audit.",
+    "limitations": "Proves one bound initial local product USB completion observation within budget, not physical FIFO propagation time, sustained service or RF delivery. Guaranteed PC/MCU clock mapping remains unavailable."
+  },
+  "later_failure": {
+    "captured_R19F": {
+      "role": "vehicle",
+      "decoded": {
+        "valid": true,
+        "reason": "",
+        "role": "vehicle",
+        "source_line": 7190,
+        "device_ms": "41480",
+        "status_hex": "000300020001",
+        "usb_epoch": "1",
+        "text": "R19F:V:1C16:000000000000A208:000300020001:00000001",
+        "boot_build_identity_in_frame": false
+      },
+      "raw_offset": 1237,
+      "raw_last_offset": 1299,
+      "read_completed_ticks": "205818974",
+      "observed_ticks": "206128208",
+      "binding": "PROVENANCE_CONSISTENT_CONTINUOUS_READER",
+      "binding_limitation": "R19F has no boot/build/session identity. Binding is a source/flash-bound uninterrupted physical-role reader chain, not authentication or identity encoded in the frame."
+    },
+    "independent_raw_fault_validation": {
+      "coordinates_match": true,
+      "crc_valid": true,
+      "text_matches": true
+    },
+    "direct_status_decode": {
+      "startup_fault": 0,
+      "e220_state": 3,
+      "e220_fault": 0,
+      "writer_status": 2,
+      "radio_session_status": 0,
+      "adapter_fail_closed": false,
+      "tdd_state": 1,
+      "usb_loss_epoch": 1
+    },
+    "source_line_scope": "7190 identifies the generic reservation abort/latch wrapper. R19F contains six status bytes, not reservation reason/detail/predicate. It is later than the Withdrawn event and must not be treated as the first cause."
+  },
+  "metrics": {
+    "pc_clock_domain_id": "725fdc3e733e4b28a3456d7e4db7a49e",
+    "pc_frequency_hz": "10000000",
+    "measurement_duration_ms": 40031.9612,
+    "request_after_measurement_start_ms": 44.548,
+    "request_local_api_duration_ms": 41.4102,
+    "request_deadline_exact_30s": true,
+    "request_to_measurement_end_ms": 39987.4132,
+    "pc_prepared_read_to_validated_ms": 1.3127,
+    "pc_prepared_read_to_vehicle_commit_ack_ms": 202.1547,
+    "pc_prepared_read_to_ground_commit_ack_ms": 259.8622,
+    "pc_prepared_read_to_param_attempt_ms": 354.2892,
+    "pc_param_write_return_to_GroundHeld_read_ms": 1.1945,
+    "pc_prepared_read_to_Withdrawn_read_ms": 450.5199,
+    "pc_param_attempt_to_Withdrawn_read_ms": 96.2307,
+    "pc_Withdrawn_read_to_workflow_fail_ms": 10.6589,
+    "pc_param_attempt_to_Release_ms": null,
+    "pc_control_pump_max_slice_ms": 101.4136,
+    "vehicle_mcu_prepared_to_commit_ack_ms": 202,
+    "vehicle_mcu_prepared_to_Withdrawn_ms": 450,
+    "vehicle_mcu_Withdrawn_to_R19F_ms": 451,
+    "heartbeat_total": 11,
+    "heartbeat_preparation": 10,
+    "heartbeat_measurement": 1,
+    "max_heartbeat_gap_between_received_only_ms": 2015.1094,
+    "heartbeat_gaps_ms": [
+      1859.9227,
+      2015.1094,
+      549.1937,
+      549.9248,
+      1649.4886,
+      550.6622,
+      2015.0137,
+      549.8068,
+      550.118,
+      1649.8451
+    ],
+    "last_heartbeat_after_measurement_start_ms": 422.8231,
+    "last_heartbeat_to_measurement_end_ms": 39609.1381,
+    "first_heartbeat_after_local_ARM_return_ms": 0.6488,
+    "ground_mcu_initial_enqueue_to_usb_complete_us": 474,
+    "ground_mcu_initial_ARM_to_usb_complete_us": 686,
+    "cross_clock_subtraction_used": false
+  },
+  "control_pump": {
+    "schema": "vc-lora-r19-control-pump-metrics-v1",
+    "clock_domain_id": "725fdc3e733e4b28a3456d7e4db7a49e",
+    "frequency": "10000000",
+    "invocations": 449,
+    "total_commands_written": 8,
+    "total_write_attempts": 8,
+    "max_slice_elapsed_ticks": "1014136",
+    "last_slice_elapsed_ticks": "422197",
+    "last_stop_reason": "FAILED",
+    "await_observation": 436,
+    "time_budget": 12,
+    "command_budget": 0,
+    "preflight_pending": 0,
+    "failed": 1,
+    "timing_guarantee": false
+  },
+  "prepared_to_release": {
+    "clock_domain_id": "725fdc3e733e4b28a3456d7e4db7a49e",
+    "frequency": "10000000",
+    "prepared_native_read_ticks": "196810880",
+    "release_write_started_ticks": null,
+    "elapsed_ticks": null,
+    "release_write_attempted": false,
+    "mcu_hold_deadline_proven": false,
+    "scope": "PC native Prepared read completion to local Release OUT attempt only; not RF delivery or MCU hold lifetime."
+  },
+  "terminal_abort": {
+    "summary": {
+      "phase": "ABORT_UNCONFIRMED",
+      "first_reason": "ATTEMPTED_ABORT_WITHDRAWN_AFTER_REQUEST",
+      "started_ticks": "201422668",
+      "last_ticks": "600057797",
+      "capture_deadline_ticks": "599908292",
+      "blocked_reason": "CAPTURE_DEADLINE_REACHED"
+    },
+    "roles": [
+      {
+        "role": "ground",
+        "attempts": 1,
+        "write_success": true,
+        "ack_present": false
+      },
+      {
+        "role": "vehicle",
+        "attempts": 1,
+        "write_success": true,
+        "ack_present": false
+      }
+    ],
+    "interpretation": "Both Abort OUTs were accepted locally, but neither matching AbortAck was observed; no successful remote abort completion claim."
+  },
+  "previous_run_comparison": {
+    "run": "20261025T153553329Z-fatal-scheduling-param-once-ps51",
+    "same_candidate": true,
+    "previous": "round1 safe cancellation after58 Vehicle MCU ms; round2 runtime failure25ms after new Prepared; PARAM0 NOT_ATTEMPTED; measured HB0",
+    "current": "round1 reaches Bound/bothCommitAck and PARAM1; Withdrawn450 Vehicle MCU ms after Prepared; Release0; 0/932; measured HB1",
+    "conclusion": "More of the USB reservation/request path was observed this time, but full problem resolution or statistical reliability improvement is not established by this single trial."
+  },
+  "raw_integrity": {
+    "raw": [
+      {
+        "role": "vehicle",
+        "bytes": 3757,
+        "sha256": "16FEC6AEF58E6B725AFBC9ED02A360FD7CADD4B1744249C88EACB9893C789448",
+        "hash_matches": true,
+        "inline_matches": true
+      },
+      {
+        "role": "ground",
+        "bytes": 4045,
+        "sha256": "9E275661B23EB8C01A70647562F675CE1EDCB649FF2B95164C728AACB57CA372",
+        "hash_matches": true,
+        "inline_matches": true
+      }
+    ],
+    "responses": [
+      {
+        "role": "vehicle",
+        "opcode": "HelloReply",
+        "raw_offset": 217,
+        "coordinates_match": true,
+        "crc_valid": true,
+        "wire_version": 3,
+        "opcode_exact": true,
+        "device_ms": "29787",
+        "read_completed_ticks": "88913863"
+      },
+      {
+        "role": "ground",
+        "opcode": "HelloReply",
+        "raw_offset": 677,
+        "coordinates_match": true,
+        "crc_valid": true,
+        "wire_version": 3,
+        "opcode_exact": true,
+        "device_ms": "21497",
+        "read_completed_ticks": "141067763"
+      },
+      {
+        "role": "vehicle",
+        "opcode": "Prepared",
+        "raw_offset": 976,
+        "coordinates_match": true,
+        "crc_valid": true,
+        "wire_version": 3,
+        "opcode_exact": true,
+        "device_ms": "40579",
+        "read_completed_ticks": "196810880"
+      },
+      {
+        "role": "ground",
+        "opcode": "Bound",
+        "raw_offset": 1243,
+        "coordinates_match": true,
+        "crc_valid": true,
+        "wire_version": 3,
+        "opcode_exact": true,
+        "device_ms": "27178",
+        "read_completed_ticks": "197866165"
+      },
+      {
+        "role": "vehicle",
+        "opcode": "CommitAck",
+        "raw_offset": 1042,
+        "coordinates_match": true,
+        "crc_valid": true,
+        "wire_version": 3,
+        "opcode_exact": true,
+        "device_ms": "40781",
+        "read_completed_ticks": "198832427"
+      },
+      {
+        "role": "ground",
+        "opcode": "CommitAck",
+        "raw_offset": 1309,
+        "coordinates_match": true,
+        "crc_valid": true,
+        "wire_version": 3,
+        "opcode_exact": true,
+        "device_ms": "27332",
+        "read_completed_ticks": "199409502"
+      },
+      {
+        "role": "ground",
+        "opcode": "GroundHeld",
+        "raw_offset": 1375,
+        "coordinates_match": true,
+        "crc_valid": true,
+        "wire_version": 3,
+        "opcode_exact": true,
+        "device_ms": "27469",
+        "read_completed_ticks": "200779819"
+      },
+      {
+        "role": "vehicle",
+        "opcode": "Withdrawn",
+        "raw_offset": 1108,
+        "coordinates_match": true,
+        "crc_valid": true,
+        "wire_version": 3,
+        "opcode_exact": true,
+        "device_ms": "41029",
+        "read_completed_ticks": "201316079"
+      }
+    ],
+    "whole_raw_heartbeat_and_param_frames": [
+      {
+        "role": "ground",
+        "message_id": 0,
+        "raw_offset": 157,
+        "frame_bytes": 21,
+        "sha256": "A3EB2A834308FA0F916E89B1BEC91D5F8600739C16A3917E5B03E1BED3DB237F",
+        "sysid": 1,
+        "compid": 1,
+        "sequence": 66,
+        "summary_hb_matches": true,
+        "read_completed_ticks": "84745673",
+        "in_measurement": false,
+        "param_index": null
+      },
+      {
+        "role": "ground",
+        "message_id": 0,
+        "raw_offset": 304,
+        "frame_bytes": 21,
+        "sha256": "795D813A54B1076D3F80ED36510581150748BE6857BECC5FFE1B0A5B38135FEC",
+        "sysid": 1,
+        "compid": 1,
+        "sequence": 99,
+        "summary_hb_matches": true,
+        "read_completed_ticks": "103344900",
+        "in_measurement": false,
+        "param_index": null
+      },
+      {
+        "role": "ground",
+        "message_id": 0,
+        "raw_offset": 451,
+        "frame_bytes": 21,
+        "sha256": "F49D64C9B4BB92684E4BE9FC3A0A9468A604B15A00CC86911436536429ED34EF",
+        "sysid": 1,
+        "compid": 1,
+        "sequence": 131,
+        "summary_hb_matches": true,
+        "read_completed_ticks": "123495994",
+        "in_measurement": false,
+        "param_index": null
+      },
+      {
+        "role": "ground",
+        "message_id": 0,
+        "raw_offset": 535,
+        "frame_bytes": 21,
+        "sha256": "2AF6E2E64E4EE76B2A7FA64B2368D4BB3D1C1DB6EAE2613C2545E7568D9853A7",
+        "sysid": 1,
+        "compid": 1,
+        "sequence": 163,
+        "summary_hb_matches": true,
+        "read_completed_ticks": "128987931",
+        "in_measurement": false,
+        "param_index": null
+      },
+      {
+        "role": "ground",
+        "message_id": 0,
+        "raw_offset": 556,
+        "frame_bytes": 21,
+        "sha256": "903BC9E96BAAA419407BA814337402C5BA62817220572D460E30688BF7C319DD",
+        "sysid": 1,
+        "compid": 1,
+        "sequence": 195,
+        "summary_hb_matches": true,
+        "read_completed_ticks": "134487179",
+        "in_measurement": false,
+        "param_index": null
+      },
+      {
+        "role": "ground",
+        "message_id": 22,
+        "raw_offset": 577,
+        "frame_bytes": 37,
+        "sha256": "24DB16B67EFBA461CD9B73DB6B652A7133684E1EFE6F1105DAF713563F3C2C6D",
+        "sysid": 1,
+        "compid": 1,
+        "sequence": 121,
+        "summary_hb_matches": true,
+        "read_completed_ticks": null,
+        "in_measurement": null,
+        "param_index": 65535
+      },
+      {
+        "role": "ground",
+        "message_id": 0,
+        "raw_offset": 806,
+        "frame_bytes": 21,
+        "sha256": "9B60C9A6231C79EDED9554A155EFC194D753784D1A45949ACB6A7CA8D791EF43",
+        "sysid": 1,
+        "compid": 1,
+        "sequence": 227,
+        "summary_hb_matches": true,
+        "read_completed_ticks": "150982065",
+        "in_measurement": false,
+        "param_index": null
+      },
+      {
+        "role": "ground",
+        "message_id": 0,
+        "raw_offset": 890,
+        "frame_bytes": 21,
+        "sha256": "19236B15AA2B3AF0A962A69F4B5D0A88423F75AEC6694471048AFFB0425B1F58",
+        "sysid": 1,
+        "compid": 1,
+        "sequence": 3,
+        "summary_hb_matches": true,
+        "read_completed_ticks": "156488687",
+        "in_measurement": false,
+        "param_index": null
+      },
+      {
+        "role": "ground",
+        "message_id": 0,
+        "raw_offset": 1037,
+        "frame_bytes": 21,
+        "sha256": "CE320B30ED29F80292057DD9913879DC205960977B39606C0B6DA42464EA6C17",
+        "sysid": 1,
+        "compid": 1,
+        "sequence": 35,
+        "summary_hb_matches": true,
+        "read_completed_ticks": "176638824",
+        "in_measurement": false,
+        "param_index": null
+      },
+      {
+        "role": "ground",
+        "message_id": 0,
+        "raw_offset": 1058,
+        "frame_bytes": 21,
+        "sha256": "83701C0A546D770140818961D8951020DC847745BE8C4CEB735B3D942BDF8D0B",
+        "sysid": 1,
+        "compid": 1,
+        "sequence": 67,
+        "summary_hb_matches": true,
+        "read_completed_ticks": "182136892",
+        "in_measurement": false,
+        "param_index": null
+      },
+      {
+        "role": "ground",
+        "message_id": 0,
+        "raw_offset": 1142,
+        "frame_bytes": 21,
+        "sha256": "795D813A54B1076D3F80ED36510581150748BE6857BECC5FFE1B0A5B38135FEC",
+        "sysid": 1,
+        "compid": 1,
+        "sequence": 99,
+        "summary_hb_matches": true,
+        "read_completed_ticks": "187638072",
+        "in_measurement": false,
+        "param_index": null
+      },
+      {
+        "role": "ground",
+        "message_id": 0,
+        "raw_offset": 1441,
+        "frame_bytes": 21,
+        "sha256": "532C9FCB150F917D216ABC456CB75854B094A3268BFDACF5B4F7C65B6B6EEDF3",
+        "sysid": 1,
+        "compid": 1,
+        "sequence": 164,
+        "summary_hb_matches": true,
+        "read_completed_ticks": "204136523",
+        "in_measurement": true,
+        "param_index": null
+      }
+    ],
+    "request": {
+      "frame_bytes": 14,
+      "sha_matches": true,
+      "crc_valid": true,
+      "message_id": 21,
+      "target_system": 1,
+      "target_component": 1,
+      "accepted_bytes": 14,
+      "local_only": true
+    },
+    "fault": {
+      "coordinates_match": true,
+      "crc_valid": true,
+      "text_matches": true
+    }
+  },
+  "source_hashes": [
+    {
+      "path": "capture/summary.json",
+      "sha256": "8319C2B8EA1B954B34FF4162D9BF693EC2F5C40275751F2BE4907495E10811B7"
+    },
+    {
+      "path": "capture/vehicle.raw.bin",
+      "sha256": "16FEC6AEF58E6B725AFBC9ED02A360FD7CADD4B1744249C88EACB9893C789448"
+    },
+    {
+      "path": "capture/ground.raw.bin",
+      "sha256": "9E275661B23EB8C01A70647562F675CE1EDCB649FF2B95164C728AACB57CA372"
+    },
+    {
+      "path": "summary.json",
+      "sha256": "545CF1261925B6A4C1E41A9DD2687CE36924486FB833BF11DF350BFA19808EC0"
+    }
+  ],
+  "limits": [
+    "Capture/raw analysis only; root owns STOP/Fatal/AUX/RAM and accepted-R18 rollback proof.",
+    "Missing AbortAck, Release, fresh Grant and complete parameter list are not inferred successes.",
+    "No extra trial, live hardware access, source modification, build, test execution or device/process inventory was performed."
+  ],
+  "additional_work_stopped": true
+}

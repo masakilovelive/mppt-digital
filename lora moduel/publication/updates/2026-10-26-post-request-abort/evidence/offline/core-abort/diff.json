@@ -1,0 +1,668 @@
+[
+  {
+    "file": "r19_grant_reservation",
+    "before_lines": 582,
+    "after_lines": 602,
+    "changes": [
+      {
+        "InputObject": "  // begin_cancel() is called only after the bridge has retired the exact",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  // unwritten action/cycle/lease. This is that local historical tombstone, not",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  // physical RF proof and never permission to reuse the old writer authority.",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  // It survives terminal cleanup, but cannot describe a different fresh nonce.",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  bool unwritten_reservation_retired() const noexcept {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    return s_.initialized && s_.role==Role::Vehicle && cancellation_supported() &&",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      cancellation_used_ && cancellation_pending() && !grant_written_ && !tail_seen_ &&",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      retired_nonce_==s_.slot_nonce && retired_session_==s_.grant_session &&",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      retired_cycle_==s_.grant_cycle && retired_token_==s_.action_token &&",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      retired_generation_==s_.writer_generation;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  // Exact duplicates are idempotent, not a request to republish an ACK. If the",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  // first call had no queue slot, it retains revocation and may be re-evaluated",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  // with fresh boundary proof until its one ACK can be queued.",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    if(!s_.initialized || !agreement_enabled() || !boundary_proven ||",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "       now<last_now_ || now>std::numeric_limits<std::uint32_t>::max() ||",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "       (terminal_aborted_ && now<terminal_abort_last_observed_ms_)) return false;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    if(!terminal_aborted_) {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      terminal_aborted_=true;terminal_abort_ms_=now;agreement_committed_=false;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    terminal_abort_last_observed_ms_=now;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    if(terminal_abort_ack_queued_ || terminal_abort_ack_committed_) return true;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    terminal_abort_ack_queued_=true;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      if(!terminal_aborted_ || !terminal_abort_ack_queued_ || terminal_abort_ack_committed_ || now<terminal_abort_ms_ ||",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  bool agreement_committed_{false},terminal_aborted_{false},terminal_abort_ack_queued_{false},terminal_abort_ack_committed_{false};",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  std::uint64_t agreement_commit_ms_{0U},terminal_abort_ms_{0U},terminal_abort_last_observed_ms_{0U};",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    }",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  }",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    if(!s_.initialized || !agreement_enabled() || terminal_aborted_ || !boundary_proven ||",
+        "SideIndicator": "<="
+      },
+      {
+        "InputObject": "       now<last_now_ || now>std::numeric_limits<std::uint32_t>::max()) return false;",
+        "SideIndicator": "<="
+      },
+      {
+        "InputObject": "    terminal_aborted_=true;terminal_abort_ms_=now;agreement_committed_=false;",
+        "SideIndicator": "<="
+      },
+      {
+        "InputObject": "      if(!terminal_aborted_ || terminal_abort_ack_committed_ || now<terminal_abort_ms_ ||",
+        "SideIndicator": "<="
+      },
+      {
+        "InputObject": "  bool agreement_committed_{false},terminal_aborted_{false},terminal_abort_ack_committed_{false};",
+        "SideIndicator": "<="
+      },
+      {
+        "InputObject": "  std::uint64_t agreement_commit_ms_{0U},terminal_abort_ms_{0U};",
+        "SideIndicator": "<="
+      }
+    ]
+  },
+  {
+    "file": "r19_grant_agreement_tests",
+    "before_lines": 262,
+    "after_lines": 389,
+    "changes": [
+      {
+        "InputObject": "template<class C,class=void>struct HasRetiredUnwritten:std::false_type{};",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "template<class C>struct HasRetiredUnwritten<C,std::void_t<",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  decltype(std::declval<const C&>().unwritten_reservation_retired())>>:std::true_type{};",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "void terminal_abort_idempotence() {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  for(auto role:{Role::Ground,Role::Vehicle}) {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    Pair p;p.commit();Controller& c=role==Role::Ground?p.ground:p.vehicle;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    if(role==Role::Ground) {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.on_ground_held(200U,640U,1U,200U),\"post-request terminal regression has one real original request\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      pop(c,Op::GroundHeld);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    } else {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.begin_cancel(130U,true),\"post-request cleanup may follow safe retirement of the Vehicle tuple\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      pop(c,Op::Withdrawn);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    const auto prior=c.snapshot();const auto prior_hold=c.hold_deadline_ms();",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    const auto abort=command(abort_request,role);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.terminal_abort(abort,230U,true),\"proof-backed first terminal cleanup acknowledged locally\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.terminal_abort(abort,231U,true),\"same-tuple repeated Abort is idempotent while ACK is queued\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.terminal_abort_ms()==230U && !c.terminal_abort_ack_committed(),\"duplicate cannot replace original terminal time or claim USB publication\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    for(unsigned field=0U;field<16U;++field) {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      auto bad=abort;bool boundary=true;std::uint64_t now=232U;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      switch(field) {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "        case 0:bad.reader_session++;break;case 1:bad.slot_nonce++;break;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "        case 2:bad.boot_id++;break;case 3:bad.usb_epoch++;break;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "        case 4:bad.grant_session++;break;case 5:bad.grant_cycle++;break;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "        case 6:bad.action_token++;break;case 7:bad.writer_generation++;break;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "        case 8:bad.wire_version=2U;break;case 9:bad.opcode=commit_request;break;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "        case 10:bad.role=role==Role::Ground?Role::Vehicle:Role::Ground;break;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "        case 11:bad.flags=1U;break;case 12:bad.device_ms=1U;break;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "        case 13:boundary=false;break;case 14:now=229U;break;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "        default:now=std::uint64_t{1U}<<32U;break;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      }",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(!c.terminal_abort(bad,now,boundary),\"terminal retry retains every identity semantic boundary and time guard\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.terminal_aborted() && c.terminal_abort_ms()==230U && !c.terminal_abort_ack_committed(),\"rejected terminal duplicate never resets its irreversible tombstone\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    pop(c,abort_ack);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.peek_reply()==nullptr,\"pending duplicates add no extra AbortAck\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.terminal_abort(abort,240U,true) && c.peek_reply()==nullptr,\"dequeued but unpublished AbortAck remains single in-flight publication\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(!c.terminal_abort_ack_committed(),\"dequeue is not completed ACK delivery\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.note_reply_completed(abort_ack,241U) && c.terminal_abort_ack_committed(),\"only actual publication callback commits the first ACK\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.terminal_abort(abort,242U,true) && c.peek_reply()==nullptr,\"completed terminal duplicate succeeds without implicit ACK republication\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(!c.terminal_abort(abort,241U,true),\"terminal retry cannot regress its independent cleanup observation clock\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(!c.handle_command(command(commit_request,role),243U) && !c.tick(243U) &&",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      !c.ground_request_allowed() && !c.should_release() && !c.awaiting_grant() &&",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      !c.can_prepare() && !c.negotiation_allowed(243U) && !c.cancellation_available(),",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      \"terminal idempotence never revives PARAM Release retry cancellation or negotiation authority\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    const auto& after=c.snapshot();",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(after.state==prior.state && after.reason==prior.reason && after.event_count==prior.event_count &&",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      after.journal_count==prior.journal_count && after.ground_t0_ms==prior.ground_t0_ms &&",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      c.hold_deadline_ms()==prior_hold,\"terminal retries leave legacy first-fault journal and all original clocks untouched\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    Pair p;p.commit();auto& c=p.ground;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.on_ground_held(200U,640U,1U,200U),\"failed cleanup uses the original request origin\");pop(c,Op::GroundHeld);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.tick(700U) && !c.tick(701U) && c.snapshot().reason==Reason::GrantWaitExpired,\"failed cleanup does not defer the original 500ms failure\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    const auto prior=c.snapshot();",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(!c.terminal_abort(command(abort_request,Role::Ground),710U,false) && !c.terminal_aborted(),\"Failed state alone is never a terminal boundary proof\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.terminal_abort(command(abort_request,Role::Ground),711U,true),\"exact Failed tuple may be cleaned up with real boundary proof\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.terminal_abort(command(abort_request,Role::Ground),712U,true),\"Failed cleanup is idempotent without clearing first failure\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    pop(c,Op::Fault);pop(c,abort_ack);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.peek_reply()==nullptr && c.note_reply_completed(abort_ack,713U),\"original Fault and sole cleanup ACK retain order\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.failed() && c.snapshot().frozen && c.snapshot().reason==prior.reason &&",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      c.snapshot().event_count==prior.event_count && c.snapshot().ground_t0_ms==200U,",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      \"cleanup does not hide original GrantWaitExpired reason timestamp or t0\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  }",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    Controller c;check(c.initialize(Role::Vehicle,22U,1U,29000U),\"saved-run Vehicle identity initialization\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    auto h=command(Op::HelloRequest,Role::Vehicle,3U,false);h.boot_id=0U;h.usb_epoch=0U;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.handle_command(h,29787U),\"saved-run Hello\");pop(c,Op::HelloReply);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    auto p=command(Op::PrepareVehicle,Role::Vehicle,3U,false);p.grant_session=640U;p.grant_cycle=1U;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.handle_command(p,35067U) && c.on_prepared(640U,2U,7U,9U,41329U,40579U),\"saved-run prepare retains 8000ms and hold750ms conditions\");pop(c,Op::Prepared);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    auto b=command(Op::BindPeerVehicle,Role::Vehicle);b.boot_id=11U;b.usb_epoch=0U;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.handle_command(b,40638U) && c.handle_command(command(commit_request,Role::Vehicle),40782U),\"saved-run conditional commit before later heartbeat cancellation\");pop(c,commit_ack);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.begin_cancel(41029U,true),\"saved-run SAFE_CANCEL retires old tuple before its hold expiry\");pop(c,Op::Withdrawn);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.terminal_abort(command(abort_request,Role::Vehicle),41480U,true),\"saved-run core accepts cleanup after old hold expiry if physical boundary is actually proven\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(c.terminal_aborted() && !c.failed() && c.hold_deadline_ms()==41329U && !c.should_release(),\"saved-run late cleanup neither renews nor reuses old hold or lease\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  }",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "template<class C>void retired_unwritten_tombstone() {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  if constexpr(!HasRetiredUnwritten<C>::value) {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(false,\"core exposes a const exact-tuple unwritten retirement tombstone\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  } else {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    C initial;check(!initial.unwritten_reservation_retired(),\"uninitialized defaults are not old-slot retirement proof\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    Pair p;p.commit();C& v=p.vehicle;C& g=p.ground;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(!v.unwritten_reservation_retired() && !g.unwritten_reservation_retired(),\"a prepared or committed tuple is still not retired\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(v.begin_cancel(130U,true),\"unwritten retirement regression selects safe local cancellation\");pop(v,Op::Withdrawn);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    const C& local=v;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(local.unwritten_reservation_retired(),\"exact locally cancelled Vehicle tuple retains its unwritten retirement fact\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(!v.should_release() && !v.holding() && v.cancellation_pending(),\"retirement fact is not RF release authority\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(v.handle_command(command(Op::CancelRequest,Role::Vehicle),131U),\"retired Vehicle may acknowledge matching cancellation\");pop(v,Op::CancelAck);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(v.note_reply_completed(Op::CancelAck,132U),\"retired tuple cancellation ACK actually published\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    auto peer=command(Op::CancelPeerConfirmed,Role::Vehicle);peer.boot_id=11U;peer.usb_epoch=0U;peer.device_ms=132U;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(v.handle_command(peer,133U),\"retired tuple peer confirmation\");pop(v,Op::CancelPeerConfirmed);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(v.unwritten_reservation_retired(),\"bilateral cancellation retains the same exact retired tuple\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    auto fresh=command(Op::HelloRequest,Role::Vehicle,3U,false);fresh.boot_id=0U;fresh.usb_epoch=0U;fresh.slot_nonce++;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(v.handle_command(fresh,134U),\"fresh nonce starts only after complete pre-request cancellation\");pop(v,Op::HelloReply);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(!v.unwritten_reservation_retired(),\"old retired tuple never proves a different nonce or new reservation\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(g.begin_cancel(135U,false),\"Ground can enter its own cancellation path\");pop(g,Op::CancelAck);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    check(!g.unwritten_reservation_retired(),\"Ground cancellation cannot claim Vehicle physical-slot retirement\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      auto release=command(Op::ReleaseGrant,Role::Vehicle);release.device_ms=125U;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.handle_command(release,125U) && !c.unwritten_reservation_retired(),\"ReleaseGranted is not cancellation retirement\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.on_grant_write_accepted(640U,2U,7U,9U,126U) && !c.unwritten_reservation_retired(),\"accepted old Grant can never count as unwritten retirement\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.on_tail(640U,2U,7U,9U,676U) && !c.unwritten_reservation_retired(),\"RF tail history is never erased by an unwritten tombstone\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.begin_cancel(130U,true),\"terminal historical retirement starts with safe cancellation\");pop(c,Op::Withdrawn);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.terminal_abort(command(abort_request,Role::Vehicle),140U,true),\"retired exact tuple terminal cleanup boundary proven\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.unwritten_reservation_retired() && c.terminal_aborted() && !c.should_release(),\"terminal cleanup retains history but never revives old authority\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      C c;check(c.initialize(Role::Vehicle,22U,0U,100U),\"epoch0 remains a valid Vehicle identity\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      auto h=command(Op::HelloRequest,Role::Vehicle,3U,false);h.boot_id=0U;h.usb_epoch=0U;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.handle_command(h,101U),\"epoch0 Hello remains valid\");pop(c,Op::HelloReply);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      auto p=command(Op::PrepareVehicle,Role::Vehicle,3U,false);p.usb_epoch=0U;p.grant_session=640U;p.grant_cycle=0U;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.handle_command(p,102U),\"cycle0 may name the original baseline in a Prepare request\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.on_prepared(640U,1U,7U,9U,850U,110U),\"fresh reserved cycle is distinct from baseline0\");pop(c,Op::Prepared);",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.begin_cancel(130U,true) && c.unwritten_reservation_retired(),\"epoch0 and baseline0 do not hide valid exact-tuple safe retirement\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      auto zero=command(abort_request,Role::Vehicle);zero.usb_epoch=0U;zero.grant_cycle=0U;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      MavlinkFrame frame{};",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(!r19_encode_grant_reservation_frame(zero,false,0U,frame) &&",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "        !c.terminal_abort(zero,140U,true) && !c.terminal_aborted(),",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "        \"unchanged reservation wire semantic rejects cycle0 authority even though TDD baseline0 is valid\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  }",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(c.terminal_abort(command(abort_request,Role::Ground),213U,true) && c.peek_reply()==nullptr,\"duplicate Abort confirms the same terminal boundary without repeated ACK or authority\");",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      Pair q;q.commit();C& c=q.vehicle;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    }",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    }",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    }",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    {",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      Pair q;q.commit();C& c=q.vehicle;",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    }",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "    }",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  }",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "}",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "  codec();cancelled_release();terminal_abort_idempotence();retired_unwritten_tombstone<Controller>();agreement<Controller>();",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "}",
+        "SideIndicator": "=>"
+      },
+      {
+        "InputObject": "      check(!c.terminal_abort(command(abort_request,Role::Ground),213U,true) && c.peek_reply()==nullptr,\"duplicate Abort cannot enqueue repeated authority\");",
+        "SideIndicator": "<="
+      },
+      {
+        "InputObject": "  codec();cancelled_release();agreement<Controller>();",
+        "SideIndicator": "<="
+      }
+    ]
+  }
+]

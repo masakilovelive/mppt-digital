@@ -1,0 +1,149 @@
+{
+  "schema": "vc-lora-r19-reader-fixed-live-result-v1",
+  "result": "DIAGNOSTIC_RECORD_ACQUISITION_FIXED_HIGH_SPEED_UNRESOLVED_R18_RESTORED",
+  "workspace": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge",
+  "candidate_id": "20261025T151239434Z-90a93ae7",
+  "started_jst": "2026-10-26T01:16:24.2790717+09:00",
+  "finished_jst": "2026-10-26T01:19:55.5087527+09:00",
+  "physical_run_count": 1,
+  "latest_one_run_authorization_consumed": true,
+  "additional_device_operations_after_restoration": 0,
+  "firmware_changed_this_turn": false,
+  "timing_or_rf_limits_relaxed": false,
+  "outer_result": {
+    "status": "PASS_PARAM_LIST_DIAGNOSTICS_CAPTURED_R18_RESTORED_NOT_ACCEPTANCE",
+    "summary": "../summary.json",
+    "sha256": "545CF1261925B6A4C1E41A9DD2687CE36924486FB833BF11DF350BFA19808EC0",
+    "meaning": "Diagnostic acquisition and restoration succeeded; not communication or product acceptance"
+  },
+  "records": {
+    "both_roles_acquired": true,
+    "reader_schema": "vc-lora-r19-runtime-stage-jtag-read-v12",
+    "paired_raw_reads_per_role": 24,
+    "both_role_cleanup_proven": true,
+    "vehicle_summary_sha256": "6A60DFE8996E9C8267530EA37F8089327B7EC7F394810CBEF04A8E63C84C36CB",
+    "ground_summary_sha256": "E748A7DBFED52AEADF9DF285B9B0538C282002CC3761B303AC8619297DC915D6",
+    "previous_reader_compile_flag_rejection_recurred": false
+  },
+  "parameter_test": {
+    "request_attempts": 1,
+    "request_bytes_accepted_by_local_api": 14,
+    "request_frame_sha256": "FC3A47A83D35D44E96E044A216FDBF082805F9FACCDD5E4B9252E0C7026D4A75",
+    "pixhawk_or_rf_delivery_proven": false,
+    "unique_parameters_at30_seconds": 0,
+    "unique_parameters_final": 0,
+    "target": 932,
+    "result": "INCOMPLETE_PARAMETERS",
+    "snapshot_30s_complete_and_sealed": true,
+    "pre_request_param_value_count": 1,
+    "pre_request_param_value": "STAT_RUNTIME index65535; excluded from932 count",
+    "ledger_error_total": 0,
+    "ledger_error_scope": "PARAM_VALUE ledger and stream framing only; does not establish zero communication/runtime errors"
+  },
+  "reservation": {
+    "round": 1,
+    "both_role_commit_ack_observed": true,
+    "ground_held_observed": true,
+    "param_outcome": "ATTEMPTED_ABORT",
+    "workflow_failure": "ATTEMPTED_ABORT_WITHDRAWN_AFTER_REQUEST",
+    "workflow_failure_phase": "GroundHeldReadyToRelease",
+    "release_out_attempts": 0,
+    "fresh_grant_observed_after_request": false,
+    "actual_high_speed_negotiation_or_bulk_start_proven": false,
+    "vehicle_same_clock_ms": {
+      "prepared": 40579,
+      "commit_ack": 40781,
+      "safe_cancel": 41029,
+      "prepared_to_safe_cancel": 450,
+      "heartbeat_deadline": 43529,
+      "hold_deadline": 41329,
+      "conservative_heartbeat_grant_reserve": 5050,
+      "later_external_fault": 41480,
+      "later_external_fault_detail": 20
+    },
+    "vehicle_stop": {
+      "disposition": "SAFE_CANCEL",
+      "reason": "HeartbeatDeadlineConflict",
+      "aux_high": true,
+      "writer_lease_valid_and_matching": true,
+      "zero_uart_proven": true,
+      "old_cycle_and_lease_retired": true,
+      "fatal_detail13_latched": false,
+      "fatal_record_scope": "reserved-grant-detail13-only; not a general all-fatal detector",
+      "later_detail20_source": "AbortRequest terminal_abort not acknowledged, bridge line7231; distinct from detail13"
+    },
+    "ground_same_clock_ms": {
+      "parameter_request_accepted_and_await_fresh_grant_started": 27469,
+      "grant_wait_expired": 27970,
+      "elapsed": 501,
+      "owner_error": "GrantDeadlineExceeded",
+      "coordinator_error": "GrantDeadlineExceeded"
+    },
+    "pc_same_clock_ms": {
+      "prepared_native_read_to_param_write_start": 354.2892,
+      "param_write_start_to_withdrawn_native_read": 96.2307
+    },
+    "interpretation": "Vehicle cancelled the held unwritten Grant for Heartbeat priority. PC observed withdrawal after its one PARAM attempt and did not issue Release. Ground entered its local Fresh Grant wait, then recorded deadline expiry. Successful two-sided500ms protocol timing is not established.",
+    "cross_clock_limit": "No direct subtraction or physical causal ordering is inferred between PC, Vehicle and Ground clocks. Inter-role joins use the bound boot/epoch/nonce/session/cycle/token/generation and control records."
+  },
+  "heartbeat": {
+    "ground_crc_valid_preparation_frames": 10,
+    "ground_crc_valid_measurement_frames": 1,
+    "observed_interframe_max_ms": 2015.1094,
+    "measurement_terminal_silence_seconds": 39.6091381,
+    "continuous_max2500ms_requirement_met": false,
+    "initial_ground_local_usb_enqueue_to_completion_us": 474,
+    "initial_ground_arm_to_usb_completion_us": 686,
+    "initial_ground_product_budget_ms": 106,
+    "initial_ground_product_frame_crc_and_sha_matched": true,
+    "scope": "One initial21-byte product Heartbeat completed locally and was received intact; no sustained communication guarantee"
+  },
+  "aux": {
+    "vehicle_fault_latched": false,
+    "ground_fault_latched": false,
+    "vehicle_maximum_poll_gap_us": 100937,
+    "ground_maximum_poll_gap_us": 100974,
+    "physical_waveform_measured": false,
+    "interpretation": "No AUX fault recorded this run; this neither proves every physical edge nor resolves earlier AUX incidents"
+  },
+  "diagnostic_usb": {
+    "first_product_usb_failure_latched_either_role": false,
+    "diagnostic_failure_latched_both_roles": true,
+    "pending_ring_bytes_at_each_first_diagnostic_failure": 31,
+    "vehicle_first_diagnostic_failure_us": "2555882",
+    "ground_first_diagnostic_failure_us": "13874902",
+    "terminal_name": "LoopTimeout",
+    "interpretation": "Diagnostic USB timeout remains separate from the later successful initial product Heartbeat and reservation failure; physical FIFO defect is not proven"
+  },
+  "restoration": {
+    "status": "PASS_R18_ROLLBACK_COMPLETE",
+    "both_roles_restored_written_verified_and_reenumerated": true,
+    "attempts_per_role": 1,
+    "vehicle_sha256": "9157311590ACA76326FA91E6BE1C2C0BF07CCD6B4D65CFFB778C3B61C97D0E52",
+    "ground_sha256": "30EE08F194DE279186B6603F019D81C2C1B2BE5E473DB318D21DD171E4F0E8D5",
+    "flash_record": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/validation/R19-RUNTIME-FAIL-DIAGNOSTIC-APP-FLASH-HIL-001/20261025T161625334Z-aa8a747c-rollback/flash_record.json",
+    "flash_record_sha256": "5A8D9E7DBC2CC723476186DE7E4F1A140506234D6B74F81192DAC947BD4DE81E",
+    "post_restore_live_mavlink_acceptance": "NOT_TESTED"
+  },
+  "independent_saved_evidence_audits": {
+    "capture": {
+      "path": "capture-readonly-summary-001.json",
+      "sha256": "8837E3BC51CF32545DC7CC327ED48BC21A551DB703626E90A35E157D58874526",
+      "work_stopped": true
+    },
+    "ram": {
+      "path": "ram-readonly-summary-001.json",
+      "sha256": "57065B2737E49316A3F35A126F368CC7BD0C87D85D12871DFE227BD43FFCA545",
+      "all48_raw_sha_size_and_pairs_matched": true,
+      "work_stopped": true
+    }
+  },
+  "next_offline_focus": [
+    "Align Heartbeat-priority reservation lifetime with pre-PARAM commit and release scheduling",
+    "Ensure post-request withdrawal propagates terminal abort state to both roles rather than leaving Ground in Fresh Grant wait",
+    "Keep diagnostic USB timeout evidence distinct from product USB and RF delivery"
+  ],
+  "additional_hardware_test_permitted_by_consumed_authorization": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

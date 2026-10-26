@@ -1,0 +1,131 @@
+[CmdletBinding()]
+param([string]$RepoRoot='',[string]$EvidenceDirectory='')
+Set-StrictMode -Version Latest
+$ErrorActionPreference='Stop'
+if(-not $RepoRoot){$RepoRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)}
+$tool=Join-Path $RepoRoot 'tools/r19_startup_boundary_evaluation.ps1'
+$script:checks=0
+function Check([bool]$Condition,[string]$Name){if(-not $Condition){throw "FAIL $Name"};$script:checks++;Write-Output "PASS $Name"}
+function Reject($Evidence,[string]$Name){$threw=$false;try{$null=Get-R19StartupBoundaryEvaluation -Evidence $Evidence}catch{$threw=$true};Check $threw $Name}
+function Clone($Object){$Object|ConvertTo-Json -Depth 30|ConvertFrom-Json}
+function Fixture {
+  [pscustomobject]@{
+    schema='vc-lora-r19-startup-boundary-evidence-v1';experiment_mode='EXPLICIT_ARM'
+    first_failure_record=[pscustomobject]@{
+      schema='vc-lora-r19-first-usb-failure-decoded-v1';result='PASS';role='ground'
+      raw_sha256=('A'*64);failure_latched=$true;build_fingerprint=@(1,2,3,4);boot_instance=@(5,6,7,8)
+      first_failure=[pscustomobject]@{
+        api_called=$true;raw_return=$false;budget_ms=106;expected_epoch=1;observed_epoch=1
+        started_us='5559642';finished_us='5665880';expected_frame_bytes=21;accepted_frame_bytes=21
+        sdk=[pscustomobject]@{terminal_name='LoopTimeout';snapshot_observed=$true;ring_pending_bytes=0;stash_pending_bytes=0;publish_generation=3;pickup_generation=2;flush_blocker_mask=24}
+      }
+    }
+    readiness=$null;first_read=$null;source_order=$null;coverage=$null
+  }
+}
+function Readiness {
+  [pscustomobject]@{
+    schema='vc-lora-r19-readiness-observation-v1';role='ground';build_fingerprint=@(1,2,3,4);boot_instance=@(5,6,7,8)
+    usb_epoch=1;reader_session='123';nonce='5915759585527857153';reply_device_us='1000';armed_device_us='2000'
+    pc_reply_validated=$true;continuous_owner=$true;device_arm_accepted=$true;device_arm_record_verified=$true;mode_binding_verified=$true
+    identity_binding_verified=$true;device_clock_continuity_verified=$true;evidence_sha256=('B'*64);acquisition_status='ARMED'
+  }
+}
+function R19F {
+  [byte[]]$b=[byte[]]::new(63);$b[0]=253;$b[1]=51;$b[5]=254;$b[6]=190;$b[7]=253;$b[10]=2
+  [Text.Encoding]::ASCII.GetBytes('R19F:G:0D59:0000000000001621:000100000000:00000001').CopyTo($b,11)
+  [uint16]$crc=65535
+  foreach($v in @($b[1..60])+@(83)){
+    [uint16]$tmp=([uint16]$v-bxor($crc-band255));$tmp=($tmp-bxor(($tmp-shl4)-band255))-band255
+    $crc=(($crc-shr8)-bxor($tmp-shl8)-bxor($tmp-shl3)-bxor($tmp-shr4))-band65535
+  }
+  $b[61]=[byte]($crc-band255);$b[62]=[byte]($crc-shr8)
+  return ,$b
+}
+Check (Test-Path -LiteralPath $tool) 'tool_exists'
+. $tool -ImportOnly
+$e=Fixture;$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.classification-ceq'UNKNOWN') 'no_readiness_is_unknown'
+Check ($r.usb.failure-ceq'IMMUTABLE_USB_COMPLETION_TIMEOUT') 'first_failure_not_later_fifo'
+Check ($r.usb.ring_pending_bytes-eq0-and$r.usb.stash_pending_bytes-eq0) 'immutable_pending_zero_preserved'
+Check ($r.usb.expected_frame_bytes-eq21-and$r.usb.accepted_frame_bytes-eq21-and$r.usb.elapsed_us-ceq'106238') 'quantitative_immutable_frame_and_elapsed_preserved'
+Check ($r.rf.status-ceq'NOT_EVALUATED'-and$r.parameters.status-ceq'NOT_EVALUATED') 'no_downstream_coverage_not_failure'
+Check (-not$r.root_cause_proven-and-not$r.acceptance_eligible-and-not$r.deployment_authorized) 'no_root_cause_or_acceptance_promotion'
+$e.readiness=Readiness;$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.readiness.status-ceq'PROTOCOL_READINESS_VERIFIED') 'bound_protocol_readiness'
+Check ($r.classification-ceq'USB_BOUNDARY_AFTER_PROTOCOL_READINESS') 'failure_after_bound_device_arm'
+Check (-not$r.readiness.kernel_pending_read_proven) 'arm_does_not_prove_kernel_read'
+Check (-not$r.root_cause_proven) 'arm_failure_not_physical_root_cause'
+$e.first_failure_record.first_failure.observed_epoch=2;$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.classification-ceq'UNKNOWN'-and$r.readiness.status-ceq'INVALIDATED_USB_EPOCH') 'epoch_loss_invalidates_assured_readiness'
+$e.first_failure_record.first_failure.observed_epoch=1
+$e.readiness.armed_device_us='6000000';$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.classification-ceq'PRE_ARM_FAILURE_REQUIRES_GATE_OR_BINDING_REVIEW') 'bound_explicit_gate_pre_arm_product_failure_requires_review'
+Check ($r.classification_reason-ceq'Bound EXPLICIT_ARM evidence places the product USB failure before device ARM. Review gate bypass, event binding and record provenance; this does not establish host-readiness causation.') 'pre_arm_failure_reason_does_not_claim_readiness_root_cause'
+Check (-not$r.root_cause_proven) 'pre_arm_gate_review_not_root_cause_proof'
+$e.readiness.armed_device_us='5600000';$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.classification-ceq'UNKNOWN') 'arm_during_failure_interval_unknown'
+$e.readiness=Readiness;$e.readiness.device_clock_continuity_verified=$false;$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.classification-ceq'UNKNOWN') 'no_device_clock_continuity_no_order'
+foreach($field in @('identity_binding_verified','pc_reply_validated','continuous_owner','device_arm_accepted','device_arm_record_verified','mode_binding_verified')){
+  $e=Fixture;$e.readiness=Readiness;$e.readiness.$field=$false;$r=Get-R19StartupBoundaryEvaluation $e
+  Check ($r.readiness.status-ceq'UNKNOWN'-and$r.classification-ceq'UNKNOWN') "missing_readiness_$field"
+}
+$e=Fixture;$e.readiness=Readiness;$e.readiness.boot_instance[0]=99;Reject $e 'wrong_boot_rejected'
+$e=Fixture;$e.readiness=Readiness;$e.readiness.build_fingerprint[0]=99;Reject $e 'wrong_build_rejected'
+$e=Fixture;$e.readiness=Readiness;$e.readiness.usb_epoch=2;Reject $e 'wrong_epoch_rejected'
+$e=Fixture;$e.readiness=Readiness;$e.experiment_mode='SYNC_ONLY';Reject $e 'sync_only_cannot_claim_arm'
+$e=Fixture;$e.readiness=Readiness;$e.experiment_mode='PASSIVE';Reject $e 'passive_cannot_claim_arm'
+$e=Fixture;$e.readiness=Readiness;$e.readiness.acquisition_status='TIMED_OUT';$e.readiness.armed_device_us='0';$e.readiness.device_arm_accepted=$false
+$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.classification-ceq'STARTUP_ACQUISITION_TIMEOUT'-and$r.usb.budget_ms-eq106) 'startup_acquisition_timeout_separate_from_usb_timeout'
+$e.readiness.device_arm_record_verified=$false;$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.classification-ceq'UNKNOWN') 'unverified_device_timeout_not_classified'
+$e.readiness.device_arm_record_verified=$true;$e.experiment_mode='PASSIVE';Reject $e 'passive_cannot_claim_acquisition_timeout'
+$e=Fixture;$e.first_failure_record=$null;$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.classification-ceq'UNKNOWN'-and$r.usb.failure-ceq'NOT_OBSERVED') 'missing_record_not_usb_healthy'
+$e=Fixture;$e.readiness=Readiness;$e.readiness.nonce='1';Reject $e 'non_private_nonce_rejected'
+$e=Fixture;$e.first_failure_record.first_failure.finished_us='1';Reject $e 'backward_failure_time_rejected'
+$e=Fixture;$e.first_failure_record.first_failure.budget_ms=107;Reject $e 'changed_106ms_contract_rejected'
+$e=Fixture;$e.first_failure_record.first_failure.accepted_frame_bytes=22;Reject $e 'overaccepted_frame_rejected'
+$e=Fixture;$e.first_failure_record.first_failure.started_us=5559642.5;Reject $e 'imprecise_double_time_rejected'
+$e=Fixture;$e.first_failure_record.raw_sha256='invalid';Reject $e 'missing_immutable_record_hash_rejected'
+$e=Fixture;$e|Add-Member -NotePropertyName guessed_clock_delta -NotePropertyValue 10;Reject $e 'unknown_root_field_rejected'
+$e=Fixture;$e.first_failure_record.failure_latched=$false;$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.usb.failure-ceq'NOT_OBSERVED'-and$r.classification-ceq'UNKNOWN') 'not_latched_is_not_healthy'
+$e=Fixture;$e.first_failure_record.first_failure.sdk.snapshot_observed=$false;$r=Get-R19StartupBoundaryEvaluation $e
+Check ($null-eq$r.usb.ring_pending_bytes-and$null-eq$r.usb.publish_generation) 'unobserved_sdk_snapshot_not_zeroed_into_health'
+$e=Fixture;$e.first_read=[pscustomobject]@{
+ schema='vc-lora-r19-first-read-observation-v1';role='ground';first_block_base64=[Convert]::ToBase64String((R19F))
+ initial_bytes_to_read=63;block_index=0;block_offset=0;evidence_sha256=('C'*64)
+};$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.pre_read.failure_report_present_before_first_application_read) 'exact_first_r19f_already_buffered'
+Check (-not$r.pre_read.immutable_failure_boot_binding_proven) 'r19f_without_boot_nonce_not_boot_proof'
+Check ($r.pre_read.original_failure_before_read-ceq'UNKNOWN') 'source_order_required_for_origin'
+$e.source_order=[pscustomobject]@{schema='vc-lora-r19-failure-source-order-v1';source_sha256=('D'*64)
+ fail_report_follows_latch=$true;runtime_source_line=3417;runtime_time_ms='5665';runtime_status_hex='000100000000';usb_epoch=1
+ same_boot_acquisition_verified=$false
+};$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.pre_read.original_failure_before_read-ceq'CONSISTENT_BOOT_BINDING_UNKNOWN') 'source_order_no_boot_binding_not_proven'
+$e.source_order.same_boot_acquisition_verified=$true;$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.pre_read.original_failure_before_read-ceq'PROVEN_BY_SOURCE_ORDER_AND_BOUND_FRAME') 'bound_source_causal_order_no_clock_guess'
+Check ($r.pre_read.failure_before_com_open-ceq'UNKNOWN') 'before_read_not_before_open'
+$e.source_order.runtime_source_line=3377;Reject $e 'immutable_record_line_cannot_replace_runtime_latch_line'
+$e.source_order.runtime_source_line=3417
+$e.first_read.block_index=1;$r=Get-R19StartupBoundaryEvaluation $e
+Check (-not$r.pre_read.failure_report_present_before_first_application_read) 'later_block_is_not_first_read_proof'
+$e.first_read.block_index=0
+$e.first_read.initial_bytes_to_read=62;$r=Get-R19StartupBoundaryEvaluation $e
+Check (-not$r.pre_read.failure_report_present_before_first_application_read) 'partial_initial_watermark_not_pre_read_proof'
+$e.first_read.initial_bytes_to_read=63;[byte[]]$bad=R19F;$bad[62]=$bad[62]-bxor1;$e.first_read.first_block_base64=[Convert]::ToBase64String($bad);Reject $e 'bad_r19f_crc_rejected'
+$e=Fixture;$e.coverage=[pscustomobject]@{rf=[pscustomobject]@{evaluated=$true;status='FAIL';evidence_sha256=('E'*64)};parameters=[pscustomobject]@{evaluated=$false;status='NOT_EVALUATED';evidence_sha256=''}}
+$r=Get-R19StartupBoundaryEvaluation $e
+Check ($r.rf.status-ceq'FAIL'-and$r.parameters.status-ceq'NOT_EVALUATED') 'explicit_layer_failure_not_propagated'
+$e.coverage.parameters.status='FAIL';Reject $e 'uncovered_layer_cannot_claim_failure'
+$source=[IO.File]::ReadAllText($tool)
+Check ($source-notmatch'(?i)SerialPort|Get-PnpDevice|Get-CimInstance|Start-Process|Invoke-RestMethod|Invoke-WebRequest|openocd|taskkill') 'no_device_process_network_entrypoint'
+Write-Output "STARTUP_BOUNDARY_EVALUATION PASS $script:checks checks"
+if($EvidenceDirectory){
+  [void][IO.Directory]::CreateDirectory($EvidenceDirectory)
+  [pscustomobject]@{schema='vc-lora-r19-startup-boundary-tests-v1';result='PASS';checks=$script:checks;hardware_interaction=$false;acceptance_eligible=$false}|ConvertTo-Json|Set-Content -LiteralPath (Join-Path $EvidenceDirectory 'test_summary.json') -Encoding utf8
+}

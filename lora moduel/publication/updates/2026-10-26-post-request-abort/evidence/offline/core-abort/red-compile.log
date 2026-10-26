@@ -1,0 +1,6 @@
+-- Configuring done
+-- Generating done
+-- Build files have been written to: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+[0/1] Re-running CMake...
+[1/2] Building CXX object tests/host/CMakeFiles/vc_lora_r19_grant_agreement_tests.dir/standalone/r19_grant_agreement_tests.cpp.obj
+[2/2] Linking CXX executable tests\host\vc_lora_r19_grant_agreement_tests.exe

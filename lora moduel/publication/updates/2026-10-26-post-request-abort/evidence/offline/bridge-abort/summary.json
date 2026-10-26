@@ -1,0 +1,36 @@
+{
+  "schema": "vc-lora-r19-post-request-bridge-abort-fix-v1",
+  "result": "PASS_FOCUSED_OFFLINE_NOT_HARDWARE_ACCEPTANCE",
+  "implemented": [
+    "Cleanup of exact retired unwritten Grant may coexist with a distinct validated StandardTdd SendRadioData writer, without completing, retiring or altering that writer",
+    "Ground may quarantine a never-negotiated request after its actual GrantDeadlineExceeded failure while preserving fail-closed, first fault, adapter diagnostics and original t0",
+    "Repeated exact terminal Abort is boundary-revalidated and cannot duplicate ACK or revive the old reservation",
+    "Before Prepared publication, recheck newly urgent Heartbeat; retire the real unpublished Grant TDD cycle and keep AwaitVehicleGrant, original8-second preparation and unused published-cancellation budget"
+  ],
+  "test_first": {
+    "initial_abort_red": {"tests":3,"failed":2,"negative_writer_mismatch_passed":true,"log":"red-tests.log"},
+    "prepublication_defer_red": {"tests":2,"failed":2,"log":"defer-red-tests.log"},
+    "review_owner_mismatch_red": {"tests":1,"failed":1,"log":"owner-red-tests.log"},
+    "final_bridge_green": {"tests":42,"failed":0,"log":"final-focused-green.log"},
+    "existing_unsafe_guards_retained":true
+  },
+  "review": {
+    "independent_read_only_review_completed":true,
+    "owner_comparison_hardening_added_with_negative_test":true,
+    "ack_semantics":"No further authority for the exact old tuple, not global radio idle or zero historical RF",
+    "normal_data_scope":"SendRadioData includes Heartbeat and other standard telemetry; this exception is not mislabeled Heartbeat-only"
+  },
+  "unchanged": ["106ms product USB budget","500ms Ground fresh Grant and Vehicle tail-to-start budgets","2500ms Heartbeat target","5050ms conservative RF reserve","750ms hold","8000ms MCU and15s PC preparation origins","one cancellation/two rounds","one PARAM list attempt","UART/pins/RF profile","STOP128/Fatal128/base512/v12 diagnostic ABIs"],
+  "diffs": ["final-bridge.diff","final-bridge-tests.diff","final-host-registration.diff","final-root-registration.diff"],
+  "hardware_interaction": false,
+  "arduino_build_in_this_focused_step": false,
+  "full_suite_result":"Parent-owned separate verification",
+  "proof_limits": [
+    "Fake hardware integration does not prove actual RF timing or successful application delivery",
+    "A new future Heartbeat may still require safe cancellation after a committed reservation; no future750ms availability guarantee is added",
+    "The exact preceding live detail20 boundary predicate was not latched; the new test reproduces and repairs the code path consistent with that observation",
+    "Post-expiry cleanup is not recovery of a failed adapter and never relabels its deadline as success"
+  ],
+  "acceptance_authorized":false,
+  "deployment_authorized":false
+}

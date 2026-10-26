@@ -1,0 +1,25 @@
+{
+  "schema": "vc-lora-host-validation-interrupted-v1",
+  "result": "INTERRUPTED_AFTER_KNOWN_TEST_FIXTURE_FAILURE_NOT_PASS",
+  "registered_tests": 548,
+  "completed_tests": 519,
+  "passed_tests": 518,
+  "failed_tests": 1,
+  "uncompleted_tests": 29,
+  "log": "full-host.log",
+  "failure": {
+    "test": "R19-param_list_capture_contract-OFFLINE-001",
+    "check": "actual-production-param-branches-are-unique-and-hardware-free",
+    "error": "Unexpected command inside isolated production fixture: Invoke-R19CaptureReservationPriorityAbort",
+    "interpretation": "Existing isolated AST fixture did not import or audit the newly added real cleanup helper. Repair requires source-bound transitive function and negative-call validation, not a success stub or relaxed safety gate."
+  },
+  "source_freeze": "verified_source_pre_full.json",
+  "source_count": 606,
+  "source_unchanged_at_mid_run_check": true,
+  "termination_scope": "Only this task's verified run_host_tests.ps1 process19168 under full-host.log launcher30764 and its descendants31616/17032",
+  "termination_proven_by_native_result": true,
+  "planned_followup": "Repair test fixture only, focused PS5/PS7 validation, new source freeze, then a new full548-test run from the beginning",
+  "hardware_interaction": false,
+  "acceptance_authorized": false,
+  "deployment_authorized": false
+}

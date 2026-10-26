@@ -1,0 +1,200 @@
+{
+  "schema": "vc-lora-r19-grant-agreement-reader-contract-test-v1",
+  "result": "PASS",
+  "checks": 109,
+  "cases": [
+    {
+      "name": "explicit-v3-binding",
+      "result": "PASS"
+    },
+    {
+      "name": "legacy-v2-unchanged",
+      "result": "PASS"
+    },
+    {
+      "name": "legacy-without-compile-container",
+      "result": "PASS"
+    },
+    {
+      "name": "legacy-artifact-does-not-resolve-opt-in-decoder-root",
+      "result": "PASS"
+    },
+    {
+      "name": "portable-full-exact-compiler-property-boundary",
+      "result": "PASS"
+    },
+    {
+      "name": "actual-sealed-fatal-candidate-entire-extended-binding",
+      "result": "PASS"
+    },
+    {
+      "name": "offline-summary-does-not-require-live-artifact",
+      "result": "PASS"
+    },
+    {
+      "name": "agreement-requires-stop",
+      "result": "PASS"
+    },
+    {
+      "name": "ram-only-fixture-cannot-prove-compiled-agreement",
+      "result": "PASS"
+    },
+    {
+      "name": "ram-only-fixture-rejects-undeclared-agreement",
+      "result": "PASS"
+    },
+    {
+      "name": "undeclared-v3",
+      "result": "PASS"
+    },
+    {
+      "name": "missing-v3",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-missing-seal",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-missing-handoff",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-case-metadata",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-extra-contract-field",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-wrong-contract-wire",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-missing-marker",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-duplicate-marker",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-marker-data",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-marker-nosize",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-marker-size",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-marker-address",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-marker-metadata-size",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-marker-metadata-case",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-missing-role",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-duplicate-role",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-wrong-role-entry",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-missing-compile",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-missing-compile-container",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-duplicate-compile",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-overridden-compile",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-legacy-compile",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-source-missing",
+      "result": "PASS"
+    },
+    {
+      "name": "reject-source-digest",
+      "result": "PASS"
+    },
+    {
+      "name": "legacy-reject-hidden-marker",
+      "result": "PASS"
+    },
+    {
+      "name": "legacy-reject-hidden-compile",
+      "result": "PASS"
+    },
+    {
+      "name": "legacy-reject-hidden-metadata",
+      "result": "PASS"
+    },
+    {
+      "name": "flash-exact-projection",
+      "result": "PASS"
+    },
+    {
+      "name": "flash-reject-missing",
+      "result": "PASS"
+    },
+    {
+      "name": "flash-reject-case",
+      "result": "PASS"
+    },
+    {
+      "name": "flash-reject-wrong",
+      "result": "PASS"
+    },
+    {
+      "name": "flash-reject-undeclared",
+      "result": "PASS"
+    },
+    {
+      "name": "flash-reject-selection",
+      "result": "PASS"
+    },
+    {
+      "name": "entry-flags-and-call-order",
+      "result": "PASS"
+    },
+    {
+      "name": "legacy-gate-ast-closure-keeps-agreement-disabled",
+      "result": "PASS"
+    }
+  ],
+  "failed_cases": 0,
+  "shell": "7.6.5",
+  "hardware_interaction": false,
+  "production_main_executed": false,
+  "actual_sealed_candidate_root": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/runs/candidates/R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261026T023007458Z-ccd7d4c8",
+  "actual_sealed_candidate_requested": true,
+  "native_nm_or_openocd_invoked": false,
+  "reader_source_sha256": "F705EC70A863C517697E1F74F05237EF9146C2BB6A4A471F3A0E78D9740B33AB",
+  "gate_source_sha256": "A7B20AF6CE4362E6A56FB0E9CFD3A6DE570C8A3625F9EDC1848ABF0CCEEC3736"
+}

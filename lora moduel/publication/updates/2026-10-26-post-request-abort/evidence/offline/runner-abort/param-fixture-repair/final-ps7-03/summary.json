@@ -1,0 +1,376 @@
+{
+  "schema": "vc-lora-r19-param-list-capture-contract-v1",
+  "result": "PASS",
+  "hardware_interaction": false,
+  "com_open_attempts": 0,
+  "native_process_calls": 0,
+  "permit_consumed": false,
+  "passed_count": 72,
+  "failed_count": 0,
+  "checks": [
+    {
+      "name": "capture-parses",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "PARAM_LIST-selection-is-explicit-switch-opt-in",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "default-ImportOnly-has-no-port-process-or-permit-effects",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "opt-in-ImportOnly-loads-the-real-pure-helper-and-capture-functions",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "opt-in-rejects-SyncOnly",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "opt-in-rejects-without-AUX",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "opt-in-rejects-without-USB-diagnostic",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "opt-in-rejects-with-read-pause",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "helper-import-is-under-the-explicit-opt-in-branch",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "eligible-request-latches-before-exact-canonical-write-and-never-retries",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-gate-null-state",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-gate-vehicle-role",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-gate-null-workflow",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-gate-ARM-not-accepted",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-gate-ARM-string-not-boolean",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-gate-no-CRC-valid-heartbeat",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-gate-reader-bytes-still-pending",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-gate-only-thirty-seconds-remain",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-gate-one-tick-short-of-thirty-one-seconds",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "exact-thirty-one-seconds-remaining-is-eligible",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "unparsed-raw-cursor-is-rejected-before-attempt",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-partial-is-one-attempt-without-retry",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-zero-is-one-attempt-without-retry",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-exception-is-one-attempt-without-retry",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "request-void-is-one-attempt-without-retry",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "reentrant-writer-observes-attempt-and-cannot-send-twice",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "priority-abort-is-a-verified-actual-source-closure-not-a-stub",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "source-bound-priority-audit-rejects-unknown-command",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "source-bound-priority-audit-rejects-unknown-type",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "source-bound-priority-audit-rejects-unknown-dynamic-call",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "source-bound-priority-audit-rejects-unknown-constructor",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-production-param-branches-are-unique-and-hardware-free",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-priority-delivery-branch-rejects-an-injected-command-before-execution",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-Ground-request-branch-keeps-three-private-writes-and-adds-one-product-request",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-Ground-request-branch-does-not-retry-after-local-write-exception",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-request-branch-is-Ground-only-and-workflow-failure-closed",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-PARAM-then-native-Withdrawn-prioritizes-both-real-Aborts-without-ACK-or-reissue",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-capture-heartbeat-input-is-the-validated-product-ledger",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-CRC-product-loop-keeps-request-closed-until-a-valid-heartbeat",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "checkpoint-refuses-before-native-watermark",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "checkpoint-refuses-equal-native-watermark",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "checkpoint-refuses-pending-native-watermark",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "strict-native-watermark-seals-once-and-durably-keeps-request-provenance",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "preexisting-checkpoint-is-never-overwritten",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-ingest-uses-native-completion-not-analysis-time-at-the-deadline",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-stop-tail-reassembles-split-frame-with-final-native-completion-time",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "nine-hundred-thirty-two-values-completing-at-deadline-are-clean-not-product-acceptance",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "last-frame-completing-one-tick-late-leaves-exactly-one-missing-in-30s",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "CRC-invalid-frame-does-not-fill-a-missing-index-in-actual-ingest",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-summary-preserves-parameter-evidence-after-raw-streams",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "optional-ledger-serialization-failure-cannot-hide-either-raw-stream",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-plan-permit-pin-and-summary-context-bind-the-opt-in",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-contract-accepts-real-helper-zero-request-snapshot",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-contract-accepts-real-helper-partial-write-snapshot-without-promoting-it",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-contract-accepts-real-helper-complete-932-native-deadline-checkpoint",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-cross-contract-rejects-mismatched-clock-domain",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-cross-contract-rejects-missing-product-write-attempt-count",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-cross-contract-rejects-two-request-attempts",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-cross-contract-rejects-string-local-acceptance",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-cross-contract-rejects-fabricated-remote-delivery",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-outer-cross-contract-rejects-request-outside-measurement",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-CLI-persistence-context-is-inline-and-inert",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-inline-CLI-summary-default-preserves-raw-and-option-schema",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-inline-CLI-summary-explicit-false-preserves-raw-and-option-schema",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-inline-CLI-summary-enabled-preserves-raw-and-option-schema",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-parent-capture-argv-has-one-pure-param-list-flag-branch",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-capture-prefix-preserves-bound-switch-default-after-nested-imports",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-parent-argv-forwards-param-list-switch-default-without-implicit-opt-in",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-capture-prefix-preserves-bound-switch-explicit-false-after-nested-imports",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-parent-argv-forwards-param-list-switch-explicit-false-without-implicit-opt-in",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-capture-prefix-preserves-bound-switch-enabled-after-nested-imports",
+      "passed": true,
+      "error": ""
+    },
+    {
+      "name": "actual-parent-argv-forwards-param-list-switch-enabled-without-implicit-opt-in",
+      "passed": true,
+      "error": ""
+    }
+  ],
+  "capture_sha256": "C0BBB652987DB00834D9D95D7EC012186BA40E460D6FAC7CBF12549B5F50B8E1",
+  "helper_sha256": "87111812DE5674B38F54C05D2A1771FDFC7B00CCE757F4C167CD74D594104E5B",
+  "outer_sha256": "E3F9D5BC71A01EE1A40ED7E19C44689A0335B569B154257FA0E7C596698312B3",
+  "test_sha256": "8493F81EFBAF301EE27350F17DFA393AA65CCCA756CF3CBE6B7DF1F0F9D30C87"
+}

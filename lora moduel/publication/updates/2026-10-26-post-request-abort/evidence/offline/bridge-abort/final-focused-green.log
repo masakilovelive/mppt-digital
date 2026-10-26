@@ -1,0 +1,90 @@
+Internal ctest changing into directory: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+Test project E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+      Start 159: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-after-withdrawal-writer-owner-001
+      Start 138: IT-R19-GRANT-AGREEMENT-GROUND-wrong-wire-001
+ 1/42 Test #159: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-after-withdrawal-writer-owner-001 ......   Passed    0.32 sec
+      Start 144: IT-R19-GRANT-AGREEMENT-VEHICLE-commit-001
+ 2/42 Test #138: IT-R19-GRANT-AGREEMENT-GROUND-wrong-wire-001 ................................   Passed    0.16 sec
+      Start 152: IT-R19-GRANT-AGREEMENT-VEHICLE-wrong-wire-001
+ 3/42 Test #144: IT-R19-GRANT-AGREEMENT-VEHICLE-commit-001 ...................................   Passed    0.02 sec
+      Start 160: IT-R19-GRANT-AGREEMENT-VEHICLE-defer-prepared-heartbeat-001
+ 4/42 Test #152: IT-R19-GRANT-AGREEMENT-VEHICLE-wrong-wire-001 ...............................   Passed    0.02 sec
+      Start 143: IT-R19-GRANT-AGREEMENT-GROUND-abort-after-grant-deadline-001
+ 5/42 Test #160: IT-R19-GRANT-AGREEMENT-VEHICLE-defer-prepared-heartbeat-001 .................   Passed    0.02 sec
+      Start 137: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-origin-001
+ 6/42 Test #143: IT-R19-GRANT-AGREEMENT-GROUND-abort-after-grant-deadline-001 ................   Passed    0.02 sec
+      Start 161: IT-R19-GRANT-AGREEMENT-VEHICLE-defer-prepared-budget-001
+ 7/42 Test #137: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-origin-001 .............................   Passed    0.02 sec
+      Start 136: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-proxy-001
+ 8/42 Test #161: IT-R19-GRANT-AGREEMENT-VEHICLE-defer-prepared-budget-001 ....................   Passed    0.02 sec
+      Start 151: IT-R19-GRANT-AGREEMENT-VEHICLE-unsafe-epoch-001
+ 9/42 Test #136: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-proxy-001 ..............................   Passed    0.02 sec
+      Start 157: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-after-withdrawal-data-001
+10/42 Test #151: IT-R19-GRANT-AGREEMENT-VEHICLE-unsafe-epoch-001 .............................   Passed    0.02 sec
+      Start 122: IT-R19-GRANT-AGREEMENT-GROUND-commit-wrong-tuple-001
+11/42 Test #157: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-after-withdrawal-data-001 ..............   Passed    0.02 sec
+      Start 130: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-session-001
+12/42 Test #122: IT-R19-GRANT-AGREEMENT-GROUND-commit-wrong-tuple-001 ........................   Passed    0.02 sec
+      Start 121: IT-R19-GRANT-AGREEMENT-GROUND-request-without-commit-001
+13/42 Test #130: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-session-001 ............................   Passed    0.03 sec
+      Start 139: IT-R19-GRANT-AGREEMENT-GROUND-abort-wrong-identity-001
+14/42 Test #121: IT-R19-GRANT-AGREEMENT-GROUND-request-without-commit-001 ....................   Passed    0.02 sec
+      Start 146: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-001
+15/42 Test #139: IT-R19-GRANT-AGREEMENT-GROUND-abort-wrong-identity-001 ......................   Passed    0.02 sec
+      Start 134: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-writer-001
+16/42 Test #146: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-001 ....................................   Passed    0.03 sec
+      Start 148: IT-R19-GRANT-AGREEMENT-VEHICLE-unsafe-uart-001
+17/42 Test #134: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-writer-001 .............................   Passed    0.02 sec
+      Start 142: IT-R19-GRANT-AGREEMENT-GROUND-abort-prefix-fault-001
+18/42 Test #148: IT-R19-GRANT-AGREEMENT-VEHICLE-unsafe-uart-001 ..............................   Passed    0.02 sec
+      Start 127: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-tail-001
+19/42 Test #142: IT-R19-GRANT-AGREEMENT-GROUND-abort-prefix-fault-001 ........................   Passed    0.02 sec
+      Start 155: IT-R19-GRANT-AGREEMENT-VEHICLE-loop-abort-001
+20/42 Test #127: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-tail-001 ...............................   Passed    0.02 sec
+      Start 145: IT-R19-GRANT-AGREEMENT-VEHICLE-release-without-commit-001
+21/42 Test #155: IT-R19-GRANT-AGREEMENT-VEHICLE-loop-abort-001 ...............................   Passed    0.02 sec
+      Start 135: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-ingress-001
+22/42 Test #145: IT-R19-GRANT-AGREEMENT-VEHICLE-release-without-commit-001 ...................   Passed    0.03 sec
+      Start 131: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-usb-001
+23/42 Test #135: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-ingress-001 ............................   Passed    0.03 sec
+      Start 126: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-pending-001
+24/42 Test #131: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-usb-001 ................................   Passed    0.03 sec
+      Start 156: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-prefix-fault-001
+25/42 Test #126: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-pending-001 ............................   Passed    0.03 sec
+      Start 150: IT-R19-GRANT-AGREEMENT-VEHICLE-unsafe-tail-001
+26/42 Test #156: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-prefix-fault-001 .......................   Passed    0.03 sec
+      Start 133: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-high-speed-001
+27/42 Test #150: IT-R19-GRANT-AGREEMENT-VEHICLE-unsafe-tail-001 ..............................   Passed    0.03 sec
+      Start 129: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-negotiation-001
+28/42 Test #133: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-high-speed-001 .........................   Passed    0.03 sec
+      Start 147: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-after-withdrawal-001
+29/42 Test #129: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-negotiation-001 ........................   Passed    0.03 sec
+      Start 140: IT-R19-GRANT-AGREEMENT-GROUND-failed-loop-abort-001
+30/42 Test #147: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-after-withdrawal-001 ...................   Passed    0.03 sec
+      Start 132: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-epoch-001
+31/42 Test #140: IT-R19-GRANT-AGREEMENT-GROUND-failed-loop-abort-001 .........................   Passed    0.03 sec
+      Start 128: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-frozen-001
+32/42 Test #132: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-epoch-001 ..............................   Passed    0.03 sec
+      Start 123: IT-R19-GRANT-AGREEMENT-GROUND-abort-held-001
+33/42 Test #128: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-frozen-001 .............................   Passed    0.03 sec
+      Start 124: IT-R19-GRANT-AGREEMENT-GROUND-abort-preheld-001
+34/42 Test #123: IT-R19-GRANT-AGREEMENT-GROUND-abort-held-001 ................................   Passed    0.03 sec
+      Start 149: IT-R19-GRANT-AGREEMENT-VEHICLE-unsafe-busy-001
+35/42 Test #124: IT-R19-GRANT-AGREEMENT-GROUND-abort-preheld-001 .............................   Passed    0.03 sec
+      Start 153: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-wrong-identity-001
+36/42 Test #149: IT-R19-GRANT-AGREEMENT-VEHICLE-unsafe-busy-001 ..............................   Passed    0.03 sec
+      Start 141: IT-R19-GRANT-AGREEMENT-GROUND-loop-abort-001
+37/42 Test #153: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-wrong-identity-001 .....................   Passed    0.03 sec
+      Start 120: IT-R19-GRANT-AGREEMENT-GROUND-commit-001
+38/42 Test #141: IT-R19-GRANT-AGREEMENT-GROUND-loop-abort-001 ................................   Passed    0.03 sec
+      Start 125: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-busy-001
+39/42 Test #120: IT-R19-GRANT-AGREEMENT-GROUND-commit-001 ....................................   Passed    0.03 sec
+      Start 154: IT-R19-GRANT-AGREEMENT-VEHICLE-failed-loop-abort-001
+40/42 Test #125: IT-R19-GRANT-AGREEMENT-GROUND-unsafe-busy-001 ...............................   Passed    0.03 sec
+      Start 158: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-after-withdrawal-writer-mismatch-001
+41/42 Test #154: IT-R19-GRANT-AGREEMENT-VEHICLE-failed-loop-abort-001 ........................   Passed    0.03 sec
+42/42 Test #158: IT-R19-GRANT-AGREEMENT-VEHICLE-abort-after-withdrawal-writer-mismatch-001 ...   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 42
+
+Total Test time (real) =   1.11 sec

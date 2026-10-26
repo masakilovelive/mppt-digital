@@ -1,0 +1,338 @@
+{
+    "schema":  "vc-lora-r19-candidate-compile-evidence-v1",
+    "role":  "ground",
+    "result":  "PASS",
+    "exit_code":  0,
+    "argv":  [
+                 "--config-file",
+                 "C:\\Users\\user\\.arduinoIDE\\arduino-cli.yaml",
+                 "compile",
+                 "--fqbn",
+                 "esp32:esp32:XIAO_ESP32S3",
+                 "--warnings",
+                 "all",
+                 "--clean",
+                 "--build-path",
+                 "C:\\Users\\user\\AppData\\Local\\Temp\\vc_lora_r19_candidate_artifact_3ca1a3f428474a85b880646247c70719\\build\\ground",
+                 "--output-dir",
+                 "C:\\Users\\user\\AppData\\Local\\Temp\\vc_lora_r19_candidate_artifact_3ca1a3f428474a85b880646247c70719\\output\\ground",
+                 "--build-property",
+                 "compiler.cpp.extra_flags=-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1 -DVC_LORA_R19_RUNTIME_FAIL_DIAGNOSTICS=1 -DVC_LORA_R19_TIMED_PATH_DIAGNOSTICS=1 -DVC_LORA_R19_USB_READINESS_MODE=2 -DVC_LORA_R19_AUX_READINESS_DIAGNOSTICS=1 -DVC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD=1 -DVC_LORA_R19_GRANT_DIAGNOSTICS=1 -DVC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS=1 -DVC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS=1 -DVC_LORA_R19_GRANT_AGREEMENT_DIAGNOSTICS=1 -DVC_LORA_R19_GRANT_RESERVATION_FATAL_DIAGNOSTICS=1",
+                 "--jobs",
+                 "2",
+                 "--json",
+                 "E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3"
+             ],
+    "candidate_enable_flag":  "-DVC_LORA_R19_HIGH_SPEED_CANDIDATE=1",
+    "runtime_fail_diagnostics_enabled":  true,
+    "acceptance_eligible":  false,
+    "acceptance_authorized":  false,
+    "deployment_authorized":  false,
+    "flash_bytes":  448653,
+    "ram_bytes":  82504,
+    "compiler_out":  "Sketch uses 448653 bytes (13%) of program storage space. Maximum is 3342336 bytes.\nGlobal variables use 82504 bytes (25%) of dynamic memory, leaving 245176 bytes for local variables. Maximum is 327680 bytes.\n",
+    "compiler_err":  "In file included from E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\vc_lora_phase6_bridge.hpp:167,\n                 from E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\vc_lora_ground_xiao_esp32s3.ino:7:\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_first_usb_failure_record.hpp: In member function \u0027bool vc_lora::experimental::R19FirstUsbFailureRecord::observe_clock_sync(uint64_t, uint64_t)\u0027:\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_first_usb_failure_record.hpp:122:79: warning: \u0027++\u0027 expression of \u0027volatile\u0027-qualified type is deprecated [-Wvolatile]\n  122 |     if (words_[14U] != std::numeric_limits\u003cstd::uint32_t\u003e::max()) ++words_[14U];\n      |                                                                     ~~~~~~~~~~^\nIn file included from E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\vc_lora_phase6_bridge.hpp:172:\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_grant_diagnostic_record.hpp: In member function \u0027bool vc_lora::experimental::R19GrantDiagnosticRecord::observe(const vc_lora::experimental::R19GrantDiagnosticEvidence\u0026, bool)\u0027:\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_grant_diagnostic_record.hpp:124:31: warning: \u0027++\u0027 expression of \u0027volatile\u0027-qualified type is deprecated [-Wvolatile]\n  124 |     begin_write();++words_[80U];\n      |                     ~~~~~~~~~~^\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_grant_diagnostic_record.hpp:138:38: warning: \u0027++\u0027 expression of \u0027volatile\u0027-qualified type is deprecated [-Wvolatile]\n  138 |       if(words_[81U]\u003c10U)++words_[81U];else ++words_[83U];\n      |                            ~~~~~~~~~~^\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_grant_diagnostic_record.hpp:138:57: warning: \u0027++\u0027 expression of \u0027volatile\u0027-qualified type is deprecated [-Wvolatile]\n  138 |       if(words_[81U]\u003c10U)++words_[81U];else ++words_[83U];\n      |                                               ~~~~~~~~~~^\nIn file included from E:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\vc_lora_phase6_bridge.hpp:188:\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_aux_readiness_record.hpp: In function \u0027void vc_lora::experimental::r19_aux_detail::increment(volatile uint32_t*, std::size_t)\u0027:\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_aux_readiness_record.hpp:65:13: warning: \u0027++\u0027 expression of \u0027volatile\u0027-qualified type is deprecated [-Wvolatile]\n   65 |   else ++w[n];\n      |          ~~~^\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_aux_readiness_record.hpp: In member function \u0027void vc_lora::experimental::R19AuxObservationRecord::append(uint64_t, uint64_t, uint32_t, uint32_t, uint32_t, uint32_t)\u0027:\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_aux_readiness_record.hpp:168:49: warning: \u0027++\u0027 expression of \u0027volatile\u0027-qualified type is deprecated [-Wvolatile]\n  168 |     if(words_[17U]\u003chistory_capacity)++words_[17U];else{words_[13U]|=r19_aux_history_coverage_lost;r19_aux_detail::increment(words_,19U);}\n      |                                       ~~~~~~~~~~^\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_aux_readiness_record.hpp: In member function \u0027bool vc_lora::experimental::R19AuxEdgeRecord::observe_edge(uint64_t, uint32_t)\u0027:\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_aux_readiness_record.hpp:213:113: warning: \u0027++\u0027 expression of \u0027volatile\u0027-qualified type is deprecated [-Wvolatile]\n  213 |       r19_aux_detail::write64(words_,base,now_us);words_[base+2U]=level;words_[base+3U]=words_[28U];++words_[15U];}\n      |                                                                                                       ~~~~~~~~~~^\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_aux_readiness_record.hpp: In member function \u0027bool vc_lora::experimental::R19UsbReadinessRecord::event(vc_lora::experimental::R19ReadinessEvent, uint64_t, uint32_t, uint32_t, uint32_t, uint32_t)\u0027:\nE:\\VESC\\TRIAL_LOG\\Loreley3_System\\06_vc_lora_bridge\\runs\\candidates\\R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001\\20261026T023007458Z-ccd7d4c8\\package\\vc_lora_ground_xiao_esp32s3\\high_speed\\r19_aux_readiness_record.hpp:251:83: warning: \u0027++\u0027 expression of \u0027volatile\u0027-qualified type is deprecated [-Wvolatile]\n  251 |       words_[base+5U]=c;words_[base+6U]=d;words_[base+7U]=words_[16U];++words_[17U];}\n      |                                                                         ~~~~~~~~~~^\n",
+    "application":  {
+                        "path":  "firmware/ground.application.bin",
+                        "size_bytes":  448800,
+                        "sha256":  "FDCA520E9AB21A308AD3AD4F314EBA6453FD032B13E49982AFD05DF7D1D6F7AD"
+                    },
+    "application_binary_provenance":  {
+                                          "schema":  "vc-lora-r19-application-binary-provenance-v1",
+                                          "exact_match":  true,
+                                          "build_path":  {
+                                                             "origin":  "build-path",
+                                                             "file_name":  "vc_lora_ground_xiao_esp32s3.ino.bin",
+                                                             "size_bytes":  448800,
+                                                             "sha256":  "FDCA520E9AB21A308AD3AD4F314EBA6453FD032B13E49982AFD05DF7D1D6F7AD"
+                                                         },
+                                          "output_dir":  {
+                                                             "origin":  "output-dir",
+                                                             "file_name":  "vc_lora_ground_xiao_esp32s3.ino.bin",
+                                                             "size_bytes":  448800,
+                                                             "sha256":  "FDCA520E9AB21A308AD3AD4F314EBA6453FD032B13E49982AFD05DF7D1D6F7AD"
+                                                         },
+                                          "published":  {
+                                                            "path":  "firmware/ground.application.bin",
+                                                            "size_bytes":  448800,
+                                                            "sha256":  "FDCA520E9AB21A308AD3AD4F314EBA6453FD032B13E49982AFD05DF7D1D6F7AD"
+                                                        }
+                                      },
+    "application_flash_layout":  {
+                                     "schema":  "vc-lora-r19-application-flash-layout-v1",
+                                     "application_file_name":  "vc_lora_ground_xiao_esp32s3.ino.bin",
+                                     "flash_args":  {
+                                                        "sha256":  "929110FA5D4B163A66711BCECD998E7ADB6E07842F11AD8B461AD17B6F151D99",
+                                                        "application_occurrences":  1,
+                                                        "application_offset":  "0x10000"
+                                                    },
+                                     "partitions_csv":  {
+                                                            "sha256":  "AB2F33C14EB855054613FD3A4BA85457AE281C6F371C25931CCC763BC79CB0E2",
+                                                            "target_app_occurrences":  1,
+                                                            "target_app_name":  "app0",
+                                                            "target_app_subtype":  "ota_0",
+                                                            "target_app_offset":  "0x10000",
+                                                            "target_app_size_bytes":  3342336
+                                                        }
+                                 },
+    "timed_path_diagnostics":  {
+                                   "schema":  "vc-lora-r19-timed-path-candidate-v1",
+                                   "enabled":  true,
+                                   "mode":  "ExplicitHostArm",
+                                   "mode_value":  2,
+                                   "macro":  "VC_LORA_R19_TIMED_PATH_DIAGNOSTICS",
+                                   "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v6",
+                                   "record":  {
+                                                  "symbol":  "vc_lora_r19_timed_path_record",
+                                                  "schema_version":  1,
+                                                  "size_bytes":  512
+                                              },
+                                   "decoder":  {
+                                                   "path":  "tools/read_r19_timed_path_record.ps1",
+                                                   "sha256":  "B2925BFCF346C750A935A6511CFB45DF2D1EBD2831F878014FAF2BE4A01D5E5C"
+                                               }
+                               },
+    "aux_readiness_diagnostics":  {
+                                      "schema":  "vc-lora-r19-aux-readiness-candidate-v1",
+                                      "enabled":  true,
+                                      "macro":  "VC_LORA_R19_AUX_READINESS_DIAGNOSTICS",
+                                      "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v7",
+                                      "record":  {
+                                                     "symbol":  "vc_lora_r19_aux_readiness_record",
+                                                     "schema_version":  1,
+                                                     "size_bytes":  6144
+                                                 },
+                                      "decoder":  {
+                                                      "path":  "tools/read_r19_aux_readiness_record.ps1",
+                                                      "sha256":  "C011580259EA94F3092B1B3CCAF34DB30C4D9CA1158D2A51D2DC96EA76D880DF"
+                                                  }
+                                  },
+    "grant_reservation_fatal_diagnostics":  {
+                                                "schema":  "vc-lora-r19-grant-reservation-fatal-candidate-v1",
+                                                "enabled":  true,
+                                                "macro":  "VC_LORA_R19_GRANT_RESERVATION_FATAL_DIAGNOSTICS",
+                                                "scope":  "reserved-grant-detail13-only",
+                                                "runtime_reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v12",
+                                                "record":  {
+                                                               "symbol":  "vc_lora_r19_grant_reservation_fatal_record",
+                                                               "schema_version":  1,
+                                                               "size_bytes":  128
+                                                           },
+                                                "decoder":  {
+                                                                "path":  "tools/read_r19_grant_reservation_fatal_record.ps1",
+                                                                "sha256":  "54AA6DD96ECA100A9BE6B37913834E159837F57E52BC0B16514A5067BD5C261E"
+                                                            },
+                                                "paired_raw_reads":  24
+                                            },
+    "grant_agreement_diagnostics":  {
+                                        "schema":  "vc-lora-r19-grant-agreement-candidate-v1",
+                                        "enabled":  true,
+                                        "macro":  "VC_LORA_R19_GRANT_AGREEMENT_DIAGNOSTICS",
+                                        "requires_stop_diagnostics":  true,
+                                        "usb_control_schema":  "vc-lora-r19-grant-reservation-usb-v3",
+                                        "wire_version":  3,
+                                        "frame_bytes":  66,
+                                        "runtime_reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v12",
+                                        "reservation_record_bytes":  512,
+                                        "stop_record_bytes":  128,
+                                        "capability_symbol":  "vc_lora_r19_grant_agreement_capability",
+                                        "capability_symbol_bytes":  4,
+                                        "capability_symbol_evidence":  "compiled-v3-capability-only-not-runtime-completion",
+                                        "opcodes":  {
+                                                        "CommitRequest":  19,
+                                                        "CommitAck":  20,
+                                                        "AbortRequest":  21,
+                                                        "AbortAck":  22
+                                                    },
+                                        "commit":  {
+                                                       "requires_both_role_ack_before_param":  true,
+                                                       "ack_is_future_cancellation_guarantee":  false,
+                                                       "current_tuple_revalidated":  true
+                                                   },
+                                        "terminal_abort":  {
+                                                               "requires_both_role_ack":  true,
+                                                               "unknown_prefix_retry_allowed":  false,
+                                                               "param_reissue_allowed":  false,
+                                                               "maximum_abort_requests_per_role":  1,
+                                                               "missing_ack_result":  "ABORTED_UNCONFIRMED"
+                                                           },
+                                        "source_bindings":  [
+                                                                {
+                                                                    "path":  "firmware/phase6/vc_lora_phase6_bridge.hpp",
+                                                                    "sha256":  "C3455ADBFBD03D1C1C0CF204E67BA7A46FF300C25BABE44B10D7F6F91FEF566C"
+                                                                },
+                                                                {
+                                                                    "path":  "firmware/high_speed/r19_grant_reservation.hpp",
+                                                                    "sha256":  "2CAD96D4644C5E13AEA2CF0A5A2978D21C4FDCB4AFE900D33308236A9469F73F"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/r19_grant_reservation_wire.ps1",
+                                                                    "sha256":  "8EF2E05151B4F859C84E35595452EF08D3F8F5873897D0CCD475E8DEDEB29553"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/r19_grant_reservation_workflow.ps1",
+                                                                    "sha256":  "268301BDC10AB1C934791AE5E5147C618D090E94BA4CAF7D0F205B619CB34B44"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/r19_grant_reservation_contract.ps1",
+                                                                    "sha256":  "80ECF4135382E37E59DAB3F0AD38D3E2DFE6DF68604D134195911DB414FFC669"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/run_r19_timed_path_capture.ps1",
+                                                                    "sha256":  "C0BBB652987DB00834D9D95D7EC012186BA40E460D6FAC7CBF12549B5F50B8E1"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/build_r19_candidate_artifacts.ps1",
+                                                                    "sha256":  "507701BCD2297EC75447CFA92CA0F69D54858BFD975F163CF40DF744946074E3"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/r19_candidate_artifact_common.ps1",
+                                                                    "sha256":  "8B44FD32F88167C3491A55FC82928072F3F98FA89E83A00D25B0259F04EAA24F"
+                                                                },
+                                                                {
+                                                                    "path":  "tools/verify_r19_candidate_artifact.ps1",
+                                                                    "sha256":  "99EE6740836E6B1AF9AD7D657DD0C7994775A0BFD2853D7B4865BF497E010A49"
+                                                                }
+                                                            ]
+                                    },
+    "grant_reservation_stop_diagnostics":  {
+                                               "schema":  "vc-lora-r19-grant-reservation-stop-candidate-v1",
+                                               "enabled":  true,
+                                               "macro":  "VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS",
+                                               "record_schema":  1,
+                                               "size_bytes":  128,
+                                               "symbol":  "vc_lora_r19_grant_reservation_stop_record",
+                                               "decoder_path":  "tools/read_r19_grant_reservation_stop_record.ps1",
+                                               "decoder_sha256":  "AC70CEA71CC4C8645D31E4B3E77AFF9D668EBAC554D5DD2C62DFA611D2C84D02",
+                                               "runtime_reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v12",
+                                               "usb_control_schema":  "vc-lora-r19-grant-reservation-usb-v3",
+                                               "cancellation":  {
+                                                                    "schema":  "vc-lora-r19-grant-reservation-cancellation-v1",
+                                                                    "maximum_cancellations":  1,
+                                                                    "opcodes":  {
+                                                                                    "CancelRequest":  15,
+                                                                                    "CancelAck":  16,
+                                                                                    "Withdrawn":  17,
+                                                                                    "CancelPeerConfirmed":  18
+                                                                                }
+                                                                }
+                                           },
+    "grant_reservation_diagnostics":  {
+                                          "schema":  "vc-lora-r19-grant-reservation-candidate-v1",
+                                          "enabled":  true,
+                                          "macro":  "VC_LORA_R19_GRANT_RESERVATION_DIAGNOSTICS",
+                                          "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v12",
+                                          "record":  {
+                                                         "symbol":  "vc_lora_r19_grant_reservation_record",
+                                                         "schema_version":  1,
+                                                         "size_bytes":  512
+                                                     },
+                                          "decoder":  {
+                                                          "path":  "tools/read_r19_grant_reservation_record.ps1",
+                                                          "sha256":  "0E6FC4C0197DD96DD8C3851EEE5C08AA5AC3A59072385B69CB81459B9C7211F5"
+                                                      },
+                                          "usb_control":  {
+                                                              "schema":  "vc-lora-r19-grant-reservation-usb-v3",
+                                                              "frame_bytes":  66,
+                                                              "magic":  "R19R",
+                                                              "request_component":  197,
+                                                              "response_component":  198
+                                                          },
+                                          "capture":  {
+                                                          "mode":  "HostAssistedDualUsbReservation",
+                                                          "prepare_seconds":  15,
+                                                          "measurement_seconds":  40,
+                                                          "param_request_maximum":  1
+                                                      },
+                                          "producer":  {
+                                                           "kind":  "actual-dual-usb-grant-hold-tail-release",
+                                                           "role_capabilities":  {
+                                                                                     "ground":  [
+                                                                                                    "Bind",
+                                                                                                    "Held",
+                                                                                                    "TailPermit"
+                                                                                                ],
+                                                                                     "vehicle":  [
+                                                                                                     "Prepare",
+                                                                                                     "Release",
+                                                                                                     "TailReady"
+                                                                                                 ]
+                                                                                 }
+                                                       },
+                                          "cancellation":  {
+                                                               "schema":  "vc-lora-r19-grant-reservation-cancellation-v1",
+                                                               "maximum_cancellations":  1,
+                                                               "opcodes":  {
+                                                                               "CancelRequest":  15,
+                                                                               "CancelAck":  16,
+                                                                               "Withdrawn":  17,
+                                                                               "CancelPeerConfirmed":  18
+                                                                           }
+                                                           }
+                                      },
+    "grant_diagnostics":  {
+                              "schema":  "vc-lora-r19-grant-diagnostic-candidate-v1",
+                              "enabled":  true,
+                              "macro":  "VC_LORA_R19_GRANT_DIAGNOSTICS",
+                              "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v9",
+                              "record":  {
+                                             "symbol":  "vc_lora_r19_grant_diagnostic_record",
+                                             "schema_version":  1,
+                                             "size_bytes":  1024
+                                         },
+                              "decoder":  {
+                                              "path":  "tools/read_r19_grant_diagnostic_record.ps1",
+                                              "sha256":  "024B52920F2F91C0806988EE43968F0B90D189E82FC52F0D403C2025656EB4B0"
+                                          }
+                          },
+    "diagnostic_usb_failure_diagnostics":  {
+                                               "schema":  "vc-lora-r19-diagnostic-usb-failure-candidate-v1",
+                                               "enabled":  true,
+                                               "macro":  "VC_LORA_R19_DIAGNOSTIC_USB_FAILURE_RECORD",
+                                               "reader_schema":  "vc-lora-r19-runtime-stage-jtag-read-v8",
+                                               "record":  {
+                                                              "symbol":  "vc_lora_r19_diagnostic_usb_failure_record",
+                                                              "schema_version":  1,
+                                                              "size_bytes":  256
+                                                          },
+                                               "decoder":  {
+                                                               "path":  "tools/read_r19_diagnostic_usb_failure_record.ps1",
+                                                               "sha256":  "26E15CAC70F9414F2EE3A43FBF44A820BC1F7B8DC41672EC81733A9B1CD54451"
+                                                           }
+                                           },
+    "usb_role_capabilities":  {
+                                  "schema":  "vc-lora-r19-usb-role-capabilities-v1",
+                                  "mode":  "ExplicitHostArm",
+                                  "implementation_bound":  true,
+                                  "canonical_sources":  [
+                                                            {
+                                                                "path":  "firmware/phase6/vc_lora_phase6_bridge.hpp",
+                                                                "sha256":  "C3455ADBFBD03D1C1C0CF204E67BA7A46FF300C25BABE44B10D7F6F91FEF566C"
+                                                            },
+                                                            {
+                                                                "path":  "firmware/high_speed/r19_diagnostic_usb_failure_record.hpp",
+                                                                "sha256":  "47CE684BB11CD3807CA15605982BD98B66C7CB4258BE63DEA229E10E1793A258"
+                                                            },
+                                                            {
+                                                                "path":  "tools/r19_usb_role_contract.ps1",
+                                                                "sha256":  "10787A8D4064FC7370F40AE81BA3034E8D59F063E4D207E81B3E4F37FD020238"
+                                                            }
+                                                        ],
+                                  "roles":  [
+                                                {
+                                                    "role":  "vehicle",
+                                                    "clock_request_reply":  true,
+                                                    "effective_mode":  "SyncOnly",
+                                                    "ready":  false,
+                                                    "arm":  false
+                                                },
+                                                {
+                                                    "role":  "ground",
+                                                    "clock_request_reply":  true,
+                                                    "effective_mode":  "ExplicitHostArm",
+                                                    "ready":  true,
+                                                    "arm":  true
+                                                }
+                                            ]
+                              }
+}

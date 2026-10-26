@@ -1,0 +1,95 @@
+{
+  "schema": "vc-lora-r19-post-request-abort-core-offline-review-v1",
+  "owner": "/root/agreement_live_boundary_audit",
+  "mode": "offline-source-fix-and-focused-host-tests-only",
+  "result": "PASS_FOCUSED_CORE_NOT_HARDWARE_ACCEPTANCE",
+  "source_files_changed": [
+    "firmware/high_speed/r19_grant_reservation.hpp",
+    "tests/host/standalone/r19_grant_agreement_tests.cpp"
+  ],
+  "hardware_interaction": false,
+  "com_jtag_pnp_process_inspection": false,
+  "arduino_builds": false,
+  "full_host_test_run": false,
+  "bridge_ps_cmake_modified_by_this_agent": false,
+  "files": {
+    "header_before": {"path":"r19_grant_reservation.before.hpp","sha256":"5943A88E585A02A35800DE85B9E1A291C8BB7B089A8312BB92FFD51C5306D114"},
+    "header_after": {"path":"r19_grant_reservation.after.hpp","sha256":"2CAD96D4644C5E13AEA2CF0A5A2978D21C4FDCB4AFE900D33308236A9469F73F"},
+    "test_before": {"path":"r19_grant_agreement_tests.before.cpp","sha256":"3F75527EF2A857862325540446EBD963C4E324B8F8208414BA0F2323819F57C5"},
+    "test_after": {"path":"r19_grant_agreement_tests.after.cpp","sha256":"4F40CEF5FD6862E83543ADA0B344999B5EC2B8E3CE12642D23CC5C6A353E815C"},
+    "mechanical_diff": {"path":"diff.json","format":"Compare-Object line additions/removals; before/after files preserve complete context","sha256":"1A1BDDF83A09BF919012F13AC4B85A41F586F68E92BAE444DC8B9429D8D30118"},
+    "red_log": {"path":"red-target.log","sha256":"F038048B93CB013B26AD9FB0066A16799A205C0D5730E191983D8DB5878499B7"},
+    "final_focused_compile_log": {"path":"green-focused-compile.log","sha256":"3FB9804C316FF5CE07A9C21A8062E377C6136678CEFA231748C91849EEE918FD"}
+  },
+  "test_first": {
+    "red": {
+      "header_sha256":"5943A88E585A02A35800DE85B9E1A291C8BB7B089A8312BB92FFD51C5306D114",
+      "target":"vc_lora_r19_grant_agreement_tests",
+      "compile_exit_code":0,
+      "execution_exit_code":1,
+      "checks":1351,
+      "failures":8,
+      "failure_classes":["Repeated same-tuple Abort rejected while ACK queued, dequeued/inflight, and published (both roles)","Repeated cleanup rejected after Failed Ground request","Missing const exact-tuple unwritten retirement accessor"],
+      "log":"red-target.log",
+      "compile_log":"red-compile.log",
+      "red_test_source_snapshot_captured_at_execution":false,
+      "provenance_note":"Original before source and final after source are retained. Regression tests were applied before the product header edit; red compile and execution logs were saved before product editing. The exact intermediate RED test-source bytes were not copied separately."
+    },
+    "initial_green": {"target":"vc_lora_r19_grant_agreement_tests","checks":1453,"failures":0,"execution_exit_code":0,"log":"green-target.log"},
+    "final_focused": [
+      {"target":"vc_lora_r19_grant_agreement_tests","checks":1463,"failures":0,"exit_code":0,"log":"vc_lora_r19_grant_agreement_tests.green.log"},
+      {"target":"vc_lora_r19_grant_reservation_tests","checks":685,"failures":0,"exit_code":0,"log":"vc_lora_r19_grant_reservation_tests.green.log"},
+      {"target":"vc_lora_r19_grant_reservation_stop_tests","failures":0,"exit_code":0,"log":"vc_lora_r19_grant_reservation_stop_tests.green.log","checks_count_reported_by_executable":false},
+      {"target":"vc_lora_r19_grant_reservation_fatal_record_tests","checks":14,"failures":0,"exit_code":0,"log":"vc_lora_r19_grant_reservation_fatal_record_tests.green.log"}
+    ],
+    "invocation_scope":"CMake --build build/host --target the named focused executable(s) --parallel 1; execute those files only. No run_host_tests.ps1 invocation because it has no filter and would build/run the full suite.",
+    "cmake_regeneration":"The first target build regenerated build-system output only; this agent edited no CMake source."
+  },
+  "design": {
+    "terminal_abort_signature_unchanged":"bool terminal_abort(const Message&, uint64_t now, bool boundary_proven) noexcept",
+    "new_const_accessor":"bool unwritten_reservation_retired() const noexcept",
+    "accessor_line":235,
+    "terminal_abort_line":282,
+    "accessor_contract":[
+      "Initialized Vehicle only; cancellation supported, cancellation_used and cancellation_pending",
+      "No accepted reserved Grant write or tail history",
+      "Retired nonce/session/cycle/action token/writer generation exactly match the current snapshot",
+      "No additional nonzero assumptions: presence depends on the cancellation phase and exact tuple",
+      "Historical local retirement remains true after exact terminal cleanup, but is false for a new nonce/FreshRound, Ground, uninitialized, unretired, or already-written Grant"
+    ],
+    "accessor_evidence_limit":"begin_cancel is called only after the bridge has actually retired the unwritten action/cycle/lease. The accessor is that local historical tombstone, not a physical RF proof or authority to alter another writer lease.",
+    "abort_contract":[
+      "Every call retains full initialization/agreement/version/opcode/semantic/role/session/nonce/boot/epoch/session-cycle/token/generation/boundary/time guards",
+      "First valid call irreversibly sets the terminal tombstone and revokes agreement; legacy state, journal, t0 and phase clocks remain untouched",
+      "Exact same-tuple duplicate with a currently proven boundary is successful idempotent cleanup, not a new reservation or request",
+      "At most one AbortAck is enqueued. ACK queued, dequeued-but-unpublished, and committed states do not trigger implicit ACK republication",
+      "If the initial reply queue lacks space, revocation is retained and false returned; later same-tuple re-evaluation may queue the first ACK after space becomes available",
+      "Independent cleanup observation time rejects duplicate-call clock regression without rewriting operational clocks",
+      "ACK publication callback requires that this ACK was actually queued; popping the queue alone is not publication",
+      "Failed state permits this exact cleanup API only, never normal Handle/Release/PARAM/negotiation restart"
+    ],
+    "legacy_expectation_update":"An existing duplicate-Abort return-false assertion was explicitly changed to return-true idempotent completion, preserving and strengthening its no-extra-ACK/no-repeated-authority assertions. This is the agreed API semantics update, not removal of a failure test.",
+    "no_automatic_ack_republication":"An already queued/in-flight/published ACK is not replayed merely because the same AbortRequest is seen again. Host per-role Abort attempt maximum is unchanged."
+  },
+  "regression_coverage": [
+    "GroundHeld original one PARAM request and Vehicle safe-cancelled tuple converge to irreversible terminal state",
+    "Same-tuple duplicate while ACK queued, dequeued/inflight, and committed adds no duplicate ACK",
+    "16 duplicate mutations retain exact identity/semantic/version/opcode/boundary/time validation",
+    "Independent cleanup clock never regresses and the first terminal timestamp stays unchanged",
+    "All operational gates remain disabled after terminal cleanup; no new request, fresh retry, release, cancellation, or negotiation authority",
+    "Failed Ground cleanup retains GrantWaitExpired first fault, frozen journal, and original request t0",
+    "Saved-run MCU schedule reproduced: Prepared40579, Commit40782, SAFE_CANCEL41029, terminal cleanup41480 with boundary=true succeeds even after old hold41329; old hold and lease are not renewed",
+    "Uninitialized/Prepared/committed/Ground/released/Grant-written/tail/new-nonce cases cannot claim an exact unwritten retired Vehicle slot",
+    "Epoch0 and TDD baseline cycle0 remain valid; baseline0 -> fresh reserved cycle1 -> safe cancellation is covered",
+    "Existing reservation wire still rejects cycle0 as a complete reservation authority tuple; this repair does not relax that separate semantic contract",
+    "Existing legacy reservation, cancellation maximum1, Ground/Vehicle500ms, hold750ms, prepare8000ms, 550ms service floor, and record512/STOP128/Fatal128 ABI tests remain passing"
+  ],
+  "limitations": [
+    "This core does not explain which bridge physical-boundary predicate rejected the previous detail20 call. Before the fix, the core already accepted the saved-run SAFE_CANCEL-to-late-cleanup schedule when boundary=true. Parent bridge alignment and integration tests are independently required.",
+    "Queue-full-before-first-AbortAck recovery is implemented defensively and statically reviewed, but not dynamically forced via private-state exposure or memory corruption. Reachable public API regressions cover the queued/inflight/committed duplicate states. Do not claim queue-full timing was reproduced.",
+    "Legal reservation authority cycle0 is rejected by the pre-existing wire complete_tuple/fresh predicates. No valid cycle0-reservation SAFE_CANCEL fixture was invented or unsafe private state injected; the legal baseline0/epoch0 path is tested instead.",
+    "No firmware/Arduino build, full-suite test, real USB/AUX/RF trial, 932-in-30s result, or product acceptance has been performed by this agent.",
+    "Core tombstone/ACK consistency does not guarantee a quiet Heartbeat reservation window, Grant RF arrival, peer ACK receipt, or high-speed transfer success."
+  ],
+  "freeze":"Only evidence parse/hash confirmation remains; source files are frozen for parent integration."
+}

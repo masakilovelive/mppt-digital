@@ -1,0 +1,247 @@
+{
+  "schema": "r19-post-request-abort-diff-v1",
+  "files": [
+    {
+      "path": "tools/r19_grant_reservation_workflow.ps1",
+      "before_sha256": "A38C492E003352B296D49C952B52187C729765D3C21835E5C77E61FBE40CF7A7",
+      "after_sha256": "268301BDC10AB1C934791AE5E5147C618D090E94BA4CAF7D0F205B619CB34B44",
+      "changes": [
+        {
+          "side": "=>",
+          "line": "    try{if($State.status-cne'Failed'){"
+        },
+        {
+          "side": "=>",
+          "line": "    }}catch{if($State.status-cne'Failed'){throw}}"
+        },
+        {
+          "side": "=>",
+          "line": "    # A typed prepeek can latch Failed and throw. Retire that COMPLETE frame"
+        },
+        {
+          "side": "=>",
+          "line": "    # now: waiting for another native byte would leave cleanup behind its own"
+        },
+        {
+          "side": "=>",
+          "line": "    # already-consumed withdrawal. The first failure and normal OUT gate stay closed."
+        },
+        {
+          "side": "=>",
+          "line": "  if($State.agreement_enabled){"
+        },
+        {
+          "side": "=>",
+          "line": "    if(-not($State.status-ceq'CommittedReadyForOneParam'-and$null-ne$State.commit_ground-and$null-ne$State.commit_vehicle-and$null-ne$State.bound-and$null-ne$State.prepared-and-not$State.cancelling-and$State.param_attempts-eq0-and$null-eq$State.pending_command)){return $false}"
+        },
+        {
+          "side": "=>",
+          "line": "    foreach($pair in @(@($State.prepared,'vehicle'),@($State.bound,'ground'),@($State.commit_vehicle,'vehicle'),@($State.commit_ground,'ground'))){"
+        },
+        {
+          "side": "=>",
+          "line": "      $current=$pair[0];$role=$pair[1];$hello=if($role-ceq'ground'){$State.hello_ground}else{$State.hello_vehicle}"
+        },
+        {
+          "side": "=>",
+          "line": "      if($null-eq$hello-or-not(Test-R19GrantReservationTuple $current $State.prepared)-or$current.role-cne$role-or$current.reader_session-cne$State.reader_session-or$current.slot_nonce-cne$State.slot_nonce-or$current.boot_id-cne$hello.boot_id-or$current.usb_epoch-cne$hello.usb_epoch){return $false}"
+        },
+        {
+          "side": "=>",
+          "line": "    return $true"
+        },
+        {
+          "side": "=>",
+          "line": "  param([object]$State,[object[]]$States,[string]$NowTicks,[scriptblock]$NowTicksProvider=$null,[ValidateSet('','vehicle','ground')][string]$TargetRole='')"
+        },
+        {
+          "side": "=>",
+          "line": "    # Continuity/identity is required for BOTH owners, but a partial ACK on the"
+        },
+        {
+          "side": "=>",
+          "line": "    # other USB endpoint must not delay this endpoint's deauthorization OUT."
+        },
+        {
+          "side": "=>",
+          "line": "    if($TargetRole-and$role-cne$TargetRole){continue}"
+        },
+        {
+          "side": "=>",
+          "line": "    # Native-prefix control delivery does not consume ordinary PollBytes."
+        },
+        {
+          "side": "=>",
+          "line": "  }"
+        },
+        {
+          "side": "=>",
+          "line": "  if($State.status-cne'Failed'-or$Command.opcode-cne'AbortRequest'-or$Command.role-cnotin@('ground','vehicle')){throw 'INVALID_TERMINAL_ABORT_WRITE_STATE'}"
+        },
+        {
+          "side": "=>",
+          "line": "  # Revalidate the exact current identity/tuple AFTER the last native-prefix"
+        },
+        {
+          "side": "=>",
+          "line": "  # preflight, immediately before the irreversible one-shot attempt latch."
+        },
+        {
+          "side": "<=",
+          "line": "    if($State.status-cne'Failed'){"
+        },
+        {
+          "side": "<=",
+          "line": "  if($State.agreement_enabled){return $State.status-ceq'CommittedReadyForOneParam'-and$null-ne$State.commit_ground-and$null-ne$State.commit_vehicle-and$null-ne$State.bound-and$null-ne$State.prepared-and-not$State.cancelling-and$State.param_attempts-eq0-and$null-eq$State.pending_command}"
+        },
+        {
+          "side": "<=",
+          "line": "  param([object]$State,[object[]]$States,[string]$NowTicks,[scriptblock]$NowTicksProvider=$null)"
+        },
+        {
+          "side": "<=",
+          "line": "    # No special abort parser steals bytes from the ordinary read owner. Wait"
+        },
+        {
+          "side": "<=",
+          "line": "    # for its current immutable prefix and the runtime monitor to be delivered."
+        }
+      ]
+    },
+    {
+      "path": "tools/run_r19_timed_path_capture.ps1",
+      "before_sha256": "2A6E24381AAB8AD6ED3B5058EA5CFB31CA215DE51356D7858459ED352B163C56",
+      "after_sha256": "C0BBB652987DB00834D9D95D7EC012186BA40E460D6FAC7CBF12549B5F50B8E1",
+      "changes": [
+        {
+          "side": "=>",
+          "line": "      $null=Invoke-R19ReservationTerminalAbortWrite -State $State -Command $c -NowTicks $NowTicks -Writer {param([byte[]]$Bytes)&$terminalDriverWriter $target $Bytes} -BeforeWrite $(if($null-ne$BeforeWrite){$BeforeWrite}else{{"
+        },
+        {
+          "side": "=>",
+          "line": "        try{Receive-R19GrantReservationControlPrefixes -State $State -States $States -NowTicks $NowTicks}"
+        },
+        {
+          "side": "=>",
+          "line": "        catch{$State.terminal_abort.blocked_reason='NATIVE_CLEANUP_PREFIX_NOT_PROVEN';return $false}"
+        },
+        {
+          "side": "=>",
+          "line": "        Invoke-R19GrantReservationTerminalAbortPreflight $State $States ([string](&$NowTicks)) -NowTicksProvider $NowTicks -TargetRole $role"
+        },
+        {
+          "side": "=>",
+          "line": "      }})"
+        },
+        {
+          "side": "=>",
+          "line": "function Invoke-R19CaptureReservationPriorityAbort {"
+        },
+        {
+          "side": "=>",
+          "line": "  param([object]$State,[object[]]$States,[string]$PreparationDeadlineTicks,[string]$MeasurementDeadlineTicks,[scriptblock]$NowTicks,[scriptblock]$Writer=$null)"
+        },
+        {
+          "side": "=>",
+          "line": "  if($null-eq$State-or-not$State.agreement_enabled-or$State.status-cne'Failed'){return 0}"
+        },
+        {
+          "side": "=>",
+          "line": "  $before=$State.terminal_abort.roles.vehicle.attempts+$State.terminal_abort.roles.ground.attempts"
+        },
+        {
+          "side": "=>",
+          "line": "  $end=Get-R19GrantReservationAbortCaptureDeadline -Workflow $State -PreparationDeadlineTicks $PreparationDeadlineTicks -MeasurementDeadlineTicks $MeasurementDeadlineTicks"
+        },
+        {
+          "side": "=>",
+          "line": "  $priorityWriter=if($null-ne$Writer){$Writer}else{{param($Target,[byte[]]$Bytes)$Target.port.Write($Bytes,0,$Bytes.Length);return [int]$Bytes.Length}}"
+        },
+        {
+          "side": "=>",
+          "line": "  try{$null=Invoke-R19GrantReservationTerminalAbortDriver -State $State -States $States -CaptureDeadlineTicks $end -NowTicks $NowTicks -Writer $priorityWriter}"
+        },
+        {
+          "side": "=>",
+          "line": "  catch{$State.terminal_abort.blocked_reason='PRIORITY_ABORT_DRIVER_REJECTED'}"
+        },
+        {
+          "side": "=>",
+          "line": "  return [int]($State.terminal_abort.roles.vehicle.attempts+$State.terminal_abort.roles.ground.attempts-$before)"
+        },
+        {
+          "side": "=>",
+          "line": "    if($GrantAgreementDiagnostics){$serialWrites+=Invoke-R19CaptureReservationPriorityAbort $reservationWorkflow $states.ToArray() $preparationDeadlineTicks ([string]$deadline) {[string]$clock.ElapsedTicks}}"
+        },
+        {
+          "side": "=>",
+          "line": "          try{Add-R19GrantReservationDeliveredBlock -State $reservationWorkflow -RoleState $s -Block $block -NowTicks ([string]$clock.ElapsedTicks)}"
+        },
+        {
+          "side": "=>",
+          "line": "          catch{if($reservationWorkflow.status-cne'Failed'){throw}}"
+        },
+        {
+          "side": "=>",
+          "line": "          if($GrantAgreementDiagnostics){$serialWrites+=Invoke-R19CaptureReservationPriorityAbort $reservationWorkflow $states.ToArray() $preparationDeadlineTicks ([string]$deadline) {[string]$clock.ElapsedTicks}}"
+        },
+        {
+          "side": "=>",
+          "line": "              if($PSBoundParameters['GrantReservationDiagnostics']-and$reservationWorkflow.agreement_enabled){$serialWrites+=Invoke-R19CaptureReservationPriorityAbort $reservationWorkflow $states.ToArray() $preparationDeadlineTicks ([string]$deadline) {[string]$clock.ElapsedTicks}}"
+        },
+        {
+          "side": "=>",
+          "line": "      # The same deauthorization-only priority path also covers a failure in"
+        },
+        {
+          "side": "=>",
+          "line": "      # the final normal control pump. No ACK wait precedes the peer Abort OUT."
+        },
+        {
+          "side": "=>",
+          "line": "      $serialWrites+=Invoke-R19CaptureReservationPriorityAbort $reservationWorkflow $states.ToArray() $preparationDeadlineTicks ([string]$deadline) {[string]$clock.ElapsedTicks}"
+        },
+        {
+          "side": "=>",
+          "line": "}"
+        },
+        {
+          "side": "<=",
+          "line": "      $null=Invoke-R19ReservationTerminalAbortWrite -State $State -Command $c -NowTicks $NowTicks -Writer {param([byte[]]$Bytes)&$terminalDriverWriter $target $Bytes} -BeforeWrite $(if($null-ne$BeforeWrite){$BeforeWrite}else{{Invoke-R19GrantReservationTerminalAbortPreflight $State $States ([string](&$NowTicks)) -NowTicksProvider $NowTicks}})"
+        },
+        {
+          "side": "<=",
+          "line": "          Add-R19GrantReservationDeliveredBlock -State $reservationWorkflow -RoleState $s -Block $block -NowTicks ([string]$clock.ElapsedTicks)"
+        },
+        {
+          "side": "<=",
+          "line": "      # Separate deauthorization-only path: normal failed-state command, PARAM"
+        },
+        {
+          "side": "<=",
+          "line": "      # and readiness guards stay closed. No new attempt after an unknown prefix."
+        },
+        {
+          "side": "<=",
+          "line": "      $terminalAttemptsBefore=$reservationWorkflow.terminal_abort.roles.vehicle.attempts+$reservationWorkflow.terminal_abort.roles.ground.attempts"
+        },
+        {
+          "side": "<=",
+          "line": "      $terminalCaptureDeadline=Get-R19GrantReservationAbortCaptureDeadline -Workflow $reservationWorkflow -PreparationDeadlineTicks $preparationDeadlineTicks -MeasurementDeadlineTicks ([string]$deadline)"
+        },
+        {
+          "side": "<=",
+          "line": "      try{$null=Invoke-R19GrantReservationTerminalAbortDriver -State $reservationWorkflow -States $states.ToArray() -CaptureDeadlineTicks $terminalCaptureDeadline -NowTicks {[string]$clock.ElapsedTicks} -Writer {param($target,[byte[]]$Bytes)$target.port.Write($Bytes,0,$Bytes.Length);return [int]$Bytes.Length}}"
+        },
+        {
+          "side": "<=",
+          "line": "      finally{$serialWrites+=($reservationWorkflow.terminal_abort.roles.vehicle.attempts+$reservationWorkflow.terminal_abort.roles.ground.attempts-$terminalAttemptsBefore)}"
+        }
+      ]
+    }
+  ],
+  "new_test": {
+    "path": "tests/hil/check_r19_post_request_abort_priority.ps1",
+    "sha256": "4066F9074B6D517F6397D3E5C2B13EC24AD0016DD7E3E26F8FF8A7AA1CD404AA"
+  }
+}

@@ -1,0 +1,24 @@
+warning: in the working copy of 'runs\validation\R19-POST-REQUEST-ABORT-ALIGNMENT-OFFLINE-001\20261026JST-fix\bridge-abort\before\host-CMakeLists.txt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/host/CMakeLists.txt', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/runs\\validation\\R19-POST-REQUEST-ABORT-ALIGNMENT-OFFLINE-001\\20261026JST-fix\\bridge-abort\\before\\host-CMakeLists.txt" b/tests/host/CMakeLists.txt
+index 62aa5e3..7df6f2a 100644
+--- "a/runs\\validation\\R19-POST-REQUEST-ABORT-ALIGNMENT-OFFLINE-001\\20261026JST-fix\\bridge-abort\\before\\host-CMakeLists.txt"
++++ b/tests/host/CMakeLists.txt
+@@ -513,13 +513,15 @@ endforeach()
+ foreach(agreement_case IN ITEMS commit request-without-commit commit-wrong-tuple abort-held abort-preheld
+     unsafe-busy unsafe-pending unsafe-tail unsafe-frozen unsafe-negotiation unsafe-session
+     unsafe-usb unsafe-epoch unsafe-high-speed unsafe-writer unsafe-ingress unsafe-proxy unsafe-origin wrong-wire
+-    abort-wrong-identity failed-loop-abort loop-abort abort-prefix-fault)
++    abort-wrong-identity failed-loop-abort loop-abort abort-prefix-fault abort-after-grant-deadline)
+   add_test(NAME IT-R19-GRANT-AGREEMENT-GROUND-${agreement_case}-001
+     COMMAND vc_lora_phase6_grant_agreement_ground_tests ${agreement_case})
+ endforeach()
+ foreach(agreement_case IN ITEMS commit release-without-commit abort abort-after-withdrawal
+     unsafe-uart unsafe-busy unsafe-tail unsafe-epoch wrong-wire
+-    abort-wrong-identity failed-loop-abort loop-abort abort-prefix-fault)
++    abort-wrong-identity failed-loop-abort loop-abort abort-prefix-fault
++    abort-after-withdrawal-data abort-after-withdrawal-writer-mismatch
++    abort-after-withdrawal-writer-owner defer-prepared-heartbeat defer-prepared-budget)
+   add_test(NAME IT-R19-GRANT-AGREEMENT-VEHICLE-${agreement_case}-001
+     COMMAND vc_lora_phase6_grant_agreement_vehicle_tests ${agreement_case})
+ endforeach()

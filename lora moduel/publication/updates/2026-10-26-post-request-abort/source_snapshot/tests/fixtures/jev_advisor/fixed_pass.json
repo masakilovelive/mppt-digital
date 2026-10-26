@@ -1,0 +1,41 @@
+{
+  "schema_version": "r19-jev-input-2",
+  "run_id": "R19-JEV-SYNTHETIC-PASS-001",
+  "source_manifest": [
+    {
+      "path": "Jev_Integration_and_Token_Measurement_Spec_R19.md",
+      "sha256": "A3DC9DA596DD14581781EB5EF05E7575672C90BC5982ADE76AE2037B1DAAC66E"
+    }
+  ],
+  "source_hash": "eab56d011b776c5d3de457d2c1aa49379224f01fa0b654f86efde4c038d86d2f",
+  "test_scope": "host",
+  "evidence_scope": "host_model",
+  "host_tests_passed": 250,
+  "host_tests_failed": 0,
+  "failed_test_ids": [],
+  "sanitizer_errors": 0,
+  "expected_params": 932,
+  "received_params": 932,
+  "first_missing_index": null,
+  "completion_ms": 29999.0,
+  "heartbeat_count": 77,
+  "heartbeat_first_ms": 1000.0,
+  "heartbeat_max_ms": 2500.0,
+  "heartbeat_post_ms": 900.0,
+  "missing_params": 0,
+  "duplicate_params": 0,
+  "out_of_order_params": 0,
+  "crc_errors": 0,
+  "parser_errors": 0,
+  "partial_frames": 0,
+  "control_leakage": 0,
+  "retry_identity_status": "proven",
+  "standard_grant_handoff_status": "proven",
+  "direction_guard_status": "proven",
+  "physical_tail_status": "proven",
+  "vcta_physical_drain_status": "proven",
+  "live_flash_authorized": false,
+  "hardware_operation_requested": false,
+  "communication_parameter_change_requested": false,
+  "acceptance_relaxation_requested": false
+}

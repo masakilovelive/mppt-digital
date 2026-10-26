@@ -1,0 +1,8 @@
+[1/8] Building CXX object tests/host/CMakeFiles/vc_lora_r19_grant_reservation_tests.dir/standalone/r19_grant_reservation_tests.cpp.obj
+[2/8] Linking CXX executable tests\host\vc_lora_r19_grant_reservation_tests.exe
+[3/8] Building CXX object tests/host/CMakeFiles/vc_lora_r19_grant_reservation_stop_tests.dir/standalone/r19_grant_reservation_stop_tests.cpp.obj
+[4/8] Building CXX object tests/host/CMakeFiles/vc_lora_r19_grant_agreement_tests.dir/standalone/r19_grant_agreement_tests.cpp.obj
+[5/8] Linking CXX executable tests\host\vc_lora_r19_grant_agreement_tests.exe
+[6/8] Building CXX object tests/host/CMakeFiles/vc_lora_r19_grant_reservation_fatal_record_tests.dir/standalone/r19_grant_reservation_fatal_record_tests.cpp.obj
+[7/8] Linking CXX executable tests\host\vc_lora_r19_grant_reservation_fatal_record_tests.exe
+[8/8] Linking CXX executable tests\host\vc_lora_r19_grant_reservation_stop_tests.exe

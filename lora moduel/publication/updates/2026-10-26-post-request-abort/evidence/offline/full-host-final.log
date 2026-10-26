@@ -1,0 +1,83 @@
+-- Configuring done
+-- Generating done
+-- Build files have been written to: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+[1/30] Linking CXX executable tests\host\vc_lora_phase6_timed_path_mode_1_tests.exe
+[2/30] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_fail_diagnostic_tests.exe
+[3/30] Linking CXX executable tests\host\vc_lora_phase6_timed_path_mode_2_tests.exe
+[4/30] Linking CXX executable tests\host\vc_lora_phase6_ground_usb_commit_latch_tests.exe
+[5/30] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_diagnostic_tests.exe
+[6/30] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_staged_zero_tests.exe
+[7/30] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_staged_partial_tests.exe
+[8/30] Linking CXX executable tests\host\vc_lora_phase6_first_usb_failure_integration_tests.exe
+[9/30] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_alive_read_only_bootstrap_tests.exe
+[10/30] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_alive_starvation_tests.exe
+[11/30] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_alive_diagnostic_tests.exe
+[12/30] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_alive_diagnostic_tests.exe
+[13/30] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_fail_boundary_loss_tests.exe
+[14/30] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_fail_deadline_tests.exe
+[15/30] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_fail_pending_alive_tests.exe
+[16/30] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_recovery_guard_tests.exe
+[17/30] Linking CXX executable tests\host\vc_lora_phase6_vehicle_runtime_fail_flush_deadline_tests.exe
+[18/30] Linking CXX executable tests\host\vc_lora_phase6_ground_host_readiness_tests.exe
+[19/30] Linking CXX executable tests\host\vc_lora_phase6_ground_runtime_fail_recovery_guard_tests.exe
+[20/30] Linking CXX executable tests\host\vc_lora_r19_grant_agreement_capability_ground_tests.exe
+[21/30] Linking CXX executable tests\host\vc_lora_phase6_grant_reservation_vehicle_stop_flow_tests.exe
+[22/30] Linking CXX executable tests\host\vc_lora_phase6_grant_reservation_fatal_flow_tests.exe
+[23/30] Linking CXX executable tests\host\vc_lora_phase6_vehicle_usb_clock_tests.exe
+[24/30] Linking CXX executable tests\host\vc_lora_phase6_ground_diagnostic_usb_failure_tests.exe
+[25/30] Linking CXX executable tests\host\vc_lora_phase6_grant_reservation_vehicle_flow_tests.exe
+[26/30] Linking CXX executable tests\host\vc_lora_phase6_grant_reservation_ground_stop_flow_tests.exe
+[27/30] Linking CXX executable tests\host\vc_lora_phase6_grant_reservation_ground_flow_tests.exe
+[28/30] Linking CXX executable tests\host\vc_lora_phase6_vehicle_product_loop_tests.exe
+[29/30] Linking CXX executable tests\host\vc_lora_phase6_vehicle_diagnostic_usb_failure_tests.exe
+[30/30] Linking CXX executable tests\host\vc_lora_phase6_ground_product_loop_tests.exe
+Internal ctest changing into directory: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+Test project E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+        Start  73: R19-USB-EXTENDED-RECORDS-OFFLINE-CONTRACT-001
+  1/548 Test  #73: R19-USB-EXTENDED-RECORDS-OFFLINE-CONTRACT-001 ...............................   Passed   64.63 sec
+        Start   1: R19-diagnostic_usb_failure_record-CONTRACT-001
+        Start  63: R19-grant_artifact_contract-OFFLINE-001
+        Start  70: R19-aux_readiness_outer-OFFLINE-001
+        Start   4: R19-diagnostic_usb_outer_raw-CONTRACT-001
+  2/548 Test   #4: R19-diagnostic_usb_outer_raw-CONTRACT-001 ...................................   Passed   29.84 sec
+        Start  57: R19-param_list_diagnostics-OFFLINE-001
+  3/548 Test  #70: R19-aux_readiness_outer-OFFLINE-001 .........................................   Passed   33.89 sec
+        Start  76: check_r19_first_usb_failure_record_contract
+  4/548 Test  #63: R19-grant_artifact_contract-OFFLINE-001 .....................................   Passed   52.94 sec
+        Start  58: R19-param_list_capture_contract-OFFLINE-001
+  5/548 Test  #57: R19-param_list_diagnostics-OFFLINE-001 ......................................   Passed   23.52 sec
+        Start  80: check_r19_usb_clock_correlation_contract
+  6/548 Test   #1: R19-diagnostic_usb_failure_record-CONTRACT-001 ..............................   Passed   53.66 sec
+        Start  53: R19-timed_path_outer_raw-OFFLINE-001
+  7/548 Test  #76: check_r19_first_usb_failure_record_contract .................................   Passed   39.05 sec
+        Start  68: R19-aux_readiness_artifact-OFFLINE-001
+  8/548 Test  #80: check_r19_usb_clock_correlation_contract ....................................   Passed   20.01 sec
+        Start  78: check_r19_first_usb_failure_outer_contract
+  9/548 Test  #53: R19-timed_path_outer_raw-OFFLINE-001 ........................................   Passed   20.93 sec
+        Start  47: R19-timed_path_trace-OFFLINE-001
+ 10/548 Test  #58: R19-param_list_capture_contract-OFFLINE-001 .................................   Passed   25.12 sec
+        Start  41: R19-STARTUP-READER-OFFLINE-INTEGRATION-001
+ 11/548 Test  #47: R19-timed_path_trace-OFFLINE-001 ............................................   Passed   14.43 sec
+        Start  43: R19-continuous_reader_integration-OFFLINE-001
+ 12/548 Test  #41: R19-STARTUP-READER-OFFLINE-INTEGRATION-001 ..................................   Passed   14.57 sec
+        Start  65: R19-grant_parent_contract-OFFLINE-001
+ 13/548 Test  #68: R19-aux_readiness_artifact-OFFLINE-001 ......................................   Passed   20.03 sec
+        Start  54: R19-read_comparison_capture_contract-OFFLINE-001
+ 14/548 Test  #78: check_r19_first_usb_failure_outer_contract ..................................   Passed   21.56 sec
+        Start  67: R19-aux_readiness_record-OFFLINE-001
+ 15/548 Test  #43: R19-continuous_reader_integration-OFFLINE-001 ...............................   Passed   12.97 sec
+        Start  61: R19-grant_diagnostic_record-OFFLINE-001
+ 16/548 Test  #67: R19-aux_readiness_record-OFFLINE-001 ........................................   Passed    7.23 sec
+        Start  51: R19-timed_path_artifact_contract-OFFLINE-001
+ 17/548 Test  #65: R19-grant_parent_contract-OFFLINE-001 .......................................   Passed    9.92 sec
+        Start  45: R19-host_readiness_workflow-OFFLINE-001
+ 18/548 Test  #54: R19-read_comparison_capture_contract-OFFLINE-001 ............................   Passed   10.28 sec
+        Start 518: ST-MAV-001
+ 19/548 Test  #45: R19-host_readiness_workflow-OFFLINE-001 .....................................   Passed    6.84 sec
+        Start  60: R19-start_admission-OFFLINE-001
+ 20/548 Test  #51: R19-timed_path_artifact_contract-OFFLINE-001 ................................   Passed    7.25 sec
+        Start  75: UT-R19-HWCDC-FLUSH-CALL-EVIDENCE-001
+ 21/548 Test  #61: R19-grant_diagnostic_record-OFFLINE-001 .....................................   Passed    7.81 sec
+        Start  40: R19-STARTUP-READER-OFFLINE-CONTRACT-001
+ 22/548 Test #518: ST-MAV-001 ..................................................................***Failed   10.51 sec
+

@@ -1,0 +1,25 @@
+Internal ctest changing into directory: E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+Test project E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge/build/host
+    Start 157: IT-R19-GRANT-AGREEMENT-VEHICLE-defer-prepared-heartbeat-001
+1/2 Test #157: IT-R19-GRANT-AGREEMENT-VEHICLE-defer-prepared-heartbeat-001 ...***Failed    0.17 sec
+FAIL unpublished urgent slot retires without Prepared, UART or cancellation-budget use
+FAIL late Heartbeat is selected before a replacement Grant
+FAIL replacement Grant uses a new real TDD cycle and token
+FAIL only replacement after Heartbeat tail becomes Prepared with unchanged750ms hold
+actual bridge agreement case=defer-prepared-heartbeat role=Vehicle checks=20 failures=4
+
+    Start 158: IT-R19-GRANT-AGREEMENT-VEHICLE-defer-prepared-budget-001
+2/2 Test #158: IT-R19-GRANT-AGREEMENT-VEHICLE-defer-prepared-budget-001 ......***Failed    0.01 sec
+FAIL unpublished urgent slot retires without Prepared, UART or cancellation-budget use
+FAIL deferral never resets original eight-second prepare deadline
+actual bridge agreement case=defer-prepared-budget role=Vehicle checks=18 failures=2
+
+
+0% tests passed, 2 tests failed out of 2
+
+Total Test time (real) =   0.26 sec
+
+The following tests FAILED:
+	157 - IT-R19-GRANT-AGREEMENT-VEHICLE-defer-prepared-heartbeat-001 (Failed)
+	158 - IT-R19-GRANT-AGREEMENT-VEHICLE-defer-prepared-budget-001 (Failed)
+Errors while running CTest

@@ -1,0 +1,293 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:vc-lora:jev:r19-decision-input:2",
+  "title": "VC LoRa Bridge R19 Jev decision input",
+  "description": "Bounded measurements extracted from a saved host-model or HIL-physical result. This advisory input cannot change the fixed R19 acceptance criteria.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "source_manifest",
+    "source_hash",
+    "test_scope",
+    "evidence_scope",
+    "host_tests_passed",
+    "host_tests_failed",
+    "failed_test_ids",
+    "sanitizer_errors",
+    "expected_params",
+    "received_params",
+    "first_missing_index",
+    "completion_ms",
+    "heartbeat_count",
+    "heartbeat_first_ms",
+    "heartbeat_max_ms",
+    "heartbeat_post_ms",
+    "missing_params",
+    "duplicate_params",
+    "out_of_order_params",
+    "crc_errors",
+    "parser_errors",
+    "partial_frames",
+    "control_leakage",
+    "retry_identity_status",
+    "standard_grant_handoff_status",
+    "direction_guard_status",
+    "physical_tail_status",
+    "vcta_physical_drain_status",
+    "live_flash_authorized",
+    "hardware_operation_requested",
+    "communication_parameter_change_requested",
+    "acceptance_relaxation_requested"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "r19-jev-input-2"
+    },
+    "run_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"
+    },
+    "source_manifest": {
+      "description": "Closed, explicit list of source files and their byte-level SHA-256 digests. source_hash is the hash of the canonicalized manifest.",
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 512,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.{1,2}(?:/|$))(?!.*[\\\\*?\\[\\]])[^/\\\\]+(?:/[^/\\\\]+)*$"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[A-Fa-f0-9]{64}$"
+          }
+        }
+      }
+    },
+    "source_hash": {
+      "description": "SHA-256 of the canonical source_manifest, verified again against source bytes by the runtime.",
+      "type": "string",
+      "pattern": "^[A-Fa-f0-9]{64}$"
+    },
+    "test_scope": {
+      "type": "string",
+      "enum": [
+        "host",
+        "hil"
+      ]
+    },
+    "evidence_scope": {
+      "description": "Host-model evidence is never physical acceptance evidence.",
+      "type": "string",
+      "enum": [
+        "host_model",
+        "hil_physical"
+      ]
+    },
+    "host_tests_passed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "host_tests_failed": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "failed_test_ids": {
+      "description": "Bounded IDs of failed host tests. The runtime requires this count to equal host_tests_failed.",
+      "type": "array",
+      "maxItems": 64,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160,
+        "pattern": "^[A-Za-z0-9_./:+-]+$"
+      }
+    },
+    "sanitizer_errors": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "expected_params": {
+      "description": "R19 fixed PARAM_VALUE inventory; this value is not configurable by Jev.",
+      "type": "integer",
+      "const": 932
+    },
+    "received_params": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "first_missing_index": {
+      "description": "First missing zero-based PARAM_VALUE index, or null when none is missing.",
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 931
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "completion_ms": {
+      "description": "Measured R19 t1 - t0 completion duration; zero is not measurement evidence.",
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "heartbeat_count": {
+      "description": "Number of Heartbeats used to derive the timing evidence.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "heartbeat_first_ms": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "heartbeat_max_ms": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "heartbeat_post_ms": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "missing_params": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "duplicate_params": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "out_of_order_params": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "crc_errors": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "parser_errors": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "partial_frames": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "control_leakage": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "retry_identity_status": {
+      "$ref": "#/$defs/evidenceStatus",
+      "description": "Whether rejected/zero writes retained identical bytes and did not advance ordinal or counts."
+    },
+    "standard_grant_handoff_status": {
+      "$ref": "#/$defs/evidenceStatus"
+    },
+    "direction_guard_status": {
+      "$ref": "#/$defs/evidenceStatus"
+    },
+    "physical_tail_status": {
+      "$ref": "#/$defs/evidenceStatus"
+    },
+    "vcta_physical_drain_status": {
+      "$ref": "#/$defs/evidenceStatus"
+    },
+    "live_flash_authorized": {
+      "description": "Read-only evidence value. Jev is forbidden from changing it.",
+      "type": "boolean"
+    },
+    "hardware_operation_requested": {
+      "description": "True when the requested next action would touch hardware, COM, or firmware.",
+      "type": "boolean"
+    },
+    "communication_parameter_change_requested": {
+      "description": "True when UART, air-rate, sub-packet, E220, or TDD settings would change.",
+      "type": "boolean"
+    },
+    "acceptance_relaxation_requested": {
+      "description": "True when a proposed action would weaken a fixed R19 acceptance criterion.",
+      "type": "boolean"
+    }
+  },
+  "$defs": {
+    "evidenceStatus": {
+      "type": "string",
+      "enum": [
+        "proven",
+        "disproven",
+        "unknown"
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "received_params": {
+            "const": 932
+          }
+        },
+        "required": [
+          "received_params"
+        ]
+      },
+      "then": {
+        "properties": {
+          "first_missing_index": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "oneOf": [
+        {
+          "properties": {
+            "test_scope": {
+              "const": "host"
+            },
+            "evidence_scope": {
+              "const": "host_model"
+            }
+          },
+          "required": [
+            "test_scope",
+            "evidence_scope"
+          ]
+        },
+        {
+          "properties": {
+            "test_scope": {
+              "const": "hil"
+            },
+            "evidence_scope": {
+              "const": "hil_physical"
+            }
+          },
+          "required": [
+            "test_scope",
+            "evidence_scope"
+          ]
+        }
+      ]
+    }
+  ]
+}

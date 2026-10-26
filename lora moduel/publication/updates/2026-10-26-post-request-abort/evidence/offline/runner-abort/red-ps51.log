@@ -1,0 +1,7 @@
+FAIL Complete withdrawn frame is retired even when its first-failure transition throws
+At E:\VESC\TRIAL_LOG\Loreley3_System\06_vc_lora_bridge\tests\hil\check_r19_post_request_abort_priority.ps1:12 char:76
++ ... string]$Name){$script:checks++;if(-not$Value){throw ('FAIL '+$Name)}}
++                                                   ~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : OperationStopped: (FAIL Complete w...ansition throws:String) [], RuntimeException
+    + FullyQualifiedErrorId : FAIL Complete withdrawn frame is retired even when its first-failure transition throws
+ 

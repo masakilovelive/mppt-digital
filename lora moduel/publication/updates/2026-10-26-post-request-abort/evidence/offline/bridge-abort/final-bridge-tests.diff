@@ -1,0 +1,181 @@
+warning: in the working copy of 'runs\validation\R19-POST-REQUEST-ABORT-ALIGNMENT-OFFLINE-001\20261026JST-fix\bridge-abort\before\phase6_grant_agreement_flow_tests.cpp', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/host/standalone/phase6_grant_agreement_flow_tests.cpp', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/runs\\validation\\R19-POST-REQUEST-ABORT-ALIGNMENT-OFFLINE-001\\20261026JST-fix\\bridge-abort\\before\\phase6_grant_agreement_flow_tests.cpp" b/tests/host/standalone/phase6_grant_agreement_flow_tests.cpp
+index e621e5e..a99fa73 100644
+--- "a/runs\\validation\\R19-POST-REQUEST-ABORT-ALIGNMENT-OFFLINE-001\\20261026JST-fix\\bridge-abort\\before\\phase6_grant_agreement_flow_tests.cpp"
++++ b/tests/host/standalone/phase6_grant_agreement_flow_tests.cpp
+@@ -204,6 +204,7 @@ int main(int argc, char** argv) {
+     if (runtime_fail_closed) goto done;
+     {
+       auto prepare = command(Op::PrepareVehicle, Role::Vehicle);
++      const auto original_prepare_ms = monotonic_now_ms();
+       prepare.grant_session = 640U; prepare.grant_cycle = 1U; send(prepare);
+       tdd_controller.reset(640U, 2U, monotonic_now_ms());
+       fake_arduino::advance_time_ms(3000U); r19_observe_e220_aux(monotonic_now_ms());
+@@ -213,6 +214,55 @@ int main(int argc, char** argv) {
+       fake_arduino::advance_time_ms(1U); r19_observe_e220_aux(monotonic_now_ms());
+       const auto action = tdd_controller.tick(make_tdd_input(monotonic_now_ms()));
+       check(action.type == LinkActionType::SendGrant, "actual TDD issued exact Grant action");
++      if (test == "defer-prepared-heartbeat" || test == "defer-prepared-budget") {
++        const auto frame = heartbeat();
++        for (std::size_t i = 0U; i < frame.size; ++i)
++          (void)vehicle_scheduler.ingest_byte(frame.bytes[i], monotonic_now_ms());
++        check(r19_hold_generated_grant(action, monotonic_now_ms()),
++              "late Heartbeat revalidates generated-but-unpublished Grant");
++        check(!runtime_fail_closed && r19_grant_reservation.awaiting_grant() &&
++                  !r19_reserved_grant_action_valid &&
++                  !e220_writer_arbiter.write_active() &&
++                  r19_grant_reservation.peek_reply() == nullptr &&
++                  r19_grant_reservation.cancellation_available() &&
++                  tdd_controller.cycle_id() == 3U &&
++                  e220_serial.normal_tx_bytes().empty(),
++              "unpublished urgent slot retires without Prepared, UART or cancellation-budget use");
++        if (test == "defer-prepared-budget") {
++          fake_arduino::advance_time_ms(original_prepare_ms + 8001U - monotonic_now_ms());
++          r19_tick_grant_reservation();
++          check(runtime_fail_closed && r19_grant_reservation.snapshot().reason ==
++                    R19GrantReservationReason::PrepareExpired,
++                "deferral never resets original eight-second prepare deadline");
++        } else {
++          const auto hb_action = tdd_controller.tick(make_tdd_input(monotonic_now_ms()));
++          check(hb_action.type == LinkActionType::SendRadioData,
++                "late Heartbeat is selected before a replacement Grant");
++          process_action(hb_action, monotonic_now_ms());
++          fake_arduino::set_pin_input_level(D8, LOW);
++          observe_radio_completion(monotonic_now_ms());
++          fake_arduino::advance_time_ms(530U);
++          fake_arduino::set_pin_input_level(D8, HIGH);
++          observe_radio_completion(monotonic_now_ms());
++          fake_arduino::advance_time_ms(20U);
++          observe_radio_completion(monotonic_now_ms());
++          LinkAction fresh{};
++          for (unsigned i = 0U; i < 5U && fresh.type == LinkActionType::None; ++i) {
++            fake_arduino::advance_time_ms(1U);
++            r19_observe_e220_aux(monotonic_now_ms());
++            fresh = tdd_controller.tick(make_tdd_input(monotonic_now_ms()));
++          }
++          check(fresh.type == LinkActionType::SendGrant && fresh.token != action.token &&
++                    fresh.control.cycle_id == 3U,
++                "replacement Grant uses a new real TDD cycle and token");
++          check(r19_hold_generated_grant(fresh, monotonic_now_ms()) &&
++                    !runtime_fail_closed && r19_reserved_grant_action_valid &&
++                    r19_grant_reservation.hold_deadline_ms() == monotonic_now_ms() + 750U &&
++                    r19_grant_reservation.cancellation_available(),
++                "only replacement after Heartbeat tail becomes Prepared with unchanged750ms hold");
++        }
++        goto done;
++      }
+       check(r19_hold_generated_grant(action, monotonic_now_ms()), "actual bridge holds issued Grant");
+       selected_token = action.token;
+       selected_generation = standard_radio_writer_lease.writer_generation;
+@@ -275,7 +325,10 @@ int main(int argc, char** argv) {
+                   e220_serial.normal_tx_bytes().size() == before + 32U,
+               "committed exact Grant can release once, not private bytes");
+       } else {
+-        if (test == "abort-after-withdrawal") {
++        if (test == "abort-after-withdrawal" ||
++            test == "abort-after-withdrawal-data" ||
++            test == "abort-after-withdrawal-writer-owner" ||
++            test == "abort-after-withdrawal-writer-mismatch") {
+           const auto frame = heartbeat();
+           fake_arduino::advance_time_ms(154U);
+           for (std::size_t i = 0U; i < frame.size; ++i)
+@@ -285,6 +338,59 @@ int main(int argc, char** argv) {
+                     r19_grant_reservation.cancellation_pending(),
+                 "new Heartbeat safely retires committed old Grant before abort reconciliation");
+           drain();
++          if (test != "abort-after-withdrawal") {
++            const auto data = tdd_controller.tick(make_tdd_input(monotonic_now_ms()));
++            check(data.type == LinkActionType::SendRadioData,
++                  "retired Grant yields to actual retained Heartbeat data action");
++            process_action(data, monotonic_now_ms());
++            const auto lease = e220_writer_arbiter.active_lease();
++            const auto bytes = e220_serial.normal_tx_bytes().size();
++            const auto cycle = tdd_controller.cycle_id();
++            check(radio_busy && standard_radio_writer_tail_pending && lease.valid() &&
++                      lease.action_token != selected_token &&
++                      lease.writer_generation != selected_generation && bytes > before,
++                  "new standard data has its own real accepted UART and writer lease");
++            if (test == "abort-after-withdrawal-writer-mismatch")
++              ++standard_radio_writer_lease.writer_generation;
++            if (test == "abort-after-withdrawal-writer-owner")
++              standard_radio_writer_lease.owner = static_cast<Phase6RadioWriterOwner>(2U);
++            send(tuple_command(kAbort, Role::Vehicle));
++            if (test == "abort-after-withdrawal-writer-mismatch" ||
++                test == "abort-after-withdrawal-writer-owner") {
++              check(runtime_fail_closed && !reply_is(22U),
++                    "retirement cannot excuse mismatched active standard data lease");
++            } else {
++              check(!runtime_fail_closed && r19_grant_reservation.terminal_aborted() &&
++                        reply_is(22U),
++                    "retired exact old Grant can ACK abort while unrelated standard data is active");
++              check(radio_busy && standard_radio_writer_tail_pending &&
++                        e220_writer_arbiter.active_lease().action_token == lease.action_token &&
++                        e220_writer_arbiter.active_lease().writer_generation == lease.writer_generation &&
++                        standard_radio_writer_lease.action_token == lease.action_token &&
++                        standard_radio_writer_lease.writer_generation == lease.writer_generation &&
++                        tdd_controller.cycle_id() == cycle &&
++                        e220_serial.normal_tx_bytes().size() == bytes,
++                    "abort never retires, completes or modifies the unrelated data writer");
++              drain();
++              send(tuple_command(kAbort, Role::Vehicle));
++              check(!runtime_fail_closed && r19_grant_reservation.peek_reply() == nullptr &&
++                        r19_grant_reservation.terminal_abort_ack_committed(),
++                    "duplicate abort remains idempotent during unrelated data tail");
++              fake_arduino::set_pin_input_level(D8, LOW);
++              observe_radio_completion(monotonic_now_ms());
++              fake_arduino::advance_time_ms(530U);
++              fake_arduino::set_pin_input_level(D8, HIGH);
++              observe_radio_completion(monotonic_now_ms());
++              fake_arduino::advance_time_ms(20U);
++              observe_radio_completion(monotonic_now_ms());
++              check(!runtime_fail_closed && !radio_busy &&
++                        !e220_writer_arbiter.write_active() &&
++                        !r19_grant_reservation.should_release() &&
++                        e220_serial.normal_tx_bytes().size() == bytes,
++                    "normal data tail completes naturally with old Grant authority still dead");
++            }
++            goto done;
++          }
+         }
+         if (test == "unsafe-uart") {
+           send(tuple_command(Op::ReleaseGrant, Role::Vehicle));
+@@ -386,6 +492,38 @@ int main(int argc, char** argv) {
+               "no fresh Grant still fails at original501ms; Commit is not deadline extension");
+         goto done;
+       }
++      if (test == "abort-after-grant-deadline") {
++        fake_arduino::advance_time_ms(501U);
++        r19_service_high_speed_product_route(monotonic_now_ms());
++        check(runtime_fail_closed && r19_ground_adapter->failure_latched() &&
++                  r19_ground_adapter->diagnostics().owner_last_error ==
++                      BulkSessionResult::GrantDeadlineExceeded,
++              "real no-Grant501ms failure occurs before late cleanup");
++        const auto first = r19_grant_reservation.snapshot();
++        const auto fault = r19_runtime_fail_latch.evidence();
++        const auto adapter = r19_ground_adapter->diagnostics();
++        send(tuple_command(kAbort, Role::Ground));
++        check(reply_is(22U) && r19_grant_reservation.terminal_aborted() &&
++                  !r19_product_route_selected && !r19_held_parameter_request_valid &&
++                  r19_acceleration_consumed,
++              "late exact abort quarantines never-negotiated expired Ground request and ACKs");
++        drain();
++        fake_arduino::advance_time_ms(1000U);
++        r19_service_high_speed_product_route(monotonic_now_ms());
++        const auto& after = r19_grant_reservation.snapshot();
++        const auto& fault_after = r19_runtime_fail_latch.evidence();
++        check(runtime_fail_closed && !bridge_ready &&
++                  after.state == first.state && after.reason == first.reason &&
++                  after.event_count == first.event_count &&
++                  fault_after.source_line == fault.source_line &&
++                  fault_after.monotonic_ms == fault.monotonic_ms &&
++                  r19_ground_adapter->diagnostics().observed_ms == adapter.observed_ms &&
++                  r19_ground_adapter->t0_ms() == t0 &&
++                  r19_held_parameter_request_origin_ms == t0 &&
++                  r19_grant_reservation.terminal_abort_ack_committed(),
++              "late cleanup preserves first fault, adapter deadline/t0 and permanent failure");
++        goto done;
++      }
+       if (test == "abort-wrong-identity") {
+         auto invalid = tuple_command(kAbort, Role::Ground); ++invalid.writer_generation;
+         send(invalid);

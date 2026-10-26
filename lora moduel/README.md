@@ -1,29 +1,30 @@
 # VC LoRa Bridge — 検証実験アーカイブ
 
-2026-10-25 JST更新。LoRa通信検証・R19診断開発を、指定フォルダ `lora moduel` にまとめた公開アーカイブです。
-最新は[R19予約取消し修正と実機評価](publication/updates/2026-10-25-stop-safe-cancellation/README.md)です。2026年10月25日17時台の実機試験までを反映しています。今回の公開操作自体では、ファームウェア変更・実機操作・通信条件変更を行っていません。
+2026-10-26 JST更新。LoRa通信検証・R19診断開発を、指定フォルダ `lora moduel` にまとめた公開アーカイブです。
+最新は[R19予約取消し後の中止処理と開始タイミング](publication/updates/2026-10-26-post-request-abort/README.md)です。10月26日01時台の実機結果と、その後のオフライン修正・全548試験・両機ビルドを反映しています。修正後の実機評価は未実施です。今回の公開操作自体では、製品ソース変更・実機操作・通信条件変更を行っていません。
 直下のソースは既存の公開スナップショットを保持し、各更新の関連ソースは日付別の `source_snapshot/` へ分離しています。最新更新も選別コピーであり、直下のソース全体を現行版へ同期したものではありません。
 
 ## 現在の結論
 
 - R18低速経路には、Mission Plannerで932/932パラメータを取得した過去の受入実績があります。取得時間6,045.839秒、同区間のHeartbeat最大間隔2,206.203 msです。
 - R19の目標は「932件を30秒以内、Heartbeat最大2,500 ms以下、全error 0」の同時達成ですが、**未達・受入未完了・Deployment未許可**です。
-- 最新試験は2026年10月25日17時32分から17時36分JST。STOP128診断と安全取消しを追加した候補で、取得要求1回を含む40秒測定を実施しました。30秒時点・終了時とも0/932件で、高速転送は開始していません。
-- VehicleはHeartbeat期限との競合で`SAFE_CANCEL`を選択しました。取消し通知をPCが検出した時点ではPARAM要求は送信済みで、runnerはGrant解放を送らず中止しました。Groundは要求保持から501 msで`GrantWaitExpired`、Vehicleは元の準備上限8秒で`PrepareExpired`となりました。取消し完了・別Grantでの新予約は未成立です。
-- 同じrunの製品Heartbeatは準備中9件・40秒測定中1件、合計10件です。初回USB完了は457 µsで106 ms以内ですが、その後は測定末尾まで約39.7秒無受信です。AUX faultは両機0、診断USBの31 byte待機は両機に残ります。
-- STOP128は各停止条件を固定記録し、JTAG reader v11は各role22 rawを取得します。初回停止記録が安全取消しでも、その後の準備期限切れを否定しません。従来のv1・reader v10は別契約で維持します。
-- 今回の元ワークスペース最終一括試験479/479と、Vehicle→Ground診断ビルドは合格しています。公開作業で全479試験・Arduinoビルドを再実行したという意味ではありません。前回13時台の`FAIL_STAGE_READ_R18_RESTORED`と後続オフライン修正の記録は変更せず残しています。
+- 最新実機試験は2026年10月26日01時16分から01時19分JST。両機のCommitAck後に取得要求1回を含む40秒測定を実施しました。30秒時点・終了時とも0/932件で、高速転送は開始していません。
+- VehicleはPreparedから450 ms後にHeartbeat期限との競合で`SAFE_CANCEL`を選択しました。取消し通知をPCが検出した時点ではPARAM要求は送信済みで、Grant解放指示は送っていません。Groundは要求保持から501 msで期限超過、Vehicleは後続Abort処理でdetail 20を記録しました。以前のdetail 13とは別です。
+- 同じrunの製品Heartbeatは準備中10件・40秒測定中1件。初回USB完了は474 µsで106 ms以内ですが、その後は測定末尾まで約39.6秒無受信です。AUX faultは両機0、診断USBの31 byte待機は両機に残ります。
+- JTAG reader v12は両roleで各24 rawの取得と一致を確認しました。取得・R18復旧の成功は、通信の受入成功ではありません。従来readerの証拠は別契約のまま保持します。
+- その後、取消し通知の退役、両機への優先Abort、旧予約だけの無効化、Heartbeat競合時の予約確定延期をオフライン修正しました。106 ms・両側500 msなどは変更せず、全548/548試験とVehicle→Ground診断ビルド、新候補の独立照合に合格しました。新候補は実機未評価です。
 - 前段階の10月24日低速切替試験では30秒で4/932件、終了時6/932件を取得しています。今回の厳密な予約診断とは条件が異なり、この実績を今回の高速成功へ読み替えません。
 - 最新の実機試験終了時に両機のaccepted R18復旧を確認済みです。復旧成功を高速通信の受入とは扱いません。追加実機操作には新しい許可が必要です。
 
-最新結果は[R19予約取消し修正と実機評価](publication/updates/2026-10-25-stop-safe-cancellation/README.md)、同日13時台は[Grant予約の実機結果と取得判定の修正](publication/updates/2026-10-25-grant-reservation/README.md)、前段階は[Grant期限超過と低速切替の評価](publication/updates/2026-10-24-pregrant-fallback/README.md)と[取得要求と高速転送停止](publication/updates/2026-10-24-param-list/README.md)を参照してください。
+最新結果は[R19予約取消し後の中止処理と開始タイミング](publication/updates/2026-10-26-post-request-abort/README.md)、以前の結果は[R19予約取消し修正と実機評価](publication/updates/2026-10-25-stop-safe-cancellation/README.md)と[Grant予約の実機結果と取得判定の修正](publication/updates/2026-10-25-grant-reservation/README.md)、前段階は[Grant期限超過と低速切替の評価](publication/updates/2026-10-24-pregrant-fallback/README.md)を参照してください。
 [作業場所と仕様の統合資料](CURRENT_WORKSPACE_AND_SPEC_R19.md)には古い準備段階の記述も残るため、現在の進捗判定は最新の日付別更新を優先し、対象runとソースhashを照合してください。
 
 ## 読む順番
 
 | ファイル／ディレクトリ | 内容 |
 |---|---|
-| [publication/updates/2026-10-25-stop-safe-cancellation/](publication/updates/2026-10-25-stop-safe-cancellation/) | 最新のSTOP128・安全取消し、479試験、17時台の実機0/932件、R18復旧 |
+| [publication/updates/2026-10-26-post-request-abort/](publication/updates/2026-10-26-post-request-abort/) | 最新の両機Abort・開始時期の修正、548試験・両ビルド、01時台の実機0/932件。修正後は実機未評価 |
+| [publication/updates/2026-10-25-stop-safe-cancellation/](publication/updates/2026-10-25-stop-safe-cancellation/) | 過去のSTOP128・安全取消し、479試験、17時台の実機0/932件、R18復旧 |
 | [publication/updates/2026-10-25-grant-reservation/](publication/updates/2026-10-25-grant-reservation/) | 同日13時台の予約診断、Vehicle先行停止、0/932件、R18復旧、取得判定の修正 |
 | [publication/updates/2026-10-24-pregrant-fallback/](publication/updates/2026-10-24-pregrant-fallback/) | 前段階の501 ms原因確定、安全な低速切替、4件と6件の取得、関連430試験と実機証拠 |
 | [publication/updates/2026-10-24-param-list/](publication/updates/2026-10-24-param-list/) | 過去の取得要求1回・0／932件、高速adapter停止、Heartbeat単独試験、台帳追加 |
@@ -92,9 +93,9 @@ Windows PowerShell 5.1またはPowerShell 7で、このディレクトリへ移�
 ```
 
 C++ホスト試験にはCMake 3.20以上、Ninja、C++17対応コンパイラが必要です。
-初回公開時の全host 345/345 PASSと、10月23日公開段階の371/371 PASSは過去の結果です。10月24日の取得台帳追加段階では、初回399/401合格の後に互換性修正を行い、最終一括試験401/401 PASSを元ワークスペースで確認しています。今回の最終結果は上記の479/479 PASSです。
+初回公開時の全host 345/345 PASSと、10月23日公開段階の371/371 PASSは過去の結果です。10月24日の取得台帳追加段階では、初回399/401合格の後に互換性修正を行い、最終一括試験401/401 PASSを元ワークスペースで確認しています。最新の最終結果は上記の548/548 PASSです。
 **選別コピーによる全試験のclean-clone再現は保証しません。** 一部の試験は省略した過去run・sealed candidateを参照します。欠測で失敗したテストを削除・緩和して合格としないでください。
-今回の追加物に対する確認は[安全取消し更新の公開時検証](publication/updates/2026-10-25-stop-safe-cancellation/validation/summary.json)、前回は[予約診断更新の公開時検証](publication/updates/2026-10-25-grant-reservation/validation/summary.json)を参照してください。元ワークスペースの全479件と、公開コピーの選別検証は別です。選別公開物の全479件再現を示すものではありません。
+今回の追加物に対する確認は[中止処理修正の公開時検証](publication/updates/2026-10-26-post-request-abort/validation/summary.json)、前回は[安全取消し更新の公開時検証](publication/updates/2026-10-25-stop-safe-cancellation/validation/summary.json)を参照してください。元ワークスペースの全548件と、公開コピーの選別検証は別です。選別公開物の全548件再現を示すものではありません。
 
 通常版Arduino buildにはXIAO ESP32-S3環境と所定の変更済みESP32 Core 3.3.11が必要です。
 SDKへのインストール・COM操作・書込みを行うツールは純オフライン確認ではありません。
@@ -102,7 +103,7 @@ SDKへのインストール・COM操作・書込みを行うツールは純オ�
 
 ## 今後の残作業
 
-1. 要求受付と予約取消しが競合する開始手順を整合させる。STOP128記録、安全取消しの選択、PCの送信前停止判定は実装済みだが、要求後に届く取消しで新予約へ進めない課題が残る。両側500 msと106 ms条件は維持する。
+1. 今回修正した両機Abortと予約確定前のHeartbeat優先を実機確認する。要求後の取消しでは自動再要求せず終了し、古いReleaseを通さないことを評価する。両側500 msと106 ms条件は維持する。
 2. 診断USBの起動・測定中・終了の待機を分け、AUX物理信号と観測・判定の問題を切り分ける。今回AUX安全停止がなかったことを根因解消とはしない。106 ms条件を維持する。
 3. オフラインの失敗試験・回帰確認後、別の実機許可と安全確認を経て、実際の高速経路で932件／30秒／Heartbeat／全error 0を同一runで評価する。
 
@@ -115,7 +116,7 @@ Jevは任意のPC側Shadow助言機能であり、製品の判定・実機操作
 - 元ワークスペース全体ではありません。巨大なbuild tree、全run履歴、Arduino compiler生成物、driver配布ZIP、APIキー、履歴・画面画像等は除外しました。
 - raw診断の小さな`.bin`と、一部の過去R18 run内に保存されたaccepted application imageは、そのrunの証拠整合のため保持しています。
 - R19のsealed candidate一式、復旧用baselineの完全な依存関係、ローカルtoolchainは同梱していません。**このcloneをそのまま実機書込み可能な認証済みパッケージとして扱わないでください。**
-- 選別したvalidationのmanifestやsealは省略ファイルも参照し得ます。初回公開分は`publication/source_inventory.json`、日付別の追加原本は各更新の`source_inventory.json`で区別します。最新は`publication/updates/2026-10-25-stop-safe-cancellation/source_inventory.json`です。初回公開の検証結果を、今回の追加物すべての再検証結果へ読み替えないでください。
+- 選別したvalidationのmanifestやsealは省略ファイルも参照し得ます。初回公開分は`publication/source_inventory.json`、日付別の追加原本は各更新の`source_inventory.json`で区別します。最新は`publication/updates/2026-10-26-post-request-abort/source_inventory.json`です。初回公開の検証結果を、今回の追加物すべての再検証結果へ読み替えないでください。
 - 変更済みEspressifファイルのライセンス・帰属は[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)を参照。プロジェクト全体への新しいライセンス付与は行っていません。
 - GitHubへの公開・記載された過去の許可文言は、将来の実機操作・再試験の許可にはなりません。
 

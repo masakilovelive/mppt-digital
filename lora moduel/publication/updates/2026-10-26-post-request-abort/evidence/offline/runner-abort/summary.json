@@ -1,0 +1,174 @@
+{
+  "schema": "r19-post-request-abort-alignment-runner-offline-summary-v1",
+  "result": "FOCUSED_PASS_NO_LIVE_CLAIM",
+  "source_frozen": true,
+  "confirmed_software_failure_path": "Runtime prepeek of a complete post-PARAM Withdrawn invoked Stop-R19GrantReservationWorkflow before removing the parsed frame from the runtime monitor. The monitor then retained that complete frame while next_raw_offset already covered all bytes. With no newer native bytes, its early return could indefinitely defer terminal preflight's buffer-empty condition.",
+  "red_evidence": {
+    "log": "red-ps51.log",
+    "failure": "Complete withdrawn frame is retired even when its first-failure transition throws",
+    "state": "Failed ATTEMPTED_ABORT_WITHDRAWN_AFTER_REQUEST, with complete66-byte frame still retained; no subsequent input supplied"
+  },
+  "repair": [
+    "A typed prepeek that has already latched immutable Failed is caught inside the bounded raw-frame parser so its complete frame is removed and raw cursor retired immediately. First failure and all ordinary OUT gates remain closed.",
+    "Priority terminal cleanup is called immediately after the early pump, reservation block delivery and PARAM caller finally, and after the final pump, before ordinary Heartbeat/private analysis or checkpoint saving can add delay.",
+    "Each Abort preflight drains bounded retained native control prefixes without PollBytes consumption; both reader continuity/identity checks remain mandatory.",
+    "Only the selected USB role must have its own complete delivered prefix. A partial first-role AbortAck cannot hold the independent peer Abort OUT; an incomplete TARGET prefix still blocks that role.",
+    "Canonical command bytes, role, boot, epoch, nonce, reader session and current tuple are validated after the last preflight callback, immediately before one-shot attempt latch.",
+    "The final pre-PARAM request gate revalidates Prepared/Bound/bilateral CommitAck current tuple and identity; pending pre-request Withdrawn still consumes zero PARAM attempts."
+  ],
+  "tests": [
+    {
+      "engine": "ps51",
+      "test": "check_r19_post_request_abort_priority",
+      "checks": 32,
+      "result": "PASS",
+      "hardware_interaction": false,
+      "log": "ps51-check_r19_post_request_abort_priority.log"
+    },
+    {
+      "engine": "ps7",
+      "test": "check_r19_post_request_abort_priority",
+      "checks": 32,
+      "result": "PASS",
+      "hardware_interaction": false,
+      "log": "ps7-check_r19_post_request_abort_priority.log"
+    },
+    {
+      "engine": "ps51",
+      "test": "check_r19_grant_agreement_scheduling_pump",
+      "checks": 74,
+      "result": "PASS",
+      "hardware_interaction": false,
+      "log": "ps51-check_r19_grant_agreement_scheduling_pump.log"
+    },
+    {
+      "engine": "ps7",
+      "test": "check_r19_grant_agreement_scheduling_pump",
+      "checks": 74,
+      "result": "PASS",
+      "hardware_interaction": false,
+      "log": "ps7-check_r19_grant_agreement_scheduling_pump.log"
+    },
+    {
+      "engine": "ps51",
+      "test": "check_r19_grant_agreement_workflow",
+      "checks": 570,
+      "result": "PASS",
+      "hardware_interaction": false,
+      "log": "ps51-check_r19_grant_agreement_workflow.log"
+    },
+    {
+      "engine": "ps7",
+      "test": "check_r19_grant_agreement_workflow",
+      "checks": 570,
+      "result": "PASS",
+      "hardware_interaction": false,
+      "log": "ps7-check_r19_grant_agreement_workflow.log"
+    },
+    {
+      "engine": "ps51",
+      "test": "check_r19_grant_reservation_runtime_fault_preflight",
+      "checks": 48,
+      "result": "PASS",
+      "hardware_interaction": false,
+      "log": "ps51-check_r19_grant_reservation_runtime_fault_preflight.log"
+    },
+    {
+      "engine": "ps7",
+      "test": "check_r19_grant_reservation_runtime_fault_preflight",
+      "checks": 48,
+      "result": "PASS",
+      "hardware_interaction": false,
+      "log": "ps7-check_r19_grant_reservation_runtime_fault_preflight.log"
+    },
+    {
+      "engine": "ps51",
+      "test": "check_r19_grant_agreement_capture_live_contract",
+      "checks": 98,
+      "result": "PASS",
+      "hardware_interaction": false,
+      "log": "ps51-check_r19_grant_agreement_capture_live_contract.log"
+    },
+    {
+      "engine": "ps7",
+      "test": "check_r19_grant_agreement_capture_live_contract",
+      "checks": 98,
+      "result": "PASS",
+      "hardware_interaction": false,
+      "log": "ps7-check_r19_grant_agreement_capture_live_contract.log"
+    }
+  ],
+  "checks_per_engine": 822,
+  "new_test_scope": [
+    "Actual runtime prepeek complete Withdrawn and no new input",
+    "Two Abort OUTs before any ACK, PollBytes or slow normal analysis",
+    "Partial first-role ACK is not an inter-role send dependency",
+    "Runtime failure observed before cleanup still allows only deauthorization",
+    "Unknown per-role OUT prefix is never retried; peer can retire once",
+    "Stopped/overflowed/changed-identity reader, command24 capacity and expired capture cause zero writes",
+    "Target partial prefix denies its own write",
+    "Mutation of tuple during final preflight consumes zero attempt",
+    "Pre-PARAM current commit tuple and pending cancellation deny request",
+    "Actual capture loop body executes with synthetic500ms Heartbeat/private analyses after both Abort writes; normal consumers still execute and serial-write accounting stays exact"
+  ],
+  "compatibility_red": {
+    "logs": [
+      "compat-red-runtime-fault-ps51.log",
+      "compat-red-runtime-fault-ps7.log"
+    ],
+    "cause": "New optional agreement flag referenced by isolated legacy PARAM-caller AST fixture was undefined.",
+    "fix": "Use the already bound reservation workflow agreement_enabled field under existing diagnostic PSBoundParameters gate. No old test was weakened.",
+    "green": "Original runtime fault preflight48 checks on both engines"
+  },
+  "invariants": {
+    "PARAM_maximum": 1,
+    "PARAM_reissue_allowed": false,
+    "Abort_maximum_per_role": 1,
+    "total_control_maximum": 24,
+    "normal_writes_after_Failed": false,
+    "original_PC_prepare_seconds": 15,
+    "original_measurement_seconds": 40,
+    "product_USB_budget_ms": 106,
+    "Ground_Grant_budget_ms": 500,
+    "Vehicle_start_budget_ms": 500,
+    "deadline_reset_or_extension": false,
+    "ACK_success_requires_both_actual_matching_observations": true,
+    "hardware_timing_guarantee": false
+  },
+  "files": [
+    {
+      "path": "tools/r19_grant_reservation_workflow.ps1",
+      "before_sha256": "A38C492E003352B296D49C952B52187C729765D3C21835E5C77E61FBE40CF7A7",
+      "after_sha256": "268301BDC10AB1C934791AE5E5147C618D090E94BA4CAF7D0F205B619CB34B44"
+    },
+    {
+      "path": "tools/run_r19_timed_path_capture.ps1",
+      "before_sha256": "2A6E24381AAB8AD6ED3B5058EA5CFB31CA215DE51356D7858459ED352B163C56",
+      "after_sha256": "C0BBB652987DB00834D9D95D7EC012186BA40E460D6FAC7CBF12549B5F50B8E1"
+    }
+  ],
+  "new_test": {
+    "path": "tests/hil/check_r19_post_request_abort_priority.ps1",
+    "sha256": "4066F9074B6D517F6397D3E5C2B13EC24AD0016DD7E3E26F8FF8A7AA1CD404AA"
+  },
+  "no_operations": {
+    "hardware": true,
+    "COM": true,
+    "JTAG": true,
+    "device_or_process_inventory": true,
+    "Arduino_build": true,
+    "full_host_suite": true,
+    "Git": true,
+    "sealed_candidate_edit": true,
+    "accepted_R18_edit": true,
+    "pin_or_CMake_edit": true
+  },
+  "next_owner": "Root owns test registration, refreshed source pins, full host suite, sequential Vehicle/Ground Arduino builds and any separately authorized live trial.",
+  "limitations": [
+    "Synthetic deterministic ordering proves removal of this software wait and scheduling priority, not a guaranteed wall-clock Abort arrival before either MCU deadline.",
+    "No extra retry, timeout extension, RF-rate change or normal failed-state reopening was introduced.",
+    "Live communication resolution, 932/30, sustained Heartbeat and RF transfer remain unverified."
+  ],
+  "before_directory": "before",
+  "diff": "diff.json"
+}

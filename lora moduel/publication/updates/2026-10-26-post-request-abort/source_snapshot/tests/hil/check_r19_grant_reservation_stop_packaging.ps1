@@ -1,0 +1,78 @@
+[CmdletBinding()]
+param([string]$RepoRoot='')
+Set-StrictMode -Version Latest
+$ErrorActionPreference='Stop'
+if(-not$RepoRoot){$RepoRoot=Split-Path -Parent (Split-Path -Parent $PSScriptRoot)}
+$repo=(Resolve-Path -LiteralPath $RepoRoot).Path
+. (Join-Path $repo 'tools/r19_candidate_artifact_common.ps1')
+$script:checks=0;$script:failures=0
+function Check([bool]$Value,[string]$Name){$script:checks++;if(-not$Value){$script:failures++;Write-Output ('FAIL '+$Name)}}
+function ExpectReject([scriptblock]$Action,[string]$Name){$rejected=$false;try{&$Action|Out-Null}catch{$rejected=$true};Check $rejected $Name}
+function Parse([string]$Relative){$t=$null;$e=$null;$a=[Management.Automation.Language.Parser]::ParseFile((Join-Path $repo $Relative),[ref]$t,[ref]$e);Check (@($e).Count-eq0) ('Parses '+$Relative);return $a}
+foreach($file in @('tools/build_r19_candidate_artifacts.ps1','tools/verify_r19_candidate_artifact.ps1')){
+  $a=Parse $file
+  Check (@($a.ParamBlock.Parameters|Where-Object{$_.Name.VariablePath.UserPath-ceq'GrantReservationStopDiagnostics'}).Count-eq1) ('Explicit STOP opt-in '+$file)
+}
+$leaf=Get-R19CandidateOutputLeaf $true 'ExplicitHostArm' $true $true $true $true
+Check ($leaf-ceq'R19-GRANT-RESERVATION-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001') 'Legacy candidate namespace unchanged'
+try{
+  $stopLeaf=Get-R19CandidateOutputLeaf $true 'ExplicitHostArm' $true $true $true $true $true
+  Check ($stopLeaf-ceq'R19-GRANT-RESERVATION-STOP-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001') 'STOP has separate publication namespace'
+}catch{Check $false ('STOP namespace '+$_.Exception.Message)}
+$legacyFlags=Get-R19CandidateCompileProperty $true 'ExplicitHostArm' $true $true $true $true
+Check (-not$legacyFlags.Contains('VC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS')) 'Legacy flags do not enable cancellation'
+try{
+  $flags=Get-R19CandidateCompileProperty $true 'ExplicitHostArm' $true $true $true $true $true
+  Check ($flags-ceq($legacyFlags+' -DVC_LORA_R19_GRANT_RESERVATION_STOP_DIAGNOSTICS=1')) 'STOP compilation adds exactly one opt-in macro'
+}catch{Check $false ('STOP compile flags '+$_.Exception.Message)}
+ExpectReject {Get-R19CandidateOutputLeaf $true 'ExplicitHostArm' $true $true $true $false $true} 'STOP rejects missing reservation prerequisite'
+ExpectReject {Get-R19CandidateCompileProperty $false 'Disabled' $false $false $false $false $true} 'STOP rejects missing diagnostic chain'
+try{
+  $legacySources=@(Get-R19CandidateSourceFiles $repo 'ExplicitHostArm' $true $true $true $true)
+  $stopSources=@(Get-R19CandidateSourceFiles $repo 'ExplicitHostArm' $true $true $true $true $true)
+  foreach($name in @('r19_grant_reservation_stop_record.hpp','read_r19_grant_reservation_stop_record.ps1')){
+    Check (@($legacySources|Where-Object{$_.Name-ceq$name}).Count-eq0) ('Legacy snapshot excludes '+$name)
+    Check (@($stopSources|Where-Object{$_.Name-ceq$name}).Count-eq1) ('STOP snapshot binds '+$name)
+  }
+}catch{Check $false ('STOP source inventory '+$_.Exception.Message)}
+ExpectReject {Get-R19CandidateSourceFiles $repo 'ExplicitHostArm' $true $true $true $false $true} 'STOP source inventory rejects missing reservation'
+function ImportFunctions([string]$Relative,[string[]]$Names){
+  $a=Parse $Relative
+  foreach($name in $Names){
+    $nodes=@($a.EndBlock.Statements|Where-Object{$_-is[Management.Automation.Language.FunctionDefinitionAst]-and$_.Name-ceq$name})
+    Check ($nodes.Count-eq1) ('Unique production function '+$name)
+    if($nodes.Count-eq1){. ([scriptblock]::Create($nodes[0].Extent.Text));Set-Item -Path ('Function:script:'+$name) -Value (Get-Item ('Function:'+$name)).ScriptBlock}
+  }
+}
+ImportFunctions 'tools/build_r19_candidate_artifacts.ps1' @('Add-OptionalUsbFailureMetadata','Add-DiagnosticAbiMetadata')
+ImportFunctions 'tools/verify_r19_candidate_artifact.ps1' @('Assert-Condition','Assert-ModeContract','Assert-DiagnosticAbiContract')
+$runtimeFailDiagnosticsEnabled=$true;$acceptanceEligible=$false;$timedPathEnabled=$true;$TimedPathMode='ExplicitHostArm'
+$auxReadinessEnabled=$true;$diagnosticUsbFailureEnabled=$true;$grantDiagnosticsEnabled=$true;$grantReservationEnabled=$true
+$timedPathContract=Get-R19TimedPathCandidateContract $repo $TimedPathMode
+$auxReadinessContract=Get-R19AuxReadinessCandidateContract $repo $true
+$diagnosticUsbFailureContract=Get-R19DiagnosticUsbFailureCandidateContract $repo $true
+$grantDiagnosticContract=Get-R19GrantDiagnosticCandidateContract $repo $true
+$usbRoleCapabilities=Get-R19UsbRoleCapabilities -RepoRoot $repo -Mode $TimedPathMode -Enabled $true
+foreach($stop in @($false,$true)){
+  $grantReservationStopEnabled=$stop
+  $grantReservationContract=Get-R19GrantReservationCandidateContract -RepoRoot $repo -Enabled $true -CancellationEnabled $stop
+  $grantReservationStopContract=Get-R19GrantReservationStopCandidateContract -RepoRoot $repo -Enabled $stop
+  $record=[pscustomobject][ordered]@{runtime_fail_diagnostics_enabled=$true;acceptance_authorized=$false;acceptance_eligible=$false;deployment_authorized=$false}
+  Add-DiagnosticAbiMetadata $record
+  $expectedReader=if($stop){'vc-lora-r19-runtime-stage-jtag-read-v11'}else{'vc-lora-r19-runtime-stage-jtag-read-v10'}
+  Check ($record.reader_schema-ceq$expectedReader) ('Builder reader generation opt-in='+$stop)
+  Check (($null-ne$record.PSObject.Properties['grant_reservation_stop_diagnostics'])-eq$stop) ('Builder stop declaration opt-in='+$stop)
+  try{Assert-ModeContract $record 'fixture';Assert-DiagnosticAbiContract $record 'fixture';Check $true ('Verifier accepts exact builder metadata opt-in='+$stop)}catch{Check $false ('Verifier metadata '+$_.Exception.Message)}
+  $record.reader_schema=if($stop){'vc-lora-r19-runtime-stage-jtag-read-v10'}else{'vc-lora-r19-runtime-stage-jtag-read-v11'}
+  ExpectReject {Assert-DiagnosticAbiContract $record 'fixture'} ('Reject reader downgrade/implicit upgrade opt-in='+$stop)
+  $record.reader_schema=$expectedReader
+  if($stop){
+    $record.grant_reservation_stop_diagnostics.decoder_sha256='0'*64
+    ExpectReject {Assert-ModeContract $record 'fixture'} 'Reject resealed but source-mismatched stop decoder'
+  }else{
+    Add-Member -InputObject $record -NotePropertyName grant_reservation_stop_diagnostics -NotePropertyValue (Get-R19GrantReservationStopCandidateContract -RepoRoot $repo -Enabled $true)
+    ExpectReject {Assert-ModeContract $record 'fixture'} 'Legacy cannot silently claim stop/cancellation capability'
+  }
+}
+if($script:failures-gt0){throw ('R19_STOP_PACKAGING RED checks='+$script:checks+' failures='+$script:failures)}
+Write-Output ('R19_STOP_PACKAGING PASS checks='+$script:checks+' hardware_interaction=false')

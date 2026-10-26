@@ -1,0 +1,91 @@
+{
+  "schema": "vc-lora-r19-post-request-abort-alignment-result-v1",
+  "result": "PASS_OFFLINE_REPAIR_548_TESTS_BOTH_BUILDS_SEALED_CANDIDATE_NOT_HARDWARE_ACCEPTANCE",
+  "completed_utc": "2026-10-26T02:38:35.2894252Z",
+  "scope": "Offline source/test repair and compile only; no new device authorization inferred",
+  "workspace": "E:/VESC/TRIAL_LOG/Loreley3_System/06_vc_lora_bridge",
+  "implemented": [
+    "Consume an already complete Withdrawn frame even when it latches Failed, so terminal cleanup does not wait for another native byte",
+    "Prioritize both endpoint Abort attempts before ordinary PARAM/Heartbeat parsing, without waiting for the first peer ACK",
+    "Revalidate bound identities, exact current reservation tuple, reader continuity and one-shot limits immediately before every Abort and PARAM attempt",
+    "Core terminal Abort is idempotent and cannot duplicate ACK or revive old authority",
+    "Revoke an exact safely retired old Grant without disturbing a distinct validated StandardTdd data writer",
+    "Quarantine an exact never-negotiated Ground Grant timeout on late Abort while preserving first fault, failed adapter and original t0",
+    "Defer an unpublished Grant when a newly urgent Heartbeat is present; retire real TDD cycle without consuming published cancellation budget or resetting preparation"
+  ],
+  "focused_evidence": {
+    "core": {"path":"core-abort/summary.json","sha256":"A226173810F8396D70AE84B984F09B4115B4CED61345D27C6CED8AE633C58BBE","result":"PASS","agreement_checks":1463,"related_targets_passed":3},
+    "bridge": {"path":"bridge-abort/summary.json","sha256":"5178E59DB293B150650AAA9DBC9A731139F698B66EC31979D6BE6E5C2F15D5AE","result":"PASS","final_cpp_cases":42,"new_cpp_registered_cases":6},
+    "runner": {"path":"runner-abort/summary.json","sha256":"833094E98B0EC199D6AADB16E0CBD4F42157FD8324678B002204892094FDACC0","result":"PASS","ps51_checks":822,"ps7_checks":822,"new_priority_checks_each_engine":32},
+    "design_review": {"path":"design-review/summary.json","sha256":"A1F421D921E2D36F77FE1EC7FF3FFF4757A4DBAF5FC734EA56091202CF3C5E8A"},
+    "independent_source_reviews": "Bridge and runner reviewed read-only; owner-identity hardening was added through RED then GREEN regression"
+  },
+  "initial_full_validation": {
+    "result":"INTERRUPTED_NOT_PASS",
+    "registered":548,"completed":519,"passed":518,"failed":1,"uncompleted":29,
+    "evidence":"full-host-initial-interrupted.json",
+    "log":"full-host.log",
+    "log_sha256":"F850D42203F82B711CB7F60D7E44728872525AC8F9E87D97A7D0DD792DFBDAC2",
+    "failure":"Old isolated PARAM AST fixture did not recognize the new real cleanup helper; test-only source-bound dependency repair pending"
+  },
+  "second_interrupted_validation": {"result":"INTERRUPTED_NOT_PASS","evidence":"full-host-second-interrupted.json"},
+  "test_only_fixture_repair": {
+    "path":"runner-abort/param-fixture-repair/summary-final.json",
+    "sha256":"F37DB8DC666A845C2315E7B660413EB4CA42F144B621EC6974B3DE7A5D07ACF7",
+    "result":"PASS",
+    "ps51_checks":72,"ps7_checks":72,
+    "final_test_sha256":"8493F81EFBAF301EE27350F17DFA393AA65CCCA756CF3CBE6B7DF1F0F9D30C87",
+    "source_bound_function_closure":41,
+    "delivered_branch_command_type_member_audit":true,
+    "unknown_command_injection_rejected_before_execution":true,
+    "product_or_runner_changed_by_this_repair":false
+  },
+  "final_full_validation": {"result":"PASS","registered":548,"passed":548,"failed":0,"exit_code":0,"real_seconds":611.82,"log":"full-host-verified.log","log_sha256":"7C796BB864BA70312D077CAC4EC72555AF229B4F8BB108CC33DF9CA40EA7301E","source_freeze":"verified_source_full_verified.json","source_freeze_sha256":"61C49E100F7C36EE31E388B05AD41F605E8B555AAA28A5FFB3A0FEC7F9DC0F0F","source_count":606,"post_test_changed_inputs":0,"checked_utc":"2026-10-26T02:29:41.1001028Z"},
+  "arduino_vehicle_then_ground": {
+    "result":"PASS","exit_code":0,"compile_order":["vehicle","ground"],
+    "log":"arduino-diagnostic-build.log","log_sha256":"80202C6BFB96875016BCED9B2A38611EE1082B880BC5B7ACEBB9D6ABD349C017",
+    "runtime_fail_diagnostic":true,"timed_path_mode":"ExplicitHostArm","grant_agreement_and_fatal_diagnostics":true,"physical_write":false,
+    "artifact_id":"20261026T023007458Z-ccd7d4c8",
+    "artifact_root":"runs/candidates/R19-GRANT-FATAL-EXPLICIT-HOST-ARM-CANDIDATE-BUILD-001/20261026T023007458Z-ccd7d4c8",
+    "manifest_sha256":"ADEF5FCD60AF48DA633EB2FA706F393D726186581BA9246D09C5B50FC6CDB5D0",
+    "handoff_sha256":"2D2094E976D6C791DB0B59FB1FF7398065087C9AD996DCAB97F2D85B399FBC8E",
+    "final_seal_sha256":"05E5AE9DB48CBA42FA22825A8B56F396F1A689A509C61BFC2E1C47488716CED8",
+    "published_latest_sha256":"BCC18E66C91C54835A8BEF351CB26B6A175D2719ED0FB22F0538B40E4BECF79A",
+    "vehicle":{"flash_bytes":469497,"ram_bytes":118096,"application_sha256":"4777ACB06304BDC3D6E9DCCC73E76722ED65263C2ED59B653DB68FB7555D1F38","compile_evidence_sha256":"76A7ABF09E26D1F84B12326FF3BC305F59544A89D59B9091EDB0B050EE1F80A5","diagnostic_symbols":13},
+    "ground":{"flash_bytes":448653,"ram_bytes":82504,"application_sha256":"FDCA520E9AB21A308AD3AD4F314EBA6453FD032B13E49982AFD05DF7D1D6F7AD","compile_evidence_sha256":"C759C2014824152D5827B5BA07655BF17A8BF348DECD5115DEB37561AB2F9F27","diagnostic_symbols":13},
+    "independent_verification":{"result":"PASS","exit_code":0,"log":"candidate-independent-verification.log","log_sha256":"22EAA2000EC664A82F9EB7047A114952D080ECE07C17568AB7AA76DF551F4F57"},
+    "preservation":{"default_sketches_count":152,"default_sketches_tree_sha256":"B4EDC8F52753B775936E06D63ACEC5AFCB7293364A5602499601A108A13B794C","standard_artifacts_count":44,"standard_artifacts_tree_sha256":"A4740C706F29A582657196824C62349A5092C3D335DC9AC98C374705455511E3","before_after_exact_match":true}
+  },
+  "actual_sealed_reader_contract": {
+    "result":"PASS","hardware_interaction":false,"production_reader_main_executed":false,"native_nm_or_openocd_invoked":false,
+    "ps51":{"checks":109,"failed":0,"summary":"sealed-reader-ps51/summary.json","sha256":"AF7C0C95DCE8C6DBAB3CA924C6EA8E54BF250BC4B4B905CA0574CEB6ACB0D817"},
+    "ps7":{"checks":109,"failed":0,"summary":"sealed-reader-ps7/summary.json","sha256":"DD9DF39A34828F9B748071F852E4DA4FDA21ACC77E762C0A2D3B7B92BF8CD949"}
+  },
+  "final_source_integrity":{"source_freeze":"verified_source_full_verified.json","file_count":606,"changed_after_tests":0,"changed_after_build_and_sealed_reader_checks":0,"checked_utc":"2026-10-26T02:38:35.2894252Z"},
+  "saved_differences":["bridge-abort/final-bridge.diff","bridge-abort/final-bridge-tests.diff","bridge-abort/final-host-registration.diff","bridge-abort/final-root-registration.diff","core-abort/summary.json","runner-abort/diff.json","runner-abort/param-fixture-repair/summary-final.json"],
+  "unchanged_limits": {
+    "product_usb_ms":106,"ground_fresh_grant_ms":500,"vehicle_tail_to_start_ms":500,
+    "aux_ms":2000,"heartbeat_ms":2500,"conservative_rf_reserve_ms":5050,
+    "hold_ms":750,"mcu_prepare_ms":8000,"pc_prepare_seconds":15,
+    "maximum_cancellations":1,"maximum_rounds":2,"maximum_param_attempts":1,
+    "maximum_control_commands":24,"wire_version":3
+  },
+  "pins_uart_rf_or_diagnostic_record_abis_changed":false,
+  "hardware_interaction":false,
+  "r18_hardware_changed":false,
+  "previous_sealed_candidate_relabelled":false,
+  "old_prepared_run_reusable_with_changed_sources":false,
+  "live_high_speed_resolution_proven":false,
+  "all932_within30_seconds":"NOT_RETESTED",
+  "acceptance_authorized":false,
+  "deployment_authorized":false,
+  "proof_limits":[
+    "The saved live detail20 boundary predicate was not separately latched; the offline real-bridge fixture reproduces and repairs the compatible active-standard-writer cleanup refusal, not a physical E220 Busy proof",
+    "Safe cancellation remains possible if a new urgent Heartbeat arrives after Prepared or Commit; no guaranteed future750-ms safe slot or932/30-second success is claimed",
+    "Late Ground abort quarantines old authority only; an already expired500-ms request remains failed with its original t0 and first fault",
+    "Core ACK-queue-full handling is defensive and reviewed but that forced branch was not dynamically reproduced",
+    "Diagnostic USB31-byte retention is separate and not resolved by this change",
+    "No COM, JTAG, PnP, radio or physical flash operation was executed in this offline repair turn"
+  ],
+  "remaining":["Prepare a fresh reviewed tool closure bound to this new candidate; older prepared runs cannot be reused after source changes","Use a new explicit one-run authorization and renewed safety confirmation for any future physical trial","Physically verify both Abort acknowledgments, no stale Release/PARAM reuse, then high-speed932/932 within30 seconds plus continuous Heartbeat<=2500ms and all errors0 in the same run"]
+}

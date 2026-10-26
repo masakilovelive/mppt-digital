@@ -1,0 +1,177 @@
+warning: in the working copy of 'runs\validation\R19-POST-REQUEST-ABORT-ALIGNMENT-OFFLINE-001\20261026JST-fix\bridge-abort\before\vc_lora_phase6_bridge.hpp', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'firmware/phase6/vc_lora_phase6_bridge.hpp', LF will be replaced by CRLF the next time Git touches it
+diff --git "a/runs\\validation\\R19-POST-REQUEST-ABORT-ALIGNMENT-OFFLINE-001\\20261026JST-fix\\bridge-abort\\before\\vc_lora_phase6_bridge.hpp" b/firmware/phase6/vc_lora_phase6_bridge.hpp
+index fbcdffc..51e1a17 100644
+--- "a/runs\\validation\\R19-POST-REQUEST-ABORT-ALIGNMENT-OFFLINE-001\\20261026JST-fix\\bridge-abort\\before\\vc_lora_phase6_bridge.hpp"
++++ b/firmware/phase6/vc_lora_phase6_bridge.hpp
+@@ -7092,7 +7092,7 @@ bool r19_agreement_tuple_matches(
+       command.action_token == s.action_token && command.writer_generation == s.writer_generation;
+ }
+ 
+-bool r19_agreement_radio_boundary_clean() noexcept {
++bool r19_agreement_no_acceleration_boundary() noexcept {
+   return !r19_standard_tdd_frozen && !r19_session_owners_constructed &&
+       r19_radio_session == nullptr && r19_radio_stream_purpose == R19RadioStreamPurpose::None &&
+       !r19_radio_buffer_credit_pending && !r19_retained_radio_action_final &&
+@@ -7111,16 +7111,21 @@ bool r19_agreement_radio_boundary_clean() noexcept {
+       r19_peer_receipt_ledger_kind == PeerCompletionReceiptKind::None &&
+       r19_peer_receipt_producer_kind == PeerCompletionReceiptKind::None &&
+       r19_peer_receipt_send_not_before_ms == 0U && r19_peer_receipt_send_deadline_ms == 0U &&
+-      r19_standard_resume_not_before_ms == 0U && !radio_busy && !pending_radio_action.active &&
+-      !standard_radio_writer_tail_pending && !e220_writer_arbiter.fail_closed() &&
++      r19_standard_resume_not_before_ms == 0U && !e220_write_contract.fail_closed() &&
++      !e220_writer_arbiter.fail_closed() &&
+       !e220_writer_arbiter.high_speed_active() && !e220_writer_arbiter.explicit_restore_required() &&
+       e220_writer_arbiter.high_speed_stream_uart_records() == 0U &&
+       e220_writer_arbiter.high_speed_stream_accepted_bytes() == 0U;
+ }
+ 
++bool r19_agreement_radio_boundary_clean() noexcept {
++  return r19_agreement_no_acceleration_boundary() && !radio_busy &&
++      !pending_radio_action.active && !standard_radio_writer_tail_pending;
++}
++
+ #if defined(VC_LORA_PHASE6_GROUND)
+ bool r19_agreement_ground_abort_boundary() noexcept {
+-  if (!r19_agreement_radio_boundary_clean() || r19_acceleration_consumed ||
++  if (!r19_agreement_radio_boundary_clean() ||
+       r19_ground_adapter == nullptr || r19_grant_reservation_negotiation_started ||
+       r19_ground_negotiation_response_pending || r19_ground_usb_commit_active ||
+       e220_writer_arbiter.write_active() || standard_radio_writer_lease.valid() ||
+@@ -7128,15 +7133,39 @@ bool r19_agreement_ground_abort_boundary() noexcept {
+       ground_proxy_request_dequeued || ground_proxy_request_token != 0U ||
+       !ground_ingress.empty() || ground_ingress.fail_closed() ||
+       tdd_controller.state() != GroundTddState::WaitGrant) return false;
++  if (r19_grant_reservation.terminal_aborted())
++    return r19_acceleration_consumed && !r19_product_route_selected &&
++        !r19_held_parameter_request_valid;
++  if (r19_acceleration_consumed) return false;
+   if (!r19_product_route_selected)
+     return !r19_held_parameter_request_valid && r19_reservation_ground_boundary_clean();
+   const auto& d = r19_ground_adapter->diagnostics();
+-  // Only the never-negotiated AwaitFreshGrant owner can be quarantined.
+-  // An already failed adapter, possible VCBN prefix or active RF is not safe.
+-  return r19_held_parameter_request_valid && !r19_ground_adapter->failure_latched() &&
+-      d.request_origin_valid && d.await_fresh_grant_started_valid &&
++  const bool waiting = !r19_ground_adapter->failure_latched() &&
+       d.owner_state_after == GroundBulkSessionState::AwaitFreshGrant &&
+-      d.coordinator_state_after == GroundHighSpeedTddState::AwaitFreshGrant &&
++      d.coordinator_state_after == GroundHighSpeedTddState::AwaitFreshGrant;
++  const auto& first = r19_ground_adapter->first_failure_diagnostics();
++  // A late cleanup may quarantine only the exact never-negotiated Grant wait
++  // expiry. It does NOT reset its t0, forgive its deadline or clear fail-closed.
++  const bool expired_wait = runtime_fail_closed &&
++      r19_ground_adapter->failure_latched() &&
++      first.event == experimental::GroundHighSpeedDiagnosticEvent::Tick &&
++      first.owner_result_valid && first.coordinator_result_valid &&
++      first.owner_state_before == GroundBulkSessionState::AwaitFreshGrant &&
++      first.coordinator_state_before == GroundHighSpeedTddState::AwaitFreshGrant &&
++      first.owner_state_after == GroundBulkSessionState::FailClosed &&
++      first.coordinator_state_after == GroundHighSpeedTddState::FailClosed &&
++      first.owner_result == BulkSessionResult::GrantDeadlineExceeded &&
++      first.owner_last_error == BulkSessionResult::GrantDeadlineExceeded &&
++      first.coordinator_result == HighSpeedCoordinatorResult::GrantDeadlineExceeded &&
++      first.coordinator_last_error == HighSpeedCoordinatorResult::GrantDeadlineExceeded &&
++      first.request_origin_valid && first.await_fresh_grant_started_valid &&
++      first.request_origin_ms == r19_held_parameter_request_origin_ms &&
++      first.await_fresh_grant_started_ms == r19_held_parameter_request_origin_ms &&
++      first.observed_ms >= first.request_origin_ms &&
++      first.observed_ms - first.request_origin_ms > BulkSessionTiming::grant_wait_budget_ms &&
++      !first.fresh_grant_observed_valid && !first.coordinator_grant_staged_valid;
++  return r19_held_parameter_request_valid && (waiting || expired_wait) &&
++      d.request_origin_valid && d.await_fresh_grant_started_valid &&
+       d.request_origin_ms == r19_held_parameter_request_origin_ms &&
+       d.await_fresh_grant_started_ms == r19_held_parameter_request_origin_ms &&
+       r19_ground_adapter->t0_ms() == r19_held_parameter_request_origin_ms &&
+@@ -7144,14 +7173,37 @@ bool r19_agreement_ground_abort_boundary() noexcept {
+       r19_held_parameter_request_loss_epoch == Serial.txLossEpoch();
+ }
+ #else
++bool r19_agreement_retired_data_writer_boundary() noexcept {
++  const auto& s = r19_grant_reservation.snapshot();
++  const auto lease = e220_writer_arbiter.active_lease();
++  // The old tuple was retired before this *different* standard-data writer
++  // started. An AbortAck revokes that old tuple, not unrelated normal traffic.
++  // Do not cancel/release/complete this writer or pretend its RF tail is done.
++  return r19_grant_reservation.unwritten_reservation_retired() &&
++      radio_busy && !pending_radio_action.active && standard_radio_writer_tail_pending &&
++      standard_radio_writer_action_type == LinkActionType::SendRadioData &&
++      e220_writer_arbiter.write_active() && lease.valid() &&
++      lease.owner == Phase6RadioWriterOwner::StandardTdd &&
++      standard_radio_writer_lease.valid() &&
++      lease.owner == standard_radio_writer_lease.owner &&
++      lease.action_token == standard_radio_writer_lease.action_token &&
++      lease.writer_generation == standard_radio_writer_lease.writer_generation &&
++      lease.action_token != s.action_token && lease.writer_generation != s.writer_generation;
++}
++
+ bool r19_agreement_vehicle_boundary(bool retire, std::uint64_t now_ms) noexcept {
+-  if (!r19_agreement_radio_boundary_clean() || r19_product_route_selected ||
++  if (!r19_agreement_no_acceleration_boundary() || r19_product_route_selected ||
+       r19_reserved_grant_uart_accepted || r19_reserved_grant_releasing) return false;
+   if (!r19_reserved_grant_action_valid) {
+-    // An earlier safe Heartbeat cancellation already retired this exact tuple.
+-    return retire && r19_grant_reservation.cancellation_pending() &&
++    // Historical exact-tuple proof comes from the controller, not the first
++    // STOP record (which could refer to a different, earlier nonce).
++    const bool retired = r19_grant_reservation.unwritten_reservation_retired() ||
++        r19_grant_reservation.terminal_aborted();
++    const bool idle = r19_agreement_radio_boundary_clean() &&
+         !e220_writer_arbiter.write_active() && !standard_radio_writer_lease.valid();
++    return retire && retired && (idle || r19_agreement_retired_data_writer_boundary());
+   }
++  if (!r19_agreement_radio_boundary_clean()) return false;
+   const auto& s = r19_grant_reservation.snapshot();
+   const auto& action = r19_reserved_grant_action;
+   const auto& lease = e220_writer_arbiter.active_lease();
+@@ -7212,7 +7264,6 @@ bool r19_intercept_grant_reservation_usb_frame(
+     if (!r19_agreement_tuple_matches(command)) {
+       r19_abort_grant_reservation(19U); return true;
+     }
+-    if (r19_grant_reservation.terminal_aborted()) return true;
+     const bool boundary =
+ #if defined(VC_LORA_PHASE6_GROUND)
+         r19_agreement_ground_abort_boundary();
+@@ -7228,7 +7279,10 @@ bool r19_intercept_grant_reservation_usb_frame(
+     }
+ #endif
+     r19_note_grant_reservation();
+-    if (!acknowledged) r19_abort_grant_reservation(20U);
++    // Queue capacity may leave cleanup irrevocably tombstoned but unconfirmed.
++    // Never turn that into renewed authority or replay an accepted ACK prefix.
++    if (!acknowledged && !r19_grant_reservation.terminal_aborted())
++      r19_abort_grant_reservation(20U);
+     return true;
+   }
+   if (r19_grant_reservation.terminal_aborted()) return true;
+@@ -7476,7 +7530,29 @@ bool r19_hold_generated_grant(const LinkAction& action,
+       : now_ms + 750U;
+   if (r19_reserved_grant_action_valid || radio_busy || pending_radio_action.active ||
+       !e220_write_contract.ready_for_write() || !aux_high() ||
+-      deadline <= now_ms || !acquire_standard_radio_writer_lease(action)) {
++      deadline <= now_ms) {
++    r19_abort_grant_reservation(12U);
++    return true;
++  }
++  const bool heartbeat_urgent = input.heartbeat_deadline_valid &&
++      input.heartbeat_tail_available &&
++      (input.heartbeat_deadline_ms <= now_ms ||
++       input.heartbeat_deadline_ms - now_ms <= FixedFirmwareContract::heartbeat_grant_reserve_ms);
++  if (heartbeat_urgent) {
++    // Revalidate immediately before publishing Prepared. This slot is still
++    // unknown to PC/Ground and has no UART/lease: retire the actual TDD action,
++    // let normal Heartbeat service run, and keep the original prepare clock.
++    // This is not a wire cancellation or a reset of the one-cancellation budget.
++    if (standard_radio_writer_lease.valid() || standard_radio_writer_tail_pending ||
++        e220_writer_arbiter.write_active() || e220_writer_arbiter.fail_closed() ||
++        e220_writer_arbiter.high_speed_active() ||
++        e220_writer_arbiter.explicit_restore_required() ||
++        !tdd_controller.cancel_unsent_grant(action.token, action.control.session_id,
++            action.control.cycle_id, now_ms))
++      r19_abort_grant_reservation(12U);
++    return true;
++  }
++  if (!acquire_standard_radio_writer_lease(action)) {
+     r19_abort_grant_reservation(12U);
+     return true;
+   }

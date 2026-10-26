@@ -1,0 +1,7 @@
+{
+  "rate_card_version": "UNCONFIGURED",
+  "description": "Populate from the authoritative price source at measurement time. No model price is assumed by Phase A.",
+  "source_url": null,
+  "retrieved_at": null,
+  "models": {}
+}

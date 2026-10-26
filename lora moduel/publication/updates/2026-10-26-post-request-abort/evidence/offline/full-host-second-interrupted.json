@@ -1,0 +1,26 @@
+{
+  "schema": "vc-lora-host-validation-interrupted-v1",
+  "result": "INTERRUPTED_FOR_TEST_ONLY_DELIVERY_BRANCH_AUDIT_HARDENING_NOT_PASS",
+  "registered_tests":548,
+  "completed_tests":22,
+  "passed_tests":21,
+  "failed_tests_during_forced_termination":1,
+  "uncompleted_tests":526,
+  "log":"full-host-final.log",
+  "previous_param_fixture_failure_rechecked":"R19-param_list_capture_contract-OFFLINE-001 PASS before interruption",
+  "reason":"Independent read-only review identified a test-only missing command/type/member audit of the newly isolated delivered-control branch. Actual frozen branch manually reviewed safe, but future unknown-command injection was not covered.",
+  "interrupted_native_test":"ST-MAV-001 was force-terminated with the owned test tree; not classified as a logical product regression or a passing test",
+  "termination":{
+    "scope":"Only verified run_host_tests.ps1 PID20848 under this task full-host-final.log launcher30316 and its descendants",
+    "native_tool_exit":"Nonzero because two descendant PIDs exited during termination traversal",
+    "followup_exact_pids_checked":[9292,17336,20848,30388],
+    "remaining_count":0,
+    "exec_session_closed":true
+  },
+  "source_freeze":"verified_source_final.json",
+  "product_sources_changed_for_this_repair":false,
+  "planned_followup":"Test-only minimal delivered-branch AST audit plus nonexecuting unknown-command rejection; PS5/PS7 focused verification, new606-file freeze and full548 rerun",
+  "hardware_interaction":false,
+  "acceptance_authorized":false,
+  "deployment_authorized":false
+}
